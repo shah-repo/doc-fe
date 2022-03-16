@@ -710,7 +710,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if"]`).first().check();
-      cy.get(`[data-cy="validators.required_if.name"]`).arrowType("Radio BTN req{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Radio BTN req" );
       cy.get(`input[type="checkbox"][value="2"]`).last().check();
       cy.fbAddNewFieldButton();
     });
@@ -959,9 +959,9 @@ context("Repeat Training with Training Curriculum", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -988,7 +988,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -1000,12 +1000,12 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Select Groups to train 'Owner as approver'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Owner as approver{downarrow}{enter}");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Owner as approver");
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("radio button group option 3 checked", () => {

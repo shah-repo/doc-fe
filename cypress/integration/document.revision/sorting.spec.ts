@@ -1719,6 +1719,7 @@ context("Sorting test", () => {
     context("Sort 'Doc Id'", () => {
       it("Doc Id should be in ascending order", () => {
         cy.get("span").contains("Doc ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get("span").contains("Doc ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 8 });
@@ -1726,6 +1727,7 @@ context("Sorting test", () => {
 
       it("Doc Id should be in descending order", () => {
         cy.get("span").contains("Doc ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get("span").contains("Doc ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 8 });
@@ -1735,6 +1737,7 @@ context("Sorting test", () => {
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
         cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
@@ -1742,6 +1745,7 @@ context("Sorting test", () => {
 
       it("Revision should be in descending order", () => {
         cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
@@ -1751,6 +1755,7 @@ context("Sorting test", () => {
     context("Sort 'Document title'", () => {
       it("Document title should be in ascending order", () => {
         cy.contains("Document title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Document title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
@@ -1758,6 +1763,7 @@ context("Sorting test", () => {
 
       it("Document title should be in descending order", () => {
         cy.contains("Document title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Document title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
@@ -1767,6 +1773,7 @@ context("Sorting test", () => {
     context("Sort 'Type'", () => {
       it("Type should be in ascending order", () => {
         cy.contains("Type").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Type").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
@@ -1774,6 +1781,7 @@ context("Sorting test", () => {
 
       it("Type should be in descending order", () => {
         cy.contains("Type").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Type").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
@@ -1783,6 +1791,7 @@ context("Sorting test", () => {
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
@@ -1790,6 +1799,7 @@ context("Sorting test", () => {
 
       it("Owner should be in descending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
@@ -1815,6 +1825,7 @@ context("Sorting test", () => {
     context("Sort 'Status'", () => {
       it("Status should be in ascending order", () => {
         cy.contains("Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
@@ -1822,6 +1833,7 @@ context("Sorting test", () => {
 
       it("Status should be in descending order", () => {
         cy.contains("Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
@@ -1831,6 +1843,7 @@ context("Sorting test", () => {
     context("Sort 'Effective Date'", () => {
       it("Effective Date should be in ascending order", () => {
         cy.contains("Effective Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Effective Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
@@ -1838,6 +1851,7 @@ context("Sorting test", () => {
 
       it("Effective Date should be in descending order", () => {
         cy.contains("Effective Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Effective Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
@@ -1885,6 +1899,7 @@ context("Sorting test", () => {
     context("Sort 'Group Type'", () => {
       it("Group Type should be in ascending order", () => {
         cy.contains("Group Type").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Group Type").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 7 });
@@ -1892,6 +1907,7 @@ context("Sorting test", () => {
 
       it("Group Type should be in descending order", () => {
         cy.contains("Group Type").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Group Type").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 7 });
@@ -1907,6 +1923,7 @@ context("Sorting test", () => {
     context("Sort 'Name'", () => {
       it("Name should be in ascending order", () => {
         cy.contains("Name").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Name").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 6 });
@@ -1914,6 +1931,7 @@ context("Sorting test", () => {
 
       it("Name should be in descending order", () => {
         cy.contains("Name").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Name").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 6 });
@@ -1923,6 +1941,7 @@ context("Sorting test", () => {
     context("Sort 'Email'", () => {
       it("Email should be in ascending order", () => {
         cy.contains("Email").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Email").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 6 });
@@ -1930,6 +1949,7 @@ context("Sorting test", () => {
 
       it("Email should be in descending order", () => {
         cy.contains("Email").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Email").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 6 });
@@ -1955,6 +1975,7 @@ context("Sorting test", () => {
     context("Sort 'Active'", () => {
       it("Active should be in ascending order", () => {
         cy.contains("Active").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Active").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 6 });
@@ -1971,6 +1992,7 @@ context("Sorting test", () => {
     context("Sort 'Signed up'", () => {
       it("Signed up should be in ascending order", () => {
         cy.contains("Signed Up").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Signed Up").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 6 });
@@ -1978,6 +2000,7 @@ context("Sorting test", () => {
 
       it("Signed up should be in descending order", () => {
         cy.contains("Signed Up").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Signed Up").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 6 });
@@ -1993,6 +2016,7 @@ context("Sorting test", () => {
     context("Sort 'ID'", () => {
       it("ID should be in ascending order", () => {
         cy.contains("ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 8 });
@@ -2000,6 +2024,7 @@ context("Sorting test", () => {
 
       it("ID should be in descending order", () => {
         cy.contains("ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 8 });
@@ -2009,6 +2034,7 @@ context("Sorting test", () => {
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
         cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
@@ -2016,6 +2042,7 @@ context("Sorting test", () => {
 
       it("Revision should be in descending order", () => {
         cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
@@ -2025,6 +2052,7 @@ context("Sorting test", () => {
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
         cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
@@ -2032,6 +2060,7 @@ context("Sorting test", () => {
 
       it("State should be in descending order", () => {
         cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
@@ -2041,6 +2070,7 @@ context("Sorting test", () => {
     context("Sort 'Title'", () => {
       it("Title should be in ascending order", () => {
         cy.contains("Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
@@ -2048,6 +2078,7 @@ context("Sorting test", () => {
 
       it("Title should be in descending order", () => {
         cy.contains("Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
@@ -2057,6 +2088,7 @@ context("Sorting test", () => {
     context("Sort 'EFT Owner'", () => {
       it("EFT Owner should be in ascending order", () => {
         cy.contains("EFT Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
@@ -2064,6 +2096,7 @@ context("Sorting test", () => {
 
       it("EFT Owner should be in descending order", () => {
         cy.contains("EFT Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
@@ -2073,6 +2106,7 @@ context("Sorting test", () => {
     context("Sort 'Cal Due Date'", () => {
       it("Cal Due Date should be in ascending order", () => {
         cy.contains("Cal Due Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 8 });
@@ -2080,6 +2114,7 @@ context("Sorting test", () => {
 
       it("Cal Due Date should be in descending order", () => {
         cy.contains("Cal Due Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 8 });
@@ -2089,6 +2124,7 @@ context("Sorting test", () => {
     context("Sort 'PM Due Date'", () => {
       it("PM Due Date should be in ascending order", () => {
         cy.contains("PM Due Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
@@ -2096,6 +2132,7 @@ context("Sorting test", () => {
 
       it("PM Due Date should be in descending order", () => {
         cy.contains("PM Due Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
@@ -2105,6 +2142,7 @@ context("Sorting test", () => {
     context("Sort 'EQ Status'", () => {
       it("EQ Status should be in ascending order", () => {
         cy.contains("EQ Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
@@ -2112,6 +2150,7 @@ context("Sorting test", () => {
 
       it("EQ Status should be in descending order", () => {
         cy.contains("EQ Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
@@ -2127,6 +2166,7 @@ context("Sorting test", () => {
     context("Sort 'Supplier ID'", () => {
       it("Supplier ID should be in ascending order", () => {
         cy.contains("Supplier ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 7 });
@@ -2134,6 +2174,7 @@ context("Sorting test", () => {
 
       it("Supplier ID should be in descending order", () => {
         cy.contains("Supplier ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 7 });
@@ -2143,6 +2184,7 @@ context("Sorting test", () => {
     context("Sort 'Supplier Name'", () => {
       it("Supplier Name should be in ascending order", () => {
         cy.contains("Supplier Name").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 7 });
@@ -2150,6 +2192,7 @@ context("Sorting test", () => {
 
       it("Supplier Name should be in descending order", () => {
         cy.contains("Supplier Name").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 7 });
@@ -2159,6 +2202,7 @@ context("Sorting test", () => {
     context("Sort 'Supplier Level'", () => {
       it("Supplier Level should be in ascending order", () => {
         cy.contains("Supplier Level").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 7 });
@@ -2166,6 +2210,7 @@ context("Sorting test", () => {
 
       it("Supplier Level should be in descending order", () => {
         cy.contains("Supplier Level").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 7 });
@@ -2175,7 +2220,9 @@ context("Sorting test", () => {
     context("Sort 'Supplier Status'", () => {
       it("Supplier Status should be in ascending order", () => {
         cy.contains("Supplier Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 7 });
@@ -2183,6 +2230,7 @@ context("Sorting test", () => {
 
       it("Supplier Status should be in descending order", () => {
         cy.contains("Supplier Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 7 });
@@ -2192,6 +2240,7 @@ context("Sorting test", () => {
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
         cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 7 });
@@ -2199,6 +2248,7 @@ context("Sorting test", () => {
 
       it("State should be in descending order", () => {
         cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 7 });
@@ -2208,6 +2258,7 @@ context("Sorting test", () => {
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 7 });
@@ -2215,6 +2266,7 @@ context("Sorting test", () => {
 
       it("Owner should be in descending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 7 });
@@ -2224,6 +2276,7 @@ context("Sorting test", () => {
     context("Sort 'Approval ID'", () => {
       it("Approval ID should be in ascending order", () => {
         cy.contains("Approval ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 7 });
@@ -2231,6 +2284,7 @@ context("Sorting test", () => {
 
       it("Approval ID should be in descending order", () => {
         cy.contains("Approval ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 7 });
@@ -2246,6 +2300,7 @@ context("Sorting test", () => {
     context("Sort 'Parts ID'", () => {
       it("Parts ID should be in ascending order", () => {
         cy.contains("Parts ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Parts ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 5 });
@@ -2253,6 +2308,7 @@ context("Sorting test", () => {
 
       it("Parts ID should be in descending order", () => {
         cy.contains("Parts ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Parts ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 5 });
@@ -2262,6 +2318,7 @@ context("Sorting test", () => {
     context("Sort 'Document Title'", () => {
       it("Document Title should be in ascending order", () => {
         cy.contains("Document Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 5 });
@@ -2269,6 +2326,7 @@ context("Sorting test", () => {
 
       it("Document Title should be in descending order", () => {
         cy.contains("Document Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 5 });
@@ -2278,6 +2336,7 @@ context("Sorting test", () => {
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 5 });
@@ -2285,6 +2344,7 @@ context("Sorting test", () => {
 
       it("Owner should be in descending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 5 });
@@ -2294,6 +2354,7 @@ context("Sorting test", () => {
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
         cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 5 });
@@ -2301,6 +2362,7 @@ context("Sorting test", () => {
 
       it("State should be in descending order", () => {
         cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 5 });
@@ -2310,6 +2372,7 @@ context("Sorting test", () => {
     context("Sort 'Approval ID'", () => {
       it("Approval ID should be in ascending order", () => {
         cy.contains("Approval ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 5 });
@@ -2317,6 +2380,7 @@ context("Sorting test", () => {
 
       it("Approval ID should be in descending order", () => {
         cy.contains("Approval ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 5 });
@@ -2332,6 +2396,7 @@ context("Sorting test", () => {
     context("Sort 'PO #'", () => {
       it("PO # should be in ascending order", () => {
         cy.contains("PO #").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("PO #").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 8 });
@@ -2339,6 +2404,7 @@ context("Sorting test", () => {
 
       it("PO # should be in descending order", () => {
         cy.contains("PO #").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("PO #").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 8 });
@@ -2348,6 +2414,7 @@ context("Sorting test", () => {
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
         cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
@@ -2355,6 +2422,7 @@ context("Sorting test", () => {
 
       it("Revision should be in descending order", () => {
         cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
@@ -2364,6 +2432,7 @@ context("Sorting test", () => {
     context("Sort 'PO Status'", () => {
       it("PO Status should be in ascending order", () => {
         cy.contains("PO Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
@@ -2371,6 +2440,7 @@ context("Sorting test", () => {
 
       it("PO Status should be in descending order", () => {
         cy.contains("PO Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
@@ -2380,6 +2450,7 @@ context("Sorting test", () => {
     context("Sort 'Supplier'", () => {
       it("Supplier should be in ascending order", () => {
         cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
@@ -2387,6 +2458,7 @@ context("Sorting test", () => {
 
       it("Supplier should be in descending order", () => {
         cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
@@ -2396,6 +2468,7 @@ context("Sorting test", () => {
     context("Sort 'Part Number'", () => {
       it("Part Number should be in ascending order", () => {
         cy.contains("Part Number").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
@@ -2403,6 +2476,7 @@ context("Sorting test", () => {
 
       it("Part Number should be in descending order", () => {
         cy.contains("Part Number").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
@@ -2412,6 +2486,7 @@ context("Sorting test", () => {
     context("Sort 'Amount'", () => {
       it("Amount should be in ascending order", () => {
         cy.contains("Amount").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Amount").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 8 });
@@ -2419,6 +2494,7 @@ context("Sorting test", () => {
 
       it("Amount should be in descending order", () => {
         cy.contains("Amount").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Amount").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 8 });
@@ -2428,6 +2504,7 @@ context("Sorting test", () => {
     context("Sort 'Requestor'", () => {
       it("Requestor should be in ascending order", () => {
         cy.contains("Requestor").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
@@ -2435,6 +2512,7 @@ context("Sorting test", () => {
 
       it("Requestor should be in descending order", () => {
         cy.contains("Requestor").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
@@ -2444,6 +2522,7 @@ context("Sorting test", () => {
     context("Sort 'Issue Date'", () => {
       it("Issue Date should be in ascending order", () => {
         cy.contains("Issue Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
@@ -2451,6 +2530,7 @@ context("Sorting test", () => {
 
       it("Issue Date should be in descending order", () => {
         cy.contains("Issue Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
@@ -2466,6 +2546,7 @@ context("Sorting test", () => {
     context("Sort 'Receive ID'", () => {
       it("Receive ID should be in ascending order", () => {
         cy.contains("Receive ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Receive ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 5 });
@@ -2473,6 +2554,7 @@ context("Sorting test", () => {
 
       it("Receive ID should be in descending order", () => {
         cy.contains("Receive ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Receive ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 5 });
@@ -2482,6 +2564,7 @@ context("Sorting test", () => {
     context("Sort 'Document Title'", () => {
       it("Document Title should be in ascending order", () => {
         cy.contains("Document Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 5 });
@@ -2489,6 +2572,7 @@ context("Sorting test", () => {
 
       it("Document Title should be in descending order", () => {
         cy.contains("Document Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 5 });
@@ -2498,6 +2582,7 @@ context("Sorting test", () => {
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 5 });
@@ -2505,6 +2590,7 @@ context("Sorting test", () => {
 
       it("Owner should be in descending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 5 });
@@ -2555,6 +2641,7 @@ context("Sorting test", () => {
     context("Sort 'AR ID'", () => {
       it("AR ID should be in ascending order", () => {
         cy.contains("AR ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("AR ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 4 });
@@ -2562,6 +2649,7 @@ context("Sorting test", () => {
 
       it("AR ID should be in descending order", () => {
         cy.contains("AR ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("AR ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 4 });
@@ -2571,6 +2659,7 @@ context("Sorting test", () => {
     context("Sort 'AR Title'", () => {
       it("AR Title should be in ascending order", () => {
         cy.contains("AR Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("AR Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 4 });
@@ -2578,6 +2667,7 @@ context("Sorting test", () => {
 
       it("AR Title should be in descending order", () => {
         cy.contains("AR Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("AR Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 4 });
@@ -2587,6 +2677,7 @@ context("Sorting test", () => {
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 4 });
@@ -2594,6 +2685,7 @@ context("Sorting test", () => {
 
       it("Owner should be in descending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 4 });
@@ -2604,6 +2696,7 @@ context("Sorting test", () => {
     context("Sort 'Status'", () => {
       it("Status should be in ascending order", () => {
         cy.contains("Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 4 });
@@ -2611,6 +2704,7 @@ context("Sorting test", () => {
 
       it("Status should be in descending order", () => {
         cy.contains("Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 4 });
@@ -2626,6 +2720,7 @@ context("Sorting test", () => {
     context("Sort 'ID'", () => {
       it("ID should be in ascending order", () => {
         cy.contains("ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 7 });
@@ -2633,6 +2728,7 @@ context("Sorting test", () => {
 
       it("ID should be in descending order", () => {
         cy.contains("ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 7 });
@@ -2642,6 +2738,7 @@ context("Sorting test", () => {
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
         cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 7 });
@@ -2649,6 +2746,7 @@ context("Sorting test", () => {
 
       it("Revision should be in descending order", () => {
         cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 7 });
@@ -2658,6 +2756,7 @@ context("Sorting test", () => {
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
         cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 7 });
@@ -2665,6 +2764,7 @@ context("Sorting test", () => {
 
       it("State should be in descending order", () => {
         cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 7 });
@@ -2675,6 +2775,7 @@ context("Sorting test", () => {
     context("Sort 'Title'", () => {
       it("Title should be in ascending order", () => {
         cy.contains("Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 7 });
@@ -2682,6 +2783,7 @@ context("Sorting test", () => {
 
       it("Title should be in descending order", () => {
         cy.contains("Title").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 7 });
@@ -2691,6 +2793,7 @@ context("Sorting test", () => {
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 7 });
@@ -2698,6 +2801,7 @@ context("Sorting test", () => {
 
       it("Owner should be in descending order", () => {
         cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 7 });
@@ -2707,6 +2811,7 @@ context("Sorting test", () => {
     context("Sort 'Released Date'", () => {
       it("Released Date should be in ascending order", () => {
         cy.contains("Released Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Released Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 7 });
@@ -2714,6 +2819,7 @@ context("Sorting test", () => {
 
       it("Released Date should be in descending order", () => {
         cy.contains("Released Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Released Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 7 });
@@ -2723,6 +2829,7 @@ context("Sorting test", () => {
     context("Sort 'Form ID'", () => {
       it("Form ID should be in ascending order", () => {
         cy.contains("Form ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 7 });
@@ -2730,6 +2837,7 @@ context("Sorting test", () => {
 
       it("Form ID should be in descending order", () => {
         cy.contains("Form ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 7 });

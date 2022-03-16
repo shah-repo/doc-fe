@@ -7,7 +7,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -1099,7 +1098,7 @@ context("Inspection flow", () => {
           cy.get("[name=\"editorConfig.pass.value.from\"]").arrowType("20");
           cy.get("[name=\"editorConfig.pass.value.to\"]").arrowType("150");
           cy.get("[id$=\"editorConfig.aql\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("1.0").arrowClick();
+          cy.get("ul>li[role=option]").contains("1.0").arrowClick();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
@@ -1119,7 +1118,7 @@ context("Inspection flow", () => {
           cy.get("[name=\"editorConfig.pass.value.from\"]").arrowType("20");
           cy.get("[name=\"editorConfig.pass.value.to\"]").arrowType("150");
           cy.get("[id$=\"editorConfig.aql\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("1.0").arrowClick();
+          cy.get("ul>li[role=option]").contains("1.0").arrowClick();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
@@ -1143,10 +1142,8 @@ context("Inspection flow", () => {
       });
 
       it("Click 'ADD NEW PART'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-          cy.recCreateRecordFromLandingPage();
-          cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
-        });
+        cy.recCreateRecordFromLandingPage();
+        cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
       });
 
       it("Enter title 'New Part for inspection'", () => {
@@ -1163,12 +1160,12 @@ context("Inspection flow", () => {
 
       it("Select make vs buy", () => {
         cy.get("[id$=\"make-vs-buy\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Make").arrowClick();
+        cy.get("ul>li[role=option]").contains("Make").arrowClick();
       });
 
       it("Select unit of measure", () => {
         cy.get("[id$=\"unit-of-measure\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Batch").arrowClick();
+        cy.get("ul>li[role=option]").contains("Batch").arrowClick();
       });
 
       it("Select traceability required", () => {
@@ -1365,9 +1362,7 @@ context("Inspection flow", () => {
 
     context("Release Inspection document", () => {
       it("Save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Add approvals", () => {

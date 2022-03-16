@@ -124,7 +124,6 @@ context("Autocomplete 'Available Part Documents' test", () => {
 
       it("Clicks on 'Add new part' button", () => {
         cy.wrapWithWaitOnApiCalls([
-          CyRoutes.GetRequiredApprovers,
           CyRoutes.DocPreview], () => {
           cy.ptClickCreateNewPart();
         });
@@ -197,7 +196,7 @@ context("Autocomplete 'Available Part Documents' test", () => {
           });
 
           it("Select 'Available Parts Documents' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Available Part Documents{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Available Part Documents" });
           });
 
           it("Click 'Add' button", () => {
@@ -228,9 +227,9 @@ context("Autocomplete 'Available Part Documents' test", () => {
             if (response.body.length > 0 ) {
               const parts = response.body;
               parts.forEach((part) => {
-                cy.get("ul[role=listbox]>li").should("contain.text", part.documentRevisions[0].name);
+                cy.get("ul>li[role=option]").should("contain.text", part.documentRevisions[0].name);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

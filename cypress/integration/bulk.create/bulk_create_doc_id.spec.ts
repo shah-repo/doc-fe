@@ -517,7 +517,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
@@ -782,12 +782,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Select form to be used for bulk creation", () => {
         cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
+        cy.get("ul>li[role=option]").contains("Document for bulk creation").arrowClick();
       });
 
       it("Select document type to be used for bulk creation", () => {
         cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Test Private Pool").arrowClick();
+        cy.get("ul>li[role=option]").contains("Test Private Pool").arrowClick();
       });
 
       it("Upload logo picture 'image.jpg'", () => {
@@ -1349,12 +1349,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Select form to be used for bulk creation", () => {
         cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
+        cy.get("ul>li[role=option]").contains("Document for bulk creation").arrowClick();
       });
 
       it("Select document type to be used for bulk creation", () => {
         cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Test Public Pool").arrowClick();
+        cy.get("ul>li[role=option]").contains("Test Public Pool").arrowClick();
       });
 
       it("Select 'yes' to have Document id column", () => {

@@ -84,6 +84,14 @@ body {
   color: var(--navy);
 }
 
+.k-grid-header .k-i-sort-asc-sm:before {
+  content: "\e017";
+}
+
+.k-grid-header .k-i-sort-desc-sm:before {
+  content: "\e019";
+}
+
 td[role="gridcell"] {
   white-space: nowrap;
 }
@@ -189,7 +197,6 @@ td#kendo-expandable-column[role="gridcell"] {
 .k-grid-header .k-header {
   padding-bottom: 0;
 }
-
 
 .k-grid {
   font-family: var(--font-family);
@@ -341,6 +348,6 @@ td#kendo-expandable-column[role="gridcell"] {
   color: var(--almost_black);
 }
 
-.k-list-container .k-list-scroller {
-  min-width: 140px;
+.k-list-container .k-popup .k-list .k-item {
+  white-space: nowrap;
 }

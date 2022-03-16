@@ -909,7 +909,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Select 'SUP-00001' Supplier ", () => {
-      cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType("SUP-00001{downarrow}{enter}");
+      cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001");
     });
 
     it("Enters description 'New Purchase Order Description'", () => {
@@ -981,7 +981,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
       });
 
@@ -1048,7 +1048,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     it("Select PO Receivable from dropdown for 'RC-00002'", () => {
       SystemRequirement("REQ-1830");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy*=\"porec-receivable-\"]").arrowType("POT-00001{downarrow}{enter}");
+        cy.get("[data-cy*=\"porec-receivable-\"]").autocompleteSelect("POT-00001");
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1101,7 +1101,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     it("Select PO Receivable from dropdown for 'RC-00001'", () => {
       SystemRequirement("REQ-1830");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy*=\"porec-receivable-\"]").arrowType("POT-00001{downarrow}{enter}");
+        cy.get("[data-cy*=\"porec-receivable-\"]").autocompleteSelect("POT-00001");
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1130,12 +1130,12 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Select 'Lots test' document type", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
-        cy.get("[data-cy='lotType']").arrowType("Lots test{downarrow}{enter}");
+        cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
       });
     });
 
     it("Select 'Lots form document' form", () => {
-      cy.get("[data-cy='lotForm']").arrowType("Lots form{downarrow}{enter}");
+      cy.get("[data-cy='lotForm']").autocompleteSelect("Lots form");
     });
 
     it("Click 'Create Lot' button", () => {
@@ -1171,12 +1171,12 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Select 'Lots test' document type", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
-        cy.get("[data-cy='lotType']").arrowType("Lots test{downarrow}{enter}");
+        cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
       });
     });
 
     it("Select 'Lots form document' form", () => {
-      cy.get("[data-cy='lotForm']").arrowType("Lots form{downarrow}{enter}");
+      cy.get("[data-cy='lotForm']").autocompleteSelect("Lots form");
     });
 
     it("Click 'Create Lot' button", () => {
@@ -1209,7 +1209,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
     });
 

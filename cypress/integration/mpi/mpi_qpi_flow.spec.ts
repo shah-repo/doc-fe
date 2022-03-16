@@ -355,7 +355,7 @@ context("Mpi/Qpi flow", () => {
           it("Add attachment and check autosave", () => {
             cy.contains("Step #1").parentsUntil("li")
               .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
               cy.elUploadAttachment({
                 fileName: "image.jpg",
                 el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
@@ -496,9 +496,7 @@ context("Mpi/Qpi flow", () => {
 
         context("Release MPI and verify state", () => {
           it("Click save document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-              cy.drClickCreateDocumentWithApiCallForForms();
-            });
+            cy.drClickCreateDocumentWithApiCallForForms();
           });
 
           it("Approve and release MPI document with selecting approver", () => {
@@ -619,9 +617,7 @@ context("Mpi/Qpi flow", () => {
 
         context("Release MPI and verify state", () => {
           it("Click save document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-              cy.drClickCreateDocumentWithApiCallForForms();
-            });
+            cy.drClickCreateDocumentWithApiCallForForms();
           });
 
           it("Approve and release MPI document with selecting approver", () => {
@@ -737,9 +733,7 @@ context("Mpi/Qpi flow", () => {
 
         context("Release QPI and verify state", () => {
           it("Click save document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-              cy.drClickCreateDocumentWithApiCallForForms();
-            });
+            cy.drClickCreateDocumentWithApiCallForForms();
           });
 
           it("Approve and release QPI document", () => {
@@ -812,9 +806,7 @@ context("Mpi/Qpi flow", () => {
 
         context("Release QPI and verify state", () => {
           it("Click save document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-              cy.drClickCreateDocumentWithApiCallForForms();
-            });
+            cy.drClickCreateDocumentWithApiCallForForms();
           });
 
           it("Approve and release QPI document with selecting approver", () => {
@@ -933,9 +925,7 @@ context("Mpi/Qpi flow", () => {
 
         context("Release QPI and verify state", () => {
           it("Click save document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-              cy.drClickCreateDocumentWithApiCallForForms();
-            });
+            cy.drClickCreateDocumentWithApiCallForForms();
           });
 
           it("Approve and release QPI document with selecting approver", () => {

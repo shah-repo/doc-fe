@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import { DataResult, process, State } from "@progress/kendo-data-query";
+import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
   setGroupIds,
@@ -23,6 +23,9 @@ import { AutoSizer, Size } from "react-virtualized";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { AsyncFilterTemplate } from "../../async.tasks/grid/filter.template/AsyncFilterTemplate";
+import { DateFilterTemplate } from "../../async.tasks/grid/filter.template/DateFilterTemplate";
+import { AsyncStatus, dropDownOptions } from "../../async.tasks/grid/helper";
 import { changeRequestStatusOption } from "../../change.request/utils/helpers";
 import { ColumnMenu } from "../../document.revision/grid/cell.templates/ColumnMenu";
 import { CompletedDateFilterTemplate } from "../../document.revision/grid/filter.template/CompletedDateFilterTemplate";
@@ -105,8 +108,28 @@ export function KendoGrid<T extends any>({
   );
 
   const dataStateChange = (e: GridDataStateChangeEvent) => {
-    setDataState(e.dataState);
-    const groupedResultState = processWithGroups(records, e.dataState);
+    const updatedDataState = { ...e.dataState };
+    // Hack to handle excpetion. Fixes ENC-11080
+    if (updatedDataState.filter) {
+      const updatedFilters = map(updatedDataState.filter.filters, (filterObject: FilterDescriptor) => {
+        if (
+          [
+            "startswith",
+            "endswith",
+            "contains",
+            "doesnotcontain",
+            "isempty",
+            "isnotempty",
+          ].includes(filterObject.operator as string)
+        ) {
+          filterObject.value = filterObject.value || "";
+        }
+        return filterObject;
+      });
+      updatedDataState.filter.filters = updatedFilters as any;
+    }
+    setDataState(updatedDataState);
+    const groupedResultState = processWithGroups(records, updatedDataState);
     setResultState(groupedResultState);
     setNoDataMessage(<span />);
     dispatch(
@@ -114,7 +137,7 @@ export function KendoGrid<T extends any>({
         {
           ...tableCriteria,
           queryDict: {
-            dataState: e.dataState,
+            dataState: updatedDataState,
           },
         },
         tableName
@@ -184,6 +207,29 @@ export function KendoGrid<T extends any>({
       })}
     />
   );
+  const TaskTypeFilter = (props: GridFilterCellProps) => (
+    <AsyncFilterTemplate
+      {...props}
+      data={dropDownOptions.map((e) => e.value)}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+  const AsyncStatusFilter = (props: GridFilterCellProps) => (
+    <AsyncFilterTemplate
+      {...props}
+      data={AsyncStatus.map((e) => e.value)}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+  const AsyncDateFilter = (props: GridFilterCellProps) => (
+    <DateFilterTemplate
+      {...props}
+    />
+  );
 
   const filterCellMapping = {
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
@@ -194,6 +240,9 @@ export function KendoGrid<T extends any>({
     [KendoGridFilterCell.CREATED_AT]: EffectiveDate,
     [KendoGridFilterCell.RELEASED_AT]: EffectiveDate,
     [KendoGridFilterCell.STATE]: StateFilter,
+    [KendoGridFilterCell.TASKTYPE]: TaskTypeFilter,
+    [KendoGridFilterCell.STATUS]: AsyncStatusFilter,
+    [KendoGridFilterCell.ASYNC_CREATED_AT]: AsyncDateFilter,
   };
 
   const sortedColumnDefinitions = orderByLockedState(columns, []);

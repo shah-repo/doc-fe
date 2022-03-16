@@ -142,7 +142,7 @@ context("Autocomplete 'GL code' test", () => {
           });
 
           it("Select 'GL codes' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("GL codes{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "GL codes" });
           });
 
           it("Click 'Add' button", () => {
@@ -173,10 +173,10 @@ context("Autocomplete 'GL code' test", () => {
             if (response.body.acctCodes.length > 0 ) {
               const acctCodes = response.body.acctCodes;
               acctCodes.forEach((acctCode) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text", acctCode);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.acctCodes.length);
                 });

@@ -214,9 +214,8 @@ DocumentRevisionFormContainerProps
           pmFormId,
           releasedDocRev,
           redlineActive,
-          isOutput,
           lastSavedTimestamp,
-          originScheme,
+          mode,
         }}
       />
     </FBWorkspace>
