@@ -194,7 +194,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   );
 
   return (
-    <>
+    <div>
       <Observer>
         {() => (
           <>
@@ -293,7 +293,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         </HeaderMenu>
       </span>
       }
-    </>
+    </div>
   );
 };
 
