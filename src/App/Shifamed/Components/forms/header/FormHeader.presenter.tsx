@@ -2,15 +2,20 @@ import { Box, Grid, LinearProgress } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { ReactComponent as CloudIcon } from "../../../../../assets/images/cloud.svg";
+import { getHumanizedFormat } from "../../../../../common/utils/date";
 import Header from "../../../../../ui/components/common/header/Header";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import FormMessage from "../../../../../ui/components/forms/FormMessage";
 import FormProgress from "../../../../../ui/components/forms/FormProgress";
+import Text from "../../../../../ui/components/Text";
 import { FormHeaderContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import DocRevActions from "../../../../../ui/documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../../../../ui/documentRevision/helpers/records";
+import Colors from "../../../../../ui/layout/theme/utils/colors";
 import SM from "../../../Utils/SM/SM";
 import NewDocRevActions from "../presenters/Actions";
+import { styles } from "./FormHeader.styles";
 import HeaderInfo from "./HeaderInfo";
 
 interface Props {
@@ -23,34 +28,59 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
   const { _formState } = SM.useStores();
   const location = useLocation();
   const isCreateUrl = SM.pathname.includes("document_revision/create");
+  const classes = styles();
   return (
-    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
-      {documentRevision &&
-      <HeaderInfo
-        revisionStage={documentRevision.revisionStage}
-        groupOptions={documentRevision.document.documentType.groupOptions}
-        isInlineApproval={isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)
-        }
-        navigationDetails={location.state}
-        status={documentRevision.status}
-        id={documentRevision.document.docId}
-        name={documentRevision.name}
-        documentTypeId={documentRevision?.document?.documentType.id}
-        revisionChangeType={documentRevision?.revisionChangeType}
-        subRevision={documentRevision?.subRevision}
-        displayStatus={documentRevision.displayStatus}
-        subtitle={generateSubtitle(documentRevision)}
-      />}
-      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center">{!isCreateUrl && type}
+    <Header
+      status={documentRevision?.status}
+      displayStatus={documentRevision?.displayStatus}
+    >
+      {documentRevision && (
+        <HeaderInfo
+          revisionStage={documentRevision.revisionStage}
+          groupOptions={documentRevision.document.documentType.groupOptions}
+          isInlineApproval={isFormWithInlineApproval(
+            documentRevision.formDocument?.formTemplate?.schema
+          )}
+          navigationDetails={location.state}
+          status={documentRevision.status}
+          id={documentRevision.document.docId}
+          name={documentRevision.name}
+          documentTypeId={documentRevision?.document?.documentType.id}
+          revisionChangeType={documentRevision?.revisionChangeType}
+          subRevision={documentRevision?.subRevision}
+          displayStatus={documentRevision.displayStatus}
+          subtitle={generateSubtitle(documentRevision)}
+        />
+      )}
+      <Grid
+        item={true}
+        xs={type !== "newOutput" && isDisabled ? 6 : 12}
+        alignContent="center"
+      >
+        {!isCreateUrl && type}
         <Grid container={true} alignItems="center" justify="flex-end">
-          <Box alignSelf="center">
-            {lastSavedTimestamp &&
-            <Box>
+          {lastSavedTimestamp && (
+            SM.isNewLayout ? (<Box
+              display="flex"
+              alignItems="center"
+              color={Colors.white}
+              className={classes.lastEdited}
+            >
+              <CloudIcon style={{ marginRight: 10 }} />
+              <Text
+                translation="form.builder.header.lastEdited"
+                values={{
+                  lastSavedTimestamp: getHumanizedFormat(lastSavedTimestamp),
+                }}
+              />
+            </Box>)
+              : (<Box alignSelf="center">
+                <Box>
               Last saved: &nbsp;
-              {lastSavedTimestamp}
-            </Box>
-            }
-          </Box>
+                  {lastSavedTimestamp}
+                </Box>
+              </Box>)
+          )}
           {SM.isNewLayout && !isCreateUrl ? (
             <NewDocRevActions {...{ isCreateDocumentDisabled }} />
           ) : (
