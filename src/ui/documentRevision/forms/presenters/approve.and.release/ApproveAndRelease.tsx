@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { getStartOfDayDateString, TIME_ZONE } from "../../../../../common/utils/date";
 import { getHasPermission } from "../../../../../common/utils/selectors";
 import { Group, Permission } from "../../../../../state/ducks/auth/types";
@@ -45,6 +46,7 @@ interface Props {
   revisionStage?: number;
   isRecord: boolean;
   isInlineApproval: boolean;
+  newVarient?: boolean;
 }
 
 const styles = makeStyles(() =>
@@ -70,6 +72,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   revisionStage,
   isRecord,
   isInlineApproval,
+  newVarient = false,
 }) => {
 
   // MARK: @selectors
@@ -314,18 +317,28 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        <Button
-          color="secondary"
-          variant="outlined"
-          onClick={isRecord ? alertDialog.open :  openDialog}
-          id="ApproveAndRelease-button"
-          data-cy="ApproveAndRelease-button"
-        >
-          <Text message={isRecord ? "record.finalize.and.release" : label} />
-        </Button>
+        {newVarient ? (
+          <StyledButton
+            color="primary"
+            onClick={isRecord ? alertDialog.open : openDialog}
+            id="ApproveAndRelease-button"
+            data-cy="ApproveAndRelease-button"
+          >
+            <Text message={isRecord ? "record.finalize.and.release" : label} />
+          </StyledButton>
+        ) : (
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={isRecord ? alertDialog.open : openDialog}
+            id="ApproveAndRelease-button"
+            data-cy="ApproveAndRelease-button"
+          >
+            <Text message={isRecord ? "record.finalize.and.release" : label} />
+          </Button>
+        )}
       </CustomLabelTooltip>
-      {
-        dialog.isOpen &&
+      {dialog.isOpen && (
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
@@ -337,26 +350,34 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           id="ApproveAndRelease-dialog"
         >
           <DialogTitle>
-            {isQms &&
-              <Text translation={isRecord ? "record.finalize.and.release" : "common.approve.and.release"} />
-            }
-            {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
+            {isQms && (
+              <Text
+                translation={
+                  isRecord
+                    ? "record.finalize.and.release"
+                    : "common.approve.and.release"
+                }
+              />
+            )}
+            {!isQms && (
+              <Text
+                translation="common.warning.message"
+                values={{ name: documentName }}
+              />
+            )}
           </DialogTitle>
           <DialogContent
             classes={{ root: classes.dialogContent }}
             id="ApproveAndRelease-content"
           >
             <FormContext.Provider value={{ submitOnChange: false }}>
-              <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-              >
+              <Formik initialValues={initialValues} onSubmit={onSubmit}>
                 {renderForm}
               </Formik>
             </FormContext.Provider>
           </DialogContent>
         </Dialog>
-      }
+      )}
       <AlertDialog
         message="record.release.alert"
         dialog={alertDialog}
