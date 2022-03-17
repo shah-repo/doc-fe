@@ -980,6 +980,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/\(file\) Upload excel with data for import/);
+
+          expect(el).match(/privateBulkExistDocId\n.xlsx/);
+
+          expect(el).match(/MASS CREATE LOGS\n\(file\) Logs\nNone/);
+
           expect(el).match(/WIP/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1000,10 +1006,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
-
-          expect(el).match(/\(file\) Upload excel with data for import\nprivateBulkExistDocId.xlsx/);
-
-          expect(el).match(/MASS CREATE LOGS\n\(file\) Logs\nNone/);
 
           tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT\\n1 2 3`);
           expect(el).match(tmpRegex);
@@ -1179,21 +1181,17 @@ context("Bulk create public, private and reserved doc-ids", () => {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
             fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
           }).then((cdata) => {
-          expect(cdata.numpages).eq(3);
-          expect(cdata.text).match(/Page 1 of 3/);
-          expect(cdata.text).match(/Page 2 of 3/);
-          expect(cdata.text).match(/Page 3 of 3/);
+          expect(cdata.numpages).eq(2);
+          expect(cdata.text).match(/Page 1 of 2/);
+          expect(cdata.text).match(/Page 2 of 2/);
           tmpRegex = new RegExp( "\\n\\n");
           const arr = cdata.text.split(tmpRegex);
           arr.forEach((element) => {
-            if (element.includes("Page 1 of 3")) {
+            if (element.includes("Page 1 of 2")) {
               pages[0] = element;
             }
-            if (element.includes("Page 2 of 3")) {
+            if (element.includes("Page 2 of 2")) {
               pages[1] = element;
-            }
-            if (element.includes("Page 3 of 3")) {
-              pages[2] = element;
             }
           });
         });
@@ -1201,7 +1199,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Verify page 1 for released document", () => {
         const el = pages[0];
-        if (el.includes("Page 1 of 3")) {
+        if (el.includes("Page 1 of 2")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
@@ -1219,6 +1217,14 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/\(file\) Upload excel with data for import/);
+
+          expect(el).match(/privateBulkNoExistDo\ncId.xlsx/);
+
+          expect(el).match(/MASS CREATE LOGS/);
+
+          expect(el).match(/\(file\) Logs/);
+
           expect(el).match(/Released/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1227,7 +1233,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 1 of 3/);
+          expect(el).match(/Page 1 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -1236,44 +1242,14 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Verify page 2 for released document", () => {
         const el = pages[1];
-        if (el.includes("Page 2 of 3")) {
+        if (el.includes("Page 2 of 2")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
-          tmpRegex = new
-          RegExp( `\\(file\\) Upload excel with data for import\\nprivateBulkNoExistDocId\\.xlsx`, "gi" );
-          expect(el).match(tmpRegex);
+          expect(el).match(/BulkProcessLogs.txt/);
 
-          expect(el).match(/MASS CREATE LOGS/);
-
-          expect(el).match(/\(file\) Logs\nBulkProcessLogs.txt/);
-
-          tmpRegex = new RegExp(`Checkbox\\n1 2 3`);
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Released/);
-
-          expect(el).not.match(/TEXT FIELD/);
-
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
-          expect(el).match(tmpRegex);
-
-          tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Page 2 of 3/);
-
-          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(el).not.match(tmpRegex);
-        }
-      });
-
-      it("Verify page 3 for released document", () => {
-        const el = pages[2];
-        if (el.includes("Page 3 of 3")) {
-          tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\n(.*)\n1 2 3`, "gi" );
           expect(el).match(tmpRegex);
 
           // eslint-disable-next-line max-len
@@ -1282,15 +1258,15 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
           expect(el).match(/Released/);
 
-          expect(el).not.match(/TEXT FIELD/);
-
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 3 of 3/);
+          expect(el).match(/Page 2 of 2/);
+
+          expect(el).not.match(/TEXT FIELD/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
