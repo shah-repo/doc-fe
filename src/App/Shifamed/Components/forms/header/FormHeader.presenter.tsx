@@ -4,6 +4,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as CloudIcon } from "../../../../../assets/images/cloud.svg";
 import Header from "../../../../../ui/components/common/header/Header";
+import HeaderInfo from "../../../../../ui/components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import FormMessage from "../../../../../ui/components/forms/FormMessage";
 import FormProgress from "../../../../../ui/components/forms/FormProgress";
@@ -16,13 +17,13 @@ import Colors from "../../../../../ui/layout/theme/utils/colors";
 import SM from "../../../Utils/SM/SM";
 import NewDocRevActions from "../presenters/Actions";
 import { styles } from "./FormHeader.styles";
-import HeaderInfo from "./HeaderInfo";
 
 interface Props {
   isCreateDocumentDisabled: boolean;
+  newVarient?: boolean;
 }
 
-const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled }) => {
+const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled, newVarient = false }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { _formState } = SM.useStores();
@@ -50,6 +51,7 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
           subRevision={documentRevision?.subRevision}
           displayStatus={documentRevision.displayStatus}
           subtitle={generateSubtitle(documentRevision)}
+          newVarient={newVarient}
         />
       )}
       <Grid

@@ -14,7 +14,7 @@ interface OwnProps {
   requestId: string;
   requestType: RequestType;
   renderAsButton: boolean;
-  newVariant: boolean;
+  newVariant?: boolean;
 }
 
 const OwnerChangerContainer: React.FC<OwnProps> = ({

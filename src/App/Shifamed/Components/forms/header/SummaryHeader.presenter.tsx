@@ -4,11 +4,11 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import { SM } from "../../../..";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
+import Header from "../../../../../ui/components/common/header/Header";
+import HeaderInfo from "../../../../../ui/components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import { isFormWithInlineApproval } from "../../../../../ui/documentRevision/helpers/records";
 import ControlsContainer from "../../../../Enlil/Features/DocumentRevision/PreviewControls.container";
-import NewHeader from "./Header";
-import NewHeaderInfo from "./HeaderInfo";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -28,11 +28,11 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       {() => (
         <>
           <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-            <NewHeader
+            <Header
               displayStatus={documentRevision.displayStatus}
               status={documentRevision.status}
             >
-              <NewHeaderInfo
+              <HeaderInfo
                 revisionStage={documentRevision.revisionStage}
                 groupOptions={
                   documentRevision.document.documentType.groupOptions
@@ -50,6 +50,7 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
                 subRevision={documentRevision?.subRevision}
                 displayStatus={documentRevision.displayStatus}
                 subtitle={generateSubtitle(documentRevision)}
+                newVarient
               />
 
               <Grid item={true} xs={6} style={{ paddingRight: "15px" }}>
@@ -62,7 +63,7 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
                   />
                 </Grid>
               </Grid>
-            </NewHeader>
+            </Header>
           </Collapse>
         </>
       )}
