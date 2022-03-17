@@ -1,4 +1,10 @@
-import { Box, Collapse, FormControlLabel, Grid, Switch } from "@material-ui/core";
+import {
+  Box,
+  Collapse,
+  FormControlLabel,
+  Grid,
+  Switch,
+} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,6 +13,7 @@ import React, { useState } from "react";
 import SM from "../../App/Shifamed/Utils/SM/SM";
 import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { FormHeaderStatusClassMapping } from "../components/common/kendo/helpers";
+import Text from "../components/Text";
 import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
 
@@ -29,7 +36,8 @@ const Header: React.FunctionComponent<Props> = ({
   canToggleCustomLabels,
 }) => {
   const [isScorlled, setIsScorlled] = useState<boolean>(false);
-  const [selectedDocRevDisplayStatus, setSelectedDocRevDisplayStatus] = useState<string>("");
+  const [selectedDocRevDisplayStatus, setSelectedDocRevDisplayStatus] =
+    useState<string>("");
   FormScrolledContext = React.createContext<FormScrolledContext | undefined>({
     setIsScorlled,
     setSelectedDocRevDisplayStatus,
@@ -60,7 +68,9 @@ const Header: React.FunctionComponent<Props> = ({
                             onChange={toggleCustomLabels}
                           />
                         }
-                        label="Show customizable labels"
+                        label={
+                          <Text translation="form.builder.header.control.label" />
+                        }
                       />
                     )}
                   </Grid>
@@ -93,18 +103,20 @@ const Header: React.FunctionComponent<Props> = ({
     <AppBar position="fixed" color="primary" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.logo}></div>
-        <Grid
-          container={true}
-          alignItems="flex-end"
-          justify="flex-end"
-        >
-          {canToggleCustomLabels &&
-        <FormControlLabel
-          control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
-          label="Show customizable labels"
-        />
-          }
-          <AutosaveToggle/>
+        <Grid container={true} alignItems="flex-end" justify="flex-end">
+          {canToggleCustomLabels && (
+            <FormControlLabel
+              control={
+                <Switch
+                  name="toggleCustomLabels"
+                  checked={customLabelsValue}
+                  onChange={toggleCustomLabels}
+                />
+              }
+              label={<Text translation="form.builder.header.control.label" />}
+            />
+          )}
+          <AutosaveToggle />
         </Grid>
       </Toolbar>
     </AppBar>

@@ -10,7 +10,6 @@ import { FormHeaderStatusClassMapping } from "../../../../../ui/components/commo
 import Text from "../../../../../ui/components/Text";
 import { checkIsDocumentMPIOutput } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { useDocumentStatus } from "../../../../../ui/hooks/docCustomization/useCustomization";
-import Colors from "../../../../../ui/layout/theme/utils/colors";
 import { styles } from "./HeaderInfo.styles";
 import { StyledBreadcrumb } from "./StyledBreadcrumb";
 
@@ -63,7 +62,6 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
       <StyledBreadcrumb separator="›">
         <Typography
           className={classes.groupSection}
-          style={{ marginLeft: "5px" }}
         >
           <Grid
             container={true}
@@ -77,7 +75,7 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
             <Link
               underline="hover"
               onClick={returnToList}
-              style={{ color: Colors.white, cursor: "Pointer" }}
+              className={classes.link}
             >
               <Grid item={true} className={classes.title}>
                 {navigationDetails?.label}
@@ -97,7 +95,7 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
               justify="flex-start"
               alignItems="center"
             >
-              <Grid item={true} style={{ minWidth: "50px" }}>
+              <Grid item={true} className={classes.minWidthSpace}>
                 {" "}
                 {id}
               </Grid>

@@ -229,7 +229,7 @@ const PreviewControlsContainer: React.FunctionComponent<
   const renderNoAccessWarning = () => {
     if (!hasAccess) {
       return (
-        <div style={{ display: "flex" }}>
+        <Box display="flex">
           <Box
             alignSelf="center"
             id="PreviewControlsContainer-warning"
@@ -257,7 +257,7 @@ const PreviewControlsContainer: React.FunctionComponent<
               <Text translation="document.request.access" />
             </StyledButton>
           )}
-        </div>
+        </Box>
       );
     }
   };

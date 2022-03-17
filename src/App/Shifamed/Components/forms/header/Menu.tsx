@@ -2,7 +2,7 @@ import { IconButton, MenuItem } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
 import React from "react";
 import { ReactComponent as MoreVerticalIcon } from "../../../../../assets/images/more_vertical.svg";
-import Colors from "../../../../../ui/layout/theme/utils/colors";
+import { styles } from "./Menu.styles";
 
 interface Props {
   // children: any[];
@@ -10,6 +10,7 @@ interface Props {
 }
 
 const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
+  const classes = styles();
   if (!children.length) {
     children = [children];
   }
@@ -34,7 +35,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
         onClick={handleClick}
         data-cy="HeaderMenuButton"
         id="HeaderMenuButton"
-        style={{ color: Colors.white, marginRight: "20px" }}
+        className={classes.iconButton}
         disableRipple
       >
         <MoreVerticalIcon />
@@ -50,13 +51,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
           vertical: "bottom",
           horizontal: "center",
         }}
-        style = {{
-          padding: "5px 0px",
-          border: `1px solid ${Colors.gray_goose}`,
-          boxSizing: "border-box",
-          boxShadow: "0px 10px 30px rgba(22, 34, 41, 0.15)",
-          borderRadius: "4px",
-        }}
+        className={classes.menu}
       >
         {children.map((menuItem, index) => {
           if (!menuItem) {
@@ -65,12 +60,9 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
           return (
             <MenuItem
               onClick={handleClose}
+              className={classes.menuItem}
               style={{
                 display: menuItem?.props?.shouldDisplay === false ? "none" : "block",
-                backgroundColor: Colors.white,
-                margin: "0px",
-                padding: "0px",
-                width: "240px",
               }}
               key={index}
             >

@@ -55,6 +55,7 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: "14px",
       lineHeight: "24px",
       color: Colors.white,
+      marginLeft: "5px",
     },
     statusDefault: {
       color: Colors.white,
@@ -114,5 +115,12 @@ export const styles = makeStyles((theme: Theme) =>
       "-webkit-mask":
         `url(${iconLink}) no-repeat center / contain`,
     }),
+    link: {
+      color: Colors.white,
+      cursor: "Pointer",
+    },
+    minWidthSpace: {
+      minWidth: "50px",
+    },
   },
   ));
