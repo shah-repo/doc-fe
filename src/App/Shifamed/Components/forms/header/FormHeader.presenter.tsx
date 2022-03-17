@@ -3,7 +3,6 @@ import { Observer } from "mobx-react";
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as CloudIcon } from "../../../../../assets/images/cloud.svg";
-import { getHumanizedFormat } from "../../../../../common/utils/date";
 import Header from "../../../../../ui/components/common/header/Header";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import FormMessage from "../../../../../ui/components/forms/FormMessage";
@@ -69,9 +68,9 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
               >
                 <CloudIcon style={{ marginRight: 10 }} />
                 <Text
-                  translation="form.builder.header.lastEdited"
+                  translation="form.builder.header.lastSaved"
                   values={{
-                    lastSavedTimestamp: getHumanizedFormat(lastSavedTimestamp),
+                    lastSavedTimestamp,
                   }}
                 />
               </Box>
