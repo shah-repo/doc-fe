@@ -1714,7 +1714,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Select expired equipment", () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick().wait(500);
         cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
       });
 
@@ -1762,13 +1762,11 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-          cy.listLoadingElementShouldAppear();
-        });
+        cy.drClickReviseDocument();
       });
 
       it("Update step #1 description", () => {
+        cy.cmpTurnOffAutosave();
         cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
         cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
       });
@@ -1940,7 +1938,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Select expired equipment", () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick().wait(500);
         cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
       });
 
@@ -1988,13 +1986,11 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-          cy.listLoadingElementShouldAppear();
-        });
+        cy.drClickReviseDocument();
       });
 
       it("Update step #1 description", () => {
+        cy.cmpTurnOffAutosave();
         cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
         cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
       });
