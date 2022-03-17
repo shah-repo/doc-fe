@@ -31,6 +31,7 @@ import FormOwnerChangerContainer from "../../../Shifamed/Components/forms/presen
 import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
 import ExportToEmail from "../../../Shifamed/Components/forms/presenters/ExportToEmail";
 import { StyledButton } from "../../../Shifamed/Components/forms/presenters/StyledListButton";
+import { styles } from "./PreviewControls.styles";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -69,6 +70,7 @@ const PreviewControlsContainer: React.FunctionComponent<
   hasAccess,
   canChangeOwnerShip,
 }) => {
+  const classes = styles();
   const handleCreateDocument = useHandleCreateDoc();
   const {
     isVisible: showRevise,
@@ -239,7 +241,7 @@ const PreviewControlsContainer: React.FunctionComponent<
             <Grid container alignItems="center">
               <Grid item>
                 <WarningIcon
-                  style={{ marginTop: 2, marginRight: 10, width: "20px", height: "20px", color: Colors.white }}
+                  className={classes.warningIcon}
                 />
               </Grid>
               <Grid item>
