@@ -89,7 +89,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {newVariant ?
+      {newVariant ? (
         <StyledButton
           color="primary"
           onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
@@ -98,8 +98,8 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
         >
           <Text message={isObsolete ? "common.void" : label} />
         </StyledButton>
-
-        : <Button
+      ) : (
+        <Button
           color="secondary"
           variant="outlined"
           onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
@@ -107,10 +107,9 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           data-cy="ApproveAndRelease-button"
         >
           <Text message={isObsolete ? "common.void" : label} />
-        </Button>}
-      <Dialog
-        open={voidRecordDialog.isOpen}
-      >
+        </Button>
+      )}
+      <Dialog open={voidRecordDialog.isOpen}>
         <DialogContent>
           <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
             <Box textAlign="center">
