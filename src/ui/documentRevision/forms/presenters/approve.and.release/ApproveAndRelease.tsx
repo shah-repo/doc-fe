@@ -338,7 +338,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           </Button>
         )}
       </CustomLabelTooltip>
-      {dialog.isOpen &&
+      {
+        dialog.isOpen &&
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
@@ -350,9 +351,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           id="ApproveAndRelease-dialog"
         >
           <DialogTitle>
-            {isQms && (
+            {isQms &&
               <Text translation={isRecord ? "record.finalize.and.release" : "common.approve.and.release"} />
-            )}
+            }
             {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
           </DialogTitle>
           <DialogContent
