@@ -292,6 +292,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             {...{
               shouldShowUpgrade,
             }}
+            newVariant
           />
           {!(isRecord && isInlineApproval) &&
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
