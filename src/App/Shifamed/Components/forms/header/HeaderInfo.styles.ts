@@ -21,11 +21,12 @@ export const styles = makeStyles((theme: Theme) =>
       cursor: "pointer",
     },
     title: {
-      fontFamily: "Inter",
+      fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "24px",
+      cursor: "pointer",
     },
     GREEN_STATUS: {
       color: Colors.green_blue,
@@ -85,6 +86,19 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "18px",
       color: Colors.white,
     },
+    subTitleLink: {
+      "fontFamily": "Sora",
+      "fontWeight": 600,
+      "fontSize": "12px",
+      "color": Colors.white,
+      "textDecoration": "none",
+      "cursor": "pointer",
+      "& a": {
+        color: Colors.white,
+        textDecoration: "underline",
+        cursor: "pointer",
+      },
+    },
     whiteDot: {
       width: "4px",
       height: "4px",
@@ -118,6 +132,7 @@ export const styles = makeStyles((theme: Theme) =>
     link: {
       color: Colors.white,
       cursor: "Pointer",
+      textDecoration: "none",
     },
     minWidthSpace: {
       minWidth: "50px",
