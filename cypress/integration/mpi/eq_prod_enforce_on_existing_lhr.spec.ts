@@ -1944,7 +1944,6 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
   context("Revise LHRs", () => {
     it("Click Revise on LHRs #1", () => {
       cy.drClickReviseDocument();
-      });
     });
 
     it("Update step #1 description", () => {
