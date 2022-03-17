@@ -224,7 +224,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <NewCloneEBButton
           {...{ documentRevision }}
         />}
-        <InspectionControlsContainer {...{ documentRevision }} />
+        <InspectionControlsContainer {...{ documentRevision }} newVarient={true} />
         <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}/>
         {
           isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (

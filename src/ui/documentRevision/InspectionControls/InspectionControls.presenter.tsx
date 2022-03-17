@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import React from "react";
+import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import Text from "../../components/Text";
 import { InspectionControlsPresenterProps } from "./InspectionControls.types";
 import InspectionDialog from "./InspectionDialog/InspectionDialog";
@@ -15,22 +16,34 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
   canCreateInspection,
   isDocumentDraft,
   disabled,
+  newVarient,
   ...props
 }) => {
   if (!isDocumentDraft || !canCreateInspection) { return null; }
 
   return (
     <>
-      <Button
-        variant="outlined"
-        color="secondary"
-        data-cy={`PreviewControlsContainer-inspection-FAI`}
-        onClick={() => onButtonClick()}
-        {...{ disabled }}
-      >
-        <Text translation={"document.revision.fai"} />
-      </Button>
-      <InspectionDialog { ...(props) } />
+      {newVarient ? (
+        <StyledButton
+          color="primary"
+          data-cy={`PreviewControlsContainer-inspection-FAI`}
+          onClick={() => onButtonClick()}
+          {...{ disabled }}
+        >
+          <Text translation={"document.revision.fai"} />
+        </StyledButton>
+      ) : (
+        <Button
+          variant="outlined"
+          color="secondary"
+          data-cy={`PreviewControlsContainer-inspection-FAI`}
+          onClick={() => onButtonClick()}
+          {...{ disabled }}
+        >
+          <Text translation={"document.revision.fai"} />
+        </Button>
+      )}
+      <InspectionDialog {...props} />
     </>
   );
 };

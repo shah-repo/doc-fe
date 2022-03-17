@@ -293,7 +293,7 @@ const PreviewControlsContainer: React.FunctionComponent<
         isStatusInReview &&
         isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
-      <InspectionControlsContainer {...{ documentRevision }} />
+      <InspectionControlsContainer {...{ documentRevision }} newVarient/>
       {isExportable && (
         <ExportToEmail
           revisionId={documentRevision.id}
