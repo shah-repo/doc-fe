@@ -12,5 +12,6 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.white,
     },
     cloudIcon: { marginRight: 10 },
+    linearProgress: { width: "100%" },
   })
 );
