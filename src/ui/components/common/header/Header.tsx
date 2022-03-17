@@ -8,7 +8,23 @@ import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevision
 import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import Colors from "../../../layout/theme/utils/colors";
-import { FormHeaderStatusClassMapping } from "../kendo/helpers";
+
+export enum FormHeaderStatusClassMapping {
+  "Pending Approval"="PENDING_STATUS",
+  "In Review"="PENDING_STATUS",
+  "Pending Change"="PENDING_STATUS",
+  "IN_REVIEW" = "PENDING_STATUS",
+  "Approved"="GREEN_STATUS",
+  "Released"="GREEN_STATUS",
+  "APPROVED" = "GREEN_STATUS",
+  "Obsolete"="GRAY_STATUS",
+  "WIP" = "WIP_STATUS",
+  "Voided"="RED_STATUS",
+  "CLOSED" = "CLOSED_STATUS",
+  "VOIDED" = "RED_STATUS",
+  "Superseded"="GRAY_STATUS",
+  "Void"="GRAY_STATUS",
+}
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({

@@ -13,7 +13,7 @@ import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../..
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
-import { FormHeaderStatusClassMapping } from "../kendo/helpers";
+import { FormHeaderStatusClassMapping } from "./Header";
 import { styles } from "./HeaderInfo.styles";
 
 interface NavigationDetails {

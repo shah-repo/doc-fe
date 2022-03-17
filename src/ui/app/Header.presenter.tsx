@@ -12,7 +12,7 @@ import { Observer } from "mobx-react";
 import React, { useState } from "react";
 import SM from "../../App/Shifamed/Utils/SM/SM";
 import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
-import { FormHeaderStatusClassMapping } from "../components/common/kendo/helpers";
+import { FormHeaderStatusClassMapping } from "../components/common/header/Header";
 import Text from "../components/Text";
 import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
