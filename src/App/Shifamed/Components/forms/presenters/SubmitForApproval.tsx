@@ -99,7 +99,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
               <span className={classes.iconContainer}>
                 <ReportProblemOutlinedIcon color="error" />
               </span>
-              <Typography variant="h6" style={{ marginTop: 20, marginBottom: 5 }}>
+              <Typography variant="h6" className={classes.alertText}>
                 <Text translation="common.alert" />
               </Typography>
             </Box>
