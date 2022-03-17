@@ -26,27 +26,28 @@ const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {
-        shouldShowUpgrade &&
+      {shouldShowUpgrade && (
         <>
-          {newVariant ?
+          {newVariant ? (
             <StyledButton
               color="primary"
               onClick={dialog.open}
               id="UpgradeToLatest-upgrade"
             >
-              <Text translation="common.upgrade"/>
-            </StyledButton> :
+              <Text translation="common.upgrade" />
+            </StyledButton>
+          ) : (
             <Button
               variant="outlined"
               onClick={dialog.open}
               id="UpgradeToLatest-upgrade"
             >
-              <Text translation="common.upgrade"/>
-            </Button>}
-          <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }}/>
+              <Text translation="common.upgrade" />
+            </Button>
+          )}
+          <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }} />
         </>
-      }
+      )}
     </>
   );
 };
