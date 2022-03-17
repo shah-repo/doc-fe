@@ -17,6 +17,7 @@ import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import ApproveAndRelease from "../../../../../ui/documentRevision/forms/presenters/approve.and.release/ApproveAndRelease";
+import CancelButton from "../../../../../ui/documentRevision/forms/presenters/CancelButton";
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
 import { SubmitForApproval } from "../../../../../ui/documentRevision/forms/presenters/SubmitForApproval";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
@@ -29,7 +30,6 @@ import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../../..
 import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeToLatest";
 import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
-import CancelButton from "./CancelButton";
 import FormOwnerChangerContainer from "./change.owner/container";
 import ExportToCSVButton from "./ExportToCSV.button";
 import ExportToEmail from "./ExportToEmail";
@@ -279,6 +279,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           <CancelButton
             {...{ documentRevision }}
             setShouldDisplay={props.setCancelButtonDisplay}
+            newVarient
           />}
           {renderChangeOwnership}
           <UpgradeToLatestContainer
