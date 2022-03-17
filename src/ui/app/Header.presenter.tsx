@@ -5,6 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import { Observer } from "mobx-react";
 import React, { useState } from "react";
 import SM from "../../App/Shifamed/Utils/SM/SM";
+import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { FormHeaderStatusClassMapping } from "../components/common/kendo/helpers";
 import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
@@ -15,11 +16,11 @@ interface Props extends WithStyles<typeof styles> {
   canToggleCustomLabels: boolean;
 }
 interface FormScrolledContext{
-  setIsScorlled: any;
-  setSelectedDocRevDisplayStatus: any;
+  setIsScorlled: (action: boolean) => void;
+  setSelectedDocRevDisplayStatus: (status: DocumentRevisionStatus) => void;
 }
 
-export let FormScrolledContext = React.createContext<FormScrolledContext| undefined>(undefined);
+export let FormScrolledContext = React.createContext<FormScrolledContext | undefined>(undefined);
 
 const Header: React.FunctionComponent<Props> = ({
   classes,
@@ -47,9 +48,7 @@ const Header: React.FunctionComponent<Props> = ({
                 alignContent="center"
                 alignItems="center"
               >
-                {!isScorlled && (
-                  <Box className={classes.newLogo}/>
-                )}
+                {!isScorlled && <Box className={classes.newLogo} />}
                 <Grid container={true} alignItems="flex-end" justify="flex-end">
                   <Grid item>
                     {canToggleCustomLabels && (
@@ -74,11 +73,15 @@ const Header: React.FunctionComponent<Props> = ({
             <Collapse in={isScorlled}>
               <Box
                 height={40}
-                className={`${classes[FormHeaderStatusClassMapping[selectedDocRevDisplayStatus]]} ${classes.topScrollBarBox}`}
+                className={`${
+                  classes[
+                    FormHeaderStatusClassMapping[selectedDocRevDisplayStatus]
+                  ]
+                } ${classes.topScrollBarBox}`}
                 alignItems="center"
                 justifyContent="center"
               >
-                { selectedDocRevDisplayStatus }
+                {selectedDocRevDisplayStatus}
               </Box>
             </Collapse>
           </>
