@@ -823,6 +823,12 @@ context("Repeat Training with Training Curriculum", () => {
           fileName: downloadFile,
         });
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -867,7 +873,9 @@ context("Repeat Training with Training Curriculum", () => {
         tmpRegex = new RegExp( `Output Document Type\\nTraining Curriculum test`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/PERIODIC TRAINING/);
 
@@ -876,6 +884,8 @@ context("Repeat Training with Training Curriculum", () => {
         expect(el).match(/Refresh\/repeat training periodically\?\n Yes/);
 
         expect(el).match(/Training Frequency \(in days\)/);
+
+        expect(el).match(/TRAINEES DETAILS/);
 
         expect(el).match(/Released/);
 
@@ -895,8 +905,6 @@ context("Repeat Training with Training Curriculum", () => {
         tmpRegex = new
         RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/TRAINEES DETAILS/);
 
         expect(el).match(/Groups to Train/);
 
@@ -1109,6 +1117,12 @@ context("Repeat Training with Training Curriculum", () => {
           fileName: downloadFile,
         });
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -1142,7 +1156,9 @@ context("Repeat Training with Training Curriculum", () => {
 
         expect(el).match(/Description\ntest training curricula refresh \/ repeat/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/PERIODIC TRAINING/);
 
@@ -1155,6 +1171,9 @@ context("Repeat Training with Training Curriculum", () => {
         expect(el).match(/TRAINEES DETAILS/);
 
         expect(el).match(/Groups to Train\nOwner as approver/);
+
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Draft/);
 
@@ -1173,9 +1192,6 @@ context("Repeat Training with Training Curriculum", () => {
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");
@@ -1332,7 +1348,9 @@ context("Repeat Training with Training Curriculum", () => {
 
         expect(el).match(/Description\ntest training curricula refresh \/ repeat/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/PERIODIC TRAINING/);
 
@@ -1345,6 +1363,9 @@ context("Repeat Training with Training Curriculum", () => {
         expect(el).match(/TRAINEES DETAILS/);
 
         expect(el).match(/Groups to Train\nOwner as approver/);
+
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
 
@@ -1363,9 +1384,6 @@ context("Repeat Training with Training Curriculum", () => {
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");

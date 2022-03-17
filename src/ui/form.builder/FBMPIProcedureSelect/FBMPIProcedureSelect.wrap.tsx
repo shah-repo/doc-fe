@@ -1,14 +1,16 @@
 import { Box, Grid, Typography } from "@material-ui/core";
-import { concat, uniqBy } from "lodash";
+import { concat, isUndefined, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import moment from "moment";
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { EQStatus, FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions, FBSelectedEQ } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { toastError } from "../../components/notifications";
 import Colors from "../../layout/theme/utils/colors";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -37,6 +39,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     const isLHRProductionBuild =  workspaceState?.isLHRProductionBuild || false;
     const smartRefLHR = document?.smartReferencesTo?.find((item) => item.type === SmartReferenceType.HiddenPiInstance);
     const enforceFlag = Boolean(smartRefLHR?.toDocRev?.document.typeSpecificConfig?.eqProdEnforceConfig.value);
+    const intl = useIntl();
 
     React.useEffect(() => {
       dialogState?.setActions(
@@ -169,6 +172,12 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       if (!id) { return; }
       const formValue = formState?.getValues() as FBMPIProcedureSelectValue;
       const { quantity, unit, usedOverride } = formValue;
+      if (isUndefined(quantity)) { return; }
+      if (!usedOverride) { return; }
+      if (quantity <= 0 || quantity.toString().split(".")[1]?.length > 10) {
+        toastError(intl.formatMessage({ id: "document.revision.quntity.error" }));
+        return;
+      }
       const part = {
         fieldId: name,
         forPreselected: { id: initialValues?.id },

@@ -126,6 +126,7 @@ context("Autosave on leaving page while data is still not saved", () => {
     });
 
     it("Type 'Test' inside title field", () => {
+      cy.cmpTurnOffAutosave();
       cy.drEnterDocumentTitle({ name: "Test" });
     });
 
@@ -164,6 +165,7 @@ context("Autosave on leaving page while data is still not saved", () => {
 
     it("Click on created 'Draft' document and check if data is saved", () => {
       cy.drFilterDocListByNameAndStatus({ title: "Test", status: "Draft" });
+      cy.cmpTurnOnAutosave();
       cy.get("[id=Title-field]").contains("Test");
       cy.get("[data-cy=\"RichTextEditor.description\"]>div>div:nth-child(2)>div>div>div>div>div>div>span>span")
         .contains("Test description");

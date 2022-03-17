@@ -319,6 +319,7 @@ context("Approval request email popup modal", () => {
 
     it("Get emails and visit AR approval url", () => {
       cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email });
+      cy.pause();
     });
 
     it("Approve AR", () => {
