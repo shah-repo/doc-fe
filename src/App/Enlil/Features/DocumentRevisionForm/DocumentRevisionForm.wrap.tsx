@@ -1,7 +1,10 @@
 import { get } from "lodash";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
+import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
+import { ApplicationState } from "../../../../state/reducers";
 import { FormScrolledContext } from "../../../../ui/app/Header.presenter";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
 
@@ -16,13 +19,15 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     autosaveEnabled,
     ...props
   }: T) => {
-
     // MARK: @config
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const { _formState, _tabsState } = SM.useStores();
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
-
+    const { id } = _formState?.getValues() as DocumentRevision;
+    const formDocuments = useSelector((state: ApplicationState) =>
+      documentRevisionsSelectors.getDocumentRevision(state, id)
+    );
     const {
       setIsScorlled,
       setSelectedDocRevDisplayStatus,
@@ -38,12 +43,15 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     // MARK: @state
 
     // MARK: @reactions
+    useEffect(() => {
+      setSelectedDocRevDisplayStatus(formDocuments?.displayStatus);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formDocuments]);
     SM.reaction(
       () => _formState?.values,
       () => {
         const documentRevision = _formState?.getValues() as DocumentRevision;
         if (!_documentRevisionFormState) { return; }
-        setSelectedDocRevDisplayStatus(documentRevision.displayStatus);
         _documentRevisionFormState.setDocumentRevision(documentRevision);
         // Set the FB schema
         let schema = get(documentRevision, "formTemplate.schema");
