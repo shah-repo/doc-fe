@@ -6,6 +6,7 @@ import React from "react";
 import { SM } from "../../../../App";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import Colors from "../../../layout/theme/utils/colors";
 import { FormHeaderStatusClassMapping } from "../kendo/helpers";
 
@@ -56,7 +57,7 @@ interface Props{
 const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
-  const isCreateUrl = SM.pathname.includes("document_revision/create");
+  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   if (SM.isNewLayout && !isCreateUrl) {
     return (
       <Observer>

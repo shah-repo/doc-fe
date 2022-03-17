@@ -16,6 +16,7 @@ import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
@@ -50,7 +51,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     canChangeOwnerShip,
     type,
   } = React.useContext(FormHeaderContext)!;
-  const isCreateUrl = SM.pathname.includes("document_revision/create");
+  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || "";

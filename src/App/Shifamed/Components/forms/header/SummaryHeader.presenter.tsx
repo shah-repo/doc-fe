@@ -27,7 +27,6 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
     <Observer>
       {() => (
         <>
-          {" "}
           <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
             <NewHeader
               displayStatus={documentRevision.displayStatus}

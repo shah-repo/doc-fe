@@ -8,6 +8,7 @@ import { generateSubtitle } from "../../../../../ui/components/common/header/sub
 import FormMessage from "../../../../../ui/components/forms/FormMessage";
 import FormProgress from "../../../../../ui/components/forms/FormProgress";
 import Text from "../../../../../ui/components/Text";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../../../ui/constants/urls";
 import { FormHeaderContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import DocRevActions from "../../../../../ui/documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../../../../ui/documentRevision/helpers/records";
@@ -26,7 +27,7 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { _formState } = SM.useStores();
   const location = useLocation();
-  const isCreateUrl = SM.pathname.includes("document_revision/create");
+  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const classes = styles();
   return (
     <Header
