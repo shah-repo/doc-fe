@@ -36,7 +36,6 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       displayStatus={documentRevision.displayStatus}
       subtitle={generateSubtitle(documentRevision)}
     />
-
     <Grid item={true} xs={6}>
       <Grid container={true} alignItems="flex-end" justify="flex-end">
         <ControlsContainer

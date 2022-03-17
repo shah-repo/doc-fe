@@ -126,7 +126,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
     );
   };
 
-  return (<>
+  return (
     <InspectionControlsPresenter
       {...{
         canCreateInspection,
@@ -142,7 +142,6 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
         newVarient,
       }}
     />
-  </>
   );
 };
 
