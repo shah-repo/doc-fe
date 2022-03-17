@@ -17,6 +17,7 @@ import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import ApproveAndRelease from "../../../../../ui/documentRevision/forms/presenters/approve.and.release/ApproveAndRelease";
+import ExportToCSVButton from "../../../../../ui/documentRevision/forms/presenters/export.to.csv/ExportToCSV.button";
 import ExportToEmail from "../../../../../ui/documentRevision/forms/presenters/export.to.email/ExportToEmail";
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
 import { SubmitForApproval } from "../../../../../ui/documentRevision/forms/presenters/SubmitForApproval";
@@ -32,7 +33,6 @@ import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
 import CancelButton from "./CancelButton";
 import FormOwnerChangerContainer from "./change.owner/container";
-import ExportToCSVButton from "./ExportToCSV.button";
 import VoidButton from "./VoidButton";
 
 const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
@@ -218,6 +218,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <span>
         {(isStatusReleased || isStatusInDraft) && serializedCSV &&
           <ExportToCSVButton
+            newVariant
             {...{ documentRevision }}
           />}
         {(isStatusReleased || isStatusInDraft) && canCopy &&

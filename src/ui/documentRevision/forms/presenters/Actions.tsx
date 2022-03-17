@@ -219,6 +219,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         {(isStatusReleased || isStatusInDraft) && serializedCSV &&
           <ExportToCSVButton
             {...{ documentRevision }}
+            newVariant
           />}
         {(isStatusReleased || isStatusInDraft) && canCopy &&
         <CopyEBButton
