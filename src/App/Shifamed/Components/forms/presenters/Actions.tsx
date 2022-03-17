@@ -12,6 +12,7 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../../../state/ducks/documentRevisi
 import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
+import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
@@ -31,7 +32,6 @@ import NewCloneEBButton from "./CopyEBButton";
 import ExportToCSVButton from "./ExportToCSV.button";
 import ExportToEmail from "./ExportToEmail";
 import RedlineButton from "./Redline.button";
-import FormSubmitButton from "./SubmitButton";
 import { SubmitForApproval } from "./SubmitForApproval";
 import VoidButton from "./VoidButton";
 
@@ -198,7 +198,8 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <Observer>
         {() => (
           <>
-            {<FormSubmitButton
+            {<SubmitButton
+              newVariant
               asyncState={asyncState}
               label={isDisabled ?
                 "common.save" :

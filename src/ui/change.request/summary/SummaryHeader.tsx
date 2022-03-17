@@ -1,8 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { FormikErrors } from "formik";
 import React from "react";
-import { SM } from "../../../App";
-import FormSubmitButton from "../../../App/Shifamed/Components/forms/presenters/SubmitButton";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common/types";
 import { AsyncState } from "../../../state/types";
@@ -28,22 +26,13 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   canEdit,
 }) => {
 
-  let submitButtonRenderer = canEdit && (
+  const submitButtonRenderer = canEdit && (
     <SubmitButton
       asyncState={asyncState}
       label="document.save"
       errors={errors}
     />
   );
-  if (SM.isNewLayout) {
-    submitButtonRenderer =  canEdit && (
-      <FormSubmitButton
-        asyncState={asyncState}
-        label="document.save"
-        errors={errors}
-      />
-    );
-  }
   return (
     <Header>
       <HeaderInfo status={state} id={crId} name={title}/>
