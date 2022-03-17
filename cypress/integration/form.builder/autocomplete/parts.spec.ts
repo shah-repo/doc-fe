@@ -148,8 +148,7 @@ context("Autocomplete 'Parts' test", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
-      // eslint-disable-next-line max-len
-      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox",  { force: true }).wait(1500).arrowType("{downarrow}{enter}",  { force: true });
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
@@ -161,8 +160,8 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Check doc Draft status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", "New Part Form");
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.arCheckTitleInEditableAndMatches({ name: "New Part Form" });
       cy.get("#HeaderInfo-docId").then((x) => {
         releasedFormId = x.text();
       });
@@ -304,7 +303,9 @@ context("Autocomplete 'Parts' test", () => {
 
         expect(el).match(/Output Document Type\nParts/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/Make vs Buy\nPrimary Supplier\nOther Suppliers/);
 
@@ -382,8 +383,8 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "New Part Form");
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "New Part Form" });
       cy.get("#HeaderInfo-docId").then((x) => {
         releasedFormId = x.text();
       });
@@ -529,7 +530,9 @@ context("Autocomplete 'Parts' test", () => {
 
         expect(el).match(/Output Document Type\nParts/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/Make vs Buy\nPrimary Supplier\nOther Suppliers/);
 
@@ -660,8 +663,8 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Extract document Id", () => {
-        cy.get("#HeaderInfo-status").should("have.text", "Draft");
-        cy.get("#HeaderInfo-name").should("have.text", "Parts document title");
+        cy.drCheckDocumentStatus({ status: "Draft" });
+        cy.arCheckTitleInEditableAndMatches({ name: "Parts document title" });
         cy.get("#HeaderInfo-docId").contains("PRT-").then(($x) => {
           releasedFormId = $x.text();
         });
@@ -798,13 +801,16 @@ context("Autocomplete 'Parts' test", () => {
 
           expect(el).match(/Description\nParts document description/);
 
-          expect(el).match(/Attachments\nimage.jpg/);
+          expect(el).match(/Attachments/);
 
-          expect(el).match(/Make vs Buy\nNone\n/);
+          expect(el).match(/image.jpg/);
+
+          expect(el).match(/Make vs Buy\nMake\n/);
 
           // eslint-disable-next-line max-len
-          tmpRegex = new RegExp( `Traceability required\nIQC Required\nLimited Shelf Life\nFAI Required`, "gi" );
-          expect(el).match(tmpRegex);
+          expect(el).match(/Traceability required\nSerialized\n Yes .*No\nSelect serialization\nSelect Provided Serialization/);
+
+          expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required/);
 
           // eslint-disable-next-line max-len
           tmpRegex = new RegExp( `Checkbox\nTraceability required\nIQC Required\nLimited Shelf Life\nFAI Required\n1 2 3`, "gi" );
@@ -814,6 +820,8 @@ context("Autocomplete 'Parts' test", () => {
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
+
+          expect(el).not.match(/TEXT FIELD/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
@@ -862,8 +870,8 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Check doc Released status and click on Send To Email", () => {
-        cy.get("#HeaderInfo-status").should("have.text", "Released");
-        cy.get("#HeaderInfo-name").should("have.text", "Parts document title");
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.arCheckTitleInEditableAndMatches({ name: "Parts document title" });
         cy.get("#HeaderInfo-docId").contains("PRT-").then(($x) => {
           releasedFormId = $x.text();
         });
@@ -1003,13 +1011,16 @@ context("Autocomplete 'Parts' test", () => {
 
           expect(el).match(/Description\nParts document description/);
 
-          expect(el).match(/Attachments\nimage.jpg/);
+          expect(el).match(/Attachments/);
 
-          expect(el).match(/Make vs Buy\nNone\n/);
+          expect(el).match(/image.jpg/);
+
+          expect(el).match(/Make vs Buy\nMake\n/);
 
           // eslint-disable-next-line max-len
-          tmpRegex = new RegExp( `Traceability required\nIQC Required\nLimited Shelf Life\nFAI Required`, "gi" );
-          expect(el).match(tmpRegex);
+          expect(el).match(/Traceability required\nSerialized\n Yes .*No\nSelect serialization\nSelect Provided Serialization/);
+
+          expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required/);
 
           // eslint-disable-next-line max-len
           tmpRegex = new RegExp( `Checkbox\nTraceability required\nIQC Required\nLimited Shelf Life\nFAI Required\n1 2 3`, "gi" );
@@ -1019,6 +1030,8 @@ context("Autocomplete 'Parts' test", () => {
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
+
+          expect(el).not.match(/TEXT FIELD/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
