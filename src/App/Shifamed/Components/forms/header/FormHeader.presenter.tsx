@@ -56,7 +56,6 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
         xs={type !== "newOutput" && isDisabled ? 6 : 12}
         alignContent="center"
       >
-        {!isCreateUrl && type}
         <Grid container={true} alignItems="center" justify="flex-end">
           {lastSavedTimestamp && (
             <Box
