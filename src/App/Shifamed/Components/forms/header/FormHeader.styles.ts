@@ -11,5 +11,6 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "15px",
       color: Colors.white,
     },
-  },
-  ));
+    cloudIcon: { marginRight: 10 },
+  })
+);

@@ -66,7 +66,7 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
                 color={Colors.white}
                 className={classes.lastEdited}
               >
-                <CloudIcon style={{ marginRight: 10 }} />
+                <CloudIcon className={classes.cloudIcon} />
                 <Text
                   translation="form.builder.header.lastSaved"
                   values={{
