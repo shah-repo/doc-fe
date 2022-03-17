@@ -17,6 +17,7 @@ import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
+import { SubmitForApproval } from "../../../../../ui/documentRevision/forms/presenters/SubmitForApproval";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../../../../ui/documentRevision/helpers/documentRevisionStatus";
@@ -32,7 +33,6 @@ import CancelButton from "./CancelButton";
 import FormOwnerChangerContainer from "./change.owner/container";
 import ExportToCSVButton from "./ExportToCSV.button";
 import ExportToEmail from "./ExportToEmail";
-import { SubmitForApproval } from "./SubmitForApproval";
 import VoidButton from "./VoidButton";
 
 const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
@@ -240,6 +240,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                   currentDocumentType,
                 }
               }
+              newVariant
             />
           )
         }
