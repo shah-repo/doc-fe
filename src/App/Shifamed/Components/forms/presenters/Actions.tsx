@@ -16,6 +16,7 @@ import CloneEBButton from "../../../../../ui/components/forms/CopyEBButton";
 import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
+import ApproveAndRelease from "../../../../../ui/documentRevision/forms/presenters/approve.and.release/ApproveAndRelease";
 import ExportToCSVButton from "../../../../../ui/documentRevision/forms/presenters/export.to.csv/ExportToCSV.button";
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
 import { SubmitForApproval } from "../../../../../ui/documentRevision/forms/presenters/SubmitForApproval";
@@ -29,7 +30,6 @@ import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../../..
 import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeToLatest";
 import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
-import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import FormOwnerChangerContainer from "./change.owner/container";
 import ExportToEmail from "./ExportToEmail";
@@ -226,7 +226,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           {...{ documentRevision }}
           newVariant
         />}
-        <InspectionControlsContainer {...{ documentRevision }} newVarient={true} />
+        <InspectionControlsContainer {...{ documentRevision }} newVarient />
         <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }} newVarient/>
         {
           isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
@@ -265,6 +265,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                       isInlineApproval,
                     }
                   }
+                  newVarient
                 />
               )}
             </Observer>
