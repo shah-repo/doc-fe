@@ -1,7 +1,6 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../../../../ui/layout/theme/utils/colors";
 
-
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     submitButton: {
@@ -45,5 +44,6 @@ export const styles = makeStyles((theme: Theme) =>
         borderRadius: 11,
       },
     },
-  }),
+    alertText: { marginTop: 20, marginBottom: 5 },
+  })
 );
