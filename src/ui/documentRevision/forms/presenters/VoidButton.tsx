@@ -1,5 +1,9 @@
 import { Box, Button } from "@material-ui/core";
 import React, { useMemo } from "react";
+import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
@@ -14,9 +18,11 @@ import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 
 interface Props {
   documentRevision: DocumentRevision | undefined;
+  newVarient?: boolean;
 }
 const VoidButton: React.FunctionComponent<Props> = ({
   documentRevision,
+  newVarient = false,
 }) => {
   const dialog = useDialog();
   const async = useAsync();
@@ -40,15 +46,31 @@ const VoidButton: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={async.asyncState} />
         <FormProgress asyncState={async.asyncState} />
       </Box>
-      <Button
-        id="void"
-        variant="outlined"
-        color="secondary"
-        onClick={dialog.open}
-        disabled={async.asyncState.status === AsyncStatus.Active}
-      >
-        <Text translation="common.void" />
-      </Button>
+      {newVarient ? (
+        <StyledMenuListItem
+          button
+          disabled={async.asyncState.status === AsyncStatus.Active}
+          alignItems="flex-start"
+        >
+          <StyledMenuListIcon>
+            <VoidDocumentIcon />
+          </StyledMenuListIcon>
+          <StyledMenuListItemText
+            primary={<Text translation="common.void" />}
+            onClick={dialog.open}
+          />
+        </StyledMenuListItem>
+      ) : (
+        <Button
+          id="void"
+          variant="outlined"
+          color="secondary"
+          onClick={dialog.open}
+          disabled={async.asyncState.status === AsyncStatus.Active}
+        >
+          <Text translation="common.void" />
+        </Button>
+      )}
       <AlertDialog
         confirmAction={voidDocument}
         message={isRecord ? "documentRevision.record.void.alert" : "documentRevision.void.alert"}

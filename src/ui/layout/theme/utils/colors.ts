@@ -39,6 +39,7 @@ enum Colors {
   light_slate_blue="#7B61FF",
   steel_blue="#457AB5",
   dodger_blue="#4D88FF",
+  ultramarine_blue="#4C69FF",
   // red
   red = "#c40000",
   dark_red = "#a10808",

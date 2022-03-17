@@ -23,6 +23,7 @@ import ExportToEmail from "../../../../../ui/documentRevision/forms/presenters/e
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
 import { SubmitForApproval } from "../../../../../ui/documentRevision/forms/presenters/SubmitForApproval";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
+import VoidButton from "../../../../../ui/documentRevision/forms/presenters/VoidButton";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../../../../ui/documentRevision/helpers/records";
@@ -33,7 +34,6 @@ import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeTo
 import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
 import FormOwnerChangerContainer from "./change.owner/container";
-import VoidButton from "./VoidButton";
 
 const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
@@ -295,9 +295,9 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             newVariant
           />
           {!(isRecord && isInlineApproval) &&
-          isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
+          isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }} newVarient/>}
           {isRecord && isInlineApproval &&
-          isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
+          isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }} newVarient/>}
         </HeaderMenu>
       </span>
       }
