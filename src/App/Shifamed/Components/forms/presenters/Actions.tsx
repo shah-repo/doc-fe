@@ -16,6 +16,7 @@ import CloneEBButton from "../../../../../ui/components/forms/CopyEBButton";
 import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
+import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../../../../ui/documentRevision/helpers/documentRevisionStatus";
@@ -31,7 +32,6 @@ import CancelButton from "./CancelButton";
 import FormOwnerChangerContainer from "./change.owner/container";
 import ExportToCSVButton from "./ExportToCSV.button";
 import ExportToEmail from "./ExportToEmail";
-import RedlineButton from "./Redline.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import VoidButton from "./VoidButton";
 
@@ -225,8 +225,8 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           {...{ documentRevision }}
           newVariant
         />}
-        <InspectionControlsContainer {...{ documentRevision }} />
-        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}/>
+        <InspectionControlsContainer {...{ documentRevision }} newVarient={true} />
+        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }} newVarient/>
         {
           isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
             <SubmitForApproval

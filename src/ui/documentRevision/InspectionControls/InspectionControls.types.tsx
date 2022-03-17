@@ -7,10 +7,12 @@ export interface InspectionControlsPresenterProps extends InspectionDialogProps 
   canCreateInspection: boolean;
   isDocumentDraft: boolean;
   disabled: boolean;
+  newVarient?: boolean;
 }
 
 export interface InspectionControlsContainerProps {
   documentRevision: DocumentRevision;
+  newVarient?: boolean;
 }
 
 export type OutputDocumentTypes = FBOutputDocumentType[];

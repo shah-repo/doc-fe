@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import NewInspectionControlsPresenter from "../../../App/Shifamed/Components/forms/presenters/InspectionControls.presenter";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
@@ -20,6 +18,7 @@ import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionCont
  */
 export const InspectionControlsContainer: React.FunctionComponent<InspectionControlsContainerProps> = ({
   documentRevision,
+  newVarient = false,
 }) => {
   // MARK: @config
   const {
@@ -128,34 +127,21 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
   };
 
   return (<>
-    {SM.isNewLayout ?
-      <NewInspectionControlsPresenter
-        {...{
-          canCreateInspection,
-          isDocumentDraft,
-          onButtonClick,
-          disabled,
-          inspectionDialog,
-          formOptions,
-          docTypeOptions,
-          onFormSelect,
-          onDocTypeSelect,
-          isDocTypeInputDisabled,
-        }}
-      /> : <InspectionControlsPresenter
-        {...{
-          canCreateInspection,
-          isDocumentDraft,
-          onButtonClick,
-          disabled,
-          inspectionDialog,
-          formOptions,
-          docTypeOptions,
-          onFormSelect,
-          onDocTypeSelect,
-          isDocTypeInputDisabled,
-        }}
-      />}
+    <InspectionControlsPresenter
+      {...{
+        canCreateInspection,
+        isDocumentDraft,
+        onButtonClick,
+        disabled,
+        inspectionDialog,
+        formOptions,
+        docTypeOptions,
+        onFormSelect,
+        onDocTypeSelect,
+        isDocTypeInputDisabled,
+        newVarient,
+      }}
+    />
   </>
   );
 };

@@ -271,7 +271,7 @@ const PreviewControlsContainer: React.FunctionComponent<
         onClick={dialog.open}
         data-cy="document.revision.withdraw.alert"
       >
-        <Text message={"withdraw submission"} />
+        <Text translation="changeRequest.transition.withdrawn" />
       </StyledButton>
       <AlertDialog
         confirmAction={withdrawAction}
@@ -293,7 +293,7 @@ const PreviewControlsContainer: React.FunctionComponent<
         isStatusInReview &&
         isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
-      <InspectionControlsContainer {...{ documentRevision }} />
+      <InspectionControlsContainer {...{ documentRevision }} newVarient/>
       {isExportable && (
         <ExportToEmail
           revisionId={documentRevision.id}
