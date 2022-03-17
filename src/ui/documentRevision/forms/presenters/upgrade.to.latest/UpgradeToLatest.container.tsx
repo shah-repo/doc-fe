@@ -1,8 +1,6 @@
 import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { SM } from "../../../../../App";
-import NewUpgradeToLatestButton from "../../../../../App/Shifamed/Components/forms/presenters/UpgradeToLatest.button";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -18,6 +16,7 @@ interface Props {
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   setShouldDisplay?: (value: boolean) => void;
   shouldShowUpgrade: boolean;
+  newVariant?: boolean;
 }
 
 const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
@@ -27,6 +26,7 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   bannerPortal,
   setShouldDisplay,
   shouldShowUpgrade,
+  newVariant,
 }) => {
   const dispatch = useDispatch();
 
@@ -49,9 +49,7 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
     <>
       {
         type === "button" &&
-         SM.isNewLayout ?
-          <NewUpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/>
-          : ( <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/> )
+       <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade, newVariant }}/>
       }
 
       {

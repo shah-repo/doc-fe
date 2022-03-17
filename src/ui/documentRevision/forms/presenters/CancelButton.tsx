@@ -1,6 +1,10 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
+import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
@@ -14,11 +18,13 @@ import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus"
 interface Props {
   documentRevision: DocumentRevision;
   setShouldDisplay: (value: boolean) => void;
+  newVarient?: boolean;
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
   documentRevision,
   setShouldDisplay,
+  newVarient = false,
 }) => {
   const dialog = useDialog();
   const async = useAsync();
@@ -39,10 +45,24 @@ const CancelButton: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        canShowCancelButton &&
+        (!newVarient && canShowCancelButton) &&
         <Button id="cancelDraftButton" data-cy="cancelDraftButton" variant="outlined" onClick={dialog.open}>
           <Text translation="common.cancel.draft" />
         </Button>
+      }
+      {
+        (newVarient && canShowCancelButton) &&
+       ( <StyledMenuListItem button alignItems="flex-start">
+         <StyledMenuListIcon>
+           <VoidDocumentIcon />
+         </StyledMenuListIcon>
+         <StyledMenuListItemText
+           id="cancelDraftButton"
+           data-cy="cancelDraftButton"
+           primary={<Text translation="common.cancel.draft" />}
+           onClick={dialog.open}
+         />
+       </StyledMenuListItem>)
       }
       <AlertDialog
         confirmAction={handleCancelDraft}

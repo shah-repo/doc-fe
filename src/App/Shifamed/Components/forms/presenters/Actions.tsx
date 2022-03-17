@@ -12,10 +12,16 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../../../state/ducks/documentRevisi
 import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
+import CloneEBButton from "../../../../../ui/components/forms/CopyEBButton";
 import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
+import ApproveAndRelease from "../../../../../ui/documentRevision/forms/presenters/approve.and.release/ApproveAndRelease";
+import CancelButton from "../../../../../ui/documentRevision/forms/presenters/CancelButton";
+import ExportToCSVButton from "../../../../../ui/documentRevision/forms/presenters/export.to.csv/ExportToCSV.button";
+import ExportToEmail from "../../../../../ui/documentRevision/forms/presenters/export.to.email/ExportToEmail";
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
+import { SubmitForApproval } from "../../../../../ui/documentRevision/forms/presenters/SubmitForApproval";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../../../../ui/documentRevision/helpers/documentRevisionStatus";
@@ -26,13 +32,7 @@ import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../../..
 import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeToLatest";
 import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
-import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
-import CancelButton from "./CancelButton";
 import FormOwnerChangerContainer from "./change.owner/container";
-import NewCloneEBButton from "./CopyEBButton";
-import ExportToCSVButton from "./ExportToCSV.button";
-import ExportToEmail from "./ExportToEmail";
-import { SubmitForApproval } from "./SubmitForApproval";
 import VoidButton from "./VoidButton";
 
 const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
@@ -218,13 +218,15 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <span>
         {(isStatusReleased || isStatusInDraft) && serializedCSV &&
           <ExportToCSVButton
+            newVariant
             {...{ documentRevision }}
           />}
         {(isStatusReleased || isStatusInDraft) && canCopy &&
-        <NewCloneEBButton
+        <CloneEBButton
           {...{ documentRevision }}
+          newVariant
         />}
-        <InspectionControlsContainer {...{ documentRevision }} newVarient={true} />
+        <InspectionControlsContainer {...{ documentRevision }} newVarient />
         <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }} newVarient/>
         {
           isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
@@ -239,6 +241,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                   currentDocumentType,
                 }
               }
+              newVariant
             />
           )
         }
@@ -262,6 +265,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                       isInlineApproval,
                     }
                   }
+                  newVarient
                 />
               )}
             </Observer>
@@ -270,12 +274,14 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         {isExportable && <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
+          newVariant
         />}
         <HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
           <CancelButton
             {...{ documentRevision }}
             setShouldDisplay={props.setCancelButtonDisplay}
+            newVarient
           />}
           {renderChangeOwnership}
           <UpgradeToLatestContainer

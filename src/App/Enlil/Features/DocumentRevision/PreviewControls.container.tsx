@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import NewCloneEBButton from "../../../../App/Shifamed/Components/forms/presenters/CopyEBButton";
 import { ReactComponent as WarningIcon } from "../../../../assets/images/warning_white.svg";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
@@ -12,10 +11,12 @@ import { documentsActions } from "../../../../state/ducks/documents";
 import { ApplicationState } from "../../../../state/reducers";
 import AlertDialog from "../../../../ui/app/alert.dialog/AlertDialog";
 import { RequestType } from "../../../../ui/components/common/owner.changer/helpers/types";
+import CloneEBButton from "../../../../ui/components/forms/CopyEBButton";
 import { toastInfo } from "../../../../ui/components/notifications";
 import Text from "../../../../ui/components/Text";
 import PDFSocket from "../../../../ui/document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../../../../ui/document.revision/utils/paths";
+import ExportToEmail from "../../../../ui/documentRevision/forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "../../../../ui/documentRevision/helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
@@ -29,7 +30,6 @@ import useDialog from "../../../../ui/hooks/useDialog";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import FormOwnerChangerContainer from "../../../Shifamed/Components/forms/presenters/change.owner/container";
 import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
-import ExportToEmail from "../../../Shifamed/Components/forms/presenters/ExportToEmail";
 import { StyledButton } from "../../../Shifamed/Components/forms/presenters/StyledListButton";
 import { styles } from "./PreviewControls.styles";
 
@@ -285,7 +285,7 @@ const PreviewControlsContainer: React.FunctionComponent<
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
       {(isStatusReleased || isStatusInDraft) && canCopy && (
-        <NewCloneEBButton {...{ documentRevision }} />
+        <CloneEBButton {...{ documentRevision }} newVariant/>
       )}
       {renderOutputButton()}
       {renderNoAccessWarning()}
@@ -298,6 +298,7 @@ const PreviewControlsContainer: React.FunctionComponent<
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
+          newVariant
         />
       )}
       <DownloadHTML pdf={documentRevision.pdf}/>
