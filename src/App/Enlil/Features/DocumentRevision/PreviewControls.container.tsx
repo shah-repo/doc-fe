@@ -14,6 +14,7 @@ import { RequestType } from "../../../../ui/components/common/owner.changer/help
 import CloneEBButton from "../../../../ui/components/forms/CopyEBButton";
 import { toastInfo } from "../../../../ui/components/notifications";
 import Text from "../../../../ui/components/Text";
+import DownloadHTML from "../../../../ui/document.revision/summary/download.html";
 import PDFSocket from "../../../../ui/document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../../../../ui/document.revision/utils/paths";
 import ExportToEmail from "../../../../ui/documentRevision/forms/presenters/export.to.email/ExportToEmail";
@@ -29,7 +30,6 @@ import useAsync from "../../../../ui/hooks/useAsync";
 import useDialog from "../../../../ui/hooks/useDialog";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import FormOwnerChangerContainer from "../../../Shifamed/Components/forms/presenters/change.owner/container";
-import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
 import { StyledButton } from "../../../Shifamed/Components/forms/presenters/StyledListButton";
 import { styles } from "./PreviewControls.styles";
 
@@ -301,7 +301,7 @@ const PreviewControlsContainer: React.FunctionComponent<
           newVariant
         />
       )}
-      <DownloadHTML pdf={documentRevision.pdf}/>
+      <DownloadHTML pdf={documentRevision.pdf} newVarient/>
       {canChangeOwnerShip && (
         <FormOwnerChangerContainer
           requestId={documentRevision.id}
