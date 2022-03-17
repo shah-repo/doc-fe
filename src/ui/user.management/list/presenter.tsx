@@ -1,26 +1,18 @@
 import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { getHasPermission } from "../../../common/utils/selectors";
-import { Group, Permission } from "../../../state/ducks/auth/types";
+import { Group } from "../../../state/ducks/auth/types";
 import { User } from "../../../state/ducks/common/types";
-import { companyActions, companySelectors } from "../../../state/ducks/company";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import AddEmployeeContainer from "../add.employee/container";
 import AddSlackButtonContainer from "../AddSlackButton/AddSlackButton.container";
-import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
-import { DropboxResponse } from "../profile/dialog/DialogContent";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import { styles } from "./styles";
@@ -46,18 +38,6 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const [showUserProfile, setUserProfile] = useState(false);
   const [selectedEmployee, setEmployee] = useState<GetEmployeeResponse>(DEFAULT_SELECTED_EMPLOYEE);
-
-  const hasDropboxPermission = useSelector(getHasPermission(Permission.COMPANY_DROPBOX_INTEGRATION));
-  const dropboxAsync = useAsync<DropboxResponse>({
-    onSuccess: (data?: DropboxResponse) => {
-      window.open(data?.data.url);
-    },
-    onError: (error) => {
-      toastError(intl.formatMessage({ id: "dropbox.connection.error" }));
-    },
-  });
-  const enableDropboxAction = useActionCreator(companyActions.enableDropbox);
-  const isCompanyDropboxEnabled = useSelector(companySelectors.isDropboxEnabled);
 
   const openUserProfile = () => setUserProfile(true);
   const closeUserProfile = () => setUserProfile(false);
@@ -178,12 +158,6 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
             alignItems: "center",
           }}
         >
-          {/* Company dropbox button */}
-          <EnableDropboxButton
-            shouldDisplayButton={hasDropboxPermission}
-            {...{ dropboxAsync, enableDropboxAction }}
-            disabled={Boolean(isCompanyDropboxEnabled)}
-          />
           <AddSlackButtonContainer />
           <AddEmployeeContainer />
         </Grid>

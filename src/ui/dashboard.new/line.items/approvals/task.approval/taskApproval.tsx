@@ -5,7 +5,6 @@ import {
   Collapse,
   Grid,
   IconButton,
-  Link,
   List,
   ListItemAvatar,
   ListItemText,
@@ -30,7 +29,9 @@ import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import ApprovalTitle from "../../common/ApprovalTitle/presenter";
 import { getDocIcon } from "../../common/DocIcon";
+import DocId from "../../common/DocId/presenter";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
@@ -214,45 +215,10 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <Link
-                    href={changeRequestEditPath(arChangeRequestId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {arId}
-                    </Typography>
-                  </Link>
+                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId = {arId}/>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={title}
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={changeRequestEditPath(arChangeRequestId)}
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyBold}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {title}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                  <ApprovalTitle  url={changeRequestEditPath(arChangeRequestId)} title={title || ""}/>
                 </Grid>
               </Grid>
               <Grid

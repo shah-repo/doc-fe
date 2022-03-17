@@ -535,8 +535,8 @@ context("Approval request form scenario", () => {
         {
           sentToUser: USERS[21].email,
           contains: [
-            "Your request has been\r\n                                      approved!",
-            "AR-00002\r\n                                        Approval request from newly created form",
+            "Your request has been approved!",
+            "AR-00002 Approval request from newly created form",
             companyId,
           ],
         },
@@ -554,8 +554,8 @@ context("Approval request form scenario", () => {
         {
           sentToUser: USERS[21].email,
           contains: [
-            "Your request has been\r\n                                      rejected!",
-            "AR-00002\r\n                                        Approval request from newly created form",
+            "Your request has been rejected!",
+            "AR-00002 Approval request from newly created form",
             companyId,
           ],
         },

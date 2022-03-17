@@ -307,7 +307,7 @@ context("Mpi Template", () => {
           cy.fbSelectItemFromNewFieldList({ field: "Text field" });
           cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
           cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
-          cy.fbEnterNameValue({ name: "rows", value: "2" });
+          cy.fbEnterNameValue({ name: "rows", value: 2 });
           cy.fbAddNewFieldButton();
           cy.get(`[name^="fb-textfield"`).parent().trigger("mouseover");
         });
@@ -325,7 +325,7 @@ context("Mpi Template", () => {
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
           cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-          cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+          cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
           cy.fbAddNewFieldButton();
         });
 
@@ -433,9 +433,7 @@ context("Mpi Template", () => {
 
       context("Release MPI", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release MPI document", () => {
@@ -494,7 +492,7 @@ context("Mpi Template", () => {
           cy.fbSelectItemFromNewFieldList({ field: "Text field" });
           cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
           cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
-          cy.fbEnterNameValue({ name: "rows", value: "2" });
+          cy.fbEnterNameValue({ name: "rows", value: 2 });
           cy.fbAddNewFieldButton();
         });
 
@@ -511,7 +509,7 @@ context("Mpi Template", () => {
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
           cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-          cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+          cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
           cy.fbAddNewFieldButton();
         });
 
@@ -619,9 +617,7 @@ context("Mpi Template", () => {
 
       context("Release LHRt document", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release LHRt document", () => {

@@ -36,6 +36,7 @@ enum Colors {
   cerulean="#01A6C7",
   light_slate_blue="#7B61FF",
   steel_blue="#457AB5",
+  topaz="#03C0C1",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -67,10 +68,11 @@ enum Colors {
   old_lace="#FEF8EE",
   tawny="#B25F00",
   ochre="#CE8723",
+  blaze_orange="#FF6500",
   // cyan
   light_cyan="#DCF4FD",
   lochmara="#306AAC",
-  peri_winkle_blue="#8295FA"
+  peri_winkle_blue="#8295FA",
 }
 
 export default Colors;

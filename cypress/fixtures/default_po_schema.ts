@@ -350,7 +350,7 @@ export const purchaseOrderDefaultSchema: any = [
   },
   {
     name: "ship-to-address-k7f27j0k",
-    rows: "3",
+    rows: 3,
     type: "textfield",
     index: 15,
     label: "Ship To Address",
@@ -487,7 +487,7 @@ export const purchaseOrderDefaultSchema: any = [
   },
   {
     name: "company-bill-to-k7f2e82a",
-    rows: "3",
+    rows: 3,
     type: "textfield",
     index: 21,
     label: "Company Bill To Address",
@@ -532,9 +532,7 @@ export const purchaseOrderDefaultSchema: any = [
     ],
     deleteDisabled: false,
     includeContext: true,
-    validationMode: [
-      "ValidationHidden",
-    ],
+    validationMode: "default",
     formValuesRules: {
       required_if: true,
       required_if0: "shipment-info-k7fagifj",
