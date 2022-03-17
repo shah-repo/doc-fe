@@ -339,7 +339,7 @@ context("Document Creation Flow", () => {
 
     context("Check training for next revision", () => {
       it("Save document", () => {
-        cy.drClickCreateSupplierWithApiCallAudit();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and Release document", () => {

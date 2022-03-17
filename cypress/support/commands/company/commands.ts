@@ -190,6 +190,7 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       cy.get("button.Toastify__close-button--success").arrowClick();
     }
   });
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("cmpCompanyDoesntExist", (params: { name: string; multiple: boolean }) => {
@@ -208,6 +209,7 @@ Cypress.Commands.add("cmpSelectCompanyAlreadyLoggedIn", (params: { name: string;
     });
 
     addTestContext("companyName", params.name);
+    cy.progressBarShouldNotExist();
   }
 });
 
