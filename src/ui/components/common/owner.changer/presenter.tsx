@@ -15,6 +15,7 @@ import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
 import SubmitButton from "../../forms/SubmitButton";
 import Text from "../../Text";
+import { styles } from "./styles";
 
 interface OwnProps {
   employees: SelectOption[];
@@ -39,6 +40,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   renderAsButton,
   newVariant,
 }) => {
+  const classes = styles();
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
 
@@ -47,7 +49,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
       <Form>
         <FormProgress asyncState={asyncState} />
         <FormMessage asyncState={asyncState} />
-        <FormControl className="form-control" style={{ width: "100%" }} id="OwnerChangerPresenter-selectField">
+        <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
           <SelectField
             selectProps={{ id: "employee" }}
             name="employee"
@@ -76,13 +78,13 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
       onSubmit={preventPropagation}
       onClose={closeDialog}
     >
-      <DialogTitle disableTypography style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <DialogTitle disableTypography className={classes.dialogTitle}>
         <Typography variant="h6"><Text translation="change.owner" /></Typography>
-        <IconButton onClick={closeDialog} style={{ padding: 0 }}>
+        <IconButton onClick={closeDialog} className={classes.closeIcon}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent style={{ width: 500 }}>
+      <DialogContent className={classes.dialogContent}>
         <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik
             initialValues={{ employee: currentOwner.id }}
