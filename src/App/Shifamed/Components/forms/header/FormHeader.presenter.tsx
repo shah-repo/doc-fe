@@ -1,7 +1,6 @@
 import { Box, Grid, LinearProgress } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { useLocation } from "react-router-dom";
 import { ReactComponent as CloudIcon } from "../../../../../assets/images/cloud.svg";
 import Header from "../../../../../ui/components/common/header/Header";
 import HeaderInfo from "../../../../../ui/components/common/header/HeaderInfo";
@@ -30,7 +29,6 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { _formState } = SM.useStores();
-  const location = useLocation();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const classes = styles();
   return (
@@ -45,7 +43,6 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({
           isInlineApproval={isFormWithInlineApproval(
             documentRevision.formDocument?.formTemplate?.schema
           )}
-          navigationDetails={location.state}
           status={documentRevision.status}
           id={documentRevision.document.docId}
           name={documentRevision.name}

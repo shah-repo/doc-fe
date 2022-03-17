@@ -34,9 +34,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const dispatch = useDispatch();
   const history = useHistory();
   const { categoryName, docTypeId } = match.params;
-  const navigationDetails = useSelector((state: ApplicationState) =>
-    companySelectors.getNavigationDetails(state, categoryName)
-  );
+  const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
   const getStatusesAction = useActionCreator(documentRevisionsActions.getDocRevStatuses);
   const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
   const async = useAsync({
@@ -179,14 +177,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     if (canEdit(dataItem)) {
       urlPath = documentEditPath(dataItem.id, dataItem.document.id);
     }
-    history.push({
-      pathname: urlPath,
-      state: {
-        label: navigationDetails.label,
-        path: match.url,
-        icon: navigationDetails.icon,
-      },
-    });
+    history.push(urlPath);
   };
   return (
     <DocumentTypePresenter
@@ -200,7 +191,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       headerColumns={columnDef}
       columns={kendoColumnDef as KendoColumn[]}
       onRowClick={onRowClick}
-      title={navigationDetails.label}
+      title={title}
       queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
       documentTypeCategory={isByCategory ? categoryName : documentType?.documentTypeAcronym}
     />

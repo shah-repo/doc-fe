@@ -1,13 +1,16 @@
 import { Chip, Grid, Link, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { StyledBreadcrumb } from "../../../../App/Shifamed/Components/forms/header/StyledBreadcrumb";
+import { companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import { DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
 import { checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
@@ -16,11 +19,6 @@ import Text from "../../Text";
 import { FormHeaderStatusClassMapping } from "./Header";
 import { styles } from "./HeaderInfo.styles";
 
-interface NavigationDetails {
-  label: string;
-  path: string;
-  icon: string;
-}
 interface Props {
   status: string;
   id: string;
@@ -33,7 +31,6 @@ interface Props {
   isInlineApproval?: boolean;
   displayStatus?: string;
   subtitle?: any;
-  navigationDetails?: NavigationDetails;
   displayRevision?: string;
   newVarient?: boolean;
 }
@@ -45,14 +42,12 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   documentTypeId,
   displayStatus,
   subtitle,
-  navigationDetails,
   displayRevision,
   newVarient = false,
 }) => {
-
+  const intl = useIntl();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
-  const classes = styles({ iconLink: navigationDetails?.icon });
   const isStatusReleased = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
     status as DocumentRevisionStatus,
@@ -60,6 +55,20 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isStatusCanceled = isDocumentRevisionCanceled(status);
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
+  const navigationDetails = useSelector((state: ApplicationState) =>
+    companySelectors.getNavigationDetails(
+      state,
+      documentType?.pageDetails?.category || ""
+    )
+  );
+  const title = navigationDetails?.label || intl.formatMessage({ id: "navigation.document.list" });
+  let url = `${DOCUMENT_REVISION_LIST_URL}`;
+  let iconLink = "/navigation_icons/document.svg";
+  if (navigationDetails.type === "CATEGORY") {
+    url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
+    iconLink = navigationDetails?.icon || "";
+  }
+  const classes = styles({ iconLink });
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
 
   const titleRenderer = (className: string) => {
@@ -121,7 +130,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 
   const history = useHistory();
   const returnToList = () => {
-    history.push(navigationDetails?.path);
+    history.push(url);
   };
   const newTitleRenderer = () => (
     <Grid container xs={6} className={classes.itemWrap} >
@@ -144,7 +153,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   className={classes.link}
                 >
                   <Grid item={true} className={classes.title}>
-                    {navigationDetails?.label}
+                    {title}
                   </Grid>
                 </Link>
               </Grid>

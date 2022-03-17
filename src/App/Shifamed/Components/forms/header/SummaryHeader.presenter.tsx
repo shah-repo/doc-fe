@@ -1,7 +1,6 @@
 import { Collapse, Grid } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { useLocation } from "react-router-dom";
 import { SM } from "../../../..";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import Header from "../../../../../ui/components/common/header/Header";
@@ -21,7 +20,6 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
-  const location = useLocation();
   const { _documentRevisionFormState } = SM.useStores();
   return (
     <Observer>
@@ -41,7 +39,6 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
                   documentRevision.formDocument?.formTemplate?.schema
                 )}
                 status={documentRevision.status}
-                navigationDetails={location.state}
                 displayRevision={documentRevision?.displayRevision}
                 id={documentRevision.document.docId}
                 name={documentRevision.name}

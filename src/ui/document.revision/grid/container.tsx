@@ -1,6 +1,5 @@
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
@@ -12,7 +11,6 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
 import { DataStateProps } from "../../components/KendoGrid/interfaces";
-import { DOCUMENT_REVISION_LIST_URL } from "../../constants/urls";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../utils/helpers";
@@ -21,12 +19,6 @@ import gridConfiguration from "./column.definition";
 import { DocumentListPresenter } from "./presenter";
 
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
-  const intl = useIntl();
-  const navigationDetails = {
-    label: intl.formatMessage({ id: "navigation.document.list" }),
-    path: DOCUMENT_REVISION_LIST_URL,
-    icon: "/navigation_icons/document.svg",
-  };
   const TABLE_NAME = "documentRevisions";
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
@@ -105,11 +97,10 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     if (isEmpty(rowData.dataItem.id) || isEmpty(rowData.dataItem.document.id)) {
       return false;
     }
-    let urlPath = documentPreviewPath(rowData.dataItem.id, rowData.dataItem.document.id);
     if (canEditDocumentRevision(rowData.dataItem)) {
-      urlPath = documentEditPath(rowData.dataItem.id, rowData.dataItem.document.id);
+      history.push(documentEditPath(rowData.dataItem.id, rowData.dataItem.document.id));
     }
-    history.push({ pathname: urlPath, state: navigationDetails });
+    history.push(documentPreviewPath(rowData.dataItem.id, rowData.dataItem.document.id));
   };
 
   return (
@@ -126,4 +117,3 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
 };
 
 export default DocumentListContainer;
-

@@ -53,7 +53,7 @@ const getNavigationDetails = (state: ApplicationState, category: string) => {
     .flatten()
     .value();
   const menuItem = find([...mainMenuItems, ...subMenuItems], { type: "CATEGORY", category });
-  return { label: menuItem?.label, icon: menuItem?.icon };
+  return { label: menuItem?.label, icon: menuItem?.icon, path: menuItem?.path, type: menuItem?.type };
 };
 
 const getActiveEmployees = (state: ApplicationState) =>
