@@ -36,14 +36,15 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
     );
   };
   if (newVariant) {
-    return  (
+    return (
       <StyledButton
         color="primary"
         data-cy="CloneEBButton"
         onClick={cloneAction}
       >
         <Text translation="documentRevision.clone.eb" />
-      </StyledButton>);
+      </StyledButton>
+    );
   }
   return (
     <Button
