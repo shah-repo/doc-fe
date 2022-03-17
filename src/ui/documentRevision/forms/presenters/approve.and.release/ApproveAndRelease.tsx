@@ -338,7 +338,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           </Button>
         )}
       </CustomLabelTooltip>
-      {dialog.isOpen && (
+      {dialog.isOpen &&
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
@@ -351,33 +351,25 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         >
           <DialogTitle>
             {isQms && (
-              <Text
-                translation={
-                  isRecord
-                    ? "record.finalize.and.release"
-                    : "common.approve.and.release"
-                }
-              />
+              <Text translation={isRecord ? "record.finalize.and.release" : "common.approve.and.release"} />
             )}
-            {!isQms && (
-              <Text
-                translation="common.warning.message"
-                values={{ name: documentName }}
-              />
-            )}
+            {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
           </DialogTitle>
           <DialogContent
             classes={{ root: classes.dialogContent }}
             id="ApproveAndRelease-content"
           >
             <FormContext.Provider value={{ submitOnChange: false }}>
-              <Formik initialValues={initialValues} onSubmit={onSubmit}>
+              <Formik
+                initialValues={initialValues}
+                onSubmit={onSubmit}
+              >
                 {renderForm}
               </Formik>
             </FormContext.Provider>
           </DialogContent>
         </Dialog>
-      )}
+      }
       <AlertDialog
         message="record.release.alert"
         dialog={alertDialog}
