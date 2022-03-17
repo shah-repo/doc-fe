@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import SM from "../../App/Shifamed/Utils/SM/SM";
 import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { FormHeaderStatusClassMapping } from "../components/common/header/Header";
+import { headerBackgroundStyles } from "../components/common/header/Header.background.styles";
 import Text from "../components/Text";
 import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
@@ -35,6 +36,7 @@ const Header: React.FunctionComponent<Props> = ({
   customLabelsValue,
   canToggleCustomLabels,
 }) => {
+  const headerBackgroundClasses = headerBackgroundStyles();
   const [isScorlled, setIsScorlled] = useState<boolean>(false);
   const [selectedDocRevDisplayStatus, setSelectedDocRevDisplayStatus] =
     useState<string>("");
@@ -84,7 +86,7 @@ const Header: React.FunctionComponent<Props> = ({
               <Box
                 height={40}
                 className={`${
-                  classes[
+                  headerBackgroundClasses[
                     FormHeaderStatusClassMapping[selectedDocRevDisplayStatus]
                   ]
                 } ${classes.topScrollBarBox}`}

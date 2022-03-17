@@ -8,6 +8,7 @@ import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevision
 import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import Colors from "../../../layout/theme/utils/colors";
+import { headerBackgroundStyles } from "./Header.background.styles";
 
 export enum FormHeaderStatusClassMapping {
   "Pending Approval"="PENDING_STATUS",
@@ -32,27 +33,6 @@ const styles = makeStyles((theme: Theme) =>
       minHeight: "64px",
       borderRadius: "6px",
     },
-    GREEN_STATUS: {
-      background: Colors.green_blue,
-    },
-    RED_STATUS: {
-      background: Colors.latest_red_varient,
-    },
-    CLOSED_STATUS: {
-      background: Colors.dawn,
-    },
-    PENDING_STATUS: {
-      background: Colors.school_bus_yellow,
-    },
-    GRAY_STATUS: {
-      background: Colors.mandy,
-    },
-    WIP_STATUS: {
-      background: Colors.raven,
-    },
-    undefined: {
-      background: Colors.dodger_blue,
-    },
     appbar: {
       backgroundColor: Colors.white,
       position: "fixed",
@@ -72,6 +52,7 @@ interface Props{
 }
 const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
   const classes = styles();
+  const headerBackgroundClasses = headerBackgroundStyles();
   const { _documentRevisionFormState } = SM.useStores();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   if (SM.isNewLayout && !isCreateUrl) {
@@ -91,7 +72,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
                 <Grid
                   container={true}
                   className={`${classes.headerSection} ${
-                    classes[
+                    headerBackgroundClasses[
                       FormHeaderStatusClassMapping[
                         displayStatus || status || ""
                       ]

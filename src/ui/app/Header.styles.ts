@@ -32,27 +32,6 @@ export default (theme: Theme) =>
       display: "flex",
       textTransform: "uppercase",
     },
-    GREEN_STATUS: {
-      background: Colors.green_blue,
-    },
-    RED_STATUS: {
-      background: Colors.latest_red_varient,
-    },
-    CLOSED_STATUS: {
-      background: Colors.dawn,
-    },
-    PENDING_STATUS: {
-      background: Colors.school_bus_yellow,
-    },
-    GRAY_STATUS: {
-      background: Colors.mandy,
-    },
-    WIP_STATUS: {
-      background: Colors.raven,
-    },
-    undefined: {
-      background: Colors.dodger_blue,
-    },
     welcomeText: {
       color: Colors.dark_gray,
     },
