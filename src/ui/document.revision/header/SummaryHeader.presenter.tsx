@@ -47,6 +47,8 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
           <OwnerChangerContainer
             requestId={documentRevision.id}
             requestType={RequestType.Document}
+            renderAsButton={true}
+            newVariant={true}
           />
         )}
       </Grid>

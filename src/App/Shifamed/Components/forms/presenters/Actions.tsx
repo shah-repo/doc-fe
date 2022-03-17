@@ -11,6 +11,7 @@ import { documentTypeSelectors } from "../../../../../state/ducks/documentRevisi
 import { DOC_TYPE_GROUP_OPTION } from "../../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
+import OwnerChangerContainer from "../../../../../ui/components/common/owner.changer/container";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
 import CloneEBButton from "../../../../../ui/components/forms/CopyEBButton";
 import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
@@ -33,7 +34,6 @@ import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../../..
 import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeToLatest";
 import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
-import FormOwnerChangerContainer from "./change.owner/container";
 
 const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
@@ -190,7 +190,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <FormOwnerChangerContainer requestId={values.id} requestType={RequestType.Document} renderAsButton={false} />
+    <OwnerChangerContainer requestId={values.id} requestType={RequestType.Document} renderAsButton={false} newVariant />
   );
 
   return (

@@ -1,7 +1,12 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { Form, Formik } from "formik";
-import React, { Fragment } from "react";
+import React from "react";
+import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { ReactComponent as ChangeOwnerIcon } from "../../../../assets/images/change_owner_avatar.svg";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState } from "../../../../state/types";
 import SelectField, { SelectOption } from "../../forms/fields/Select";
@@ -19,6 +24,8 @@ interface OwnProps {
   isDialogOpen: boolean;
   closeDialog: () => void;
   openDialog: () => void;
+  renderAsButton: boolean;
+  newVariant: boolean;
 }
 
 const OwnerChangerPresenter: React.FC<OwnProps> = ({
@@ -29,6 +36,8 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   isDialogOpen,
   closeDialog,
   openDialog,
+  renderAsButton,
+  newVariant,
 }) => {
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
@@ -87,17 +96,42 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   );
 
   return (
-    <Fragment>
-      <Button
-        color="secondary"
-        variant="outlined"
-        onClick={openDialog}
-        id="OwnerChangerPresenter-changeOwner"
-        data-cy="changeOwner" >
-        <Text translation="change.owner" />
-      </Button>
+    <>
+      {renderAsButton && newVariant && (
+        <StyledButton
+          color="primary"
+          id="OwnerChangerPresenter-changeOwner"
+          data-cy="changeOwner"
+          onClick={openDialog}
+        >
+          <Text translation="change.owner" />
+        </StyledButton>
+      )}
+      {renderAsButton && !newVariant && (
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={openDialog}
+          id="OwnerChangerPresenter-changeOwner"
+          data-cy="changeOwner" >
+          <Text translation="change.owner" />
+        </Button>
+      )}
+      {!renderAsButton && newVariant && (
+        <StyledMenuListItem button alignItems="flex-start">
+          <StyledMenuListIcon>
+            <ChangeOwnerIcon />
+          </StyledMenuListIcon>
+          <StyledMenuListItemText
+            id="OwnerChangerPresenter-changeOwner"
+            data-cy="changeOwner"
+            primary={<Text translation="change.owner" />}
+            onClick={openDialog}
+          />
+        </StyledMenuListItem>
+      )}
       {dialogRenderer()}
-    </Fragment>
+    </>
   );
 };
 
