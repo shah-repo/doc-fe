@@ -91,7 +91,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
 
-  const oldTitleRenderer = () => (
+  const oldHeaderRenderer = () => (
     <Grid container xs={6} className={classes.itemWrap} >
       <Grid item className={classes.statusWrap}>
         {
@@ -132,7 +132,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const returnToList = () => {
     history.push(url);
   };
-  const newTitleRenderer = () => (
+  const newHeaderRenderer = () => (
     <Grid container xs={6} className={classes.itemWrap} >
       <Grid item>
         <Grid item xs={12}>
@@ -219,7 +219,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 
   );
   return (
-    <>{newVarient ? newTitleRenderer() : oldTitleRenderer()}</>
+    <>{newVarient ? newHeaderRenderer() : oldHeaderRenderer()}</>
   );
 };
 
