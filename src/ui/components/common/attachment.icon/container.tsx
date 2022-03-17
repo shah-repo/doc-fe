@@ -6,6 +6,7 @@ import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { Attachment, AttachmentDownloadResponse, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments/types";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { Id, Nullable } from "../../../../state/ducks/common/types";
+import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncStatus } from "../../../../state/types";
@@ -44,8 +45,13 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   value,
   isNewVersion,
   documentRevision,
+  docRevId,
   ...other
 }) => {
+  const documentRevisionFromState = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, docRevId || "")
+  );
+  documentRevision = documentRevision || documentRevisionFromState;
   const dialogHandler = useDialog();
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
@@ -354,6 +360,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
         key={`attachment-${attachment.id}`}
         {...{
           name,
+          documentRevisionData: documentRevision,
           attachment,
           handleRemove,
           form,
