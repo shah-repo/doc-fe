@@ -377,7 +377,7 @@ context("Mpi/Qpi test", () => {
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
         cy.get(`input[name="validators.required_if_in"]`).check();
-        cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+        cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
         cy.get(`input[type="checkbox"][value="3"]`).last().check();
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
@@ -432,8 +432,8 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check doc Draft status and click on Send To Email", () => {
-          cy.get("#HeaderInfo-status").should("have.text", "Draft");
-          cy.get("#HeaderInfo-name").should("have.text", "MPI document");
+          cy.drCheckDocumentStatus({ status: "Draft" });
+          cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
           cy.get("#HeaderInfo-docId").contains("MPI-").then((x) => {
             releasedFormId = x.text();
           });
@@ -657,8 +657,8 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check MPI doc released status and click on Send To Email", () => {
-          cy.get("#HeaderInfo-status").should("have.text", "Released");
-          cy.get("#HeaderInfo-name").should("have.text", "MPI document");
+          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
           cy.get("#HeaderInfo-docId").contains("MPI-").then((x) => {
             releasedFormId = x.text();
           });
@@ -931,7 +931,7 @@ context("Mpi/Qpi test", () => {
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
         cy.get(`input[name="validators.required_if_in"]`).check();
-        cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+        cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
         cy.get(`input[type="checkbox"][value="3"]`).last().check();
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
@@ -988,8 +988,8 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check QPI doc Draft status and click on Send To Email", () => {
-          cy.get("#HeaderInfo-status").should("have.text", "Draft");
-          cy.get("#HeaderInfo-name").should("have.text", "QPI document");
+          cy.drCheckDocumentStatus({ status: "Draft" });
+          cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
           cy.get("#HeaderInfo-docId").contains("QPI-").then((x) => {
             releasedFormId = x.text();
           });
@@ -1204,8 +1204,8 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check QPI doc released status and click on Send To Email", () => {
-          cy.get("#HeaderInfo-status").should("have.text", "Released");
-          cy.get("#HeaderInfo-name").should("have.text", "QPI document");
+          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
           cy.get("#HeaderInfo-docId").contains("QPI-").then((x) => {
             releasedFormId = x.text();
           });
