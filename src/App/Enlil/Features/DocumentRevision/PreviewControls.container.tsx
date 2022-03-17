@@ -16,6 +16,7 @@ import { toastInfo } from "../../../../ui/components/notifications";
 import Text from "../../../../ui/components/Text";
 import PDFSocket from "../../../../ui/document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../../../../ui/document.revision/utils/paths";
+import ExportToEmail from "../../../../ui/documentRevision/forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "../../../../ui/documentRevision/helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
@@ -29,7 +30,6 @@ import useDialog from "../../../../ui/hooks/useDialog";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import FormOwnerChangerContainer from "../../../Shifamed/Components/forms/presenters/change.owner/container";
 import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
-import ExportToEmail from "../../../Shifamed/Components/forms/presenters/ExportToEmail";
 import { StyledButton } from "../../../Shifamed/Components/forms/presenters/StyledListButton";
 import { styles } from "./PreviewControls.styles";
 
@@ -298,6 +298,7 @@ const PreviewControlsContainer: React.FunctionComponent<
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
+          newVariant
         />
       )}
       <DownloadHTML pdf={documentRevision.pdf}/>

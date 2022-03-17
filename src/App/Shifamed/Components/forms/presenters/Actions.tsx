@@ -18,6 +18,8 @@ import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionD
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import ApproveAndRelease from "../../../../../ui/documentRevision/forms/presenters/approve.and.release/ApproveAndRelease";
 import CancelButton from "../../../../../ui/documentRevision/forms/presenters/CancelButton";
+import ExportToCSVButton from "../../../../../ui/documentRevision/forms/presenters/export.to.csv/ExportToCSV.button";
+import ExportToEmail from "../../../../../ui/documentRevision/forms/presenters/export.to.email/ExportToEmail";
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
 import { SubmitForApproval } from "../../../../../ui/documentRevision/forms/presenters/SubmitForApproval";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
@@ -31,8 +33,6 @@ import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeTo
 import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
 import FormOwnerChangerContainer from "./change.owner/container";
-import ExportToCSVButton from "./ExportToCSV.button";
-import ExportToEmail from "./ExportToEmail";
 import VoidButton from "./VoidButton";
 
 const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
@@ -218,6 +218,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <span>
         {(isStatusReleased || isStatusInDraft) && serializedCSV &&
           <ExportToCSVButton
+            newVariant
             {...{ documentRevision }}
           />}
         {(isStatusReleased || isStatusInDraft) && canCopy &&
@@ -273,6 +274,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         {isExportable && <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
+          newVariant
         />}
         <HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
