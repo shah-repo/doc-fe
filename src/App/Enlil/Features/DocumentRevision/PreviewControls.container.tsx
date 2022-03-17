@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import NewCloneEBButton from "../../../../App/Shifamed/Components/forms/presenters/CopyEBButton";
 import { ReactComponent as WarningIcon } from "../../../../assets/images/warning_white.svg";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
@@ -12,6 +11,7 @@ import { documentsActions } from "../../../../state/ducks/documents";
 import { ApplicationState } from "../../../../state/reducers";
 import AlertDialog from "../../../../ui/app/alert.dialog/AlertDialog";
 import { RequestType } from "../../../../ui/components/common/owner.changer/helpers/types";
+import CloneEBButton from "../../../../ui/components/forms/CopyEBButton";
 import { toastInfo } from "../../../../ui/components/notifications";
 import Text from "../../../../ui/components/Text";
 import PDFSocket from "../../../../ui/document.revision/summary/pdf.socket";
@@ -285,7 +285,7 @@ const PreviewControlsContainer: React.FunctionComponent<
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
       {(isStatusReleased || isStatusInDraft) && canCopy && (
-        <NewCloneEBButton {...{ documentRevision }} />
+        <CloneEBButton {...{ documentRevision }} newVariant/>
       )}
       {renderOutputButton()}
       {renderNoAccessWarning()}
