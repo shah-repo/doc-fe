@@ -67,18 +67,28 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
               <Box
                 minHeight={60}
                 borderColor={Colors.medium_gray}
-                bgcolor="white"
+                bgcolor={Colors.white}
                 py={1}
                 px={2}
                 alignContent="center"
               >
-                <Grid container={true} className={`${classes.headerSection} ${
-                  classes[FormHeaderStatusClassMapping[displayStatus || status || ""]]
-                }`} alignItems="center">
+                <Grid
+                  container={true}
+                  className={`${classes.headerSection} ${
+                    classes[
+                      FormHeaderStatusClassMapping[
+                        displayStatus || status || ""
+                      ]
+                    ]
+                  }`}
+                  alignItems="center"
+                >
                   {children}
                 </Grid>
               </Box>
-            </Collapse></>)}
+            </Collapse>
+          </>
+        )}
       </Observer>
     );
   }
