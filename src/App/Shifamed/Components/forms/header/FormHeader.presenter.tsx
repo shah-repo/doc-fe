@@ -23,7 +23,10 @@ interface Props {
   newVarient?: boolean;
 }
 
-const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled, newVarient = false }) => {
+const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({
+  isCreateDocumentDisabled,
+  newVarient = false,
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { _formState } = SM.useStores();
@@ -52,6 +55,7 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
           displayStatus={documentRevision.displayStatus}
           subtitle={generateSubtitle(documentRevision)}
           newVarient={newVarient}
+          displayRevision={documentRevision.displayRevision}
         />
       )}
       <Grid
