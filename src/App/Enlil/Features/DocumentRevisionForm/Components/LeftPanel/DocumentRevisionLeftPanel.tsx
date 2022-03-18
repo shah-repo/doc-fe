@@ -14,9 +14,7 @@ import { withDocumentRevisionLeftPanelWrap } from "./DocumentRevisionLeftPanel.w
 const DocumentRevisionLeftPanel: React.FunctionComponent<
   DocumentRevisionLeftPanelProps
 > = ({
-  _documentRevisionLeftPanelState,
   _documentRevisionFormState,
-  _formState,
 }) => {
   const classes = styles();
 
@@ -25,50 +23,49 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
     <Observer>
       {() => (
         <>
-          {(_formState?.mode === "design" ||
-            _formState?.mode === "formDesign") &&
+          {
             _documentRevisionFormState?.leftPanelOpen && (
-            <Box
-              height="100%"
-              bgcolor="white"
-              width={300}
-              borderColor={Colors.medium_gray}
-              borderLeft={0.5}
-            >
               <Box
-                pl={1}
-                display="flex"
-                height={45}
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography className={classes.titleText}>
-                  <Text translation="form.builder.library" />
-                </Typography>
-                <IconButton
-                  disableRipple
-                  disableFocusRipple
-                  onClick={_documentRevisionFormState?.setLeftPanelOpen}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-              <SMBox
-                display="flex"
-                justifyContent="center"
-                stretchY="calc(100vh - 86px)"
-                borderTop={1}
+                height="100%"
+                bgcolor="white"
+                width={300}
                 borderColor={Colors.medium_gray}
+                borderLeft={0.5}
               >
-                <Observer>
-                  {() => (<>
-                    {(!leftPanelDialogState?.showLeftPanelEditor ||  !leftPanelDialogState) && <LeftPresenter />}
-                    {leftPanelDialogState?.showLeftPanelEditor && <LeftPanelFormEditor />}
-                  </>)}
-                </Observer>
-              </SMBox>
-            </Box>
-          )}
+                <Box
+                  pl={1}
+                  display="flex"
+                  height={45}
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography className={classes.titleText}>
+                    <Text translation="form.builder.library" />
+                  </Typography>
+                  <IconButton
+                    disableRipple
+                    disableFocusRipple
+                    onClick={_documentRevisionFormState?.setLeftPanelOpen}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
+                <SMBox
+                  display="flex"
+                  justifyContent="center"
+                  stretchY="calc(100vh - 86px)"
+                  borderTop={1}
+                  borderColor={Colors.medium_gray}
+                >
+                  <Observer>
+                    {() => (<>
+                      {(!leftPanelDialogState?.showLeftPanelEditor ||  !leftPanelDialogState) && <LeftPresenter />}
+                      {leftPanelDialogState?.showLeftPanelEditor && <LeftPanelFormEditor />}
+                    </>)}
+                  </Observer>
+                </SMBox>
+              </Box>
+            )}
         </>
       )}
     </Observer>

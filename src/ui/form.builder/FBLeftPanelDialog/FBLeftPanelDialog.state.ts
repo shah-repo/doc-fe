@@ -25,8 +25,7 @@ class FBLeftPanelDialogState {
   };
 
   @action public closeDialog = () => {
-    this.reset();
-    this.setDialog(false);
+    this.HideLeftPanel();
   };
   @action public HideLeftPanel = () => {
     this.reset();

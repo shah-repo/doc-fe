@@ -1,6 +1,7 @@
 import { filter, includes, size, union } from "lodash";
 import React from "react";
 import { FB, FBData, FBEditorActions, FBEditorHelperProps, FBEditorState, FBEditorTitle, FBInputProps, FBInputType } from "..";
+import { SM } from "../../../App";
 
 export const withFBEditorHelper = <T extends FBEditorHelperProps>(
   Component: React.FunctionComponent<T>
@@ -11,7 +12,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
   }: T) => {
 
     const { dialogState, workspaceState, formState, leftPanelDialogState } = FB.useStores();
-
+    const { _documentRevisionFormState } = SM.useStores();
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex } = props;
       if (includes(FBEditorState.pickStepIndex, type)) {
@@ -54,6 +55,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       }
       const { underValidation } = editorForm.props;
 
+      if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       if (leftPanelDialogState) {
         leftPanelDialogState && leftPanelDialogState.config({
           open: true,

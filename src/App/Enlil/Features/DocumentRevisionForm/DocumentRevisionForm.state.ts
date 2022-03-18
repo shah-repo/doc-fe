@@ -40,7 +40,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   /**
    * @cfg {boolean} Left Panel open/close.
    */
-  @observable public leftPanelOpen = true;
+  @observable public leftPanelOpen = false;
 
   // MARK: @api
 
