@@ -136,6 +136,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     handleCancel = () => {
       dialogState?.closeDialog();
       leftPanelDialogState?.HideLeftPanel();
+      _documentRevisionFormState?.setLeftPanelOpen();
     };
 
     return Component({
