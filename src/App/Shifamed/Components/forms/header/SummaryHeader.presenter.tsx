@@ -7,7 +7,7 @@ import Header from "../../../../../ui/components/common/header/Header";
 import HeaderInfo from "../../../../../ui/components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import { isFormWithInlineApproval } from "../../../../../ui/documentRevision/helpers/records";
-import ControlsContainer from "../../../../Enlil/Features/DocumentRevision/PreviewControls.container";
+import ControlsContainer from "../../../../../ui/documentRevision/PreviewControls.container";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -56,7 +56,7 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
                     documentRevision={documentRevision}
                     canShowCreateVersionButton={canShowCreateVersionButton}
                     hasAccess={documentRevision.document.canAccess}
-                    canChangeOwnerShip={canChangeOwnerShip}
+                    newVarient
                   />
                 </Grid>
               </Grid>

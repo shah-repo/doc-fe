@@ -1,8 +1,9 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { StyledButton } from "../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
@@ -22,6 +23,7 @@ import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
+import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
@@ -32,6 +34,7 @@ interface OwnProps {
   documentRevision: DocumentRevision;
   canShowCreateVersionButton?: boolean;
   hasAccess: boolean;
+  newVarient?: boolean;
 }
 
 interface StateProps {
@@ -46,7 +49,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, newVarient = false,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
   const {
@@ -128,14 +131,25 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
-          <Button
-            color="secondary"
-            variant="outlined"
-            onClick={cloneDocument}
-            id="PreviewControlsContainer-revise"
-            data-cy="updateRecord" >
-            <Text message={reviseLabel} />
-          </Button>
+          {newVarient ? (
+            <StyledButton
+              color="primary"
+              onClick={cloneDocument}
+              id="PreviewControlsContainer-revise"
+              data-cy="updateRecord"
+            >
+              <Text message={reviseLabel} />
+            </StyledButton>
+          ) : (
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={cloneDocument}
+              id="PreviewControlsContainer-revise"
+              data-cy="updateRecord" >
+              <Text message={reviseLabel} />
+            </Button>
+          )}
         </CustomLabelTooltip>
       );
     }
@@ -147,7 +161,16 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         .find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
-      return (
+      return newVarient ? (
+        <StyledButton
+          color="primary"
+          onClick={cloneOutputDocument}
+          id="PreviewControlsContainer-createNew"
+          data-cy="PreviewControlsContainer-createNew"
+        >
+          <Text translation={"common.create.new"} />
+        </StyledButton>
+      ) : (
         <Button
           color="secondary"
           variant="outlined"
@@ -194,6 +217,35 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     }
   };
 
+  const newRenderNoAccessWarning = () => {
+    if (!hasAccess) {
+      return (
+        <Box display="flex">
+          <Box alignSelf="center" id="PreviewControlsContainer-warning" color={Colors.white} alignContent="center" >
+            <Grid container alignItems="center">
+              <Grid item>
+                <WarningIcon style={{ marginRight: 10, width: "20px", height: "20px" }} />
+              </Grid>
+              <Grid item>
+                <Text translation="document.security.warning" />
+              </Grid>
+            </Grid>
+          </Box>
+          {!isEmailSent && (
+            <StyledButton
+              color="primary"
+              onClick={onSubmit}
+              id="PreviewControlsContainer-access"
+              data-cy="PreviewControlsContainer-access"
+            >
+              <Text translation="document.request.access" />
+            </StyledButton>
+          )}
+        </Box>
+      );
+    }
+  };
+
   const renderWithdrawSubmissionButton = () =>
     <>
       <Button
@@ -211,23 +263,42 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       />
     </>;
 
+  const newRenderWithdrawSubmissionButton = () =>
+    <>
+      <StyledButton
+        color="primary"
+        onClick={dialog.open}
+        data-cy="document.revision.withdraw.alert"
+      >
+        <Text translation="changeRequest.transition.withdrawn" />
+      </StyledButton>
+      <AlertDialog
+        confirmAction={withdrawAction}
+        message={"document.revision.withdraw.alert"}
+        {...{ dialog }}
+      />
+    </>;
+
   return (
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
       {(isStatusReleased || isStatusInDraft) && canCopy &&
         <CopyEBButton
-          {...{ documentRevision }}
+          {...{ documentRevision }} newVariant
         />}
       {renderOutputButton()}
-      {renderNoAccessWarning()}
+      {newVarient ? newRenderNoAccessWarning() : renderNoAccessWarning()}
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-        renderWithdrawSubmissionButton()}
-      <InspectionControlsContainer {...{ documentRevision }} />
+        !newVarient && renderWithdrawSubmissionButton()}
+      {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
+        newVarient && newRenderWithdrawSubmissionButton()}
+      <InspectionControlsContainer {...{ documentRevision }} newVarient />
       {isExportable && <ExportToEmail
         revisionId={documentRevision.id}
         canAccess={documentRevision.document.canAccess}
+        newVariant
       />}
-      <DownloadHTML pdf={documentRevision.pdf} />
+      <DownloadHTML pdf={documentRevision.pdf} newVarient />
       <PDFSocket {...{ documentRevision }}/>
     </>
   );
