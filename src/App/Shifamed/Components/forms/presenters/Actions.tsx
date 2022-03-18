@@ -18,6 +18,7 @@ import CloneEBButton from "../../../../../ui/components/forms/CopyEBButton";
 import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
+import { withActionButton } from "../../../../../ui/documentRevision/forms/presenters/ActionButton.wrap";
 import ApproveAndRelease from "../../../../../ui/documentRevision/forms/presenters/approve.and.release/ApproveAndRelease";
 import CancelButton from "../../../../../ui/documentRevision/forms/presenters/CancelButton";
 import ExportToCSVButton from "../../../../../ui/documentRevision/forms/presenters/export.to.csv/ExportToCSV.button";
@@ -33,7 +34,6 @@ import { isDocumentNumericRelease } from "../../../../../ui/documentRevision/hel
 import { InspectionControlsContainer } from "../../../../../ui/documentRevision/InspectionControls/InspectionControls.container";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../../../ui/form.builder/FBInput/FBInput.wrap";
 import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeToLatest";
-import { withNewActionButton } from "./ActionButton.wrap";
 
 const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
@@ -305,4 +305,4 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   );
 };
 
-export default withNewActionButton(NewDocRevActions);
+export default withActionButton(NewDocRevActions);
