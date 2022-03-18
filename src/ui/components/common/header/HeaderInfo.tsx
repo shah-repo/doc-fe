@@ -4,7 +4,6 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { StyledBreadcrumb } from "../../../../App/Shifamed/Components/forms/header/StyledBreadcrumb";
 import { companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -18,6 +17,7 @@ import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/use
 import Text from "../../Text";
 import { FormHeaderStatusClassMapping } from "./Header";
 import { styles } from "./HeaderInfo.styles";
+import { StyledBreadcrumb } from "./StyledBreadcrumb";
 
 interface Props {
   status: string;

@@ -1,5 +1,6 @@
 import React from "react";
-import NewFormHeaderPresenter from "../../../App/Shifamed/Components/forms/header/FormHeader.presenter";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
+import FormHeaderPresenter from "./FormHeader.presenter";
 
 interface Props {
   isCreateDocumentDisabled: boolean;
@@ -8,7 +9,6 @@ interface Props {
 const FormHeader: React.FunctionComponent<Props> = ({
   isCreateDocumentDisabled,
 }) =>
-  <NewFormHeaderPresenter {...{ isCreateDocumentDisabled }} newVarient />;
-
+  <FormHeaderPresenter {...{ isCreateDocumentDisabled }} newVarient={SM.isNewLayout} />;
 
 export default FormHeader;
