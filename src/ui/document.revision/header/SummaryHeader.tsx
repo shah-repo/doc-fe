@@ -20,13 +20,16 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   FormHeaderSummaryContext = React.createContext<FormHeaderSummaryContext | undefined>({
     documentRevisionSummary: documentRevision,
   });
-  return <SummaryHeaderPresenter
-    {...{
-      documentRevision,
-      canChangeOwnerShip,
-      canShowCreateVersionButton,
-    }}
-  />;
+  return (
+    <SummaryHeaderPresenter
+      {...{
+        documentRevision,
+        canChangeOwnerShip,
+        canShowCreateVersionButton,
+      }}
+    />
+
+  );
 };
 
 export default SummaryHeader;
