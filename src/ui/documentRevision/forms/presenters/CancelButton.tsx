@@ -18,13 +18,13 @@ import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus"
 interface Props {
   documentRevision: DocumentRevision;
   setShouldDisplay: (value: boolean) => void;
-  newVarient?: boolean;
+  newVariant?: boolean;
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
   documentRevision,
   setShouldDisplay,
-  newVarient = false,
+  newVariant = false,
 }) => {
   const dialog = useDialog();
   const async = useAsync();
@@ -45,13 +45,13 @@ const CancelButton: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        (!newVarient && canShowCancelButton) &&
+        (!newVariant && canShowCancelButton) &&
         <Button id="cancelDraftButton" data-cy="cancelDraftButton" variant="outlined" onClick={dialog.open}>
           <Text translation="common.cancel.draft" />
         </Button>
       }
       {
-        (newVarient && canShowCancelButton) &&
+        (newVariant && canShowCancelButton) &&
        ( <StyledMenuListItem button alignItems="flex-start">
          <StyledMenuListIcon>
            <VoidDocumentIcon />

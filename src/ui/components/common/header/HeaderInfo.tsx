@@ -32,7 +32,7 @@ interface Props {
   displayStatus?: string;
   subtitle?: any;
   displayRevision?: string;
-  newVarient?: boolean;
+  newVariant?: boolean;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -43,7 +43,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   displayStatus,
   subtitle,
   displayRevision,
-  newVarient = false,
+  newVariant = false,
 }) => {
   const intl = useIntl();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
@@ -219,7 +219,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 
   );
   return (
-    <>{newVarient ? newHeaderRenderer() : oldHeaderRenderer()}</>
+    <>{newVariant ? newHeaderRenderer() : oldHeaderRenderer()}</>
   );
 };
 

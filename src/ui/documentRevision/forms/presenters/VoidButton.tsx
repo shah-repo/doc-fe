@@ -18,11 +18,11 @@ import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 
 interface Props {
   documentRevision: DocumentRevision | undefined;
-  newVarient?: boolean;
+  newVariant?: boolean;
 }
 const VoidButton: React.FunctionComponent<Props> = ({
   documentRevision,
-  newVarient = false,
+  newVariant = false,
 }) => {
   const dialog = useDialog();
   const async = useAsync();
@@ -46,7 +46,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={async.asyncState} />
         <FormProgress asyncState={async.asyncState} />
       </Box>
-      {newVarient ? (
+      {newVariant ? (
         <StyledMenuListItem
           button
           disabled={async.asyncState.status === AsyncStatus.Active}

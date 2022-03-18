@@ -37,6 +37,7 @@ import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.contai
 import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
+  const newVariant = SM.isNewLayout;
   const formik = useFormikContext();
   const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
@@ -192,7 +193,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <OwnerChanger requestId={values.id} requestType={RequestType.Document} renderAsButton={false} newVariant={true} />
+    <OwnerChanger requestId={values.id} requestType={RequestType.Document}
+      renderAsButton={false} newVariant={newVariant} />
   );
 
   return (
@@ -201,6 +203,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         {() => (
           <>
             {<SubmitButton
+              newVariant={newVariant && !isCreateUrl}
               asyncState={asyncState}
               label={isDisabled ?
                 "common.save" :
@@ -219,15 +222,16 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <span>
         {(isStatusReleased || isStatusInDraft) && serializedCSV &&
           <ExportToCSVButton
+            newVariant={newVariant}
             {...{ documentRevision }}
-            newVariant
           />}
         {(isStatusReleased || isStatusInDraft) && canCopy &&
         <CopyEBButton
           {...{ documentRevision }}
+          newVariant={newVariant}
         />}
-        <InspectionControlsContainer {...{ documentRevision }} />
-        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}/>
+        <InspectionControlsContainer {...{ documentRevision }} newVariant={newVariant} />
+        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }} newVariant={newVariant}/>
         {
           isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
             <SubmitForApproval
@@ -241,6 +245,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                   currentDocumentType,
                 }
               }
+              newVariant={newVariant}
             />
           )
         }
@@ -264,6 +269,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                       isInlineApproval,
                     }
                   }
+                  newVariant={newVariant}
                 />
               )}
             </Observer>
@@ -272,12 +278,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         {isExportable && <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
+          newVariant={newVariant}
         />}
         { !isCreateUrl && (<HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton
           {...{ documentRevision }}
           setShouldDisplay={props.setCancelButtonDisplay}
+          newVariant={newVariant}
         />}
           {renderChangeOwnership}
           <UpgradeToLatestContainer
@@ -288,11 +296,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             {...{
               shouldShowUpgrade,
             }}
+            newVariant={newVariant}
           />
           {!(isRecord && isInlineApproval) &&
-          isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
+          isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }} newVariant={newVariant} />}
           {isRecord && isInlineApproval &&
-          isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
+          isUserDocumentOwner && showVoidButtonOnInlineRecords &&
+          <VoidButton {...{ documentRevision }} newVariant={newVariant} />}
         </HeaderMenu> )}
       </span>
       }

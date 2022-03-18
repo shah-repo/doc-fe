@@ -34,7 +34,7 @@ interface OwnProps {
   documentRevision: DocumentRevision;
   canShowCreateVersionButton?: boolean;
   hasAccess: boolean;
-  newVarient?: boolean;
+  newVariant?: boolean;
 }
 
 interface StateProps {
@@ -49,7 +49,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, newVarient = false,
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, newVariant = false,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
   const {
@@ -131,7 +131,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
-          {newVarient ? (
+          {newVariant ? (
             <StyledButton
               color="primary"
               onClick={cloneDocument}
@@ -161,7 +161,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         .find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
-      return newVarient ? (
+      return newVariant ? (
         <StyledButton
           color="primary"
           onClick={cloneOutputDocument}
@@ -287,18 +287,18 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           {...{ documentRevision }} newVariant
         />}
       {renderOutputButton()}
-      {newVarient ? newRenderNoAccessWarning() : renderNoAccessWarning()}
+      {newVariant ? newRenderNoAccessWarning() : renderNoAccessWarning()}
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-        !newVarient && renderWithdrawSubmissionButton()}
+        !newVariant && renderWithdrawSubmissionButton()}
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-        newVarient && newRenderWithdrawSubmissionButton()}
-      <InspectionControlsContainer {...{ documentRevision }} newVarient />
+        newVariant && newRenderWithdrawSubmissionButton()}
+      <InspectionControlsContainer {...{ documentRevision }} newVariant />
       {isExportable && <ExportToEmail
         revisionId={documentRevision.id}
         canAccess={documentRevision.document.canAccess}
         newVariant
       />}
-      <DownloadHTML pdf={documentRevision.pdf} newVarient />
+      <DownloadHTML pdf={documentRevision.pdf} newVariant />
       <PDFSocket {...{ documentRevision }}/>
     </>
   );

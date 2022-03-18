@@ -13,11 +13,11 @@ import useAsync from "../../hooks/useAsync";
 
 interface Props {
   pdf?: PDF;
-  newVarient?: boolean;
+  newVariant?: boolean;
 }
 const DownloadHTML: React.FunctionComponent<Props> = ({
   pdf,
-  newVarient = false,
+  newVariant = false,
 }) => {
   const intl = useIntl();
   const action = useActionCreator(attachmentsActions.getAssetUrl);
@@ -39,7 +39,7 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
     async.start(action, pdf.s3Url, async);
   };
 
-  if (newVarient) {
+  if (newVariant) {
     const isActive = async.asyncState.status === AsyncStatus.Active;
     return (
       <StyledButton

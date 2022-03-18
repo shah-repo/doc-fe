@@ -23,7 +23,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
 }) => {
   const { _documentRevisionFormState } = SM.useStores();
-  const newVarient = SM.isNewLayout;
+  const newVariant = SM.isNewLayout;
 
   const headerRenderer = () => <Header
     displayStatus={documentRevision.displayStatus}
@@ -43,7 +43,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       subRevision={documentRevision?.subRevision}
       displayStatus={documentRevision.displayStatus}
       subtitle={generateSubtitle(documentRevision)}
-      newVarient={newVarient}
+      newVariant={newVariant}
       displayRevision={documentRevision.displayRevision}
     />
     <Grid item={true} xs={6}>
@@ -52,14 +52,14 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
           documentRevision={documentRevision}
           canShowCreateVersionButton={canShowCreateVersionButton}
           hasAccess={documentRevision.document.canAccess}
-          newVarient={newVarient}
+          newVariant={newVariant}
         />
         {canChangeOwnerShip && (
           <OwnerChangerContainer
             requestId={documentRevision.id}
             requestType={RequestType.Document}
             renderAsButton={true}
-            newVariant={newVarient}
+            newVariant={newVariant}
           />
         )}
       </Grid>
@@ -67,7 +67,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   </Header>;
 
   return (<>
-    {newVarient ?
+    {newVariant ?
       <Observer>
         {() => (
           <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>

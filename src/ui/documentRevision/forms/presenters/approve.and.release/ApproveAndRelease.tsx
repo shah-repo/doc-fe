@@ -46,7 +46,7 @@ interface Props {
   revisionStage?: number;
   isRecord: boolean;
   isInlineApproval: boolean;
-  newVarient?: boolean;
+  newVariant?: boolean;
 }
 
 const styles = makeStyles(() =>
@@ -72,7 +72,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   revisionStage,
   isRecord,
   isInlineApproval,
-  newVarient = false,
+  newVariant = false,
 }) => {
 
   // MARK: @selectors
@@ -317,7 +317,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        {newVarient ? (
+        {newVariant ? (
           <StyledButton
             color="primary"
             onClick={isRecord ? alertDialog.open : openDialog}

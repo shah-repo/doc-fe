@@ -16,14 +16,14 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
   canCreateInspection,
   isDocumentDraft,
   disabled,
-  newVarient,
+  newVariant,
   ...props
 }) => {
   if (!isDocumentDraft || !canCreateInspection) { return null; }
 
   return (
     <>
-      {newVarient ? (
+      {newVariant ? (
         <StyledButton
           color="primary"
           data-cy={`PreviewControlsContainer-inspection-FAI`}

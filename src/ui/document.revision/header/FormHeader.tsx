@@ -8,7 +8,7 @@ interface Props {
 }
 
 const FormHeader: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled }) => (
-  <FormHeaderPresenter {...{ isCreateDocumentDisabled }} newVarient={SM.isNewLayout}/>
+  <FormHeaderPresenter {...{ isCreateDocumentDisabled }} newVariant={SM.isNewLayout}/>
 );
 
 export default FormHeader;
