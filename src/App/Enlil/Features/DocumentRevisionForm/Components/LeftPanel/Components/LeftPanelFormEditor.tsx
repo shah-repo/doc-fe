@@ -57,7 +57,7 @@ const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
       <Grid item>
         <div ref={handleTitleRef} />
       </Grid>
-      <Grid item style={{ height: "calc(100vh - 230px)", overflow: "auto" }}>
+      <Grid item style={{ height: "calc(100vh - 230px)", overflow: "auto", marginLeft: "14px" }}>
         {content && portalTitle && portalAction && (
           <content.type {...content.props}>
             {content.props.children}
