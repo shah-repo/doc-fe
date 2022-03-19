@@ -2,17 +2,14 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import React from "react";
 // import styles from "./LeftToggleButtons.styles";
+import Text from "../../../../../../../ui/components/Text";
+import { FBEditorTitleProps } from "../../../../../../../ui/form.builder/FBEditorTitle/FBEditorTitle.types";
 
-const LeftToggleButtons: React.FunctionComponent = () => {
-  const [alignment, setAlignment] = React.useState("fieldConfig");
-  // const classes = styles();
-  const handleChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newAlignment: string
-  ) => {
-    setAlignment(newAlignment);
-  };
-  return (
+const LeftToggleButtons: React.FunctionComponent<FBEditorTitleProps> = ({
+  mode,
+  handleMode,
+}) =>
+  (
     <div
       style={{
         // position: "absolute",
@@ -26,20 +23,18 @@ const LeftToggleButtons: React.FunctionComponent = () => {
     >
       <ToggleButtonGroup
         color="primary"
-        // it will return string
         exclusive
-        value={alignment}
-        onChange={handleChange}
         style={{
           position: "absolute",
         }}
       >
         <ToggleButton
-          value="fieldConfig"
+          value={mode}
           disableFocusRipple
           disableRipple
+          onClick={handleMode}
           // TODO update with classes
-          style={alignment === "fieldConfig" ? {
+          style={mode === "config" ? {
             textTransform: "none",
             display: "flex",
             flexDirection: "row",
@@ -78,14 +73,14 @@ const LeftToggleButtons: React.FunctionComponent = () => {
             lineHeight: "18px",
           }}
         >
-          Field Config
+          <Text translation= "form.builder.field.config" />
         </ToggleButton>
-
         <ToggleButton
-          value="setRules"
+          value={mode}
           disableFocusRipple
           disableRipple
-          style={alignment === "setRules" ? {
+          onClick={handleMode}
+          style={mode === "validation" ? {
             textTransform: "none",
             display: "flex",
             flexDirection: "row",
@@ -124,11 +119,11 @@ const LeftToggleButtons: React.FunctionComponent = () => {
             lineHeight: "18px",
           }}
         >
-          Set Rules
+          <Text translation= "form.builder.validation" />
         </ToggleButton>
       </ToggleButtonGroup>
     </div>
-  );
-};
+  )
+;
 
 export default LeftToggleButtons;

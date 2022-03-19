@@ -48,14 +48,16 @@ const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
   {/* <DialogContent> */}
   <Box
     display="flex"
-    justifyContent="center"
-    alignItems="center"
+    // justifyContent="center"
+    // alignItems="center"
+    p={1}
+    width={"100%"}
   >
-    <Grid container>
+    <Grid container style={{ height: "calc(100vh - 86px)", overflow: "auto" }} >
       <Grid item>
         <div ref={handleTitleRef} />
       </Grid>
-      <Grid item>
+      <Grid item style={{ height: "calc(100vh - 230px)", overflow: "auto" }}>
         {content && portalTitle && portalAction && (
           <content.type {...content.props}>
             {content.props.children}

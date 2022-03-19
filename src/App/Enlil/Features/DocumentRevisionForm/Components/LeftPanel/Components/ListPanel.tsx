@@ -252,7 +252,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       </Box>
       <List
         style={{
-          height: "calc(100vh - 235px)",
+          height: "calc(100vh - 165px)",
           overflowY: "auto",
           width: "99.8%",
         }}
