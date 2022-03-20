@@ -446,7 +446,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Current" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
       });
 
       it("reload page", () => {
