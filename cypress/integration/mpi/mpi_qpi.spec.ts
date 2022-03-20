@@ -981,7 +981,7 @@ context("Mpi/Qpi test", () => {
         });
       });
 
-      context("Draft QPI document", () => {
+      context("Save QPI document and verify status", () => {
         it("Click save document", () => {
           SystemRequirement("REQ-3120");
           cy.drClickCreateDocumentWithApiCallForForms();
