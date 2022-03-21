@@ -13,11 +13,13 @@ import { FBWorkspace } from "../../../../ui/form.builder";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
+import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionSummaryWrap } from "./DocumentRevisionSummary.wrap";
 
 const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryProps> = ({
   onTabChange,
   onScroll,
+  _tabsState,
   _documentRevisionFormState,
   documentRevision,
   canChangeOwnerShip,
@@ -25,10 +27,18 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   isFB,
 }) => {
   const group = documentRevision?.document?.documentType?.group || "OTHER";
-  const tabConfig = useSelector((state: ApplicationState) =>
+  let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
+  if (documentRevision.retrain) {
+    tabConfig = [...tabConfig, {
+      labelId: "tabId.training",
+      tabId: "training",
+      type: "TRAINING",
+    } ];
+  }
   const tabLabels: string[] = tabConfig.map((tabInfo) => tabInfo.labelId);
   const isDynamic = Boolean(tabConfig.find((tabInfo) => tabInfo.type === "DYNAMIC"));
+  const trainingTabIndex = tabLabels.findIndex((tab) => tab === "tabId.training");
 
   return (
     <SMForm
@@ -92,6 +102,12 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             />
                           </SMBox>
                         </SMBox>
+                      )}
+                      {tabType === "TRAINING" &&
+                          _tabsState?.value === trainingTabIndex && (
+                        <FBTrainingInfoContainer
+                          documentRevisionId={documentRevision?.id}
+                        />
                       )}
                     </SMBox>
                   </SMBox>;

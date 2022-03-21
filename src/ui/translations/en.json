@@ -401,6 +401,7 @@
   "common.trId": "TRN ID",
   "common.acknowledge": "Acknowledge",
   "common.training.record": "Training Record",
+  "common.training.not.found": "Training can be assigned to this document once it is released.",
   "common.email.sent": "Email Sent!",
   "common.falied.email": "Failed to Send Email",
   "common.click.here": "Click here",
@@ -422,6 +423,9 @@
   "common.training": "Training",
   "common.just.now": "Just now",
   "common.select.all": "Select All",
+  "common.load.more": "Load More",
+  "common.due.by.date": "Due by: {date}",
+  "common.items.count": "{count} items",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -1218,5 +1222,5 @@
   "tabId.documents": "Documents",
   "tabId.changedetails": "Change Details",
   "tabId.general": "General",
-  "common.load.more": "Load More"
+  "tabId.training": "Training"
 }
