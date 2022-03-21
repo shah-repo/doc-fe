@@ -1,12 +1,6 @@
-import {
-  Box,
-  Collapse,
-  FormControlLabel,
-  Grid,
-  Switch,
-} from "@material-ui/core";
+import { Box, Collapse, FormControlLabel, Grid, Switch } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import { withStyles, WithStyles } from "@material-ui/core/styles";
+import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Observer } from "mobx-react";
 import React, { useState } from "react";
@@ -105,16 +99,14 @@ const Header: React.FunctionComponent<Props> = ({
     <AppBar position="fixed" color="primary" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.logo}></div>
-        <Grid container={true} alignItems="flex-end" justify="flex-end">
+        <Grid
+          container={true}
+          alignItems="flex-end"
+          justify="flex-end"
+        >
           {canToggleCustomLabels && (
             <FormControlLabel
-              control={
-                <Switch
-                  name="toggleCustomLabels"
-                  checked={customLabelsValue}
-                  onChange={toggleCustomLabels}
-                />
-              }
+              control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
               label={<Text translation="form.builder.header.control.label" />}
             />
           )}

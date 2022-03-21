@@ -44,6 +44,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   subtitle,
   displayRevision,
 }) => {
+
   const intl = useIntl();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);

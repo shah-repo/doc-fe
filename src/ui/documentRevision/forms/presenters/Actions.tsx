@@ -227,7 +227,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           {...{ documentRevision }}
         />}
         <InspectionControlsContainer {...{ documentRevision }} />
-        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }} />
+        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}/>
         {
           isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
             <SubmitForApproval
@@ -290,10 +290,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             }}
           />
           {!(isRecord && isInlineApproval) &&
-          isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }} />}
+          isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
           {isRecord && isInlineApproval &&
-          isUserDocumentOwner && showVoidButtonOnInlineRecords &&
-          <VoidButton {...{ documentRevision }} />}
+          isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
         </HeaderMenu> )}
       </span>
       }
