@@ -10,15 +10,14 @@ interface Props {
   isUserDocumentOwner: boolean;
   docTypeHasRedline: boolean;
   isLHRProductionBuild: boolean;
-  newVariant?: boolean;
 }
 
 const RedlineButton: React.FunctionComponent<Props> = ({
   isUserDocumentOwner,
   docTypeHasRedline,
   isLHRProductionBuild,
-  newVariant = false,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const { _formState } = SM.useStores();
   const dispatch = useDispatch();
 
@@ -31,7 +30,7 @@ const RedlineButton: React.FunctionComponent<Props> = ({
   if (!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild) {
     return null;
   }
-  if (newVariant) {
+  if (isNewLayout) {
     return (
       <StyledButton
         color="primary"

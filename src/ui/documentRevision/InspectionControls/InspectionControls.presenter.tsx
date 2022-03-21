@@ -1,6 +1,7 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
 import Text from "../../components/Text";
 import { InspectionControlsPresenterProps } from "./InspectionControls.types";
 import InspectionDialog from "./InspectionDialog/InspectionDialog";
@@ -16,14 +17,14 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
   canCreateInspection,
   isDocumentDraft,
   disabled,
-  newVariant,
   ...props
 }) => {
+  const isNewLayout = SM.isNewLayout;
   if (!isDocumentDraft || !canCreateInspection) { return null; }
 
   return (
     <>
-      {newVariant ? (
+      {isNewLayout ? (
         <StyledButton
           color="primary"
           data-cy={`PreviewControlsContainer-inspection-FAI`}

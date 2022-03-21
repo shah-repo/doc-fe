@@ -6,6 +6,7 @@ import { StyledButton } from "../../../../App/Shifamed/Components/forms/presente
 import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as ChangeOwnerIcon } from "../../../../assets/images/change_owner_avatar.svg";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState } from "../../../../state/types";
@@ -26,7 +27,6 @@ interface OwnProps {
   closeDialog: () => void;
   openDialog: () => void;
   renderAsButton: boolean;
-  newVariant: boolean;
 }
 
 const OwnerChangerPresenter: React.FC<OwnProps> = ({
@@ -38,8 +38,8 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   closeDialog,
   openDialog,
   renderAsButton,
-  newVariant,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const classes = styles();
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
@@ -99,7 +99,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
 
   return (
     <>
-      {renderAsButton && newVariant && (
+      {renderAsButton && isNewLayout && (
         <StyledButton
           color="primary"
           id="OwnerChangerPresenter-changeOwner"
@@ -109,7 +109,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
           <Text translation="change.owner" />
         </StyledButton>
       )}
-      {renderAsButton && !newVariant && (
+      {renderAsButton && !isNewLayout && (
         <Button
           color="secondary"
           variant="outlined"
@@ -119,7 +119,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
           <Text translation="change.owner" />
         </Button>
       )}
-      {!renderAsButton && newVariant && (
+      {!renderAsButton && isNewLayout && (
         <StyledMenuListItem button alignItems="flex-start">
           <StyledMenuListIcon>
             <ChangeOwnerIcon />

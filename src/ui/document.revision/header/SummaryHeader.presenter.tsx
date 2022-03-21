@@ -59,7 +59,6 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
             requestId={documentRevision.id}
             requestType={RequestType.Document}
             renderAsButton={true}
-            newVariant={newVariant}
           />
         )}
       </Grid>

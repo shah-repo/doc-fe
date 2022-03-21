@@ -1,6 +1,7 @@
 import React from "react";
 import { useIntl } from "react-intl";
 import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
 import { PDF } from "../../../state/ducks/documentRevisions/types";
@@ -13,12 +14,11 @@ import useAsync from "../../hooks/useAsync";
 
 interface Props {
   pdf?: PDF;
-  newVariant?: boolean;
 }
 const DownloadHTML: React.FunctionComponent<Props> = ({
   pdf,
-  newVariant = false,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const action = useActionCreator(attachmentsActions.getAssetUrl);
   const async = useAsync<AttachmentDownloadResponse>({
@@ -39,7 +39,7 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
     async.start(action, pdf.s3Url, async);
   };
 
-  if (newVariant) {
+  if (isNewLayout) {
     const isActive = async.asyncState.status === AsyncStatus.Active;
     return (
       <StyledButton

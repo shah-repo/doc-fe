@@ -3,6 +3,7 @@ import React, { useMemo } from "react";
 import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
@@ -18,12 +19,11 @@ import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 
 interface Props {
   documentRevision: DocumentRevision | undefined;
-  newVariant?: boolean;
 }
 const VoidButton: React.FunctionComponent<Props> = ({
   documentRevision,
-  newVariant = false,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
   const async = useAsync();
 
@@ -46,7 +46,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={async.asyncState} />
         <FormProgress asyncState={async.asyncState} />
       </Box>
-      {newVariant ? (
+      {isNewLayout ? (
         <StyledMenuListItem
           button
           disabled={async.asyncState.status === AsyncStatus.Active}

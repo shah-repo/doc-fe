@@ -3,6 +3,7 @@ import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined"
 import React from "react";
 import { useDispatch } from "react-redux";
 import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -23,7 +24,6 @@ interface Props {
   docRevOwner: string;
   updatedAt?: string;
   currentDocumentType?: DocumentType;
-  newVariant?: boolean;
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -33,8 +33,8 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   docRevOwner,
   updatedAt,
   currentDocumentType,
-  newVariant,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const classes = styles();
   const dispatch = useDispatch();
   const voidRecordDialog = useDialog();
@@ -89,7 +89,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {newVariant ? (
+      {isNewLayout ? (
         <StyledButton
           color="primary"
           onClick={isObsolete ? voidRecordDialog.open : releaseRecord}

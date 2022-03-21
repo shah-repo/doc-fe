@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../../../App/Shifamed/Utils/SM/SM";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import { toastError, toastSuccess } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
@@ -12,10 +13,10 @@ import useAsync from "../../../../hooks/useAsync";
 interface Props {
   revisionId: string;
   canAccess: boolean;
-  newVariant?: boolean;
 }
 
-const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, newVariant }) => {
+const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess }) => {
+  const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const async = useAsync({
     onSuccess: () => {
@@ -35,7 +36,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   const handleClick = () => {
     async.start(exportToEmail, revisionId, async);
   };
-  if (newVariant) {
+  if (isNewLayout) {
     return (
       <StyledButton
         color="primary"

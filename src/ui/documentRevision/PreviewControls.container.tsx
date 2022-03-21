@@ -284,7 +284,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {!isLastVersionObsolete() && renderCloneButton()}
       {(isStatusReleased || isStatusInDraft) && canCopy &&
         <CopyEBButton
-          {...{ documentRevision }} newVariant
+          {...{ documentRevision }}
         />}
       {renderOutputButton()}
       {newVariant ? newRenderNoAccessWarning() : renderNoAccessWarning()}
@@ -292,13 +292,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         !newVariant && renderWithdrawSubmissionButton()}
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
         newVariant && newRenderWithdrawSubmissionButton()}
-      <InspectionControlsContainer {...{ documentRevision }} newVariant />
+      <InspectionControlsContainer {...{ documentRevision }} />
       {isExportable && <ExportToEmail
         revisionId={documentRevision.id}
         canAccess={documentRevision.document.canAccess}
-        newVariant
       />}
-      <DownloadHTML pdf={documentRevision.pdf} newVariant />
+      <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>
   );

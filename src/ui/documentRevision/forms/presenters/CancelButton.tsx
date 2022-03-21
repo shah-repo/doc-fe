@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
@@ -18,14 +19,13 @@ import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus"
 interface Props {
   documentRevision: DocumentRevision;
   setShouldDisplay: (value: boolean) => void;
-  newVariant?: boolean;
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
   documentRevision,
   setShouldDisplay,
-  newVariant = false,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
   const async = useAsync();
   const { status = "", version = 0, id, document } = documentRevision || [];
@@ -45,13 +45,13 @@ const CancelButton: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        (!newVariant && canShowCancelButton) &&
+        (!isNewLayout && canShowCancelButton) &&
         <Button id="cancelDraftButton" data-cy="cancelDraftButton" variant="outlined" onClick={dialog.open}>
           <Text translation="common.cancel.draft" />
         </Button>
       }
       {
-        (newVariant && canShowCancelButton) &&
+        (isNewLayout && canShowCancelButton) &&
        ( <StyledMenuListItem button alignItems="flex-start">
          <StyledMenuListIcon>
            <VoidDocumentIcon />
