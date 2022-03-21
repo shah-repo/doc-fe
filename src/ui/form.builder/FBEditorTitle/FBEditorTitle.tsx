@@ -1,15 +1,60 @@
+import { Box } from "@material-ui/core";
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import React from "react";
-import { FBEditorTitleProps } from "..";
-import LeftToggleButtons from "../../../App/Enlil/Features/DocumentRevisionForm/Components/LeftPanel/Components/LeftToggleButtons";
+import {
+  FBEditorModeProps,
+  FBEditorTitleProps,
+  FBEditorTitleState,
+  FBMapWrapper,
+} from "..";
+import Text from "../../../../src/ui/components/Text";
+import { Translation } from "../../translations/types";
+import styles from "./FBEditorTitle.styles";
 import { withFBEditorTitle } from "./FBEditorTitle.wrap";
 
 const FBEditorTitle: React.FunctionComponent<FBEditorTitleProps> = ({
   handleMode,
   mode,
-}) =>
-  (
-    <LeftToggleButtons handleMode={handleMode} mode={mode}/>
-  )
-;
+}) => {
+  const classes = styles();
+  const updatedStylesMode = () =>
+    mode === "config" ? classes.toggleButtonConfig : classes.toggleButton;
+  const updatedStylesValidation = () =>
+    mode === "validation"
+      ? classes.toggleButtonMode
+      : classes.toggleButtonNotMode;
+  return (
+    <Box className={classes.rootContainer}>
+      <ToggleButtonGroup
+        color="primary"
+        exclusive
+        className={classes.toggleButtonGroup}
+      >
+        <FBMapWrapper<FBEditorModeProps>
+          collection={FBEditorTitleState.modeConfig}
+        >
+          {(config, index) => (
+            <ToggleButton
+              key={`fb-editor-mode-${config.mode}-${index}`}
+              data-cy={`fb-editor-mode-${config.mode}-${index}`}
+              value={config}
+              disableFocusRipple
+              disableRipple
+              onClick={handleMode}
+              className={
+                config.mode === "config"
+                  ? updatedStylesMode()
+                  : updatedStylesValidation()
+              }
+            >
+              <Text translation={config.label as Translation} />
+            </ToggleButton>
+          )}
+        </FBMapWrapper>
+      </ToggleButtonGroup>
+    </Box>
+  );
+};
 
 export default withFBEditorTitle(FBEditorTitle);
