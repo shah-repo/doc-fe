@@ -174,7 +174,11 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       const { quantity, unit, usedOverride } = formValue;
       if (isUndefined(quantity)) { return; }
       if (!usedOverride) { return; }
-      if (quantity <= 0 || quantity.toString().split(".")[1]?.length > 10) {
+      if (quantity <= 0) {
+        toastError(intl.formatMessage({ id: "document.revision.quntity.positive.error" }));
+        return;
+      }
+      if (quantity.toString().split(".")[1]?.length > 10) {
         toastError(intl.formatMessage({ id: "document.revision.quntity.error" }));
         return;
       }
