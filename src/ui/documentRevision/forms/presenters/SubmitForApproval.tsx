@@ -109,7 +109,9 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           <Text message={isObsolete ? "common.void" : label} />
         </Button>
       )}
-      <Dialog open={voidRecordDialog.isOpen}>
+      <Dialog
+        open={voidRecordDialog.isOpen}
+      >
         <DialogContent>
           <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
             <Box textAlign="center">

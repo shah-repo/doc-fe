@@ -47,7 +47,7 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
     <>
       {
         type === "button" &&
-       <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/>
+        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/>
       }
       {
         type === "banner" &&

@@ -44,7 +44,7 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
           <Text translation={"document.revision.fai"} />
         </Button>
       )}
-      <InspectionDialog {...props} />
+      <InspectionDialog { ...(props) } />
     </>
   );
 };
