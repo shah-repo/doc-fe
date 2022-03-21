@@ -7,7 +7,7 @@ import Text from "../../../../../../ui/components/Text";
 import { FB } from "../../../../../../ui/form.builder";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
 import LeftPanelFormEditor from "./Components/LeftPanelFormEditor";
-import LeftPresenter from "./Components/presenter";
+import ListPanel from "./Components/ListPanel";
 import styles from "./DocumentRevisionLeftPanel.styles";
 import { withDocumentRevisionLeftPanelWrap } from "./DocumentRevisionLeftPanel.wrap";
 
@@ -59,7 +59,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
                 >
                   <Observer>
                     {() => (<>
-                      {(!leftPanelDialogState?.showLeftPanelEditor ||  !leftPanelDialogState) && <LeftPresenter />}
+                      {(!leftPanelDialogState?.showLeftPanelEditor ||  !leftPanelDialogState) && <ListPanel />}
                       {leftPanelDialogState?.showLeftPanelEditor && <LeftPanelFormEditor />}
                     </>)}
                   </Observer>

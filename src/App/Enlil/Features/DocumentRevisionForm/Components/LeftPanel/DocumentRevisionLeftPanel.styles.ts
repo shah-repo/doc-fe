@@ -4,7 +4,6 @@ import Colors from "../../../../../../ui/layout/theme/utils/colors";
 export default makeStyles((theme: Theme) =>
   createStyles({
     titleText: {
-      /* Heading 24 */
       "position": "static",
       "top": "0%",
       "bottom": "0%",
@@ -13,9 +12,7 @@ export default makeStyles((theme: Theme) =>
       "font-weight": "600",
       "font-size": "12px",
       "line-height": "15px",
-      /* Main Font */
       "color": Colors.dark_jungle_green,
-      /* Inside auto layout */
       "flex": "none",
       "order": 0,
       "flex-grow": 0,

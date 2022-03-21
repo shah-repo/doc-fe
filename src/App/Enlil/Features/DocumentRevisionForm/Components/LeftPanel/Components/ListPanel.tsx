@@ -243,7 +243,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   );
 
   return (
-    <>
+    <Box>
       <Box className={classes.searchBox}>
         <SearchBox onSearch={searchItem} />
       </Box>
@@ -252,7 +252,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
         {listData.dataList.length > 0 && createList(listData.dataList)}
         { renderNoSearchResults }
       </List>
-    </>
+    </Box>
   );
 };
 
