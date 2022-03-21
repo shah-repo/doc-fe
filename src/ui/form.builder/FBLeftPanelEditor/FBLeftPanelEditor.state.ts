@@ -1,0 +1,168 @@
+import { includes } from "lodash";
+import { action, observable, set } from "mobx";
+import React from "react";
+import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
+import FBEditorAction from "../FBEditorAction/FBEditorAction";
+import FBEditorApprovalField from "../FBEditorApprovalField/FBEditorApprovalField";
+import FBEditorApprovals from "../FBEditorApprovals/FBEditorApprovals";
+import FBEditorAutocomplete from "../FBEditorAutocomplete/FBEditorAutocomplete";
+import FBEditorCheckControl from "../FBEditorCheckControl/FBEditorCheckControl";
+import FBEditorEmpty from "../FBEditorEmpty/FBEditorEmpty";
+import FBEditorEQMaintenance from "../FBEditorEQMaintenance/FBEditorEQMaintenance";
+import FBEditorHyperlink from "../FBEditorHyperlink/FBEditorHyperlink";
+import FBEditorInlineApproval from "../FBEditorInlineApproval/FBEditorInlineApproval";
+import FBEditorInstructionsDocument from "../FBEditorInstructionsDocument/FBEditorInstructionsDocument";
+import FBEditorLabel from "../FBEditorLabel/FBEditorLabel";
+import FBEditorMediaAlbum from "../FBEditorMediaAlbum/FBEditorMediaAlbum";
+import FBEditorOptionGroup from "../FBEditorOptionGroup/FBEditorOptionGroup";
+import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import FBEditorRequestApproval from "../FBEditorRequestApproval/FBEditorRequestApproval";
+import FBEditorSelectDocument from "../FBEditorSelectDocument/FBEditorSelectDocument";
+import FBEditorTextEditor from "../FBEditorTextEditor/FBEditorTextEditor";
+import FBEditorTextField from "../FBEditorTextField/FBEditorTextField";
+import FBEditorTextFieldWithRange from "../FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
+import FBEditorZIPUpload from "../FBEditorZIPUpload/FBEditorZIPUpload";
+
+class FBLeftPanelEditorState {
+
+  public static omitFinalValidation: FBInputType[] = [
+    "section",
+    "subsection",
+    "stepsection",
+    "teststep",
+    "blanktplform",
+  ];
+
+  public static omitValidation: FBInputType[] = [
+    "hyperlink",
+    "action",
+    "paragraph",
+    "quantity",
+    "timer",
+    "purchaseorder",
+    "instructionsmediaupload",
+    "evidencemediaupload",
+    "instructionsdocument",
+    "selectdocument",
+    "documentRevisions",
+    "checkpoint",
+    "createlabel",
+    "poreceive",
+    "approval",
+    "requestapproval",
+    "hellosign",
+    "approvalMatrix",
+    "poApprovalMatrix",
+    "task",
+    "approvals",
+    "procedure",
+    "mpiprocedure",
+    "eqmaintenance",
+    "textfieldwithrange",
+  ];
+
+  public static pickDefaultValue: FBInputType[] = [
+    "quantity",
+    "timer",
+    "stepsection",
+    "teststep",
+    "instructionsmediaupload",
+    "evidencemediaupload",
+    "instructionsdocument",
+    "selectdocument",
+    "checkpoint",
+    "createlabel",
+    "approval",
+    "inlineapproval",
+    "requestapproval",
+    "blanktplform",
+    "approvals",
+    "lhrstep",
+  ];
+
+  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure", "mpiprocedure", "lhrstep"];
+
+  public static pickCustomHandler: FBInputType[] = ["teststep"];
+
+  private static editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
+    section: FBEditorLabel,
+    subsection: FBEditorLabel,
+    stepsection: FBEditorLabel,
+    teststep: FBEditorLabel,
+    textfield: FBEditorTextField,
+    checkbox: FBEditorCheckControl,
+    checkboxgroup: FBEditorOptionGroup,
+    autocomplete: FBEditorAutocomplete,
+    texteditor: FBEditorTextEditor,
+    datepicker: FBEditorLabel,
+    hyperlink: FBEditorHyperlink,
+    select: FBEditorOptionGroup,
+    radio: FBEditorCheckControl,
+    radiogroup: FBEditorOptionGroup,
+    fileupload: FBEditorLabel,
+    zipattachment: FBEditorZIPUpload,
+    blanktplform: FBEditorLabel,
+    paragraph: FBEditorParagraph,
+    quantity: FBEditorLabel,
+    timer: FBEditorLabel,
+    purchaseorder: FBEditorLabel,
+    poreceive: FBEditorLabel,
+    instructionsmediaupload: FBEditorMediaAlbum,
+    evidencemediaupload: FBEditorMediaAlbum,
+    instructionsdocument: FBEditorInstructionsDocument,
+    selectdocument: FBEditorSelectDocument,
+    checkpoint: FBEditorLabel,
+    createlabel: FBEditorLabel,
+    approval: FBEditorApprovalField,
+    inlineapproval: FBEditorInlineApproval,
+    requestapproval: FBEditorRequestApproval,
+    action: FBEditorAction,
+    hellosign: FBEditorLabel,
+    approvalMatrix: FBEditorEmpty,
+    documentRevisions: FBEditorEmpty,
+    poApprovalMatrix: FBEditorLabel,
+    task: FBEditorLabel,
+    approvals: FBEditorApprovals,
+    procedure: FBEditorEmpty,
+    mpiprocedure: FBEditorEmpty,
+    parts: FBEditorEmpty,
+    eqmaintenance: FBEditorEQMaintenance,
+    textfieldwithrange: FBEditorTextFieldWithRange,
+    supplier: FBEditorLabel,
+    lhrstep: FBEditorLabel,
+    unitMeasures: FBEditorLabel,
+  };
+
+  @observable public mode?: FBEditorMode = "config";
+  public modeConfig: FBEditorModeProps[] = [
+    {
+      mode: "config",
+      label: "form.builder.field.config",
+    },
+    {
+      mode: "validation",
+      label: "form.builder.validation",
+    },
+  ];
+
+  public static editor = (editorProps: FBEditorProps): React.ReactElement | undefined => {
+    const { inputProps: { type = "", index = 0 } = {} } = editorProps;
+    const editorControl = FBLeftPanelEditorState.editors[type];
+    if (!editorControl) {
+      return;
+    }
+    return React.createElement(editorControl, {
+      key: `fb-editor-${type}-${index}`,
+      ...editorProps,
+      ...type && ({ underValidation: FBLeftPanelEditorState.underValidation(type) }),
+      ...type && ({ includeDefaultValue: FBLeftPanelEditorState.includeDefaultValue(type) }),
+    });
+  };
+
+  public static underValidation = (type: FBInputType) => !includes(FBLeftPanelEditorState.omitValidation, type);
+  public static includeDefaultValue = (type: FBInputType) => includes(FBLeftPanelEditorState.pickDefaultValue, type);
+
+  @action public setMode = (mode: FBEditorMode) => set(this, "mode", mode);
+}
+
+export default FBLeftPanelEditorState;

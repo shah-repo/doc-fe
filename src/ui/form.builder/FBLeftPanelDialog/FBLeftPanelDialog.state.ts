@@ -1,10 +1,11 @@
 import { isUndefined } from "lodash";
-import { action, observable, set } from "mobx";
+import { action, computed, observable, set } from "mobx";
 import React from "react";
 import { FBDialogProps } from "..";
 
 class FBLeftPanelDialogState {
   @observable public open = false;
+  @observable public index = 0;
   @observable public showLeftPanelEditor = false;
   @observable public maxWidth: FBDialogProps["maxWidth"] = "sm";
   @observable public content?: React.ReactElement;
@@ -15,6 +16,14 @@ class FBLeftPanelDialogState {
   @action public setDialog = (open: boolean) => {
     set(this, "open", open);
   };
+
+  @action public setIndex = (index: number) => {
+    set(this, "index", index);
+  };
+  @computed public get getIndex(): number {
+    return this.index;
+  }
+
 
   @action public setShowLeftPanelEditor = (open: boolean) => {
     set(this, "showLeftPanelEditor", open);

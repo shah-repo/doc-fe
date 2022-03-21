@@ -37,6 +37,7 @@ import { ReactComponent as TextfieldIcon } from "../../../../../../../assets/ima
 import { ReactComponent as TimerIcon } from "../../../../../../../assets/images/leftPanel/timer.svg";
 // import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
+import { FB } from "../../../../../../../ui/form.builder";
 import { FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
 import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
 import styles from "./ListPanel.styles";
@@ -50,6 +51,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
 }) => {
   const intl = useIntl();
   const classes = styles();
+  const { leftPanelDialogState } = FB.useStores();
+  index =  leftPanelDialogState?.getIndex || 0;
   const [open, setOpen] = React.useState<any>({ favorites: true });
   const IconMapping = {
     section: <SectionIcon />,

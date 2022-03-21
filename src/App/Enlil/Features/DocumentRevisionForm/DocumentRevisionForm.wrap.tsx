@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { FB, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
+import { FB, FBFormState, FBLeftPanelEditorState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
 import FBLeftPanelDialogState from "../../../../ui/form.builder/FBLeftPanelDialog/FBLeftPanelDialog.state";
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -22,7 +22,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const { _formState, _tabsState } = SM.useStores();
     const leftPanelDialogState = FB.useRef<FBLeftPanelDialogState>(FBLeftPanelDialogState);
-    const editorState = FB.useRef<FBEditorState>(FBEditorState);
+    const leftPanelEditorState = FB.useRef<FBLeftPanelEditorState>(FBLeftPanelEditorState);
     const formState = FB.useRef<FBFormState>(FBFormState, {});
     const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema: _documentRevisionFormState?.schema,
@@ -107,7 +107,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
 
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
-        <FBProvider {...{ leftPanelDialogState, editorState, formState, workspaceState }}>
+        <FBProvider {...{ leftPanelDialogState, leftPanelEditorState, formState, workspaceState }}>
           <Component
             {...props as T}
             {...{

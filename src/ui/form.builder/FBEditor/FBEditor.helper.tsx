@@ -57,7 +57,8 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
 
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       if (leftPanelDialogState) {
-        leftPanelDialogState && leftPanelDialogState.config({
+        leftPanelDialogState.setIndex(index || 0);
+        leftPanelDialogState.config({
           open: true,
           showLeftPanelEditor: true,
           title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",

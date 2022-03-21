@@ -17,7 +17,8 @@ export const withFBStarter = <T extends FBStarterProps>(
       // console.log("_documentRevisionFormState::", _documentRevisionFormState?.leftPanelOpen);
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       if (leftPanelDialogState) {
-        leftPanelDialogState?.config({
+        leftPanelDialogState.setIndex(index || 0);
+        leftPanelDialogState.config({
           open: true,
           showLeftPanelEditor: false,
           maxWidth: "sm",

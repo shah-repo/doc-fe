@@ -41,6 +41,7 @@ import {
   FBWorkspaceState,
 } from "..";
 import FBLeftPanelDialogState from "../FBLeftPanelDialog/FBLeftPanelDialog.state";
+import FBLeftPanelEditorState from "../FBLeftPanelEditor/FBLeftPanelEditor.state";
 import FBLHRBuildState from "../FBLHRBuild/FBLHRBuild.state";
 import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
 
@@ -49,6 +50,7 @@ export interface FBProviderProps {
   workspaceState?: FBWorkspaceState;
   dialogState?: FBDialogState;
   leftPanelDialogState?: FBLeftPanelDialogState;
+  leftPanelEditorState?: FBLeftPanelEditorState;
   fieldWrapper?: FBFieldWrapperState;
   filePresenterState?: FBFilePresenterState;
   mediaAlbumState?: FBMediaAlbumState;
