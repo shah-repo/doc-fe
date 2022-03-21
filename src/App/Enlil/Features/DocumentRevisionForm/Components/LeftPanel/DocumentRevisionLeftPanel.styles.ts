@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../../../../../ui/layout/theme/utils/colors";
 
 export default makeStyles((theme: Theme) =>
   createStyles({
@@ -13,7 +14,7 @@ export default makeStyles((theme: Theme) =>
       "font-size": "12px",
       "line-height": "15px",
       /* Main Font */
-      "color": "#162229",
+      "color": Colors.dark_jungle_green,
       /* Inside auto layout */
       "flex": "none",
       "order": 0,

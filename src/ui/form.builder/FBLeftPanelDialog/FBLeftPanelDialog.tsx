@@ -6,6 +6,7 @@ import { hasIn, isString } from "lodash";
 import React from "react";
 import { FBLabelLocaleProps, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import styles from "./FBLeftPanelDialog.styles";
 import { FBDialogProps } from "./FBLeftPanelDialog.types";
 import { withFBLeftPanelDialog } from "./FBLeftPanelDialog.wrap";
 
@@ -20,55 +21,58 @@ const FBLeftPanelDialog: React.FunctionComponent<FBDialogProps> = ({
   content,
   actions,
   maxWidth,
-}) => (
-  <Dialog
-    fullWidth={true}
-    fullScreen={useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
-    {...{ open, maxWidth }}
-  >
-    <DialogTitle>
-      <Box display="flex" flexDirection="row-reverse">
-        <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
-      </Box>
-      {(hasIn(title, "locale") || isString(title)) && (
-        <FBText
-          locale={(title as FBLabelLocaleProps)?.locale || title as string}
-          values={(title as FBLabelLocaleProps)?.values}
-          boxProps={{
-            fontWeight: "fontWeightBold",
-            textAlign: "left",
-            border: 1,
-            // MUI border color issue
-            borderTop: 0,
-            borderLeft: 0,
-            borderRight: 0,
-            borderColor: Colors.hint_gray,
-            mt: -2,
-            mb: 2,
-          }}
-        />
-      )}
-      <div ref={handleTitleRef} />
-    </DialogTitle>
-    <DialogContent>
-      {content && portalTitle && portalAction && (
-        <content.type {...content.props}>
-          {content.props.children}
-          {!isString(title) && !hasIn(title, "locale") && (
-            <Portal container={portalTitle}>
-              {title}
+}) => {
+  const classes = styles();
+  return (
+    <Dialog
+      fullWidth={true}
+      fullScreen={useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
+      {...{ open, maxWidth }}
+    >
+      <DialogTitle>
+        <Box display="flex" flexDirection="row-reverse">
+          <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
+        </Box>
+        {(hasIn(title, "locale") || isString(title)) && (
+          <FBText
+            locale={(title as FBLabelLocaleProps)?.locale || title as string}
+            values={(title as FBLabelLocaleProps)?.values}
+            boxProps={{
+              fontWeight: "bold",
+              textAlign: "left",
+              border: 1,
+              // MUI border color issue
+              borderTop: 0,
+              borderLeft: 0,
+              borderRight: 0,
+              borderColor: Colors.hint_gray,
+              mt: -2,
+              mb: 2,
+            }}
+          />
+        )}
+        <div ref={handleTitleRef} />
+      </DialogTitle>
+      <DialogContent>
+        {content && portalTitle && portalAction && (
+          <content.type {...content.props}>
+            {content.props.children}
+            {!isString(title) && !hasIn(title, "locale") && (
+              <Portal container={portalTitle}>
+                {title}
+              </Portal>
+            )}
+            <Portal container={portalAction}>
+              {actions}
             </Portal>
-          )}
-          <Portal container={portalAction}>
-            {actions}
-          </Portal>
-        </content.type>
-      )}
-    </DialogContent>
-    <DialogActions style={{ margin: 0 }}>
-      <div ref={handleActionsRef} />
-    </DialogActions>
-  </ Dialog>
-);
+          </content.type>
+        )}
+      </DialogContent>
+      <DialogActions className={classes.dialogActions}>
+        <div ref={handleActionsRef} />
+      </DialogActions>
+    </ Dialog>
+  );
+};
 
 export default withFBLeftPanelDialog(FBLeftPanelDialog);

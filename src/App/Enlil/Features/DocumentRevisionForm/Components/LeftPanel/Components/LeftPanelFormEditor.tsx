@@ -16,40 +16,8 @@ const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
   actions,
   maxWidth,
 }) => (<>
-  {/* <Dialog
-    fullWidth={true}
-    fullScreen={useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
-    {...{ open, maxWidth }}
-  > */}
-  {/* <DialogTitle>
-      <Box display="flex" flexDirection="row-reverse">
-        <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
-      </Box>
-      {(hasIn(title, "locale") || isString(title)) && (
-        <FBText
-          locale={(title as FBLabelLocaleProps)?.locale || title as string}
-          values={(title as FBLabelLocaleProps)?.values}
-          boxProps={{
-            fontWeight: "fontWeightBold",
-            textAlign: "left",
-            border: 1,
-            // MUI border color issue
-            borderTop: 0,
-            borderLeft: 0,
-            borderRight: 0,
-            borderColor: Colors.hint_gray,
-            mt: -2,
-            mb: 2,
-          }}
-        />
-      )}
-      <div ref={handleTitleRef} />
-    </DialogTitle> */}
-  {/* <DialogContent> */}
   <Box
     display="flex"
-    // justifyContent="center"
-    // alignItems="center"
     p={1}
     width={"100%"}
   >
@@ -77,12 +45,6 @@ const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
       </Grid>
     </Grid>
   </Box>
-
-  {/* </DialogContent> */}
-  {/* <DialogActions style={{ margin: 0 }}>
-      <div ref={handleActionsRef} />
-    </DialogActions> */}
-  {/* </ Dialog> */}
 </>
 );
 

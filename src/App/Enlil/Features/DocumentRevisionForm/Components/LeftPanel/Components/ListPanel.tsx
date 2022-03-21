@@ -244,21 +244,10 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
 
   return (
     <>
-      <Box
-        padding="10px 0px 20px 0px"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Box className={classes.searchBox}>
         <SearchBox onSearch={searchItem} />
       </Box>
-      <List
-        style={{
-          height: "calc(100vh - 165px)",
-          overflowY: "auto",
-          width: "99.8%",
-        }}
-      >
+      <List className={classes.list}>
         {/* {listData.favouriteList.length > 0 && createList(listData.favouriteList)} */}
         {listData.dataList.length > 0 && createList(listData.dataList)}
         { renderNoSearchResults }

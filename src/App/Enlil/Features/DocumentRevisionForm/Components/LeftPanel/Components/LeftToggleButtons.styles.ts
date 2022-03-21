@@ -1,49 +1,18 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../../../../../../ui/layout/theme/utils/colors";
 
 export default makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    outerContainer: {
+    rootContainer: {
       width: "270px",
       height: "52px",
-      background: "#EBEDF2",
+      background: Colors.whitest_grey,
       borderRadius: "100px",
     },
-    leftPanelTab: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: "bold",
-      fontSize: "14px",
-      lineHeight: "18px",
+    toggleButtonGroup: {
       position: "absolute",
-      height: "42px",
-      textTransform: "none",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      padding: "12px 24px",
     },
-    fieldConfig: {
-      left: "13px",
-      top: "5px",
-    },
-    setRule: {
-      left: "150px",
-      top: "5px",
-    },
-    activeTab: {
-      background: "#FFFFFF",
-      boxShadow: "0px 2px 5px rgba(204, 212, 217, 0.8)",
-      borderRadius: "100px",
-      color: "#011FBB",
-    },
-    inActiveTab: {
-      border: 0,
-      color: "#767B87",
-    },
-    fieldConfigActive: {
+    toggleButtonConfig: {
       textTransform: "none",
       display: "flex",
       flexDirection: "row",
@@ -54,17 +23,17 @@ export default makeStyles((theme: Theme) =>
       height: "42px",
       left: "5px",
       top: "5px",
-      background: "#FFFFFF",
+      background: Colors.white,
       boxShadow: "0px 2px 5px rgba(204, 212, 217, 0.8)",
       borderRadius: "100px",
-      color: "#011FBB",
+      color: Colors.navy,
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "18px",
     },
-    fieldConfigInActive: {
+    toggleButton: {
       textTransform: "none",
       display: "flex",
       flexDirection: "row",
@@ -73,16 +42,16 @@ export default makeStyles((theme: Theme) =>
       width: "123px",
       height: "42px",
       top: "5px",
-      left: "5px",
+      left: "14.5px",
       border: 0,
-      color: "#767B87",
+      color: Colors.font_gray,
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "18px",
     },
-    setRuleActive: {
+    toggleButtonMode: {
       textTransform: "none",
       display: "flex",
       flexDirection: "row",
@@ -91,19 +60,19 @@ export default makeStyles((theme: Theme) =>
       position: "absolute",
       width: "122px",
       height: "42px",
-      left: "150px",
+      left: "145px",
       top: "5px",
-      background: "#FFFFFF",
+      background: Colors.white,
       boxShadow: "0px 2px 5px rgba(204, 212, 217, 0.8)",
       borderRadius: "100px",
-      color: "#011FBB",
+      color: Colors.navy,
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "18px",
     },
-    setRuleInActive: {
+    toggleButtonNotMode: {
       textTransform: "none",
       display: "flex",
       flexDirection: "row",
@@ -112,9 +81,9 @@ export default makeStyles((theme: Theme) =>
       width: "105px",
       height: "42px",
       top: "5px",
-      left: "150px",
+      left: "153px",
       border: 0,
-      color: "#767B87",
+      color: Colors.font_gray,
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "bold",

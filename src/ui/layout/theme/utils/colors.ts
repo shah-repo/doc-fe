@@ -22,6 +22,8 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
+  whitest_grey="#EBEDF2",
+  lightest_grey1="#CCD4D9",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -57,6 +59,7 @@ enum Colors {
   carla="#E6FCD9",
   light_forest_green="#4C9646",
   light_forest_green_border="#509849",
+  dark_jungle_green="#162229",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
@@ -72,6 +75,9 @@ enum Colors {
   light_cyan="#DCF4FD",
   lochmara="#306AAC",
   peri_winkle_blue="#8295FA",
+  // Platinum
+  platinum="#E5E5E5",
+  chinese_silver="#C8CACF"
 }
 
 export default Colors;

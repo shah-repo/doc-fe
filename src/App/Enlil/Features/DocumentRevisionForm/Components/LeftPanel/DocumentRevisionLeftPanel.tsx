@@ -27,7 +27,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
             _documentRevisionFormState?.leftPanelOpen && (
               <Box
                 height="100%"
-                bgcolor="white"
+                bgcolor={Colors.white}
                 width={300}
                 borderColor={Colors.medium_gray}
                 borderLeft={0.5}
