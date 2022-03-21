@@ -384,7 +384,7 @@ context("Test upgradability of old supplier form and record", () => {
         });
 
         it("Verify revision is revision 1 - current", () => {
-          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Current" });
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
         });
       });
     });
