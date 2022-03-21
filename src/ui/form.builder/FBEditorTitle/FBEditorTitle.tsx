@@ -9,7 +9,6 @@ import {
   FBMapWrapper,
 } from "..";
 import Text from "../../../../src/ui/components/Text";
-import { Translation } from "../../translations/types";
 import styles from "./FBEditorTitle.styles";
 import { withFBEditorTitle } from "./FBEditorTitle.wrap";
 
@@ -48,7 +47,7 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitleProps> = ({
                   : updatedStylesValidation()
               }
             >
-              <Text translation={config.label as Translation} />
+              <Text translation={config.label} />
             </ToggleButton>
           )}
         </FBMapWrapper>
