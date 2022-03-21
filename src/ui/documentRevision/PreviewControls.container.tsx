@@ -6,6 +6,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { StyledButton } from "../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import SM from "../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
+import { ReactComponent as WarningWhiteIcon } from "../../assets/images/warning_white.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
@@ -225,7 +226,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           <Box alignSelf="center" id="PreviewControlsContainer-warning" color={Colors.white} alignContent="center" >
             <Grid container alignItems="center">
               <Grid item>
-                <WarningIcon style={{ marginRight: 10, width: "20px", height: "20px" }} />
+                <WarningWhiteIcon style={{ marginRight: 10, width: "20px", height: "20px" }} />
               </Grid>
               <Grid item>
                 <Text translation="document.security.warning" />

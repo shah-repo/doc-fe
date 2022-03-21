@@ -40,14 +40,14 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       _documentRevisionFormState?.setReleasedDocRev(releasedDocument);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [document?.documentRevisions]);
-
-    // MARK: @state
-
-    // MARK: @reactions
     useEffect(() => {
       setSelectedDocRevDisplayStatus(formDocuments?.displayStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formDocuments]);
+
+    // MARK: @state
+
+    // MARK: @reactions
     SM.reaction(
       () => _formState?.values,
       () => {
