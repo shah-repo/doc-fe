@@ -11,7 +11,7 @@ import { ChevronRight, ExpandMore } from "@material-ui/icons";
 import { each, flatMap } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
+// import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
 import { ReactComponent as Approvals } from "../../../../../../../assets/images/leftPanel/approvals.svg";
 import { ReactComponent as AutoCompleteIcon } from "../../../../../../../assets/images/leftPanel/auto_complete.svg";
 import { ReactComponent as BlankTplformIcon } from "../../../../../../../assets/images/leftPanel/blank_t_pl_form.svg";
@@ -35,7 +35,7 @@ import { ReactComponent as TextfieldwithrangeIcon } from "../../../../../../../a
 import { ReactComponent as TextEditorIcon } from "../../../../../../../assets/images/leftPanel/text_editor.svg";
 import { ReactComponent as TextfieldIcon } from "../../../../../../../assets/images/leftPanel/text_field.svg";
 import { ReactComponent as TimerIcon } from "../../../../../../../assets/images/leftPanel/timer.svg";
-import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
+// import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
 import { FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
 import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
@@ -130,7 +130,9 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       newObj.isFavourite = isFavourite;
       data.push(newObj);
     });
-    const favList = createFavouriteList(data);
+    // Favourate list code commented for now
+    // const favList = createFavouriteList(data);
+    const favList = [];
     const originalListData = { dataList: [], favouriteList: [] as any };
     originalListData.dataList = data;
     originalListData.favouriteList = [
@@ -146,13 +148,13 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     return originalListData;
   };
 
-  const createFavouriteList = (data) => {
-    const fav: any = [];
-    data.forEach(function(o: any) {
-      fav.push(o.isFavourite);
-    });
-    return fav;
-  };
+  // const createFavouriteList = (data) => {
+  //   const fav: any = [];
+  //   data.forEach(function(o: any) {
+  //     fav.push(o.isFavourite);
+  //   });
+  //   return fav;
+  // };
 
   const [listData, setListData] = React.useState<any>(createPickerState());
 
@@ -196,9 +198,9 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                       <Text message={stab.label} />
                     </Typography>
                   </ListItemText>
-                  <IconButton disableRipple={true}>
+                  {/* <IconButton disableRipple={true}>
                     {stab.isFavorite ? <FavoriteIcon /> : <StarIcon />}
-                  </IconButton>
+                  </IconButton> */}
                 </ListItem>
               ))}
             </List>
@@ -257,7 +259,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
           width: "99.8%",
         }}
       >
-        {listData.favouriteList.length > 0 && createList(listData.favouriteList)}
+        {/* {listData.favouriteList.length > 0 && createList(listData.favouriteList)} */}
         {listData.dataList.length > 0 && createList(listData.dataList)}
         { renderNoSearchResults }
       </List>

@@ -60,6 +60,7 @@ export default makeStyles((theme: Theme) =>
       marginLeft: "6px",
       textTransform: "capitalize",
       color: "#080B11",
+      cursor: "pointer",
     },
   })
 );
