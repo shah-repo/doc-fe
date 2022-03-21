@@ -119,7 +119,7 @@ export * from "./FBEditorProperties/FBEditorProperties.types";
 // export { default as FBEditorTextFieldWithRange } from "./FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
 export * from "./FBEditorTextFieldWithRange/FBEditorTextFieldWithRange.types";
 export { default as FBEditorTitle } from "./FBEditorTitle/FBEditorTitle";
-// export { default as FBEditorTitleState } from "./FBEditorTitle/FBEditorTitle.state";
+export { default as FBEditorTitleState } from "./FBEditorTitle/FBEditorTitle.state";
 export * from "./FBEditorTitle/FBEditorTitle.types";
 export { default as FBEditorValidation } from "./FBEditorValidation/FBEditorValidation";
 export * from "./FBEditorValidation/FBEditorValidation.types";

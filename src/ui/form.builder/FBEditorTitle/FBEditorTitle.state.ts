@@ -13,5 +13,4 @@ class FBEditorTitleState {
   ];
 }
 
-// TODO: Remove this in 22.3 as new component created for this
-FBEditorTitleState;
+export default FBEditorTitleState;
