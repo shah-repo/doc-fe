@@ -4,6 +4,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -32,7 +33,6 @@ interface Props {
   displayStatus?: string;
   subtitle?: any;
   displayRevision?: string;
-  newVariant?: boolean;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -43,7 +43,6 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   displayStatus,
   subtitle,
   displayRevision,
-  newVariant = false,
 }) => {
   const intl = useIntl();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
@@ -219,7 +218,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 
   );
   return (
-    <>{newVariant ? newHeaderRenderer() : oldHeaderRenderer()}</>
+    <>{SM.isNewLayout ? newHeaderRenderer() : oldHeaderRenderer()}</>
   );
 };
 

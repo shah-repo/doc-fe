@@ -17,13 +17,12 @@ import { styles } from "./FormHeader.styles";
 
 interface Props {
   isCreateDocumentDisabled: boolean;
-  newVariant?: boolean;
 }
 
 const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   isCreateDocumentDisabled,
-  newVariant = false,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { _formState } = SM.useStores();
@@ -66,14 +65,13 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
         subRevision={documentRevision?.subRevision}
         displayStatus={documentRevision.displayStatus}
         subtitle={generateSubtitle(documentRevision)}
-        newVariant={newVariant}
         displayRevision={documentRevision.displayRevision}
       />
       }
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center">
         <Grid container={true} alignItems="center" justify="flex-end">
-          {lastSavedTimestamp && !newVariant && renderLastSavedContnet()}
-          {lastSavedTimestamp && newVariant && newRenderLastSavedContnet()}
+          {lastSavedTimestamp && !isNewLayout && renderLastSavedContnet()}
+          {lastSavedTimestamp && isNewLayout && newRenderLastSavedContnet()}
           <DocRevActions {...{ isCreateDocumentDisabled }} />
         </Grid>
       </Grid>

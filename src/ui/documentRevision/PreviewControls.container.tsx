@@ -4,6 +4,7 @@ import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { StyledButton } from "../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
@@ -34,7 +35,6 @@ interface OwnProps {
   documentRevision: DocumentRevision;
   canShowCreateVersionButton?: boolean;
   hasAccess: boolean;
-  newVariant?: boolean;
 }
 
 interface StateProps {
@@ -49,8 +49,9 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, newVariant = false,
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const handleCreateDocument = useHandleCreateDoc();
   const {
     isVisible: showRevise,
@@ -131,7 +132,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
-          {newVariant ? (
+          {isNewLayout ? (
             <StyledButton
               color="primary"
               onClick={cloneDocument}
@@ -161,7 +162,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         .find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
-      return newVariant ? (
+      return isNewLayout ? (
         <StyledButton
           color="primary"
           onClick={cloneOutputDocument}
@@ -287,11 +288,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           {...{ documentRevision }}
         />}
       {renderOutputButton()}
-      {newVariant ? newRenderNoAccessWarning() : renderNoAccessWarning()}
+      {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-        !newVariant && renderWithdrawSubmissionButton()}
+        !isNewLayout && renderWithdrawSubmissionButton()}
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-        newVariant && newRenderWithdrawSubmissionButton()}
+        isNewLayout && newRenderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
       {isExportable && <ExportToEmail
         revisionId={documentRevision.id}
