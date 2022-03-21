@@ -75,4 +75,5 @@ const FBLeftPanelDialog: React.FunctionComponent<FBDialogProps> = ({
   );
 };
 
-export default withFBLeftPanelDialog(FBLeftPanelDialog);
+// TODO: Remove this in 22.3 as new component created for this
+withFBLeftPanelDialog(FBLeftPanelDialog);

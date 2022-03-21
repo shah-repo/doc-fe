@@ -19,33 +19,31 @@ const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
 }) => {
   const classes = styles();
   return (
-    <>
-      <Box className={classes.leftPanelEditorForm}>
-        <Grid container className={classes.rootContainer} >
-          <Grid item>
-            <div ref={handleTitleRef} />
-          </Grid>
-          <Grid item className={classes.grid}>
-            {content && portalTitle && portalAction && (
-              <content.type {...content.props}>
-                {content.props.children}
-                {!isString(title) && !hasIn(title, "locale") && (
-                  <Portal container={portalTitle}>
-                    {title}
-                  </Portal>
-                )}
-                <Portal container={portalAction}>
-                  {actions}
-                </Portal>
-              </content.type>
-            )}
-          </Grid>
-          <Grid item>
-            <div ref={handleActionsRef} />
-          </Grid>
+    <Box className={classes.leftPanelEditorForm}>
+      <Grid container className={classes.rootContainer} >
+        <Grid item>
+          <div ref={handleTitleRef} />
         </Grid>
-      </Box>
-    </>
+        <Grid item className={classes.grid}>
+          {content && portalTitle && portalAction && (
+            <content.type {...content.props}>
+              {content.props.children}
+              {!isString(title) && !hasIn(title, "locale") && (
+                <Portal container={portalTitle}>
+                  {title}
+                </Portal>
+              )}
+              <Portal container={portalAction}>
+                {actions}
+              </Portal>
+            </content.type>
+          )}
+        </Grid>
+        <Grid item>
+          <div ref={handleActionsRef} />
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

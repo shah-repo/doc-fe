@@ -60,16 +60,6 @@ type Props =
   isOwner: boolean;
 };
 
-export interface FormHeaderContext {
-  documentRevision: DocumentRevision;
-  canChangeOwnerShip: boolean;
-  values: DocumentRevisionFormValues;
-  docInfo: any;
-  isDisabled: boolean;
-  email: string;
-  isOwner: boolean;
-}
-
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
   availableReferences,
