@@ -84,24 +84,20 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
                   return <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} px={8}>
+                    <SMBox mt={8} px={8} stretchY="100%">
                       {tabType === "MIXED" &&  <SummaryPresenter
                         dataProp={documentRevision}
                         canChangeOwnerShip={canChangeOwnerShip}
                         canShowCreateVersionButton={true}
                       />}
                       {isFB && showFBLabels && (
-                        <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
-                          <SMBox mt={8} pr={6} stretchY="100%">
-                            <FBWorkspace
-                              document={documentRevision}
-                              initialValues={documentRevision.formInput}
-                              schema={schema}
-                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                "formPreview" : "preview"}
-                            />
-                          </SMBox>
-                        </SMBox>
+                        <FBWorkspace
+                          document={documentRevision}
+                          initialValues={documentRevision.formInput}
+                          schema={schema}
+                          mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                            "formPreview" : "preview"}
+                        />
                       )}
                       {tabType === "TRAINING" &&
                           _tabsState?.value === trainingTabIndex && (

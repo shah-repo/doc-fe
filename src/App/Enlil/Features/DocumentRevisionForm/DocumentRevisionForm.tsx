@@ -107,7 +107,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
                   return <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} px={8}>
+                    <SMBox mt={8} px={8} stretchY="100%">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}
                         releasedDocRev={_documentRevisionFormState?.releasedDocRev}
