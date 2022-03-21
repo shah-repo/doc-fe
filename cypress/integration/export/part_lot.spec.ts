@@ -597,7 +597,7 @@ context("Export Part Lot", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Last Signed", () => {
@@ -633,7 +633,7 @@ context("Export Part Lot", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Archive", () => {
@@ -669,7 +669,7 @@ context("Export Part Lot", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Finalize and release button click'", () => {

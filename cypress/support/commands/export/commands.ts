@@ -5,6 +5,7 @@ import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -13,6 +14,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       exportVerifyEmail(params: { status: string; filename: string; pdfStatus?: string; type?: string }): Chainable<Subject>;
+      inlineApproval(): Chainable<Subject>;
     }
   }
 }
@@ -88,5 +90,21 @@ Cypress.Commands.add("exportVerifyEmail", (params: { status: string; filename: s
       });
     });
   });
+
+});
+
+Cypress.Commands.add("inlineApproval", () => {
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.PostApprovalsApprove,
+    CyRoutes.GetDocAggregatedAudit,
+    CyRoutes.SessionDetails], () => {
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  });
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 
 });

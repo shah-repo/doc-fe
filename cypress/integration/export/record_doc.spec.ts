@@ -446,7 +446,7 @@ context("Export Record doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Last Signed", () => {
@@ -482,7 +482,7 @@ context("Export Record doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Archive", () => {
@@ -518,7 +518,7 @@ context("Export Record doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Finalize and release button click'", () => {
