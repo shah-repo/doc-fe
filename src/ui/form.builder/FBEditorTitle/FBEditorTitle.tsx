@@ -18,12 +18,6 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitleProps> = ({
   mode,
 }) => {
   const classes = styles();
-  const updatedStylesMode = () =>
-    mode === "config" ? classes.toggleButtonConfig : classes.toggleButton;
-  const updatedStylesValidation = () =>
-    mode === "validation"
-      ? classes.toggleButtonMode
-      : classes.toggleButtonNotMode;
   return (
     <Box className={classes.rootContainer}>
       <ToggleButtonGroup
@@ -42,11 +36,9 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitleProps> = ({
               disableFocusRipple
               disableRipple
               onClick={handleMode}
-              className={
-                config.mode === "config"
-                  ? updatedStylesMode()
-                  : updatedStylesValidation()
-              }
+              className={`${classes.button} ${classes[config.mode]} ${
+                mode === config.mode ? classes.active : classes.inactive
+              }`}
             >
               <Text translation={config.label as Translation} />
             </ToggleButton>
