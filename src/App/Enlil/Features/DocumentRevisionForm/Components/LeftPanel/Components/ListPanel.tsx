@@ -12,32 +12,9 @@ import { each, flatMap } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 // import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
-import { ReactComponent as Approvals } from "../../../../../../../assets/images/leftPanel/approvals.svg";
-import { ReactComponent as AutoCompleteIcon } from "../../../../../../../assets/images/leftPanel/auto_complete.svg";
-import { ReactComponent as BlankTplformIcon } from "../../../../../../../assets/images/leftPanel/blank_t_pl_form.svg";
-import { ReactComponent as CheckboxIcon } from "../../../../../../../assets/images/leftPanel/checkbox_group.svg";
-import { ReactComponent as CheckPointIcon } from "../../../../../../../assets/images/leftPanel/check_point.svg";
-import { ReactComponent as DatePickerIcon } from "../../../../../../../assets/images/leftPanel/date_picker.svg";
-import { ReactComponent as EquipmentIcon } from "../../../../../../../assets/images/leftPanel/equipment.svg";
-import { ReactComponent as FileuploadIcon } from "../../../../../../../assets/images/leftPanel/fileupload.svg";
-import { ReactComponent as HyperlinkIcon } from "../../../../../../../assets/images/leftPanel/hyperlink.svg";
-import { ReactComponent as ParagraphIcon } from "../../../../../../../assets/images/leftPanel/paragraph.svg";
-import { ReactComponent as POApprovalMatrixIcon } from "../../../../../../../assets/images/leftPanel/po_approval_matrix.svg";
-import { ReactComponent as ProcedureIcon } from "../../../../../../../assets/images/leftPanel/procedure.svg";
-import { ReactComponent as QuantityIcon } from "../../../../../../../assets/images/leftPanel/quantity.svg";
-import { ReactComponent as RadiogroupIcon } from "../../../../../../../assets/images/leftPanel/radio_group.svg";
-import { ReactComponent as SectionIcon } from "../../../../../../../assets/images/leftPanel/section.svg";
-import { ReactComponent as SelectIcon } from "../../../../../../../assets/images/leftPanel/select.svg";
-import { ReactComponent as StepsectionIcon } from "../../../../../../../assets/images/leftPanel/step_section.svg";
-import { ReactComponent as SubsectionIcon } from "../../../../../../../assets/images/leftPanel/sub_section.svg";
-import { ReactComponent as SupplierIcon } from "../../../../../../../assets/images/leftPanel/supplier.svg";
-import { ReactComponent as TextfieldwithrangeIcon } from "../../../../../../../assets/images/leftPanel/textfield_with_range.svg";
-import { ReactComponent as TextEditorIcon } from "../../../../../../../assets/images/leftPanel/text_editor.svg";
-import { ReactComponent as TextfieldIcon } from "../../../../../../../assets/images/leftPanel/text_field.svg";
-import { ReactComponent as TimerIcon } from "../../../../../../../assets/images/leftPanel/timer.svg";
 // import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
-import { FB } from "../../../../../../../ui/form.builder";
+import { FB, FBEditorState } from "../../../../../../../ui/form.builder";
 import { FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
 import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
 import styles from "./ListPanel.styles";
@@ -54,43 +31,6 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   const { leftPanelDialogState } = FB.useStores();
   index =  leftPanelDialogState?.getIndex || 0;
   const [open, setOpen] = React.useState<any>({ favorites: true });
-  const IconMapping = {
-    section: <SectionIcon />,
-    subsection: <SubsectionIcon />,
-    stepsection: <StepsectionIcon />,
-    textfield: <TextfieldIcon />,
-    checkboxgroup: <CheckboxIcon />,
-    autocomplete: <AutoCompleteIcon />,
-    texteditor: <TextEditorIcon />,
-    datepicker: <DatePickerIcon />,
-    hyperlink: <HyperlinkIcon />,
-    select: <SelectIcon />,
-    radiogroup: <RadiogroupIcon />,
-    paragraph: <ParagraphIcon />,
-    fileupload: <FileuploadIcon />,
-    blanktplform: <BlankTplformIcon />,
-    quantity: <QuantityIcon />,
-    timer: <TimerIcon />,
-    poApprovalMatrix: <POApprovalMatrixIcon />,
-    instructionsmediaupload: <FileuploadIcon />,
-    evidencemediaupload: <FileuploadIcon />,
-    procedure: <ProcedureIcon />,
-    mpiprocedure: <ProcedureIcon />,
-    eqmaintenance: <EquipmentIcon />,
-    textfieldwithrange: <TextfieldwithrangeIcon />,
-    supplier: <SupplierIcon />,
-    lhrstep: <StepsectionIcon />,
-    approvals: <Approvals />,
-    // TODO: Check Custom Control
-    // customcontrol: <FileuploadIcon/>,
-    instructionsdocument: <ProcedureIcon />,
-    selectdocument: <SelectIcon />,
-    checkpoint: <CheckPointIcon />,
-    createlabel: <CheckPointIcon />,
-    task: <CheckPointIcon />,
-    // TODO: Check Custom Control
-    // action: <FileuploadIcon/>,
-  };
   const createPickerState = () => {
     const data: any = [];
     each(pickers, function(value, key) {
@@ -117,14 +57,14 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
         subTabList.push({
           tab: val,
           label,
-          icon: IconMapping[val],
+          icon: FBEditorState.leftPanelEditorIconMapping[val],
           isFavorite: k % 2 === 0 ? true : false,
         });
         if (k % 2 === 0 ? true : false) {
           isFavourite.push({
             tab: val,
             label,
-            icon: IconMapping[val],
+            icon: FBEditorState.leftPanelEditorIconMapping[val],
             isFavorite: true,
           });
         }
@@ -195,7 +135,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                     openEditor && openEditor({ type: stab.tab, index })
                   }
                 >
-                  <IconButton disableRipple={true}>{stab.icon}</IconButton>
+                  <IconButton disableRipple={true}>{stab.icon && React.createElement(stab.icon)}</IconButton>
                   <ListItemText key={stab.tab}>
                     <Typography className={classes.listSubItem}>
                       <Text message={stab.label} />
