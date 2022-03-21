@@ -4,16 +4,15 @@ import { FormikErrors } from "formik";
 import { isEmpty } from "lodash";
 import * as React from "react";
 import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { AsyncState, AsyncStatus } from "../../../state/types";
 import Text from "../../components/Text";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 
 export interface SubmitButtonProps extends ButtonProps {
   asyncState: AsyncState;
   label: string;
   errors?: FormikErrors<any>;
   dataCy?: string;
+  showNewButton?: boolean;
 }
 
 const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
@@ -21,13 +20,12 @@ const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
   label,
   dataCy,
   errors,
+  showNewButton = false,
   ...buttonProps
 }) => {
-  const isNewLayout = SM.isNewLayout;
-  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const hasErrors = !isEmpty(errors);
   const isActive = asyncState.status === AsyncStatus.Active;
-  if (isNewLayout && !isCreateUrl) {
+  if (showNewButton) {
     return (
       <StyledButton
         type="submit"

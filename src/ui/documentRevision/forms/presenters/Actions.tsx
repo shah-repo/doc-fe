@@ -37,6 +37,7 @@ import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.contai
 import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
+  const isNewLayout = SM.isNewLayout;
   const formik = useFormikContext();
   const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
@@ -202,6 +203,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         {() => (
           <>
             {<SubmitButton
+              showNewButton={isNewLayout && !isCreateUrl}
               asyncState={asyncState}
               label={isDisabled ?
                 "common.save" :
