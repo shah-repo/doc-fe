@@ -445,8 +445,8 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
-        cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Current" });
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
       });
 
       it("reload page", () => {
@@ -529,8 +529,8 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
-        cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Current" });
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
       });
 
       it("reload page", () => {
@@ -629,8 +629,8 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
-        cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 3  - Current" });
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 3  - Released" });
       });
 
       it("reload page", () => {
@@ -688,8 +688,8 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
-        cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 4  - Current" });
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 4  - Released" });
       });
 
       it("reload page", () => {
@@ -780,8 +780,8 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
-        cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Current" });
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
       });
 
       it("Turn off autosave", () => {
@@ -857,8 +857,8 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
-        cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 3  - Current" });
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 3  - Released" });
       });
 
       it("Turn off autosave", () => {
@@ -1040,8 +1040,8 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
-        cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 4  - Current" });
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 4  - Released" });
       });
 
       it("Turn off autosave", () => {
@@ -1138,8 +1138,8 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
-        cy.drCheckDocumentStatus({ status: "Current" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 5  - Current" });
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 5  - Released" });
       });
 
       it("reload page", () => {

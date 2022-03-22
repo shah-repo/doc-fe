@@ -21,11 +21,6 @@ const defaultSecondaryContrastText = "#FFFFFF";
 
 const replacedLogo = "/ta_assets_company_avatar.png";
 const replacedAvatar = "/ta_assets_company_logo.png";
-const replacedDefaultBackground = "#FFFFFF";
-const replacedPrimary = "#FF0000";
-const replacedPrimaryContrastText = "#00FF00";
-const replacedSecondary = "#0000FF";
-const replacedSecondaryContrastText = "#000000";
 
 context("Whitelabeling test", () => {
   context("[API]Prepare company", () => {
@@ -150,46 +145,18 @@ context("Whitelabeling test", () => {
             DEV_THEME: {
               logo: replacedLogo,
               avatar: replacedAvatar,
-              colors: {
-                defaultBackground: replacedDefaultBackground,
-                primary: replacedPrimary,
-                primaryContrastText: replacedPrimaryContrastText,
-                secondary: replacedSecondary,
-                secondaryContrastText: replacedSecondaryContrastText,
-              },
             },
             DEMO_THEME: {
               logo: replacedLogo,
               avatar: replacedAvatar,
-              colors: {
-                defaultBackground: replacedDefaultBackground,
-                primary: replacedPrimary,
-                primaryContrastText: replacedPrimaryContrastText,
-                secondary: replacedSecondary,
-                secondaryContrastText: replacedSecondaryContrastText,
-              },
             },
             SANDBOX_THEME: {
               logo: replacedLogo,
               avatar: replacedAvatar,
-              colors: {
-                defaultBackground: replacedDefaultBackground,
-                primary: replacedPrimary,
-                primaryContrastText: replacedPrimaryContrastText,
-                secondary: replacedSecondary,
-                secondaryContrastText: replacedSecondaryContrastText,
-              },
             },
             PRODUCTION_THEME: {
               logo: replacedLogo,
               avatar: replacedAvatar,
-              colors: {
-                defaultBackground: replacedDefaultBackground,
-                primary: replacedPrimary,
-                primaryContrastText: replacedPrimaryContrastText,
-                secondary: replacedSecondary,
-                secondaryContrastText: replacedSecondaryContrastText,
-              },
             },
           },
         },
@@ -218,29 +185,6 @@ context("Whitelabeling test", () => {
 
     it("Verify replaced company logo", () => {
       cy.cmpVerifyCompanyLogo({ logoSource: replacedLogo });
-    });
-
-    context("Verify replaced company colors", () => {
-      it("Verify 'primary' company color should not change", () => {
-        cy.cmpVerifyPrimaryColor({ color: defaultPrimary });
-      });
-
-      it("Verify 'primaryContrastText' company color", () => {
-        cy.cmpVerifyPrimaryContrastText({ color: replacedPrimaryContrastText });
-      });
-
-      it("Verify 'secondary' company color should not change", () => {
-        cy.cmpVerifySecondaryColor({ color: defaultSecondary });
-      });
-
-      it("Verify 'secondaryContrastText' company color should not change", () => {
-        cy.cmpVerifySecondaryContrastText({ color: defaultSecondaryContrastText });
-      });
-
-      it("Verify 'defaultBackground' company color", () => {
-        cy.navigToDocTypeManagement();
-        cy.cmpVerifyDefaultBackgroundColor({ color: replacedDefaultBackground });
-      });
     });
   });
 });

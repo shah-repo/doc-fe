@@ -605,8 +605,7 @@ Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
 Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
   cy.listLoadingElementShouldNotExist();
   employees.forEach((employee) => {
-    cy.get("[data-cy=\"employees\"]").arrowClick();
-    cy.get(".MuiAutocomplete-popper").contains(employee).arrowClick();
+    cy.get("[data-cy=\"employees\"]").autocompleteSelect(employee);
   });
 });
 
