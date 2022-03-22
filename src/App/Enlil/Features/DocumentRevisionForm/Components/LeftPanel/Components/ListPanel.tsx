@@ -12,9 +12,8 @@ import {
   Typography
 } from "@material-ui/core";
 import { ChevronRight, ExpandMore } from "@material-ui/icons";
-import { each, flatMap } from "lodash";
+import { each } from "lodash";
 import React from "react";
-import { useIntl } from "react-intl";
 // import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
 // import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
@@ -30,73 +29,13 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   pickers = [],
   index = 0,
   openEditor,
+  translatedPickers = {},
 }) => {
-  const intl = useIntl();
   const classes = styles();
   const { leftPanelDialogState } = FB.useStores();
   index =  leftPanelDialogState?.getIndex || 0;
   const [open, setOpen] = React.useState<any>({});
-  const createPickerState = () => {
-    const data: any = [];
-    each(pickers, function(value, key) {
-      const newObj = {
-        tab: "",
-        label: "",
-        editors: [],
-        subTab: [],
-        isFavourite: [],
-      };
-      newObj.tab = key;
-      newObj.label =
-        intl.formatMessage({
-          id: `form.builder.${key}`,
-        }) || "";
-      newObj.editors = value;
-      const subTabList: any = [];
-      const isFavourite: any = [];
-      each(value, function(val: string, k) {
-        const label =
-          intl.formatMessage({
-            id: `form.builder.${val}`,
-          }) || "";
-        subTabList.push({
-          tab: val,
-          label,
-          icon: FBLeftPanelEditorState.editorTypeIconMapping[val],
-          isFavorite: k % 2 === 0 ? true : false,
-        });
-        if (k % 2 === 0 ? true : false) {
-          isFavourite.push({
-            tab: val,
-            label,
-            icon: FBLeftPanelEditorState.editorTypeIconMapping[val],
-            isFavorite: true,
-          });
-        }
-      });
-      newObj.subTab = subTabList;
-      newObj.isFavourite = isFavourite;
-      data.push(newObj);
-    });
-    // Favourate list code commented for now
-    // const favList = createFavouriteList(data);
-    const favList = [];
-    const originalListData = { dataList: [], favouriteList: [] as any };
-    originalListData.dataList = data;
-    originalListData.favouriteList = [
-      {
-        tab: "favorites",
-        label:
-            intl.formatMessage({
-              id: "form.builder.favorites",
-            }) || "",
-        subTab: flatMap(favList),
-      },
-    ];
-    return originalListData;
-  };
-
-  const [listData, setListData] = React.useState<any>(createPickerState());
+  const [filteredData, setFilteredData] = React.useState<any>(pickers);
 
   const handleClick = (section) => {
     setOpen({ [section]: !open[section] });
@@ -104,7 +43,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
 
   const createList = () => {
     return (
-      <FBMapWrapper<FBControlPickerDataProps> collection={pickers}>
+      <FBMapWrapper<FBControlPickerDataProps> collection={filteredData}>
         {(editors, section) => (
           <Box key={`fb-controlpicker-section-${section}`}>
             <ListItem
@@ -176,34 +115,27 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     );
   };
 
-  const searchItem = (event) => {
+  const search = (event) => {
+    const filteredData = {};
     const searchString = event?.target?.value;
-    const actualListData: any = createPickerState();
     if (!searchString) {
-      setListData(actualListData);
-      return;
+      setOpen({});
+      setFilteredData(pickers);
     }
-    const filteredListData = { dataList: [], favouriteList: [] };
-    filteredListData.dataList = actualListData.dataList
-      .filter(
-        (item) =>
-          (item.subTab = item.subTab.filter(
-            (tab) => tab.label.toLowerCase().includes(searchString.toLowerCase())
-          ))
-      )
-      .filter((item) => item.subTab.length);
-    filteredListData.favouriteList = actualListData.favouriteList
-      .filter(
-        (item) =>
-          (item.subTab = item.subTab.filter(
-            (tab) => tab.label.toLowerCase().includes(searchString.toLowerCase())
-          ))
-      )
-      .filter((item) => item.subTab.length);
-    setListData(filteredListData);
+    each(Object.keys(translatedPickers), (value, key) => {
+      const filteredList = translatedPickers[value]
+        .filter((el) =>
+          el.label.toLowerCase().includes(searchString.toLowerCase())
+        )
+        .map((el) => el.key);
+      if (filteredList.length) {
+        filteredData[value] = filteredList;
+      }
+    });
+    setFilteredData(filteredData);
   };
 
-  const renderNoSearchResults = listData.dataList.length === 0 && (
+  const renderNoSearchResults = Object.keys(filteredData).length === 0 && (
     <Typography variant="caption">
       <Text translation="table.no.results.found" />
     </Typography>
@@ -212,10 +144,10 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   return (
     <Box>
       <Box className={classes.searchBox}>
-        <SearchBox onSearch={searchItem} />
+        <SearchBox onSearch={search} />
       </Box>
       <List className={classes.list}>
-        {listData.dataList.length > 0 && createList()}
+        {Object.keys(filteredData).length > 0 && createList()}
         { renderNoSearchResults }
       </List>
     </Box>
