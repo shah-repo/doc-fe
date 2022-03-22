@@ -2,10 +2,14 @@ import {
   Box,
   Collapse,
   IconButton,
+  // Collapse,
+  // IconButton,
   List,
   ListItem,
   ListItemText,
-  Typography,
+  // ListItem,
+  // ListItemText,
+  Typography
 } from "@material-ui/core";
 import { ChevronRight, ExpandMore } from "@material-ui/icons";
 import { each, flatMap } from "lodash";
@@ -14,9 +18,10 @@ import { useIntl } from "react-intl";
 // import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
 // import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
-import { FB, FBLeftPanelEditorState } from "../../../../../../../ui/form.builder";
-import { FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
+import { FB, FBInputType, FBLeftPanelEditorState, FBMapWrapper } from "../../../../../../../ui/form.builder";
+import { FBControlPickerDataProps, FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
 import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
+import { Translation } from "../../../../../../../ui/translations/types";
 import styles from "./ListPanel.styles";
 import SearchBox from "./SearchBox";
 
@@ -30,7 +35,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   const classes = styles();
   const { leftPanelDialogState } = FB.useStores();
   index =  leftPanelDialogState?.getIndex || 0;
-  const [open, setOpen] = React.useState<any>({ favorites: true });
+  const [open, setOpen] = React.useState<any>({});
   const createPickerState = () => {
     const data: any = [];
     each(pickers, function(value, key) {
@@ -91,66 +96,85 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     return originalListData;
   };
 
-  // const createFavouriteList = (data) => {
-  //   const fav: any = [];
-  //   data.forEach(function(o: any) {
-  //     fav.push(o.isFavourite);
-  //   });
-  //   return fav;
-  // };
-
   const [listData, setListData] = React.useState<any>(createPickerState());
 
-  const handleClick = (selectedTab) => {
-    setOpen({ [selectedTab]: !open[selectedTab] });
+  const handleClick = (section) => {
+    setOpen({ [section]: !open[section] });
   };
 
-  const createList = (data) =>
-    data.map((tab, k) => (
-      <>
-        <ListItem
-          key={k}
-          button
-          onClick={() => {
-            handleClick(tab.tab);
-          }}
-          style={tab.tab === "favorites" ? { borderTop: 0 } : {}}
-          className={classes.listItemBtn}
-        >
-          <ListItemText key={tab.tab}>
-            <Typography className={classes.listItemText}>
-              <Text message={tab.label} />
-            </Typography>
-          </ListItemText>
-          {open[tab.tab] ? <ExpandMore /> : <ChevronRight />}
-        </ListItem>
-        <Collapse in={open[tab.tab]} timeout="auto" unmountOnExit>
-          <Box className={classes.outerBox}>
-            <List className={classes.listStyle}>
-              {tab.subTab.map((stab, sk) => (
-                <ListItem
-                  key={sk}
-                  className={classes.listItemStyle}
-                  onClick={
-                    openEditor && openEditor({ type: stab.tab, index })
-                  }
-                >
-                  <IconButton disableRipple={true}>{stab.icon && React.createElement(stab.icon)}</IconButton>
-                  <ListItemText key={stab.tab}>
-                    <Typography className={classes.listSubItem}>
-                      <Text message={stab.label} />
-                    </Typography>
-                  </ListItemText>
-                  {/* <IconButton disableRipple={true}>
-                    {stab.isFavorite ? <FavoriteIcon /> : <StarIcon />}
-                  </IconButton> */}
-                </ListItem>
-              ))}
-            </List>
+  const createList = () => {
+    return (
+      <FBMapWrapper<FBControlPickerDataProps> collection={pickers}>
+        {(editors, section) => (
+          <Box key={`fb-controlpicker-section-${section}`}>
+            <ListItem
+              key={section}
+              button
+              onClick={() => {
+                handleClick(section);
+              }}
+              className={classes.listItemBtn}
+            >
+              <ListItemText key={section}>
+                <Typography className={classes.listItemText}>
+                  <Text message={`form.builder.${section}`} />
+                </Typography>
+              </ListItemText>
+              {open[section] ? <ExpandMore /> : <ChevronRight />}
+            </ListItem>
+            <Collapse
+              in={open[section]}
+              timeout="auto"
+              unmountOnExit
+              className={classes.collapseRoot}
+            >
+              <FBMapWrapper<FBInputType> collection={editors}>
+                {(picker, i) => (
+                  <Box
+                    component="div"
+                    key={`fb-controlpicker-editor-${picker}-${i}`}
+                    className={classes.outerBox}
+                  >
+                    <List className={classes.listStyle}>
+                      {controlPickerState?.picker(picker, index)}
+                      {!controlPickerState?.picker(picker, index) && (
+                        <ListItem
+                          key={index}
+                          className={`${classes.listItemStyle} ${
+                            editors.length - 1 === i ? "lastItem" : ""
+                          }`}
+                          onClick={
+                            openEditor && openEditor({ type: picker, index })
+                          }
+                          disableGutters
+                        >
+                          <IconButton disableRipple={true} style={{ marginLeft: "3px" }}>
+                            {FBLeftPanelEditorState.editorTypeIconMapping[
+                              picker
+                            ] &&
+                              React.createElement(
+                                FBLeftPanelEditorState.editorTypeIconMapping[
+                                  picker
+                                ]
+                              )}
+                          </IconButton>
+                          <ListItemText key={index}>
+                            <Typography className={classes.listSubItem}>
+                              <Text translation={`form.builder.${picker}` as Translation} dataCy={`form.builder.${picker as string}`} />
+                            </Typography>
+                          </ListItemText>
+                        </ListItem>
+                      )}
+                    </List>
+                  </Box>
+                )}
+              </FBMapWrapper>
+            </Collapse>
           </Box>
-        </Collapse>
-      </>
-    ));
+        )}
+      </FBMapWrapper>
+    );
+  };
 
   const searchItem = (event) => {
     const searchString = event?.target?.value;
@@ -191,8 +215,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
         <SearchBox onSearch={searchItem} />
       </Box>
       <List className={classes.list}>
-        {/* {listData.favouriteList.length > 0 && createList(listData.favouriteList)} */}
-        {listData.dataList.length > 0 && createList(listData.dataList)}
+        {listData.dataList.length > 0 && createList()}
         { renderNoSearchResults }
       </List>
     </Box>

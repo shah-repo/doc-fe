@@ -3,14 +3,16 @@ import Colors from "../../../../../../../ui/layout/theme/utils/colors";
 
 export default makeStyles((theme: Theme) =>
   createStyles({
+    collapseRoot: {
+      padding: "15px",
+      background: Colors.whitest_grey,
+    },
     outerBox: {
       background: Colors.whitest_grey,
-      boxShadow: `0px 1px 0px ${Colors.chinese_silver}`,
-      padding: "15px",
     },
     listStyle: {
       padding: 0,
-      background: Colors.platinum,
+      background: Colors.whitest_grey,
     },
     listItemBtn: {
       display: "flex",
@@ -25,13 +27,15 @@ export default makeStyles((theme: Theme) =>
       borderTop: `1px solid ${Colors.lightest_grey1}`, // need to check if required and put conditional
     },
     listItemStyle: {
-      padding: "3px",
-      height: "48px",
-      width: "269px",
-      background: "white",
-      border: `1px solid ${Colors.lightest_grey1}`,
-      borderRadius: "3px",
-      marginBottom: "8px",
+      "height": "48px",
+      "width": "269px",
+      "background": "white",
+      "border": `1px solid ${Colors.lightest_grey1}`,
+      "borderRadius": "3px",
+      "marginBottom": "10px",
+      "&.lastItem": {
+        marginBottom: "0px",
+      },
     },
     listItemText: {
       fontFamily: "Sora",
@@ -62,7 +66,7 @@ export default makeStyles((theme: Theme) =>
       cursor: "pointer",
     },
     searchBox: {
-      padding: "10px 0px 20px 0px",
+      padding: "20px 0px 20px 0px",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -71,6 +75,7 @@ export default makeStyles((theme: Theme) =>
       height: "calc(100vh - 165px)",
       overflowY: "auto",
       width: "99.8%",
+      padding: "0px",
     },
   })
 );

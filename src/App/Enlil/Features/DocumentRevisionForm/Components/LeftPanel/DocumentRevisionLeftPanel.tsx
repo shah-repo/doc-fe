@@ -29,8 +29,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
                 height="100%"
                 bgcolor={Colors.white}
                 width={300}
-                borderColor={Colors.medium_gray}
-                borderLeft={0.5}
+                boxShadow={`inset -1px 0px 0px #CCD4D9`}
               >
                 <Box
                   pl={1}
