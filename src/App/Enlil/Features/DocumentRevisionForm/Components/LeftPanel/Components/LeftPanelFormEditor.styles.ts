@@ -9,7 +9,7 @@ export default makeStyles((theme: Theme) =>
     },
     rootContainer: { height: "calc(100vh - 86px)", overflow: "auto" },
     grid: {
-      height: "calc(100vh - 240px)",
+      height: "calc(100vh - 320px)",
       overflow: "auto",
       marginLeft: "14px",
     },

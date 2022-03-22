@@ -37,7 +37,9 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       };
       handler[type]?.();
     }
-
+    const onTypeClick = () => {
+      leftPanelDialogState?.closeDialog();
+    };
     openEditor = (props?: Partial<FBInputProps>) => () => {
       const { type, index } = props || {};
       if (!type) {
@@ -61,7 +63,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
         leftPanelDialogState.config({
           open: true,
           showLeftPanelEditor: true,
-          title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
+          title: <FBEditorTitle type={type} onTypeClick={onTypeClick} underValidation={underValidation}/>,
           maxWidth: "sm",
           content: editorForm,
           actions: (
@@ -74,7 +76,6 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       } else {
         dialogState && dialogState.config({
           open: true,
-          showLeftPanelEditor: true,
           title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
           maxWidth: "sm",
           content: editorForm,
