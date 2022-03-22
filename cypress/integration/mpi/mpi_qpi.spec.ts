@@ -22,7 +22,8 @@ let equipmentDocumentType;
 let materialsDocumentType;
 let equipmentDocument;
 let materialsDocument;
-let releasedFormId;
+let MPIDocId;
+let QPIDocId;
 let emailsFromInbox;
 const pages = ["", "", "", ""];
 let downloadUrl;
@@ -434,8 +435,9 @@ context("Mpi/Qpi test", () => {
         it("Check doc Draft status and click on Send To Email", () => {
           cy.drCheckDocumentStatus({ status: "Draft" });
           cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
-          cy.get("#HeaderInfo-docId").contains("MPI-").then((x) => {
-            releasedFormId = x.text();
+
+          cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+            MPIDocId = $docIdElement.text();
           });
           cy.sendToEmail();
         });
@@ -453,7 +455,7 @@ context("Mpi/Qpi test", () => {
             // eslint-disable-next-line @typescript-eslint/camelcase
             include_body: true,
             after: dateAfterEmailShouldArrive,
-            subject: `Export for document ${releasedFormId}`,
+            subject: `Export for document ${MPIDocId}`,
           };
 
           cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -496,7 +498,7 @@ context("Mpi/Qpi test", () => {
             if (res.body !== "") {
               downloadUrl = res.body.url;
               const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-              downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+              downloadFile  =  `${MPIDocId}${filetime}_draft.zip`;
               cy.downloadFile({
                 url: downloadUrl,
                 directory: CONFIG.DOWNLOADS_DIR,
@@ -537,7 +539,7 @@ context("Mpi/Qpi test", () => {
           cy.pdfparseFile(
             {
               directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-              fileName: `${releasedFormId}-1-MPI-document.pdf`,
+              fileName: `${MPIDocId}-1-MPI-document.pdf`,
             }).then((cdata) => {
             expect(cdata.numpages).eq(3);
             expect(cdata.text).match(/Page 1 of 3/);
@@ -563,7 +565,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[0];
           if (el.includes("Page 1 of 3")) {
             tmpRegex = new
-            RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+            RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
@@ -601,7 +603,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[1];
           if (el.includes("Page 2 of 3")) {
             tmpRegex = new
-            RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+            RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
@@ -627,7 +629,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[2];
           if (el.includes("Page 3 of 3")) {
             tmpRegex = new
-            RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+            RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -659,11 +661,11 @@ context("Mpi/Qpi test", () => {
         it("Check MPI doc released status and click on Send To Email", () => {
           cy.drCheckDocumentStatus({ status: "Released" });
           cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
-          cy.get("#HeaderInfo-docId").contains("MPI-").then((x) => {
-            releasedFormId = x.text();
+          cy.drGetDocIdElementFromUI().should("contain.text", "MPI-").then(($docIdElement: JQuery<HTMLElement>) => {
+            MPIDocId = $docIdElement.text();
           });
-          cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
-            arId = x.text();
+          cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+            arId = $lnEl.text();
           });
           cy.sendToEmail();
         });
@@ -683,7 +685,7 @@ context("Mpi/Qpi test", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${MPIDocId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -726,7 +728,7 @@ context("Mpi/Qpi test", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          downloadFile  =  `${MPIDocId}${filetime}_rel.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -767,7 +769,7 @@ context("Mpi/Qpi test", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-1-MPI-document.pdf`,
+          fileName: `${MPIDocId}-1-MPI-document.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
@@ -793,7 +795,7 @@ context("Mpi/Qpi test", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new
-        RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+        RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
@@ -831,7 +833,7 @@ context("Mpi/Qpi test", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new
-        RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+        RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
@@ -856,7 +858,7 @@ context("Mpi/Qpi test", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new
-        RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+        RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -990,8 +992,8 @@ context("Mpi/Qpi test", () => {
         it("Check QPI doc Draft status and click on Send To Email", () => {
           cy.drCheckDocumentStatus({ status: "Draft" });
           cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
-          cy.get("#HeaderInfo-docId").contains("QPI-").then((x) => {
-            releasedFormId = x.text();
+          cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
+            QPIDocId = $docIdElement.text();
           });
           cy.sendToEmail();
         });
@@ -1009,7 +1011,7 @@ context("Mpi/Qpi test", () => {
             // eslint-disable-next-line @typescript-eslint/camelcase
             include_body: true,
             after: dateAfterEmailShouldArrive,
-            subject: `Export for document ${releasedFormId}`,
+            subject: `Export for document ${QPIDocId}`,
           };
 
           cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -1052,7 +1054,7 @@ context("Mpi/Qpi test", () => {
             if (res.body !== "") {
               downloadUrl = res.body.url;
               const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-              downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+              downloadFile  =  `${QPIDocId}${filetime}_draft.zip`;
               cy.downloadFile({
                 url: downloadUrl,
                 directory: CONFIG.DOWNLOADS_DIR,
@@ -1093,7 +1095,7 @@ context("Mpi/Qpi test", () => {
           cy.pdfparseFile(
             {
               directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-              fileName: `${releasedFormId}-1-QPI-document.pdf`,
+              fileName: `${QPIDocId}-1-QPI-document.pdf`,
             }).then((cdata) => {
             expect(cdata.numpages).eq(3);
             expect(cdata.text).match(/Page 1 of 3/);
@@ -1119,7 +1121,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[0];
           if (el.includes("Page 1 of 3")) {
             tmpRegex = new
-            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
@@ -1157,7 +1159,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[1];
           if (el.includes("Page 2 of 3")) {
             tmpRegex = new
-            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
@@ -1180,7 +1182,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[2];
           if (el.includes("Page 3 of 3")) {
             tmpRegex = new
-            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -1206,11 +1208,11 @@ context("Mpi/Qpi test", () => {
         it("Check QPI doc released status and click on Send To Email", () => {
           cy.drCheckDocumentStatus({ status: "Released" });
           cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
-          cy.get("#HeaderInfo-docId").contains("QPI-").then((x) => {
-            releasedFormId = x.text();
+          cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
+            QPIDocId = $docIdElement.text();
           });
-          cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
-            arId = x.text();
+          cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+            arId = $lnEl.text();
           });
           cy.sendToEmail();
         });
@@ -1228,7 +1230,7 @@ context("Mpi/Qpi test", () => {
             // eslint-disable-next-line @typescript-eslint/camelcase
             include_body: true,
             after: dateAfterEmailShouldArrive,
-            subject: `Export for document ${releasedFormId}`,
+            subject: `Export for document ${QPIDocId}`,
           };
 
           cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -1271,7 +1273,7 @@ context("Mpi/Qpi test", () => {
             if (res.body !== "") {
               downloadUrl = res.body.url;
               const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-              downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+              downloadFile  =  `${QPIDocId}${filetime}_rel.zip`;
               cy.downloadFile({
                 url: downloadUrl,
                 directory: CONFIG.DOWNLOADS_DIR,
@@ -1312,7 +1314,7 @@ context("Mpi/Qpi test", () => {
           cy.pdfparseFile(
             {
               directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-              fileName: `${releasedFormId}-1-QPI-document.pdf`,
+              fileName: `${QPIDocId}-1-QPI-document.pdf`,
             }).then((cdata) => {
             expect(cdata.numpages).eq(3);
             expect(cdata.text).match(/Page 1 of 3/);
@@ -1338,7 +1340,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[0];
           if (el.includes("Page 1 of 3")) {
             tmpRegex = new
-            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
@@ -1376,7 +1378,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[1];
           if (el.includes("Page 2 of 3")) {
             tmpRegex = new
-            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
@@ -1399,7 +1401,7 @@ context("Mpi/Qpi test", () => {
           const el = pages[2];
           if (el.includes("Page 3 of 3")) {
             tmpRegex = new
-            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
             expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
