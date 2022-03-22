@@ -5,7 +5,7 @@ import {
   List,
   ListItem,
   ListItemText,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { ChevronRight, ExpandMore } from "@material-ui/icons";
 import { each, flatMap } from "lodash";
@@ -14,7 +14,7 @@ import { useIntl } from "react-intl";
 // import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
 // import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
-import { FB, FBEditorState } from "../../../../../../../ui/form.builder";
+import { FB, FBLeftPanelEditorState } from "../../../../../../../ui/form.builder";
 import { FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
 import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
 import styles from "./ListPanel.styles";
@@ -57,14 +57,14 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
         subTabList.push({
           tab: val,
           label,
-          icon: FBEditorState.leftPanelEditorIconMapping[val],
+          icon: FBLeftPanelEditorState.editorTypeIconMapping[val],
           isFavorite: k % 2 === 0 ? true : false,
         });
         if (k % 2 === 0 ? true : false) {
           isFavourite.push({
             tab: val,
             label,
-            icon: FBEditorState.leftPanelEditorIconMapping[val],
+            icon: FBLeftPanelEditorState.editorTypeIconMapping[val],
             isFavorite: true,
           });
         }
