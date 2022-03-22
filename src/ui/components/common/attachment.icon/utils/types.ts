@@ -29,6 +29,7 @@ export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   canDeleteFile?: boolean;
   isNewVersion?: boolean;
   documentRevision?: DocumentRevision;
+  documentRevisionData?: DocumentRevision;
 }
 
 export interface AttachmentIconProps extends AttachmentIconFactoryProps {
@@ -38,6 +39,7 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isPrimary?: boolean;
   isTransferred?: boolean;
   handleIconClick?: (attachment: Attachment) => any;
+  docRevId?: string;
 }
 
 export interface AttachmentMenuProps {

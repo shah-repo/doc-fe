@@ -15,7 +15,7 @@ export interface WhiteLabelingColors {
 export interface WhiteLabelingEnv {
   logo: string;
   avatar: string;
-  colors: WhiteLabelingColors;
+  colors?: WhiteLabelingColors;
 }
 
 export interface WhiteLabeling {
