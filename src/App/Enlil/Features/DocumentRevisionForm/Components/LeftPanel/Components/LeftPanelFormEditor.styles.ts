@@ -13,5 +13,8 @@ export default makeStyles((theme: Theme) =>
       overflow: "auto",
       marginLeft: "14px",
     },
+    gridItem: {
+      width: "100%",
+    },
   })
 );

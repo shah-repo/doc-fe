@@ -39,7 +39,7 @@ const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
             </content.type>
           )}
         </Grid>
-        <Grid item>
+        <Grid item className={classes.gridItem}>
           <div ref={handleActionsRef} />
         </Grid>
       </Grid>

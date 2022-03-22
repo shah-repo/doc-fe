@@ -98,6 +98,7 @@ export default makeStyles((theme: Theme) =>
       textAlign: "center",
       textTransform: "uppercase",
       color: Colors.almost_black,
+      cursor: "pointer",
     },
   })
 );
