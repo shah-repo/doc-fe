@@ -532,13 +532,8 @@ context("Export Record doc", () => {
         cy.inlineApproval();
       });
 
-      it("Reload page", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentTypes, CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
-          cy.reload();
-        });
-      });
-
       it("Finalize and release button click'", () => {
+        cy.reload();
         cy.recApproveAndReleaseInlineRecord();
       });
 
