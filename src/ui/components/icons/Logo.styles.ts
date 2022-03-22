@@ -34,7 +34,7 @@ const styles = makeStyles((theme: Theme) =>
       background: Colors.light_slate_blue,
     },
     demotheme: {
-      background: Colors.cerulean,
+      background: Colors.topaz,
     },
     sandboxtheme: {
       background: Colors.blaze_orange,

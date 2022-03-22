@@ -9,7 +9,6 @@ import {
   Modal,
   Typography,
 } from "@material-ui/core";
-import { size } from "lodash";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
@@ -41,7 +40,7 @@ import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import { formatCurrency } from "../../common/Utils";
+import { formatCurrency, getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
 
@@ -161,6 +160,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
+  const { count, pending, approved, primaryText, secondaryText } =
+    getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -303,19 +304,15 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text
-                          translation="assigned.users.count"
-                          values={{
-                            count:
-                              size(docRevPendingApprovals) +
-                              size(docRevApprovedApprovals),
-                          }}
+                          translation={primaryText}
+                          values={{ count }}
                         />
                         <br />
                         <Text
-                          translation="approved.and.pending.count"
+                          translation={secondaryText}
                           values={{
-                            approved: size(docRevApprovedApprovals),
-                            pending: size(docRevPendingApprovals),
+                            approved,
+                            pending,
                           }}
                         />
                       </>
