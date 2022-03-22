@@ -1797,7 +1797,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("check DAM document types", () => {
-      const documentTypes = [];
+      const documentTypes: string[] = [];
       cy.get("[data-cy=\"documentTypeApprovalMatrix\"]").each(($el) => {
         documentTypes.push($el.text());
       });
@@ -1809,13 +1809,13 @@ context("Create company with golden tenant", () => {
     });
 
     it("Check DAM assigned approval roles", () => {
-      const roles = [];
-      cy.get("table:eq(1) tbody tr:eq(9) td").each(($el) => {
+      const roles: string[] = [];
+      cy.get("table").eq(1).find("tbody tr td").each(($el) => {
         roles.push($el.text());
       });
       cy.wrap(roles).should("have.length", 12);
       cy.fixture("dam.json").then((file) => {
-        let damRoles = [];
+        let damRoles: any[] = [];
         const approvalRoles = file.approvalMatrix[1].approvalRoles;
         damRoles.push(approvalRoles.stage1);
         damRoles.push(approvalRoles.stage2);
@@ -1830,7 +1830,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Check DAM approval roles", () => {
-      const roles = [];
+      const roles: string[] = [];
       cy.get("table:eq(1) thead tr:eq(1) th").each(($el) => {
         roles.push($el.text());
       });

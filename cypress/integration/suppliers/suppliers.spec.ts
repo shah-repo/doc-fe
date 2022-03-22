@@ -439,7 +439,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Verify revision after update is equal to 2", () => {
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Current" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
       });
     });
 
@@ -473,7 +473,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Verify revision after update is equal to 2", () => {
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2.1  - Current" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2.1  - Released" });
       });
     });
   });
