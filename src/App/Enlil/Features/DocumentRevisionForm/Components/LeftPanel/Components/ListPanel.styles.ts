@@ -19,12 +19,12 @@ export default makeStyles((theme: Theme) =>
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "0px 10px 0px 15px",
+      padding: "0 10px 0 15px",
       width: "300px",
       height: "50px",
       background: "white",
-      boxShadow: `0px 1px 0px ${Colors.lightest_grey1}`,
-      borderTop: `1px solid ${Colors.lightest_grey1}`, // need to check if required and put conditional
+      boxShadow: `0 1px 0 ${Colors.lightest_grey1}`,
+      borderTop: `1px solid ${Colors.lightest_grey1}`,
     },
     listItemStyle: {
       "height": "48px",
@@ -34,7 +34,7 @@ export default makeStyles((theme: Theme) =>
       "borderRadius": "3px",
       "marginBottom": "10px",
       "&.lastItem": {
-        marginBottom: "0px",
+        marginBottom: 0,
       },
     },
     listItemText: {
@@ -58,7 +58,7 @@ export default makeStyles((theme: Theme) =>
       fontStyle: "normal",
       fontWeight: 400,
       lineHeight: "18px",
-      letterSpacing: "0px",
+      letterSpacing: 0,
       textAlign: "left",
       marginLeft: "6px",
       textTransform: "capitalize",
@@ -66,7 +66,7 @@ export default makeStyles((theme: Theme) =>
       cursor: "pointer",
     },
     searchBox: {
-      padding: "20px 0px 20px 0px",
+      padding: "20px 0",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -77,5 +77,6 @@ export default makeStyles((theme: Theme) =>
       width: "99.8%",
       padding: "0px",
     },
+    iconBtn: { marginLeft: "3px" },
   })
 );

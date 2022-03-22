@@ -14,7 +14,6 @@ export const withFBStarter = <T extends FBStarterProps>(
     const { _documentRevisionFormState } = SM.useStores();
 
     onClick = (index?: number) => {
-      // console.log("_documentRevisionFormState::", _documentRevisionFormState?.leftPanelOpen);
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       if (leftPanelDialogState) {
         leftPanelDialogState.setIndex(index || 0);
@@ -27,7 +26,6 @@ export const withFBStarter = <T extends FBStarterProps>(
       } else {
       dialogState?.config({
         open: true,
-        showLeftPanelEditor: true,
         maxWidth: "sm",
         content: <FBControlPicker {...{ index }} />,
       });

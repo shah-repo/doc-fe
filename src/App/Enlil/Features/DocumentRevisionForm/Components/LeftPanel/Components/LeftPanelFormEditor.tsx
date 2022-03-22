@@ -8,14 +8,11 @@ import styles from "./LeftPanelFormEditor.styles";
 const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
   handleActionsRef,
   handleTitleRef,
-  handleClose,
   portalAction,
   portalTitle,
-  open = false,
   title,
   content,
   actions,
-  maxWidth,
 }) => {
   const classes = styles();
   return (

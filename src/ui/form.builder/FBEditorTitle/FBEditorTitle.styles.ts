@@ -40,7 +40,7 @@ export default makeStyles((theme: Theme) =>
     active: {
       color: Colors.navy,
       borderRadius: "100px",
-      boxShadow: "0px 2px 5px rgba(204, 212, 217, 0.8)",
+      boxShadow: "0 2px 5px rgba(204, 212, 217, 0.8)",
       background: Colors.white,
       padding: "12px 24px",
     },
@@ -55,7 +55,7 @@ export default makeStyles((theme: Theme) =>
       width: "299px",
       height: "50px",
       background: Colors.white,
-      boxShadow: `0px 1px 0px ${Colors.chinese_silver}`,
+      boxShadow: `0 1px 0 ${Colors.chinese_silver}`,
 
     },
     staticTitleText: {
@@ -71,7 +71,7 @@ export default makeStyles((theme: Theme) =>
       flex: "none",
       order: 0,
       flexGrow: 0,
-      margin: "0px 10px",
+      margin: "0 10px",
       fontWeight: 700,
       display: "flex",
       alignItems: "center",
@@ -91,7 +91,7 @@ export default makeStyles((theme: Theme) =>
       flex: "none",
       order: 0,
       flexGrow: 0,
-      margin: "0px 10px",
+      margin: "0 10px",
       fontWeight: 400,
       display: "flex",
       alignItems: "center",

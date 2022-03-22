@@ -1,12 +1,12 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
 
-export default makeStyles((theme: Theme) =>
+export default makeStyles(() =>
   createStyles({
     titleText: {
       "position": "static",
-      "top": "0%",
-      "bottom": "0%",
+      "top": 0,
+      "bottom": 0,
       "font-family": "Sora",
       "font-style": "normal",
       "font-weight": "600",
@@ -16,7 +16,7 @@ export default makeStyles((theme: Theme) =>
       "flex": "none",
       "order": 0,
       "flex-grow": 0,
-      "margin": "0px 5px",
+      "margin": "0 5px",
     },
   })
 );

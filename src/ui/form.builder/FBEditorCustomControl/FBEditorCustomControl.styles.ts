@@ -1,7 +1,7 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-export default makeStyles((theme: Theme) =>
+export default makeStyles(() =>
   createStyles({
     listSubItem: {
       fontFamily: "Sora",
@@ -9,7 +9,7 @@ export default makeStyles((theme: Theme) =>
       fontStyle: "normal",
       fontWeight: 400,
       lineHeight: "18px",
-      letterSpacing: "0px",
+      letterSpacing: 0,
       textAlign: "left",
       marginLeft: "6px",
       textTransform: "capitalize",
@@ -24,7 +24,7 @@ export default makeStyles((theme: Theme) =>
       "borderRadius": "3px",
       "marginBottom": "10px",
       "& $lastItem": {
-        marginBottom: "0px",
+        marginBottom: 0,
       },
     },
   })

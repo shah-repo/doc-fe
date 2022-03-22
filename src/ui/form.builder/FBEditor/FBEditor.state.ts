@@ -2,29 +2,6 @@ import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
-import { ReactComponent as Approvals } from "../../../assets/images/leftPanel/approvals.svg";
-import { ReactComponent as AutoCompleteIcon } from "../../../assets/images/leftPanel/auto_complete.svg";
-import { ReactComponent as BlankTplformIcon } from "../../../assets/images/leftPanel/blank_t_pl_form.svg";
-import { ReactComponent as CheckboxIcon } from "../../../assets/images/leftPanel/checkbox_group.svg";
-import { ReactComponent as CheckPointIcon } from "../../../assets/images/leftPanel/check_point.svg";
-import { ReactComponent as DatePickerIcon } from "../../../assets/images/leftPanel/date_picker.svg";
-import { ReactComponent as EquipmentIcon } from "../../../assets/images/leftPanel/equipment.svg";
-import { ReactComponent as FileuploadIcon } from "../../../assets/images/leftPanel/fileupload.svg";
-import { ReactComponent as HyperlinkIcon } from "../../../assets/images/leftPanel/hyperlink.svg";
-import { ReactComponent as ParagraphIcon } from "../../../assets/images/leftPanel/paragraph.svg";
-import { ReactComponent as POApprovalMatrixIcon } from "../../../assets/images/leftPanel/po_approval_matrix.svg";
-import { ReactComponent as ProcedureIcon } from "../../../assets/images/leftPanel/procedure.svg";
-import { ReactComponent as QuantityIcon } from "../../../assets/images/leftPanel/quantity.svg";
-import { ReactComponent as RadiogroupIcon } from "../../../assets/images/leftPanel/radio_group.svg";
-import { ReactComponent as SectionIcon } from "../../../assets/images/leftPanel/section.svg";
-import { ReactComponent as SelectIcon } from "../../../assets/images/leftPanel/select.svg";
-import { ReactComponent as StepsectionIcon } from "../../../assets/images/leftPanel/step_section.svg";
-import { ReactComponent as SubsectionIcon } from "../../../assets/images/leftPanel/sub_section.svg";
-import { ReactComponent as SupplierIcon } from "../../../assets/images/leftPanel/supplier.svg";
-import { ReactComponent as TextfieldwithrangeIcon } from "../../../assets/images/leftPanel/textfield_with_range.svg";
-import { ReactComponent as TextEditorIcon } from "../../../assets/images/leftPanel/text_editor.svg";
-import { ReactComponent as TextfieldIcon } from "../../../assets/images/leftPanel/text_field.svg";
-import { ReactComponent as TimerIcon } from "../../../assets/images/leftPanel/timer.svg";
 import FBEditorAction from "../FBEditorAction/FBEditorAction";
 import FBEditorApprovalField from "../FBEditorApprovalField/FBEditorApprovalField";
 import FBEditorApprovals from "../FBEditorApprovals/FBEditorApprovals";
@@ -154,44 +131,6 @@ class FBEditorState {
     supplier: FBEditorLabel,
     lhrstep: FBEditorLabel,
     unitMeasures: FBEditorLabel,
-  };
-
-  public static leftPanelEditorIconMapping = {
-    section: SectionIcon,
-    subsection: SubsectionIcon,
-    stepsection: StepsectionIcon,
-    textfield: TextfieldIcon,
-    checkboxgroup: CheckboxIcon,
-    autocomplete: AutoCompleteIcon,
-    texteditor: TextEditorIcon,
-    datepicker: DatePickerIcon,
-    hyperlink: HyperlinkIcon,
-    select: SelectIcon,
-    radiogroup: RadiogroupIcon,
-    paragraph: ParagraphIcon,
-    fileupload: FileuploadIcon,
-    blanktplform: BlankTplformIcon,
-    quantity: QuantityIcon,
-    timer: TimerIcon,
-    poApprovalMatrix: POApprovalMatrixIcon,
-    instructionsmediaupload: FileuploadIcon,
-    evidencemediaupload: FileuploadIcon,
-    procedure: ProcedureIcon,
-    mpiprocedure: ProcedureIcon,
-    eqmaintenance: EquipmentIcon,
-    textfieldwithrange: TextfieldwithrangeIcon,
-    supplier: SupplierIcon,
-    lhrstep: StepsectionIcon,
-    approvals: Approvals,
-    // TODO: Check Custom Control
-    customcontrol: FileuploadIcon,
-    instructionsdocument: ProcedureIcon,
-    selectdocument: SelectIcon,
-    checkpoint: CheckPointIcon,
-    createlabel: CheckPointIcon,
-    task: CheckPointIcon,
-    // TODO: Check Custom Control
-    action: FileuploadIcon,
   };
 
   @observable public mode?: FBEditorMode = "config";
