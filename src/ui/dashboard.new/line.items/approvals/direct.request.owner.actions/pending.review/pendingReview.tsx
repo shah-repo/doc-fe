@@ -6,7 +6,6 @@ import {
   Modal,
   Typography,
 } from "@material-ui/core";
-import { size } from "lodash";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as InReviewIcon } from "../../../../../../assets/images/in_review_status.svg";
@@ -27,6 +26,7 @@ import { NormalStyleChip } from "../../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../../common/StyledListItem";
 import { StyleTooltip } from "../../../common/StyleTooltip";
 import { DocTypeGroups } from "../../../common/types";
+import { getPendingTooltipText } from "../../../common/Utils";
 import EmailModal from "../../../dialogs/email/EmailDialog";
 import { styles } from "./pendingReview.styles";
 
@@ -77,6 +77,8 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const { count, pending, approved, primaryText, secondaryText } =
+    getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -193,20 +195,13 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text
-                          translation="assigned.users.count"
-                          values={{
-                            count:
-                              size(docRevPendingApprovals) +
-                              size(docRevApprovedApprovals),
-                          }}
+                          translation={primaryText}
+                          values={{ count }}
                         />
                         <br />
                         <Text
-                          translation="approved.and.pending.count"
-                          values={{
-                            approved: size(docRevApprovedApprovals),
-                            pending: size(docRevPendingApprovals),
-                          }}
+                          translation={secondaryText}
+                          values={{ approved, pending }}
                         />
                       </>
                     }
