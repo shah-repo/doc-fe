@@ -646,7 +646,7 @@ context("Export Bulk", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Last Signed", () => {
@@ -682,7 +682,7 @@ context("Export Bulk", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Archive", () => {
@@ -706,6 +706,7 @@ context("Export Bulk", () => {
       });
 
       it("Finalize and release button click'", () => {
+        cy.reload();
         cy.recApproveAndReleaseInlineRecord();
       });
 
