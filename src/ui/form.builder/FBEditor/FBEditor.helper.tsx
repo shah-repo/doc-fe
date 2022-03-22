@@ -81,7 +81,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
                 height: "36px",
                 background: `${Colors.navy}`,
                 borderRadius: "100px",
-                color: "white",
+                color: Colors.white,
                 textTransform: "capitalize",
                 fontFamily: "Sora",
                 fontStyle: "normal",

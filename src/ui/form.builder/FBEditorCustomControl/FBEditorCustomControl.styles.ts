@@ -19,7 +19,7 @@ export default makeStyles(() =>
     listItemStyle: {
       "height": "48px",
       "width": "269px",
-      "background": "white",
+      "background": Colors.white,
       "border": `1px solid ${Colors.lightest_grey1}`,
       "borderRadius": "3px",
       "marginBottom": "10px",
