@@ -2,7 +2,7 @@ import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
-import { ReactComponent as Approvals } from "../../../assets/images/leftPanel/approvals.svg";
+import { ReactComponent as ApprovalsIcon } from "../../../assets/images/leftPanel/approvals.svg";
 import { ReactComponent as AutoCompleteIcon } from "../../../assets/images/leftPanel/auto_complete.svg";
 import { ReactComponent as BlankTplformIcon } from "../../../assets/images/leftPanel/blank_t_pl_form.svg";
 import { ReactComponent as CheckboxIcon } from "../../../assets/images/leftPanel/checkbox_group.svg";
@@ -11,11 +11,14 @@ import { ReactComponent as DatePickerIcon } from "../../../assets/images/leftPan
 import { ReactComponent as EquipmentIcon } from "../../../assets/images/leftPanel/equipment.svg";
 import { ReactComponent as FileuploadIcon } from "../../../assets/images/leftPanel/fileupload.svg";
 import { ReactComponent as HyperlinkIcon } from "../../../assets/images/leftPanel/hyperlink.svg";
+import { ReactComponent as InLineApprovalIcon } from "../../../assets/images/leftPanel/inline_approvals.svg";
 import { ReactComponent as ParagraphIcon } from "../../../assets/images/leftPanel/paragraph.svg";
 import { ReactComponent as POApprovalMatrixIcon } from "../../../assets/images/leftPanel/po_approval_matrix.svg";
 import { ReactComponent as ProcedureIcon } from "../../../assets/images/leftPanel/procedure.svg";
+import { ReactComponent as POIcon } from "../../../assets/images/leftPanel/purchase_order.svg";
 import { ReactComponent as QuantityIcon } from "../../../assets/images/leftPanel/quantity.svg";
 import { ReactComponent as RadiogroupIcon } from "../../../assets/images/leftPanel/radio_group.svg";
+import { ReactComponent as RequestApprovalIcon } from "../../../assets/images/leftPanel/request_approval.svg";
 import { ReactComponent as SectionIcon } from "../../../assets/images/leftPanel/section.svg";
 import { ReactComponent as SelectIcon } from "../../../assets/images/leftPanel/select.svg";
 import { ReactComponent as StepsectionIcon } from "../../../assets/images/leftPanel/step_section.svg";
@@ -174,6 +177,9 @@ class FBLeftPanelEditorState {
     quantity: QuantityIcon,
     timer: TimerIcon,
     poApprovalMatrix: POApprovalMatrixIcon,
+    purchaseorder: POIcon,
+    poreceive: POIcon,
+    approvalMatrix: POApprovalMatrixIcon,
     instructionsmediaupload: FileuploadIcon,
     evidencemediaupload: FileuploadIcon,
     procedure: ProcedureIcon,
@@ -182,7 +188,9 @@ class FBLeftPanelEditorState {
     textfieldwithrange: TextfieldwithrangeIcon,
     supplier: SupplierIcon,
     lhrstep: StepsectionIcon,
-    approvals: Approvals,
+    approvals: ApprovalsIcon,
+    inlineapproval: InLineApprovalIcon,
+    requestapproval: RequestApprovalIcon,
     // TODO: Check Custom Control
     customcontrol: FileuploadIcon,
     instructionsdocument: ProcedureIcon,
