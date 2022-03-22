@@ -5,6 +5,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -589,7 +590,12 @@ context("Export Part Lot", () => {
   context("CSL with Last Signed status", () => {
     context("Add CSL with Last Signed", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+          () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
+              .autocompleteSelect("enlil.testmail+cy1");
+          });
       });
 
       it("Click Request Approval button", () => {
@@ -661,7 +667,12 @@ context("Export Part Lot", () => {
       });
 
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).autocompleteSelect(`${USERS[1].email}`);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+          () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(1)
+              .autocompleteSelect("enlil.testmail+cy1");
+          });
       });
 
       it("Click Request Approval button", () => {
