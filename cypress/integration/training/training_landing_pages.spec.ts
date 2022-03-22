@@ -773,7 +773,7 @@ context("Test training records and training curriculum landing page", () => {
               ],
             },
           },
-          name: "Training Curriculum test record",
+          name: "ATraining Curriculum test record",
           referenceTo: [],
           retrain: false,
           revisionChangeType: RevisionChangeType.NextRevision,
@@ -833,7 +833,7 @@ context("Test training records and training curriculum landing page", () => {
               ],
             },
           },
-          name: "Training Curriculum test record2",
+          name: "BTraining Curriculum test record2",
           referenceTo: [],
           retrain: false,
           revisionChangeType: RevisionChangeType.NextRevision,
@@ -881,6 +881,68 @@ context("Test training records and training curriculum landing page", () => {
 
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
+    });
+  });
+
+  context("Verify Training Records landing page", () => {
+    it("Navigate to training records landing page", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("Verify landing page table is using Kendo grid", () => {
+      cy.get(`div[role="grid"]`).should("have.class", "k-grid");
+    });
+
+    it("Verify all columns are present", () => {
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "TRN ID");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Doc ID");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Revision");
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Document Title");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Trainee");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Assign Date");
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Due Date");
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Completed On");
+      cy.get(`th[role="columnheader"]`).eq(8).should("have.text", "TC ID");
+    });
+
+    it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
+      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+      cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+    });
+
+    it(`Verify drag and drop TRN ID header on second slot`, () => {
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TRN-");
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="1"][role]>span>span`,
+        toSelector: `th[aria-colindex="2"][role]>span>span`,
+      });
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "FM-");
+    });
+
+    it(`Column grouping should be displayed`, () => {
+      cy.get(`th[aria-colindex="5"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column");
+      cy.unClick();
+    });
+
+    it(`Verify grouping`, () => {
+      cy.get("tr.k-grouping-row").should("not.exist");
+      cy.get(`th[aria-colindex="5"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.get("div.k-columnmenu-item").eq(0).arrowClick();
+      cy.get("tr.k-grouping-row").should("have.length", "4");
+    });
+
+    it(`Verify training record could be open`, () => {
+      cy.get("div[role=dialog]").should("not.exist");
+      cy.trSelectFirstDocument();
+      cy.get("div[role=dialog]").should("exist");
+      cy.get("div[role=dialog] button").eq(0).arrowClick();
+      cy.get("div[role=dialog]").should("not.exist");
+    });
+
+    it(`Verify training record count`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
+      cy.get("tr.k-master-row").should("have.length", 6);
     });
   });
 });
