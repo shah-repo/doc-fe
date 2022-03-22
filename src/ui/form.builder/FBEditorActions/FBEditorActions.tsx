@@ -4,7 +4,6 @@ import { FBButton, FBEditorActionsProps, FBSubmitButton } from "..";
 import { withFBEditorActions } from "./FBEditorActions.wrap";
 
 interface FBLeftEditorActionsProps extends FBEditorActionsProps {
-  submitLabel? : string;
   submitStyle? : React.CSSProperties;
   cancelStyle? : React.CSSProperties;
   outerContainerMargin?: number;
