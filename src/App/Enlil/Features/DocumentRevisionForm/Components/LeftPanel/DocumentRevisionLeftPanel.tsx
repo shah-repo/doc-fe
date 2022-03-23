@@ -2,22 +2,17 @@ import { Box, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionLeftPanelProps, SMBox } from "../../../../..";
+import { SM, SMBox } from "../../../../..";
 import Text from "../../../../../../ui/components/Text";
 import { FB } from "../../../../../../ui/form.builder";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
 import LeftPanelFormEditor from "./Components/LeftPanelFormEditor";
 import ListPanel from "./Components/ListPanel";
 import styles from "./DocumentRevisionLeftPanel.styles";
-import { withDocumentRevisionLeftPanelWrap } from "./DocumentRevisionLeftPanel.wrap";
 
-const DocumentRevisionLeftPanel: React.FunctionComponent<
-  DocumentRevisionLeftPanelProps
-> = ({
-  _documentRevisionFormState,
-}) => {
+const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
   const classes = styles();
-
+  const { _documentRevisionFormState } = SM.useStores();
   const { leftPanelDialogState } = FB.useStores();
   return (
     <Observer>
@@ -71,4 +66,4 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
   );
 };
 
-export default withDocumentRevisionLeftPanelWrap(DocumentRevisionLeftPanel);
+export default DocumentRevisionLeftPanel;
