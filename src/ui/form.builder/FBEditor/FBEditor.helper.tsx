@@ -2,7 +2,6 @@ import { filter, includes, size, union } from "lodash";
 import React from "react";
 import { FB, FBData, FBEditorActions, FBEditorHelperProps, FBEditorState, FBEditorTitle, FBInputProps, FBInputType } from "..";
 import { SM } from "../../../App";
-import Colors from "../../layout/theme/utils/colors";
 
 export const withFBEditorHelper = <T extends FBEditorHelperProps>(
   Component: React.FunctionComponent<T>
@@ -71,42 +70,6 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
               key={`fb-editor-actions-${type}`}
               parentFormState={formState}
               outerContainerMargin={0}
-              submitStyle = {{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "20px",
-                width: "66px",
-                height: "36px",
-                background: `${Colors.navy}`,
-                borderRadius: "100px",
-                color: Colors.white,
-                textTransform: "capitalize",
-                fontFamily: "Sora",
-                fontStyle: "normal",
-                fontSize: "12px",
-                lineHeight: "15px",
-                border: `1px solid ${Colors.navy}`,
-              }}
-              cancelStyle = {{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "20px",
-                width: "83px",
-                height: "36px",
-                background: `${Colors.sky_blue}`,
-                borderRadius: "100px",
-                color: "#011FBB",
-                textTransform: "capitalize",
-                fontFamily: "Sora",
-                fontStyle: "normal",
-                fontSize: "12px",
-                lineHeight: "15px",
-                border: `1px solid ${Colors.sky_blue}`,
-              }}
               {...{ type, index }} />
           ),
         });
