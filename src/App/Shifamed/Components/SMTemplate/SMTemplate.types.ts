@@ -24,10 +24,6 @@ export interface SMTemplateProps {
   /**
    * @cfg {BoxProps} Box props for header container.
    */
-  leftPanel?: React.ReactNode;
-  /**
-    * @cfg {BoxProps} Box props for header container.
-    */
   headerBoxProps?: SMBoxProps;
   /**
    * @cfg {BoxProps} Box props for footer container.
@@ -37,10 +33,6 @@ export interface SMTemplateProps {
    * @cfg {BoxProps} Box props for left container.
    */
   leftSidebarBoxProps?: SMBoxProps;
-  /**
-   * @cfg {BoxProps} Box props for right container.
-   */
-  leftPanelBoxProps?: SMBoxProps;
   /**
    * @cfg {BoxProps} Box props for right container.
    */
