@@ -2,6 +2,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import "moment-timezone";
+import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -23,6 +25,8 @@ let clinicalProtocolDocumentType;
 let createdClinicalProtocolForm;
 let developersGroup;
 let createdClinicalProtocolForm2;
+const assignDate = moment().tz("America/Los_Angeles").format("l");
+const dueDate = moment().tz("America/Los_Angeles").add(1, "month").subtract(1, "days").format("l");
 
 context("Test training records and training curriculum landing page", () => {
   before(() => {
@@ -31,6 +35,11 @@ context("Test training records and training curriculum landing page", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorage();
+    cy.intercept({ url: "/api/v1/*/search", middleware: true }, (req) => {
+      req.continue((res) => {
+        res.setDelay(200);
+      });
+    });
   });
 
   afterEach(() => {
@@ -929,7 +938,11 @@ context("Test training records and training curriculum landing page", () => {
       cy.get("tr.k-grouping-row").should("not.exist");
       cy.get(`th[aria-colindex="5"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
       cy.get("tr.k-grouping-row").should("have.length", "4");
+      cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get("tr.k-grouping-row").should("not.exist");
     });
 
     it(`Verify training record could be open`, () => {
@@ -943,6 +956,144 @@ context("Test training records and training curriculum landing page", () => {
     it(`Verify training record count`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
       cy.get("tr.k-master-row").should("have.length", 6);
+    });
+
+    it("Verify arrow for Doc ID", () => {
+      cy.get(`td[data-grid-col-index="0"]`).should("have.text", "FM-00004FM-00004FM-00004FM-00004FM-00003FM-00003");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="0"]`).should("have.text", "FM-00003FM-00003FM-00004FM-00004FM-00004FM-00004");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="1"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="0"]`).should("have.text", "FM-00004FM-00004FM-00004FM-00004FM-00003FM-00003");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+    });
+
+    it("Verify arrow for TRN ID", () => {
+      cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="2"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="1"]`)
+        .should("have.text", "TRN-00001TRN-00002TRN-00003TRN-00004TRN-00005TRN-00006");
+      cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="2"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="1"]`)
+        .should("have.text", "TRN-00006TRN-00005TRN-00004TRN-00003TRN-00002TRN-00001");
+    });
+
+    it("Verify arrow for Revision", () => {
+      cy.get(`td[data-grid-col-index="2"]`)
+        .should("have.text", "111111");
+      cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="3"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="2"]`)
+        .should("have.text", "111111");
+      cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="3"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="2"]`)
+        .should("have.text", "111111");
+    });
+
+    it("Verify arrow for Document title", () => {
+      cy.get(`td[data-grid-col-index="3"]`)
+        .should("have.text", "Form document for trainingForm document for training" +
+        "Form2 document for trainingForm2 document for trainingForm2 document for trainingForm2 document for training");
+      cy.get(`th[aria-colindex="4"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="4"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="3"]`)
+        .should("have.text", "Form2 document for trainingForm2 document for training" +
+        "Form2 document for trainingForm2 document for trainingForm document for trainingForm document for training");
+      cy.get(`th[aria-colindex="4"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="4"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="3"]`)
+        .should("have.text", "Form document for trainingForm document for training" +
+        "Form2 document for trainingForm2 document for trainingForm2 document for trainingForm2 document for training");
+    });
+
+    it("Verify arrow for Trainee", () => {
+      cy.get(`td[data-grid-col-index="4"]`)
+        .should("have.text", "GRGiovanni ReynoldsHBHarry BartolettiGRGiovanni ReynoldsEWEda Walker" +
+        "ABAthena BlockHBHarry Bartoletti");
+      cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="5"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="4"]`)
+        .should("have.text", "ABAthena BlockEWEda WalkerGRGiovanni ReynoldsGRGiovanni Reynolds" +
+        "HBHarry BartolettiHBHarry Bartoletti");
+      cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="5"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="4"]`)
+        .should("have.text", "HBHarry BartolettiHBHarry BartolettiGRGiovanni Reynolds" +
+        "GRGiovanni ReynoldsEWEda WalkerABAthena Block");
+    });
+
+    it("Verify arrow for Assign Date", () => {
+      cy.get(`td[data-grid-col-index="5"]`)
+        .should("have.text", `${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}`);
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="5"]`)
+        .should("have.text", `${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}`);
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="5"]`)
+        .should("have.text", `${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}`);
+    });
+
+    it("Verify arrow for Due Date", () => {
+      cy.get(`td[data-grid-col-index="6"]`)
+        .should("have.text", `${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}`);
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="6"]`)
+        .should("have.text", `${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}`);
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="6"]`)
+        .should("have.text", `${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}`);
+    });
+
+    it("Verify arrow for Completed On", () => {
+      cy.get(`td[data-grid-col-index="7"]`)
+        .should("have.text", "PendingPendingPendingPendingPendingPending");
+      cy.get(`th[aria-colindex="8"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="8"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="7"]`)
+        .should("have.text", "PendingPendingPendingPendingPendingPending");
+      cy.get(`th[aria-colindex="8"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="8"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="7"]`)
+        .should("have.text", "PendingPendingPendingPendingPendingPending");
+    });
+
+    it("Verify arrow for Due Date", () => {
+      cy.get(`td[data-grid-col-index="8"]`)
+        .should("have.text", "TCT-00001TCT-00001TCT-00002TCT-00002TCT-00002TCT-00002");
+      cy.get(`th[aria-colindex="9"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="9"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="8"]`)
+        .should("have.text", "TCT-00001TCT-00001TCT-00002TCT-00002TCT-00002TCT-00002");
+      cy.get(`th[aria-colindex="9"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="9"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="8"]`)
+        .should("have.text", "TCT-00002TCT-00002TCT-00002TCT-00002TCT-00001TCT-00001");
     });
   });
 });

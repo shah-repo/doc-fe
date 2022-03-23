@@ -56,6 +56,7 @@ declare global {
       progressBarShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldNotExist(): Chainable<Subject>;
       landingPageLoadingElementShouldNotExist(): Chainable<Subject>;
+      landingPageLoadingElementShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldExist(): Chainable<Subject>;
       listLoadingElementShouldAppear(): Chainable<Subject>;
       dragAndDrop(params: {fromSelector: string; toSelector: string});
@@ -138,6 +139,11 @@ Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
 
 Cypress.Commands.add("landingPageLoadingElementShouldNotExist", () => {
   cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("landingPageLoadingElementShouldAppear", () => {
+  cy.get("div.k-loading-mask", { timeout: 40000 }).should("be.visible");
+  cy.get("div.k-loading-mask", { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("listLoadingElementShouldExist", () => {
