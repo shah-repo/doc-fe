@@ -970,7 +970,6 @@ context("Create company via API and create Suppliers document", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        // cy.contains(`${USERS[2].email}`).parent().next().arrowClick().wait(2000);
       });
 
       it("Remove Approver who rejected request", () => {
@@ -979,7 +978,6 @@ context("Create company via API and create Suppliers document", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        // cy.contains(`${USERS[3].email}`).parent().next().arrowClick().wait(2000);
       });
 
       it("Check doc status as Draft and click on Send To Email", () => {
