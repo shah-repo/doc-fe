@@ -1,5 +1,5 @@
 import { Box, Grid } from "@material-ui/core";
-import { cloneDeep, has, map, startCase } from "lodash";
+import { cloneDeep, has, map } from "lodash";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
@@ -43,7 +43,7 @@ export function DocumentTypePresenter({
       ).isValid()
     ) {
       return {
-        label: startCase(column.label),
+        label: column.label.split(" ").map((word) => word[0].toUpperCase() + word.substring(1)).join(" "),
         key: column.key,
       };
     }
@@ -53,7 +53,7 @@ export function DocumentTypePresenter({
       : column.label;
 
     return {
-      label: startCase(columnLabel),
+      label: columnLabel.split(" ").map((word) => word[0].toUpperCase() + word.substring(1)).join(" "),
       key: column.key,
     };
   });
