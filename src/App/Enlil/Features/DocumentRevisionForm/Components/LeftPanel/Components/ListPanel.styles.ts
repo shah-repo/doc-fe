@@ -1,7 +1,7 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../../../../../../ui/layout/theme/utils/colors";
 
-export default makeStyles((theme: Theme) =>
+export default makeStyles(() =>
   createStyles({
     collapseRoot: {
       padding: "15px",
@@ -15,14 +15,9 @@ export default makeStyles((theme: Theme) =>
       background: Colors.whitest_grey,
     },
     listItemBtn: {
-      "display": "flex",
-      "flexDirection": "row",
-      "justifyContent": "space-between",
-      "alignItems": "center",
       "padding": "0 10px 0 15px",
       "width": "300px",
       "height": "50px",
-      "background": "white",
       "boxShadow": `0 1px 0 ${Colors.lightest_grey1}`,
       "borderTop": `1px solid ${Colors.lightest_grey1}`,
       "&.firstItem": {
@@ -32,7 +27,7 @@ export default makeStyles((theme: Theme) =>
     listItemStyle: {
       "height": "48px",
       "width": "269px",
-      "background": "white",
+      "background": Colors.white,
       "border": `1px solid ${Colors.lightest_grey1}`,
       "borderRadius": "3px",
       "marginBottom": "10px",
@@ -42,29 +37,16 @@ export default makeStyles((theme: Theme) =>
     },
     listItemText: {
       fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 400,
       fontSize: "12px",
-      lineHeight: "15px",
       display: "flex",
-      alignItems: "center",
-      textAlign: "center",
       textTransform: "uppercase",
       color: Colors.almost_black,
-      flex: "none",
-      order: 0,
-      flexGrow: 0,
     },
     listSubItem: {
       fontFamily: "Sora",
       fontSize: "14px",
-      fontStyle: "normal",
-      fontWeight: 400,
-      lineHeight: "18px",
       letterSpacing: 0,
-      textAlign: "left",
       marginLeft: "6px",
-      textTransform: "capitalize",
       color: Colors.almost_black,
       cursor: "pointer",
     },
@@ -77,7 +59,6 @@ export default makeStyles((theme: Theme) =>
     list: {
       height: "calc(100vh - 165px)",
       overflowY: "auto",
-      width: "99.8%",
       padding: "0px",
     },
     iconBtn: { marginLeft: "3px" },

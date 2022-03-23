@@ -5,7 +5,7 @@ import React from "react";
 import styles from "./SearchBox.styles";
 
 interface Props {
-  onSearch: (event: any) => void;
+  onSearch: (event) => void;
 }
 const SearchBox: React.FunctionComponent<Props> = ({ onSearch }) => {
   const classes = styles();
