@@ -15,6 +15,7 @@ import {
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
+import { DialogHandler } from "../../hooks/useDialog";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
@@ -43,6 +44,7 @@ interface Props {
   loadMyFeedsListAsyncState: AsyncState;
   // TO DO:: Needs to add type definitions
   feedItems: any[];
+  dialogPDF: DialogHandler;
 }
 
 const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
@@ -54,8 +56,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   hoverItemId,
   onMouseLeaveItem,
   onMouseHoverItem,
+  dialogPDF,
 }) => {
   const classes = styles();
+
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
       {feedItems
@@ -138,6 +142,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     unPinLineItem={unPinLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
@@ -218,6 +223,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     unPinLineItem={unPinLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
@@ -305,6 +311,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
                       pendingEmailSentAt={pendingAction.pendingEmailSentAt}
+                      dialogPDF={dialogPDF}
                     />
                     <Divider />
                   </>
@@ -353,6 +360,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
