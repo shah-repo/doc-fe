@@ -671,7 +671,12 @@ context("Export maintenance record", () => {
   context("Maintenance Record with Last Signed status", () => {
     context("Add Maintenance Record with Last Signed", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+          () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
+              .autocompleteSelect("enlil.testmail+cy1");
+          });
       });
 
       it("Click Request Approval button", () => {
@@ -742,6 +747,7 @@ context("Export maintenance record", () => {
 
       it("Select Equipment", () => {
         cy.get("[data-cy=equipment_id]").autocompleteSelect("ET-00002");
+        cy.unClick();
       });
 
       it("Select Maintainer", () => {
@@ -758,6 +764,7 @@ context("Export maintenance record", () => {
       });
 
       it("Finalize and release button click'", () => {
+        cy.reload();
         cy.recApproveAndReleaseInlineRecord();
       });
 
@@ -914,7 +921,7 @@ context("Export maintenance record", () => {
 
     context("Add Maintenance Record with In Review", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       });
 
       it("Save the document", () => {

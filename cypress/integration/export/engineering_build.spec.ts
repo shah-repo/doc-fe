@@ -5,6 +5,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -391,7 +392,12 @@ context("Export Engineering Build doc", () => {
   context("EB with Last Signed status", () => {
     context("Add EB with Last Signed", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+          () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
+              .autocompleteSelect("enlil.testmail+cy1");
+          });
       });
 
       it("Click Request Approval button", () => {
@@ -399,7 +405,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Last Signed", () => {
@@ -435,7 +441,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Archive", () => {
@@ -459,6 +465,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Finalize and release button click'", () => {
+        cy.reload();
         cy.recApproveAndReleaseInlineRecord();
       });
 
@@ -519,7 +526,7 @@ context("Export Engineering Build doc", () => {
 
     context("Add EB with In Review", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       });
 
       it("Save the document", () => {

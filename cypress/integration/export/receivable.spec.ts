@@ -922,7 +922,7 @@ context("Export Receivable doc", () => {
   context("Receivable with Last Signed status", () => {
     context("Add Receivable with Last Signed", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
+        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       });
 
       it("Click Request Approval button", () => {
@@ -930,7 +930,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Last Signed", () => {
@@ -966,7 +966,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.ebApprove();
+        cy.inlineApproval();
       });
 
       it("Select Archive", () => {
@@ -990,6 +990,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Finalize and release button click'", () => {
+        cy.reload();
         cy.recApproveAndReleaseInlineRecord();
       });
 
@@ -1050,7 +1051,7 @@ context("Export Receivable doc", () => {
 
     context("Add Receivable with Pending Approval", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-po-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
+        cy.get("[data-cy^=fb-po-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       });
 
       it("Save the document", () => {
