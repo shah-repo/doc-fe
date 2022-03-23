@@ -18,7 +18,7 @@ const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
   return (
     <Box className={classes.leftPanelEditorForm}>
       <Grid container className={classes.rootContainer} >
-        <Grid item>
+        <Grid item className={classes.headerItem}>
           <div ref={handleTitleRef} />
         </Grid>
         <Grid item className={classes.grid}>

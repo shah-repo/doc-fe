@@ -74,10 +74,12 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitlePropsIncludesType> = (
           </FBMapWrapper>
         </ToggleButtonGroup>
       </Box>}
-      <Box onClick={onTypeClick} className={classes.titleContainerText}>  <IconButton disableFocusRipple={true}
-        disableRipple={true}><CaretIcon/></IconButton>  <Typography className={classes.titleText}>
-        {formattedTitle}
-      </Typography></Box>
+      <Box onClick={onTypeClick} className={classes.titleContainerText}>
+        <IconButton disableFocusRipple={true} disableRipple={true}>
+          <CaretIcon />
+        </IconButton>
+        <Typography className={classes.titleText}>{formattedTitle}</Typography>
+      </Box>
     </>
   );
 };

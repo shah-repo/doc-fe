@@ -4,7 +4,6 @@ import Colors from "../../layout/theme/utils/colors";
 export default makeStyles((theme: Theme) =>
   createStyles({
     rootContainer: {
-      width: "270px",
       height: "52px",
       background: Colors.whitest_grey,
       borderRadius: "100px",
@@ -52,7 +51,6 @@ export default makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      width: "299px",
       height: "50px",
       background: Colors.white,
       boxShadow: `0 1px 0 ${Colors.chinese_silver}`,
