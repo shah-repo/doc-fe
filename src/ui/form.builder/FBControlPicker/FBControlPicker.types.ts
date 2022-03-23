@@ -6,7 +6,6 @@ export type FBControlPickerProps =
 & {
   controlPickerState?: FBControlPickerState;
   pickers?: FBControlPickerDataProps;
-  translatedPickers?: FBControlPickerDataProps;
 };
 
 type FBControlPickerType =

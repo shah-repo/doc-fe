@@ -14,16 +14,11 @@ export default makeStyles((theme: Theme) =>
     },
     button: {
       "textTransform": "none",
-      "display": "flex",
-      "flexDirection": "row",
-      "alignItems": "center",
       "position": "absolute",
       "fontFamily": "Sora",
-      "fontStyle": "normal",
       "fontWeight": "bold",
       "fontSize": "14px",
       "top": "5px",
-      "lineHeight": "18px",
       "height": "42px",
       "&:hover": {
         borderRadius: "100px",
@@ -50,7 +45,6 @@ export default makeStyles((theme: Theme) =>
     },
     titleContainerText: {
       display: "flex",
-      flexDirection: "row",
       alignItems: "center",
       height: "50px",
       background: Colors.white,
@@ -68,8 +62,6 @@ export default makeStyles((theme: Theme) =>
     titleText: {
       fontFamily: "Sora",
       fontSize: "12px",
-      flex: "none",
-      flexGrow: 0,
       margin: "0 10px",
       textTransform: "uppercase",
       color: Colors.almost_black,

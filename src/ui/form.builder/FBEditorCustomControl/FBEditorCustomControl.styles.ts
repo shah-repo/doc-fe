@@ -6,11 +6,7 @@ export default makeStyles(() =>
     listSubItem: {
       fontFamily: "Sora",
       fontSize: "14px",
-      fontStyle: "normal",
       fontWeight: 400,
-      lineHeight: "18px",
-      letterSpacing: 0,
-      textAlign: "left",
       marginLeft: "6px",
       textTransform: "capitalize",
       color: Colors.almost_black,
