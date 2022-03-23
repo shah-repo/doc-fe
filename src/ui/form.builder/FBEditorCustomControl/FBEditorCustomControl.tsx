@@ -1,6 +1,6 @@
 import { CircularProgress, IconButton, ListItem, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
-import { FBEditorCustomControlProps, FBLeftPanelEditorState, FBMapWrapper } from "..";
+import { FBEditorCustomControlProps, FBEditorState, FBMapWrapper } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../../ui/components/Text";
 import styles from "./FBEditorCustomControl.styles";
@@ -28,9 +28,9 @@ const FBEditorCustomControl: React.FunctionComponent<FBEditorCustomControlProps>
               onClick={() => handleSelect && handleSelect(control)}
             >
               <IconButton disableRipple={true}>
-                {FBLeftPanelEditorState.editorTypeIconMapping.customcontrol &&
+                {FBEditorState.editorTypeIconMapping.customcontrol &&
                 React.createElement(
-                  FBLeftPanelEditorState.editorTypeIconMapping.customcontrol
+                  FBEditorState.editorTypeIconMapping.customcontrol
                 )}
               </IconButton>
               <ListItemText key={i}>

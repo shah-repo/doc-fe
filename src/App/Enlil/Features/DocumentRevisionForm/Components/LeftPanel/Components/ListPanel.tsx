@@ -12,10 +12,7 @@ import { each } from "lodash";
 import React from "react";
 import Text from "../../../../../../../ui/components/Text";
 import {
-  FB,
-  FBInputType,
-  FBLeftPanelEditorState,
-  FBMapWrapper,
+  FB, FBEditorState, FBInputType, FBMapWrapper,
 } from "../../../../../../../ui/form.builder";
 import {
   FBControlPickerDataProps,
@@ -90,11 +87,11 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                           disableRipple={true}
                           className={classes.iconBtn}
                         >
-                          {FBLeftPanelEditorState.editorTypeIconMapping[
+                          {FBEditorState.editorTypeIconMapping[
                             picker.key
                           ] &&
                             React.createElement(
-                              FBLeftPanelEditorState.editorTypeIconMapping[
+                              FBEditorState.editorTypeIconMapping[
                                 picker.key
                               ]
                             )}
