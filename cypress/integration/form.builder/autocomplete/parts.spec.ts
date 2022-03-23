@@ -14,7 +14,8 @@ let loginResponse;
 let secondEmployee;
 let partsID;
 
-let releasedFormId;
+let partsFormId;
+let partsDocId;
 let emailsFromInbox;
 const pages = ["", "", ""];
 let downloadUrl;
@@ -162,8 +163,8 @@ context("Autocomplete 'Parts' test", () => {
     it("Check doc Draft status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Draft" });
       cy.arCheckTitleInEditableAndMatches({ name: "New Part Form" });
-      cy.get("#HeaderInfo-docId").then((x) => {
-        releasedFormId = x.text();
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        partsFormId = $docIdElement.text();
       });
       cy.sendToEmail();
     });
@@ -187,7 +188,7 @@ context("Autocomplete 'Parts' test", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${partsFormId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -230,7 +231,7 @@ context("Autocomplete 'Parts' test", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+          downloadFile  =  `${partsFormId}${filetime}_draft.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -253,7 +254,7 @@ context("Autocomplete 'Parts' test", () => {
         });
 
       const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${releasedFormId}-1-New-Part-Form.pdf`);
+        `${partsFormId}-1-New-Part-Form.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
 
@@ -269,7 +270,7 @@ context("Autocomplete 'Parts' test", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-1-New-Part-Form.pdf`,
+          fileName: `${partsFormId}-1-New-Part-Form.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
@@ -294,7 +295,7 @@ context("Autocomplete 'Parts' test", () => {
     it("Verify page 1 for Parts form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW PART FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/AR ID\nNone/);
@@ -331,7 +332,7 @@ context("Autocomplete 'Parts' test", () => {
     it("Verify page 2 for Parts form", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW PART FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required/);
@@ -356,7 +357,7 @@ context("Autocomplete 'Parts' test", () => {
     it("Verify page 3 for Parts form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW PART FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -385,12 +386,13 @@ context("Autocomplete 'Parts' test", () => {
     it("Check doc Released status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Released" });
       cy.arCheckTitleInEditableAndMatches({ name: "New Part Form" });
-      cy.get("#HeaderInfo-docId").then((x) => {
-        releasedFormId = x.text();
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        partsFormId = $docIdElement.text();
       });
-      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
-        arId = x.text();
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
       });
+
       cy.sendToEmail();
     });
 
@@ -413,7 +415,7 @@ context("Autocomplete 'Parts' test", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${partsFormId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -456,7 +458,7 @@ context("Autocomplete 'Parts' test", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          downloadFile  =  `${partsFormId}${filetime}_rel.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -479,7 +481,7 @@ context("Autocomplete 'Parts' test", () => {
         });
 
       const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${releasedFormId}-1-New-Part-Form.pdf`);
+        `${partsFormId}-1-New-Part-Form.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
 
@@ -495,7 +497,7 @@ context("Autocomplete 'Parts' test", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-1-New-Part-Form.pdf`,
+          fileName: `${partsFormId}-1-New-Part-Form.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
@@ -520,7 +522,7 @@ context("Autocomplete 'Parts' test", () => {
     it("Verify page 1 for Parts form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW PART FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `AR ID\n${arId}`, "gi" );
@@ -558,7 +560,7 @@ context("Autocomplete 'Parts' test", () => {
     it("Verify page 2 for Parts form", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW PART FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required/);
@@ -583,7 +585,7 @@ context("Autocomplete 'Parts' test", () => {
     it("Verify page 3 for Parts form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW PART FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -665,8 +667,8 @@ context("Autocomplete 'Parts' test", () => {
       it("Extract document Id", () => {
         cy.drCheckDocumentStatus({ status: "Draft" });
         cy.arCheckTitleInEditableAndMatches({ name: "Parts document title" });
-        cy.get("#HeaderInfo-docId").contains("PRT-").then(($x) => {
-          releasedFormId = $x.text();
+        cy.drGetDocIdElementFromUI().should("contain.text", "PRT-").then(($docIdElement: JQuery<HTMLElement>) => {
+          partsDocId = $docIdElement.text();
         });
         cy.sendToEmail();
       });
@@ -690,7 +692,7 @@ context("Autocomplete 'Parts' test", () => {
           // eslint-disable-next-line @typescript-eslint/camelcase
           include_body: true,
           after: dateAfterEmailShouldArrive,
-          subject: `Export for document ${releasedFormId}`,
+          subject: `Export for document ${partsDocId}`,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -733,7 +735,7 @@ context("Autocomplete 'Parts' test", () => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
             const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+            downloadFile  =  `${partsDocId}${filetime}_draft.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -756,7 +758,7 @@ context("Autocomplete 'Parts' test", () => {
           });
 
         const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-          `${releasedFormId}-1-Parts-document-title.pdf`);
+          `${partsDocId}-1-Parts-document-title.pdf`);
         cy.readFile(pdffile).its("length").should("be.gt", 500);
       });
 
@@ -772,7 +774,7 @@ context("Autocomplete 'Parts' test", () => {
         cy.pdfparseFile(
           {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-            fileName: `${releasedFormId}-1-Parts-document-title.pdf`,
+            fileName: `${partsDocId}-1-Parts-document-title.pdf`,
           }).then((cdata) => {
           expect(cdata.numpages).eq(2);
           expect(cdata.text).match(/Page 1 of 2/);
@@ -793,7 +795,7 @@ context("Autocomplete 'Parts' test", () => {
       it("Verify page 1 for Parts document", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
-          tmpRegex = new RegExp( `Parts\n${releasedFormId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
+          tmpRegex = new RegExp( `Parts\n${partsDocId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp( `AR ID\nNone`, "gi" );
@@ -836,7 +838,7 @@ context("Autocomplete 'Parts' test", () => {
       it("Verify page 2 for Parts document", () => {
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
-          tmpRegex = new RegExp( `Parts\n${releasedFormId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
+          tmpRegex = new RegExp( `Parts\n${partsDocId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -866,17 +868,17 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Get created Parts ID", () => {
-        cy.get("#HeaderInfo-docId").then((part) => { partsID = part.text(); });
+        cy.drGetDocIdElementFromUI().then(($part) => { partsID = $part.text(); });
       });
 
       it("Check doc Released status and click on Send To Email", () => {
         cy.drCheckDocumentStatus({ status: "Released" });
         cy.arCheckTitleInEditableAndMatches({ name: "Parts document title" });
-        cy.get("#HeaderInfo-docId").contains("PRT-").then(($x) => {
-          releasedFormId = $x.text();
+        cy.drGetDocIdElementFromUI().should("contain.text", "PRT-").then(($docIdElement: JQuery<HTMLElement>) => {
+          partsDocId = $docIdElement.text();
         });
-        cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
-          arId = x.text();
+        cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+          arId = $lnEl.text();
         });
         cy.sendToEmail();
       });
@@ -900,7 +902,7 @@ context("Autocomplete 'Parts' test", () => {
           // eslint-disable-next-line @typescript-eslint/camelcase
           include_body: true,
           after: dateAfterEmailShouldArrive,
-          subject: `Export for document ${releasedFormId}`,
+          subject: `Export for document ${partsDocId}`,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -943,7 +945,7 @@ context("Autocomplete 'Parts' test", () => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
             const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+            downloadFile  =  `${partsDocId}${filetime}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -966,7 +968,7 @@ context("Autocomplete 'Parts' test", () => {
           });
 
         const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-          `${releasedFormId}-1-Parts-document-title.pdf`);
+          `${partsDocId}-1-Parts-document-title.pdf`);
         cy.readFile(pdffile).its("length").should("be.gt", 500);
       });
 
@@ -982,7 +984,7 @@ context("Autocomplete 'Parts' test", () => {
         cy.pdfparseFile(
           {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-            fileName: `${releasedFormId}-1-Parts-document-title.pdf`,
+            fileName: `${partsDocId}-1-Parts-document-title.pdf`,
           }).then((cdata) => {
           expect(cdata.numpages).eq(2);
           expect(cdata.text).match(/Page 1 of 2/);
@@ -1003,7 +1005,7 @@ context("Autocomplete 'Parts' test", () => {
       it("Verify page 1 for Parts document", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
-          tmpRegex = new RegExp( `Parts\n${releasedFormId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
+          tmpRegex = new RegExp( `Parts\n${partsDocId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp( `AR ID\n${arId}`, "gi" );
@@ -1046,7 +1048,7 @@ context("Autocomplete 'Parts' test", () => {
       it("Verify page 2 for Parts document", () => {
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
-          tmpRegex = new RegExp( `Parts\n${releasedFormId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
+          tmpRegex = new RegExp( `Parts\n${partsDocId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
