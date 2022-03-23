@@ -11,10 +11,17 @@ import { ChevronRight, ExpandMore } from "@material-ui/icons";
 import { each } from "lodash";
 import React from "react";
 import Text from "../../../../../../../ui/components/Text";
-import { FB, FBInputType, FBLeftPanelEditorState, FBMapWrapper } from "../../../../../../../ui/form.builder";
-import { FBControlPickerDataProps, FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
+import {
+  FB,
+  FBInputType,
+  FBLeftPanelEditorState,
+  FBMapWrapper,
+} from "../../../../../../../ui/form.builder";
+import {
+  FBControlPickerDataProps,
+  FBControlPickerProps,
+} from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
 import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
-import { Translation } from "../../../../../../../ui/translations/types";
 import styles from "./ListPanel.styles";
 import SearchBox from "./SearchBox";
 
@@ -23,11 +30,10 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   pickers = [],
   index = 0,
   openEditor,
-  translatedPickers = {},
 }) => {
   const classes = styles();
   const { leftPanelDialogState } = FB.useStores();
-  index =  leftPanelDialogState?.getIndex || 0;
+  index = leftPanelDialogState?.getIndex || 0;
   const [open, setOpen] = React.useState<any>({});
   const [filteredData, setFilteredData] = React.useState<any>(pickers);
 
@@ -64,35 +70,38 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
               {(picker, i) => (
                 <Box
                   component="div"
-                  key={`fb-controlpicker-editor-${picker}-${i}`}
+                  key={`fb-controlpicker-editor-${picker.label}-${i}`}
                   className={classes.outerBox}
                 >
                   <List className={classes.listStyle}>
-                    {controlPickerState?.picker(picker, index)}
-                    {!controlPickerState?.picker(picker, index) && (
+                    {controlPickerState?.picker(picker.key, index)}
+                    {!controlPickerState?.picker(picker.key, index) && (
                       <ListItem
                         key={index}
                         className={`${classes.listItemStyle} ${
                           editors.length - 1 === i ? "lastItem" : ""
                         }`}
                         onClick={
-                          openEditor && openEditor({ type: picker, index })
+                          openEditor && openEditor({ type: picker.key, index })
                         }
                         disableGutters
                       >
-                        <IconButton disableRipple={true} className={classes.iconBtn}>
+                        <IconButton
+                          disableRipple={true}
+                          className={classes.iconBtn}
+                        >
                           {FBLeftPanelEditorState.editorTypeIconMapping[
-                            picker
+                            picker.key
                           ] &&
-                              React.createElement(
-                                FBLeftPanelEditorState.editorTypeIconMapping[
-                                  picker
-                                ]
-                              )}
+                            React.createElement(
+                              FBLeftPanelEditorState.editorTypeIconMapping[
+                                picker.key
+                              ]
+                            )}
                         </IconButton>
-                        <ListItemText key={index}>
+                        <ListItemText key={index} data-cy={picker.label}>
                           <Typography className={classes.listSubItem}>
-                            <Text translation={`form.builder.${picker}` as Translation} dataCy={`form.builder.${picker as string}`} />
+                            {picker.label}
                           </Typography>
                         </ListItemText>
                       </ListItem>
@@ -114,12 +123,12 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       setOpen({});
       setFilteredData(pickers);
     }
-    each(Object.keys(translatedPickers), (value) => {
-      const filteredList = translatedPickers[value]
+    each(Object.keys(pickers), (value) => {
+      const filteredList = pickers[value]
         .filter((el) =>
           el.label.toLowerCase().includes(searchString.toLowerCase())
         )
-        .map((el) => el.key);
+        .map((el) => ({ key: el.key, label: el.label }));
       if (filteredList.length) {
         filteredData[value] = filteredList;
       }
@@ -140,7 +149,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       </Box>
       <List className={classes.list}>
         {Object.keys(filteredData).length > 0 && createList()}
-        { renderNoSearchResults }
+        {renderNoSearchResults}
       </List>
     </Box>
   );

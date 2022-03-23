@@ -16,7 +16,7 @@ export const withFBControlPicker = <T extends FBControlPickerProps>(
     const { workspaceState } = FB.useStores();
     controlPickerState = FB.useRef<FBControlPickerState>(FBControlPickerState, workspaceState);
     const translatedPickers = {};
-    each(Object.keys(controlPickerState?.pickers), (value, key) => {
+    each(Object.keys(controlPickerState?.pickers), (value) => {
       translatedPickers[value] = map(controlPickerState?.pickers[value], (item) => ({
         label: intl.formatMessage({ id: `form.builder.${item}` }),
         key: item,
@@ -25,8 +25,7 @@ export const withFBControlPicker = <T extends FBControlPickerProps>(
     return Component({
       ...(props as T),
       controlPickerState,
-      pickers: controlPickerState?.pickers,
-      translatedPickers,
+      pickers: translatedPickers,
     });
   };
 
