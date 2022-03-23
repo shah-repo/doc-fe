@@ -383,8 +383,8 @@ context("Test upgradability of old supplier form and record", () => {
           cy.ebApprove();
         });
 
-        it("Verify revision is revision 1 - current", () => {
-          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Current" });
+        it("Verify revision is revision 1 - Released", () => {
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
         });
       });
     });
@@ -431,8 +431,8 @@ context("Test upgradability of old supplier form and record", () => {
           cy.ebApprove();
         });
 
-        it("Verify revision is revision 1 - current", () => {
-          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Current" });
+        it("Verify revision is revision 1 - Released", () => {
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
         });
       });
     });

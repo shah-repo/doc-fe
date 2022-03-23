@@ -29,6 +29,7 @@ import { CompletedOnDateOptions } from "../../../../document.revision/utils/type
 import gridConfiguration from "../../../../training/grid/column.definition";
 import { TRAINING_TABLE_NAME } from "../../../../training/grid/container";
 import { DateFields } from "../../../../training/kendo/types";
+import { Translation } from "../../../../translations/types";
 import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
 import { HoverStyleChip } from "../../common/HoverStyleChip";
 import { NormalStyleChip } from "../../common/NormalStyleChip";
@@ -78,6 +79,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const count = size(pendingTrainees);
+  const translationField = count > 1 ? "training.users.counts" : "training.users.count";
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
   };
@@ -308,9 +311,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text
-                          translation="training.users.count"
+                          translation={translationField as Translation}
                           values={{
-                            count: size(pendingTrainees),
+                            count,
                             status:
                               trainingStatus === TrainingStatus.OVERDUE
                                 ? TrainingStatus.OVERDUE
