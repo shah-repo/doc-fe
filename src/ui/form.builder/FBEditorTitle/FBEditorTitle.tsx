@@ -16,7 +16,7 @@ import { withFBEditorTitle } from "./FBEditorTitle.wrap";
 
 interface FBEditorTitlePropsIncludesType extends FBEditorTitleProps {
   type?: string;
-  onTypeClick?: () => void;
+  onFBEditorClose?: () => void;
   underValidation?: boolean;
 }
 
@@ -24,7 +24,7 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitlePropsIncludesType> = (
   handleMode,
   mode,
   type,
-  onTypeClick,
+  onFBEditorClose,
   underValidation,
 }) => {
   const intl = useIntl();
@@ -74,7 +74,7 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitlePropsIncludesType> = (
           </FBMapWrapper>
         </ToggleButtonGroup>
       </Box>}
-      <Box onClick={onTypeClick} className={classes.titleContainerText}>
+      <Box onClick={onFBEditorClose} className={classes.titleContainerText}>
         <IconButton disableFocusRipple={true} disableRipple={true}>
           <CaretIcon />
         </IconButton>

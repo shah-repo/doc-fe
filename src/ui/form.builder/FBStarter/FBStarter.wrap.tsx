@@ -10,14 +10,14 @@ export const withFBStarter = <T extends FBStarterProps>(
     ...props
   }: T) => {
 
-    const { dialogState, leftPanelDialogState } = FB.useStores();
+    const { dialogState, leftPanelState } = FB.useStores();
     const { _documentRevisionFormState } = SM.useStores();
 
     onClick = (index?: number) => {
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
-      if (leftPanelDialogState) {
-        leftPanelDialogState.setIndex(index || 0);
-        leftPanelDialogState.config({
+      if (leftPanelState) {
+        leftPanelState.setIndex(index || 0);
+        leftPanelState.config({
           open: true,
           showLeftPanelEditor: false,
           maxWidth: "sm",

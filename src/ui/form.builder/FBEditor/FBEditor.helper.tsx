@@ -10,7 +10,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
     openEditor,
     ...props
   }: T) => {
-    const { dialogState, workspaceState, formState, leftPanelDialogState } = FB.useStores();
+    const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
     const { _documentRevisionFormState } = SM.useStores();
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex } = props;
@@ -36,8 +36,8 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       };
       handler[type]?.();
     }
-    const onTypeClick = () => {
-      leftPanelDialogState?.closeDialog();
+    const onFBEditorClose = () => {
+      leftPanelState?.closeDialog();
     };
     openEditor = (props?: Partial<FBInputProps>) => () => {
       const { type, index } = props || {};
@@ -57,12 +57,12 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       const { underValidation } = editorForm.props;
 
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
-      if (leftPanelDialogState) {
-        leftPanelDialogState.setIndex(index || 0);
-        leftPanelDialogState.config({
+      if (leftPanelState) {
+        leftPanelState.setIndex(index || 0);
+        leftPanelState.config({
           open: true,
           showLeftPanelEditor: true,
-          title: <FBEditorTitle type={type} onTypeClick={onTypeClick} underValidation={underValidation}/>,
+          title: <FBEditorTitle type={type} onFBEditorClose={onFBEditorClose} underValidation={underValidation}/>,
           maxWidth: "sm",
           content: editorForm,
           actions: (

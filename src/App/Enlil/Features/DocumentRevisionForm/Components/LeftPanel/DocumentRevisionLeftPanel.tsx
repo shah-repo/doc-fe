@@ -13,7 +13,7 @@ import styles from "./DocumentRevisionLeftPanel.styles";
 const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
-  const { leftPanelDialogState } = FB.useStores();
+  const { leftPanelState } = FB.useStores();
   return (
     <Observer>
       {() => (
@@ -53,8 +53,8 @@ const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
                 >
                   <Observer>
                     {() => (<>
-                      {(!leftPanelDialogState?.showLeftPanelEditor ||  !leftPanelDialogState) && <ListPanel />}
-                      {leftPanelDialogState?.showLeftPanelEditor && <LeftPanelFormEditor />}
+                      {(!leftPanelState?.showLeftPanelEditor ||  !leftPanelState) && <ListPanel />}
+                      {leftPanelState?.showLeftPanelEditor && <LeftPanelFormEditor />}
                     </>)}
                   </Observer>
                 </SMBox>

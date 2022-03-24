@@ -3,7 +3,7 @@ import { action, computed, observable, set } from "mobx";
 import React from "react";
 import { FBDialogProps } from "..";
 
-class FBLeftPanelDialogState {
+class FBLeftPanelState {
   @observable public open = false;
   @observable public index = 0;
   @observable public showLeftPanelEditor = false;
@@ -77,4 +77,4 @@ class FBLeftPanelDialogState {
   };
 }
 
-export default FBLeftPanelDialogState;
+export default FBLeftPanelState;

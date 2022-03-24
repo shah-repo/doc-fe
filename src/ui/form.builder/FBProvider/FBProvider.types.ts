@@ -40,7 +40,7 @@ import {
   FBTextFieldWithRangeState,
   FBWorkspaceState,
 } from "..";
-import FBLeftPanelDialogState from "../FBLeftPanelDialog/FBLeftPanelDialog.state";
+import FBLeftPanelState from "../FBLeftPanel/FBLeftPanel.state";
 import FBLHRBuildState from "../FBLHRBuild/FBLHRBuild.state";
 import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
 
@@ -48,7 +48,7 @@ import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSel
 export interface FBProviderProps {
   workspaceState?: FBWorkspaceState;
   dialogState?: FBDialogState;
-  leftPanelDialogState?: FBLeftPanelDialogState;
+  leftPanelState?: FBLeftPanelState;
   fieldWrapper?: FBFieldWrapperState;
   filePresenterState?: FBFilePresenterState;
   mediaAlbumState?: FBMediaAlbumState;

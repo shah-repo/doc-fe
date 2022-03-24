@@ -21,7 +21,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     ...props
   }: T) => {
 
-    const { dialogState, workspaceState, formState, leftPanelDialogState } = FB.useStores();
+    const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
     const { isOutput } = workspaceState || {};
     const { _documentRevisionFormState } = SM.useStores();
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
@@ -129,13 +129,13 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         validationAttribute: (label as string) || placeholder || validationAttribute,
       }, index);
       dialogState?.closeDialog();
-      leftPanelDialogState?.HideLeftPanel();
+      leftPanelState?.HideLeftPanel();
       _documentRevisionFormState?.setLeftPanelOpen();
     };
 
     handleCancel = () => {
       dialogState?.closeDialog();
-      leftPanelDialogState?.HideLeftPanel();
+      leftPanelState?.HideLeftPanel();
       _documentRevisionFormState?.setLeftPanelOpen();
     };
 

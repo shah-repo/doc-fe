@@ -2,7 +2,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBDialogProps } from "..";
 
-export const withFBLeftPanelDialog = <T extends FBDialogProps>(
+export const withFBLeftPanel = <T extends FBDialogProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
@@ -14,13 +14,13 @@ export const withFBLeftPanelDialog = <T extends FBDialogProps>(
     ...props
   }: T) => {
 
-    const { leftPanelDialogState } = FB.useStores();
+    const { leftPanelState } = FB.useStores();
     const handleClose = () => {
-      if (leftPanelDialogState?.props?.onClose) {
-        leftPanelDialogState?.props?.onClose?.();
+      if (leftPanelState?.props?.onClose) {
+        leftPanelState?.props?.onClose?.();
         return;
       }
-      leftPanelDialogState?.closeDialog();
+      leftPanelState?.closeDialog();
     };
 
     const [portalAction, setActionContainer] = React.useState(null);
@@ -34,11 +34,11 @@ export const withFBLeftPanelDialog = <T extends FBDialogProps>(
     }, [setTitleContainer]);
 
     useObserver(() => {
-      open = leftPanelDialogState?.open;
-      content = leftPanelDialogState?.content;
-      title = leftPanelDialogState?.title;
-      maxWidth = leftPanelDialogState?.maxWidth || "sm";
-      actions = leftPanelDialogState?.actions;
+      open = leftPanelState?.open;
+      content = leftPanelState?.content;
+      title = leftPanelState?.title;
+      maxWidth = leftPanelState?.maxWidth || "sm";
+      actions = leftPanelState?.actions;
     });
 
     return Component({
@@ -46,7 +46,7 @@ export const withFBLeftPanelDialog = <T extends FBDialogProps>(
       handleActionsRef,
       handleTitleRef,
       handleClose,
-      leftPanelDialogState,
+      leftPanelState,
       portalAction,
       portalTitle,
       open,

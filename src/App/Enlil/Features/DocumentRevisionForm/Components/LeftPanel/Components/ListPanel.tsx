@@ -29,8 +29,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   openEditor,
 }) => {
   const classes = styles();
-  const { leftPanelDialogState } = FB.useStores();
-  index = leftPanelDialogState?.getIndex || 0;
+  const { leftPanelState } = FB.useStores();
+  index = leftPanelState?.getIndex || 0;
   const [open, setOpen] = React.useState<any>({});
   const [filteredData, setFilteredData] = React.useState<any>(pickers);
 
