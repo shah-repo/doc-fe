@@ -26,7 +26,7 @@ export const withFBControlPicker = <T extends FBControlPickerProps>(
         favouriteKeyMapping[favourite.fbComponent] = favourite.id;
       });
       each(["favourites"], (value) => {
-        if (favourites.length) {
+        if (!controlPickerState?.loading && favourites.length) {
           translatedPickers[value] = map(favourites, (item) => ({
             label: intl.formatMessage({ id: `form.builder.${item.fbComponent}` }),
             key: item.fbComponent,
