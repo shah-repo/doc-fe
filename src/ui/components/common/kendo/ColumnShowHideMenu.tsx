@@ -5,7 +5,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -45,7 +45,7 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
         placement="top"
         arrow
       >
-        <IconButton onClick={handleClick}>
+        <IconButton onClick={handleClick} data-cy={"manageColumnsBtn"}>
           <ViewGridIcon />
         </IconButton>
       </StyleTooltip>
