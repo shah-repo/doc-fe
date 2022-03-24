@@ -1,0 +1,817 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+
+let createdCompany;
+let loginResponse;
+let employeeLoginFirst;
+let secondEmployee;
+let recordDocumentType;
+let approvalRequestDocumentType;
+let formDocumentType;
+let group;
+let initialArDocument;
+let createdRecordFormDocument;
+
+context("Export Bulk", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  context("[API]Prepare company", () => {
+    it("[API]Create company", (done: any) => {
+      cy.authApiLogin({
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: USERS[1].email,
+            importerEmail: IMPORTER_USER.email,
+            users: [USERS[2], USERS[3], USERS[4]],
+            documentTypes: [
+              {
+                documentTypeName: "Bulk Import",
+                documentTypeAcronym: "BLC-",
+                category: "Record",
+                group: "BULK_CREATE",
+                isQms: true,
+                fieldsConfig: {
+                  D: {
+                    visible: false,
+                    required: false,
+                  },
+                  E: {
+                    label: "Record Type",
+                    visible: false,
+                    required: true,
+                  },
+                  F: {
+                    label: "Record ID",
+                    visible: false,
+                    required: true,
+                  },
+                  G: {
+                    visible: false,
+                    required: false,
+                  },
+                  I: {
+                    visible: false,
+                  },
+                  J: {
+                    visible: false,
+                  },
+                  K: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  L: {
+                    label: "Correction",
+                    visible: true,
+                  },
+                  N: {
+                    label: "Approve and Release",
+                    visible: true,
+                  },
+                  O: {
+                    label: "Record History",
+                    visible: true,
+                  },
+                  R: {
+                    visible: false,
+                  },
+                  S: {
+                    label: "Update Record",
+                    visible: true,
+                  },
+                  A1: {
+                    label: "WIP",
+                    visible: true,
+                  },
+                  A2: {
+                    label: "Voided",
+                    visible: true,
+                  },
+                  A3: {
+                    label: "Archive",
+                    visible: true,
+                  },
+                  P1: {
+                    label: "WIP",
+                    visible: true,
+                  },
+                  P2: {
+                    label: "Voided",
+                    visible: true,
+                  },
+                  P3: {
+                    label: "Archive",
+                    visible: true,
+                  },
+                },
+              },
+            ],
+          }, sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          recordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Bulk Import");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          done();
+        });
+      });
+    });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[2].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API]Create and release inline form for Bulk Import", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: secondEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Bulk Import inline form</p>",
+              document: {
+                docId: "FM-00003",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Bulk Import inline form",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: recordDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "fb-form-document-to-be-used",
+                    type: "autocomplete",
+                    index: 0,
+                    label: "Select Form Document For Import",
+                    rules: "required",
+                    optionId: "34",
+                    placeholder: "select form document for import",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Select Form Document For Import",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-add-column-document-record-id",
+                    type: "radiogroup",
+                    index: 2,
+                    label: "Column Document/Record Id?",
+                    options: [
+                      {
+                        text: "Yes",
+                        value: "Yes",
+                      },
+                      {
+                        text: "No",
+                        value: "No",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: false,
+                    validationMode: "default",
+                    editorProperties: [],
+                    validationAttribute: "Column Document/Record Id?",
+                    deleteInFormDisabled: false,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-output-document-type",
+                    type: "autocomplete",
+                    index: 3,
+                    label: "Select Output Document Type",
+                    rules: "required",
+                    optionId: "35",
+                    placeholder: "select output document type",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Select Output Document Type",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-download-sheet",
+                    type: "downloadsheet",
+                    index: 1,
+                    label: "Download Excel Template",
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-spreadsheet-for-import",
+                    type: "section",
+                    index: 4,
+                    label: "EXCEL FOR IMPORT",
+                    deleteDisabled: false,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-spreadsheet-for-import-file",
+                    type: "fileupload",
+                    index: 5,
+                    label: "Upload excel with data for import",
+                    rules: "required",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Upload excel with data for import",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-spreadsheet-for-logging",
+                    type: "section",
+                    index: 6,
+                    label: "Mass Create Logs",
+                    deleteDisabled: false,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-spreadsheet-for-logging-file",
+                    type: "fileupload",
+                    index: 7,
+                    label: "Logs",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Logs",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    index: 8,
+                    type: "section",
+                    name: "textfield-kn7fc209",
+                    validationMode: "default",
+                    label: "Section 1",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "textfield",
+                  },
+                  {
+                    index: 9,
+                    type: "textfield",
+                    name: "textfield1-kn7fc7w4",
+                    rows: 1,
+                    validationMode: "default",
+                    label: "textfield 1",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "textfield",
+                  },
+                  {
+                    index: 10,
+                    type: "inlineapproval",
+                    name: "inline-approval-kw6gbxwn",
+                    hidden: false,
+                    outputDisabled: false,
+                    deleted: false,
+                    deleteInFormDisabled: false,
+                    validationMode: "default",
+                    validationAttribute: "Inline approval",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    editorProperties: [],
+                    label: "Inline approval",
+                    editorConfig: {
+                      groups: [
+                        group.body[0].id,
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+            employeeId: secondEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdRecordFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdRecordFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+              },
+              employeeId: secondEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]Create and release form for Bulk Import", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: secondEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Bulk Import form</p>",
+              document: {
+                docId: "FM-00004",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Bulk Import form",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: recordDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "fb-form-document-to-be-used",
+                    type: "autocomplete",
+                    index: 0,
+                    label: "Select Form Document For Import",
+                    rules: "required",
+                    optionId: "34",
+                    placeholder: "select form document for import",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Select Form Document For Import",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-add-column-document-record-id",
+                    type: "radiogroup",
+                    index: 2,
+                    label: "Column Document/Record Id?",
+                    options: [
+                      {
+                        text: "Yes",
+                        value: "Yes",
+                      },
+                      {
+                        text: "No",
+                        value: "No",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: false,
+                    validationMode: "default",
+                    editorProperties: [],
+                    validationAttribute: "Column Document/Record Id?",
+                    deleteInFormDisabled: false,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-output-document-type",
+                    type: "autocomplete",
+                    index: 3,
+                    label: "Select Output Document Type",
+                    rules: "required",
+                    optionId: "35",
+                    placeholder: "select output document type",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Select Output Document Type",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-download-sheet",
+                    type: "downloadsheet",
+                    index: 1,
+                    label: "Download Excel Template",
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-spreadsheet-for-import",
+                    type: "section",
+                    index: 4,
+                    label: "EXCEL FOR IMPORT",
+                    deleteDisabled: false,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-spreadsheet-for-import-file",
+                    type: "fileupload",
+                    index: 5,
+                    label: "Upload excel with data for import",
+                    rules: "required",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Upload excel with data for import",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-spreadsheet-for-logging",
+                    type: "section",
+                    index: 6,
+                    label: "Mass Create Logs",
+                    deleteDisabled: false,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-spreadsheet-for-logging-file",
+                    type: "fileupload",
+                    index: 7,
+                    label: "Logs",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Logs",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-l02u8tzp",
+                    uniqueSchemaItem: true,
+                    index: 8,
+                  },
+                ],
+              },
+            },
+            employeeId: secondEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdRecordFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdRecordFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+              },
+              employeeId: secondEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+  });
+
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
+    });
+  });
+
+  context("Create a Bulk Import from inline form", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Select the Bulk Import inline form", () => {
+      cy.dlFilterByDocTitle({ docTitle: "Bulk Import inline form" });
+
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Enter title 'Bulk Creation document", () => {
+      cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
+    });
+
+    it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+        cy.unClick();
+      });
+    });
+
+    it("Select form to be used for bulk creation", () => {
+      cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("FM-00003");
+    });
+
+    it("Select document type to be used for bulk creation", () => {
+      cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Bulk Import");
+    });
+
+    it("Select 'yes' to have Document id column", () => {
+      cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Upload csv file", () => {
+      cy.atchUploadTemplateForBLC({ fileName: "test_template.xlsx" });
+    });
+
+    it("Enter text in textfield", () => {
+      cy.get("[name^=\"textfield1\"]").arrowType("Test one");
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Bulk Import with WIP status", () => {
+    it("Verify export", () => {
+      cy.exportVerifyEmail({ status: "WIP", filename: "-1-Bulk-Creation-document" });
+    });
+  });
+
+  context("Bulk Import Last Signed status", () => {
+    context("Add Bulk Import Last Signed", () => {
+      it("Add inline approver", () => {
+        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email }`);
+      });
+
+      it("Click Request Approval button", () => {
+        cy.contains("Request approval").arrowClick();
+      });
+
+      it("Approve inline approval", () => {
+        cy.inlineApproval();
+      });
+
+      it("Select Last Signed", () => {
+        cy.contains("Last Signed").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Verify export", () => {
+        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-Bulk-Creation-document" });
+      });
+    });
+  });
+
+  context("Bulk Import Archive status", () => {
+    context("Add Bulk Import Archive", () => {
+      it("Click WIP status record", () => {
+        cy.contains("WIP").arrowClick();
+      });
+
+      it("Update section", () => {
+        cy.get("[name^=\"textfield1\"]").arrowType("1");
+      });
+
+      it("Save the document", () => {
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click Request Approval button", () => {
+        cy.contains("Request approval").arrowClick();
+      });
+
+      it("Approve inline approval", () => {
+        cy.inlineApproval();
+      });
+
+      it("Select Archive", () => {
+        cy.contains("Archive").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Verify export", () => {
+        cy.exportVerifyEmail({ status: "Archive", filename: "-1-Bulk-Creation-document" });
+      });
+    });
+  });
+
+  context("Bulk Import Released status", () => {
+    context("Add Bulk Import Released", () => {
+      it("Click WIP status record", () => {
+        cy.contains("WIP").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Finalize and release button click'", () => {
+        cy.reload();
+        cy.recApproveAndReleaseInlineRecord();
+      });
+
+      it("Verify export", () => {
+        cy.exportVerifyEmail({ status: "Released", filename: "-A-Bulk-Creation-document" });
+      });
+    });
+  });
+
+  context("Bulk Import Canceled status", () => {
+    context("Add Bulk Import Canceled", () => {
+      it("Click Update record", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click Cancel draft", () => {
+        cy.drCancelDraftButton();
+      });
+
+      it("Verify export", () => {
+        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1-Bulk-Creation-document" });
+      });
+    });
+  });
+
+  context("Bulk Import In Review status", () => {
+    context("Create a Bulk Import from form", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Select the Bulk Import form", () => {
+        cy.dlClearFilters();
+        cy.dlFilterByDocTitle({ docTitle: "Bulk Import form" });
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Click on Create New button", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Enter title", () => {
+        cy.drEnterDocumentTitle( { name: "Bulk Import form" });
+      });
+
+      it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").click();
+          cy.unClick();
+        });
+      });
+
+      it("Select form to be used for bulk creation", () => {
+        cy.get("input[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("FM-00003");
+      });
+
+      it("Select document type to be used for bulk creation", () => {
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Bulk Import");
+      });
+
+      it("Select 'yes' to have Document id column", () => {
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Upload csv file", () => {
+        cy.atchUploadTemplateForBLC({ fileName: "test_template1.xlsx" });
+      });
+    });
+
+    context("Add Bulk Import with In Review", () => {
+      it("Add inline approver", () => {
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email }`);
+      });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Save and submit for Approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Verify export", () => {
+        cy.exportVerifyEmail({ status: "In Review", filename: "-A-Bulk-Import-form" });
+      });
+    });
+  });
+
+});
+
+export { };
+
