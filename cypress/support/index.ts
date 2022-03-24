@@ -32,6 +32,7 @@ import "./commands/dashboard/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
 import "./commands/engineering.build/commands";
+import "./commands/export/commands";
 import "./commands/filters/commands";
 import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
