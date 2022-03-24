@@ -916,9 +916,13 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Rejecting request gives prompt", () => {
-        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).trigger("mouseover").wait(1000);
-        cy.get(`[data-cy="transition-reject"]`).trigger("mouseover").wait(1000);
-        cy.get(`[data-cy="transition-reject"]`).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PreventIdleLogout], () => {
+          cy.get(`.MuiListItemText-root.MuiListItemText-dense`).trigger("mouseover").wait(1000);
+          cy.get(`[data-cy="transition-reject"]`).trigger("mouseover").wait(1000);
+          cy.get(`[data-cy="transition-reject"]`).arrowClick();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Log out from current user", () => {
