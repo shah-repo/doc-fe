@@ -2,7 +2,7 @@ import { Box, Grid, Portal } from "@material-ui/core";
 import { hasIn, isString } from "lodash";
 import React from "react";
 import { FBDialogProps } from "../../../../../../../ui/form.builder";
-import { withFBLeftPanel } from "../../../../../../../ui/form.builder/FBLeftPanelDialog/FBLeftPanelDialog.wrap";
+import { withFBLeftPanel } from "../../../../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.wrap";
 import styles from "./LeftPanelFormEditor.styles";
 
 const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
