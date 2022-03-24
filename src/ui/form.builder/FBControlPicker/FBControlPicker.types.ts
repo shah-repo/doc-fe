@@ -17,4 +17,8 @@ type FBControlPickerType =
 | "instructions"
 | "actions";
 
+export interface FBFavouritesBody {
+  fbComponent: string;
+}
+
 export type FBControlPickerDataProps = Partial<Record<FBControlPickerType, FBInputType[]>>;

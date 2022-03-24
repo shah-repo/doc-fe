@@ -1,7 +1,7 @@
 import {
-  Box,
-  Collapse,
+  Box, Collapse,
   IconButton,
+  LinearProgress,
   List,
   ListItem,
   ListItemText,
@@ -9,7 +9,10 @@ import {
 } from "@material-ui/core";
 import { ChevronRight, ExpandMore } from "@material-ui/icons";
 import { each } from "lodash";
-import React from "react";
+import { Observer } from "mobx-react";
+import React, { useEffect } from "react";
+import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
+import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
 import {
   FB, FBEditorState, FBInputType, FBMapWrapper,
@@ -33,9 +36,19 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   index = leftPanelState?.getIndex || 0;
   const [open, setOpen] = React.useState<any>({});
   const [filteredData, setFilteredData] = React.useState<any>(pickers);
+  useEffect(() => {
+    setFilteredData(pickers);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controlPickerState?.loading]);
 
   const handleClick = (section) => {
     setOpen({ [section]: !open[section] });
+  };
+  const addFavourite = (type) => {
+    controlPickerState?.addFavourite(type);
+  };
+  const removeFavourite = (id) => {
+    controlPickerState?.removeFavourite(id);
   };
 
   const createList = () => (
@@ -78,14 +91,15 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                         className={`${classes.listItemStyle} ${
                           editors.length - 1 === i ? "lastItem" : ""
                         }`}
-                        onClick={
-                          openEditor && openEditor({ type: picker.key, index })
-                        }
                         disableGutters
                       >
                         <IconButton
                           disableRipple={true}
                           className={classes.iconBtn}
+                          onClick={
+                            openEditor &&
+                            openEditor({ type: picker.key, index })
+                          }
                         >
                           {FBEditorState.editorTypeIconMapping[
                             picker.key
@@ -96,11 +110,27 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                               ]
                             )}
                         </IconButton>
-                        <ListItemText key={index} data-cy={picker.label}>
+                        <ListItemText key={index} data-cy={picker.label}
+                          onClick={
+                            openEditor &&
+                            openEditor({ type: picker.key, index })
+                          }
+                        >
                           <Typography className={classes.listSubItem}>
                             {picker.label}
                           </Typography>
                         </ListItemText>
+                        <IconButton disableRipple={true}>
+                          {picker.isFavorite ? (
+                            <FavoriteIcon
+                              onClick={() => removeFavourite(picker.id)}
+                            />
+                          ) : (
+                            <StarIcon
+                              onClick={() => addFavourite(picker.key)}
+                            />
+                          )}
+                        </IconButton>
                       </ListItem>
                     )}
                   </List>
@@ -144,6 +174,17 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       <Box className={classes.searchBox}>
         <SearchBox onSearch={search} />
       </Box>
+      <Observer>
+        {() => (
+          <>
+            {controlPickerState?.loading && (
+              <Box width="100%" pt={1}>
+                <LinearProgress style={{ width: "100%" }} />
+              </Box>
+            )}
+          </>
+        )}
+      </Observer>
       <List className={classes.list}>
         {Object.keys(filteredData).length > 0 && createList()}
         {renderNoSearchResults}
