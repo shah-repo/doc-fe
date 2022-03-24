@@ -21,7 +21,10 @@ let calibrationSchemaFieldName;
 
 let loginResponse;
 let multipleCompanies;
-let releasedFormId;
+let pMFormId;
+let pMDocId;
+let calFormId;
+let calDocId;
 let emailsFromInbox;
 const pages = ["", "", "", ""];
 let downloadUrl;
@@ -256,7 +259,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
@@ -270,10 +273,10 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify form draft status and Send To Email", () => {
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", "Preventative Maintenance form");
-      cy.get("#HeaderInfo-docId").then((x) => {
-        releasedFormId = x.text();
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative Maintenance form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        pMFormId = $docIdElement.text();
       });
       cy.sendToEmail();
     });
@@ -297,7 +300,7 @@ context("Equipment maintenance and calibration", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${pMFormId}`,
       };
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
@@ -339,7 +342,7 @@ context("Equipment maintenance and calibration", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+          downloadFile  =  `${pMFormId}${filetime}_draft.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -361,7 +364,7 @@ context("Equipment maintenance and calibration", () => {
           fileName: downloadFile,
         });
       const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${releasedFormId}-1-Preventative-Maintenance-form.pdf`);
+        `${pMFormId}-1-Preventative-Maintenance-form.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
 
@@ -377,7 +380,7 @@ context("Equipment maintenance and calibration", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-1-Preventative-Maintenance-form.pdf`,
+          fileName: `${pMFormId}-1-Preventative-Maintenance-form.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
@@ -402,7 +405,7 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 1 for PM form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
@@ -412,9 +415,13 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/Output Document Type\nMaintenance Record/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
         expect(el).match(/Draft/);
 
@@ -431,12 +438,12 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 2 for PM form", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nEquipment Maintenance Section/);
+        expect(el).match(/Equipment Maintenance Section/);
 
-        expect(el).match(/APPROVALS\nApprovers\n1 2 3/);
+        expect(el).match(/APPROVALS\nApprovers/);
 
         expect(el).match(/Draft/);
 
@@ -453,7 +460,7 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 3 for PM form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -480,14 +487,13 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "Preventative Maintenance form");
-      cy.get("#HeaderInfo-docId").then((x) => {
-        releasedFormId = x.text();
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative Maintenance form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        pMFormId = $docIdElement.text();
       });
-
-      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
-        arId = x.text();
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
       });
       cy.sendToEmail();
     });
@@ -511,7 +517,7 @@ context("Equipment maintenance and calibration", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${pMFormId}`,
       };
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
@@ -553,7 +559,7 @@ context("Equipment maintenance and calibration", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          downloadFile  =  `${pMFormId}${filetime}_rel.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -575,7 +581,7 @@ context("Equipment maintenance and calibration", () => {
           fileName: downloadFile,
         });
       const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${releasedFormId}-1-Preventative-Maintenance-form.pdf`);
+        `${pMFormId}-1-Preventative-Maintenance-form.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
 
@@ -591,7 +597,7 @@ context("Equipment maintenance and calibration", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-1-Preventative-Maintenance-form.pdf`,
+          fileName: `${pMFormId}-1-Preventative-Maintenance-form.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
@@ -616,7 +622,7 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 1 for PM form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
@@ -626,9 +632,13 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/Output Document Type\nMaintenance Record/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -645,12 +655,12 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 2 for PM form", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nEquipment Maintenance Section/);
+        expect(el).match(/Equipment Maintenance Section/);
 
-        expect(el).match(/APPROVALS\nApprovers\n1 2 3/);
+        expect(el).match(/APPROVALS\nApprovers/);
 
         expect(el).match(/Released/);
 
@@ -667,7 +677,7 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 3 for PM form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -749,7 +759,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
@@ -761,10 +771,10 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", "Calibration form");
-      cy.get("#HeaderInfo-docId").then((x) => {
-        releasedFormId = x.text();
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        calFormId = $docIdElement.text();
       });
       cy.sendToEmail();
     });
@@ -788,7 +798,7 @@ context("Equipment maintenance and calibration", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${calFormId}`,
       };
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
@@ -830,7 +840,7 @@ context("Equipment maintenance and calibration", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+          downloadFile  =  `${calFormId}${filetime}_draft.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -852,7 +862,7 @@ context("Equipment maintenance and calibration", () => {
           fileName: downloadFile,
         });
       const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${releasedFormId}-1-Calibration-form.pdf`);
+        `${calFormId}-1-Calibration-form.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
 
@@ -868,7 +878,7 @@ context("Equipment maintenance and calibration", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-1-Calibration-form.pdf`,
+          fileName: `${calFormId}-1-Calibration-form.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
@@ -893,7 +903,7 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 1 for CAL form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
@@ -903,9 +913,13 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/Output Document Type\nMaintenance Record/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
         expect(el).match(/Draft/);
 
@@ -922,12 +936,12 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 2 for CAL form", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nEquipment Maintenance Section/);
+        expect(el).match(/Equipment Maintenance Section/);
 
-        expect(el).match(/APPROVALS\nApprovers\n1 2 3/);
+        expect(el).match(/APPROVALS\nApprovers/);
 
         expect(el).match(/Draft/);
 
@@ -944,7 +958,7 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 3 for CAL form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -971,13 +985,13 @@ context("Equipment maintenance and calibration", () => {
       cy.pause();
 
       it("Verify form released status and click on Send To Email", () => {
-        cy.get("#HeaderInfo-status").should("have.text", "Released");
-        cy.get("#HeaderInfo-name").should("have.text", "Calibration form");
-        cy.get("#HeaderInfo-docId").then((x) => {
-          releasedFormId = x.text();
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
+        cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+          calFormId = $docIdElement.text();
         });
-        cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
-          arId = x.text();
+        cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+          arId = $lnEl.text();
         });
         cy.sendToEmail();
       });
@@ -1002,7 +1016,7 @@ context("Equipment maintenance and calibration", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${calFormId}`,
       };
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
@@ -1044,7 +1058,7 @@ context("Equipment maintenance and calibration", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          downloadFile  =  `${calFormId}${filetime}_rel.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -1066,7 +1080,7 @@ context("Equipment maintenance and calibration", () => {
           fileName: downloadFile,
         });
       const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${releasedFormId}-1-Calibration-form.pdf`);
+        `${calFormId}-1-Calibration-form.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
 
@@ -1082,7 +1096,7 @@ context("Equipment maintenance and calibration", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-1-Calibration-form.pdf`,
+          fileName: `${calFormId}-1-Calibration-form.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
@@ -1107,7 +1121,7 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 1 for CAL form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
@@ -1117,9 +1131,13 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/Output Document Type\nMaintenance Record/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -1136,12 +1154,12 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 2 for CAL form", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nEquipment Maintenance Section/);
+        expect(el).match(/Equipment Maintenance Section/);
 
-        expect(el).match(/APPROVALS\nApprovers\n1 2 3/);
+        expect(el).match(/APPROVALS\nApprovers/);
 
         expect(el).match(/Released/);
 
@@ -1158,10 +1176,13 @@ context("Equipment maintenance and calibration", () => {
     it("Verify page 3 for CAL form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
 
@@ -1347,10 +1368,10 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Extract document Id", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "WIP");
-      cy.get("#HeaderInfo-name").should("have.text", "Preventative maintenance document");
-      cy.get("#HeaderInfo-docId").contains("MR-").then(($x) => {
-        releasedFormId = $x.text();
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        pMDocId = $docIdElement.text();
       });
     });
 
@@ -1402,21 +1423,21 @@ context("Equipment maintenance and calibration", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "REJECTED")
-        .and("contain", releasedFormId);
+        .and("contain", pMDocId);
     });
 
     it("Open doc to check WIP state", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
-        .contains(releasedFormId).last().arrowClick();
+        .contains(pMDocId).last().arrowClick();
     });
   });
 
   context("Check doc WIP status and click on Send To Email", () => {
     it("Check doc WIP status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "WIP");
-      cy.get("#HeaderInfo-name").should("have.text", "Preventative maintenance document");
-      cy.get("#HeaderInfo-docId").then(($x) => {
-        releasedFormId = $x.text();
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        pMDocId = $docIdElement.text();
       });
       cy.sendToEmail();
     });
@@ -1440,7 +1461,7 @@ context("Equipment maintenance and calibration", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${pMDocId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -1482,7 +1503,7 @@ context("Equipment maintenance and calibration", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_WIP.zip`;
+          downloadFile  =  `${pMDocId}${filetime}_WIP.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -1516,7 +1537,7 @@ context("Equipment maintenance and calibration", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-        fileName: `${releasedFormId}-A-Preventative-maintenance-document.pdf`,
+        fileName: `${pMDocId}-A-Preventative-maintenance-document.pdf`,
       }).then((cdata) => {
         expect(cdata.numpages).eq(1);
         expect(cdata.text).match(/Page 1 of 1/);
@@ -1535,10 +1556,12 @@ context("Equipment maintenance and calibration", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
-        RegExp( `Maintenance Record\n${releasedFormId}, Revision A\nPREVENTATIVE MAINTENANCE DOCUMENT`, "gi" );
+        RegExp( `Maintenance Record\n${pMDocId}, Revision A\nPREVENTATIVE MAINTENANCE DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         // expect(el).match(/APPROVAL REQUEST DETAILS/);
 
@@ -1633,12 +1656,12 @@ context("Equipment maintenance and calibration", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "APPROVED")
-        .and("contain", releasedFormId);
+        .and("contain", pMDocId);
     });
 
     it("Open doc to check released state", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
-        .contains(releasedFormId).last().arrowClick();
+        .contains(pMDocId).last().arrowClick();
       cy.pause();
     });
 
@@ -1649,10 +1672,13 @@ context("Equipment maintenance and calibration", () => {
 
   context("Check doc Released status and click on Send To Email", () => {
     it("Check doc released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "Preventative maintenance document");
-      cy.get("#HeaderInfo-docId").then(($x) => {
-        releasedFormId = $x.text();
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        pMDocId = $docIdElement.text();
+      });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
       });
       cy.sendToEmail();
     });
@@ -1676,7 +1702,7 @@ context("Equipment maintenance and calibration", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${pMDocId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -1718,7 +1744,7 @@ context("Equipment maintenance and calibration", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          downloadFile  =  `${pMDocId}${filetime}_rel.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -1752,7 +1778,7 @@ context("Equipment maintenance and calibration", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-        fileName: `${releasedFormId}-A-Preventative-maintenance-document.pdf`,
+        fileName: `${pMDocId}-A-Preventative-maintenance-document.pdf`,
       }).then((cdata) => {
         expect(cdata.numpages).eq(1);
         expect(cdata.text).match(/Page 1 of 1/);
@@ -1771,10 +1797,12 @@ context("Equipment maintenance and calibration", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
-        RegExp( `Maintenance Record\n${releasedFormId}, Revision A\nPREVENTATIVE MAINTENANCE DOCUMENT`, "gi" );
+        RegExp( `Maintenance Record\n${pMDocId}, Revision A\nPREVENTATIVE MAINTENANCE DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         // expect(el).match(/APPROVAL REQUEST DETAILS/);
 
@@ -1897,10 +1925,10 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Extract document Id", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "WIP");
-      cy.get("#HeaderInfo-name").should("have.text", "Calibration document");
-      cy.get("#HeaderInfo-docId").contains("MR-").then(($x) => {
-        releasedFormId = $x.text();
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        calDocId = $docIdElement.text();
       });
     });
 
@@ -1952,22 +1980,23 @@ context("Equipment maintenance and calibration", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "REJECTED")
-        .and("contain", releasedFormId);
+        .and("contain", calDocId);
     });
 
     it("Open doc to check WIP state", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
-        .contains(releasedFormId).last().arrowClick();
+        .contains(calDocId).last().arrowClick();
     });
   });
 
   context("Check doc WIP status and click on Send To Email", () => {
     it("Check doc WIP status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "WIP");
-      cy.get("#HeaderInfo-name").should("have.text", "Calibration document");
-      cy.get("#HeaderInfo-docId").then(($x) => {
-        releasedFormId = $x.text();
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        calDocId = $docIdElement.text();
       });
+
       cy.sendToEmail();
     });
 
@@ -1990,7 +2019,7 @@ context("Equipment maintenance and calibration", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${calDocId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -2032,7 +2061,7 @@ context("Equipment maintenance and calibration", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_WIP.zip`;
+          downloadFile  =  `${calDocId}${filetime}_WIP.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -2066,7 +2095,7 @@ context("Equipment maintenance and calibration", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-        fileName: `${releasedFormId}-A-Calibration-document.pdf`,
+        fileName: `${calDocId}-A-Calibration-document.pdf`,
       }).then((cdata) => {
         expect(cdata.numpages).eq(1);
         expect(cdata.text).match(/Page 1 of 1/);
@@ -2085,10 +2114,12 @@ context("Equipment maintenance and calibration", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
-        RegExp( `Maintenance Record\n${releasedFormId}, Revision A\nCALIBRATION DOCUMENT`, "gi" );
+        RegExp( `Maintenance Record\n${calDocId}, Revision A\nCALIBRATION DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         // expect(el).match(/APPROVAL REQUEST DETAILS/);
 
@@ -2183,12 +2214,12 @@ context("Equipment maintenance and calibration", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "APPROVED")
-        .and("contain", releasedFormId);
+        .and("contain", calDocId);
     });
 
     it("Open doc to check released state", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
-        .contains(releasedFormId).last().arrowClick();
+        .contains(calDocId).last().arrowClick();
       cy.pause();
     });
 
@@ -2199,10 +2230,13 @@ context("Equipment maintenance and calibration", () => {
 
   context("Check doc Released status and click on Send To Email", () => {
     it("Check doc released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "Calibration document");
-      cy.get("#HeaderInfo-docId").then(($x) => {
-        releasedFormId = $x.text();
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        calDocId = $docIdElement.text();
+      });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
       });
       cy.sendToEmail();
     });
@@ -2226,7 +2260,7 @@ context("Equipment maintenance and calibration", () => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${releasedFormId}`,
+        subject: `Export for document ${calDocId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -2268,7 +2302,7 @@ context("Equipment maintenance and calibration", () => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          downloadFile  =  `${calDocId}${filetime}_rel.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -2302,7 +2336,7 @@ context("Equipment maintenance and calibration", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-        fileName: `${releasedFormId}-A-Calibration-document.pdf`,
+        fileName: `${calDocId}-A-Calibration-document.pdf`,
       }).then((cdata) => {
         expect(cdata.numpages).eq(1);
         expect(cdata.text).match(/Page 1 of 1/);
@@ -2321,10 +2355,12 @@ context("Equipment maintenance and calibration", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
-        RegExp( `Maintenance Record\n${releasedFormId}, Revision A\nCALIBRATION DOCUMENT`, "gi" );
+        RegExp( `Maintenance Record\n${calDocId}, Revision A\nCALIBRATION DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         // expect(el).match(/APPROVAL REQUEST DETAILS/);
 
