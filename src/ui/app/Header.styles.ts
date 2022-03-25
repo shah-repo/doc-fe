@@ -19,7 +19,7 @@ export default (theme: Theme) =>
       backgroundRepeat: "no-repeat",
       backgroundImage: `url(${EnlilLogo})`,
       left: "61%",
-      right: "20.42%",
+      right: "20%",
       position: "absolute",
       paddingTop: "48px",
     },
