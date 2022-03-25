@@ -12,6 +12,7 @@ import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms
 import { FBWorkspace } from "../../../../ui/form.builder";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
+import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
 
 const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> = ({
@@ -20,6 +21,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   onDirtyFlagChange,
   onScroll,
   _formState,
+  _tabsState,
   _documentRevisionFormState,
   documentRevision,
   bannerPortal,
@@ -48,10 +50,18 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   mode,
 }) => {
   const group = documentRevision?.document?.documentType?.group || "OTHER";
-  const tabConfig = useSelector((state: ApplicationState) =>
+  let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
+  if (formValues.values?.retrain) {
+    tabConfig = [...tabConfig, {
+      labelId: "tabId.training",
+      tabId: "training",
+      type: "TRAINING",
+    } ];
+  }
   const tabLabels: string[] = tabConfig.map((tabInfo) => tabInfo.labelId);
   const isDynamic = Boolean(tabConfig.find((tabInfo) => tabInfo.type === "DYNAMIC"));
+  const trainingTabIndex = tabLabels.findIndex((tab) => tab === "tabId.training");
 
   return (
     <SMForm
@@ -97,7 +107,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
                   return <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} px={8}>
+                    <SMBox mt={8} px={8} stretchY="100%">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}
                         releasedDocRev={_documentRevisionFormState?.releasedDocRev}
@@ -136,6 +146,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           {... { autosaveEnabled }}
                           initialValues={formInput}
                           schema={schema}
+                        />
+                      )}
+                      {tabType === "TRAINING" &&
+                          _tabsState?.value === trainingTabIndex && (
+                        <FBTrainingInfoContainer
+                          documentRevisionId={documentRevision?.id}
                         />
                       )}
                     </SMBox>

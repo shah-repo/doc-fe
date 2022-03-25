@@ -36,6 +36,7 @@ enum Colors {
   cerulean="#01A6C7",
   light_slate_blue="#7B61FF",
   steel_blue="#457AB5",
+  mild_wind_blue="#CCD4D9",
   // red
   red = "#c40000",
   dark_red = "#a10808",

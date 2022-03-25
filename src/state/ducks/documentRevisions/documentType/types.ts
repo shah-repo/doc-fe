@@ -400,7 +400,7 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType;
 }
 
-type TabType = "MIXED" | "DYNAMIC";
+type TabType = "MIXED" | "DYNAMIC" | "TRAINING";
 
 export interface TabInfo {
   labelId: string;
