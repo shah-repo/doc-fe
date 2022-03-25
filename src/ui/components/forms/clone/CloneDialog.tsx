@@ -144,7 +144,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
       <Box component="div" className={classes.footer}>
         <Button
           variant="contained"
-          className={classes.buttonCancel}
+          className={`${classes.buttonCancel} ${classes.buttonLabel}`}
           disableFocusRipple={true}
           disableRipple={true}
         >
@@ -154,7 +154,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
           variant="contained"
           onClick={cloneAction}
           data-cy="CloneContinue"
-          className={classes.buttonContinue}
+          className={`${classes.buttonContinue} ${classes.buttonLabel}`}
         >
           <Text translation="common.continue" />
         </Button>

@@ -115,5 +115,13 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "20px",
       color: Colors.almost_black,
     },
+    buttonLabel: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 700,
+      fontSize: "12px",
+      lineHeight: "15px",
+      textTransform: "uppercase",
+    },
   })
 );
