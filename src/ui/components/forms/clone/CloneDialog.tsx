@@ -39,12 +39,10 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    console.log(value);
   };
 
   const asyncClone = useAsync({
     onSuccess: (documentRevision: any) => {
-      console.log("Test");
       history.push({
         pathname: documentVersionPath(
           documentRevision.id,
@@ -59,7 +57,6 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   };
 
   const cloneAction = () => {
-    console.log(payload);
     asyncClone.start(cloneEB, documentRevision.id, { ...payload }, asyncClone);
   };
 
