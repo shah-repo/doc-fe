@@ -7,7 +7,7 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "flex-start",
-      padding: "15px 20px",
+      padding: "0px 20px 15px 20px",
       position: "relative",
       width: "660px",
       height: "291px",
@@ -18,7 +18,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     header: {
       width: "660px",
-      height: "43px",
+      height: "58px",
       marginLeft: "-20px",
       boxShadow: `0px 1px 0px ${Colors.medium_gray}`,
       borderRadius: "6px 6px 0px 0px",
@@ -67,8 +67,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     headertitle: {
       position: "static",
-      paddingTop: 2,
-      paddingBottom: 2,
       marginLeft: "20px",
     },
     contenttitle: {

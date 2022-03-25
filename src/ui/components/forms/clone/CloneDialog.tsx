@@ -68,7 +68,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
 
   return (
     <Box component="div" className={classes.paper}>
-      <Grid container justify="space-between" className={classes.header}>
+      <Grid container  direction="row" justify="space-between" alignItems="center" className={classes.header}>
         <Grid item>
           <Typography
             variant="h2"
