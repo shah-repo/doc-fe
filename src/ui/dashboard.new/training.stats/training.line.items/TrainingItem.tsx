@@ -115,8 +115,6 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           >
             {documentId}
           </Typography>
-        </Grid>
-        <Grid item={true}>
           <Typography
             component="span"
             variant="body2"

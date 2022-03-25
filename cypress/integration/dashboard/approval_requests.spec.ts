@@ -714,7 +714,11 @@ context("Approval request form", () => {
     });
 
     it("Close popup should open on click close button", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
+      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisAPPROVED")
+        .parent()
+        .parent()
+        .parent()
+        .find(".MuiBox-root").eq(0)
         .find("svg").eq(0).arrowClick();
 
       cy.get("#simple-modal-title").should("exist").and("have.text", "Close Approval Request");
@@ -873,8 +877,12 @@ context("Approval request form", () => {
     });
 
     it("Close popup should open on click close button", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).trigger("mouseover");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiBox-root").eq(0)
+      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00003Approval request form1isAPPROVED")
+        .trigger("mouseover")
+        .parent()
+        .parent()
+        .parent()
+        .find(".MuiBox-root").eq(0)
         .find("svg").eq(0).arrowClick();
 
       cy.get("#simple-modal-title").should("exist").and("have.text", "Close Approval Request");
