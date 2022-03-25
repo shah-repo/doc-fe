@@ -84,7 +84,7 @@ export const styles = makeStyles((theme: Theme) =>
         boxShadow: "none",
       },
       "&$checked": {
-        "color": "#4B8DF8",
+        "color": Colors.navy,
         "&:hover": {
           backgroundColor: "transparent",
           boxShadow: "none",

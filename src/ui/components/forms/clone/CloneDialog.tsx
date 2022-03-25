@@ -141,6 +141,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
       <Box component="div" className={classes.footer}>
         <Button
           variant="contained"
+          onClick={handleCloneModelClose}
           className={`${classes.buttonCancel} ${classes.buttonLabel}`}
           disableFocusRipple={true}
           disableRipple={true}
