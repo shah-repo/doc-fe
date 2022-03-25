@@ -6,6 +6,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
+import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
@@ -30,6 +31,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     documentStatus,
     dialogState,
     disabled,
+    isRequester,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -40,7 +42,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
-
+    const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
+    const updateApprovers = document?.status === "DRAFT" && !isAdministrativeChange;
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
@@ -88,6 +91,15 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // On add part items
+    React.useEffect(() => reaction(
+      () => workspaceState?.formInputSync?.get("po-items-built-in"),
+      (poItems) => {
+        // console.log("po items built in: debug", poItems);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // On add approver
     React.useEffect(() => reaction(
       () => poApprovalsState?.approvalApi.data,
@@ -117,6 +129,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         removeApprover(difference(formValue, fieldValue));
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    React.useEffect(() => reaction(
+      () => workspaceState?.formInputSync?.get("requestor-k740hxlb"),
+      (requestor) => {
+        const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
+        if (updateApprovers && requestor && !formValue.includes(requestor)) {
+          addApprover([requestor]);
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     const checkGroups = (id: string) => {
@@ -197,6 +220,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
 
+    isRequester = (approverId: string) => approverId === formState?.getFieldValue("requestor-k740hxlb");
     return Component({
       ...(props as T),
       renderOption,
@@ -213,6 +237,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       documentStatus,
       dialogState,
       disabled,
+      isRequester,
     });
   };
 

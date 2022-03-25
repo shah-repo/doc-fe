@@ -33,6 +33,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupByKey,
   value,
   inputStyle = {},
+  isRequester,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -98,8 +99,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               )}
             </Box>
           )}
-          renderTags={(value, getTagProps) => (
-            <FBMapWrapper<any[]> collection={value}>
+          renderTags={(_value, getTagProps) => (
+            <FBMapWrapper<any[]> collection={value as any[]}>
               {(option, index) => {
                 const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
                   (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
@@ -109,7 +110,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}
                     {...getTagProps({ index })}
-                    disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
+                    disabled={props.name === "approvers" ? isAlreadyApproved : disabled || (isRequester && isRequester(option.id))}
                   />
                 ); }}
             </FBMapWrapper>
