@@ -1,8 +1,8 @@
-import { keyBy, uniq } from "lodash";
+import { get, isEmpty, keyBy, set, unionBy, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
-import { CompanyGroupsListAction, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
+import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, HISTORY_LIST, HISTORY_LIST_ASYNC, HISTORY_LIST_INITIAL_STATE } from "./constants";
+import { CompanyGroupsListAction, GroupsAllIdsState, GroupsByIdState, HistoryListAction, HistoryState, LoadCompanyGroup } from "./types";
 
 export const groupsById = (
   state: GroupsByIdState = {},
@@ -33,8 +33,24 @@ export const groupsAllIds = (
   }
 };
 
+const history = (
+  state: HistoryState = HISTORY_LIST_INITIAL_STATE,
+  action: HistoryListAction
+): HistoryState => {
+  const actionResult = get(action.payload, "results");
+  const stateResult = get(state, "results");
+  const combineResult = isEmpty(stateResult) ? actionResult : unionBy(stateResult, actionResult, "id");
+  switch (action.type) {
+    case HISTORY_LIST:
+      return action.initialLoad ? action.payload : set(action.payload, "results", combineResult);
+    default:
+      return state;
+  }
+};
 export default combineReducers({
   loadGroupsListAsyncInfo: asyncReducer(COMPANY_GROUPS_GET_ASYNC),
   groupsById,
   groupsAllIds,
+  history,
+  loadHistoryAsyncInfo: asyncReducer(HISTORY_LIST_ASYNC),
 });

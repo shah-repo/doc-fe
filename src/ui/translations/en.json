@@ -1212,5 +1212,6 @@
   "documenttype.view.schema": "View schema",
   "documenttype.edit.config": "Edit Field config",
   "documenttype.view.config": "View Field config",
-  "common.load.more": "Load More"
+  "common.load.more": "Load More",
+  "user.management.audit": "History"
 }

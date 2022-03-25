@@ -1,11 +1,12 @@
+import { isEmpty } from "lodash";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { authActions } from "../auth";
 import { Group, User } from "../auth/types";
 import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
 import { EditActiveStatusAction, EditGroupsAction, EditUserInfoAction } from "../tableSearch/types";
-import { ADD_EMPLOYEE_POST_ASYNC, API_TOKEN, API_TOKEN_DELETE_ASYNC, API_TOKEN_GET_ASYNC, API_TOKEN_POST_ASYNC, API_TOKEN_REVOKE_URL, API_TOKEN_URL, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, EMPLOYEES_URL, EMPLOYEE_GET_ASYNC, GROUPS_ME_GET_ASYNC, GROUPS_ME_URL, GROUPS_URL, GROUP_GET_BY_ID, SLACK_URL } from "./constants";
-import { AddEmployeeRequest, ApiTokenData, CompanyGroupsListAction, EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody, GetApiTokenList, GetEmployeeResponse, GetSlackUrl, LoadCompanyGroups } from "./types";
+import { ADD_EMPLOYEE_POST_ASYNC, API_TOKEN, API_TOKEN_DELETE_ASYNC, API_TOKEN_GET_ASYNC, API_TOKEN_POST_ASYNC, API_TOKEN_REVOKE_URL, API_TOKEN_URL, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, EMPLOYEES_URL, EMPLOYEE_GET_ASYNC, GROUPS_ME_GET_ASYNC, GROUPS_ME_URL, GROUPS_URL, GROUP_GET_BY_ID, HISTORY_INITIAL_PAYLOAD, HISTORY_LIST, HISTORY_LIST_ASYNC, HISTORY_LIST_INITIAL_STATE, HISTORY_URL, SLACK_URL } from "./constants";
+import { AddEmployeeRequest, ApiTokenData, CompanyGroupsListAction, EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody, GetApiTokenList, GetEmployeeResponse, GetSlackUrl, HistoryListAction, HistoryListApiResponse, LoadCompanyGroups } from "./types";
 
 const companyGroupsList = (
   groups: LoadCompanyGroups,
@@ -149,6 +150,26 @@ const revokeApiToken = (id: string, handlers: Handlers): ApiAction<GetApiTokenLi
     handlers,
   });
 
+
+const historyList = (historyStats: HistoryListApiResponse = HISTORY_LIST_INITIAL_STATE, initialLoad = true):
+HistoryListAction => ({
+  type: HISTORY_LIST,
+  payload: historyStats,
+  initialLoad,
+});
+
+const loadHistoryList = (queryPayload): ApiAction<HistoryListApiResponse> => {
+  const finalPayload = isEmpty(queryPayload) ? HISTORY_INITIAL_PAYLOAD : queryPayload;
+  return apiAction({
+    url: `${HISTORY_URL}`,
+    method: "post",
+    data: finalPayload,
+    asyncType: HISTORY_LIST_ASYNC,
+    onSuccess: (historyItems, dispatch) => {
+      dispatch(historyList(historyItems, finalPayload.offset === HISTORY_INITIAL_PAYLOAD.offset));
+    },
+  });
+};
 export default {
   loadCompanyGroups,
   loadGroupsMe,
@@ -164,4 +185,6 @@ export default {
   getApiTokenList,
   revokeApiToken,
   loadGroupById,
+  historyList,
+  loadHistoryList,
 };

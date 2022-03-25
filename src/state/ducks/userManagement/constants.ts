@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 export const COMPANY_GROUPS_LIST = "userManagement/COMPANY_GROUPS_LIST";
 export const COMPANY_GROUPS_GET_ASYNC = "userManagement/COMPANY_GROUPS_GET_ASYNC";
 export const GROUPS_ME_GET_ASYNC = "userManagement/GROUPS_ME_GET_ASYNC";
@@ -19,3 +20,20 @@ export const USER_SLACK_URL = "/slack/user_oauth_url";
 export const API_TOKEN = "/api_tokens";
 export const API_TOKEN_URL = `${API_TOKEN}/generate`;
 export const API_TOKEN_REVOKE_URL = `${API_TOKEN}/revoke`;
+
+export const HISTORY_LIST = "userManagement/HISTORY_LIST";
+export const HISTORY_LIST_ASYNC = "userManagement/HISTORY_LIST_ASYNC";
+
+// TODO: Update with new API URL
+export const HISTORY_URL = "/dashboard_feed/due_trainings";
+export const HISTORY_INITIAL_OFFSET = 0;
+export const HISTORY_LIMIT = 50;
+export const  HISTORY_INITIAL_PAYLOAD = {
+  offset: HISTORY_INITIAL_OFFSET,
+  limit: HISTORY_LIMIT,
+};
+export const HISTORY_LIST_INITIAL_STATE = {
+  results: [],
+  page_total: 0,
+  total: 0,
+};

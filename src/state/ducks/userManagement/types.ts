@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { Group, GroupTag, GroupType, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common/types";
 import { Company, Employee } from "../company/types";
-import { COMPANY_GROUPS_LIST } from "./constants";
+import { COMPANY_GROUPS_LIST, HISTORY_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
@@ -69,3 +69,33 @@ export interface GetApiTokenList {
   name: string;
   active: boolean;
 }
+
+// Update Once get Api Response ... Currently Its training
+interface History {
+  pendingEmailSentAt: Nullable<string>;
+  trainingStatus: string;
+  docId: string;
+  docDocumentId: string;
+  docRevName: string;
+  docRevVersion: string;
+  trainingRecordId?: string | undefined;
+  docRevId: string;
+  id: string;
+  type: string;
+  timestamp: string;
+  pinned: boolean;
+  // TODO: Update this
+  pendingTrainees?: any[] | undefined;
+}
+export interface HistoryListAction {
+  type: typeof HISTORY_LIST;
+  payload: HistoryListApiResponse;
+  initialLoad?: boolean;
+}
+export interface HistoryListApiResponse {
+  results: History[];
+  page_total: number;
+  total: number;
+}
+
+export type HistoryState = HistoryListApiResponse;
