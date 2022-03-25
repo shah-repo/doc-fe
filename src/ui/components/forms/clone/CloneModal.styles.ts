@@ -73,6 +73,8 @@ export const styles = makeStyles((theme: Theme) =>
       position: "static",
       paddingTop: 29,
       marginLeft: "35px",
+      fontSize: "12px",
+      lineHeight: "15px",
     },
     radio: {
       paddingTop: 0,
