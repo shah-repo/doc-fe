@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { useIntl } from "react-intl";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/modelClose.svg";
 import { ReactComponent as Active } from "../../../../assets/images/radioActive.svg";
@@ -32,7 +31,6 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   documentRevision,
 }) => {
   const classes = styles();
-  const intl = useIntl();
   const [value, setValue] = React.useState("false");
   const cloneEB = useActionCreator(documentRevisionsActions.cloneEB);
   const history = useHistory();
@@ -53,7 +51,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   });
 
   const payload = {
-    decoupleEB: value === "true" ? true : false,
+    decoupleEB: value === "true",
   };
 
   const cloneAction = () => {
@@ -61,7 +59,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   };
 
   return (
-    <Box component="div" className={classes.paper}>
+    <Box className={classes.paper}>
       <Grid
         container
         direction="row"
@@ -89,7 +87,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
           </IconButton>
         </Grid>
       </Grid>
-      <Box component="div" className={classes.content}>
+      <Box className={classes.content}>
         <Typography
           variant="h2"
           component="h2"
@@ -99,7 +97,6 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
           <Text translation="documentRevision.clone.eb.title" />
         </Typography>
         <RadioGroup
-          aria-label="cloneEB"
           name="cloneEB1"
           value={value}
           onChange={handleChange}
@@ -116,7 +113,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
             }
             label={
               <Typography variant="body2" className={classes.radioLabel}>
-                {intl.formatMessage({ id: "common.true" })}
+                <Text translation="common.true" />
               </Typography>
             }
           />
@@ -132,13 +129,13 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
             }
             label={
               <Typography variant="body2" className={classes.radioLabel}>
-                {intl.formatMessage({ id: "common.false" })}
+                <Text translation="common.false" />
               </Typography>
             }
           />
         </RadioGroup>
       </Box>
-      <Box component="div" className={classes.footer}>
+      <Box className={classes.footer}>
         <Button
           variant="contained"
           onClick={handleCloneModelClose}
