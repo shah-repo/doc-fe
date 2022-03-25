@@ -155,8 +155,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       const filteredList = pickers[value]
         .filter((el) =>
           el.label.toLowerCase().includes(searchString.toLowerCase())
-        )
-        .map((el) => ({ key: el.key, label: el.label }));
+        );
       if (filteredList.length) {
         filteredData[value] = filteredList;
       }
