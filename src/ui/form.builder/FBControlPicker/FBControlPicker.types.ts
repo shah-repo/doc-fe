@@ -15,7 +15,8 @@ type FBControlPickerType =
 | "customcontrols"
 | "buttons"
 | "instructions"
-| "actions";
+| "actions"
+| "favourites";
 
 export interface FBFavouritesBody {
   fbComponent: string;

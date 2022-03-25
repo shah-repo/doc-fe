@@ -1,9 +1,9 @@
-import { cloneDeep, each, map } from "lodash";
+import { cloneDeep, each, keys, map } from "lodash";
 import { toJS } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FB, FBControlPickerProps, FBControlPickerState } from "..";
+import { FB, FBControlPickerProps, FBControlPickerState, FBInputType } from "..";
 import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
 
 export const withFBControlPicker = <T extends FBControlPickerProps>(
@@ -20,34 +20,41 @@ export const withFBControlPicker = <T extends FBControlPickerProps>(
     const translatedPickers = {};
     const statePickers = controlPickerState?.pickers;
     useObserver(() => {
-      const favourites =  cloneDeep(toJS(controlPickerState?.data)?.results) || [];
+      const favouritePickers =  cloneDeep(toJS(controlPickerState?.data)?.results) || [];
       const favouriteKeyMapping = {};
-      each(favourites, (favourite) => {
-        favouriteKeyMapping[favourite.fbComponent] = favourite.id;
+      each(favouritePickers, (favouritePicker) => {
+        favouriteKeyMapping[favouritePicker.fbComponent] = favouritePicker.id;
       });
-      each(["favourites"], (value) => {
-        if (!controlPickerState?.loading && favourites.length) {
-          translatedPickers[value] = map(favourites, (item) => ({
-            label: intl.formatMessage({ id: `form.builder.${item.fbComponent}` }),
-            key: item.fbComponent,
-            isFavorite: true,
-            id: item.id,
-          }));
-        }
-      });
-      each(Object.keys(statePickers), (value) => {
-        translatedPickers[value] = map(controlPickerState?.pickers[value], (item) => ({
-          label: intl.formatMessage({ id: `form.builder.${item}` }),
-          key: item,
-          isFavorite: favouriteKeyMapping[item] ? true : false,
-          id: favouriteKeyMapping[item],
+      if (!controlPickerState?.loading && favouritePickers.length) {
+        statePickers.favourites = keys(favouriteKeyMapping) as FBInputType[];
+      }
+      each(statePickers, (pickersList, pickerSection) => {
+        translatedPickers[pickerSection] = map(pickersList, (pickerItem) => ({
+          label: intl.formatMessage({ id: `form.builder.${pickerItem}` }),
+          key: pickerItem,
+          isFavorite: favouriteKeyMapping[pickerItem] ? true : false,
+          id: favouriteKeyMapping[pickerItem],
         }));
       });
+    });
+    // Always show favourites on top and sort remaining sections
+    let sortedSections = keys(translatedPickers).sort();
+    if (sortedSections.includes("favourites")) {
+      sortedSections = [
+        "favourites",
+        ...sortedSections.filter((section) => section !== "favourites"),
+      ];
+    }
+    const sortedPickers = {};
+    each(sortedSections, (section) => {
+      if (section) {
+        sortedPickers[section] = translatedPickers[section];
+      }
     });
     return Component({
       ...(props as T),
       controlPickerState,
-      pickers: translatedPickers,
+      pickers: sortedPickers,
     });
   };
 
