@@ -393,7 +393,8 @@ context("Copyable Checkbox test", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev,
         CyRoutes.AvailableMaintenanceForms], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm").autocompleteSelect("Engineering Build");
+        cy.get("#MultipleFormTemplate-selectDocForm").arrowClick();
+        cy.get("div[id^=react-select]").contains("Engineering Build").arrowClick();
       });
     });
 
