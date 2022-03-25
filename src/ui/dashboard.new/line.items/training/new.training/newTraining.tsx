@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
-import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
@@ -117,14 +116,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     let filterDate = {};
     if (trainingStatus === TrainingStatus.OVERDUE) {
       filterDate = {
-        text: CompletedOnDateOptions.OVERDUE,
-        value: moment().endOf("day").toISOString(),
+        operator: "eq",
+        value: CompletedOnDateOptions.OVERDUE,
         field: DateFields.DUE_ON,
       };
     } else {
       filterDate = {
-        text: CompletedOnDateOptions.NEXT_WEEK,
-        value: moment().add(7, "d").startOf("day").toISOString(),
+        operator: "eq",
+        value: CompletedOnDateOptions.NEXT_WEEK,
         field: DateFields.DUE_ON,
       };
     }
@@ -146,6 +145,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
             field: "trainingPlan.document.docId",
             operator: "eq",
             value: docId,
+          },
+          {
+            ...filterDate,
           },
         ],
       },
