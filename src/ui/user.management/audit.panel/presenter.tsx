@@ -1,7 +1,8 @@
-import { Box, Drawer } from "@material-ui/core";
+import { Box, Drawer, LinearProgress } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { historySelectors } from "../../../state/ducks/userManagement";
+import { AsyncStatus } from "../../../state/types";
 import PanelCard from "./panel.card";
 
 type Anchor =  "right";
@@ -13,6 +14,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
 }) => {
+  const loadAsyncState = useSelector(historySelectors.getLoadHistoryListAsyncInfo);
+  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+
   const auditItems: any = useSelector(historySelectors.historyList);
   const [opendrawer, setOpenDrawer] = React.useState({
     right: openHistoryPanel,
@@ -32,7 +36,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     setOpenDrawer({ ...opendrawer, [anchor]: open });
   };
   const list = (anchor: Anchor) => {
-    console.log(auditItems.results, anchor);
     // For testing
     auditItems.results = auditItems.results.splice(0, 1);
     return (
@@ -96,14 +99,14 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       <Drawer anchor="right" open={opendrawer.right} onClose={toggleDrawer("right", false)} onClick={() => {
         closeHistoryPanel(opendrawer.right);
       }}>
-        {list("right")}
+        <div style={{ width: "300px" }}> {loading ? <LinearProgress style={{ width: "100%" }} /> : list("right")}</div>
       </Drawer>
     </Box>
   </div>);
 
   return (
     <>
-      {auditItems.total > 0 && renderPanel()}
+      {renderPanel()}
     </>
   );
 };

@@ -20,13 +20,15 @@ const AuditItemsContainer: React.FunctionComponent<OwnProps> = ({
   );
 
   return (
-    <AsyncGate
-      asyncAction={loadHistoryList}
-      asyncState={loadHistoryListAsyncInfo}
-      startActionOnMount={true}
-    >
+    <>
       <AuditItemPresenter openHistoryPanel={openHistoryPanel} closeHistoryPanel={closeHistoryPanel}/>
-    </AsyncGate>
+      <AsyncGate
+        asyncAction={loadHistoryList}
+        asyncState={loadHistoryListAsyncInfo}
+        startActionOnMount={true}
+      >
+      </AsyncGate>
+    </>
   );
 };
 
