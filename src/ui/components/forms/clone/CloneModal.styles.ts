@@ -77,8 +77,21 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "15px",
     },
     radio: {
-      paddingTop: 0,
+      "paddingTop": 11,
+      "marginLeft": "35px",
+      "&:hover": {
+        backgroundColor: "transparent",
+        boxShadow: "none",
+      },
+      "&$checked": {
+        "color": "#4B8DF8",
+        "&:hover": {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      },
     },
+    checked: {},
     closemodel: {
       right: "20px",
       height: "30px",
@@ -93,6 +106,14 @@ export const styles = makeStyles((theme: Theme) =>
       width: "660px",
       display: "flex",
       alignItems: "flex-start",
+    },
+    radioLabel: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "20px",
+      color: Colors.almost_black,
     },
   })
 );

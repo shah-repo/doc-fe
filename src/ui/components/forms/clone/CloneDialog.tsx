@@ -12,6 +12,8 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/modelClose.svg";
+import { ReactComponent as Active } from "../../../../assets/images/radioActive.svg";
+import { ReactComponent as InActive } from "../../../../assets/images/radioInActive.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../components/Text";
@@ -58,17 +60,18 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
 
   const cloneAction = () => {
     console.log(payload);
-    asyncClone.start(
-      cloneEB,
-      documentRevision.id,
-      { ...payload },
-      asyncClone
-    );
+    asyncClone.start(cloneEB, documentRevision.id, { ...payload }, asyncClone);
   };
 
   return (
     <Box component="div" className={classes.paper}>
-      <Grid container  direction="row" justify="space-between" alignItems="center" className={classes.header}>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+        className={classes.header}
+      >
         <Grid item>
           <Typography
             variant="h2"
@@ -103,17 +106,38 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
           name="cloneEB1"
           value={value}
           onChange={handleChange}
-          className={`${classes.contenttitle} ${classes.radio}`}
         >
           <FormControlLabel
             value={"false"}
-            control={<Radio color="primary" />}
-            label={intl.formatMessage({ id: "common.true" })}
+            control={
+              <Radio
+                classes={{ root: classes.radio, checked: classes.checked }}
+                checkedIcon={<Active />}
+                icon={<InActive />}
+                disableRipple
+              />
+            }
+            label={
+              <Typography variant="body2" className={classes.radioLabel}>
+                {intl.formatMessage({ id: "common.true" })}
+              </Typography>
+            }
           />
           <FormControlLabel
             value={"true"}
-            control={<Radio color="primary" />}
-            label={intl.formatMessage({ id: "common.false" })}
+            control={
+              <Radio
+                classes={{ root: classes.radio, checked: classes.checked }}
+                checkedIcon={<Active />}
+                icon={<InActive />}
+                disableRipple
+              />
+            }
+            label={
+              <Typography variant="body2" className={classes.radioLabel}>
+                {intl.formatMessage({ id: "common.false" })}
+              </Typography>
+            }
           />
         </RadioGroup>
       </Box>
