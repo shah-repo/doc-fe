@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/core";
+import { range } from "lodash";
 import React from "react";
 import DetailDescription from "./detail.description";
 import styles from "./styles";
@@ -8,7 +9,7 @@ const PanelCard: React.FunctionComponent<any> = () => {
   const classes = styles();
   const renderComponentType = () => (
     // Update Conditional rendering base on response
-    ["1", "2", "3", "4"].map((text, index) => (
+    range(1, 12).map((text, index) => (
       <Box
         key={index}
         width={300} fontFamily="Sora"

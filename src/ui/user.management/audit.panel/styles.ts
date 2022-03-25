@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-const SIDEBAR_WIDTH = 300;
+// const SIDEBAR_WIDTH = 300;
 export default makeStyles((theme: Theme) =>
   createStyles({
     outerContainer: {
@@ -22,63 +22,34 @@ export default makeStyles((theme: Theme) =>
       flexGrow: 0,
       margin: "1px 0px",
     },
-    listItem: {
-      "padding": "13px 0px 0px 0px",
-      "& .MuiListItemAvatar-root": {
-        maxWidth: "35px",
-        minWidth: "35px",
-        marginRight: "8px",
-      },
-    },
-    drawerPaper: {
-      marginTop: "105px",
-      position: "fixed",
-      height: "100%",
-      overflow: "auto",
-      width: SIDEBAR_WIDTH,
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    drawerPaperClose: {
-      width: 60,
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    drawerInner: {
-      width: SIDEBAR_WIDTH,
-      height: "calc(100% - 105px)",
-      display: "flex",
-      flexDirection: "column",
-    },
-    drawerHeader: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end",
-      padding: "0 8px",
-      minHeight: "10px",
-    },
-    sidebarList: {
-      height: "calc(100% - 60px)",
-      overflow: "auto",
-      paddingRight: "17px",
-      minWidth: "calc(100% + 17px)",
-    },
-    menuIcon: {
-      "margin": "8px 13px 13px 11px",
-      "paddingTop": "5px",
-      "paddingBottom": "5px",
-      "justifyContent": "unset",
-      "&:hover": {
-        background: "none",
-      },
-    },
-
-
+    // drawerInner: {
+    //   width: SIDEBAR_WIDTH,
+    //   height: "calc(100% - 105px)",
+    //   display: "flex",
+    //   flexDirection: "column",
+    // },
+    // drawerHeader: {
+    //   display: "flex",
+    //   alignItems: "center",
+    //   justifyContent: "flex-end",
+    //   padding: "0 8px",
+    //   minHeight: "10px",
+    // },
+    // sidebarList: {
+    //   height: "calc(100% - 60px)",
+    //   overflow: "auto",
+    //   paddingRight: "17px",
+    //   minWidth: "calc(100% + 17px)",
+    // },
+    // menuIcon: {
+    //   "margin": "8px 13px 13px 11px",
+    //   "paddingTop": "5px",
+    //   "paddingBottom": "5px",
+    //   "justifyContent": "unset",
+    //   "&:hover": {
+    //     background: "none",
+    //   },
+    // },
     avatar: {
       width: "35px",
       height: "35px",
@@ -114,6 +85,70 @@ export default makeStyles((theme: Theme) =>
       fontFamily: "Sora",
       fontStyle: "normal",
       fontSize: "14px",
+    },
+    titleOuterContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "0",
+      position: "static",
+      width: "275px",
+      height: "23px",
+      left: "20px",
+      top: "10px",
+      flex: "none",
+      order: 0,
+      alignSelf: "stretch",
+      flexGrow: 0,
+    },
+    titleContainer: {
+      position: "static",
+      width: "235px",
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "12px",
+      lineHeight: "15px",
+      color: "#162229",
+      flex: "none",
+      order: 0,
+      flexGrow: 0,
+      margin: "0px 2px",
+    },
+    iconContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      alignItems: "center",
+      padding: "0px",
+      position: "static",
+      width: "23px",
+      height: "23px",
+      left: "252px",
+      top: "0px",
+      flex: "none",
+      order: 1,
+      flexGrow: 0,
+      margin: "0px 2px",
+    },
+    externalContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+      padding: "10px 5px 10px 20px",
+      position: "static",
+      width: "300px",
+      height: "43px",
+      left: "0px",
+      top: "0px",
+      background: "#FFFFFF",
+      boxShadow: "0px 1px 0px #CCD4D9",
+      flex: "none",
+      order: 0,
+      alignSelf: "stretch",
+      flexGrow: 0,
+      margin: "1px 0px",
     },
   })
 );

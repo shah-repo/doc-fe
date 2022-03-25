@@ -78,7 +78,7 @@ interface History {
   docDocumentId: string;
   docRevName: string;
   docRevVersion: string;
-  trainingRecordId?: string | undefined;
+  trainingRecordId?: string;
   docRevId: string;
   id: string;
   type: string;

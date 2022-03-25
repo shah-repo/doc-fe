@@ -161,7 +161,7 @@ HistoryListAction => ({
 const loadHistoryList = (queryPayload): ApiAction<HistoryListApiResponse> => {
   const finalPayload = isEmpty(queryPayload) ? HISTORY_INITIAL_PAYLOAD : queryPayload;
   return apiAction({
-    url: `${HISTORY_URL}`,
+    url: HISTORY_URL,
     method: "post",
     data: finalPayload,
     asyncType: HISTORY_LIST_ASYNC,

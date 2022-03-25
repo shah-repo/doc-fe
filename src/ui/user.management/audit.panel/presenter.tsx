@@ -1,9 +1,12 @@
-import { Box, Drawer, LinearProgress } from "@material-ui/core";
+import { Box, Drawer, IconButton, LinearProgress } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { useSelector } from "react-redux";
 import { historySelectors } from "../../../state/ducks/userManagement";
 import { AsyncStatus } from "../../../state/types";
+import Colors from "../../layout/theme/utils/colors";
 import PanelCard from "./panel.card";
+import styles from "./styles";
 
 type Anchor =  "right";
 interface OwnProps {
@@ -16,7 +19,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
 }) => {
   const loadAsyncState = useSelector(historySelectors.getLoadHistoryListAsyncInfo);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
-
+  const classes = styles();
   const auditItems: any = useSelector(historySelectors.historyList);
   const [opendrawer, setOpenDrawer] = React.useState({
     right: openHistoryPanel,
@@ -40,43 +43,31 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     auditItems.results = auditItems.results.splice(0, 1);
     return (
       <>
-        <Box style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          padding: "10px 5px 10px 20px",
-          position: "static",
-          width: "300px",
-          height: "43px",
-          left: "0px",
-          top: "0px",
-          background: "#FFFFFF",
-          boxShadow: "0px 1px 0px #CCD4D9",
-          flex: "none",
-          order: 0,
-          alignSelf: "stretch",
-          flexGrow: 0,
-          margin: "1px 0px",
-        }}>
-
-          <div style={{
-            position: "static",
-            width: "46px",
-            fontFamily: "Sora",
-            fontStyle: "normal",
-            fontWeight: 600,
-            fontSize: "12px",
-            lineHeight: "15px",
-            color: "#162229",
-            flex: "none",
-            order: 0,
-            flexGrow: 0,
-            margin: "0px 2px",
-          }}>
+        <div className={classes.externalContainer}>
+          <div className={classes.titleOuterContainer}>
+            <div  className={classes.titleContainer}
+            >
             History
+            </div>
+            <div
+              className={classes.iconContainer}
+            >
+              <IconButton
+                color="default"
+                onClick={toggleDrawer("right", false)}
+                aria-label="Close"
+                id="histoy-closepanel"
+                disableFocusRipple
+                disableRipple
+                disableTouchRipple
+              >
+                <CloseIcon style={{ color: Colors.gray }} />
+              </IconButton></div>
           </div>
+        </div>
+        <Box height={710} style={{ overflow: "auto" }}>
+          <PanelCard/>
         </Box>
-        <PanelCard/>
         {/* <div
           onClick={toggleDrawer(anchor, false)}
           onKeyDown={toggleDrawer(anchor, false)}

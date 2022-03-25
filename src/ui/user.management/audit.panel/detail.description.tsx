@@ -15,7 +15,7 @@ const DetailDescription: React.FunctionComponent<any> = ({
       <Box
         color={Colors.font_gray}
         fontSize={12}>
-  Deactivated User
+  Deactivated User Text: {text}
       </Box>
       {!multitypo && <Box color={Colors.almost_black} fontSize={14} className={classes.description} >
   Sam Smith
