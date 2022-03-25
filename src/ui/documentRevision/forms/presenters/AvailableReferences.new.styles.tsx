@@ -8,7 +8,7 @@ export const styles = makeStyles(() =>
       fontSize: "12px",
       fontFamily: "Sora",
       fontWeight: 600,
-      lineHeight: "15.12px",
+      lineHeight: "15px",
       marginBottom: "10px",
     },
     root: {
