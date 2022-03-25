@@ -698,11 +698,9 @@ context("Equipment maintenance and calibration", () => {
     });
   });
 
-  context("Create Calibration record", () => {
-    it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+  context("Create form for Calibration", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document' button", () => {
@@ -982,24 +980,23 @@ context("Equipment maintenance and calibration", () => {
       cy.url().then((url: any) => {
         createdCalibrationFormDocumentId = url.split("/").pop();
       });
-      cy.pause();
+    });
 
-      it("Verify form released status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
-        cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
-        cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
-          calFormId = $docIdElement.text();
-        });
-        cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
-          arId = $lnEl.text();
-        });
-        cy.sendToEmail();
+    it("Verify form released status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        calFormId = $docIdElement.text();
       });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
+      });
+      cy.sendToEmail();
+    });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-        cy.checkToastMessageContains({
-          message: "File will be sent to your email shortly.",
-        });
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
       });
     });
   });
@@ -1401,10 +1398,6 @@ context("Equipment maintenance and calibration", () => {
       cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
     });
 
-    it("Verify there is no dashboard notifications", () => {
-      cy.cmpVerifyNoPendingActions();
-    });
-
     it("Logout existing user", () => {
       cy.authLogout();
     });
@@ -1563,21 +1556,21 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/image.jpg/);
 
-        // expect(el).match(/APPROVAL REQUEST DETAILS/);
+        expect(el).match(/MAINTENANCE DETAILS/);
 
-        // expect(el).match(/DOCUMENT #1/);
+        expect(el).match(/Equipment\nEQ-00001 - 1 Equipment document/);
 
-        // expect(el).match(/Document\nCP-00004 - rev 1 - New document for testing AR/);
+        tmpRegex = new RegExp(`Maintainer\n${ADMIN_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
 
-        // expect(el).match(/Description of change\nadded document description/);
+        tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
 
-        // expect(el).match(/Justification of change\njustification for added document/);
+        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| DRAFT\\n1 2 3`);
+        expect(el).match(tmpRegex);
 
-        // tmpRegex = new RegExp(`Checkbox\\nAPPROVERS\\n${USERS[2].name} \\n(.*)\\n1 2 3`, "gi" );
-        // expect(el).match(tmpRegex);
-
-        // tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
-        // expect(el).not.match(tmpRegex);
+        tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
+        expect(el).not.match(tmpRegex);
 
         tmpRegex = new RegExp(`REJECTED`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1662,7 +1655,6 @@ context("Equipment maintenance and calibration", () => {
     it("Open doc to check released state", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .contains(pMDocId).last().arrowClick();
-      cy.pause();
     });
 
     it("Verify status is 'Released'", () => {
@@ -1676,9 +1668,6 @@ context("Equipment maintenance and calibration", () => {
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         pMDocId = $docIdElement.text();
-      });
-      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
-        arId = $lnEl.text();
       });
       cy.sendToEmail();
     });
@@ -1793,7 +1782,7 @@ context("Equipment maintenance and calibration", () => {
       });
     });
 
-    it("Verify page 1 in released document", () => {
+    it("Verify page 1 in Released document", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
@@ -1804,21 +1793,22 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/image.jpg/);
 
-        // expect(el).match(/APPROVAL REQUEST DETAILS/);
+        expect(el).match(/MAINTENANCE DETAILS/);
 
-        // expect(el).match(/DOCUMENT #1/);
+        expect(el).match(/Equipment\nEQ-00001 - 1 Equipment document/);
 
-        // expect(el).match(/Document\nCP-00004 - rev 1 - New document for testing AR/);
+        tmpRegex = new RegExp(`Maintainer\n${ADMIN_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
 
-        // expect(el).match(/Description of change\nadded document description/);
+        tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
 
-        // expect(el).match(/Justification of change\njustification for added document/);
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| APPROVED \\| ${docRelDate}.*\n.*\\n1 2 3`);
+        expect(el).match(tmpRegex);
 
-        // tmpRegex = new RegExp(`Checkbox\\nAPPROVERS\\n${USERS[2].name} \\n(.*)\\n1 2 3`, "gi" );
-        // expect(el).match(tmpRegex);
-
-        // tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
-        // expect(el).not.match(tmpRegex);
+        tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
+        expect(el).not.match(tmpRegex);
 
         tmpRegex = new RegExp(`REJECTED`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1958,10 +1948,6 @@ context("Equipment maintenance and calibration", () => {
       cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
     });
 
-    it("Verify there is no dashboard notifications", () => {
-      cy.cmpVerifyNoPendingActions();
-    });
-
     it("Logout existing user", () => {
       cy.authLogout();
     });
@@ -1996,7 +1982,6 @@ context("Equipment maintenance and calibration", () => {
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         calDocId = $docIdElement.text();
       });
-
       cy.sendToEmail();
     });
 
@@ -2121,21 +2106,21 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/image.jpg/);
 
-        // expect(el).match(/APPROVAL REQUEST DETAILS/);
+        expect(el).match(/MAINTENANCE DETAILS/);
 
-        // expect(el).match(/DOCUMENT #1/);
+        expect(el).match(/Equipment\nEQ-00001 - 1 Equipment document/);
 
-        // expect(el).match(/Document\nCP-00004 - rev 1 - New document for testing AR/);
+        tmpRegex = new RegExp(`Maintainer\n${ADMIN_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
 
-        // expect(el).match(/Description of change\nadded document description/);
+        tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
 
-        // expect(el).match(/Justification of change\njustification for added document/);
+        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| DRAFT\\n1 2 3`);
+        expect(el).match(tmpRegex);
 
-        // tmpRegex = new RegExp(`Checkbox\\nAPPROVERS\\n${USERS[2].name} \\n(.*)\\n1 2 3`, "gi" );
-        // expect(el).match(tmpRegex);
-
-        // tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
-        // expect(el).not.match(tmpRegex);
+        tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
+        expect(el).not.match(tmpRegex);
 
         tmpRegex = new RegExp(`REJECTED`, "gi");
         expect(el).not.match(tmpRegex);
@@ -2145,7 +2130,7 @@ context("Equipment maintenance and calibration", () => {
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 1/);
@@ -2220,7 +2205,6 @@ context("Equipment maintenance and calibration", () => {
     it("Open doc to check released state", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .contains(calDocId).last().arrowClick();
-      cy.pause();
     });
 
     it("Verify status is 'Released'", () => {
@@ -2231,12 +2215,9 @@ context("Equipment maintenance and calibration", () => {
   context("Check doc Released status and click on Send To Email", () => {
     it("Check doc released status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         calDocId = $docIdElement.text();
-      });
-      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
-        arId = $lnEl.text();
       });
       cy.sendToEmail();
     });
@@ -2351,7 +2332,7 @@ context("Equipment maintenance and calibration", () => {
       });
     });
 
-    it("Verify page 1 in released document", () => {
+    it("Verify page 1 in Released document", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
@@ -2362,21 +2343,22 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/image.jpg/);
 
-        // expect(el).match(/APPROVAL REQUEST DETAILS/);
+        expect(el).match(/MAINTENANCE DETAILS/);
 
-        // expect(el).match(/DOCUMENT #1/);
+        expect(el).match(/Equipment\nEQ-00001 - 1 Equipment document/);
 
-        // expect(el).match(/Document\nCP-00004 - rev 1 - New document for testing AR/);
+        tmpRegex = new RegExp(`Maintainer\n${ADMIN_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
 
-        // expect(el).match(/Description of change\nadded document description/);
+        tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
 
-        // expect(el).match(/Justification of change\njustification for added document/);
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| APPROVED \\| ${docRelDate}.*\n.*\\n1 2 3`);
+        expect(el).match(tmpRegex);
 
-        // tmpRegex = new RegExp(`Checkbox\\nAPPROVERS\\n${USERS[2].name} \\n(.*)\\n1 2 3`, "gi" );
-        // expect(el).match(tmpRegex);
-
-        // tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
-        // expect(el).not.match(tmpRegex);
+        tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
+        expect(el).not.match(tmpRegex);
 
         tmpRegex = new RegExp(`REJECTED`, "gi");
         expect(el).not.match(tmpRegex);
@@ -2386,7 +2368,7 @@ context("Equipment maintenance and calibration", () => {
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 1/);
