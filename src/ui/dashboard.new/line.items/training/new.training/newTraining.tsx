@@ -160,7 +160,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       skip: 0,
       take: 25,
       group: [],
-      customDueOnFilterDate: filterDate,
     };
     dispatch(
       tableSearchActions.setSearchCriteria(
