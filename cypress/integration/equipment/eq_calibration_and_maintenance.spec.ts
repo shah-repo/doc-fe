@@ -1831,7 +1831,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Create Calibration record", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
