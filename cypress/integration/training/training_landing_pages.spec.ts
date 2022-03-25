@@ -909,7 +909,7 @@ context("Test training records and training curriculum landing page", () => {
       cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Document Title");
       cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Trainee");
       cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Assign Date");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Due Date");
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Due date");
       cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Completed On");
       cy.get(`th[role="columnheader"]`).eq(8).should("have.text", "TC ID");
     });
@@ -960,7 +960,6 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify sorting arrows on each field", () => {
       it("Verify sorting arrow for Doc ID", () => {
-        cy.get(`td[data-grid-col-index="0"]`).should("have.text", "FM-00004FM-00004FM-00004FM-00004FM-00003FM-00003");
         cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should("exist");
@@ -1016,7 +1015,7 @@ context("Test training records and training curriculum landing page", () => {
         "Form2 document for trainingForm2 document for trainingForm2 document for trainingForm2 document for training");
       });
 
-      it("Verify sortingarrow for Trainee", () => {
+      it("Verify sorting arrow for Trainee", () => {
         cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="5"] span.k-i-sort-asc-sm`).should("exist");
@@ -1032,8 +1031,6 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify sorting arrow for Assign Date", () => {
-        cy.get(`td[data-grid-col-index="5"]`)
-          .should("have.text", `${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}`);
         cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
@@ -1047,8 +1044,6 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify sorting arrow for Due Date", () => {
-        cy.get(`td[data-grid-col-index="6"]`)
-          .should("have.text", `${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}`);
         cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
@@ -1062,8 +1057,6 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify sorting arrow for Completed On", () => {
-        cy.get(`td[data-grid-col-index="7"]`)
-          .should("have.text", "PendingPendingPendingPendingPendingPending");
         cy.get(`th[aria-colindex="8"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="8"] span.k-i-sort-asc-sm`).should("exist");
