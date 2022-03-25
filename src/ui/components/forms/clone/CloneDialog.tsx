@@ -52,16 +52,16 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
     },
   });
 
-  const payload = JSON.stringify({
-    decoupleEB: value,
-  });
+  const payload = {
+    decoupleEB: value === "true" ? true : false,
+  };
 
   const cloneAction = () => {
     console.log(payload);
     asyncClone.start(
       cloneEB,
       documentRevision.id,
-      { ...JSON.parse(payload) },
+      { ...payload },
       asyncClone
     );
   };
