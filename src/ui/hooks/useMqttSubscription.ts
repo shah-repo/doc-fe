@@ -7,16 +7,16 @@ const useMqttSubscription = (
 ) => {
   const didMqttConnect = useDidMqttConnect();
   useEffect(() => {
-    subscribe();
-    return () => {
-      unsubscribe();
-    };
-  }, [subscribe, unsubscribe]);
-  useEffect(() => {
     if (didMqttConnect) {
       subscribe();
     }
-  }, [didMqttConnect, subscribe]);
+    
+    return () => {
+      if (didMqttConnect) {
+        unsubscribe();
+      }
+    };
+  }, [didMqttConnect]);
 };
 
 export default useMqttSubscription;

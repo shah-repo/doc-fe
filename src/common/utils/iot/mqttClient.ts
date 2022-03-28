@@ -3,7 +3,9 @@
 import * as AWSMqttClient from "aws-mqtt";
 import { Credentials } from "aws-sdk/global";
 import { Dictionary, isEmpty, some } from "lodash";
+import moment from "moment";
 import MQTTPattern from "mqtt-pattern";
+import { IotCredentials } from "../../../state/ducks/auth/types";
 
 interface AwsMqttClient {
   connected: boolean;
@@ -27,7 +29,7 @@ interface IAwsMqttClient {
   };
 }
 
-let credentialsMqtt: any;
+let credentialsMqtt: IotCredentials;
 let creatingClient = false;
 let retrySubscriptions: Dictionary<any> = {};
 
@@ -44,9 +46,10 @@ export class IotService {
 
   // TODO: try mqtt-this.emitter
   private emitter: any = {};
+  private connectedSubscriptions: Dictionary<any> = {};
 
   private constructor(
-    private mqttClientInstance: AwsMqttClient,
+    public mqttClientInstance: AwsMqttClient,
   ) {
     this.mqttClientInstance = mqttClientInstance;
   }
@@ -57,17 +60,21 @@ export class IotService {
   }
 
   public subscribeToTopic(topic: string, notif: any): any {
-    if (this.isConnected()) {
-      this.subscribe(topic, notif);
+    if (!this.isConnected()) {
+      // console.error(new Error("subscribeToTopic"))
+      // console.log("Could not subscribe. Client not connected", topic);
+      retrySubscriptions[topic] = notif;
       return;
     }
-    retrySubscriptions[topic] = notif;
+
+    this.subscribe(topic, notif);
   }
 
   public async unsubscribeFromTopic(topic: string) {
     if (!this.isConnected()) {
       // eslint-disable-next-line: no-console
-      console.log("Could not unsubscribe. Client not connected");
+      // console.error(new Error("unsubscribeFromTopic"))
+      // console.log("Could not unsubscribe. Client not connected", topic);
       return;
     }
 
@@ -77,6 +84,8 @@ export class IotService {
     );
     if (topicSubscribed) {
       await this.mqttClientInstance.unsubscribe(fullTopic);
+
+      console.log(`unsubs to : ${topic}`)
       delete this.emitter[fullTopic];
     }
   }
@@ -84,7 +93,7 @@ export class IotService {
   public async unsubscribeAll() {
     if (!this.isConnected()) {
       // eslint-disable-next-line: no-console
-      console.log("Could not unsubscribe all. Client not connected");
+      // console.log("Could not unsubscribe all. Client not connected");
       return;
     }
 
@@ -94,6 +103,7 @@ export class IotService {
 
       await this.mqttClientInstance.unsubscribe(topics);
       this.emitter = {};
+      this.connectedSubscriptions = {};
     }
   }
 
@@ -102,7 +112,7 @@ export class IotService {
       return Object.keys(this.mqttClientInstance._resubscribeTopics);
     }
     // eslint-disable-next-line: no-console
-    console.log("No client available");
+    // console.log("No client available");
     return [];
   }
 
@@ -122,10 +132,15 @@ export class IotService {
         MQTTPattern.clean(fullTopic),
       );
       this.emitter[fullTopic] = notif;
+      this.connectedSubscriptions[topic] = notif;
+      // console.log(`subs to : ${topic}`)
+    } else {
+      // console.log(`alreadySubscribed : ${topic}`)
     }
   }
 
   private async createMqttClient() {
+    // console.log(moment(credentialsMqtt.credentials.Expiration).isAfter(new Date()))
     if (creatingClient) {
       return;
     }
@@ -151,27 +166,34 @@ export class IotService {
 
     creatingClient = true;
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
-    /*
-    this.mqttClientInstance.on("error", (error) => {
-    });
+    
+    // this.mqttClientInstance.on("error", (error) => {
+    //   console.log("error", error)
+    // });
 
-    this.mqttClientInstance.on("offline", () => {
-    });
+    // this.mqttClientInstance.on("offline", () => {
+    //   console.log("offline")
+    // });
 
-    this.mqttClientInstance.on("disconnect", (packet) => {
-    });
+    // this.mqttClientInstance.on("disconnect", (packet) => {
+    //   console.log("disconnect")
+    // });
 
-    this.mqttClientInstance.on("reconnect", () => {
-    });
+    // this.mqttClientInstance.on("reconnect", () => {
+    //   console.log("reconnect")
+      
+    // });
 
-    this.mqttClientInstance.on("end", () => {
-    }); */
+    // this.mqttClientInstance.on("end", () => {
+    //   console.log("end")
+    // }); 
 
     this.mqttClientInstance.on("connect", (connack) => {
-      const retry = { ...retrySubscriptions };
-      retrySubscriptions = {};
-      Object.keys(retry).forEach((topic) => this.subscribeToTopic(topic, retry[topic]));
+      Object.keys(this.connectedSubscriptions).forEach((topic) => this.subscribe(topic, this.connectedSubscriptions[topic]));
+      Object.keys(retrySubscriptions).forEach((topic) => this.subscribe(topic, retrySubscriptions[topic]));
       creatingClient = false;
+
+      retrySubscriptions = {};
     });
     this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
       const emitterKey = Object.keys(this.emitter).find((pattern: string) =>
@@ -192,4 +214,29 @@ export class IotService {
       this.emitter[emitterKey] && this.emitter[emitterKey](new TextDecoder("utf-8").decode(message), params);
     });
   }
+}
+
+
+export const validCredentials = (credentials: IotCredentials, currenEmployeeId: string) => {
+  if(!credentials) {
+    return false;
+  }
+  
+  const { Expiration} = credentials.credentials;
+  
+  if(credentials.employeeId !== currenEmployeeId) {
+    // console.log({msg: "different credentials",credentialsEmployeeId: credentials.employeeId, currenEmployeeId: currenEmployeeId} );
+    return false;
+  }
+
+  if(!Expiration) {
+    // console.log("no expirationIotDate");
+    return false;
+  }
+  if(moment(new Date()).isAfter(moment(Expiration).subtract(10, "minute"))) {
+    // console.log("expired");
+    return false;
+  }
+  // console.log("credentials OK");
+  return true;
 }
