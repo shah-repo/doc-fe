@@ -1,6 +1,6 @@
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { FBWorkspace } from "../../../../ui/form.builder";
@@ -15,6 +15,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   onScroll,
   _formState,
   _documentRevisionFormState,
+  workspaceState,
   documentRevision,
   bannerPortal,
   shouldShowUpgrade,
@@ -46,6 +47,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     headerBoxProps={{ maxHeight: "30%" }}
     contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
     values={formValues.values}
+    leftSidebar={DocumentRevisionLeftPanel}
     header= {
       <DocumentRevisionHeader
         {...{ bannerPortal, shouldShowUpgrade }}
@@ -119,7 +121,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                         ...formValues.values as unknown as DocumentRevision,
                         ...documentRevision as unknown as DocumentRevision,
                       }}
-                      {... { schema, autosaveEnabled }}
+                      {... { schema, autosaveEnabled, workspaceState }}
                       initialValues={formInput}
                     />
                   </SMBox>

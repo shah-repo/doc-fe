@@ -2,6 +2,7 @@
 import { compact, Dictionary, filter, isEmpty, isString, kebabCase, omit, size, union } from "lodash";
 import React from "react";
 import { editorPropertiesFlags, FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { COMMON_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
@@ -20,9 +21,9 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     ...props
   }: T) => {
 
-    const { dialogState, workspaceState, formState } = FB.useStores();
+    const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
     const { isOutput } = workspaceState || {};
-
+    const { _documentRevisionFormState } = SM.useStores();
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
       index = size(workspaceState?.getSchema());
     }
@@ -128,9 +129,15 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         validationAttribute: (label as string) || placeholder || validationAttribute,
       }, index);
       dialogState?.closeDialog();
+      leftPanelState?.HideLeftPanel();
+      _documentRevisionFormState?.setLeftPanelOpen();
     };
 
-    handleCancel = () => dialogState?.closeDialog();
+    handleCancel = () => {
+      dialogState?.closeDialog();
+      leftPanelState?.HideLeftPanel();
+      _documentRevisionFormState?.setLeftPanelOpen();
+    };
 
     return Component({
       ...(props as T),

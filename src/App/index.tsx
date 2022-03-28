@@ -5,6 +5,7 @@ export { default as DocumentRevisionFormHeader } from "./Enlil/Features/Document
 export * from "./Enlil/Features/DocumentRevisionForm/Components/FormHeader/DocumentRevisionFormHeader.types";
 export { default as DocumentRevisionHeader } from "./Enlil/Features/DocumentRevisionForm/Components/Header/DocumentRevisionHeader";
 export * from "./Enlil/Features/DocumentRevisionForm/Components/Header/DocumentRevisionHeader.types";
+export { default as DocumentRevisionLeftPanel } from "./Enlil/Features/DocumentRevisionForm/Components/LeftPanel/DocumentRevisionLeftPanel";
 export { default as DocumentRevisionSidebar } from "./Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
 export { default as DocumentRevisionSidebarState } from "./Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state";
 export * from "./Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.types";

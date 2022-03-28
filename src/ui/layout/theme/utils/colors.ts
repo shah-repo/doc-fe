@@ -24,6 +24,8 @@ enum Colors {
   grey_cloud = "#B4B4B4",
   gray_goose ="##CCD4D9",
   raven = "#767B87",
+  whitest_grey="#EBEDF2",
+  lightest_grey1="#CCD4D9",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -83,6 +85,9 @@ enum Colors {
   peri_winkle_blue="#8295FA",
   bright_gray="#EBEDF2",
   light_gray_border="#CCD4D9",
+  // Platinum
+  platinum="#E5E5E5",
+  chinese_silver="#C8CACF"
 }
 
 export default Colors;

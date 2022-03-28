@@ -37,6 +37,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
    * @cfg {boolean} Hidden status of header.
    */
   @observable isHeaderHidden = false;
+  /**
+   * @cfg {boolean} Left Panel open/close.
+   */
+  @observable public leftPanelOpen = false;
 
   // MARK: @api
 
@@ -103,6 +107,8 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @action public setDisabledAction = (disabledAction: boolean) => {
     set(this, "disabledAction", disabledAction);
   };
+
+  @action setLeftPanelOpen = () => set(this, "leftPanelOpen", !this.leftPanelOpen);
 
   // MARK: @helpers
   public setDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
