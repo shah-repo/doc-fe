@@ -1,7 +1,12 @@
-
-import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import {
+  Avatar,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 import React from "react";
-import styles from "./styles";
+import styles from "./common.styles";
 import UserIcon from "./test_user_Avatar.jpg";
 
 const UserAvatar: React.FunctionComponent<any> = () => {
@@ -12,21 +17,15 @@ const UserAvatar: React.FunctionComponent<any> = () => {
       disableGutters
       style={{
         minWidth: "35px",
-        marginRight: "8px",
-        flexShrink: 0,
       }}
-    ><ListItemAvatar>
-        <Avatar
-          alt="test"
-          src={UserIcon}
-        />
+    >
+      <ListItemAvatar>
+        <Avatar alt="test" src={UserIcon} />
       </ListItemAvatar>
       <ListItemText
         primary={
-          <Typography
-            className={classes.generalInfo}
-          >
-       Maureen Gamarra
+          <Typography className={classes.generalInfo}>
+            Maureen Gamarra
           </Typography>
         }
         secondary={
@@ -37,7 +36,7 @@ const UserAvatar: React.FunctionComponent<any> = () => {
               color="textPrimary"
               className={classes.secondaryText}
             >
-         Feb 04, 2022 09:28 AM
+              Feb 04, 2022 09:28 AM
             </Typography>
           </React.Fragment>
         }

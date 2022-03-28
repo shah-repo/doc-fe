@@ -1,11 +1,12 @@
-import { Box, Drawer, IconButton, LinearProgress } from "@material-ui/core";
+import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { useSelector } from "react-redux";
 import { historySelectors } from "../../../state/ducks/userManagement";
 import { AsyncStatus } from "../../../state/types";
+import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
-import PanelCard from "./panel.card";
+import EmployeeActivated from "./Cards/EmployeeActivated.presenter";
 import styles from "./styles";
 
 type Anchor =  "right";
@@ -38,62 +39,50 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
 
     setOpenDrawer({ ...opendrawer, [anchor]: open });
   };
-  const list = (anchor: Anchor) => {
-    // For testing
-    auditItems.results = auditItems.results.splice(0, 1);
-    return (
-      <>
-        <div className={classes.externalContainer}>
-          <div className={classes.titleOuterContainer}>
-            <div  className={classes.titleContainer}
+  const renderListItems = () => (
+    <>
+      <div className={classes.externalContainer}>
+        <div className={classes.titleOuterContainer}>
+          <div className={classes.titleContainer}>
+            <Text translation="document.revision.history" />
+          </div>
+          <div className={classes.iconContainer} >
+            <IconButton
+              color="default"
+              onClick={toggleDrawer("right", false)}
+              aria-label="Close"
+              id="histoy-closepanel"
+              disableFocusRipple
+              disableRipple
+              disableTouchRipple
             >
-            History
-            </div>
-            <div
-              className={classes.iconContainer}
-            >
-              <IconButton
-                color="default"
-                onClick={toggleDrawer("right", false)}
-                aria-label="Close"
-                id="histoy-closepanel"
-                disableFocusRipple
-                disableRipple
-                disableTouchRipple
-              >
-                <CloseIcon style={{ color: Colors.gray }} />
-              </IconButton></div>
+              <CloseIcon style={{ color: Colors.gray }} />
+            </IconButton>
           </div>
         </div>
-        <Box height={710} style={{ overflow: "auto" }}>
-          <PanelCard/>
-        </Box>
-        {/* <div
-          onClick={toggleDrawer(anchor, false)}
-          onKeyDown={toggleDrawer(anchor, false)}
-        >
-          <List>
-            {auditItems.results.map((docObj, index) => (
-              <ListItem button key={docObj.docRevName}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={docObj.docRevName} />
-              </ListItem>
-            ))}
-          </List>
-        </div> */}
-      </>
-    );
-  };
+      </div>
+      <Box className={classes.listItemContainer} style={{ overflow: "auto" }}>
+        {auditItems.results.map((auditItem, index) =>
+          <ListItem key={index} disableGutters>
+            <EmployeeActivated />
+          </ListItem>
+        )}
+      </Box>
+    </>
+  );
 
-  const renderPanel = () => (<div>
-    <Box>
-      <Drawer anchor="right" open={opendrawer.right} onClose={toggleDrawer("right", false)} onClick={() => {
+  const renderPanel = () => (
+    <Drawer
+      anchor="right"
+      open={opendrawer.right}
+      onClose={toggleDrawer("right", false)}
+      onClick={() => {
         closeHistoryPanel(opendrawer.right);
-      }}>
-        <div style={{ width: "300px" }}> {loading ? <LinearProgress style={{ width: "100%" }} /> : list("right")}</div>
-      </Drawer>
-    </Box>
-  </div>);
+      }}
+    >
+      <Box width={300}> {loading ? <LinearProgress /> : renderListItems()}</Box>
+    </Drawer>
+  );
 
   return (
     <>

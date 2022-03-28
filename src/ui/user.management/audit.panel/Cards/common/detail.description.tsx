@@ -1,8 +1,8 @@
 
 import { Box } from "@material-ui/core";
 import React from "react";
-import Colors from "../../layout/theme/utils/colors";
-import styles from "./styles";
+import Colors from "../../../../layout/theme/utils/colors";
+import styles from "./common.styles";
 
 const DetailDescription: React.FunctionComponent<any> = ({
   text,
