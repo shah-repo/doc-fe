@@ -455,8 +455,8 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select Autocompletes", () => {
-      cy.get("[data-cy^=\"ac-wi-ch-\"]").arrowClick().autocompleteSelect("test title");
-      cy.get("[data-cy^=\"ac-wo-ch-\"]").arrowClick().autocompleteSelect("test title");
+      cy.get("[data-cy^=\"ac-wi-ch-\"]").arrowClick().autocompleteSelect("eb-title");
+      cy.get("[data-cy^=\"ac-wo-ch-\"]").arrowClick().autocompleteSelect("eb-title");
     });
 
     it("Select Procedure", () => {

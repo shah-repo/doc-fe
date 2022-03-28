@@ -728,7 +728,8 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 
 Cypress.Commands.add("drSelectUser", (...users: string[]) => {
   users.forEach((user) => {
-    cy.get(`[data-cy="field-securityEmployees"]`).autocompleteSelect(`${user}`);
+    cy.get(`[data-cy="field-securityEmployees"]`).arrowType(`${user}`).wait(500);
+    cy.get(`div[id^=react-select]`).contains(user).arrowClick();
   });
   cy.unClick();
 });
