@@ -23,10 +23,11 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
           ownerId={auditDetails.ownerId}
           ownerName={auditDetails.ownerName}
         />
-        {map(auditDetails.groupItems, (groupItem) => (
+        {map(auditDetails.groupItems, (groupItem, index) => (
           <DetailDescription
             primaryText={getTransalatedText(groupItem.primaryText)}
             secondayText={groupItem.secondayText}
+            key={index}
           />
         ))}
       </Box>

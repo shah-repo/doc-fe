@@ -29,17 +29,19 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   });
 
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
-    event: React.KeyboardEvent | React.MouseEvent,
+    // event: React.KeyboardEvent | React.MouseEvent,
   ) => {
-    if (
-      event.type === "keydown" &&
-      ((event as React.KeyboardEvent).key === "Tab" ||
-        (event as React.KeyboardEvent).key === "Shift")
-    ) {
-      return;
-    }
+    // TODO: Check if below If condition required
+    // if (
+    //   event.type === "keydown" &&
+    //   ((event as React.KeyboardEvent).key === "Tab" ||
+    //     (event as React.KeyboardEvent).key === "Shift")
+    // ) {
+    //   return;
+    // }
 
     setOpenDrawer({ ...opendrawer, [anchor]: open });
+    closeHistoryPanel(opendrawer.right);
   };
   const renderListItems = () => (
     <>
@@ -78,9 +80,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       anchor="right"
       open={opendrawer.right}
       onClose={toggleDrawer("right", false)}
-      onClick={() => {
-        closeHistoryPanel(opendrawer.right);
-      }}
     >
       <Box width={300}> {loading ? <LinearProgress /> : renderListItems()}</Box>
     </Drawer>
