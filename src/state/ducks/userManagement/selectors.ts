@@ -159,7 +159,7 @@ const historyGroups = (state: ApplicationState) => {
       fieldPath: "groups",
       timestamp: "2022-03-28T09:11:57.065Z",
       previousValue: "undefined",
-      nextValue: "a23f9dc1-96b1-4584-9387-c6dd89fd0c99",
+      nextValue: "ab406658-9ee5-4f97-a710-20e4cc0232c4",
       groupId: "08737b9e-7df0-409c-8f40-4263261920d9",
       ownerId: "40558ca1-672e-4aa2-b7c0-cff075c7e6b3",
       server: null,
@@ -252,7 +252,7 @@ const historyGroups = (state: ApplicationState) => {
       fieldPath: "groups",
       timestamp: "2022-03-28T09:05:01.528Z",
       previousValue: "undefined",
-      nextValue: "af568047-4153-4383-8304-b66f0018314a",
+      nextValue: "74500c48-a403-4c8b-8e46-a2f2363edded",
       groupId: "1a37b4ca-cc42-4fbe-8406-92d08ea11039",
       ownerId: "40558ca1-672e-4aa2-b7c0-cff075c7e6b3",
       server: null,
@@ -358,4 +358,5 @@ export default {
   getLoadHistoryListAsyncInfo,
   historyList,
   historyGroups,
+  groupsById,
 };

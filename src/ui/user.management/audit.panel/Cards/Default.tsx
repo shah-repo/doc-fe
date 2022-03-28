@@ -2,6 +2,8 @@ import { Box } from "@material-ui/core";
 import { map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
+import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import styles from "./card.styles";
 import DetailDescription from "./common/detail.description";
 import UserAvatar from "./common/userAvatar";
@@ -14,6 +16,9 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
   const classes = styles();
   const intl = useIntl();
   const getTransalatedText = (key: string) => intl.formatMessage({ id: `user.management.audit.history.${key}` });
+  const groupsById = useSelector(userManagementSelectors.groupsById);
+  const getGrpNameFromGrpId = (groupId: string) => groupId.split(",").map((obj) => groupsById[obj] ?
+    groupsById[obj].name : obj).join(",");
   return (
     <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
       <Box display="grid">
@@ -26,7 +31,8 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
         {map(auditDetails.groupItems, (groupItem, index) => (
           <DetailDescription
             primaryText={getTransalatedText(groupItem.primaryText)}
-            secondayText={groupItem.secondayText}
+            secondayText={groupItem.primaryText === "AddedToGroups" ?
+              getGrpNameFromGrpId(groupItem.secondayText) : groupItem.secondayText }
             key={index}
           />
         ))}
