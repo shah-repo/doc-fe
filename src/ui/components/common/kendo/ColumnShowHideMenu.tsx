@@ -5,7 +5,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
