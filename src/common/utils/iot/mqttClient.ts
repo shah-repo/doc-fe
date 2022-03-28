@@ -85,7 +85,7 @@ export class IotService {
     if (topicSubscribed) {
       await this.mqttClientInstance.unsubscribe(fullTopic);
 
-      console.log(`unsubs to : ${topic}`)
+      // console.log(`unsubs to : ${topic}`)
       delete this.emitter[fullTopic];
     }
   }
