@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { useFormikContext } from "formik";
-import { compact, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
+import { compact, difference, each, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -44,6 +44,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     dialogState = FB.useRef(FBDialogState);
     const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
     const updateApprovers = document?.status === "DRAFT" && !isAdministrativeChange;
+    let deletedRequestor = "";
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
@@ -91,12 +92,32 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    const checkLineItems = (poItems: any, requester: any) => {
+      const approvers = map(poApprovalsState?.getApprovals, "approver.id");
+      let proceedToNewReq = false;
+      each(poItems.items, (item) => {
+        if (item.type === "service") {
+          proceedToNewReq = true;
+        }
+        if (item.type === "product" && item.partNumberDocId) {
+          proceedToNewReq = true;
+        }
+      });
+      if (updateApprovers && requester && proceedToNewReq && !approvers?.includes(requester)) {
+        addApprover([requester]);
+        formState?.validate();
+      } else if (!requester && approvers?.includes(deletedRequestor)) {
+        removeApprover([deletedRequestor]);
+      }
+    };
+
     // On add part items
     React.useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get("po-items-built-in"),
       (poItems) => {
-        // console.log("po items built in: debug", poItems);
-      }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        deletedRequestor = workspaceState?.formInputSync?.get("requestor-k740hxlb");
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -134,10 +155,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     React.useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get("requestor-k740hxlb"),
       (requestor) => {
-        const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
-        if (updateApprovers && requestor && !formValue.includes(requestor)) {
-          addApprover([requestor]);
-        }
+        const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+        checkLineItems(poItems, requestor);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

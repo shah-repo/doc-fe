@@ -6,13 +6,14 @@ const FBAutocompleteAsync: React.FunctionComponent<FBAutocompleteAsyncProps> = (
   options,
   defaultValue,
   forceNewRender,
+  disableClearable,
   ...props
 }) => (
   <>
-    {!options && !forceNewRender && <FBAutocomplete {...props} disabled={true} />}
-    {!options && forceNewRender && <FBAutocomplete {...props} disabled={true} />}
-    {options && !forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }} />}
-    {options && forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }} />}
+    {!options && !forceNewRender && <FBAutocomplete {...props} disabled={true} disableClearable={disableClearable} />}
+    {!options && forceNewRender && <FBAutocomplete {...props} disabled={true} disableClearable={disableClearable} />}
+    {options && !forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }} disableClearable={disableClearable} />}
+    {options && forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }} disableClearable={disableClearable} />}
   </>
 );
 
