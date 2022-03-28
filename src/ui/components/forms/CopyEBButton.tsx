@@ -4,6 +4,7 @@ import * as React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
 import CloneModal from "./clone/CloneDialog";
+import { styles } from "./clone/CloneModal.styles";
 
 interface CloneEBButtonProps extends ButtonProps {
   documentRevision: DocumentRevision;
@@ -12,6 +13,7 @@ interface CloneEBButtonProps extends ButtonProps {
 const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
   documentRevision,
 }) => {
+  const classes = styles();
   const [cloneModelopen, setCloneModelopen] = React.useState(false);
 
   const openCloneModel = (e) => {
@@ -40,8 +42,7 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
       <Modal
         open={cloneModelopen}
         onClose={onClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        className={classes.modal}
       >
         <CloneModal
           handleCloneModelClose={onClose}

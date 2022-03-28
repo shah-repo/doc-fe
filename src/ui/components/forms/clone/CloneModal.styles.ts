@@ -3,16 +3,15 @@ import Colors from "../../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
-    paper: {
+    modal: {
       display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-      padding: "0px 20px 15px 20px",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    paper: {
       position: "relative",
       width: "660px",
       height: "291px",
-      top: "30%",
-      left: "25%",
       background: Colors.white,
       borderRadius: "6px",
     },
@@ -21,7 +20,6 @@ export const styles = makeStyles((theme: Theme) =>
       height: "58px",
       marginLeft: "-20px",
       boxShadow: `0px 1px 0px ${Colors.medium_gray}`,
-      borderRadius: "6px 6px 0px 0px",
     },
     footer: {
       "display": "flex",
@@ -96,16 +94,6 @@ export const styles = makeStyles((theme: Theme) =>
       right: "20px",
       height: "30px",
       borderRadius: "6px",
-    },
-    content: {
-      flexDirection: "column",
-      height: "auto",
-      overflowY: "auto",
-      top: "48px",
-      left: "20px",
-      width: "660px",
-      display: "flex",
-      alignItems: "flex-start",
     },
     radioLabel: {
       fontFamily: "Sora",

@@ -59,7 +59,14 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   };
 
   return (
-    <Box className={classes.paper}>
+    <Box
+      pt={0}
+      pl={2.5}
+      pb={1.875}
+      pr={2.5}
+      alignItems="flex-start"
+      className={classes.paper}
+    >
       <Grid
         container
         direction="row"
@@ -71,7 +78,6 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
           <Typography
             variant="h2"
             component="h2"
-            id="simple-modal-title"
             className={`${classes.headertitle} ${classes.title}`}
           >
             <Text translation="documentRevision.clone.modal.title" />
@@ -79,7 +85,6 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
         </Grid>
         <Grid item>
           <IconButton
-            aria-label="close"
             className={classes.closemodel}
             onClick={handleCloneModelClose}
           >
@@ -87,20 +92,15 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
           </IconButton>
         </Grid>
       </Grid>
-      <Box className={classes.content}>
+      <Box>
         <Typography
           variant="h2"
           component="h2"
-          id="simple-modal-title"
           className={`${classes.contenttitle} ${classes.title}`}
         >
           <Text translation="documentRevision.clone.eb.title" />
         </Typography>
-        <RadioGroup
-          name="cloneEB1"
-          value={value}
-          onChange={handleChange}
-        >
+        <RadioGroup value={value} onChange={handleChange}>
           <FormControlLabel
             value={"false"}
             control={
@@ -140,8 +140,8 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
           variant="contained"
           onClick={handleCloneModelClose}
           className={`${classes.buttonCancel} ${classes.buttonLabel}`}
-          disableFocusRipple={true}
-          disableRipple={true}
+          disableFocusRipple
+          disableRipple
         >
           <Text translation="common.cancel" />
         </Button>
