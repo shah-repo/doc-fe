@@ -317,7 +317,6 @@ const historyGroups = (state: ApplicationState) => {
       employeeName: "Abhishek Jain",
     },
   ];
-
   // Enrich Audi Records with uniq groupKey and action info
   const auditRecords = map(response, (auditRecord) => ({
     ...auditRecord,
@@ -325,24 +324,14 @@ const historyGroups = (state: ApplicationState) => {
     actionInfo: getActionInfo(auditRecord),
   }));
   const auditRecordGroups = groupBy(auditRecords, "groupKey");
-
   // Create a Group Data for each Card to be represented
   const cardGroups = {};
   each(auditRecordGroups, (groupedItems, groupKey) => {
     cardGroups[groupKey] = {
-      ...pick(auditRecordGroups[groupKey][0], [
-        "ownerId",
-        "ownerName",
-        "ownerEmail",
-        "timestamp",
-      ]),
-      items: map(groupedItems, (groupItem) => ({
-        action: groupItem.actionInfo.action,
-        value: groupItem.actionInfo.value,
-      })),
+      ...pick(auditRecordGroups[groupKey][0], ["ownerId", "ownerName", "ownerEmail", "timestamp"]),
+      items: map(groupedItems, (groupItem) => ({ ...groupItem.actionInfo })),
     };
   });
-
   // Make uniq values
   each(cardGroups, (data: any, key) => {
     cardGroups[key].groupItems = chain(data.items)
@@ -353,9 +342,7 @@ const historyGroups = (state: ApplicationState) => {
       }))
       .value();
   });
-
   return cardGroups;
-
 };
 const getLoadHistoryListAsyncInfo = (state: ApplicationState): AsyncState => state.userManagement.loadHistoryAsyncInfo;
 
