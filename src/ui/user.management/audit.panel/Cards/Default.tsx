@@ -3,6 +3,7 @@ import { map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import styles from "./card.styles";
 import DetailDescription from "./common/detail.description";
@@ -23,7 +24,10 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
     <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
       <Box display="grid">
         <UserAvatar
-          timestamp={auditDetails.timestamp}
+          timestamp={getFormattedDateString(
+            auditDetails.timestamp,
+            MomentFormats.BriefDateTime
+          )}
           ownerEmail={auditDetails.ownerEmail}
           ownerId={auditDetails.ownerId}
           ownerName={auditDetails.ownerName}
