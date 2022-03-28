@@ -26,8 +26,6 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { Translation } from "../../translations/types";
 import Attachment from "./attachment";
 import BuildsContainer from "./builds.container";
-import ReferencedByContainer from "./referencedBy.container";
-import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
 import CompleteTraining from "./training/complete.training";
 import TrainingControl from "./training/training.control";
@@ -165,16 +163,6 @@ const Presenter: React.FunctionComponent<Props> = ({
             label="document.output.type"
             value={outputDocumentTypeName}
           />
-        )}
-        {referenceTo && (
-          <ReferenceToContainer
-            dataProp={referenceTo}
-            status={status}
-            deprecatedAt={deprecatedAt}
-          />
-        )}
-        {document.referencedBy && (
-          <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {isEB && parent && (
           <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" docRevId={dataProp.id} />

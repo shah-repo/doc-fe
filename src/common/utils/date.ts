@@ -37,6 +37,7 @@ export enum MomentFormats {
   DateTimeSeconds = "M/D/YYYY hh:mm:ss A",
   Time = "hh:mm:ss A",
   AsyncTasksDefaultDateTimeFormatter = "YYYY-MM-DDTHH:mm:ss",
+  YearMonthDateDotNotation = "YYYY.MM.DD",
   YearMonthDate= "YYYY-MM-DD"
 }
 

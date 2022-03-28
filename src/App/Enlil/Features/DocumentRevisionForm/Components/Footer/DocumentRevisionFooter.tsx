@@ -31,4 +31,5 @@ const DocumentRevisionFooter: React.FunctionComponent<DocumentRevisionFooterProp
   </Observer>
 );
 
-export default withDocumentRevisionFooterWrap(DocumentRevisionFooter);
+// TODO: Remove this in 22.3 as new component created for this
+withDocumentRevisionFooterWrap(DocumentRevisionFooter);

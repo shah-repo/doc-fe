@@ -81,6 +81,8 @@ enum Colors {
   light_cyan="#DCF4FD",
   lochmara="#306AAC",
   peri_winkle_blue="#8295FA",
+  bright_gray="#EBEDF2",
+  light_gray_border="#CCD4D9",
 }
 
 export default Colors;

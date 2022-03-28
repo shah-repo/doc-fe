@@ -1,6 +1,6 @@
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionFooter, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
@@ -38,7 +38,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       {..._documentRevisionFormState?.documentRevision && {
         rightSidebar: (
           <Observer>
-            {() => <DocumentRevisionSidebar />}
+            {() => <DocumentRevisionSidebar edit={false} />}
           </Observer>
         ),
       }}
@@ -47,7 +47,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         templateBoxProps={{ stretchY: "100%" }}
         headerBoxProps={{ maxHeight: "80%" }}
         contentBoxProps={{ minHeight: "20%", height: "100%" }}
-        footer={<DocumentRevisionFooter />}
         header={<DocumentRevisionSummaryHeader {...{ documentRevision }} />}
       >
         <Observer>

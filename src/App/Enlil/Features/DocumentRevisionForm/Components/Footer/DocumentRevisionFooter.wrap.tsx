@@ -16,7 +16,9 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
     // MARK: @config
     _documentRevisionFooterState = SM.useRef(DocumentRevisionFooterState);
     const { _formState } = SM.useStores();
-
+    if (_formState?.values?.get("formDocument")) {
+      setFormDocument(_formState?.values?.get("formDocument"));
+    }
     // MARK: @state
 
     // MARK: @reactions

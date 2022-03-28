@@ -24,6 +24,7 @@ export type DocumentRevisionSidebarProps =
   formDocument?: FBDocumentRevisionProps;
   isNewOutput?: boolean;
   title?: string;
+  edit: boolean;
 };
 
 export interface DocumentRevisionSidebarStateProps {

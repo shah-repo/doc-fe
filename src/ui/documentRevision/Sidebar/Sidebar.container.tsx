@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import FBStore from "../../form.builder/FBStore/FBStore";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import SidebarPresenter from "./Sidebar.presenter";
-import { Sidebar } from "./types";
+import SidebarPresenter from "./Sidebar.presenter.new";
+import { Sidebar } from "./types.new";
 
 interface SidebarContainerProps {
   sidebarList: Sidebar[];

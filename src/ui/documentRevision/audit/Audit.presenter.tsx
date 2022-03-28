@@ -404,4 +404,5 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   );
 };
 
-export default AuditPresenter;
+// TODO: Remove this in 22.3 as new component created for this
+AuditPresenter;
