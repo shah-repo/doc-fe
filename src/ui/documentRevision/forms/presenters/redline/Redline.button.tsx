@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { SM } from "../../../../../App";
+import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { companyActions } from "../../../../../state/ducks/company";
 import Text from "../../../../components/Text";
 
@@ -16,6 +17,7 @@ const RedlineButton: React.FunctionComponent<Props> = ({
   docTypeHasRedline,
   isLHRProductionBuild,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const { _formState } = SM.useStores();
   const dispatch = useDispatch();
 
@@ -28,7 +30,18 @@ const RedlineButton: React.FunctionComponent<Props> = ({
   if (!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild) {
     return null;
   }
-
+  if (isNewLayout) {
+    return (
+      <StyledButton
+        color="primary"
+        data-cy="redlineButton"
+        onClick={() => handleClick()}
+        id="Redline"
+      >
+        <Text translation="common.redline" />
+      </StyledButton>
+    );
+  }
   return (
     <>
       <Button

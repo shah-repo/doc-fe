@@ -16,6 +16,7 @@ import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
@@ -36,6 +37,7 @@ import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.contai
 import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
+  const isNewLayout = SM.isNewLayout;
   const formik = useFormikContext();
   const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
@@ -50,6 +52,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     canChangeOwnerShip,
     type,
   } = React.useContext(FormHeaderContext)!;
+  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || "";
@@ -190,7 +193,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
+    <OwnerChanger requestId={values.id} requestType={RequestType.Document}
+      renderAsButton={false} />
   );
 
   return (
@@ -199,6 +203,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         {() => (
           <>
             {<SubmitButton
+              showNewButton={isNewLayout && !isCreateUrl}
               asyncState={asyncState}
               label={isDisabled ?
                 "common.save" :
@@ -270,7 +275,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
         />}
-        <HeaderMenu>
+        { !isCreateUrl && (<HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton
           {...{ documentRevision }}
@@ -290,7 +295,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
           {isRecord && isInlineApproval &&
           isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
-        </HeaderMenu>
+        </HeaderMenu> )}
       </span>
       }
     </div>

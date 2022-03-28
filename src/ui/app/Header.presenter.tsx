@@ -1,10 +1,14 @@
-import { Box, FormControlLabel, Grid, Switch } from "@material-ui/core";
+import { Box, Collapse, FormControlLabel, Grid, Switch } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
-import React from "react";
-import { SM } from "../../App";
-import EnlilLogo from "../../assets/images/enlil_logo.svg";
+import { Observer } from "mobx-react";
+import React, { useState } from "react";
+import SM from "../../App/Shifamed/Utils/SM/SM";
+import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
+import { headerBackgroundStyles } from "../components/common/header/Header.background.styles";
+import { FormHeaderStatusClassMapping } from "../components/common/header/Helpers";
+import Text from "../components/Text";
 import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
 
@@ -13,6 +17,12 @@ interface Props extends WithStyles<typeof styles> {
   customLabelsValue: boolean;
   canToggleCustomLabels: boolean;
 }
+interface FormScrolledContext{
+  setIsScorlled: (action: boolean) => void;
+  setSelectedDocRevDisplayStatus: (status: DocumentRevisionStatus) => void;
+}
+
+export let FormScrolledContext = React.createContext<FormScrolledContext | undefined>(undefined);
 
 const Header: React.FunctionComponent<Props> = ({
   classes,
@@ -20,42 +30,69 @@ const Header: React.FunctionComponent<Props> = ({
   customLabelsValue,
   canToggleCustomLabels,
 }) => {
-  if (SM.isNewLayout) {
-    return  (
-      <Box
-        height={40}
-        fontSize="1rem"
-        style={{
-          background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
-        }}
-      >
-        <Box
-          height="100%"
-          width={150}
-          mr="18%"
-          style={{
-            backgroundRepeat: "no-repeat",
-            backgroundImage: `url(${EnlilLogo})`,
-            float: "right",
-          }}
-        />
-        <Grid
-          container={true}
-          alignItems="flex-end"
-          justify="flex-end"
-        >
-          {canToggleCustomLabels &&
-          <FormControlLabel
-            control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
-            label="Show customizable labels"
-          />
-          }
-          <Box position={"absolute"}>
-            <AutosaveToggle/>
-          </Box>
+  const headerBackgroundClasses = headerBackgroundStyles();
+  const [isScorlled, setIsScorlled] = useState<boolean>(false);
+  const [selectedDocRevDisplayStatus, setSelectedDocRevDisplayStatus] =
+    useState<string>("");
+  FormScrolledContext = React.createContext<FormScrolledContext | undefined>({
+    setIsScorlled,
+    setSelectedDocRevDisplayStatus,
+  });
 
-        </Grid>
-      </Box>
+  if (SM.isNewLayout) {
+    return (
+      <Observer>
+        {() => (
+          <>
+            <Collapse in={!isScorlled}>
+              <Box
+                height={48}
+                className={classes.newAppBar}
+                display="flex"
+                alignContent="center"
+                alignItems="center"
+              >
+                {!isScorlled && <Box className={classes.newLogo} />}
+                <Grid container={true} alignItems="flex-end" justify="flex-end">
+                  <Grid item>
+                    {canToggleCustomLabels && (
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            name="toggleCustomLabels"
+                            checked={customLabelsValue}
+                            onChange={toggleCustomLabels}
+                          />
+                        }
+                        label={
+                          <Text translation="form.builder.header.control.label" />
+                        }
+                      />
+                    )}
+                  </Grid>
+                  <Grid item>
+                    <AutosaveToggle />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Collapse>
+            <Collapse in={isScorlled}>
+              <Box
+                height={40}
+                className={`${
+                  headerBackgroundClasses[
+                    FormHeaderStatusClassMapping[selectedDocRevDisplayStatus]
+                  ]
+                } ${classes.topScrollBarBox}`}
+                alignItems="center"
+                justifyContent="center"
+              >
+                {selectedDocRevDisplayStatus}
+              </Box>
+            </Collapse>
+          </>
+        )}
+      </Observer>
     );
   }
   return (
@@ -67,13 +104,13 @@ const Header: React.FunctionComponent<Props> = ({
           alignItems="flex-end"
           justify="flex-end"
         >
-          {canToggleCustomLabels &&
-        <FormControlLabel
-          control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
-          label="Show customizable labels"
-        />
-          }
-          <AutosaveToggle/>
+          {canToggleCustomLabels && (
+            <FormControlLabel
+              control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
+              label={<Text translation="form.builder.header.control.label" />}
+            />
+          )}
+          <AutosaveToggle />
         </Grid>
       </Toolbar>
     </AppBar>

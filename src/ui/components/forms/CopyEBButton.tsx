@@ -2,6 +2,8 @@ import { Button } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import * as React from "react";
 import { useHistory } from "react-router-dom";
+import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
@@ -16,6 +18,7 @@ interface CloneEBButtonProps extends ButtonProps {
 const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
   documentRevision,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const history = useHistory();
   const asyncClone = useAsync({
     onSuccess: (documentRevision: any) => {
@@ -32,6 +35,17 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
       asyncClone,
     );
   };
+  if (isNewLayout) {
+    return (
+      <StyledButton
+        color="primary"
+        data-cy="CloneEBButton"
+        onClick={cloneAction}
+      >
+        <Text translation="documentRevision.clone.eb" />
+      </StyledButton>
+    );
+  }
   return (
     <Button
       variant="contained"

@@ -1,17 +1,24 @@
-import { Chip, Grid, Typography } from "@material-ui/core";
+import { Chip, Grid, Link, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
+import { companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import { DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
 import { checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
+import { FormHeaderStatusClassMapping } from "./Helpers";
+import { StyledBreadcrumb } from "./StyledBreadcrumb";
 
 interface Props {
   status: string;
@@ -25,6 +32,7 @@ interface Props {
   isInlineApproval?: boolean;
   displayStatus?: string;
   subtitle?: any;
+  displayRevision?: string;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -34,11 +42,12 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   documentTypeId,
   displayStatus,
   subtitle,
+  displayRevision,
 }) => {
 
+  const intl = useIntl();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
-  const classes = styles();
   const isStatusReleased = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
     status as DocumentRevisionStatus,
@@ -46,18 +55,32 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isStatusCanceled = isDocumentRevisionCanceled(status);
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
+  const navigationDetails = useSelector((state: ApplicationState) =>
+    companySelectors.getNavigationDetails(
+      state,
+      documentType?.pageDetails?.category || ""
+    )
+  );
+  const title = navigationDetails?.label || intl.formatMessage({ id: "navigation.document.list" });
+  let url = `${DOCUMENT_REVISION_LIST_URL}`;
+  let iconLink = "/navigation_icons/document.svg";
+  if (navigationDetails.type === "CATEGORY") {
+    url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
+    iconLink = navigationDetails?.icon || "";
+  }
+  const classes = styles({ iconLink });
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
 
-  const titleRenderer = () => {
+  const titleRenderer = (className: string) => {
     const stepRegex = /Step #[0-9]+/;
     // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
     const mpiOutputTitle = name.match(stepRegex);
 
     return isTypeMpiOutput && mpiOutputTitle ?
-      <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} component="span">
+      <Typography variant="h6" id="HeaderInfo-docId" className={className} component="span">
         {mpiOutputTitle[0]}
       </Typography> :
-      <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} component="span">
+      <Typography variant="h6" id="HeaderInfo-docId" className={className} component="span">
         {id}
       </Typography>;
   };
@@ -68,8 +91,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
 
-
-  return (
+  const oldHeaderRenderer = () => (
     <Grid container xs={6} className={classes.itemWrap} >
       <Grid item className={classes.statusWrap}>
         {
@@ -87,7 +109,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item>
         <Grid item xs={12}>
-          {titleRenderer()}
+          {titleRenderer(classes.id)}
           {
             isTitleVisible &&
             <Typography variant="h6" id="HeaderInfo-name" component="span">
@@ -104,7 +126,100 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
           }
         </Grid>
       </Grid>
+    </Grid>);
+
+  const history = useHistory();
+  const returnToList = () => {
+    history.push(url);
+  };
+  const newHeaderRenderer = () => (
+    <Grid container xs={6} className={classes.itemWrap} >
+      <Grid item>
+        <Grid item xs={12}>
+          <StyledBreadcrumb separator="›">
+            <Typography className={classes.groupSection}>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid item={true} className={classes.itemIcon}>
+                  <div className={classes.icon} />
+                </Grid>
+                <Link
+                  underline="hover"
+                  onClick={returnToList}
+                  className={classes.link}
+                >
+                  <Grid item={true} className={classes.title}>
+                    {title}
+                  </Grid>
+                </Link>
+              </Grid>
+            </Typography>
+            <Typography id="HeaderInfo-docId" className={classes.breadcrumbId}>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid item={true} className={classes.minWidthSpace}>
+                  {titleRenderer(classes.breadcrumbId)}
+                  {isTitleVisible && (
+                    <Typography
+                      variant="h6"
+                      id="HeaderInfo-name"
+                      component="span"
+                      className={classes.breadcrumbId}
+                    >  &nbsp;
+                      {name}
+                   &nbsp;
+                    </Typography>)}
+                  {subtitle && (
+                    <Typography
+                      variant="subtitle1"
+                      id="HeaderInfo-subtitle"
+                      component="p"
+                      className={classes.subTitleLink}
+                    >
+                      {subtitle}
+                    </Typography>
+                  )}
+                </Grid>
+            &nbsp;
+                <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
+                <Grid item={true}>
+                  <Text
+                    translation="form.builder.header.rev"
+                    values={{ revision: displayRevision }}
+                  />
+                </Grid>
+                {isStatusVisible && <Grid item={true}>
+                  <CustomLabelTooltip {...{ tooltipConfig }}>
+                    <Chip
+                      size="small"
+                      className={`${classes.chip} ${
+                        classes[
+                          FormHeaderStatusClassMapping[displayStatus || label || ""]
+                        ]
+                      }`}
+                      label={displayStatus || label}
+                    />
+                  </CustomLabelTooltip>
+                </Grid>}
+              </Grid>
+            </Typography>
+        )
+          </StyledBreadcrumb>
+        </Grid>
+      </Grid>
     </Grid>
+
+  );
+  return (
+    <>{SM.isNewLayout ? newHeaderRenderer() : oldHeaderRenderer()}</>
   );
 };
 

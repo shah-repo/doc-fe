@@ -1,6 +1,7 @@
 import { get, isUndefined } from "lodash";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormState, DocumentRevisionSummaryProps, SM, SMProvider } from "../../..";
+import { FormScrolledContext } from "../../../../ui/app/Header.presenter";
 
 export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummaryProps>(
   Component: React.FunctionComponent<T>,
@@ -23,6 +24,12 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     schema = documentRevision.schema || schema;
     const formFB = formInput || formTemplate || formDocument;
     isFB = !isUndefined(formFB);
+    const {
+      setIsScorlled,
+      setSelectedDocRevDisplayStatus,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    } = React.useContext(FormScrolledContext)!;
+    setSelectedDocRevDisplayStatus(documentRevision?.displayStatus);
 
     // MARK: @state
     useEffect(() => {
@@ -45,6 +52,7 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
       const isHeaderHidden = pageYOffset > 0;
       if (isHeaderHidden !== _documentRevisionFormState.isHeaderHidden) {
         _documentRevisionFormState.setIsHeaderHidden(isHeaderHidden);
+        setIsScorlled(isHeaderHidden);
       }
     };
 

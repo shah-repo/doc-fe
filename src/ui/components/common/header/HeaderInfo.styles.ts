@@ -27,6 +27,14 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: "bold",
       marginRight: theme.spacing(2),
     },
+    breadcrumbId: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "18px",
+      color: Colors.white,
+    },
     itemWrap: {
       alignSelf: "center",
     },
@@ -34,6 +42,104 @@ export const styles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       alignItems: "center",
       display: "flex",
+    },
+    groupSection: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "24px",
+      color: Colors.white,
+      marginLeft: "5px",
+    },
+    itemIcon: {
+      color: "inherit",
+      minWidth: "30px",
+      marginLeft: "20px",
+    },
+    icon: ({ iconLink }) => ({
+      "width": 18,
+      "height": 18,
+      "backgroundColor": Colors.white,
+      "mask":
+        `url(${iconLink}) no-repeat center / contain`,
+      "-webkit-mask":
+        `url(${iconLink}) no-repeat center / contain`,
+    }),
+    link: {
+      color: Colors.white,
+      cursor: "Pointer",
+      textDecoration: "none",
+    },
+    title: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "24px",
+      cursor: "pointer",
+    },
+    minWidthSpace: {
+      minWidth: "50px",
+    },
+    subTitleLink: {
+      "fontFamily": "Sora",
+      "fontWeight": 600,
+      "fontSize": "12px",
+      "color": Colors.white,
+      "textDecoration": "none",
+      "cursor": "pointer",
+      "& a": {
+        color: Colors.white,
+        textDecoration: "underline",
+        cursor: "pointer",
+      },
+    },
+    whiteDot: {
+      width: "4px",
+      height: "4px",
+      marginLeft: "5px",
+      marginRight: "5px",
+      position: "relative",
+      background: Colors.white,
+    },
+    chip: {
+      display: "flex",
+      flexDirection: "row",
+      padding: "0px !important",
+      borderRadius: 3,
+      marginLeft: "12px",
+      background: Colors.white,
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 700,
+      fontSize: "10px",
+      lineHeight: "13px",
+      textTransform: "uppercase",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+    },
+    GREEN_STATUS: {
+      color: Colors.green_blue,
+    },
+    RED_STATUS: {
+      color: Colors.latest_red_varient,
+    },
+    CLOSED_STATUS: {
+      color: Colors.dawn,
+    },
+    PENDING_STATUS: {
+      color: Colors.school_bus_yellow,
+    },
+    GRAY_STATUS: {
+      color: Colors.mandy,
+    },
+    WIP_STATUS: {
+      color: Colors.raven,
+    },
+    undefined: {
+      color: Colors.dodger_blue,
     },
   },
   ));

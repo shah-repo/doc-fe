@@ -1,7 +1,11 @@
 import { get } from "lodash";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
+import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
+import { ApplicationState } from "../../../../state/reducers";
+import { FormScrolledContext } from "../../../../ui/app/Header.presenter";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -21,13 +25,25 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const { _formState, _tabsState } = SM.useStores();
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
-
+    const { id } = _formState?.getValues() as DocumentRevision;
+    const formDocuments = useSelector((state: ApplicationState) =>
+      documentRevisionsSelectors.getDocumentRevision(state, id)
+    );
+    const {
+      setIsScorlled,
+      setSelectedDocRevDisplayStatus,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    } = React.useContext(FormScrolledContext)!;
     useEffect(() => {
       if (!document?.id) { return; }
       const releasedDocument = (document?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status));
       _documentRevisionFormState?.setReleasedDocRev(releasedDocument);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [document?.documentRevisions]);
+    useEffect(() => {
+      setSelectedDocRevDisplayStatus(formDocuments?.displayStatus);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formDocuments]);
 
     // MARK: @state
 
@@ -87,10 +103,12 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       setTimeout(() => {
         const elY = get(el, "scrollTop");
         if (pageYOffset > 0 && pageYOffset < elY && !_documentRevisionFormState?.isHeaderHidden) {
+          setIsScorlled(true);
           _documentRevisionFormState?.setIsHeaderHidden(true);
         }
         if (pageYOffset === 0 && elY === 0 && _documentRevisionFormState?.isHeaderHidden) {
           _documentRevisionFormState?.setIsHeaderHidden(false);
+          setIsScorlled(false);
         }
       }, 250);
     };

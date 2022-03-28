@@ -22,6 +22,8 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
+  gray_goose ="##CCD4D9",
+  raven = "#767B87",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -36,6 +38,8 @@ enum Colors {
   cerulean="#01A6C7",
   light_slate_blue="#7B61FF",
   steel_blue="#457AB5",
+  dodger_blue="#4D88FF",
+  ultramarine_blue="#4C69FF",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -45,6 +49,8 @@ enum Colors {
   opal_red = "#f05a5c",
   latest_red_varient = "#EC2B00",
   trinary_red = "#F14822",
+  mandy = "#EB4770",
+  dawn="#A2A2A2",
   // purple
   deep_purple = "#29064C",
   purple = "#99c",
@@ -56,12 +62,15 @@ enum Colors {
   olivine = "#9EB774",
   carla="#E6FCD9",
   light_forest_green="#4C9646",
+  green_blue="#0DB78D",
   light_forest_green_border="#509849",
+  dark_jungle_green="#162229",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
   pink_red = "#f50057",
+  school_bus_yellow = "#EFA20B",
   // orange
   basket_ball_orange = "#F88961",
   old_lace="#FEF8EE",
