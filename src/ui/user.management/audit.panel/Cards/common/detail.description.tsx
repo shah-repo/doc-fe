@@ -5,7 +5,8 @@ import Colors from "../../../../layout/theme/utils/colors";
 import styles from "./common.styles";
 
 const DetailDescription: React.FunctionComponent<any> = ({
-  text,
+  primaryText,
+  secondayText,
   marginBottom,
   multitypo,
 }) => {
@@ -15,13 +16,11 @@ const DetailDescription: React.FunctionComponent<any> = ({
       <Box
         color={Colors.font_gray}
         fontSize={12}>
-  Deactivated User Text: {text}
+        {primaryText}
       </Box>
       {!multitypo && <Box color={Colors.almost_black} fontSize={14} className={classes.description} >
-  Sam Smith
+        {secondayText}
       </Box>}
-      {multitypo && <Box color={Colors.almost_black} fontSize={14} className={classes.description}>
-      Sam Smith <span style={{ fontSize: "12px", color: Colors.font_gray }}>to </span> Sam Smith Jone</Box>}
     </Box>
   );
 };

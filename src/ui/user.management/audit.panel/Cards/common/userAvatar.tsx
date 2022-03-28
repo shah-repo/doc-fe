@@ -9,7 +9,7 @@ import React from "react";
 import styles from "./common.styles";
 import UserIcon from "./test_user_Avatar.jpg";
 
-const UserAvatar: React.FunctionComponent<any> = () => {
+const UserAvatar: React.FunctionComponent<any> = ({ timestamp, ownerEmail, ownerId, ownerName }) => {
   const classes = styles();
   return (
     <ListItem
@@ -25,7 +25,7 @@ const UserAvatar: React.FunctionComponent<any> = () => {
       <ListItemText
         primary={
           <Typography className={classes.generalInfo}>
-            Maureen Gamarra
+            {ownerName}
           </Typography>
         }
         secondary={
@@ -36,7 +36,7 @@ const UserAvatar: React.FunctionComponent<any> = () => {
               color="textPrimary"
               className={classes.secondaryText}
             >
-              Feb 04, 2022 09:28 AM
+              {timestamp}
             </Typography>
           </React.Fragment>
         }

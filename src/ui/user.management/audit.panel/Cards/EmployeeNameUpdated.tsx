@@ -4,14 +4,17 @@ import styles from "./card.styles";
 import DetailDescription from "./common/detail.description";
 import UserAvatar from "./common/userAvatar";
 
-const EmployeeNameUpdated: React.FunctionComponent = () => {
+interface Props {
+  details: any;
+}
+
+const EmployeeNameUpdated: React.FunctionComponent<Props> = ({ details }) => {
   const classes = styles();
   return (
     <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
       <Box display="grid">
-        <UserAvatar />
-        <DetailDescription text={"text"} marginBottom={true} />
-        <DetailDescription text={"text"} />
+        <UserAvatar timestamp={details.timestamp} user={details.actionBy} />
+        <DetailDescription primaryText={"Username update"} secondayText={`${details.previousValue} to ${details.nextValue}`} />
       </Box>
     </Box>
   );

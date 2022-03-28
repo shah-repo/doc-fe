@@ -1,12 +1,13 @@
 import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import { map } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { historySelectors } from "../../../state/ducks/userManagement";
 import { AsyncStatus } from "../../../state/types";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
-import EmployeeActivated from "./Cards/EmployeeActivated.presenter";
+import Default from "./Cards/Default";
 import styles from "./styles";
 
 type Anchor =  "right";
@@ -21,7 +22,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const loadAsyncState = useSelector(historySelectors.getLoadHistoryListAsyncInfo);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
   const classes = styles();
-  const auditItems: any = useSelector(historySelectors.historyList);
+  const cardGroups: any = useSelector(historySelectors.historyGroups);
+  console.log("debug: cardGroups :: ", cardGroups);
   const [opendrawer, setOpenDrawer] = React.useState({
     right: openHistoryPanel,
   });
@@ -62,9 +64,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         </div>
       </div>
       <Box className={classes.listItemContainer} style={{ overflow: "auto" }}>
-        {auditItems.results.map((auditItem, index) =>
-          <ListItem key={index} disableGutters>
-            <EmployeeActivated />
+        {map(cardGroups, (auditDetails, groupKey) =>
+          <ListItem key={groupKey} disableGutters>
+            {<Default auditDetails={auditDetails} />}
           </ListItem>
         )}
       </Box>
