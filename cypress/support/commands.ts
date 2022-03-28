@@ -56,8 +56,10 @@ declare global {
       progressBarShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldNotExist(): Chainable<Subject>;
       landingPageLoadingElementShouldNotExist(): Chainable<Subject>;
+      landingPageLoadingElementShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldExist(): Chainable<Subject>;
       listLoadingElementShouldAppear(): Chainable<Subject>;
+      dragAndDrop(params: {fromSelector: string; toSelector: string});
     }
   }
 }
@@ -137,6 +139,11 @@ Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
 
 Cypress.Commands.add("landingPageLoadingElementShouldNotExist", () => {
   cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("landingPageLoadingElementShouldAppear", () => {
+  cy.get("div.k-loading-mask", { timeout: 40000 }).should("be.visible");
+  cy.get("div.k-loading-mask", { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("listLoadingElementShouldExist", () => {
@@ -330,6 +337,14 @@ Cypress.Commands.add("verifyAutocompleteList", { prevSubject: "element" }, (
   cy.get("ul>li[role=option]").last().should("have.attr", "data-option-index", indexNumberToVerifyLengthOfList);
 
   cy.unClick();
+});
+
+Cypress.Commands.add("dragAndDrop", (params: {fromSelector: string; toSelector: string}) => {
+  cy.get(params.fromSelector)
+    .realMouseDown({ position: "center", button: "left" });
+  cy.get(params.toSelector)
+    .realMouseMove(0, 0, { position: "center" })
+    .realMouseUp();
 });
 
 // Cypress.Commands.overwrite("click", (originalFn, element, options) => {
