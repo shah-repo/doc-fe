@@ -1,4 +1,4 @@
-import { each, groupBy, map, pick } from "lodash";
+import { chain, each, groupBy, map, pick } from "lodash";
 import { createSelector } from "reselect";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
@@ -37,6 +37,50 @@ const getOfficialGroups = createSelector(
 
 const historyList = (state: ApplicationState) => state.userManagement.history;
 
+const getActionInfo = (groupItem) => {
+  let actionInfo = {
+    action: "Unknown",
+    value: groupItem,
+  };
+  if (groupItem.fieldPath === "name" && groupItem.type === "STRING_EDITED") {
+    actionInfo = {
+      action: "EmployeeNameUpdated",
+      value: `${groupItem.previousValue} to ${groupItem.nextValue}`,
+    };
+  } else if (groupItem.fieldPath === "groups" && groupItem.type === "ARRAY_NEW") {
+    if (groupItem.previousValue === "undefined") {
+      actionInfo = {
+        action: "AddedToGroups",
+        value: groupItem.nextValue,
+      };
+    }
+  } else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_NEW") {
+    actionInfo = {
+      action: "CreatedNewUser",
+      value: groupItem.employeeName,
+    };
+  } else if (groupItem.fieldPath === "name" && groupItem.type === "STRING_NEW") {
+    actionInfo = {
+      action: "ActivateUser",
+      value: groupItem.nextValue,
+    };
+  }
+  else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_EDITED") {
+    if (groupItem.previousValue === "true" && groupItem.nextValue === "false") {
+      actionInfo = {
+        action: "DeactivateUser",
+        value: groupItem.employeeName,
+      };
+    }
+    if (groupItem.previousValue === "false" && groupItem.nextValue === "true") {
+      actionInfo = {
+        action: "ActivateUser",
+        value: groupItem.nextValue,
+      };
+    }
+  }
+  return actionInfo;
+};
 const historyGroups = (state: ApplicationState) => {
   const response = [
     {
@@ -273,14 +317,16 @@ const historyGroups = (state: ApplicationState) => {
       employeeName: "Abhishek Jain",
     },
   ];
-  const auditRecords = map(response, (auditRecord) => {
-    const auditRecordObject = { ...auditRecord, groupKey: "" };
-    auditRecordObject.groupKey = `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`;
-    return auditRecordObject;
-  });
+
+  // Enrich Audi Records with uniq groupKey and action info
+  const auditRecords = map(response, (auditRecord) => ({
+    ...auditRecord,
+    groupKey: `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`,
+    actionInfo: getActionInfo(auditRecord),
+  }));
   const auditRecordGroups = groupBy(auditRecords, "groupKey");
 
-
+  // Create a Group Data for each Card to be represented
   const cardGroups = {};
   each(auditRecordGroups, (groupedItems, groupKey) => {
     cardGroups[groupKey] = {
@@ -290,68 +336,25 @@ const historyGroups = (state: ApplicationState) => {
         "ownerEmail",
         "timestamp",
       ]),
-      items: [],
+      items: map(groupedItems, (groupItem) => ({
+        action: groupItem.actionInfo.action,
+        value: groupItem.actionInfo.value,
+      })),
     };
-    each(groupedItems, (groupItem) => {
-      if (groupItem.fieldPath === "name" && groupItem.type === "STRING_EDITED") {
-        cardGroups[groupKey].items.push({
-          action: "EmployeeNameUpdated",
-          value: `${groupItem.previousValue} to ${groupItem.nextValue}`,
-        });
-      } else if (groupItem.fieldPath === "groups" && groupItem.type === "ARRAY_NEW") {
-        if (groupItem.previousValue === "undefined") {
-          cardGroups[groupKey].items.push({
-            action: "AddedToGroups",
-            value: groupItem.nextValue,
-          });
-        }
-      } else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_NEW") {
-        cardGroups[groupKey].items.push({
-          action: "CreatedNewUser",
-          value: groupItem.employeeName,
-        });
-      } else if (groupItem.fieldPath === "name" && groupItem.type === "STRING_NEW") {
-        cardGroups[groupKey].items.push({
-          action: "ActivateUser",
-          value: groupItem.nextValue,
-        });
-      }
-      else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_EDITED") {
-        if (groupItem.previousValue === "true" && groupItem.nextValue === "false") {
-          cardGroups[groupKey].items.push({
-            action: "DeactivateUser",
-            value: groupItem.employeeName,
-          });
-        }
-        if (groupItem.previousValue === "false" && groupItem.nextValue === "true") {
-          cardGroups[groupKey].items.push({
-            action: "ActivateUser",
-            value: groupItem.nextValue,
-          });
-        }
-      } else {
-        cardGroups[groupKey].items.push({
-          action: "Unknown",
-          value: groupItem,
-        });
-      }
-    });
   });
 
-  const newCardGroups = {};
+  // Make uniq values
   each(cardGroups, (data: any, key) => {
-    newCardGroups[key] = data;
-    newCardGroups[key].groupItems = [];
-    const itemsGroups = groupBy(data.items || [], "action");
-    each(itemsGroups, (itemGroup, action) => {
-  	newCardGroups[key].groupItems.push({
-    	action,
+    cardGroups[key].groupItems = chain(data.items)
+      .groupBy("action")
+      .map((itemGroup, action) => ({
+        action,
         items: map(itemGroup, "value"),
-      });
-    });
+      }))
+      .value();
   });
 
-  return newCardGroups;
+  return cardGroups;
 
 };
 const getLoadHistoryListAsyncInfo = (state: ApplicationState): AsyncState => state.userManagement.loadHistoryAsyncInfo;
