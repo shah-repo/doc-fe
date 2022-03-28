@@ -2,6 +2,7 @@ import { chain, each, groupBy, map, pick } from "lodash";
 import { createSelector } from "reselect";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
+import { ACTION_TITLE_MAPPIING } from "./types";
 
 const groupsById = (state: ApplicationState) => state.userManagement.groupsById;
 const groupsAllIds = (state: ApplicationState) => state.userManagement.groupsAllIds;
@@ -44,37 +45,37 @@ const getActionInfo = (groupItem) => {
   };
   if (groupItem.fieldPath === "name" && groupItem.type === "STRING_EDITED") {
     actionInfo = {
-      action: "EmployeeNameUpdated",
+      action: ACTION_TITLE_MAPPIING.EmployeeNameUpdated,
       value: `${groupItem.previousValue} to ${groupItem.nextValue}`,
     };
   } else if (groupItem.fieldPath === "groups" && groupItem.type === "ARRAY_NEW") {
     if (groupItem.previousValue === "undefined") {
       actionInfo = {
-        action: "AddedToGroups",
+        action: ACTION_TITLE_MAPPIING.AddedToGroups,
         value: groupItem.nextValue,
       };
     }
   } else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_NEW") {
     actionInfo = {
-      action: "CreatedNewUser",
+      action: ACTION_TITLE_MAPPIING.CreatedNewUser,
       value: groupItem.employeeName,
     };
   } else if (groupItem.fieldPath === "name" && groupItem.type === "STRING_NEW") {
     actionInfo = {
-      action: "ActivateUser",
+      action: ACTION_TITLE_MAPPIING.ActivateUser,
       value: groupItem.nextValue,
     };
   }
   else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_EDITED") {
     if (groupItem.previousValue === "true" && groupItem.nextValue === "false") {
       actionInfo = {
-        action: "DeactivateUser",
+        action: ACTION_TITLE_MAPPIING.DeactivateUser,
         value: groupItem.employeeName,
       };
     }
     if (groupItem.previousValue === "false" && groupItem.nextValue === "true") {
       actionInfo = {
-        action: "ActivateUser",
+        action: ACTION_TITLE_MAPPIING.ActivateUser,
         value: groupItem.nextValue,
       };
     }
@@ -336,10 +337,13 @@ const historyGroups = (state: ApplicationState) => {
   each(cardGroups, (data: any, key) => {
     cardGroups[key].groupItems = chain(data.items)
       .groupBy("action")
-      .map((itemGroup, action) => ({
-        action,
-        items: map(itemGroup, "value"),
-      }))
+      .map((itemGroup, action) => {
+        const items = map(itemGroup, "value");
+        return {
+          primaryText: action,
+          secondayText: items.join(","),
+        };
+      })
       .value();
   });
   return cardGroups;
