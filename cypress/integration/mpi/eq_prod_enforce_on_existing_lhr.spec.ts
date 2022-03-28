@@ -1810,7 +1810,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     it("Verify Equipment Enforce Prod is checked", () => {
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains("Lot History Record")
+      cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains(/^Lot History Record$/)
         .parents("tr").find(`td[data-grid-col-index="12"] input`).should("be.checked");
     });
   });
