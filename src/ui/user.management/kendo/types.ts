@@ -36,4 +36,5 @@ export interface AddUserManage {
 
 export interface UserManagementProps<T> extends KendoPanelProps<T>{
   onSelect: GridRowSelection<T>;
+  rerender: boolean;
 }

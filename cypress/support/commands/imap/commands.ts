@@ -88,17 +88,21 @@ Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => 
 Cypress.Commands.add("imapGetApprovalRequestLink", (params: { userEmail: string }) => {
   cy.imapGetEmailWithLongerOffset({ userEmail: params.userEmail }).should((emailText) => {
     const startingPosition = emailText.search("/change_request/");
-    const endingPosition = emailText.search("\" target");
+    const endingPosition = emailText.search(`/preview"`);
     const urlToAR = emailText.substring(startingPosition, endingPosition);
-    cy.visit(CONFIG.FE_URL + decodeHTMLEntities(urlToAR));
+    cy.visit(CONFIG.FE_URL + decodeHTMLEntities(`${urlToAR}/preview`));
   });
 });
 
 Cypress.Commands.add("imapGetRecordRequestLink", (params: { userEmail: string }) => {
   cy.imapGetEmailWithLongerOffset({ userEmail: params.userEmail }).should((emailText) => {
-    const startingPosition = emailText.search("/document_revision/");
-    const endingPosition = emailText.search("\" target");
-    const urlToAR = emailText.substring(startingPosition, endingPosition);
+    const filteredExtraSpaceEmailText = emailText.replace(/\s+/g, " ").trim();
+    const startingPosition = filteredExtraSpaceEmailText.search("/document_revision/");
+    const endingPosition = filteredExtraSpaceEmailText.search(`" target`);
+    const urlToAR = filteredExtraSpaceEmailText.substring(startingPosition, endingPosition);
+    console.log(startingPosition);
+    console.log(endingPosition);
+    console.log(urlToAR);
     cy.visit(CONFIG.FE_URL + decodeHTMLEntities(urlToAR));
   });
 });

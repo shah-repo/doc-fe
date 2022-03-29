@@ -1077,8 +1077,7 @@ context("Training Flow test", () => {
 
   context("Verify Training Records with timestamp on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.training\"]").arrowClick();
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
+      cy.navigToTrainingRecords();
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
@@ -1196,8 +1195,7 @@ context("Training Flow test", () => {
     });
 
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.training\"]").arrowClick();
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
+      cy.navigToTrainingRecords();
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {

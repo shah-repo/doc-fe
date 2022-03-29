@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import { isEmpty, size } from "lodash";
+import { Observer } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -54,25 +55,29 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
               )}
 
             >
-              <FBText
-                key={`fb-part-${type}-${item.title}-${index}`}
-                locale={`form.builder.procedure.${type}.title`}
-                values={{
-                  title: getItem?.(item.title),
-                  lot: getLot?.(item.partLot),
-                  quantity: item.quantity || "form.builder.none",
-                  unit: item.unit,
-                }}
-                boxProps={{
-                  bgcolor: FBPartItemStatusBg[(item.status || "none")],
-                  borderColor: FBPartItemStatusBorder[(item.status || "none")],
-                  border: 1,
-                  borderRadius: 4,
-                  padding: 1,
-                  fontWeight: "bold",
-                  mb: (gutter && index === (size(collection) - 1)) ? 5 : 2,
-                }}
-              />
+              <Observer>
+                {() => (
+                  <FBText
+                    key={`fb-part-${type}-${item.title}-${index}`}
+                    locale={`form.builder.procedure.${type}.title`}
+                    values={{
+                      title: getItem?.(item.title),
+                      lot: getLot?.(item.partLot),
+                      quantity: item.quantity || "form.builder.none",
+                      unit: item.unit,
+                    }}
+                    boxProps={{
+                      bgcolor: FBPartItemStatusBg[(item.status || "none")],
+                      borderColor: FBPartItemStatusBorder[(item.status || "none")],
+                      border: 1,
+                      borderRadius: 4,
+                      padding: 1,
+                      fontWeight: "bold",
+                      mb: (gutter && index === (size(collection) - 1)) ? 5 : 2,
+                    }}
+                  />
+                )}
+              </Observer>
             </FBConditionalWrapper>
           </Box>
         )}

@@ -10,7 +10,6 @@ import {
   Modal,
   Typography,
 } from "@material-ui/core";
-import { size } from "lodash";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -37,6 +36,7 @@ import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
+import { getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./pendingReview.styles";
 
@@ -103,6 +103,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const { count, pending, approved, primaryText, secondaryText } =
+    getPendingTooltipText(pendingApprovers, approvedApprovers);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -228,18 +230,15 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text
-                          translation="assigned.users.count"
-                          values={{
-                            count:
-                              size(pendingApprovers) + size(approvedApprovers),
-                          }}
+                          translation={primaryText}
+                          values={{ count }}
                         />
                         <br />
                         <Text
-                          translation="approved.and.pending.count"
+                          translation={secondaryText}
                           values={{
-                            approved: size(approvedApprovers),
-                            pending: size(pendingApprovers),
+                            approved,
+                            pending,
                           }}
                         />
                       </>
