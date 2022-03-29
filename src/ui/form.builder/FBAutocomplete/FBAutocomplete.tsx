@@ -35,6 +35,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   inputStyle = {},
   isRequester,
   disableClearable,
+  rules,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -50,7 +51,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       )}
       <FBInput
         {...props}
-        {...{ multiple, defaultValue, loading }}
+        {...{ multiple, defaultValue, loading, rules }}
         type="autocomplete"
         disabled={props.name === "approvers" ? false : disabled}
       >

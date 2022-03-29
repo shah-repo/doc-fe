@@ -125,6 +125,9 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     debounceFilterInput = debounce(onFilterInputChange, 1000);
     filterSelectedOptions = name !== "requestor-k740hxlb";
+    if (name === "requestor-k740hxlb") {
+      props.rules = "required";
+    }
 
     if (isUndefined(defaultValue)) {
       defaultValue = "";
