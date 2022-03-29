@@ -8,7 +8,7 @@ import moment from "moment";
 import MQTTPattern from "mqtt-pattern";
 import { IotCredentials } from "../../../state/ducks/auth/types";
 
-const debugLog = debug("enlil:iotservice")
+const loggerDebug = debug("enlil:iotservice")
 
 interface AwsMqttClient {
   connected: boolean;
@@ -47,7 +47,6 @@ export class IotService {
 
   private static instance: IotService;
 
-  // TODO: try mqtt-this.emitter
   private emitter: any = {};
   private connectedSubscriptions: Dictionary<any> = {};
 
@@ -59,13 +58,13 @@ export class IotService {
 
   public async updateMqttClient(endpointRedux: any): Promise<any> {
     credentialsMqtt = endpointRedux;
-    debugLog("(updateMqttClient) Updating credentials");
+    loggerDebug("(updateMqttClient) Updating credentials");
     await this.createMqttClient();
   }
 
   public subscribeToTopic(topic: string, notif: any): any {
     if (!this.isConnected()) {
-      debugLog("(subscribeToTopic) Could not subscribe. Client not connected", topic);
+      loggerDebug("(subscribeToTopic) Could not subscribe. Client not connected", topic);
       retrySubscriptions[topic] = notif;
       return;
     }
@@ -75,7 +74,7 @@ export class IotService {
 
   public async unsubscribeFromTopic(topic: string) {
     if (!this.isConnected()) {
-      debugLog("(unsubscribeFromTopic) Could not unsubscribe. Client not connected", topic);
+      loggerDebug("(unsubscribeFromTopic) Could not unsubscribe. Client not connected", topic);
       return;
     }
 
@@ -88,13 +87,13 @@ export class IotService {
 
       delete this.emitter[fullTopic];
     } else {
-      debugLog(`(unsubscribeFromTopic) cannot unsubscribe from ${topic}, not subscribed`)
+      loggerDebug(`(unsubscribeFromTopic) cannot unsubscribe from ${topic}, not subscribed`)
     }
   }
 
   public async unsubscribeAll() {
     if (!this.isConnected()) {
-      debugLog("(unsubscribeAll) Could not unsubscribe all. Client not connected");
+      loggerDebug("(unsubscribeAll) Could not unsubscribe all. Client not connected");
       return;
     }
 
@@ -112,7 +111,7 @@ export class IotService {
     if (this.mqttClientInstance && this.mqttClientInstance._resubscribeTopics) {
       return Object.keys(this.mqttClientInstance._resubscribeTopics);
     }
-    debugLog("(subscribedTopics) No client available");
+    loggerDebug("(subscribedTopics) No client available");
     return [];
   }
 
@@ -133,9 +132,9 @@ export class IotService {
       );
       this.emitter[fullTopic] = notif;
       this.connectedSubscriptions[topic] = notif;
-      debugLog(`(subscribe) Subscribed to : '${topic}'`)
+      loggerDebug(`(subscribe) Subscribed to : '${topic}'`)
     } else {
-      debugLog(`(subscribe) already subscribed to '${topic}'`)
+      loggerDebug(`(subscribe) already subscribed to '${topic}'`)
     }
   }
 
@@ -167,27 +166,27 @@ export class IotService {
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
     
     this.mqttClientInstance.on("error", (error) => {
-      debugLog("(createMqttClient) on error", error)
+      loggerDebug("(createMqttClient) on error", error)
     });
 
     this.mqttClientInstance.on("offline", () => {
-      debugLog("(createMqttClient) on offline")
+      loggerDebug("(createMqttClient) on offline")
     });
 
     this.mqttClientInstance.on("disconnect", (packet) => {
-      debugLog("(createMqttClient) on disconnect", packet)
+      loggerDebug("(createMqttClient) on disconnect", packet)
     });
 
     this.mqttClientInstance.on("reconnect", () => {
-      debugLog("(createMqttClient) on reconnect")
+      loggerDebug("(createMqttClient) on reconnect")
     });
 
     this.mqttClientInstance.on("end", () => {
-      debugLog("(createMqttClient) on end")
+      loggerDebug("(createMqttClient) on end")
     }); 
 
     this.mqttClientInstance.on("connect", (connack) => {
-      debugLog("(createMqttClient) on connect", connack)
+      loggerDebug("(createMqttClient) on connect", connack)
       Object.keys(this.connectedSubscriptions).forEach((topic) => this.subscribe(topic, this.connectedSubscriptions[topic]));
       Object.keys(retrySubscriptions).forEach((topic) => this.subscribe(topic, retrySubscriptions[topic]));
       creatingClient = false;
@@ -204,7 +203,7 @@ export class IotService {
       }
 
       const params = MQTTPattern.extract(emitterKey, topic);
-      debugLog("(createMqttClient) on message received", {
+      loggerDebug("(createMqttClient) on message received", {
         params,
         topic,
         decodedMessage: new TextDecoder("utf-8").decode(message),
@@ -217,25 +216,25 @@ export class IotService {
 
 export const areValidCredentials = (credentials: IotCredentials, currenEmployeeId: string) => {
   if(!credentials) {
-    debugLog("(validCredentials) no credentials");
+    loggerDebug("(validCredentials) no credentials");
     return false;
   }
   
   const { Expiration} = credentials.credentials;
   
   if(credentials.employeeId !== currenEmployeeId) {
-    debugLog("(validCredentials)", {msg: "different credentials",credentialsEmployeeId: credentials.employeeId, currenEmployeeId: currenEmployeeId} );
+    loggerDebug("(validCredentials)", {msg: "different credentials",credentialsEmployeeId: credentials.employeeId, currenEmployeeId: currenEmployeeId} );
     return false;
   }
 
   if(!Expiration) {
-    debugLog("(validCredentials) no expirationIotDate");
+    loggerDebug("(validCredentials) no expirationIotDate");
     return false;
   }
   if(moment(new Date()).isAfter(moment(Expiration).subtract(10, "minute"))) {
-    debugLog("(validCredentials) expired");
+    loggerDebug("(validCredentials) expired");
     return false;
   }
-  debugLog("(validCredentials) credentials valid");
+  loggerDebug("(validCredentials) credentials valid");
   return true;
 }
