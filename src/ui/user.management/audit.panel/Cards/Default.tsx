@@ -17,10 +17,10 @@ interface Props {
 const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
   const classes = styles();
   const intl = useIntl();
-  const getTransalatedText = (key: string, values: any) =>
+  const getTransalatedText = (key: string, values: any) => {
     console.log("debug :: values :: ", values);
-  intl.formatMessage({ id: `user.management.audit.history.${key}` }, values)
-  ;
+    return intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
+  };
   const groupsById = useSelector(userManagementSelectors.groupsById);
   const getGrpNameFromGrpId = (groupId: string) => groupId.split(",").map((obj) => groupsById[obj] ?
     groupsById[obj].name : obj).join(",");
