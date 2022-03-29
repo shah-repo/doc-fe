@@ -20,7 +20,7 @@ const getExpirationOfCredentials = (state: ApplicationState): string =>
   state.auth.user.iotCredentials.credentials.Expiration;
 
 const getCredentials = (state: ApplicationState): IotCredentials =>
-  state.auth.user.iotCredentials as IotCredentials;
+  state.auth.user.iotCredentials;
 
 const currentUserGroups = (state: ApplicationState): Group[] =>
   state.auth.user.groups || [];
