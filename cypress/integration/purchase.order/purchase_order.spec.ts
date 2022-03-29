@@ -1026,7 +1026,7 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.checkToastMessage({ exists: false });
       });
@@ -1048,7 +1048,7 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.checkToastMessage({ exists: false });
       });
@@ -1100,7 +1100,7 @@ context("PO test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.poAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click 'Void' button", () => {

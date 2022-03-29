@@ -1288,11 +1288,11 @@ context("Autocomplete test", () => {
 
     it("Verify count of 'Document revisions' in the list", () => {
       SystemRequirement("FB-0050");
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 13 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 14 });
     });
 
     it("Verify count of 'Approval requests' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 10 });
+      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 11 });
     });
 
     it("Verify count of 'Approvers' in the list", () => {
@@ -1389,7 +1389,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document revisions (all versions)' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-all", length: 13 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-all", length: 14 });
     });
 
     it("Verify count of 'Materials' in the list", () => {
