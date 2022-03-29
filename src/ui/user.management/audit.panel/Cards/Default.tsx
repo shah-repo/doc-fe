@@ -26,6 +26,7 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
     groupsById[obj].name : obj).join(",");
 
   const companyEmployesUserAvatarInfo = useSelector(companySelectors.getActiveEmployeesForUserAvatar);
+  // TODO: On api integartion check exact id or obj?.user?.id
   const userAvatarDetails = companyEmployesUserAvatarInfo.find((obj) => obj.id === auditDetails.ownerId);
 
   return (

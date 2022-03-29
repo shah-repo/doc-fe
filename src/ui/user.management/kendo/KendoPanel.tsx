@@ -54,6 +54,7 @@ import { NameCell } from "./cell.template/NameCell";
 import { SignedCell } from "./cell.template/SignedCell";
 import KendoGridStyles from "./styles";
 import { AddUserManage, UserManage, UserManagementProps } from "./types";
+import UMExport from "./UMExport";
 
 let call: CancelTokenSource;
 
@@ -525,8 +526,13 @@ export function KendoPanel<T>({
   return (
     <Box>
       <Box mb={2}>
-        <Grid container justify="space-between" alignItems="center">
-          <GridTitle translation="navigation.user.management" />
+        <Grid container={true} justify="space-between" alignItems="center">
+          <Grid item xs >
+            <GridTitle translation="navigation.user.management" />
+          </Grid>
+          <Grid item>
+            <UMExport gridData={gridData} columns={columnDefinitions} />
+          </Grid>
           <Grid item>
             <AddEmployeeContainer addGroup={addNew} />
           </Grid>
