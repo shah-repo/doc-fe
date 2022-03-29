@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/quotes */
 import React from "react";
 import { useSelector } from "react-redux";
-import { IotService } from "../../../common/utils/iot/mqttClient";
+import { IotService } from "../../../common/utils/iot/iotService";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { companyActions } from "../../../state/ducks/company";

@@ -1,6 +1,6 @@
 import React from "react";
 import { appGlobals } from "../../appGlobals";
-import { IotService } from "../../common/utils/iot/mqttClient";
+import { IotService } from "../../common/utils/iot/iotService";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
 import useActionCreator from "../hooks/useActionCreator";

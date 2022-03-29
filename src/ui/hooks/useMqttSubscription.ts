@@ -7,16 +7,17 @@ const useMqttSubscription = (
 ) => {
   const didMqttConnect = useDidMqttConnect();
   useEffect(() => {
-    subscribe();
-    return () => {
-      unsubscribe();
-    };
-  }, [subscribe, unsubscribe]);
-  useEffect(() => {
     if (didMqttConnect) {
       subscribe();
     }
-  }, [didMqttConnect, subscribe]);
+
+    return () => {
+      if (didMqttConnect) {
+        unsubscribe();
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [didMqttConnect]);
 };
 
 export default useMqttSubscription;

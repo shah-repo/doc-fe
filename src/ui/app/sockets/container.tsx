@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { IotService } from "../../../common/utils/iot/mqttClient";
+import { IotService } from "../../../common/utils/iot/iotService";
 import ChangeRequestListSockets from "./ChangeRequestListSockets";
 import DocumentTypeSockets from "./DocumentTypeSockets";
 import EmployeeListSockets from "./EmployeeListSockets";
