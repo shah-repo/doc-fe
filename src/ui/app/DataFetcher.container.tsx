@@ -2,7 +2,7 @@ import { isEqual } from "lodash";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { IotService, validCredentials } from "../../common/utils/iot/mqttClient";
+import { IotService, areValidCredentials } from "../../common/utils/iot/iotService";
 import Config from "../../config";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { setIotCreds } from "../../state/ducks/auth/actions";
@@ -34,7 +34,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   }, [dispatch, employeeId]);
 
   useEffect(() => {
-    if (validCredentials(iotCredentials,employeeId)) {
+    if (areValidCredentials(iotCredentials,employeeId)) {
       setIotCreds(iotCredentials);
       return;
     } 

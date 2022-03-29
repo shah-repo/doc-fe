@@ -2,10 +2,13 @@
 /* eslint-disable no-underscore-dangle */
 import * as AWSMqttClient from "aws-mqtt";
 import { Credentials } from "aws-sdk/global";
+import  debug  from "debug";
 import { Dictionary, isEmpty, some } from "lodash";
 import moment from "moment";
 import MQTTPattern from "mqtt-pattern";
 import { IotCredentials } from "../../../state/ducks/auth/types";
+
+const debugLog = debug("enlil:iotservice")
 
 interface AwsMqttClient {
   connected: boolean;
@@ -56,13 +59,13 @@ export class IotService {
 
   public async updateMqttClient(endpointRedux: any): Promise<any> {
     credentialsMqtt = endpointRedux;
+    debugLog("(updateMqttClient) Updating credentials");
     await this.createMqttClient();
   }
 
   public subscribeToTopic(topic: string, notif: any): any {
     if (!this.isConnected()) {
-      // console.error(new Error("subscribeToTopic"))
-      // console.log("Could not subscribe. Client not connected", topic);
+      debugLog("(subscribeToTopic) Could not subscribe. Client not connected", topic);
       retrySubscriptions[topic] = notif;
       return;
     }
@@ -72,9 +75,7 @@ export class IotService {
 
   public async unsubscribeFromTopic(topic: string) {
     if (!this.isConnected()) {
-      // eslint-disable-next-line: no-console
-      // console.error(new Error("unsubscribeFromTopic"))
-      // console.log("Could not unsubscribe. Client not connected", topic);
+      debugLog("(unsubscribeFromTopic) Could not unsubscribe. Client not connected", topic);
       return;
     }
 
@@ -85,15 +86,15 @@ export class IotService {
     if (topicSubscribed) {
       await this.mqttClientInstance.unsubscribe(fullTopic);
 
-      // console.log(`unsubs to : ${topic}`)
       delete this.emitter[fullTopic];
+    } else {
+      debugLog(`(unsubscribeFromTopic) cannot unsubscribe from ${topic}, not subscribed`)
     }
   }
 
   public async unsubscribeAll() {
     if (!this.isConnected()) {
-      // eslint-disable-next-line: no-console
-      // console.log("Could not unsubscribe all. Client not connected");
+      debugLog("(unsubscribeAll) Could not unsubscribe all. Client not connected");
       return;
     }
 
@@ -111,8 +112,7 @@ export class IotService {
     if (this.mqttClientInstance && this.mqttClientInstance._resubscribeTopics) {
       return Object.keys(this.mqttClientInstance._resubscribeTopics);
     }
-    // eslint-disable-next-line: no-console
-    // console.log("No client available");
+    debugLog("(subscribedTopics) No client available");
     return [];
   }
 
@@ -133,14 +133,13 @@ export class IotService {
       );
       this.emitter[fullTopic] = notif;
       this.connectedSubscriptions[topic] = notif;
-      // console.log(`subs to : ${topic}`)
+      debugLog(`(subscribe) Subscribed to : '${topic}'`)
     } else {
-      // console.log(`alreadySubscribed : ${topic}`)
+      debugLog(`(subscribe) already subscribed to '${topic}'`)
     }
   }
 
   private async createMqttClient() {
-    // console.log(moment(credentialsMqtt.credentials.Expiration).isAfter(new Date()))
     if (creatingClient) {
       return;
     }
@@ -167,28 +166,28 @@ export class IotService {
     creatingClient = true;
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
     
-    // this.mqttClientInstance.on("error", (error) => {
-    //   console.log("error", error)
-    // });
+    this.mqttClientInstance.on("error", (error) => {
+      debugLog("(createMqttClient) on error", error)
+    });
 
-    // this.mqttClientInstance.on("offline", () => {
-    //   console.log("offline")
-    // });
+    this.mqttClientInstance.on("offline", () => {
+      debugLog("(createMqttClient) on offline")
+    });
 
-    // this.mqttClientInstance.on("disconnect", (packet) => {
-    //   console.log("disconnect")
-    // });
+    this.mqttClientInstance.on("disconnect", (packet) => {
+      debugLog("(createMqttClient) on disconnect", packet)
+    });
 
-    // this.mqttClientInstance.on("reconnect", () => {
-    //   console.log("reconnect")
-      
-    // });
+    this.mqttClientInstance.on("reconnect", () => {
+      debugLog("(createMqttClient) on reconnect")
+    });
 
-    // this.mqttClientInstance.on("end", () => {
-    //   console.log("end")
-    // }); 
+    this.mqttClientInstance.on("end", () => {
+      debugLog("(createMqttClient) on end")
+    }); 
 
     this.mqttClientInstance.on("connect", (connack) => {
+      debugLog("(createMqttClient) on connect", connack)
       Object.keys(this.connectedSubscriptions).forEach((topic) => this.subscribe(topic, this.connectedSubscriptions[topic]));
       Object.keys(retrySubscriptions).forEach((topic) => this.subscribe(topic, retrySubscriptions[topic]));
       creatingClient = false;
@@ -205,8 +204,7 @@ export class IotService {
       }
 
       const params = MQTTPattern.extract(emitterKey, topic);
-      console.log({
-        action: "messageReceived",
+      debugLog("(createMqttClient) on message received", {
         params,
         topic,
         decodedMessage: new TextDecoder("utf-8").decode(message),
@@ -217,26 +215,27 @@ export class IotService {
 }
 
 
-export const validCredentials = (credentials: IotCredentials, currenEmployeeId: string) => {
+export const areValidCredentials = (credentials: IotCredentials, currenEmployeeId: string) => {
   if(!credentials) {
+    debugLog("(validCredentials) no credentials");
     return false;
   }
   
   const { Expiration} = credentials.credentials;
   
   if(credentials.employeeId !== currenEmployeeId) {
-    // console.log({msg: "different credentials",credentialsEmployeeId: credentials.employeeId, currenEmployeeId: currenEmployeeId} );
+    debugLog("(validCredentials)", {msg: "different credentials",credentialsEmployeeId: credentials.employeeId, currenEmployeeId: currenEmployeeId} );
     return false;
   }
 
   if(!Expiration) {
-    // console.log("no expirationIotDate");
+    debugLog("(validCredentials) no expirationIotDate");
     return false;
   }
   if(moment(new Date()).isAfter(moment(Expiration).subtract(10, "minute"))) {
-    // console.log("expired");
+    debugLog("(validCredentials) expired");
     return false;
   }
-  // console.log("credentials OK");
+  debugLog("(validCredentials) credentials valid");
   return true;
 }
