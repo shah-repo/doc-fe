@@ -102,10 +102,12 @@ export type HistoryState = HistoryListApiResponse;
 
 export enum ACTION_TITLE_MAPPIING {
   AddedToGroups = "AddedToGroups",
+  AddedToGroup = "AddedToGroup",
   CreatedNewUser = "CreatedNewUser",
   DeactivateUser = "DeactivateUser",
   ActivateUser = "ActivateUser",
   Unknown = "Unknown",
   EmployeeNameUpdated = "EmployeeNameUpdated",
   DeletedFromGroup = "DeletedFromGroup",
+  DeletedFromGroups = "DeletedFromGroups",
 }
