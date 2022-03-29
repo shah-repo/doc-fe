@@ -32,6 +32,8 @@ declare global {
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
+      drGetDocIdElementFromUI(): Chainable<JQuery<HTMLElement>>;
+      drGetChangeRequestLinkElementFromUI(): Chainable<JQuery<HTMLElement>>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
       drFilterDocListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
@@ -436,6 +438,14 @@ Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
 
+Cypress.Commands.add("drGetDocIdElementFromUI", () => {
+  cy.get(`[id="HeaderInfo-docId"]`);
+});
+
+Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {
+  cy.get(`[id="ChangeRequestLink-linkButton"]`);
+});
+
 Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
   cy.get("[id=\"document.docId\"]").invoke("val").should("not.be.empty");
 });
@@ -606,8 +616,7 @@ Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
 Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
   cy.listLoadingElementShouldNotExist();
   employees.forEach((employee) => {
-    cy.get("[data-cy=\"employees\"]").arrowClick();
-    cy.get(".MuiAutocomplete-popper").contains(employee).arrowClick();
+    cy.get("[data-cy=\"employees\"]").autocompleteSelect(employee);
   });
 });
 

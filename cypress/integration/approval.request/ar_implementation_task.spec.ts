@@ -248,6 +248,13 @@ context("Approval request implementation tasks", () => {
       cy.arVerifyStatus({ status: "Implementation" });
     });
 
+    it("Verify export", () => {
+      cy.exportVerifyEmail({
+        status: "Implementation", filename: "-Approval-request-from-newly-created-form",
+        pdfStatus: "IMPLEMENTATION", type: "approval request",
+      });
+    });
+
     it("Check 'Implementation task' status is 'Pending'", () => {
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: "PENDING" });

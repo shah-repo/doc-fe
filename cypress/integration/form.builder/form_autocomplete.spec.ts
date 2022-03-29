@@ -1305,7 +1305,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document types' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 28 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 29 });
     });
 
     it("Verify count of 'Supplier list' in the list", () => {

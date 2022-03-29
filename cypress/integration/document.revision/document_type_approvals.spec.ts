@@ -626,10 +626,6 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drEnterDocumentDescriptionWithWait({ description: "Suppliers address" });
       });
 
-      it("Click 'Save' document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
       it("Add approver to approvals", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });

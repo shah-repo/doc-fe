@@ -896,6 +896,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
   context("Create Purchase Order document with two Products", () => {
     it("Click on 'Purchase Order' on sidebar", () => {
       cy.navigToPurchaseOrder();
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click on 'Create PO' button", () => {
@@ -1016,7 +1017,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Add new receiving'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.GetSpecificDocumentType], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
         cy.recCreateNew();
       });
       cy.progressBarShouldNotExist();
@@ -1033,7 +1034,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Add new receiving'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.GetSpecificDocumentType], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
         cy.recCreateNew();
       });
       cy.progressBarShouldNotExist();
