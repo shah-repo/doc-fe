@@ -33,4 +33,13 @@ export const styles = makeStyles((theme) => ({
     maxHeight: "90vh",
     margin: "0 auto",
   },
+  backdrop: {
+    zIndex: 9999,
+  },
+  closeButton: {
+    position: "absolute",
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
 }));

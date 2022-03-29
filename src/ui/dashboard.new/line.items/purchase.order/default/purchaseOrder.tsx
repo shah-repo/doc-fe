@@ -26,6 +26,7 @@ import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
+import { DialogHandler } from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
 import { getStatusLabel } from "../../common/DocIcon";
 import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
@@ -66,6 +67,7 @@ interface Props {
   onMouseHoverItem: (id: string) => void;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dialogPDF: DialogHandler;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -91,6 +93,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
   unPinLineItem,
   pinLineItem,
+  dialogPDF,
 }) => {
   const classes = styles();
   const PoItems: any = [
@@ -332,7 +335,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 />
               </span>
             )}
-            {downloadPdfHover && (
+            {
               <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
@@ -342,10 +345,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   <DownloadHtmlPreview
                     id={docRevId}
                     data-cy="transition-download-pdf"
+                    downloadPdfHover={downloadPdfHover}
+                    dialogPDF={dialogPDF}
                   />
                 </span>
               </StyleTooltip>
-            )}
+            }
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} />
