@@ -10,12 +10,13 @@ const useMqttSubscription = (
     if (didMqttConnect) {
       subscribe();
     }
-    
+
     return () => {
       if (didMqttConnect) {
         unsubscribe();
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [didMqttConnect]);
 };
 

@@ -2,13 +2,13 @@
 /* eslint-disable no-underscore-dangle */
 import * as AWSMqttClient from "aws-mqtt";
 import { Credentials } from "aws-sdk/global";
-import  debug  from "debug";
+import debug from "debug";
 import { Dictionary, isEmpty, some } from "lodash";
 import moment from "moment";
 import MQTTPattern from "mqtt-pattern";
 import { IotCredentials } from "../../../state/ducks/auth/types";
 
-const loggerDebug = debug("enlil:iotservice")
+const loggerDebug = debug("enlil:iotservice");
 
 interface AwsMqttClient {
   connected: boolean;
@@ -87,7 +87,7 @@ export class IotService {
 
       delete this.emitter[fullTopic];
     } else {
-      loggerDebug(`(unsubscribeFromTopic) cannot unsubscribe from ${topic}, not subscribed`)
+      loggerDebug(`(unsubscribeFromTopic) cannot unsubscribe from ${topic}, not subscribed`);
     }
   }
 
@@ -119,7 +119,7 @@ export class IotService {
     return this.mqttClientInstance && this.mqttClientInstance.connected;
   }
 
-  private async subscribe(topic: string, notif: any) {
+  private async subscribe(topic: string, notif: any): Promise<any> {
     const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
     const noSubscriptions = isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
     const alreadySubscribed = some(Object.keys(this.mqttClientInstance._resubscribeTopics),
@@ -132,9 +132,9 @@ export class IotService {
       );
       this.emitter[fullTopic] = notif;
       this.connectedSubscriptions[topic] = notif;
-      loggerDebug(`(subscribe) Subscribed to : '${topic}'`)
+      loggerDebug(`(subscribe) Subscribed to : '${topic}'`);
     } else {
-      loggerDebug(`(subscribe) already subscribed to '${topic}'`)
+      loggerDebug(`(subscribe) already subscribed to '${topic}'`);
     }
   }
 
@@ -164,35 +164,39 @@ export class IotService {
 
     creatingClient = true;
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
-    
+
     this.mqttClientInstance.on("error", (error) => {
-      loggerDebug("(createMqttClient) on error", error)
+      loggerDebug("(createMqttClient) on error", error);
     });
 
     this.mqttClientInstance.on("offline", () => {
-      loggerDebug("(createMqttClient) on offline")
+      loggerDebug("(createMqttClient) on offline");
     });
 
     this.mqttClientInstance.on("disconnect", (packet) => {
-      loggerDebug("(createMqttClient) on disconnect", packet)
+      loggerDebug("(createMqttClient) on disconnect", packet);
     });
 
     this.mqttClientInstance.on("reconnect", () => {
-      loggerDebug("(createMqttClient) on reconnect")
+      loggerDebug("(createMqttClient) on reconnect");
     });
 
     this.mqttClientInstance.on("end", () => {
-      loggerDebug("(createMqttClient) on end")
-    }); 
+      loggerDebug("(createMqttClient) on end");
+    });
 
     this.mqttClientInstance.on("connect", (connack) => {
-      loggerDebug("(createMqttClient) on connect", connack)
-      Object.keys(this.connectedSubscriptions).forEach((topic) => this.subscribe(topic, this.connectedSubscriptions[topic]));
-      Object.keys(retrySubscriptions).forEach((topic) => this.subscribe(topic, retrySubscriptions[topic]));
+      loggerDebug("(createMqttClient) on connect", connack);
+      for (const topic of Object.keys(this.connectedSubscriptions)) {
+        this.subscribe(topic, this.connectedSubscriptions[topic]);
+      }
+      for (const topic of Object.keys(retrySubscriptions)) {
+        this.subscribe(topic, retrySubscriptions[topic]);
+      }
       creatingClient = false;
-
       retrySubscriptions = {};
     });
+
     this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
       const emitterKey = Object.keys(this.emitter).find((pattern: string) =>
         MQTTPattern.matches(pattern, topic),
@@ -215,26 +219,31 @@ export class IotService {
 
 
 export const areValidCredentials = (credentials: IotCredentials, currenEmployeeId: string) => {
-  if(!credentials) {
+  if (!credentials) {
     loggerDebug("(validCredentials) no credentials");
     return false;
   }
-  
-  const { Expiration} = credentials.credentials;
-  
-  if(credentials.employeeId !== currenEmployeeId) {
-    loggerDebug("(validCredentials)", {msg: "different credentials",credentialsEmployeeId: credentials.employeeId, currenEmployeeId: currenEmployeeId} );
+
+  const { Expiration } = credentials.credentials;
+
+  if (credentials.employeeId !== currenEmployeeId) {
+    loggerDebug("(validCredentials)", {
+      msg: "different credentials",
+      credentialsEmployeeId: credentials.employeeId,
+      currenEmployeeId,
+    } );
+
     return false;
   }
 
-  if(!Expiration) {
+  if (!Expiration) {
     loggerDebug("(validCredentials) no expirationIotDate");
     return false;
   }
-  if(moment(new Date()).isAfter(moment(Expiration).subtract(10, "minute"))) {
+  if (moment(new Date()).isAfter(moment(Expiration).subtract(10, "minute"))) {
     loggerDebug("(validCredentials) expired");
     return false;
   }
   loggerDebug("(validCredentials) credentials valid");
   return true;
-}
+};
