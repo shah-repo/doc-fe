@@ -32,7 +32,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     omitFormValue,
     disabled,
     editorProperties,
-    filterSelectedOptions,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
@@ -124,7 +123,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     };
 
     debounceFilterInput = debounce(onFilterInputChange, 1000);
-    filterSelectedOptions = name !== "requestor-k740hxlb";
     if (name === "requestor-k740hxlb") {
       props.rules = "required";
     }
@@ -157,7 +155,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       name,
       disabled,
       includeQRScan,
-      filterSelectedOptions,
     });
   };
 
