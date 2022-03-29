@@ -87,6 +87,10 @@ const getActionInfo = (groupItem) => {
   }
   return actionInfo;
 };
+const getGrpNameFromGrpId = (state: ApplicationState, groupId: string[]) =>
+  groupId.map((obj) => state.userManagement.groupsById[obj] ?
+    state.userManagement.groupsById[obj].name : obj).join(",");
+
 const historyGroups = (state: ApplicationState) => {
   // console.log("debug :: state.userManagement.history :: ", state.userManagement.history);
   // const response = state.userManagement.history.results
@@ -110,7 +114,7 @@ const historyGroups = (state: ApplicationState) => {
         fieldPath: "groups",
         timestamp: "2022-03-29T12:56:05.663Z",
         previousValue: "undefined",
-        nextValue: "546da05f-cdb6-44c6-900d-9fa83d9ddba9",
+        nextValue: "a5d56a1d-d3cc-4860-9cb8-beb36d9c0af9",
         groupId: "e6b99d61-565d-4b91-83ee-a804712e44a9",
         ownerId: "f8b40d70-06e6-4a39-9c65-3c0d30660850",
         server: null,
@@ -160,7 +164,7 @@ const historyGroups = (state: ApplicationState) => {
         fieldType: "ARRAY",
         fieldPath: "groups",
         timestamp: "2022-03-29T12:30:54.308Z",
-        previousValue: "546da05f-cdb6-44c6-900d-9fa83d9ddba9",
+        previousValue: "a5d56a1d-d3cc-4860-9cb8-beb36d9c0af9",
         nextValue: "undefined",
         groupId: "32384fb3-8b59-47b0-bccc-5d8b3ce21423",
         ownerId: "08cbe301-46c9-4b1e-bd8b-29d69cb8d8f1",
@@ -335,7 +339,7 @@ const historyGroups = (state: ApplicationState) => {
         fieldPath: "groups",
         timestamp: "2022-03-29T12:03:01.456Z",
         previousValue: "undefined",
-        nextValue: "546da05f-cdb6-44c6-900d-9fa83d9ddba9",
+        nextValue: "a5d56a1d-d3cc-4860-9cb8-beb36d9c0af9",
         groupId: "7ae767b1-5a18-4e99-96e5-47799fe93c87",
         ownerId: "f8b40d70-06e6-4a39-9c65-3c0d30660850",
         server: null,
@@ -413,7 +417,7 @@ const historyGroups = (state: ApplicationState) => {
         }
         return {
           primaryText: action,
-          secondayText: items.join(","),
+          secondayText: ["AddedToGroups", "DeletedFromGroup"].includes(action) ? getGrpNameFromGrpId(state, items) : items.join(","),
           employeeName: data.employeeName,
         };
       })
