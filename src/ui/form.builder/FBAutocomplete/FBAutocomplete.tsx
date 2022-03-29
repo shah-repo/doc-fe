@@ -20,6 +20,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupBy,
   refresh,
   filterSelectedOptions = false,
+  disableClearable = false,
   freeSolo = false,
   multiple = false,
   options,
@@ -34,7 +35,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   value,
   inputStyle = {},
   isRequester,
-  disableClearable,
   rules,
   ...props
 }) => {
@@ -67,9 +67,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             defaultValue,
             freeSolo,
             filterOptions,
+            disableClearable,
           }}
-          filterSelectedOptions={filterSelectedOptions}
-          disableClearable={disableClearable}
           PopperComponent={CustomPopper}
           options={modifiedOptions}
           onInputChange={debounceFilterInput}
