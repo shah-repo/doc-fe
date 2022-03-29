@@ -25,7 +25,7 @@ export const HISTORY_LIST = "userManagement/HISTORY_LIST";
 export const HISTORY_LIST_ASYNC = "userManagement/HISTORY_LIST_ASYNC";
 
 // TODO: Update with new API URL
-export const HISTORY_URL = "/dashboard_feed/due_trainings";
+export const HISTORY_URL = "/employees/audit";
 export const HISTORY_INITIAL_OFFSET = 0;
 export const HISTORY_LIMIT = 50;
 export const  HISTORY_INITIAL_PAYLOAD = {

@@ -16,7 +16,10 @@ interface Props {
 const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
   const classes = styles();
   const intl = useIntl();
-  const getTransalatedText = (key: string) => intl.formatMessage({ id: `user.management.audit.history.${key}` });
+  const getTransalatedText = (key: string, values: any) => {
+    console.log("debug :: values :: ", values);
+    return intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
+  };
   const groupsById = useSelector(userManagementSelectors.groupsById);
   const getGrpNameFromGrpId = (groupId: string) => groupId.split(",").map((obj) => groupsById[obj] ?
     groupsById[obj].name : obj).join(",");
@@ -32,11 +35,12 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
           ownerId={auditDetails.ownerId}
           ownerName={auditDetails.ownerName}
         />
+        {/* Below in secondayText add ${auditDetails.id} at the end for testing only. It should be cleaned up later */}
         {map(auditDetails.groupItems, (groupItem, index) => (
           <DetailDescription
-            primaryText={getTransalatedText(groupItem.primaryText)}
-            secondayText={groupItem.primaryText === "AddedToGroups" ?
-              getGrpNameFromGrpId(groupItem.secondayText) : groupItem.secondayText }
+            primaryText={getTransalatedText(groupItem.primaryText, { employeeName: groupItem.employeeName || auditDetails.nextValue })}
+            secondayText={`${["AddedToGroups", "DeletedFromGroup"].includes(groupItem.primaryText)  ?
+              getGrpNameFromGrpId(groupItem.secondayText) : groupItem.secondayText } ${auditDetails.id}`}
             key={index}
             marginBottom={auditDetails.groupItems.length > 1 && +index % 2 === 0}
           />

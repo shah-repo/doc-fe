@@ -162,8 +162,8 @@ const loadHistoryList = (queryPayload): ApiAction<HistoryListApiResponse> => {
   const finalPayload = isEmpty(queryPayload) ? HISTORY_INITIAL_PAYLOAD : queryPayload;
   return apiAction({
     url: HISTORY_URL,
-    method: "post",
-    data: finalPayload,
+    method: "get",
+    params: finalPayload,
     asyncType: HISTORY_LIST_ASYNC,
     onSuccess: (historyItems, dispatch) => {
       dispatch(historyList(historyItems, finalPayload.offset === HISTORY_INITIAL_PAYLOAD.offset));
