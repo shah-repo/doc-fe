@@ -141,6 +141,6 @@ const redlineConfig = (
 export default combineReducers({
   selectedCompany,
   companyMine,
-  autosaveConfig,
   redlineConfig,
+  autosaveConfig,
 });
