@@ -57,7 +57,7 @@ const getActionInfo = (groupItem) => {
     }
   } else if (groupItem.fieldPath === "groups" && groupItem.type === "ARRAY_DELETED") {
     actionInfo = {
-      action: ACTION_TITLE_MAPPIING.DeletedFromGroup,
+      action: ACTION_TITLE_MAPPIING.DeletedFromGroups,
       value: groupItem.previousValue,
     };
   } else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_NEW") {
@@ -106,7 +106,7 @@ const historyGroups = (state: ApplicationState) => {
         documentRevisionId: null,
         referenceId: null,
         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-        userId: "79725a72-de90-4a81-8b66-bd529f8e6011",
+        userId: "772335f4-1c5b-415f-a708-b87b80c59658",
         approvalId: null,
         companyGroupId: null,
         type: "ARRAY_NEW",
@@ -157,7 +157,7 @@ const historyGroups = (state: ApplicationState) => {
         documentRevisionId: null,
         referenceId: null,
         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-        userId: "79725a72-de90-4a81-8b66-bd529f8e6011",
+        userId: "772335f4-1c5b-415f-a708-b87b80c59658",
         approvalId: null,
         companyGroupId: null,
         type: "ARRAY_DELETED",
@@ -270,7 +270,7 @@ const historyGroups = (state: ApplicationState) => {
         documentRevisionId: null,
         referenceId: null,
         employeeId: null,
-        userId: "79725a72-de90-4a81-8b66-bd529f8e6011",
+        userId: "772335f4-1c5b-415f-a708-b87b80c59658",
         approvalId: null,
         companyGroupId: null,
         type: "STRING_NEW",
@@ -398,7 +398,7 @@ const historyGroups = (state: ApplicationState) => {
   const cardGroups = {};
   each(auditRecordGroups, (groupedItems, groupKey) => {
     cardGroups[groupKey] = {
-      ...pick(auditRecordGroups[groupKey][0], ["ownerId", "ownerName", "ownerEmail", "timestamp", "employeeName", "id", "nextValue"]),
+      ...pick(auditRecordGroups[groupKey][0], ["ownerId", "ownerName", "ownerEmail", "timestamp", "employeeName", "id", "nextValue", "userId"]),
       items: map(groupedItems, (groupItem) => ({ ...groupItem.actionInfo })),
     };
   });
@@ -411,14 +411,15 @@ const historyGroups = (state: ApplicationState) => {
         if (items.length === 1) {
           if (action === "AddedToGroups") {
             action = "AddedToGroup";
-          } else if (action === "DeletedFromGroup") {
+          } else if (action === "DeletedFromGroups") {
             action = "DeletedFromGroup";
           }
         }
         return {
           primaryText: action,
-          secondayText: ["AddedToGroups", "DeletedFromGroup"].includes(action) ? getGrpNameFromGrpId(state, items) : items.join(","),
+          secondayText: ["AddedToGroup", "AddedToGroups", "DeletedFromGroups", "DeletedFromGroup"].includes(action) ? getGrpNameFromGrpId(state, items) : items.join(","),
           employeeName: data.employeeName,
+          includeNameAndEmail: ["AddedToGroup", "AddedToGroups", "DeletedFromGroups", "DeletedFromGroup"].includes(action),
         };
       })
       .value();

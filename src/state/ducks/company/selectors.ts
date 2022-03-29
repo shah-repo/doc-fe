@@ -56,7 +56,7 @@ const getActiveEmployeesForUserAvatar = (state: ApplicationState) =>
   chain(state.company.companyMine.employees)
   // TODO: Check if Active user only? Probaby all is required.
     // .filter({ active: true })
-    .map((employee) => pick(employee, ["id", "user.id", "user.name", "user.avatar", "user.initialColor"]))
+    .map((employee) => pick(employee, ["id", "user.id", "user.name", "user.avatar", "user.initialColor", "user.email"]))
     .value()
     .sort(sortStringsByKey("user.name"));
 

@@ -10,6 +10,7 @@ import styles from "./common.styles";
 
 const UserAvatarCard: React.FunctionComponent<any> = ({
   timestamp,
+  // TODO:Check if required
   ownerEmail, ownerId, ownerName, avatar, initialColor, name,
 }) => {
   const classes = styles();

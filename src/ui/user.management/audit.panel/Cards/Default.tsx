@@ -16,14 +16,15 @@ interface Props {
 const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
   const classes = styles();
   const intl = useIntl();
-  const getTransalatedText = (key: string, values: any) => {
-    console.log("debug :: values :: ", values);
-    return intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
-  };
+  const getTransalatedText = (key: string, values: any) =>
+    // console.log("debug :: values :: ", values);
+    intl.formatMessage({ id: `user.management.audit.history.${key}` }, values)
+  ;
 
   const companyEmployesUserAvatarInfo = useSelector(companySelectors.getActiveEmployeesForUserAvatar);
   // TODO: On api integartion check exact id or obj?.user?.id
   const userAvatarDetails = companyEmployesUserAvatarInfo.find((obj) => obj.id === auditDetails.ownerId);
+  const userDetails = companyEmployesUserAvatarInfo.find((obj) => obj?.user?.id === auditDetails.userId);
   return (
     <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
       <Box display="grid">
@@ -44,6 +45,8 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
             secondayText= {`${groupItem.secondayText}  ${auditDetails.id}`}
             key={index}
             marginBottom={auditDetails.groupItems.length > 1 && +index % 2 === 0}
+            includeNameAndEmail={groupItem.includeNameAndEmail}
+            userDetails={userDetails}
           />
         ))}
       </Box>
