@@ -7,6 +7,7 @@ import {
 import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_INITIAL_PAYLOAD, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import useDialog from "../../hooks/useDialog";
 import { scrollToBottom } from "../line.items/common/Utils";
 import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
 
@@ -15,10 +16,17 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const [hoverItemId, setHoverItemId] = React.useState("");
   const [offset, setOffset] = React.useState(MY_FEEDS_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(MY_FEEDS_LIMIT);
+  const dialogPDF = useDialog();
+
   const onMouseHoverItem = (id: string) => {
     setHoverItemId(id);
   };
   const onMouseLeaveItem = () => {
+    // Need to avoid calling setHoverItemId when PDF dialog is open
+    // because component gets unmounted and PDF process is interrupted
+    if (dialogPDF.isOpen) {
+      return;
+    }
     setHoverItemId("");
   };
   const loadMyFeeds = useActionCreator(dashboardMyFeedsActions.loadMyFeedsList);
@@ -63,6 +71,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
       {...{
         loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
         pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
+        dialogPDF,
       }}
       onLoadMoreData={onLoadMoreData}
     />
