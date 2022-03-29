@@ -404,6 +404,13 @@ const historyGroups = (state: ApplicationState) => {
       .groupBy("action")
       .map((itemGroup, action) => {
         const items = map(itemGroup, "value");
+        if (items.length === 1) {
+          if (action === "AddedToGroups") {
+            action = "AddedToGroup";
+          } else if (action === "DeletedFromGroup") {
+            action = "DeletedFromGroup";
+          }
+        }
         return {
           primaryText: action,
           secondayText: items.join(","),
