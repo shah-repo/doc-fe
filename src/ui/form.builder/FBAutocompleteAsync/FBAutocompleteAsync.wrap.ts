@@ -101,7 +101,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       [additionalData, autocompleteAsyncState]);
 
     useEffect(() => {
-      if (shouldReloadOnInit) {
+      if (shouldReloadOnInit || optionId) {
         autocompleteAsyncState?.load(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps

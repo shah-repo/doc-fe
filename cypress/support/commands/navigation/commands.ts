@@ -228,6 +228,7 @@ Cypress.Commands.add("navigToTrainingRecords", () => {
       NavigationItems.TRAINING_RECORDS,
     ],
   });
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToTrainingCurriculums", () => {
@@ -240,4 +241,5 @@ Cypress.Commands.add("navigToTrainingCurriculums", () => {
       ],
     });
   });
+  cy.landingPageLoadingElementShouldNotExist();
 });
