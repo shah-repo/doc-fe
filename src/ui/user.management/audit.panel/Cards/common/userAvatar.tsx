@@ -1,15 +1,17 @@
 import {
-  Avatar,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import UserAvatar from "../../../../app/UserMenu/UserAvatar";
 import styles from "./common.styles";
-import UserIcon from "./test_user_Avatar.jpg";
 
-const UserAvatar: React.FunctionComponent<any> = ({ timestamp, ownerEmail, ownerId, ownerName }) => {
+const UserAvatarCard: React.FunctionComponent<any> = ({
+  timestamp,
+  ownerEmail, ownerId, ownerName, avatar, initialColor, name,
+}) => {
   const classes = styles();
   return (
     <ListItem
@@ -20,8 +22,9 @@ const UserAvatar: React.FunctionComponent<any> = ({ timestamp, ownerEmail, owner
       }}
     >
       <ListItemAvatar>
-        <Avatar alt="test" src={UserIcon} />
+        <UserAvatar {...{ avatar, initialColor, name }} />
       </ListItemAvatar>
+
       <ListItemText
         primary={
           <Typography className={classes.generalInfo}>
@@ -45,4 +48,4 @@ const UserAvatar: React.FunctionComponent<any> = ({ timestamp, ownerEmail, owner
   );
 };
 
-export default UserAvatar;
+export default UserAvatarCard;
