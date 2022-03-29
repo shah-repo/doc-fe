@@ -92,7 +92,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    const checkLineItems = (poItems: any, requester: any) => {
+    const checkLineItems = (poItems: any, requester: string) => {
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
       let proceedToNewReq = false;
       each(poItems.items, (item) => {
@@ -115,8 +115,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     React.useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get("po-items-built-in"),
       (poItems) => {
+        const approvers = map(poApprovalsState?.getApprovals, "approver.id");
         // eslint-disable-next-line react-hooks/exhaustive-deps
         deletedRequestor = workspaceState?.formInputSync?.get("requestor-k740hxlb");
+        if (poItems.items.length) {
+          checkLineItems(poItems, deletedRequestor);
+        } else if (approvers?.includes(deletedRequestor)) {
+          checkLineItems(poItems, "");
+        }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
