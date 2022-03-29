@@ -4,6 +4,7 @@ import { MomentFormats } from "../../../common/utils/date";
 import Colors from "../../../ui/layout/theme/utils/colors";
 import asyncReducer from "../../reducers/asyncReducer";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
+import { Employee } from "../company/types";
 import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch/types";
 import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_CREDENTIALS, SET_EMPLOYEE, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
@@ -21,13 +22,12 @@ const DEFAULT_CREDENTIALS = {
     AccessKeyId: "",
     SecretAccessKey: "",
     SessionToken: "",
-    Expiration: new Date(0).toISOString(),
+    Expiration: "",
   },
   endpoint: "",
   environment: "",
   companyId: "",
   region: "",
-  employeeId: "",
 };
 
 const USER_DEFAULT_STATE: UserState = {
@@ -65,12 +65,15 @@ const user = (
   switch (action.type) {
     case AUTH_USER: {
 
-      const { passwordExpiresAt } = action.payload;
+      const { passwordExpiresAt, employees } = action.payload;
+      const activeUser = employees.find((employee) => employee.active) || { id: "" } as Employee;
       const currentDate = moment.utc().format(MomentFormats.MonthDateYear);
 
       return {
         ...state,
         ...action.payload,
+        employeeId: activeUser.id,
+        employee: activeUser,
         daysUntilPasswordExpires: moment(passwordExpiresAt).diff(moment(currentDate), "days"),
       };
     }

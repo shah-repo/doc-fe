@@ -28,15 +28,12 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const passwordSoonToExpire = useSelector(authSelectors.getPasswordSoonToExpire);
   const daysUntilPasswordExpires = useSelector(authSelectors.getDaysUntilPasswordExpires);
 
-
   const handleClick = (employee: Employee) => () => {
-    dispatch(authActions.clearNonAuthData());
-    dispatch(tableSearchActions.clearAllTables());
-    dispatch(authActions.setCredentials(null));
-
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(authActions.selectEmployee(employee));
-
+    dispatch(authActions.getIotCreds());
+    dispatch(authActions.clearNonAuthData());
+    dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);
 
     passwordSoonToExpire && toastInfo(

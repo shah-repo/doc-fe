@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IotService } from "../../common/utils/iot/iotService";
+import { IotService } from "../../common/utils/iot/mqttClient";
 
 const useDidMqttConnect = () => {
   const [didConnect, setDidConnect] = useState(false);

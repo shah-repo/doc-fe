@@ -122,7 +122,6 @@ export interface IotCredentials {
   endpoint: string;
   environment: string;
   companyId: string;
-  employeeId: string;
   region: string;
 }
 

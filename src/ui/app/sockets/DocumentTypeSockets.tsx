@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/quotes */
 import React from "react";
-import { IotService } from "../../../common/utils/iot/iotService";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
