@@ -45,7 +45,6 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
         () => fileUploadState?.files,
         (files) => {
           formState?.setFieldValue(name, files, withState);
-          formState?.setFieldAutosave(name);
           formState?.unlockField(name);
         }
       );

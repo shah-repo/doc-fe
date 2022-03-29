@@ -62,8 +62,6 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
               locale: "form.builder.step.number",
               values: { number: stepIndex },
             }}
-            autosave={false}
-            shouldNotAutosaveOnBlur={true}
             withState
             boxProps={{ style: { color: Colors.black } }}
           />

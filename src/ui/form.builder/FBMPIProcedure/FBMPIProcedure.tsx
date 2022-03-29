@@ -50,8 +50,6 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           {...{ disabled, autoFocus, autoScrollTo, onKeyDown }}
           name={`${name}.description`}
           gutter={false}
-          autosave={false}
-          shouldNotAutosaveOnBlur={true}
           label={{
             locale: "form.builder.step.number",
             values: { number: stepIndex },

@@ -2,7 +2,6 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import * as React from "react";
 import { default as ReactDatePicker, ReactDatePickerProps } from "react-datepicker";
 import { TypographyProps } from "../../../../state/ducks/common/types";
-import { useFormContext } from "../FormContext";
 import { styles } from "./DatePicker.styles";
 import Field, { FieldOwnProps } from "./Field";
 
@@ -22,11 +21,9 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   label,
   ...fieldProps
 }) => {
-  const { submitForm } = useFormContext();
   const onChange = (date: Date) => {
     const { form } = fieldProps;
     form.setFieldValue(fieldProps.field.name, date);
-    submitForm();
   };
 
   const classes = styles();

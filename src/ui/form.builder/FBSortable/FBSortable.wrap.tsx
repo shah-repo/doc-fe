@@ -13,15 +13,11 @@ export const withFBSortable = <T extends FBSortableProps>(
 
     const { workspaceState } = FB.useStores();
 
-    const schemaField = (schemaItem: FBSchemaProps): React.ReactNode | undefined => {
-      const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
-      return FBSchemaState.component({
-        ...schemaItem,
-        autosave: isUnderWorkspace && workspaceState?.autosave,
-        disabled: workspaceState?.isMode("design"),
-        gutter: false,
-      });
-    };
+    const schemaField = (schemaItem: FBSchemaProps): React.ReactNode | undefined => FBSchemaState.component({
+      ...schemaItem,
+      disabled: workspaceState?.isMode("design"),
+      gutter: false,
+    });
 
     const SortableItem = SortableElement(({ value }: { value: FBSchemaProps }) => (
       <li style={{ listStyleType: "none" }}>

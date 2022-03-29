@@ -36,7 +36,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     active,
     document,
     changeRequest,
-    autosave = false,
     schema,
     includeProcedureDiff,
     ...props
@@ -47,7 +46,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,
       mode,
-      autosave,
     });
     const dispatch = useDispatch();
 
@@ -100,12 +98,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [document?.approvals]);
 
-    React.useEffect(() => {
-      if (!workspaceState) { return; }
-      workspaceState.setAutosave(autosave);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [autosave]);
-
     // *TODO: find a way to reset constructor props
     useEffect(() => {
       if (!workspaceState) { return; }
@@ -139,7 +131,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       dialogState,
       workspaceState,
       snackbarState,
-      autosave,
       includeProcedureDiff,
     });
   };

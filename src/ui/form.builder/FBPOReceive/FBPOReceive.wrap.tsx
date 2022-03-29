@@ -1,4 +1,3 @@
-import { useFormikContext } from "formik";
 import { get, last, remove } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
@@ -32,7 +31,6 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const intl = useIntl();
     const { formInput } = workspaceState || {};
     const { receivedItems } = name && (formInput?.[name] || { receivedItems: "" });
-    const { submitForm } = useFormikContext();
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
@@ -126,8 +124,6 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       () => formState?.inputState.get(`porec-${name}`)?.value,
       (value) => {
         formState?.setFieldValue(name, { id: value });
-        formState?.setFieldAutosave(name);
-        submitForm();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

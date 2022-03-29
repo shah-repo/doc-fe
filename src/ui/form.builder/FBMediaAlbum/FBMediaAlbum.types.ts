@@ -23,7 +23,6 @@ export type FBMediaAlbumProps =
   | "name"
   | "onFileUploadChange"
   | "actionsDisabled"
-  | "autosave"
   >
   & {
     onClick?: () => void;

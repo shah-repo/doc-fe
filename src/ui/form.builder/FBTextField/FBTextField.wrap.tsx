@@ -60,7 +60,6 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       }
       if (!name) { return; }
       formState?.unlockField(name);
-      formState?.setFieldAutosave(name);
     };
 
     useEffect(() => reaction(

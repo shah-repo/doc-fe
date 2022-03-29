@@ -9,7 +9,6 @@ const FBUnitMeasures: React.FunctionComponent<FBUnitMeasuresProps> = ({
   <FBAutocompleteAsync
     type="unitMeasures"
     optionId={FBAutocompleteAsyncOption.unitMeasures}
-    autosave
     withState
     {...{ disabled, name, label }}
   />

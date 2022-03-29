@@ -54,9 +54,6 @@ export const withFBOnChange = <T extends FBInputProps>(
       // TODO: refactor with state opt
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
 
-      if (type && !FBInputState.omitOnChange.includes(type)) {
-        formState?.setFieldAutosave(name);
-      }
       if (formState?.validationRelatedRules[name]) {
         map(formState?.validationRelatedRules[name], (field) => {
           const { name: fieldName, value: fieldValue } = field;
@@ -188,9 +185,6 @@ export const withFBOnChange = <T extends FBInputProps>(
       props.onBlur && props.onBlur(ev);
       if (!name) { return; }
       formState?.unlockField(name);
-      if (type && FBInputState.omitOnChange.includes(type)) {
-        formState?.setFieldAutosave(name);
-      }
     };
 
     return useObserver(() => Component({

@@ -3,7 +3,7 @@ import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/t
 
 type FBPurchaseOrderMode = "preview" | "form";
 export type FBPurchaseOrderProps =
-& Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue" | "autosave">
+& Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue">
 & {
   handleItem?: (item?: FBPurchaseOrderItem) => any;
   handleReceiveAll?: () => any;

@@ -17,10 +17,9 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   label,
   isTypePM,
   rules,
-  autosave,
   ...props
 }) => (
-  <FBInput showErrorMsg={false} {...{ name, rules, autosave }} {...props} type="eqmaintenance">
+  <FBInput showErrorMsg={false} {...{ name, rules }} {...props} type="eqmaintenance">
     <FBSection
       {...{ label }}
       name={`${name}-section`}
@@ -51,7 +50,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       validationMode="visibility"
       rules={`required_if:${name}.requirements,Yes`}
       withState
-      {...{ disabled, getOptionLabel, autosave }}
+      {...{ disabled, getOptionLabel }}
     />
     <FBQuantityField
       name={`${name}.frequency`}
@@ -60,21 +59,21 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       rules={`required_if:${name}.requirements,Yes`}
       withState
       placeholder="form.builder.units.days"
-      {...{ disabled, autosave }}
+      {...{ disabled }}
     />
     <FBTextEditor
       name={`${name}.justification`}
       label="common.justifications"
       validationMode="visibility"
       rules={`required_if:${name}.requirements,No`}
-      {...{ disabled, autosave }}
+      {...{ disabled }}
     />
     <FBTextEditor
       name={`${name}.instructions`}
       label="form.builder.pm.instructions"
       validationMode="visibility"
       rules={`required_if:${name}.requirements,Yes`}
-      {...{ disabled, autosave }}
+      {...{ disabled }}
     />
     <FBEQMaintenanceHistory {...{ name }}/>
     {complianceDueDate &&

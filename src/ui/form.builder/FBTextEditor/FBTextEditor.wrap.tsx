@@ -31,7 +31,6 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     omitFormValue,
     autoFocus,
     autoScrollTo,
-    shouldNotAutosaveOnBlur = false,
     ...props
   }: T) => {
 
@@ -184,7 +183,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (withState) {
         formState?.setFieldValue(name, formState.getFieldValue(name), true, omitFormValue);
       }
-      if (autoFocus || autoScrollTo || shouldNotAutosaveOnBlur) { return; }
+      if (autoFocus || autoScrollTo) { return; }
       if (!textEditorState) { return; }
       if (!editorState) { return; }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

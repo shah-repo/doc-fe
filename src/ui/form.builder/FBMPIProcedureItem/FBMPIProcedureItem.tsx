@@ -100,7 +100,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           editorProperties={["copyableValue"]}
           gutter={false}
           editorConfig={defaultValue}
-          autosave={false}
           fieldType="mpiprocedure"
         />
       </Box>

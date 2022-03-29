@@ -9,7 +9,6 @@ import { ActionMeta, ValueType } from "react-select/src/types";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
-import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { selectStyles } from "./Autocomplete";
 import { OptionType } from "./types";
@@ -37,7 +36,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [inputValue, setInputValue] = useState(formikValue);
-  const { submitForm } = useFormContext();
   const {
     form: { setFieldValue, setFieldTouched, touched },
     field: { name },
@@ -64,12 +62,11 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     }
   };
 
-  const onBlur = async () => {
+  const onBlur = () => {
     if (formikValue !== inputValue) {
       // eslint-disable-next-line @typescript-eslint/await-thenable
-      await setFieldValue(name, inputValue);
+      setFieldValue(name, inputValue);
     }
-    submitForm();
   };
 
   const stringify = (option: OptionType) => option.label;

@@ -35,7 +35,6 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 forceDefault={true}
                 multiple={true}
                 defaultValue={[]}
-                autosave={true}
                 {...{ disabled }}
               />
               <FBAutocompleteAsync
@@ -47,7 +46,6 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 forceDefault={true}
                 multiple={true}
                 defaultValue={[]}
-                autosave={true}
                 {...{ disabled }}
               />
             </React.Fragment>

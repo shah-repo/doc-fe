@@ -140,7 +140,6 @@ export type FBInputProps =
     omitFinalValidation?: boolean;
     validators?: Dictionary<any>;
     forceDefault?: boolean;
-    autosave?: boolean;
     transform?: FBInputTransform;
     dataCy?: string;
     withState?: boolean;
@@ -230,15 +229,6 @@ export const OmitIncludeNotes: FBInputType[] = [
   "teststep",
   "section",
   "subsection",
-];
-
-export const FBAutosave: FBInputType[] = [
-  "textfield",
-  "checkboxgroup",
-  "autocomplete",
-  "select",
-  "quantity",
-  "texteditor",
 ];
 
 export interface FBInputConstructor {

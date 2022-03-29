@@ -22,7 +22,6 @@ export type FBApprovalProps =
 | "approveIsBlocking"
 | "reviseDisabled"
 | "editorProperties"
-| "autosave"
 | "gutter"
 > & {
   onApprove?: (approver?: FBInlineApproverType) => () => void;

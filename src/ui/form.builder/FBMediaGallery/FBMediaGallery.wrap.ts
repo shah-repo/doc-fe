@@ -8,17 +8,14 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
     handleDelete,
     removeMedia,
     previewType,
-    autosave,
     ...props
   }: T) => {
 
-    const { mediaAlbumState, workspaceState, formState } = FB.useStores();
+    const { mediaAlbumState } = FB.useStores();
 
     handleDelete = (id: string) => {
       removeMedia && removeMedia(id);
       mediaAlbumState?.setActiveMedia(0);
-      if (!workspaceState?.autosave) { return; }
-      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     previewType = (media: FBAttachment): FBFilePreviewType | undefined =>
@@ -28,7 +25,6 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
       ...(props as T),
       handleDelete,
       previewType,
-      autosave,
     });
   };
 

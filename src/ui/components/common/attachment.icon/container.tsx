@@ -20,7 +20,6 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
-import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
 import { toastError } from "../../notifications";
 import PasswordDialog from "../../password/dialog";
@@ -58,7 +57,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isWatermarking, setWatermark] = useState<boolean>(false);
   const [PasswordSubmitAction, setPasswordSubmitAction] = useState<PasswordSubmitActionType>();
-  const { submitForm } = useFormContext();
   const isCurrentUserOperator = React.useContext(isOperator);
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const documentType = React.useContext(documentTypeContext);
@@ -157,7 +155,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       FBDynamicValidatorStore.validate();
     }
     form.setFieldValue(name, filtered);
-    submitForm();
   };
 
   const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {

@@ -18,7 +18,6 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   disabled,
   loading,
   groups = {},
-  autosave,
   label,
   approvals,
   currentUser,

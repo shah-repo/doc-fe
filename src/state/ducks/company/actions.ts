@@ -2,7 +2,7 @@ import { getEmployeeNavigation } from "../../../ui/app/NavigationLocalStorageHel
 import { COMPANY_MINE_URL } from "../../../ui/constants/urls";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
+import { REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
 import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from "./types";
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
@@ -47,11 +47,6 @@ const updateNavigationMenuItem = ( label: string, isOpen: boolean): UpdateNaviga
   payload: { label, isOpen },
 });
 
-const autosaveConfig = () => ({
-  type: AUTOSAVE_CONFIG,
-});
-
-
 const redlineConfig = (redlineActive: boolean) => ({
   type: REDLINE_CONFIG,
   payload: { redlineActive },
@@ -62,6 +57,5 @@ export default {
   getCompanyMine,
   updateCompanyMine,
   updateNavigationMenuItem,
-  autosaveConfig,
   redlineConfig,
 };

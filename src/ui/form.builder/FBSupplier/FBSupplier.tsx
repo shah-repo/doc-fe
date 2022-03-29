@@ -24,7 +24,6 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
             gutter={false}
             shouldReloadOnInit
             withState
-            autosave
             optionId={FBAutocompleteAsyncOption.suppliers}
             {...{ name, label, disabled, loading }}
           />

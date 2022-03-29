@@ -60,7 +60,6 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
         () => fileUploadState?.files,
         (files) => {
           formState?.setFieldValue(name, files, withState);
-          formState?.setFieldAutosave(name);
           formState?.unlockField(name);
         }
       );

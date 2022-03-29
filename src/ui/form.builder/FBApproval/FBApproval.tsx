@@ -19,7 +19,6 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   isDefined,
   approveIsBlocking,
   approvalNonVersioned,
-  autosave,
   loading,
   label,
   name,
@@ -30,7 +29,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
 }) => (
   <FBProvider {...{ [`${FBFieldName.ApprovalState}-${name}`]: approvalState }}>
     <FBApprovalSocket {...{ name }} />
-    <FBInput {...{ name, disabled, autosave, gutter }} type="approval">
+    <FBInput {...{ name, disabled, gutter }} type="approval">
       {approveIsBlocking && (
         <Box
           py={1}

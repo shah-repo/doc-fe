@@ -6,7 +6,6 @@ import moment from "moment";
 import * as React from "react";
 import { useEffect } from "react";
 import { TypographyProps } from "../../../../state/ducks/common/types";
-import { useFormContext } from "../FormContext";
 import Field, { FieldOwnProps } from "./Field";
 
 type DatePickerPropsWithFormik = FieldOwnProps & FormikFieldProps &
@@ -18,7 +17,6 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   value,
   ...fieldProps
 }) => {
-  const { submitForm } = useFormContext();
   const muiTheme = createMuiTheme({
     overrides: {},
   });
@@ -33,7 +31,6 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   const handleDateChange = (date) => {
     const { form } = fieldProps;
     form.setFieldValue(fieldProps.field.name, date);
-    submitForm();
   };
 
   return (

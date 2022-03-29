@@ -30,12 +30,11 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   owners,
   showFieldOwnersWarning,
   isContributorIncluded,
-  autosave,
   ...props
 }) => (
   <FBProvider {...{ dialogState }}>
     <FBDialog />
-    <FBInput {...props} {...{ name, autosave }} type="approvals">
+    <FBInput {...props} {...{ name }} type="approvals">
       <FBSection
         name={`fb-approvals-section-${name}`}
         {...{ label }}
@@ -47,7 +46,6 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         withState
         gutter={false}
         multiple={true}
-        autosave={false}
         {...{ disabled, renderOption, loading }}
       />
       <Box display="flex" flexWrap="wrap" my={2}>

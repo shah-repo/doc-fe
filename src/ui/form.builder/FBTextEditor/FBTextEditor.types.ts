@@ -15,5 +15,4 @@ export type FBTextEditorProps =
   formValue?: string;
   masked?: boolean;
   isPreview?: boolean;
-  shouldNotAutosaveOnBlur?: boolean;
 };

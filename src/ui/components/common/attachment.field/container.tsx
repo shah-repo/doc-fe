@@ -9,7 +9,6 @@ import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicVa
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
-import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
 import { toastError } from "../../notifications";
 import Presenter from "./presenter";
@@ -24,7 +23,6 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
   form,
   ...other
 }) => {
-  const { submitForm } = useFormContext();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const intl = useIntl();
 
@@ -59,7 +57,6 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
         FBDynamicValidatorStore.validate();
       }
       form.setFieldValue(name, attachments);
-      submitForm();
     },
     onError: (error) => {
       setIsUploading(false);

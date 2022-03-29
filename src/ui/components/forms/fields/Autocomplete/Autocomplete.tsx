@@ -8,7 +8,6 @@ import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circl
 import { TypographyProps } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
-import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { InputField } from "../Input.styles";
 import { OptionType } from "./types";
@@ -57,7 +56,6 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   isDisabled = false,
   ...fieldProps
 }) => {
-  const { submitForm } = useFormContext();
   const onChange = (value: ValueType<OptionType>) => {
     fieldProps.onChange?.(value);
     const {
@@ -97,9 +95,6 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         input={<InputField name={fieldProps.field.name} />}
         isDisabled={isDisabled}
         components={{ MultiValueRemove }}
-        onBlur={() => {
-          submitForm();
-        }}
       />
     </Field>
   );

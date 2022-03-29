@@ -10,7 +10,6 @@ import useDebounce from "use-debounce/lib/useDebounce";
 import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { RenderSize } from "../../../../../state/ducks/common/types";
 import useDidMount from "../../../../hooks/useDidMount";
-import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { convertHtmlToDraft } from "./helpers";
 import "./rte.css";
@@ -49,7 +48,6 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   toggleToolbar = true,
   ...fieldProps
 }) => {
-  const { submitForm } = useFormContext();
   const didMount = useDidMount();
   const { field, form } = fieldProps;
   // Disabled because of ENC-7826
@@ -117,7 +115,6 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     }
     // Disabled because of ENC-7826
     /* clearInterval(timeoutID); */
-    submitForm();
   };
 
   const handleFocus = () => {

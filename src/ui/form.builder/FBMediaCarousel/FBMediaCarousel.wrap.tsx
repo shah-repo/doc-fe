@@ -19,11 +19,10 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
     toolsVisibility,
     activeStep,
     previewType,
-    autosave,
     ...props
   }: T) => {
     mediaCarouselState = FB.useRef<FBMediaCarouselState>(FBMediaCarouselState);
-    const { mediaAlbumState, workspaceState, formState } = FB.useStores();
+    const { mediaAlbumState } = FB.useStores();
 
     useEffect(() => {
       if (isUndefined(mediaAlbumState?.activeMedia)) {
@@ -66,8 +65,6 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       }
       removeMedia && removeMedia(media.id);
       mediaAlbumState?.setActiveMedia(0);
-      if (!workspaceState?.autosave) { return; }
-      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     onMouseOver = () => !isEmpty(activeMediaPath) && mediaCarouselState?.setToolsVisible(true);
@@ -92,7 +89,6 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       collection,
       activeStep,
       previewType,
-      autosave,
     });
   };
 

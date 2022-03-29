@@ -24,7 +24,6 @@ const FBEBPartForm: React.FunctionComponent<FBEBPartFormProps> = ({
       name="description"
       label="form.builder.field.description"
       {...{ disabled }}
-      shouldNotAutosaveOnBlur
     />
     <FBAutocompleteAsync
       rules="required"

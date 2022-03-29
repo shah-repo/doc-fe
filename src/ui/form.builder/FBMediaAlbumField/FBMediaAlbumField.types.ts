@@ -10,7 +10,6 @@ export type FBMediaAlbumFieldProps =
 | "gutter"
 | "reviseDisabled"
 | "editorProperties"
-| "autosave"
 | "type"
 | "index"
 | "editorConfig"

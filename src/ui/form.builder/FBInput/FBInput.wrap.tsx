@@ -1,12 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isString, isUndefined, last, map, size, union } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
+import { FB, FBInputProps, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
@@ -61,7 +60,6 @@ export const withFBInput = <T extends FBInputProps>(
     hidden,
     rules,
     value,
-    autosave = false,
     transform,
     bookmarked,
     omitFinalValidation = false,
@@ -79,7 +77,6 @@ export const withFBInput = <T extends FBInputProps>(
 
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
     const { isOutput } = workspaceState || {};
-    const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
@@ -235,33 +232,6 @@ export const withFBInput = <T extends FBInputProps>(
     }, [rules]);
 
     useEffect(() => {
-      reaction(
-        () => inputState?.autosaveNextValue,
-        (value) => {
-          if (!workspaceState?.autosave) {
-            return;
-          }
-          if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
-            if (type === "poreceive" || (type === "autocomplete" && name === "lot_part")) {
-              submitForm({
-                type: type as FBInputType,
-                name,
-                prevValue: inputState?.autosavePrevValue,
-                nextValue: value,
-              });
-              return;
-            }
-            if (type && FBAutosave.includes(type)) {
-              workspaceState.saveDocRev(formState?.getValues());
-            } else {
-              submitForm();
-            }
-          }
-        }
-      );
-    }, []);
-
-    useEffect(() => {
       if (!bookmarked) { return; }
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
       bookmarkState?.addBookmark({ name, label });
@@ -306,7 +276,6 @@ export const withFBInput = <T extends FBInputProps>(
       placeholder,
       rules,
       value,
-      autosave,
       transform,
       bookmarked,
       applicableValidationSchema,

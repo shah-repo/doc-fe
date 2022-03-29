@@ -32,7 +32,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   stepIndex,
   label,
   gutter,
-  autosave,
   lhrBuildTypeExist,
   ...props
 }) => (
@@ -55,7 +54,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           type="lhrstep"
           optionId={FBAutocompleteAsyncOption.mpiDocuments}
           gutter={false}
-          autosave
           rules="required"
           withState
           shouldReloadOnInit

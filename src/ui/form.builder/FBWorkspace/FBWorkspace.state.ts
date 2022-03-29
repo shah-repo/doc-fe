@@ -20,7 +20,6 @@ class FBWorkspaceState extends FBSchemaState {
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
-  @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
 
@@ -34,13 +33,11 @@ class FBWorkspaceState extends FBSchemaState {
   // and we need to know the values from both FB and AvailableReferences to create
   // new merged value
   public referenceValue: Id[] = [];
-  public omitAutosave = false;
 
-  public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
+  public constructor({ schema, mode }: FBWorkspaceConstructor) {
     super(schema);
     this.schema = schema;
     this.mode = mode || "none";
-    this.autosave = autosave;
   }
 
   public get auth(): FBWorkspaceExternalState["auth"] | undefined {
@@ -139,10 +136,6 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, "revisionChangeType", revisionChangeType);
   };
 
-  @action public setAutosave = (autosave: boolean) => {
-    set(this, "autosave", autosave);
-  };
-
   @action public getMode = (): FBWorkspaceMode => get(this, "mode");
 
   @action public getFieldByName = (name: string) => this.document?.formInput?.[name];
@@ -182,9 +175,8 @@ class FBWorkspaceState extends FBSchemaState {
 
   public saveDocRev = (values?: Record<string, any>) => {
     this.loadAudit = false;
-    const { id, mode, autosave } = this;
+    const { id, mode } = this;
     if ((mode === "form") && !values) { return; }
-    if (!autosave) { return; }
     if (!id) { return; }
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     this.setDirty(true);
@@ -212,7 +204,6 @@ class FBWorkspaceState extends FBSchemaState {
       default:
         return;
     }
-    this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
     const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
     this.documentRevApi.set({
@@ -221,7 +212,6 @@ class FBWorkspaceState extends FBSchemaState {
       body,
       method: "patch",
     }, (data, error) => {
-      this.omitAutosave = false;
       if (error) {
         this.documentRevApi.onError(error);
       } else {

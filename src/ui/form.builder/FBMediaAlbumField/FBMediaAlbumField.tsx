@@ -14,14 +14,13 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   name = "",
   loading,
   editorConfig,
-  autosave,
   mode,
   label,
   index,
   gutter,
 }) => (
   <FBProvider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
-    <FBInput {...{ name, label, gutter, index, editorConfig, autosave }} type="mediaalbum">
+    <FBInput {...{ name, label, gutter, index, editorConfig }} type="mediaalbum">
       {mode !== "qr" && (
         <FBMediaAlbum {...{
           collection,
@@ -31,7 +30,6 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
           name,
           onFileUploadChange,
           actionsDisabled,
-          autosave,
         }}
         />
       )}

@@ -309,14 +309,6 @@ class FBFormState extends FBSchemaState {
       });
   };
 
-  public setFieldAutosave = (name?: string) => {
-    if (!name) { return; }
-    const inputState = this.inputState.get(name);
-    if (!inputState) { return; }
-    const formValue = cloneDeep(this.getFieldValue(name));
-    inputState.setAutosaveValue(cloneDeep(formValue));
-  };
-
   public lockField = (
     body: Partial<FBLockBody>,
     fieldName: string

@@ -7,16 +7,14 @@ import { withFBApprovers } from "./FBApprovers.wrap";
 const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
   renderOption,
   isIncluded,
-  onBlur,
   name,
   gutter,
   disabled,
   loading,
   defaultValue,
   groups = {},
-  autosave,
 }) => (
-  <FBInput {...{ name, gutter, disabled, autosave }} type="approvers">
+  <FBInput {...{ name, gutter, disabled }} type="approvers">
     <FBAutocompleteAsync
       label="form.builder.approvers"
       placeholder="form.builder.start.typing.list"
@@ -27,7 +25,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       gutter={false}
       omitFormValue={true}
       name={`fb-approvers-${name}`}
-      {...{ loading, renderOption, defaultValue, disabled, autosave, onBlur  }}
+      {...{ loading, renderOption, defaultValue, disabled  }}
     />
     <Box display="flex" flexWrap="wrap">
       <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>

@@ -84,7 +84,6 @@ DocumentRevisionFormContainerProps
   let document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ""));
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
 
   const availableReferences = useGetAvailableReferences(initialValues);
@@ -188,7 +187,6 @@ DocumentRevisionFormContainerProps
         ...documentRevision as unknown as DocumentRevision,
       }}
       initialValues={formInput}
-      autosave={autosaveEnabled}
       schema={originScheme}
       {...{ mode }}
     >

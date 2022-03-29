@@ -29,7 +29,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     mode,
     type,
     fieldType,
-    autosave = true,
     ...props
   }: T) => {
 
@@ -206,7 +205,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       loading,
       mode,
       name,
-      autosave,
     });
   };
 

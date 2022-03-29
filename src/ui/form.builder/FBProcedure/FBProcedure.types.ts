@@ -8,7 +8,6 @@ export type FBProcedureProps =
 | "index"
 | "disabled"
 | "loading"
-| "autosave"
 | "isInputOwner"
 | "autoFocus"
 | "autoScrollTo">

@@ -2,7 +2,7 @@ import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
 import { GroupTag } from "../auth/types";
 import { User } from "../common/types";
 import { DocumentType } from "../documentRevisions/documentType/types";
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
+import { REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
 
 export interface WhiteLabelingColors {
   defaultBackground: string;
@@ -102,14 +102,6 @@ export interface NavigationMenu {
 export interface NavigationMenuItem {
   label: string;
   isOpen: boolean;
-}
-
-export interface AutosaveState {
-  autosaveEnabled: boolean;
-}
-
-export interface AutosaveAction {
-  type: typeof AUTOSAVE_CONFIG;
 }
 
 export interface RedlineState {

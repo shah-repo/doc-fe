@@ -36,7 +36,6 @@ export const withFBSupplier = <T extends FBSupplierProps>(
         formState?.setFieldValue(name, supplierId);
         formState?.getInputState(name)?.setRender();
         formState?.validate();
-        formState?.setFieldAutosave(name);
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

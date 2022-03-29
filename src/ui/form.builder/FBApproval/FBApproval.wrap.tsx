@@ -29,14 +29,12 @@ export const withFBApproval = <T extends FBApprovalProps>(
     editorProperties = [],
     reviseDisabled,
     approveLoading,
-    autosave,
     loading,
     ...props
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
     approvalNonVersioned = includes(editorProperties, "approvalNonVersioned");
-    autosave = approvalNonVersioned;
     const currentUser = store.getState().auth.user;
     const {
       id: documentId,
@@ -208,8 +206,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
         () => approvalState?.hasApproved,
         (data) => {
           formState?.setFieldValue(name, cloneDeep(data));
-          if (!approvalNonVersioned) { return; }
-          formState?.setFieldAutosave(name);
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -233,7 +229,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
       name,
       editorProperties,
       approveLoading,
-      autosave,
     });
   };
 

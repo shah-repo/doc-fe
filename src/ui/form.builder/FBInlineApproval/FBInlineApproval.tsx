@@ -55,7 +55,6 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
         name={`fb-ia-${name}`}
         multiple
         withState
-        autosave={false}
         optionLabelKey="user.email"
         labelPrefixRoot="user.name"
         optionValueKey="id"

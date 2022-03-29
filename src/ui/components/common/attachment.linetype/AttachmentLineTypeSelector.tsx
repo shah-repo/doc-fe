@@ -14,7 +14,7 @@ import { documentRevisionTypeGroupsFromDocListContext } from "../../../documentR
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import Colors from "../../../layout/theme/utils/colors";
-import { FormContext, useFormContext } from "../../forms/FormContext";
+import { FormContext } from "../../forms/FormContext";
 import Text from "../../Text";
 import { AttachmentStyleProps } from "../attachment.field/utils/types";
 import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
@@ -70,7 +70,6 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   onChange,
   isUploading,
 }) => {
-  const { submitForm } = useFormContext();
   const classes = styles({ isField });
   const dialog = useDialog();
   const async = useAsync<any>({ onSuccess: dialog.close });
@@ -86,7 +85,6 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   };
 
   const closeDialog = () => {
-    submitForm();
     dialog.close();
   };
 

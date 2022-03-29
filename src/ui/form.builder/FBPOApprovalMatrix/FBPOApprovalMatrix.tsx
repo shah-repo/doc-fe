@@ -13,12 +13,11 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
   poamState,
   dialogState,
   name,
-  autosave,
   ...props
 }) => (
   <Provider {...{ poamState, dialogState }}>
     <FBDialog />
-    <FBInput {...{ name, autosave }} disabled={props.disabled} type="poApprovalMatrix">
+    <FBInput {...{ name }} disabled={props.disabled} type="poApprovalMatrix">
       <Box mt={3}>
         <FBSection name={`fb-poam-section-${name}`} label={props.label}>
           <Box display="flex" flexDirection="row-reverse">

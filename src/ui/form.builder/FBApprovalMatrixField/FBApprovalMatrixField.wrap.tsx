@@ -33,7 +33,6 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
         () => approvalMatrixFieldState?.data,
         (data) => {
           formState?.setFieldValue(name, cloneDeep(data));
-          formState?.setFieldAutosave(name);
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps

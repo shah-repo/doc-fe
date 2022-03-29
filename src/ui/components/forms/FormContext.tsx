@@ -1,8 +1,6 @@
 import { useFormikContext } from "formik";
 import { filter, isEmpty, isEqual, map, omit } from "lodash";
 import React, { useContext } from "react";
-import { useSelector } from "react-redux";
-import { companySelectors } from "../../../state/ducks/company";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions/types";
 import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
@@ -16,7 +14,6 @@ export const useFormContext = () => {
   const context = useContext(FormContext);
   const formik = useFormikContext();
   const { workspaceState, formState, schemaState } = FB.useStores();
-  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   function isOutputSchema(): boolean {
     const values = formik.values as any;
     const { schema: documentSchema = [] } = values?.formDocument?.formTemplate || {};
@@ -115,10 +112,6 @@ export const useFormContext = () => {
   }
 
   const submitForm = (relation?: SubmitFormRelation) => {
-    if (!autosaveEnabled) {
-      return;
-    }
-
     if (context.submitOnChange) {
       if (workspaceState) {
         setFBValue();

@@ -5,7 +5,6 @@ import { FB, FBLHRBuildOptions, FBLHRBuildProps, FBLHRBuildState } from "..";
 import { SMDialogAction } from "../../../App";
 import { withSMDialog } from "../../../App/Shifamed/Components/SMDialog/SMDialog.hoc";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBLHRBuild = <T extends FBLHRBuildProps>(
   Component: React.FunctionComponent<T>,
@@ -25,7 +24,6 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, document } = workspaceState || {};
-    const formContext = useFormContext();
     buildValidationRules = isOutput || (!isOutput && document?.status === DocumentRevisionStatus.Released) ?
       "required" : null;
 
@@ -46,9 +44,6 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     }, []);
 
     // MARK: @helpers
-    function save() {
-      formContext.submitForm();
-    }
 
     // MARK: @reactions
     useEffect(() => reaction(
@@ -63,8 +58,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     useEffect(() => reaction(
       () => workspaceState?.formInputSync.get(name),
       (value) => {
-        const { autosave } = workspaceState || {};
-        const isDisabled = (autosave && (value === FBLHRBuildOptions["R&D"])) || disabled;
+        const isDisabled = ( (value === FBLHRBuildOptions["R&D"])) || disabled;
         lhrBuildState?.setDisabled(isDisabled);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,7 +73,6 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
         return;
       }
       lhrBuildState?.setValue(value);
-      save();
     };
 
     onDialogActionClick = (action: SMDialogAction) => {
@@ -88,10 +81,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
         lhrBuildState?.setValue(formValue);
         return;
       }
-      const { autosave } = workspaceState || {};
       lhrBuildState?.setValue(FBLHRBuildOptions["R&D"]);
-      lhrBuildState?.setDisabled(autosave);
-      save();
     };
 
     return Component({

@@ -4,7 +4,7 @@ import { FBFilePreviewType, FBMediaAlbumProps, FBMediaCarouselState, FBVisibilit
 export type FBMediaCarouselProps =
 & Pick<MobileStepperProps, "activeStep">
 & Pick<BoxProps, "onMouseOver" | "onMouseLeave">
-& Pick<FBMediaAlbumProps, "collection" | "removeMedia" | "actionsDisabled" | "autosave">
+& Pick<FBMediaAlbumProps, "collection" | "removeMedia" | "actionsDisabled">
 & {
   handleNext?: () => any;
   handleBack?: () => any;

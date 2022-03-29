@@ -1,4 +1,3 @@
-import { cloneDeep } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBInputConstructor, FBInputType } from "..";
 
@@ -6,11 +5,9 @@ class FBInputState {
   public static omitLabel: FBInputType[] = ["checkbox", "radio", "hyperlink", "section"];
   // Set value on blur
   public static omitOnChange: FBInputType[] = ["textfield", "texteditor", "purchaseorder"];
-  public autosavePrevValue?: any;
   @observable public value: any;
   @observable public includeContext = false;
   @observable public children: React.ReactElement | undefined;
-  @observable public autosaveNextValue?: any;
   @observable public hidden?: boolean;
   @observable public forceRender?: boolean = false;
   @observable public includeNotes = false;
@@ -22,11 +19,6 @@ class FBInputState {
 
   @action public setChildren = (children: React.ReactElement) => {
     set(this, "children", children);
-  };
-
-  @action public setAutosaveValue = (value: any) => {
-    this.autosavePrevValue = cloneDeep(this.autosaveNextValue);
-    set(this, "autosaveNextValue", cloneDeep(value));
   };
 
   @action public setIncludeContext = (state: boolean) => {
