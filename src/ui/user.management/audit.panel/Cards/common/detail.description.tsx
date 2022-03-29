@@ -8,7 +8,6 @@ const DetailDescription: React.FunctionComponent<any> = ({
   primaryText,
   secondayText,
   marginBottom,
-  multitypo,
 }) => {
   const classes = styles();
   return (
@@ -18,9 +17,9 @@ const DetailDescription: React.FunctionComponent<any> = ({
         fontSize={12}>
         {primaryText}
       </Box>
-      {!multitypo && <Box color={Colors.almost_black} fontSize={14} className={classes.description} >
+      <Box color={Colors.almost_black} fontSize={14} className={classes.description} >
         {secondayText}
-      </Box>}
+      </Box>
     </Box>
   );
 };

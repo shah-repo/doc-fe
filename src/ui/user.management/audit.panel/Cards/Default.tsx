@@ -38,6 +38,7 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
             secondayText={groupItem.primaryText === "AddedToGroups" ?
               getGrpNameFromGrpId(groupItem.secondayText) : groupItem.secondayText }
             key={index}
+            marginBottom={auditDetails.groupItems.length > 1 && +index % 2 === 0}
           />
         ))}
       </Box>
