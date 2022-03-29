@@ -63,7 +63,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           {(approval: FBInlineApprovalBody, index) => {
             const isApproved = isDocumentRevisionApproved(approval.status);
             return (
-              <Box mb={4} key={index}>
+              <Box mb={4}>
                 <Box
                   key={`fb-po-approvals-info-${approval.id}-${index}`}
                   pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
