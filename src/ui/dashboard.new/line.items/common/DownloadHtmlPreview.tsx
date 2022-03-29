@@ -4,7 +4,7 @@ import * as React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { ReactComponent as DownloadPdfSolidIcon } from "../../../../assets/images/download_pdf_solid.svg";
-import { IotService } from "../../../../common/utils/iot/mqttClient";
+import { IotService } from "../../../../common/utils/iot/iotService";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/types";
 import { authSelectors } from "../../../../state/ducks/auth";

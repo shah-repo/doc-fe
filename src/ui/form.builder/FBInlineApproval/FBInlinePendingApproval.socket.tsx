@@ -1,6 +1,6 @@
 import React from "react";
 import { FB } from "..";
-import { IotService } from "../../../common/utils/iot/mqttClient";
+import { IotService } from "../../../common/utils/iot/iotService";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
 
 const FBInlinePendingApprovalSocket: React.FunctionComponent<{}> = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { IotService } from "../../../common/utils/iot/mqttClient";
+import { IotService } from "../../../common/utils/iot/iotService";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { CR_TABLE_NAME } from "../../change.request/grid/container";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
