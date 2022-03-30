@@ -117,7 +117,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (poItems) => {
         const approvers = map(poApprovalsState?.getApprovals, "approver.id");
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        deletedRequestor = workspaceState?.formInputSync?.get("requestor-k740hxlb");
+        deletedRequestor = workspaceState?.formInputSync?.get("po-requestor-autocomplete");
         if (poItems.items.length) {
           checkLineItems(poItems, deletedRequestor);
         } else if (approvers?.includes(deletedRequestor)) {
@@ -161,7 +161,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     React.useEffect(() => reaction(
-      () => workspaceState?.formInputSync?.get("requestor-k740hxlb"),
+      () => workspaceState?.formInputSync?.get("po-requestor-autocomplete"),
       (requestor) => {
         const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
         checkLineItems(poItems, requestor);
@@ -251,7 +251,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
 
-    isRequester = (approverId: string) => approverId === formState?.getFieldValue("requestor-k740hxlb");
+    isRequester = (approverId: string) => approverId === formState?.getFieldValue("po-requestor-autocomplete");
     return Component({
       ...(props as T),
       renderOption,
