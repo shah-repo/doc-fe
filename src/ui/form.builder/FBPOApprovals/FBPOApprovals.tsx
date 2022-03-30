@@ -43,7 +43,6 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           withState
           gutter={false}
           multiple={true}
-          value={approvals}
           omitFormValue={true}
           isRequester={isRequester}
           filterSelectedOptions={true}

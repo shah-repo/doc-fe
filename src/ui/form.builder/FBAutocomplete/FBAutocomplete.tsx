@@ -132,8 +132,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}
                     {...getTagProps({ index })}
-                    disabled={props.name === "approvers" ?
-                      isAlreadyApproved : disabled || (isRequester && isRequester(option.id))}
+                    disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
                   />
                 ); }}
             </FBMapWrapper>
