@@ -5,7 +5,9 @@ import { chain, each, groupBy, map, pick, values } from "lodash";
 import qs from "query-string";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import apiClient from "../../../state/apiClient";
+import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { HISTORY_URL } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPIING } from "../../../state/ducks/userManagement/types";
@@ -32,7 +34,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [Items, setItems] = React.useState<any>([]);
   const [page, setPage] = useState(0);
   const groups = useSelector(userManagementSelectors.groupsById);
+  const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
 
+  const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
   const getGroupNames = (groupIds) => chain(groupIds).map((groupId) => groups[groupId].name).join(", ").value();
   const closeDrawer = () => {
     setOpenDrawer({ ...opendrawer, right: false });
@@ -99,7 +103,11 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       ...auditRecord,
       groupKey: `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`,
       actionInfo: getActionInfo(auditRecord),
+      ownerDetails: getUserDetails(auditRecord.ownerId),
+      employeeDetails: getUserDetails(auditRecord.employeeId),
+      timestamp: getFormattedDateString(auditRecord.timestamp, MomentFormats.BriefDateTime),
     }));
+    console.log("debug :: auditRecords :: ", auditRecords);
     const auditRecordGroups = groupBy(auditRecords, "groupKey");
     // Create a Group Data for each Card to be represented
     const cardGroups = {};
@@ -114,6 +122,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           "id",
           "nextValue",
           "userId",
+          "ownerDetails",
+          "employeeDetails",
         ]),
         items: map(groupedItems, (groupItem) => ({ ...groupItem.actionInfo })),
       };

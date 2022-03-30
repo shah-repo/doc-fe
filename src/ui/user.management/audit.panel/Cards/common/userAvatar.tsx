@@ -5,14 +5,19 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { Employee } from "../../../../../state/ducks/company/types";
 import UserAvatar from "../../../../app/UserMenu/UserAvatar";
 import styles from "./common.styles";
 
-const UserAvatarCard: React.FunctionComponent<any> = ({
+interface Props {
+  timestamp: string;
+  userDetails: Employee;
+}
+const UserAvatarCard: React.FunctionComponent<Props> = ({
   timestamp,
-  // TODO:Check if required
-  ownerEmail, ownerId, ownerName, avatar, initialColor, name,
+  userDetails,
 }) => {
+  const { avatar, initialColor, name } = { ...userDetails.user };
   const classes = styles();
   return (
     <ListItem
@@ -23,27 +28,19 @@ const UserAvatarCard: React.FunctionComponent<any> = ({
       }}
     >
       <ListItemAvatar>
-        <UserAvatar {...{ avatar, initialColor, name }} />
+        <UserAvatar avatar={avatar || ""} initialColor={initialColor || ""} name={name || ""} />
       </ListItemAvatar>
 
       <ListItemText
-        primary={
-          <Typography className={classes.generalInfo}>
-            {ownerName}
-          </Typography>
-        }
-        secondary={
-          <React.Fragment>
-            <Typography
-              component="span"
-              variant="body2"
-              color="textPrimary"
-              className={classes.secondaryText}
-            >
-              {timestamp}
-            </Typography>
-          </React.Fragment>
-        }
+        primary={<Typography className={classes.generalInfo}>{name}</Typography>}
+        secondary={<Typography
+          component="span"
+          variant="body2"
+          color="textPrimary"
+          className={classes.secondaryText}
+        >
+          {timestamp}
+        </Typography>}
       />
     </ListItem>
   );

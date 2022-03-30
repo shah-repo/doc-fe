@@ -2,9 +2,6 @@ import { Box } from "@material-ui/core";
 import { map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
-import { companySelectors } from "../../../../state/ducks/company";
 import styles from "./card.styles";
 import DetailDescription from "./common/detail.description";
 import UserAvatarCard from "./common/userAvatar";
@@ -21,22 +18,12 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
     intl.formatMessage({ id: `user.management.audit.history.${key}` }, values)
   ;
 
-  const companyEmployesUserAvatarInfo = useSelector(companySelectors.getActiveEmployeesForUserAvatar);
-  // TODO: On api integartion check exact id or obj?.user?.id
-  const userAvatarDetails = companyEmployesUserAvatarInfo.find((obj) => obj.id === auditDetails.ownerId);
-  const userDetails = companyEmployesUserAvatarInfo.find((obj) => obj?.user?.id === auditDetails.userId);
   return (
     <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
       <Box display="grid">
         <UserAvatarCard
-          timestamp={getFormattedDateString(
-            auditDetails.timestamp,
-            MomentFormats.BriefDateTime
-          )}
-          ownerEmail={auditDetails.ownerEmail}
-          ownerId={auditDetails.ownerId}
-          ownerName={auditDetails.ownerName}
-          avatar={userAvatarDetails?.user?.avatar} initialColor={userAvatarDetails?.user?.initialColor} name={userAvatarDetails?.user?.name}
+          timestamp={auditDetails.timestamp}
+          userDetails={auditDetails.ownerDetails}
         />
         {/* Below in secondayText add ${auditDetails.id} at the end for testing only. It should be cleaned up later */}
         {map(auditDetails.groupItems, (groupItem, index) => (
@@ -46,7 +33,7 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
             key={index}
             marginBottom={auditDetails.groupItems.length > 1 && +index % 2 === 0}
             includeNameAndEmail={groupItem.includeNameAndEmail}
-            userDetails={userDetails}
+            userDetails={auditDetails.employeeDetails}
           />
         ))}
       </Box>
