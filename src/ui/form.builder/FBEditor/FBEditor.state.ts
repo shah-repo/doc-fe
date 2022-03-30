@@ -8,6 +8,7 @@ import { ReactComponent as BlankTplformIcon } from "../../../assets/images/leftP
 import { ReactComponent as CheckboxIcon } from "../../../assets/images/leftPanel/checkbox_group.svg";
 import { ReactComponent as CheckPointIcon } from "../../../assets/images/leftPanel/check_point.svg";
 import { ReactComponent as DatePickerIcon } from "../../../assets/images/leftPanel/date_picker.svg";
+import { ReactComponent as DefaultIcon } from "../../../assets/images/leftPanel/default.svg";
 import { ReactComponent as EquipmentIcon } from "../../../assets/images/leftPanel/equipment.svg";
 import { ReactComponent as FileuploadIcon } from "../../../assets/images/leftPanel/fileupload.svg";
 import { ReactComponent as HyperlinkIcon } from "../../../assets/images/leftPanel/hyperlink.svg";
@@ -198,6 +199,7 @@ class FBEditorState {
     createlabel: CheckPointIcon,
     task: CheckPointIcon,
     action: FileuploadIcon,
+    default: DefaultIcon,
   };
 
   @observable public mode?: FBEditorMode = "config";

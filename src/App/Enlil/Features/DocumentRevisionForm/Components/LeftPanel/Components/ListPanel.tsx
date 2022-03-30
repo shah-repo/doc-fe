@@ -89,12 +89,15 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                         >
                           {FBEditorState.editorTypeIconMapping[
                             picker.key
-                          ] &&
-                            React.createElement(
-                              FBEditorState.editorTypeIconMapping[
-                                picker.key
-                              ]
-                            )}
+                          ] && React.createElement(
+                            FBEditorState.editorTypeIconMapping[
+                              picker.key
+                            ])}
+                          {!FBEditorState.editorTypeIconMapping[
+                            picker.key
+                          ] && React.createElement(
+                            FBEditorState.editorTypeIconMapping.default
+                          )}
                         </IconButton>
                         <ListItemText key={index} data-cy={picker.label}>
                           <Typography className={classes.listSubItem}>
