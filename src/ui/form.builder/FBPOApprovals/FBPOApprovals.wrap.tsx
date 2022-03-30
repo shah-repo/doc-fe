@@ -34,6 +34,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     disabled,
     isRequester,
     onApproverDelete,
+    isPOApproval,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -265,6 +266,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       disabled,
       isRequester,
       onApproverDelete,
+      isPOApproval: props.type === "poapprovals",
     });
   };
 
