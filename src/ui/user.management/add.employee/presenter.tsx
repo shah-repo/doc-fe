@@ -81,14 +81,13 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
       >
         <Text message="user.management.add.employee" />
       </Button>
-
-      {/* Load History Panel */}
-      {openHistoryPanel && <AuditItemsContainer openHistoryPanel={openHistoryPanel} closeHistoryPanel={onHistoryPanelClick}/>}
-
-      <AddEmployeeDialogPresenter
-        isOpen={isOpen}
-        closeDialog={closeDialog}
-      >
+      {openHistoryPanel &&
+        <AuditItemsContainer
+          openHistoryPanel={openHistoryPanel}
+          closeHistoryPanel={onHistoryPanelClick}
+        />
+      }
+      <AddEmployeeDialogPresenter isOpen={isOpen} closeDialog={closeDialog}>
         <AddEmployeeFormContainer />
       </AddEmployeeDialogPresenter>
     </Box>

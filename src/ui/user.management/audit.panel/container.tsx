@@ -9,10 +9,6 @@ interface OwnProps {
 const AuditItemsContainer: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
-}) => (
-  <>
-    <AuditItemPresenter openHistoryPanel={openHistoryPanel} closeHistoryPanel={closeHistoryPanel}/>
-  </>
-);
+}) => <AuditItemPresenter openHistoryPanel={openHistoryPanel} closeHistoryPanel={closeHistoryPanel}/>;
 
 export default AuditItemsContainer;
