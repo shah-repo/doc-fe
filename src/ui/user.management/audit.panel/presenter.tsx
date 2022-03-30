@@ -4,7 +4,9 @@ import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { chain, each, groupBy, map, pick, values } from "lodash";
 import qs from "query-string";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import apiClient from "../../../state/apiClient";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { HISTORY_URL } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPIING } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
@@ -23,18 +25,20 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
 }) => {
+  const limit = 2;
   const classes = styles();
   const [isFetching, setIsFetching] = useState(false);
-  const [opendrawer, setOpenDrawer] = React.useState({
-    right: openHistoryPanel,
-  });
+  const [opendrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<any>([]);
   const [page, setPage] = useState(0);
+  const groups = useSelector(userManagementSelectors.groupsById);
 
+  const getGroupNames = (groupIds) => chain(groupIds).map((groupId) => groups[groupId].name).join(", ").value();
   const closeDrawer = () => {
     setOpenDrawer({ ...opendrawer, right: false });
     closeHistoryPanel(opendrawer.right);
   };
+
   React.useEffect(() => {
     fetchAuditRecords();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -134,7 +138,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
               "AddedToGroups",
               "DeletedFromGroups",
               "DeletedFromGroup",
-            ].includes(action) ? items.join(",") : items.join(","),
+            ].includes(action) ? getGroupNames(items) : items.join(","),
             employeeName: data.employeeName,
             includeNameAndEmail: [
               "AddedToGroup",
@@ -148,6 +152,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     });
     return cardGroups;
   };
+
   const fetchAuditRecords = () => {
      call?.cancel();
      call = axios.CancelToken.source();
@@ -155,7 +160,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      const requestConfig: AxiosRequestConfig = {
        method: "get",
        url: HISTORY_URL,
-       params: { offset: page, limit: 2 },
+       params: { offset: page, limit },
        paramsSerializer: (params) => qs.stringify(params),
        headers: {
          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
@@ -171,7 +176,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
            ...prevState,
            ...values(cardGroups),
          ]);
-         setPage((prevPageNumber) => prevPageNumber + 1);
+         setPage((prevPageNumber) => prevPageNumber + limit);
          setIsFetching(false);
        });
   };
@@ -206,6 +211,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       </Box>
     </>
   );
+
   return (
     <Drawer anchor="right" open={opendrawer.right} onClose={() => closeDrawer()}>
       <Box width={300}> {isFetching ? <LinearProgress /> : renderAuditRecords()}</Box>
