@@ -6,6 +6,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
+import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
@@ -117,7 +118,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (poItems) => {
         const approvers = map(poApprovalsState?.getApprovals, "approver.id");
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        deletedRequestor = workspaceState?.formInputSync?.get("po-requestor-autocomplete");
+        deletedRequestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
         if (poItems.items.length) {
           checkLineItems(poItems, deletedRequestor);
         } else if (approvers?.includes(deletedRequestor)) {
@@ -153,7 +154,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         addApprover(difference(fieldValue, formValue));
-        if (name !== "fb-po-approvals-kzqyrs7r") {
+        if (props.type !== "poapprovals") {
           removeApprover(difference(formValue, fieldValue));
         }
       }
@@ -161,7 +162,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     React.useEffect(() => reaction(
-      () => workspaceState?.formInputSync?.get("po-requestor-autocomplete"),
+      () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requestor) => {
         const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
         checkLineItems(poItems, requestor);
@@ -251,7 +252,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
 
-    isRequester = (approverId: string) => approverId === formState?.getFieldValue("po-requestor-autocomplete");
+    isRequester = (approverId: string) => approverId === formState?.getFieldValue(PO_REQUESTOR_COMPONENT_NAME);
     return Component({
       ...(props as T),
       renderOption,
