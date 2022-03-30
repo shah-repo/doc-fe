@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { useFormikContext } from "formik";
-import { compact, difference, each, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
+import { compact, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -96,15 +96,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     const checkLineItems = (poItems: any, requester: string) => {
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
-      let proceedToNewReq = false;
-      each(poItems.items, (item) => {
-        if (item.type === "service") {
-          proceedToNewReq = true;
-        }
-        if (item.type === "product" && item.partNumberDocId) {
-          proceedToNewReq = true;
-        }
-      });
+      const proceedToNewReq = poItems.items.some((item) =>
+        item.type === "service" || (item.type === "product" && item.partNumberDocId)
+      );
       if (updateApprovers && requester && proceedToNewReq && !approvers?.includes(requester)) {
         addApprover([requester]);
       } else if (!requester && approvers?.includes(deletedRequestor)) {
