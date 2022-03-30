@@ -936,43 +936,38 @@ context("Create company via API and create Suppliers document", () => {
           .and("contain", supDocId);
       });
 
-      it(`Open doc ${supDocId}`, () => {
+      it(`Open doc`, () => {
         cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
           .contains(supDocId).first().arrowClick();
       });
 
       it("Upload attachment 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldAppear();
+      });
+
+      it("turnoff autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Add first approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add second approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Remove second Approver'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.ApprovalsAbandon], () => {
           cy.contains(`${USERS[2].email}`).parent().next().arrowClick();
         });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Remove Approver who rejected request", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.ApprovalsAbandon], () => {
           cy.contains(`${USERS[3].email}`).parent().next().arrowClick();
         });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check doc status as Draft and click on Send To Email", () => {
@@ -989,328 +984,329 @@ context("Create company via API and create Suppliers document", () => {
           message: "File will be sent to your email shortly.",
         });
       });
-    });
 
-    context("Verify email for Supplier document notification", () => {
-      it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
-        const getEmailSetting =  {
-          to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
-          after: dateAfterEmailShouldArrive,
-          subject: `Export for document ${supDocId}`,
-        };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
-      });
+      context("Verify email for Supplier document notification", () => {
+        it("Get emails", () => {
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          const getEmailSetting =  {
+            to: CONFIG.TEST_EMAIL,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            wait_time_sec: 5,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            max_wait_time_sec: 50,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            include_body: true,
+            after: dateAfterEmailShouldArrive,
+            subject: `Export for document ${supDocId}`,
+          };
 
-      it("Verify the emails that should be received", () => {
-        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-          {
-            sentToUser: USERS[1].email,
-            contains: [`Hello <b>${USERS[1].name},</b>`,
-              "Your documents are ready for download.",
-              "<button type=\"button\">DOWNLOAD</button>",
-              createdCompany.id],
-          }];
-
-        cy.imapVerifyEmailsInList({
-          receivedEmails: emailsFromInbox,
-          emailsToTest: emailsThatShouldBeReceived,
-          getEmailsSincedate: dateAfterEmailShouldArrive,
-          assertNumberOfEmailsFoundInList: 1,
-        });
-      });
-    });
-
-    context("Verify that zip file containing pdf downloaded", () => {
-      it("Download zip file containing Supplier form", () => {
-        expect(downloadUrl).contains("exported_file_download");
-        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-
-        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-          if (res.body !== "") {
-            downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${supDocId}${filetime}_draft.zip`;
-            cy.downloadFile({
-              url: downloadUrl,
-              directory: CONFIG.DOWNLOADS_DIR,
-              fileName: downloadFile,
-            });
-          }
-        });
-      });
-
-      it("Verify file size of the downloaded zip file", () => {
-        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-        cy.readFile(zipfile).its("length").should("be.gt", 500);
-      });
-
-      it("unzip and extract pdf from zip file", () => {
-        cy.unzipFile(
-          {
-            directory: CONFIG.DOWNLOADS_DIR,
-            fileName: downloadFile,
-          });
-
-        const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-          `${supDocId}-2-1-Test-Supplier.pdf`);
-        cy.readFile(pdffile).its("length").should("be.gt", 500);
-      });
-
-      it("Verify attached image.jpg file length more than 500 bytes", () => {
-        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-          downloadFile.replace(".zip", ""), "image.jpg");
-        cy.readFile(attachedFile).its("length").should("be.gt", 500);
-      });
-    });
-
-    context("Verify PDF file content", () => {
-      it("Extract texts from PDF file content for Supplier document", () => {
-        cy.pdfparseFile(
-          {
-            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-            fileName: `${supDocId}-2-1-Test-Supplier.pdf`,
-          }).then((cdata) => {
-          expect(cdata.numpages).eq(1);
-          expect(cdata.text).match(/Page 1 of 1/);
-          tmpRegex = new RegExp( "\\n\\n");
-          const arr = cdata.text.split(tmpRegex);
-          arr.forEach((element) => {
-            if (element.includes("Page 1 of 1")) {
-              pages[0] = element;
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+            if (emails) {
+              emailsFromInbox = emails;
+              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+              downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+            }
+            else {
+              assert.fail("No email found");
             }
           });
         });
-      });
 
-      it("Verify page 1 for Supplier document", () => {
-        const el = pages[0];
-        if (el.includes("Page 1 of 1")) {
-          tmpRegex = new RegExp( `Suppliers\n${supDocId}, Revision 2.1\nTEST SUPPLIER`, "gi" );
-          expect(el).match(tmpRegex);
+        it("Verify the emails that should be received", () => {
+          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+            {
+              sentToUser: USERS[1].email,
+              contains: [`Hello <b>${USERS[1].name},</b>`,
+                "Your documents are ready for download.",
+                "<button type=\"button\">DOWNLOAD</button>",
+                createdCompany.id],
+            }];
 
-          expect(el).match(/Supplier Address\/Phone\nUpdated for second time, Supplier address/);
-
-          expect(el).match(/Attachments/);
-
-          expect(el).match(/image.jpg/);
-
-          // eslint-disable-next-line max-len
-          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} -.*@.*| DRAFT`);
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Checkbox\n1 2 3/);
-
-          tmpRegex = new RegExp(`${USERS[2].name}`);
-          expect(el).not.match(tmpRegex);
-
-          expect(el).not.match(/REJECTED/);
-
-          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(el).not.match(tmpRegex);
-
-          expect(el).match(/Draft/);
-
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
-          expect(el).match(tmpRegex);
-
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${docRelDate}`, "gi");
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Page 1 of 1/);
-        }
-      });
-    });
-
-    context("Approve supplier and release document", () => {
-      it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
-      });
-
-      it("Approve supplier document", () => {
-        cy.ebApprove();
-      });
-
-      it("Verify revision after update is equal to 2", () => {
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2.1  - Released" });
-      });
-
-      it("Check doc status as Released and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
-        cy.arCheckTitleInEditableAndMatches({ name: "Test Supplier" });
-        cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
-          supDocId = $docIdElement.text();
-        });
-        cy.sendToEmail();
-      });
-
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-        cy.checkToastMessageContains({
-          message: "File will be sent to your email shortly.",
-        });
-      });
-    });
-
-    context("Verify email for Supplier document notification", () => {
-      it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
-        const getEmailSetting =  {
-          to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
-          after: dateAfterEmailShouldArrive,
-          subject: `Export for document ${supDocId}`,
-        };
-
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
-      });
-
-      it("Verify the emails that should be received", () => {
-        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-          {
-            sentToUser: USERS[1].email,
-            contains: [`Hello <b>${USERS[1].name},</b>`,
-              "Your documents are ready for download.",
-              "<button type=\"button\">DOWNLOAD</button>",
-              createdCompany.id],
-          }];
-
-        cy.imapVerifyEmailsInList({
-          receivedEmails: emailsFromInbox,
-          emailsToTest: emailsThatShouldBeReceived,
-          getEmailsSincedate: dateAfterEmailShouldArrive,
-          assertNumberOfEmailsFoundInList: 1,
-        });
-      });
-    });
-
-    context("Verify that zip file containing pdf downloaded", () => {
-      it("Download zip file containing Supplier form", () => {
-        expect(downloadUrl).contains("exported_file_download");
-        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-
-        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-          if (res.body !== "") {
-            downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${supDocId}${filetime}_rel.zip`;
-            cy.downloadFile({
-              url: downloadUrl,
-              directory: CONFIG.DOWNLOADS_DIR,
-              fileName: downloadFile,
-            });
-          }
-        });
-      });
-
-      it("Verify file size of the downloaded zip file", () => {
-        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-        cy.readFile(zipfile).its("length").should("be.gt", 500);
-      });
-
-      it("unzip and extract pdf from zip file", () => {
-        cy.unzipFile(
-          {
-            directory: CONFIG.DOWNLOADS_DIR,
-            fileName: downloadFile,
+          cy.imapVerifyEmailsInList({
+            receivedEmails: emailsFromInbox,
+            emailsToTest: emailsThatShouldBeReceived,
+            getEmailsSincedate: dateAfterEmailShouldArrive,
+            assertNumberOfEmailsFoundInList: 1,
           });
-
-        const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-          `${supDocId}-2-1-Test-Supplier.pdf`);
-        cy.readFile(pdffile).its("length").should("be.gt", 500);
+        });
       });
 
-      it("Verify attached image.jpg file length more than 500 bytes", () => {
-        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-          downloadFile.replace(".zip", ""), "image.jpg");
-        cy.readFile(attachedFile).its("length").should("be.gt", 500);
-      });
-    });
+      context("Verify that zip file containing pdf downloaded", () => {
+        it("Download zip file containing Supplier form", () => {
+          expect(downloadUrl).contains("exported_file_download");
+          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
-    context("Verify PDF file content", () => {
-      it("Extract texts from PDF file content for Supplier document", () => {
-        cy.pdfparseFile(
-          {
-            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-            fileName: `${supDocId}-2-1-Test-Supplier.pdf`,
-          }).then((cdata) => {
-          expect(cdata.numpages).eq(1);
-          expect(cdata.text).match(/Page 1 of 1/);
-          tmpRegex = new RegExp( "\\n\\n");
-          const arr = cdata.text.split(tmpRegex);
-          arr.forEach((element) => {
-            if (element.includes("Page 1 of 1")) {
-              pages[0] = element;
+          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+            if (res.body !== "") {
+              downloadUrl = res.body.url;
+              const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+              downloadFile  =  `${supDocId}${filetime}_draft.zip`;
+              cy.downloadFile({
+                url: downloadUrl,
+                directory: CONFIG.DOWNLOADS_DIR,
+                fileName: downloadFile,
+              });
             }
           });
         });
+
+        it("Verify file size of the downloaded zip file", () => {
+          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+          cy.readFile(zipfile).its("length").should("be.gt", 500);
+        });
+
+        it("unzip and extract pdf from zip file", () => {
+          cy.unzipFile(
+            {
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+
+          const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+            `${supDocId}-2-1-Test-Supplier.pdf`);
+          cy.readFile(pdffile).its("length").should("be.gt", 500);
+        });
+
+        it("Verify attached image.jpg file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
       });
 
-      it("Verify page 1 for Supplier document", () => {
-        const el = pages[0];
-        if (el.includes("Page 1 of 1")) {
-          tmpRegex = new RegExp( `Suppliers\n${supDocId}, Revision 2.1\nTEST SUPPLIER`, "gi" );
-          expect(el).match(tmpRegex);
+      context("Verify PDF file content", () => {
+        it("Extract texts from PDF file content for Supplier document", () => {
+          cy.pdfparseFile(
+            {
+              directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+              fileName: `${supDocId}-2-1-Test-Supplier.pdf`,
+            }).then((cdata) => {
+            expect(cdata.numpages).eq(1);
+            expect(cdata.text).match(/Page 1 of 1/);
+            tmpRegex = new RegExp( "\\n\\n");
+            const arr = cdata.text.split(tmpRegex);
+            arr.forEach((element) => {
+              if (element.includes("Page 1 of 1")) {
+                pages[0] = element;
+              }
+            });
+          });
+        });
 
-          expect(el).match(/Supplier Address\/Phone\nUpdated for second time, Supplier address/);
+        it("Verify page 1 for Supplier document", () => {
+          const el = pages[0];
+          if (el.includes("Page 1 of 1")) {
+            tmpRegex = new RegExp( `Suppliers\n${supDocId}, Revision 2.1\nTEST SUPPLIER`, "gi" );
+            expect(el).match(tmpRegex);
 
-          expect(el).match(/Attachments/);
+            expect(el).match(/Supplier Address\/Phone\nUpdated for second time, Supplier address/);
 
-          expect(el).match(/image.jpg/);
+            expect(el).match(/Attachments/);
 
-          // eslint-disable-next-line max-len
-          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
-          expect(el).match(tmpRegex);
+            expect(el).match(/image.jpg/);
 
-          expect(el).match(/Checkbox\n1 2 3/);
+            // eslint-disable-next-line max-len
+            tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} -.*@.*| DRAFT`);
+            expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`${USERS[2].name}`);
-          expect(el).not.match(tmpRegex);
+            expect(el).match(/Checkbox\n1 2 3/);
 
-          expect(el).not.match(/REJECTED/);
+            tmpRegex = new RegExp(`${USERS[2].name}`);
+            expect(el).not.match(tmpRegex);
 
-          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(el).not.match(tmpRegex);
+            expect(el).not.match(/REJECTED/);
 
-          expect(el).match(/Released/);
+            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+            expect(el).not.match(tmpRegex);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
-          expect(el).match(tmpRegex);
+            expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${docRelDate}`, "gi");
-          expect(el).match(tmpRegex);
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 1 of 1/);
-        }
+            tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${docRelDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 1 of 1/);
+          }
+        });
+      });
+
+      context("Approve supplier and release document", () => {
+        it("Submit for approval", () => {
+          cy.pmSubmitForApproval();
+        });
+
+        it("Approve supplier document", () => {
+          cy.ebApprove();
+        });
+
+        it("Verify revision after update is equal to 2", () => {
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2.1  - Released" });
+        });
+
+        it("Check doc status as Released and click on Send To Email", () => {
+          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.arCheckTitleInEditableAndMatches({ name: "Test Supplier" });
+          cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+            supDocId = $docIdElement.text();
+          });
+          cy.sendToEmail();
+        });
+
+        it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+          cy.checkToastMessageContains({
+            message: "File will be sent to your email shortly.",
+          });
+        });
+      });
+
+      context("Verify email for Supplier document notification", () => {
+        it("Get emails", () => {
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          const getEmailSetting =  {
+            to: CONFIG.TEST_EMAIL,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            wait_time_sec: 5,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            max_wait_time_sec: 50,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            include_body: true,
+            after: dateAfterEmailShouldArrive,
+            subject: `Export for document ${supDocId}`,
+          };
+
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+            if (emails) {
+              emailsFromInbox = emails;
+              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+              downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+            }
+            else {
+              assert.fail("No email found");
+            }
+          });
+        });
+
+        it("Verify the emails that should be received", () => {
+          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+            {
+              sentToUser: USERS[1].email,
+              contains: [`Hello <b>${USERS[1].name},</b>`,
+                "Your documents are ready for download.",
+                "<button type=\"button\">DOWNLOAD</button>",
+                createdCompany.id],
+            }];
+
+          cy.imapVerifyEmailsInList({
+            receivedEmails: emailsFromInbox,
+            emailsToTest: emailsThatShouldBeReceived,
+            getEmailsSincedate: dateAfterEmailShouldArrive,
+            assertNumberOfEmailsFoundInList: 1,
+          });
+        });
+      });
+
+      context("Verify that zip file containing pdf downloaded", () => {
+        it("Download zip file containing Supplier form", () => {
+          expect(downloadUrl).contains("exported_file_download");
+          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+            if (res.body !== "") {
+              downloadUrl = res.body.url;
+              const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+              downloadFile  =  `${supDocId}${filetime}_rel.zip`;
+              cy.downloadFile({
+                url: downloadUrl,
+                directory: CONFIG.DOWNLOADS_DIR,
+                fileName: downloadFile,
+              });
+            }
+          });
+        });
+
+        it("Verify file size of the downloaded zip file", () => {
+          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+          cy.readFile(zipfile).its("length").should("be.gt", 500);
+        });
+
+        it("unzip and extract pdf from zip file", () => {
+          cy.unzipFile(
+            {
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+
+          const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+            `${supDocId}-2-1-Test-Supplier.pdf`);
+          cy.readFile(pdffile).its("length").should("be.gt", 500);
+        });
+
+        it("Verify attached image.jpg file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
+      });
+
+      context("Verify PDF file content", () => {
+        it("Extract texts from PDF file content for Supplier document", () => {
+          cy.pdfparseFile(
+            {
+              directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+              fileName: `${supDocId}-2-1-Test-Supplier.pdf`,
+            }).then((cdata) => {
+            expect(cdata.numpages).eq(1);
+            expect(cdata.text).match(/Page 1 of 1/);
+            tmpRegex = new RegExp( "\\n\\n");
+            const arr = cdata.text.split(tmpRegex);
+            arr.forEach((element) => {
+              if (element.includes("Page 1 of 1")) {
+                pages[0] = element;
+              }
+            });
+          });
+        });
+
+        it("Verify page 1 for Supplier document", () => {
+          const el = pages[0];
+          if (el.includes("Page 1 of 1")) {
+            tmpRegex = new RegExp( `Suppliers\n${supDocId}, Revision 2.1\nTEST SUPPLIER`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Supplier Address\/Phone\nUpdated for second time, Supplier address/);
+
+            expect(el).match(/Attachments/);
+
+            expect(el).match(/image.jpg/);
+
+            // eslint-disable-next-line max-len
+            tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Checkbox\n1 2 3/);
+
+            tmpRegex = new RegExp(`${USERS[2].name}`);
+            expect(el).not.match(tmpRegex);
+
+            expect(el).not.match(/REJECTED/);
+
+            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+            expect(el).not.match(tmpRegex);
+
+            expect(el).match(/Released/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${docRelDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 1 of 1/);
+          }
+        });
       });
     });
   });
