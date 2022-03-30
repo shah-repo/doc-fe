@@ -1,9 +1,10 @@
 import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { chain, each, groupBy, map, pick, values } from "lodash";
+import { each, groupBy, map, pick, values } from "lodash";
 import qs from "query-string";
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import apiClient from "../../../state/apiClient";
@@ -27,7 +28,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
 }) => {
-  const limit = 2;
+  const limit = 5;
   const classes = styles();
   const [isFetching, setIsFetching] = useState(false);
   const [opendrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
@@ -35,9 +36,11 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [page, setPage] = useState(0);
   const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
+  const intl = useIntl();
+  const getTransalatedText = (key: string, values: any) => intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
 
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
-  const getGroupNames = (groupIds) => chain(groupIds).map((groupId) => groups[groupId].name).join(", ").value();
+  const getGroupName = (groupId) => groups[groupId].name;
   const closeDrawer = () => {
     setOpenDrawer({ ...opendrawer, right: false });
     closeHistoryPanel(opendrawer.right);
@@ -48,118 +51,105 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getActionInfo = (groupItem) => {
+  const getDescription = (auditRecord, ownerDetails, employeeDetails) => {
+    console.log("employeeDetails :: ", employeeDetails);
     let actionInfo = {
-      action: "Unknown",
-      value: groupItem,
+      primaryText: ACTION_TITLE_MAPPIING.Unknown as string,
+      secondayText: auditRecord.id,
+      auditType: ACTION_TITLE_MAPPIING.Unknown,
     };
-    if (groupItem.fieldPath === "name" && groupItem.type === "STRING_EDITED") {
+    if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_EDITED") {
       actionInfo = {
-        action: ACTION_TITLE_MAPPIING.EmployeeNameUpdated,
-        value: `${groupItem.previousValue} to ${groupItem.nextValue}`,
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeeNameUpdated, {}),
+        secondayText: `${auditRecord.previousValue} to ${auditRecord.nextValue}`,
+        auditType: ACTION_TITLE_MAPPIING.EmployeeNameUpdated,
       };
-    } else if (groupItem.fieldPath === "groups" && groupItem.type === "ARRAY_NEW") {
-      if (groupItem.previousValue === "undefined") {
+    } else if (auditRecord.fieldPath === "groups" && auditRecord.type === "ARRAY_NEW") {
+      if (auditRecord.previousValue === "undefined") {
         actionInfo = {
-          action: ACTION_TITLE_MAPPIING.AddedToGroups,
-          value: groupItem.nextValue,
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroups, {}),
+          secondayText: getGroupName(auditRecord.nextValue),
+          auditType: ACTION_TITLE_MAPPIING.AddedToGroups,
         };
       }
-    } else if (groupItem.fieldPath === "groups" && groupItem.type === "ARRAY_DELETED") {
+    } else if (auditRecord.fieldPath === "groups" && auditRecord.type === "ARRAY_DELETED") {
       actionInfo = {
-        action: ACTION_TITLE_MAPPIING.DeletedFromGroups,
-        value: groupItem.previousValue,
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.DeletedFromGroups, {}),
+        secondayText: getGroupName(auditRecord.previousValue),
+        auditType: ACTION_TITLE_MAPPIING.DeletedFromGroups,
       };
-    } else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_NEW") {
+    } else if (auditRecord.fieldPath === "active" && auditRecord.type === "BOOLEAN_NEW") {
       actionInfo = {
-        action: ACTION_TITLE_MAPPIING.CreatedNewUser,
-        value: groupItem.employeeName,
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.CreatedNewUser, {}),
+        secondayText: auditRecord.employeeName,
+        auditType: ACTION_TITLE_MAPPIING.CreatedNewUser,
       };
-    } else if (groupItem.fieldPath === "name" && groupItem.type === "STRING_NEW") {
+    } else if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_NEW") {
       actionInfo = {
-        action: ACTION_TITLE_MAPPIING.ActivateUser,
-        value: "Active",
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ActivateUser, { employeeName: auditRecord.nextValue }),
+        secondayText: "Active",
+        auditType: ACTION_TITLE_MAPPIING.ActivateUser,
       };
     }
-    else if (groupItem.fieldPath === "active" && groupItem.type === "BOOLEAN_EDITED") {
-      if (groupItem.previousValue === "true" && groupItem.nextValue === "false") {
+    else if (auditRecord.fieldPath === "active" && auditRecord.type === "BOOLEAN_EDITED") {
+      if (auditRecord.previousValue === "true" && auditRecord.nextValue === "false") {
         actionInfo = {
-          action: ACTION_TITLE_MAPPIING.DeactivateUser,
-          value: groupItem.employeeName,
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.DeactivateUser, {}),
+          secondayText: auditRecord.employeeName,
+          auditType: ACTION_TITLE_MAPPIING.DeactivateUser,
         };
       }
-      if (groupItem.previousValue === "false" && groupItem.nextValue === "true") {
+      if (auditRecord.previousValue === "false" && auditRecord.nextValue === "true") {
         actionInfo = {
-          action: ACTION_TITLE_MAPPIING.ActivateUser,
-          value: groupItem.nextValue === "true" ? "Active" : "Inactive",
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ActivateUser, { employeeName: employeeDetails?.user?.name }),
+          secondayText: auditRecord.nextValue === "true" ? "Active" : "Inactive",
+          auditType: ACTION_TITLE_MAPPIING.ActivateUser,
         };
       }
     }
     return actionInfo;
   };
-
+  const createGroups = (groupedItems) => {
+    const similarGroups = groupBy(groupedItems, "primaryText");
+    return map(similarGroups, (items, key) => {
+      const auditType = items[0].auditType;
+      let primaryText = key;
+      const secondayText = map(items, "secondayText");
+      if (auditType === ACTION_TITLE_MAPPIING.AddedToGroups as string && secondayText.length <= 1) {
+        primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroup, {});
+      }
+      return { primaryText, secondayText: secondayText.join(", ") };
+    });
+  };
   const getCardGroups = (response) => {
-    const auditRecords = map(response, (auditRecord) => ({
-      ...auditRecord,
-      groupKey: `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`,
-      actionInfo: getActionInfo(auditRecord),
-      ownerDetails: getUserDetails(auditRecord.ownerId),
-      employeeDetails: getUserDetails(auditRecord.employeeId),
-      timestamp: getFormattedDateString(auditRecord.timestamp, MomentFormats.BriefDateTime),
-    }));
+    const auditRecords = map(response, (auditRecord) => {
+      const employeeDetails = getUserDetails(auditRecord.employeeId);
+      const ownerDetails = getUserDetails(auditRecord.ownerId);
+      return {
+        ...auditRecord,
+        groupKey: `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`,
+        ownerDetails,
+        employeeDetails,
+        timestamp: getFormattedDateString(auditRecord.timestamp, MomentFormats.BriefDateTime),
+        ...getDescription(auditRecord, ownerDetails, employeeDetails),
+      };
+    });
     console.log("debug :: auditRecords :: ", auditRecords);
-    const auditRecordGroups = groupBy(auditRecords, "groupKey");
     // Create a Group Data for each Card to be represented
+    const auditRecordGroups = groupBy(auditRecords, "groupKey");
     const cardGroups = {};
     each(auditRecordGroups, (groupedItems, groupKey) => {
       cardGroups[groupKey] = {
         ...pick(auditRecordGroups[groupKey][0], [
-          "ownerId",
-          "ownerName",
-          "ownerEmail",
           "timestamp",
-          "employeeName",
           "id",
-          "nextValue",
-          "userId",
           "ownerDetails",
           "employeeDetails",
         ]),
-        items: map(groupedItems, (groupItem) => ({ ...groupItem.actionInfo })),
+        descriptions: createGroups(groupedItems),
       };
     });
-    // Make uniq values
-    each(cardGroups, (data: any, key) => {
-      cardGroups[key].groupItems = chain(data.items)
-        .groupBy("action")
-        .map((itemGroup, action) => {
-          const items = map(itemGroup, "value");
-          if (items.length === 1) {
-            if (action === "AddedToGroups") {
-              action = "AddedToGroup";
-            } else if (action === "DeletedFromGroups") {
-              action = "DeletedFromGroup";
-            }
-          }
-          return {
-            primaryText: action,
-            secondayText: [
-              "AddedToGroup",
-              "AddedToGroups",
-              "DeletedFromGroups",
-              "DeletedFromGroup",
-            ].includes(action) ? getGroupNames(items) : items.join(","),
-            employeeName: data.employeeName,
-            includeNameAndEmail: [
-              "AddedToGroup",
-              "AddedToGroups",
-              "DeletedFromGroups",
-              "DeletedFromGroup",
-            ].includes(action),
-          };
-        })
-        .value();
-    });
+    console.log("debug :: cardGroups :: ", cardGroups);
     return cardGroups;
   };
 
