@@ -17,6 +17,7 @@ interface AwsMqttClient {
   _resubscribeTopics: any;
   subscribe: (topic: string) => Promise<void>;
   unsubscribe: (topic: any) => Promise<void>;
+  end: () => void;
 }
 
 interface IAwsMqttClient {
@@ -62,6 +63,10 @@ export class IotService {
     await this.createMqttClient();
   }
 
+  public end() {
+    this.mqttClientInstance.end();
+  }
+
   public subscribeToTopic(topic: string, notif: any): any {
     if (!this.isConnected()) {
       loggerDebug("(subscribeToTopic) Could not subscribe. Client not connected", topic);
@@ -83,9 +88,12 @@ export class IotService {
       (id) => id === fullTopic,
     );
     if (topicSubscribed) {
+
+      loggerDebug(`(unsubscribeFromTopic) unsubscribed from ${topic}`);
       await this.mqttClientInstance.unsubscribe(fullTopic);
 
       delete this.emitter[fullTopic];
+      delete this.connectedSubscriptions[topic];
     } else {
       loggerDebug(`(unsubscribeFromTopic) cannot unsubscribe from ${topic}, not subscribed`);
     }
@@ -101,6 +109,7 @@ export class IotService {
     if (hasSubscriptions) {
       const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
 
+      loggerDebug("(unsubscribeAll) unsubscribed from all");
       await this.mqttClientInstance.unsubscribe(topics);
       this.emitter = {};
       this.connectedSubscriptions = {};

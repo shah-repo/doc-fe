@@ -8,7 +8,6 @@ import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { companyActions } from "../../../state/ducks/company";
 import { Employee, WhiteLabelingEnv } from "../../../state/ducks/company/types";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { toastInfo, toastSuccess } from "../../components/notifications";
 import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from "../../constants/urls";
 import { ThemeEnv } from "../../layout/theme/utils/types";
@@ -30,10 +29,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
 
 
   const handleClick = (employee: Employee) => () => {
-    dispatch(authActions.clearNonAuthData());
-    dispatch(tableSearchActions.clearAllTables());
-    dispatch(authActions.setCredentials(null));
-
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(authActions.selectEmployee(employee));
 
