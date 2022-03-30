@@ -25,6 +25,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   documentStatus,
   dialogState,
   isRequester,
+  onApproverDelete,
   ...props
 }) => (
   <FBProvider {...{ dialogState }}>
@@ -45,8 +46,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           value={approvals}
           omitFormValue={true}
           isRequester={isRequester}
-          disableClearable={true}
           filterSelectedOptions={true}
+          onApproverDelete={onApproverDelete}
           {...{ disabled, renderOption, loading }}
         />
         <Box display="flex" flexWrap="wrap" my={2}>

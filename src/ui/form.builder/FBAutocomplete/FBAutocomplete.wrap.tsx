@@ -32,6 +32,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     omitFormValue,
     disabled,
     editorProperties,
+    isPOApproval,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
@@ -39,7 +40,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
       !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue;
-
+    isPOApproval = name === "fb-po-approvals-kzqyrs7r";
     const multiple = editorProperties?.includes("multiple") || props.multiple;
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
 
@@ -155,6 +156,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       name,
       disabled,
       includeQRScan,
+      isPOApproval,
     });
   };
 

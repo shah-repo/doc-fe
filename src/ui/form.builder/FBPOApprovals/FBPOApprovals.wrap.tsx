@@ -32,6 +32,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     dialogState,
     disabled,
     isRequester,
+    onApproverDelete,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -152,7 +153,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         addApprover(difference(fieldValue, formValue));
-        removeApprover(difference(formValue, fieldValue));
+        if (name !== "fb-po-approvals-kzqyrs7r") {
+          removeApprover(difference(formValue, fieldValue));
+        }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -165,6 +168,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
+    onApproverDelete = (id: string) => {
+      removeApprover([id]);
+    };
 
     const checkGroups = (id: string) => {
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
@@ -262,6 +269,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       dialogState,
       disabled,
       isRequester,
+      onApproverDelete,
     });
   };
 

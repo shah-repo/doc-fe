@@ -23,4 +23,6 @@ export type FBAutocompleteProps =
    modifiedOptions?: any[];
    debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void;
    isRequester?: (id: string) => boolean;
+   onApproverDelete?: (id: string) => void;
+   isPOApproval?: boolean;
  };
