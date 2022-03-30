@@ -64,8 +64,9 @@ context("Create company via API and create Suppliers document", () => {
     cy.authApiLogin({
       email: CONFIG.SUPERADMIN_EMAIL,
       password: CONFIG.SUPERADMIN_PASSWORD,
-    }).then((response) => {
+    }).then((response: any) => {
       loginResponse = response;
+      multipleCompanies = response.employees.length > 0;
 
       cy.cmpCreateCompany({
         specFilePath: __filename,
@@ -82,8 +83,9 @@ context("Create company via API and create Suppliers document", () => {
           acctCodes: ["code 1"],
           addresses: ["Address 1"],
         }, sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
+      }).then((response: any) => {
         createdCompany = response;
+        multipleCompanies = response.employees.length > 1 ? true : false;
         adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
         secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
         thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
@@ -140,17 +142,6 @@ context("Create company via API and create Suppliers document", () => {
       }).then(() => {
         done();
       });
-    });
-  });
-
-  it("[API] Login another tester", (done: any) => {
-    cy.authApiLogin({
-      email: USERS[3].email,
-      password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-    }).then((response) => {
-      loginResponse = response;
-      multipleCompanies = loginResponse.employees.length > 1 ? true : false;
-      done();
     });
   });
 
