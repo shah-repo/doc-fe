@@ -98,6 +98,34 @@ export interface HistoryListApiResponse {
   total: number;
 }
 
+// Updated Audit Detail Props
+// TODO: Remove above Types
+interface DescriptionItemsProp {
+  primaryText: string;
+  secondayText: string;
+}
+
+interface UserItemProp {
+  avatar: Nullable<string>;
+  email: string;
+  id: string;
+  initialColor: string;
+  name: string;
+}
+interface OwnerItemsProp {
+  active: boolean;
+  id: string;
+  user: UserItemProp;
+}
+
+export interface AuditDetailsProps {
+  descriptions: DescriptionItemsProp[];
+  employeeDetails: any;
+  id: string;
+  ownerDetails: OwnerItemsProp;
+  timestamp: string;
+}
+
 export type HistoryState = HistoryListApiResponse;
 
 export enum ACTION_TITLE_MAPPIING {
