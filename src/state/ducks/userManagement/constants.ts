@@ -24,8 +24,8 @@ export const API_TOKEN_REVOKE_URL = `${API_TOKEN}/revoke`;
 export const HISTORY_LIST = "userManagement/HISTORY_LIST";
 export const HISTORY_LIST_ASYNC = "userManagement/HISTORY_LIST_ASYNC";
 
-// TODO: Update with new API URL
 export const HISTORY_URL = "/employees/audit";
+// TODO: Check below constants
 export const HISTORY_INITIAL_OFFSET = 0;
 export const HISTORY_LIMIT = 50;
 export const  HISTORY_INITIAL_PAYLOAD = {

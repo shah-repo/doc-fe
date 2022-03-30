@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
-// const SIDEBAR_WIDTH = 300;
 export default makeStyles(() =>
   createStyles({
     titleOuterContainer: {
@@ -8,7 +8,7 @@ export default makeStyles(() =>
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "0",
+      padding: 0,
       position: "static",
       width: "275px",
       height: "23px",
@@ -31,23 +31,23 @@ export default makeStyles(() =>
       flex: "none",
       order: 0,
       flexGrow: 0,
-      margin: "0px 2px",
+      margin: "0 2px",
     },
     iconContainer: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "flex-end",
       alignItems: "center",
-      padding: "0px",
+      padding: 0,
       position: "static",
       width: "23px",
       height: "23px",
       left: "252px",
-      top: "0px",
+      top: 0,
       flex: "none",
       order: 1,
       flexGrow: 0,
-      margin: "0px 2px",
+      margin: "0 2px",
     },
     externalContainer: {
       display: "flex",
@@ -57,10 +57,10 @@ export default makeStyles(() =>
       position: "static",
       width: "300px",
       height: "43px",
-      left: "0px",
-      top: "0px",
-      background: "#FFFFFF",
-      boxShadow: "0px 1px 0px #CCD4D9",
+      left: 0,
+      top: 0,
+      background: Colors.white,
+      boxShadow: `0 1px 0 ${Colors.link_water}`,
       flex: "none",
       order: 0,
       alignSelf: "stretch",
@@ -69,6 +69,7 @@ export default makeStyles(() =>
     },
     listItemContainer: {
       height: "calc(100vh - 60px)",
+      overflow: "auto",
     },
   })
 );

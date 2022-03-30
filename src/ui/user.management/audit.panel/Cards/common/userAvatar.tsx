@@ -5,13 +5,20 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { Employee } from "../../../../../state/ducks/company/types";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import UserAvatar from "../../../../app/UserMenu/UserAvatar";
 import styles from "./common.styles";
 
 interface Props {
   timestamp: string;
-  userDetails: Employee;
+  userDetails: {
+    user: {
+      avatar: Nullable<string>;
+      initialColor: string;
+      name: string;
+    };
+  };
+
 }
 const UserAvatarCard: React.FunctionComponent<Props> = ({
   timestamp,
@@ -28,7 +35,7 @@ const UserAvatarCard: React.FunctionComponent<Props> = ({
       }}
     >
       <ListItemAvatar>
-        <UserAvatar avatar={avatar || ""} initialColor={initialColor || ""} name={name || ""} />
+        <UserAvatar avatar={avatar} initialColor={initialColor} name={name} />
       </ListItemAvatar>
 
       <ListItemText

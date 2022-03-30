@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../../layout/theme/utils/colors";
 
 export default makeStyles(() =>
   createStyles({
@@ -8,15 +9,15 @@ export default makeStyles(() =>
       alignItems: "flex-start",
       padding: "15px 15px 15px 20px",
       position: "static",
-      left: "0px",
+      left: 0,
       top: "44px",
-      background: "#FFFFFF",
-      boxShadow: "0px 1px 0px #ccd4d9",
+      background: Colors.white,
+      boxShadow: `0px 1px 0px ${Colors.link_water}`,
       flex: "none",
       order: 1,
       alignSelf: "stretch",
       flexGrow: 0,
-      margin: "1px 0px",
+      margin: "1px 0",
     },
   })
 );

@@ -22,6 +22,7 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
+  link_water = "#ccd4d9",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",

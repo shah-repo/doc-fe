@@ -52,13 +52,6 @@ const getActiveEmployees = (state: ApplicationState) =>
     .value()
     .sort(sortStringsByKey("user.name"));
 
-const getActiveEmployeesForUserAvatar = (state: ApplicationState) =>
-  chain(state.company.companyMine.employees)
-    // .filter({ active: true })
-    .map((employee) => pick(employee, ["id", "user.id", "user.name", "user.avatar", "user.initialColor", "user.email"]))
-    .value()
-    .sort(sortStringsByKey("user.name"));
-
 const getAllEmployees = (state: ApplicationState) => state.company.companyMine.employees;
 
 export default {
@@ -78,6 +71,5 @@ export default {
   getRedlineActive,
   getNavigationTitle,
   getActiveEmployees,
-  getActiveEmployeesForUserAvatar,
   getAllEmployees,
 };

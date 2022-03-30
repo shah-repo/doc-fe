@@ -40,7 +40,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const getTransalatedText = (key: string, values: any) => intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
 
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
-  const getGroupName = (groupId) => groups[groupId].name;
+  const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : groupId;
   const closeDrawer = () => {
     setOpenDrawer({ ...opendrawer, right: false });
     closeHistoryPanel(opendrawer.right);

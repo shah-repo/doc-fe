@@ -4,10 +4,19 @@ import React from "react";
 import Colors from "../../../../layout/theme/utils/colors";
 import styles from "./common.styles";
 
-const DetailDescription: React.FunctionComponent<any> = ({
+interface OwnProps {
+  primaryText: string;
+  secondayText: string;
+  id: string;
+  // TODO: Update
+  employeeDetail: any;
+}
+
+const DetailDescription: React.FunctionComponent<OwnProps> = ({
   primaryText,
   secondayText,
   id,
+  employeeDetail,
 }) => {
   const classes = styles();
   return (
@@ -20,7 +29,7 @@ const DetailDescription: React.FunctionComponent<any> = ({
       <Box color={Colors.almost_black} fontSize={14} className={classes.description}>
         {secondayText}
       </Box>
-      <Box color={Colors.hint_gray} fontSize={6}>
+      <Box color={Colors.red} fontSize={6}>
         {id}
       </Box>
     </>

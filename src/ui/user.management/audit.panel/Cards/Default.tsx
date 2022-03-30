@@ -1,12 +1,29 @@
 import { Box } from "@material-ui/core";
 import { map } from "lodash";
 import React from "react";
+import { Nullable } from "../../../../state/ducks/common/types";
 import styles from "./card.styles";
 import DetailDescription from "./common/detail.description";
 import UserAvatarCard from "./common/userAvatar";
 
 interface Props {
-  auditDetails: any;
+  auditDetails: {
+    timestamp: string;
+    ownerDetails: {
+      user: {
+        avatar: Nullable<string>;
+        initialColor: string;
+        name: string;
+      };
+    };
+    descriptions: [{
+      primaryText: string;
+      secondayText: string;
+    }];
+    id: string;
+    employeeDetails: any; // TODO: Check what is required
+  };
+
 }
 
 const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
@@ -32,7 +49,7 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
             secondayText= {groupItem.secondayText}
             id={auditDetails.id}
             key={index}
-            userDetails={auditDetails.employeeDetails}
+            employeeDetail={auditDetails.employeeDetails}
           />
         ))}
       </Box>
