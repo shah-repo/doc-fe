@@ -45,12 +45,9 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           gutter={false}
           multiple={true}
           omitFormValue={true}
-          isRequester={isRequester}
           filterSelectedOptions={true}
           disableClearable={true}
-          onApproverDelete={onApproverDelete}
-          isPOApproval={isPOApproval}
-          {...{ disabled, renderOption, loading }}
+          {...{ disabled, renderOption, loading, onApproverDelete, isRequester, isPOApproval }}
         />
         <Box display="flex" flexWrap="wrap" my={2}>
           <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>

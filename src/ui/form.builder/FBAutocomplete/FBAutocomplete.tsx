@@ -38,11 +38,12 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   rules,
   onApproverDelete,
   isPOApproval,
+  name,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
   const CustomPopper = (props) => <Popper {...props} placement="bottom-start" />;
-  const renderInputData = useMemo(() => (<FBMapWrapper<any[]> collection={value as any[]}>
+  const renderInputData = useMemo(() => (<FBMapWrapper<any[]> collection={value as string[]}>
     {(option, index) => {
       const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
         (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
@@ -52,12 +53,12 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
           style={{ minHeight: "32px", height: "auto" }}
           onDelete={() => onApproverDelete && onApproverDelete(option.id)}
-          disabled={props.name === "approvers" ?
+          disabled={name === "approvers" ?
             isAlreadyApproved : disabled || (isRequester && isRequester(option.id))}
         />
       ); }}
   </FBMapWrapper>),
-  [disabled, getOptionLabel, isRequester, optionLabelKey, props.name, value, workspaceState, onApproverDelete]);
+  [disabled, getOptionLabel, isRequester, optionLabelKey, name, value, workspaceState, onApproverDelete]);
   return (
     <>
       {includeQRScan && (
@@ -71,7 +72,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         {...props}
         {...{ multiple, defaultValue, loading, rules }}
         type="autocomplete"
-        disabled={props.name === "approvers" ? false : disabled}
+        disabled={name === "approvers" ? false : disabled}
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
         <StyledAutoComplete
@@ -108,7 +109,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   inputProps={{
                     ...params.inputProps,
                     "style": { padding: "10.5px 0", ...inputStyle },
-                    "data-cy": props.name,
+                    "data-cy": name,
                   }}
                 />
               </Box>
@@ -132,7 +133,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}
                     {...getTagProps({ index })}
-                    disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
+                    disabled={name === "approvers" ? isAlreadyApproved : disabled}
                   />
                 ); }}
             </FBMapWrapper>

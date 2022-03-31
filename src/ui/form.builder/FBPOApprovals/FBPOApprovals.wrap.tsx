@@ -4,12 +4,13 @@ import { compact, difference, filter, find, includes, isEmpty, map, minBy, union
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
+import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBPOApprovalsState from "./FBPOApprovals.state";
 
@@ -46,7 +47,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
     const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
-    const updateApprovers = document?.status === "DRAFT" && !isAdministrativeChange;
+    const updateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
     let deletedRequestor = "";
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
@@ -95,7 +96,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    const checkLineItems = (poItems: any, requester: string) => {
+    const checkLineItems = (poItems: FBPurchaseOrderValue, requester: string) => {
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
       const proceedToNewReq = poItems.items.some((item) =>
         item.type === "service" || (item.type === "product" && item.partNumberDocId)
@@ -250,6 +251,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     isRequester = (approverId: string) => approverId === formState?.getFieldValue(PO_REQUESTOR_COMPONENT_NAME);
     return Component({
       ...(props as T),
+      isPOApproval: props.type === "poapprovals",
+      onApproverDelete,
+      isRequester,
       renderOption,
       isIncluded,
       approvalTransition,
@@ -264,9 +268,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       documentStatus,
       dialogState,
       disabled,
-      isRequester,
-      onApproverDelete,
-      isPOApproval: props.type === "poapprovals",
     });
   };
 
