@@ -112,7 +112,7 @@ interface UserItemProp {
   initialColor: string;
   name: string;
 }
-interface OwnerItemsProp {
+export interface OwnerItemsProp {
   active: boolean;
   id: string;
   user: UserItemProp;
@@ -120,6 +120,7 @@ interface OwnerItemsProp {
 
 export interface AuditDetailsProps {
   descriptions: DescriptionItemsProp[];
+  // TODO: Update
   employeeDetails: any;
   id: string;
   ownerDetails: OwnerItemsProp;

@@ -18,7 +18,6 @@ const Default: React.FunctionComponent<OwnProps> = ({ auditDetails }) => {
     intl.formatMessage({ id: `user.management.audit.history.${key}` }, values)
   ;
   */
-
   return (
     <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
       <Box display="grid">

@@ -1,7 +1,7 @@
 import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { each, groupBy, map, pick, values } from "lodash";
+import { each, groupBy, map, pick, sortBy, values } from "lodash";
 import qs from "query-string";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -65,12 +65,14 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       primaryText: ACTION_TITLE_MAPPIING.Unknown as string,
       secondayText: auditRecord.id,
       auditType: ACTION_TITLE_MAPPIING.Unknown,
+      sortedIndex: 0,
     };
     if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_EDITED") {
       actionInfo = {
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeeNameUpdated, {}),
         secondayText: `${auditRecord.previousValue} to ${auditRecord.nextValue}`,
         auditType: ACTION_TITLE_MAPPIING.EmployeeNameUpdated,
+        sortedIndex: 0,
       };
     } else if (auditRecord.fieldPath === "groups" && auditRecord.type === "ARRAY_NEW") {
       if (auditRecord.previousValue === "undefined") {
@@ -78,6 +80,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroups, {}),
           secondayText: getGroupName(auditRecord.nextValue),
           auditType: ACTION_TITLE_MAPPIING.AddedToGroups,
+          sortedIndex: 3,
         };
       }
     } else if (auditRecord.fieldPath === "groups" && auditRecord.type === "ARRAY_DELETED") {
@@ -85,18 +88,21 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.DeletedFromGroups, {}),
         secondayText: getGroupName(auditRecord.previousValue),
         auditType: ACTION_TITLE_MAPPIING.DeletedFromGroups,
+        sortedIndex: 3,
       };
     } else if (auditRecord.fieldPath === "active" && auditRecord.type === "BOOLEAN_NEW") {
       actionInfo = {
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.CreatedNewUser, {}),
         secondayText: auditRecord.employeeName,
         auditType: ACTION_TITLE_MAPPIING.CreatedNewUser,
+        sortedIndex: 0,
       };
     } else if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_NEW") {
       actionInfo = {
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ActivateUser, { employeeName: auditRecord.nextValue }),
         secondayText: "Active",
         auditType: ACTION_TITLE_MAPPIING.ActivateUser,
+        sortedIndex: 1,
       };
     }
     else if (auditRecord.fieldPath === "active" && auditRecord.type === "BOOLEAN_EDITED") {
@@ -105,6 +111,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.DeactivateUser, {}),
           secondayText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPIING.DeactivateUser,
+          sortedIndex: 0,
         };
       }
       if (auditRecord.previousValue === "false" && auditRecord.nextValue === "true") {
@@ -112,26 +119,32 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ActivateUser, { employeeName: employeeDetails?.user?.name }),
           secondayText: auditRecord.nextValue === "true" ? "Active" : "Inactive",
           auditType: ACTION_TITLE_MAPPIING.ActivateUser,
+          sortedIndex: 0,
         };
       }
     }
     return actionInfo;
   };
+
   const createGroups = (groupedItems) => {
-    // console.log("groupedItems", groupedItems);
     const similarGroups = groupBy(groupedItems, "primaryText");
-    return map(similarGroups, (items, key) => {
+    const sameGroup = map(similarGroups, (items, key) => {
       const auditType = items[0].auditType;
+      let sortedIndex = 0;
       let primaryText = key;
       const secondayText = map(items, "secondayText");
+      if (auditType === ACTION_TITLE_MAPPIING.AddedToGroups || auditType === ACTION_TITLE_MAPPIING.DeletedFromGroups) {
+        sortedIndex = items[0].sortedIndex;
+      }
       if (auditType === ACTION_TITLE_MAPPIING.AddedToGroups as string && secondayText.length <= 1) {
         primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroup, {});
       }
-      return { primaryText, secondayText: secondayText.join(", ") };
+      return { primaryText, secondayText: secondayText.join(", "), sortedIndex };
     });
+    return addUserNameAndEmailBlock(sameGroup);
   };
-  // Update response type
-  const getCardGroups = (response, index) => {
+
+  const getCardGroups = (response) => {
     const auditRecords = map(response, (auditRecord) => {
       const employeeDetails = getUserDetails(auditRecord.employeeId);
       const ownerDetails = getUserDetails(auditRecord.ownerId);
@@ -140,8 +153,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         groupKey: `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`,
         ownerDetails,
         employeeDetails,
-        // for Pagination test Added Page no. TODO: Remove
-        timestamp: `${getFormattedDateString(auditRecord.timestamp, MomentFormats.BriefDateTime)}  Page No.-${index}`,
+        timestamp: `${getFormattedDateString(auditRecord.timestamp, MomentFormats.BriefDateTime)}`,
         ...getDescription(auditRecord, ownerDetails, employeeDetails),
       };
     });
@@ -160,8 +172,18 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         descriptions: createGroups(groupedItems),
       };
     });
-    // console.log("debug :: cardGroups :: ", cardGroups);
     return cardGroups;
+  };
+  // Add Username and email
+  const addUserNameAndEmailBlock = (sameGroup) => {
+    const pt = sameGroup.map((d) => d.primaryText);
+    if (pt.includes("Added To Groups") || pt.includes("Added To Group") || pt.includes("Removed from Groups")) {
+      sameGroup.unshift({ primaryText: "Added User Email", secondayText: "Shiv@enlil.com", sortedIndex: 2  });
+      if (!pt.includes("Added New User")) {
+        sameGroup.unshift({ primaryText: "Added User Name", secondayText: "Shiv", sortedIndex: 1 });
+      }
+    }
+    return sortBy(sameGroup, "sortedIndex");
   };
 
   const fetchAuditRecords = () => {
@@ -183,7 +205,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
        .then((resp) => resp)
        .then(({ data }) => {
          //  TODO: Page is added for testing. Need to remove
-         const cardGroups = getCardGroups(data.results || [], page);
+         const cardGroups = getCardGroups(data.results || []);
          setItems((prevState: NullableArray<AuditDetailsProps[]>) => [
            ...prevState,
            ...values(cardGroups),
@@ -192,310 +214,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
          setIsLoading(false);
        });
   };
-  // const fetchAuditRecords = () => {
-  //   setIsLoading(true);
-  //   const data = {
-  //     pageTotal: 5,
-  //     results: [
-  //       {
-  //         createdAt: "2022-03-29T12:56:05.621Z",
-  //         updatedAt: "2022-03-29T12:56:05.621Z",
-  //         internalTags: [],
-  //         id: "43654e2d-676d-46bf-989e-f36ea656b8ef",
-  //         changeRequestId: null,
-  //         documentRevisionId: null,
-  //         referenceId: null,
-  //         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-  //         userId: "772335f4-1c5b-415f-a708-b87b80c59658",
-  //         approvalId: null,
-  //         companyGroupId: null,
-  //         type: "ARRAY_NEW",
-  //         fieldType: "ARRAY",
-  //         fieldPath: "groups",
-  //         timestamp: "2022-03-29T12:56:05.663Z",
-  //         previousValue: "undefined",
-  //         nextValue: "a5d56a1d-d3cc-4860-9cb8-beb36d9c0af9",
-  //         groupId: "e6b99d61-565d-4b91-83ee-a804712e44a9",
-  //         ownerId: "f8b40d70-06e6-4a39-9c65-3c0d30660850",
-  //         server: null,
-  //         ownerUserId: null,
-  //         ownerThirdPartyId: null,
-  //         fileUploadCandidatesId: null,
-  //         companyId: "0aecf217-2b0b-44c3-b1d6-ce889296bf7b",
-  //         attachmentId: null,
-  //         ownerName: "Zoran Company Admin",
-  //         ownerEmail: "zoran.kovacevic+ca@codecons.com",
-  //         unknown: null,
-  //         user: {
-  //           createdAt: "2022-03-29T12:02:59.394Z",
-  //           updatedAt: "2022-03-29T12:02:59.394Z",
-  //           internalTags: [],
-  //           id: "79725a72-de90-4a81-8b66-bd529f8e6011",
-  //           email: "sveerashetty@enlil.com",
-  //           name: "Shiv",
-  //           confirmed: false,
-  //           locked: false,
-  //           passwordExpires: true,
-  //           passwordLastEmailSentAt: null,
-  //           passwordUpdatedAt: null,
-  //           permissions: null,
-  //           avatar: null,
-  //           initialColor: "#c1f9ff",
-  //           resetPasswordEmailTimestamp: null,
-  //           resendConfirmationEmailTimestamp: null,
-  //           forgotPasswordEmailTimestamp: null,
-  //           passwordSetTimestamp: null,
-  //         },
-  //         employeeName: "Shiv",
-  //       },
-  //       {
-  //         createdAt: "2022-03-29T12:30:54.289Z",
-  //         updatedAt: "2022-03-29T12:30:54.289Z",
-  //         internalTags: [],
-  //         id: "1199230a-2724-4fff-a7d6-c11b746b4f68",
-  //         changeRequestId: null,
-  //         documentRevisionId: null,
-  //         referenceId: null,
-  //         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-  //         userId: "772335f4-1c5b-415f-a708-b87b80c59658",
-  //         approvalId: null,
-  //         companyGroupId: null,
-  //         type: "ARRAY_DELETED",
-  //         fieldType: "ARRAY",
-  //         fieldPath: "groups",
-  //         timestamp: "2022-03-29T12:30:54.308Z",
-  //         previousValue: "a5d56a1d-d3cc-4860-9cb8-beb36d9c0af9",
-  //         nextValue: "undefined",
-  //         groupId: "32384fb3-8b59-47b0-bccc-5d8b3ce21423",
-  //         ownerId: "08cbe301-46c9-4b1e-bd8b-29d69cb8d8f1",
-  //         server: null,
-  //         ownerUserId: null,
-  //         ownerThirdPartyId: null,
-  //         fileUploadCandidatesId: null,
-  //         companyId: "0aecf217-2b0b-44c3-b1d6-ce889296bf7b",
-  //         attachmentId: null,
-  //         ownerName: "Zoran Company Admin",
-  //         ownerEmail: "zoran.kovacevic+ca@codecons.com",
-  //         unknown: null,
-  //         user: {
-  //           createdAt: "2022-03-29T12:02:59.394Z",
-  //           updatedAt: "2022-03-29T12:02:59.394Z",
-  //           internalTags: [],
-  //           id: "79725a72-de90-4a81-8b66-bd529f8e6011",
-  //           email: "sveerashetty@enlil.com",
-  //           name: "Shiv",
-  //           confirmed: false,
-  //           locked: false,
-  //           passwordExpires: true,
-  //           passwordLastEmailSentAt: null,
-  //           passwordUpdatedAt: null,
-  //           permissions: null,
-  //           avatar: null,
-  //           initialColor: "#c1f9ff",
-  //           resetPasswordEmailTimestamp: null,
-  //           resendConfirmationEmailTimestamp: null,
-  //           forgotPasswordEmailTimestamp: null,
-  //           passwordSetTimestamp: null,
-  //         },
-  //         employeeName: "Shiv",
-  //       },
-  //       {
-  //         createdAt: "2022-03-29T12:26:45.508Z",
-  //         updatedAt: "2022-03-29T12:26:45.508Z",
-  //         internalTags: [],
-  //         id: "d0343d9e-e69d-4f2b-928f-26c7e5991035",
-  //         changeRequestId: null,
-  //         documentRevisionId: null,
-  //         referenceId: null,
-  //         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-  //         userId: null,
-  //         approvalId: null,
-  //         companyGroupId: null,
-  //         type: "BOOLEAN_EDITED",
-  //         fieldType: "BOOLEAN",
-  //         fieldPath: "active",
-  //         timestamp: "2022-03-29T12:26:45.512Z",
-  //         previousValue: "false",
-  //         nextValue: "true",
-  //         groupId: "2fd2e188-2cc8-4fb0-a153-67f277aa7e16",
-  //         ownerId: "f8b40d70-06e6-4a39-9c65-3c0d30660850",
-  //         server: null,
-  //         ownerUserId: null,
-  //         ownerThirdPartyId: null,
-  //         fileUploadCandidatesId: null,
-  //         companyId: "0aecf217-2b0b-44c3-b1d6-ce889296bf7b",
-  //         attachmentId: null,
-  //         ownerName: "Zoran Company Admin",
-  //         ownerEmail: "zoran.kovacevic+ca@codecons.com",
-  //         unknown: null,
-  //         employeeName: "Shiv",
-  //       },
-  //       {
-  //         createdAt: "2022-03-29T12:26:08.875Z",
-  //         updatedAt: "2022-03-29T12:26:08.875Z",
-  //         internalTags: [],
-  //         id: "31f84b9b-6a95-42a1-985a-f9d39f0daef9",
-  //         changeRequestId: null,
-  //         documentRevisionId: null,
-  //         referenceId: null,
-  //         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-  //         userId: null,
-  //         approvalId: null,
-  //         companyGroupId: null,
-  //         type: "BOOLEAN_EDITED",
-  //         fieldType: "BOOLEAN",
-  //         fieldPath: "active",
-  //         timestamp: "2022-03-29T12:26:08.894Z",
-  //         previousValue: "true",
-  //         nextValue: "false",
-  //         groupId: "73801f35-780f-43a5-a8fe-867ca5242b1a",
-  //         ownerId: "f248da38-fbf8-4b9e-8829-401350392b42",
-  //         server: null,
-  //         ownerUserId: null,
-  //         ownerThirdPartyId: null,
-  //         fileUploadCandidatesId: null,
-  //         companyId: "0aecf217-2b0b-44c3-b1d6-ce889296bf7b",
-  //         attachmentId: null,
-  //         ownerName: "Zoran Company Admin",
-  //         ownerEmail: "zoran.kovacevic+ca@codecons.com",
-  //         unknown: null,
-  //         employeeName: "Shiv",
-  //       },
-  //       {
-  //         createdAt: "2022-03-29T12:02:59.394Z",
-  //         updatedAt: "2022-03-29T12:02:59.394Z",
-  //         internalTags: [],
-  //         id: "ed9725c4-d7f3-4280-b72a-d53d2ce06c7c",
-  //         changeRequestId: null,
-  //         documentRevisionId: null,
-  //         referenceId: null,
-  //         employeeId: null,
-  //         userId: "772335f4-1c5b-415f-a708-b87b80c59658",
-  //         approvalId: null,
-  //         companyGroupId: null,
-  //         type: "STRING_NEW",
-  //         fieldType: "STRING",
-  //         fieldPath: "name",
-  //         timestamp: "2022-03-29T12:02:59.406Z",
-  //         previousValue: "undefined",
-  //         nextValue: "Shiv",
-  //         groupId: "7ae767b1-5a18-4e99-96e5-47799fe93c87",
-  //         ownerId: "f8b40d70-06e6-4a39-9c65-3c0d30660850",
-  //         server: null,
-  //         ownerUserId: null,
-  //         ownerThirdPartyId: null,
-  //         fileUploadCandidatesId: null,
-  //         companyId: "0aecf217-2b0b-44c3-b1d6-ce889296bf7b",
-  //         attachmentId: null,
-  //         ownerName: "Zoran Company Admin",
-  //         ownerEmail: "zoran.kovacevic+ca@codecons.com",
-  //         unknown: null,
-  //       },
-  //       {
-  //         createdAt: "2022-03-29T12:02:59.394Z",
-  //         updatedAt: "2022-03-29T12:02:59.394Z",
-  //         internalTags: [],
-  //         id: "d3c07d6b-7bbc-439e-a73c-ef8fb2cc67d1",
-  //         changeRequestId: null,
-  //         documentRevisionId: null,
-  //         referenceId: null,
-  //         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-  //         userId: null,
-  //         approvalId: null,
-  //         companyGroupId: null,
-  //         type: "BOOLEAN_NEW",
-  //         fieldType: "BOOLEAN",
-  //         fieldPath: "active",
-  //         timestamp: "2022-03-29T12:03:01.456Z",
-  //         previousValue: "undefined",
-  //         nextValue: "true",
-  //         groupId: "7ae767b1-5a18-4e99-96e5-47799fe93c87",
-  //         ownerId: "f8b40d70-06e6-4a39-9c65-3c0d30660850",
-  //         server: null,
-  //         ownerUserId: null,
-  //         ownerThirdPartyId: null,
-  //         fileUploadCandidatesId: null,
-  //         companyId: "0aecf217-2b0b-44c3-b1d6-ce889296bf7b",
-  //         attachmentId: null,
-  //         ownerName: "Zoran Company Admin",
-  //         ownerEmail: "zoran.kovacevic+ca@codecons.com",
-  //         unknown: null,
-  //         employeeName: "Shiv",
-  //       },
-  //       {
-  //         createdAt: "2022-03-29T12:02:59.394Z",
-  //         updatedAt: "2022-03-29T12:02:59.394Z",
-  //         internalTags: [],
-  //         id: "3ea641e2-f438-4ee1-8ea2-13a72619dbc6",
-  //         changeRequestId: null,
-  //         documentRevisionId: null,
-  //         referenceId: null,
-  //         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-  //         userId: null,
-  //         approvalId: null,
-  //         companyGroupId: null,
-  //         type: "ARRAY_NEW",
-  //         fieldType: "ARRAY",
-  //         fieldPath: "groups",
-  //         timestamp: "2022-03-29T12:03:01.456Z",
-  //         previousValue: "undefined",
-  //         nextValue: "a5d56a1d-d3cc-4860-9cb8-beb36d9c0af9",
-  //         groupId: "7ae767b1-5a18-4e99-96e5-47799fe93c87",
-  //         ownerId: "f8b40d70-06e6-4a39-9c65-3c0d30660850",
-  //         server: null,
-  //         ownerUserId: null,
-  //         ownerThirdPartyId: null,
-  //         fileUploadCandidatesId: null,
-  //         companyId: "0aecf217-2b0b-44c3-b1d6-ce889296bf7b",
-  //         attachmentId: null,
-  //         ownerName: "Zoran Company Admin",
-  //         ownerEmail: "zoran.kovacevic+ca@codecons.com",
-  //         unknown: null,
-  //         employeeName: "Shiv",
-  //       },
-  //       {
-  //         createdAt: "2022-03-29T12:02:59.394Z",
-  //         updatedAt: "2022-03-29T12:02:59.394Z",
-  //         internalTags: [],
-  //         id: "e7fcee54-1a70-4d68-8e69-a4d5308f497c",
-  //         changeRequestId: null,
-  //         documentRevisionId: null,
-  //         referenceId: null,
-  //         employeeId: "e348ee87-6177-4328-8603-4c4f6e76685e",
-  //         userId: null,
-  //         approvalId: null,
-  //         companyGroupId: null,
-  //         type: "ARRAY_NEW",
-  //         fieldType: "ARRAY",
-  //         fieldPath: "groups",
-  //         timestamp: "2022-03-29T12:03:01.456Z",
-  //         previousValue: "undefined",
-  //         nextValue: "0a91f1f3-36aa-4a9e-b4d4-8d7e58b6afaf",
-  //         groupId: "7ae767b1-5a18-4e99-96e5-47799fe93c87",
-  //         ownerId: "f8b40d70-06e6-4a39-9c65-3c0d30660850",
-  //         server: null,
-  //         ownerUserId: null,
-  //         ownerThirdPartyId: null,
-  //         fileUploadCandidatesId: null,
-  //         companyId: "0aecf217-2b0b-44c3-b1d6-ce889296bf7b",
-  //         attachmentId: null,
-  //         ownerName: "Zoran Company Admin",
-  //         ownerEmail: "zoran.kovacevic+ca@codecons.com",
-  //         unknown: null,
-  //         employeeName: "Shiv",
-  //       },
-  //     ],
-  //     total: 5,
-  //   };
 
-  //   const cardGroups = getCardGroups(data.results || [], page);
-  //   setItems((prevState: NullableArray<AuditDetailsProps[]>) => [
-  //     ...prevState,
-  //     ...values(cardGroups),
-  //   ] as NullableArray<AuditDetailsProps[]>);
-  //   setPage((prevPageNumber) => prevPageNumber + limit);
-  //   setIsLoading(false);
-  // };
   const renderAuditRecords = () => (
     <>
       <div className={classes.externalContainer}>
