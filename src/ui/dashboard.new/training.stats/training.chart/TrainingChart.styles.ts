@@ -52,6 +52,10 @@ export const styles = makeStyles(() =>
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "10px",
+      color: Colors.almost_black,
+    },
+    inactive: {
+      color: Colors.font_gray,
     },
     legend: {
       marginLeft: "13px",
