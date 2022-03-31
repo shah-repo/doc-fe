@@ -56,6 +56,8 @@ export enum FBEndpoint {
   LockFieldsExpire = "/document_revision_field_locks/${id}/expire",
   CreateLot = "/receivable/${receivableId}/create_lot",
   AttachmentUnzipping = "/attachment_job/start_unzipping",
-  ZIPStatus = "/attachment_job/connected_to/${attachmentId}"
+  ZIPStatus = "/attachment_job/connected_to/${attachmentId}",
+  Favourites = "/user_favourites",
+  ModifyFavourites = "/user_favourites/${id}",
 }
 
