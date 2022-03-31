@@ -1,7 +1,7 @@
 import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { each, groupBy, map, pick, values } from "lodash";
+import { each, groupBy, map, pick, sortBy, values } from "lodash";
 import qs from "query-string";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -16,7 +16,6 @@ import { ACTION_TITLE_MAPPIING, AuditDetailsProps } from "../../../state/ducks/u
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
-import { addUserNameAndEmailBlock } from "./audit.panel.helper";
 import Default from "./Cards/Default";
 import { LoadMoreButton } from "./LoadMoreButton";
 import styles from "./styles";
@@ -100,7 +99,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     } else if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_NEW") {
       actionInfo = {
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ActivateUser, { employeeName: auditRecord.nextValue }),
-        secondayText: getTransalatedText("common.active", {}),
+        secondayText: intl.formatMessage({ id: "common.active" }),
         auditType: ACTION_TITLE_MAPPIING.ActivateUser,
         sortedIndex: 1,
       };
@@ -121,8 +120,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           }),
           secondayText:
             auditRecord.nextValue === "true"
-              ? getTransalatedText("common.active", {})
-              : getTransalatedText("common.inactive", {}),
+              ? intl.formatMessage({ id: "common.active" })
+              : intl.formatMessage({ id: "common.inactive" }),
           auditType: ACTION_TITLE_MAPPIING.ActivateUser,
           sortedIndex: 0,
         };
@@ -131,7 +130,30 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     return actionInfo;
   };
 
-  const createGroups = (groupedItems) => {
+  const addUserNameAndEmailBlock = (sameGroup, employeeDetails) => {
+    const auditTypes = map(sameGroup, "auditType");
+    if (
+      auditTypes.includes(ACTION_TITLE_MAPPIING.AddedToGroups) ||
+      auditTypes.includes(ACTION_TITLE_MAPPIING.AddedToGroup) ||
+      auditTypes.includes(ACTION_TITLE_MAPPIING.DeletedFromGroups)
+    ) {
+      sameGroup.unshift({
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedUserEmail, {}),
+        secondayText: employeeDetails.user.email,
+        sortedIndex: 2,
+      });
+      if (!auditTypes.includes(ACTION_TITLE_MAPPIING.CreatedNewUser)) {
+        sameGroup.unshift({
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedUserName, {}),
+          secondayText: employeeDetails.user.name,
+          sortedIndex: 1,
+        });
+      }
+    }
+    return sortBy(sameGroup, "sortedIndex");
+  };
+
+  const createGroups = (groupedItems, employeeDetails) => {
     const similarGroups = groupBy(groupedItems, "primaryText");
     const sameGroup = map(similarGroups, (items, key) => {
       const auditType = items[0].auditType;
@@ -144,9 +166,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (auditType === ACTION_TITLE_MAPPIING.AddedToGroups as string && secondayText.length <= 1) {
         primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroup, {});
       }
-      return { primaryText, secondayText: secondayText.join(", "), sortedIndex };
+      return { primaryText, secondayText: secondayText.join(", "), sortedIndex, auditType };
     });
-    return addUserNameAndEmailBlock(sameGroup);
+    return addUserNameAndEmailBlock(sameGroup, employeeDetails);
   };
 
   const getCardGroups = (response) => {
@@ -173,7 +195,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           "ownerDetails",
           "employeeDetails",
         ]),
-        descriptions: createGroups(groupedItems),
+        descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails),
       };
     });
     return cardGroups;

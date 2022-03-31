@@ -1047,6 +1047,8 @@
   "user.management.audit.history.AddedToGroups": "Added To Groups",
   "user.management.audit.history.AddedToGroup": "Added To Group",
   "user.management.audit.history.CreatedNewUser": "Added New User",
+  "user.management.audit.history.AddedUserName": "Added User Name",
+  "user.management.audit.history.AddedUserEmail": "Added User Email",
   "user.management.audit.history.CreatedNewUserEmail": "Added Email Address",
   "user.management.audit.history.DeactivateUser": "Deactivated User",
   "user.management.audit.history.ActivateUser": "Updated status for {employeeName}",

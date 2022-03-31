@@ -1,11 +1,24 @@
-import { sortBy } from "lodash";
+import { map, sortBy } from "lodash";
+import { ACTION_TITLE_MAPPIING } from "../../../state/ducks/userManagement/types";
 
-export const addUserNameAndEmailBlock = (sameGroup) => {
-  const pt = sameGroup.map((d) => d.primaryText);
-  if (pt.includes("Added To Groups") || pt.includes("Added To Group") || pt.includes("Removed from Groups")) {
-    sameGroup.unshift({ primaryText: "Added User Email", secondayText: "Shiv@enlil.com", sortedIndex: 2  });
-    if (!pt.includes("Added New User")) {
-      sameGroup.unshift({ primaryText: "Added User Name", secondayText: "Shiv", sortedIndex: 1 });
+export const addUserNameAndEmailBlock = (sameGroup, employeeDetails) => {
+  const auditTypes = map(sameGroup, "auditType");
+  if (
+    auditTypes.includes(ACTION_TITLE_MAPPIING.AddedToGroups) ||
+    auditTypes.includes(ACTION_TITLE_MAPPIING.AddedToGroup) ||
+    auditTypes.includes(ACTION_TITLE_MAPPIING.DeletedFromGroups)
+  ) {
+    sameGroup.unshift({
+      primaryText: "Added User Email",
+      secondayText: employeeDetails.user.email,
+      sortedIndex: 2,
+    });
+    if (!auditTypes.includes(ACTION_TITLE_MAPPIING.CreatedNewUser)) {
+      sameGroup.unshift({
+        primaryText: "Added User Name",
+        secondayText: employeeDetails.user.name,
+        sortedIndex: 1,
+      });
     }
   }
   return sortBy(sameGroup, "sortedIndex");
