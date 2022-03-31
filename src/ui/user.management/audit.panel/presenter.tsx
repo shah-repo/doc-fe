@@ -1,7 +1,7 @@
 import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { each, groupBy, map, pick, sortBy, values } from "lodash";
+import { each, groupBy, map, pick, values } from "lodash";
 import qs from "query-string";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -15,9 +15,10 @@ import { HISTORY_URL } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPIING, AuditDetailsProps } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
-import { LoadMoreButton } from "../../dashboard.new/LoadMoreButton";
 import Colors from "../../layout/theme/utils/colors";
+import { addUserNameAndEmailBlock } from "./audit.panel.helper";
 import Default from "./Cards/Default";
+import { LoadMoreButton } from "./LoadMoreButton";
 import styles from "./styles";
 
 let call: CancelTokenSource;
@@ -35,7 +36,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   closeHistoryPanel,
 }) => {
   // Take from constants
-  const limit = 5;
+  const limit = 2;
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
   const [opendrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
@@ -45,8 +46,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
 
-  const getTransalatedText = (key: string, values: TranslatedTextProps) =>  intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
-
+  const getTransalatedText = (key: string, values: TranslatedTextProps) =>
+    intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
   const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : groupId;
   const closeDrawer = () => {
@@ -60,7 +61,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   }, []);
 
   const getDescription = (auditRecord, ownerDetails, employeeDetails) => {
-    // console.log("employeeDetails :: ", employeeDetails);
     let actionInfo = {
       primaryText: ACTION_TITLE_MAPPIING.Unknown as string,
       secondayText: auditRecord.id,
@@ -100,7 +100,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     } else if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_NEW") {
       actionInfo = {
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ActivateUser, { employeeName: auditRecord.nextValue }),
-        secondayText: "Active",
+        secondayText: getTransalatedText("common.active", {}),
         auditType: ACTION_TITLE_MAPPIING.ActivateUser,
         sortedIndex: 1,
       };
@@ -116,8 +116,13 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       }
       if (auditRecord.previousValue === "false" && auditRecord.nextValue === "true") {
         actionInfo = {
-          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ActivateUser, { employeeName: employeeDetails?.user?.name }),
-          secondayText: auditRecord.nextValue === "true" ? "Active" : "Inactive",
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ActivateUser, {
+            employeeName: employeeDetails?.user?.name,
+          }),
+          secondayText:
+            auditRecord.nextValue === "true"
+              ? getTransalatedText("common.active", {})
+              : getTransalatedText("common.inactive", {}),
           auditType: ACTION_TITLE_MAPPIING.ActivateUser,
           sortedIndex: 0,
         };
@@ -157,7 +162,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         ...getDescription(auditRecord, ownerDetails, employeeDetails),
       };
     });
-    // console.log("debug :: auditRecords :: ", auditRecords);
     // Create a Group Data for each Card to be represented
     const auditRecordGroups = groupBy(auditRecords, "groupKey");
     const cardGroups = {};
@@ -173,17 +177,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       };
     });
     return cardGroups;
-  };
-  // Add Username and email
-  const addUserNameAndEmailBlock = (sameGroup) => {
-    const pt = sameGroup.map((d) => d.primaryText);
-    if (pt.includes("Added To Groups") || pt.includes("Added To Group") || pt.includes("Removed from Groups")) {
-      sameGroup.unshift({ primaryText: "Added User Email", secondayText: "Shiv@enlil.com", sortedIndex: 2  });
-      if (!pt.includes("Added New User")) {
-        sameGroup.unshift({ primaryText: "Added User Name", secondayText: "Shiv", sortedIndex: 1 });
-      }
-    }
-    return sortBy(sameGroup, "sortedIndex");
   };
 
   const fetchAuditRecords = () => {
@@ -247,11 +240,11 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       </Box>
     </>
   );
-
   return (
     <Drawer anchor="right" open={opendrawer.right} onClose={() => closeDrawer()}>
-      <Box width={300}> {isLoading ? <LinearProgress /> : renderAuditRecords()}</Box>
-      <LoadMoreButton onLoadMore={fetchAuditRecords}  id="historyLoadMore" />
+      {isLoading && <LinearProgress />}
+      <Box width={300}>{renderAuditRecords()}</Box>
+      {!isLoading && <LoadMoreButton onLoadMore={fetchAuditRecords}  id="historyLoadMore" />}
     </Drawer>
   );
 };
