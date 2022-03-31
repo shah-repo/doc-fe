@@ -39,6 +39,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
       !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue;
+
     const multiple = editorProperties?.includes("multiple") || props.multiple;
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
 
