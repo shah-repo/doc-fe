@@ -1063,6 +1063,7 @@
   "api.token.message": "Please store the secret somewhere safe beacuse it will be visible only once.",
   "api.token.copy.key": "Copy key",
   "api.token.copy.secret": "Copy secret",
+  "api.error.gateway.timeout": "504 Gateway Time-out",
   "user.management.no.addresses.specified": "No addresses specified",
   "user.management.addresses": "Addresses",
   "user.management.edit.address": "Edit Addresses",

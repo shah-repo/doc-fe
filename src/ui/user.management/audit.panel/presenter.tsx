@@ -1,7 +1,7 @@
 import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { each, groupBy, map, pick, sortBy, values } from "lodash";
+import { each, groupBy, isEmpty, map, pick, sortBy, values } from "lodash";
 import qs from "query-string";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -38,6 +38,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const limit = 2;
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [opendrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<NullableArray<AuditDetailsProps[]>>([]);
   const [page, setPage] = useState(0);
@@ -205,6 +206,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      call?.cancel();
      call = axios.CancelToken.source();
      setIsLoading(true);
+     setErrorMessage("");
      const requestConfig: AxiosRequestConfig = {
        method: "get",
        url: HISTORY_URL,
@@ -227,6 +229,15 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
          ] as NullableArray<AuditDetailsProps[]>);
          setPage((prevPageNumber) => prevPageNumber + limit);
          setIsLoading(false);
+       })
+       .catch((exception) => {
+         setIsLoading(false);
+         if (axios.isCancel(exception)) {
+           return;
+         }
+         if (exception.response.status === 504) {
+           setErrorMessage(intl.formatMessage({ id: "api.error.gateway.timeout" }));
+         }
        });
   };
 
@@ -266,6 +277,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     <Drawer anchor="right" open={opendrawer.right} onClose={() => closeDrawer()}>
       {isLoading && <LinearProgress />}
       <Box width={300}>{renderAuditRecords()}</Box>
+      {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
       {!isLoading && <LoadMoreButton onLoadMore={fetchAuditRecords}  id="historyLoadMore" />}
     </Drawer>
   );
