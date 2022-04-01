@@ -11,11 +11,10 @@ interface FBLeftEditorActionsProps extends FBEditorActionsProps {
 const FBEditorActions: React.FunctionComponent<FBLeftEditorActionsProps> = ({
   handleAdd,
   handleCancel,
-  outerContainerMargin = 3,
 }) => {
   const style = styles;
   return (
-    <Box display="flex" flexDirection="row-reverse" mx={outerContainerMargin}>
+    <Box display="flex" flexDirection="row-reverse" mx={0}>
       <FBSubmitButton
         variant="outlined"
         label="common.add"

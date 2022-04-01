@@ -1,14 +1,14 @@
 import { find } from "lodash";
 import React from "react";
-import { FBControlPickerDataProps, FBEditorCustomControl, FBFavouritesBody, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
+import { FBControlPickerDataProps, FBEditorCustomControl, FBFavouritesBody, FBFavouritesResponse, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { store } from "../../../state/store";
 import { checkIsDocumentBulkCreate, checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-class FBControlPickerState extends FBRequest<any, any> {
-
+class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFavouritesBody>> {
+  public data: FBFavouritesResponse| undefined;
   public favouritesAPI = new FBRequest<FBFavouritesBody, Partial<FBFavouritesBody>>(FBEndpoint.Favourites);
   public customPicker: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     customcontrol: FBEditorCustomControl,
