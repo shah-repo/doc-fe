@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { IotService } from "../../../common/utils/iot/iotService";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { WatermarkRequest, WatermarkRequestStatus } from "../../../state/ducks/attachments/types";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -54,7 +53,6 @@ const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
         },
       );
       removeWatermark(watermarkRequest.id);
-      iotService.unsubscribeFromTopic(`${employeeId}/attachment_watermark/${watermarkRequest.id}/update`);
     },
     onError: (msg) => {
       addRequestResult(
@@ -68,20 +66,16 @@ const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
       );
     },
   });
-  const checkWatermarkRequest = (msg: string) => {
-    async.start(asyncAction, watermarkId, async);
-  };
   const employeeId = useSelector(authSelectors.currentEmployeeId);
 
-  const iotService = IotService.getInstance();
-  const subscribe = () => {
-    iotService.subscribeToTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`, checkWatermarkRequest);
-  };
-  const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`);
-  };
+  const callback = useCallback(() => {
+    async.start(asyncAction, watermarkId, async);
+  }, []);
+  const topic = useMemo(() =>
+    `${employeeId}/attachment_watermark/${watermarkId}/update`
+  , [employeeId, watermarkId]);
 
-  useMqttSubscription(subscribe, unsubscribe);
+  useMqttSubscription(topic, callback);
 
   return null;
 };

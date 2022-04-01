@@ -157,6 +157,7 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
           _persist: JSON.stringify({ version: 2, rehydrated: true }),
         };
         cy.setLocalStorage("persist:auth", JSON.stringify(auth));
+        cy.setLocalStorage("debug", "enlil:*");
         cy.saveLocalStorage();
         cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
           cy.visit(CONFIG.FE_URL, { timeout: 50000 });
