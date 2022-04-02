@@ -4,6 +4,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -17,8 +18,11 @@ let developersGroup;
 let adminSessionId;
 let adminEmployee;
 let employeeToDevs;
+let thirdEmployee;
+let RDdocumentType;
+
 let recFormId;
-let multipleCompanies;
+let recDocId;
 let emailsFromInbox;
 const pages = ["", "", "", ""];
 let downloadUrl;
@@ -27,11 +31,6 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 let arId;
-
-const ADMIN_USER = USERS[1];
-const FIRST_USER = USERS[2];
-const SECOND_USER = USERS[3];
-const THIRD_USER = USERS[4];
 
 const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
@@ -79,7 +78,94 @@ context("Records flow", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           employeeToDevs = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+          RDdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record Document");
           done();
+        });
+      });
+    });
+
+    context("[API]Update record document type", () => {
+      it("Change fields config in record document type", () => {
+        cy.drUpdateDocumentTypeName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          id: RDdocumentType[0].id,
+          payload: {
+            fieldsConfig: {
+              D: {
+                visible: false,
+                required: false,
+              },
+              E: {
+                label: "Record Type",
+                visible: false,
+                required: true,
+              },
+              F: {
+                label: "Record ID",
+                visible: false,
+                required: true,
+              },
+              G: {
+                visible: false,
+                required: false,
+              },
+              I: {
+                visible: false,
+              },
+              J: {
+                visible: false,
+              },
+              K: {
+                label: "Void",
+                visible: true,
+              },
+              L: {
+                label: "Correction",
+                visible: true,
+              },
+              N: {
+                label: "Approve and Release",
+                visible: true,
+              },
+              O: {
+                label: "Record History",
+                visible: true,
+              },
+              R: {
+                visible: false,
+              },
+              S: {
+                label: "Update Record",
+                visible: true,
+              },
+              A1: {
+                label: "WIP",
+                visible: true,
+              },
+              A2: {
+                label: "Voided",
+                visible: true,
+              },
+              A3: {
+                label: "Archive",
+                visible: true,
+              },
+              P1: {
+                label: "WIP",
+                visible: true,
+              },
+              P2: {
+                label: "Voided",
+                visible: true,
+              },
+              P3: {
+                label: "Archive",
+                visible: true,
+              },
+            },
+          },
         });
       });
     });
@@ -684,26 +770,99 @@ context("Records flow", () => {
 
   context("Fill in record attributes and release", () => {
     it("Enters title 'Approval Record title'", () => {
-      cy.drEnterDocumentTitle({ name: "Approval Record title" });
+      cy.drEnterDocumentTitle({ name: "Approval Record title{enter}" });
     });
 
-    it("Enters description 'Approval Record description'", () => {
-      cy.drEnterDocumentDescription({ description: "Approval Record description" });
-    });
+    // it("Enters description 'Approval Record description'", () => {
+    //   cy.drEnterDocumentDescription({ description: "Approval Record description" });
+    // });
 
     it("Upload attachement picture 'image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
-      cy.progressBarShouldAppear();
+      // cy.atchUploadAttach({ fileName: "image.jpg" });
+      cy.elUploadAttachment({ fileName: "image.jpg", el: "AttachmentFieldPresenter-field" });
+      // cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").last().arrowClick();
+
     });
 
     it("Checkbox option 1 checked", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
-    it("Select approver'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy*=fb-approvals-]").autocompleteSelect(USERS[2].name);
+    it("Add first Approver'", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Add 2nd Approver'", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
+    });
+
+    it("Remove first Approver'", () => {
+      cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick();
+    });
+
+    it("check first approvers removed and 2nd Approver exists", () => {
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("not.contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("contain", `${USERS[3].name} - ${USERS[3].email}`);
+    });
+
+    it("Save Record'", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
+
+    it("release button click'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
+    });
+
+    it("Get the in-review document Id", () => {
+      cy.arVerifyStatus({ status: "In Review" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        recDocId = $docIdElement.text();
+      });
+    });
+
+    it("Logout the user", () => {
+      cy.authLogout();
+    });
+
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
+    });
+
+    it("Reject document", () => {
+      cy.get(`.MuiListItemText-dense`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+    });
+
+    it("Logout the user", () => {
+      cy.authLogout();
+    });
+
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
+    });
+
+    it(`Verify reject notification`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .should("contain", "REJECTED")
+        .and("contain", recDocId);
+    });
+
+    it(`Open doc ${recDocId}`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .contains(recDocId).first().arrowClick();
+    });
+
+    it("Remove 2nd Approver'", () => {
+      cy.contains(`${USERS[3].name} - ${USERS[3].email}`).parent().next().arrowClick();
+    });
+
+    it("Add Approver'", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
     it("Save Record'", () => {
@@ -711,7 +870,7 @@ context("Records flow", () => {
       cy.pause();
     });
 
-    it("Finalize and release button click'", () => {
+    it("release button click'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
