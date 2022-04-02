@@ -187,7 +187,6 @@ context("Record inline Flow", () => {
 
     context("Create document and draft it", () => {
       it("Click create document after filling document", () => {
-        cy.pause();
         cy.drClickCreateDocumentWithApiCall();
       });
 
@@ -206,7 +205,6 @@ context("Record inline Flow", () => {
         });
       });
     });
-
 
     context("Verify email for  record form notification", () => {
       it("Get emails", () => {
@@ -720,12 +718,27 @@ context("Record inline Flow", () => {
 
       it("Check approve button is not disabled", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
+      });
 
+      it("Upload attachment 'image.jpg'", () => {
+        cy.get("#AttachmentFieldPresenter-field").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.elUploadAttachment({
+            fileName: "image.jpg",
+            el: "AttachmentFieldPresenter-field",
+          });
+        });
+        cy.progressBarShouldNotExist();
+      });
+
+      it("Checkbox option 1 checked", () => {
+        cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
     });
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
+        cy.pause();
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
