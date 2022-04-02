@@ -5,18 +5,15 @@ export const styles = makeStyles(() =>
   createStyles({
     typographyDueInfewDays: {
       fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: "12px",
-      lineHeight: "15px",
       color: Colors.latest_yellow_varient,
+      letterSpacing: 0,
     },
     typographyOverdue: {
       fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: "12px",
-      lineHeight: "15px",
       color: Colors.latest_red_varient,
       textTransform: "uppercase",
       letterSpacing: 0,

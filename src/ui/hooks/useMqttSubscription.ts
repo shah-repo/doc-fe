@@ -10,7 +10,7 @@ const useMqttSubscription = (
       unsubscribe();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [subscribe, unsubscribe]);
 };
 
 export default useMqttSubscription;
