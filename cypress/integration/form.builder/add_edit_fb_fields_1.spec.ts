@@ -130,25 +130,34 @@ context("Add and edit FB fields - Test 1", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Add Checkbox group", () => {
+    it("Add TextField", () => {
       cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
-      cy.fbGroupOptions("option1", "option2");
+      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
       cy.fbAddNewFieldButton();
     });
 
-    it("Add TextField", () => {
+    it("Add section field", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
-      cy.get("input[value^=\"visibility\"]").check();
-      cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("fb-checkbox-group" );
-      cy.get(`input[type="checkbox"][value="option2"]`).last().check();
+      cy.fbSelectItemFromNewFieldList({ field: "Section" });
+      cy.fbEnterLabel({ label: "fb-section" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Subsection", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Checkbox group", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+      cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
     });
 
@@ -156,13 +165,28 @@ context("Add and edit FB fields - Test 1", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
-    it("Add Autocomplete", () => {
+    it("Add Autocomplete with Document Revision", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-revision" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
       cy.fbAddNewFieldButton();
+    });
 
+    it("Add Autocomplete with Parts", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-parts" });
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Parts");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Autocomplete with Document Approvers", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-approvers" });
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
+      cy.fbAddNewFieldButton();
     });
 
     it("Add Text Editor", () => {
@@ -200,7 +224,14 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
-      cy.fbAddNewFieldButton();
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("input[value^=\"visibility\"]").check();
+      cy.get(`input[name="validators.required_if"]`).check();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-textfield" );
+      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("A" );
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").last().arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Paragraph", () => {
@@ -222,6 +253,13 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Step", () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ field: "Step" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-step" });
       cy.fbAddNewFieldButton();
     });
 
@@ -273,6 +311,14 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Add Evidence Media upload", () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+    });
+
     it("Add EB Procedure", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "EB Procedure" });
@@ -285,15 +331,39 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Edit section field", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-section" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-section1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Edit Subsection", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "FB-SUBSECTION" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-subsection1" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Edit Checkbox group", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-checkbox-group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group1" });
       cy.fbAddNewFieldButton();
     });
 
-    it("Edit Autocomplete", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete1" });
+    it("Edit Autocomplete with Document Revision", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete-doc-revision" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-revision1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Edit Autocomplete with Parts", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete-parts" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-parts1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Edit Autocomplete with Document Approvers", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete-doc-approvers" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-approvers1" });
       cy.fbAddNewFieldButton();
     });
 
@@ -408,12 +478,28 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("fb-textfield1").should("exist");
     });
 
+    it("Verify Section", () => {
+      cy.contains("fb-section1").should("exist");
+    });
+
+    it("Verify Subsection", () => {
+      cy.contains("FB-SUBSECTION1").should("exist");
+    });
+
     it("Verify Checkbox group", () => {
       cy.contains("fb-checkbox-group1").should("exist");
     });
 
-    it("Verify Autocomplete", () => {
-      cy.contains("fb-autocomplete1").should("exist");
+    it("Verify Autocomplete for Document Revision", () => {
+      cy.contains("fb-autocomplete-doc-revision1").should("exist");
+    });
+
+    it("Verify Autocomplete for Parts", () => {
+      cy.contains("fb-autocomplete-parts1").should("exist");
+    });
+
+    it("Verify Autocomplete for Document Approvers", () => {
+      cy.contains("fb-autocomplete-doc-approvers1").should("exist");
     });
 
     it("Verify Text Editor", () => {
