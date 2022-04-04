@@ -4,13 +4,15 @@ import { Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   getFormattedDateString,
-  MomentFormats,
+  MomentFormats
 } from "../../../common/utils/date";
+import { authSelectors } from "../../../state/ducks/auth";
 import {
   ActionTypes,
-  LINE_ITEMS_STATUS_TYPES,
+  LINE_ITEMS_STATUS_TYPES
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -64,6 +66,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   dialogPDF,
 }) => {
   const classes = styles();
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
   const renderPendingActions = () => (
 
@@ -634,7 +637,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
     <AsyncGate
       asyncAction={loadMyFeeds}
       asyncState={loadMyFeedsListAsyncState}
-      startActionOnMount={true}
+      startActionOnMount={!!currentEmployeeId}
     >
       {feedItems.total > 0 && renderPendingActions()}
       {renderNoPendingActions}
