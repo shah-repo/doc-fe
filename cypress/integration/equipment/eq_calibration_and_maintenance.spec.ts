@@ -430,7 +430,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Create Calibration record", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
@@ -512,7 +512,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify Maintenance History is now only History", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
@@ -541,7 +541,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`PMDone - Due Date: ${prevMaintenanceComplianceDate}`);
+          expect(text).to.contain(`PMDone - Due date: ${prevMaintenanceComplianceDate}`);
         });
     });
 
@@ -552,7 +552,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+          expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
         });
     });
   });
@@ -567,7 +567,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click revise on maintenance record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drClickReviseDocument();
       });
       cy.progressBarShouldNotExist();
@@ -590,6 +590,8 @@ context("Equipment maintenance and calibration", () => {
         if (!monthYearText.includes(month)) {
           cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(0).arrowClick();
         }
+
+        cy.wait(500);
 
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
@@ -630,7 +632,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click revise on maintenance record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drClickReviseDocument();
       });
       cy.progressBarShouldNotExist();
@@ -655,6 +657,7 @@ context("Equipment maintenance and calibration", () => {
         }
 
         cy.wait(500);
+
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
           .each(($el) => {
@@ -687,7 +690,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify Due date calculation", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
@@ -699,7 +702,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`PMDone - Due Date: ${prevMaintenanceComplianceDate}`);
+          expect(text).to.contain(`PMDone - Due date: ${prevMaintenanceComplianceDate}`);
         });
     });
 
@@ -710,7 +713,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`CALDue - Due Date: ${calibrationComplianceDate}`);
+          expect(text).to.contain(`CALDue - Due date: ${calibrationComplianceDate}`);
         });
     });
   });

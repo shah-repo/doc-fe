@@ -185,7 +185,6 @@ context("Equipment maintenance test", () => {
                     type: "eqmaintenance",
                     name: "pm-ki5wtk5l",
                     editorConfig: {
-                      fields: [],
                       type: "preventativeMaintenance",
                     },
                     editorProperties: [],
@@ -201,7 +200,6 @@ context("Equipment maintenance test", () => {
                     type: "eqmaintenance",
                     name: "calibration-ki5wtyj0",
                     editorConfig: {
-                      fields: [],
                       type: "calibration",
                     },
                     editorProperties: [],
@@ -607,7 +605,6 @@ context("Equipment maintenance test", () => {
       it("Select 'Equipment calibration document'", () => {
         SystemRequirement("REQ-2900");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-          CyRoutes.EmployeesGet,
           CyRoutes.DocRevPreview,
           CyRoutes.AvailableMaintenanceForms,
           CyRoutes.AvailableMaintenanceForms,
@@ -631,7 +628,7 @@ context("Equipment maintenance test", () => {
 
       context("Release PM and calibration record", () => {
         it("Navigate to PM record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(pmURL);
           });
         });
@@ -655,7 +652,7 @@ context("Equipment maintenance test", () => {
         });
 
         it("Navigate to Calibration record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(calibrationURL);
           });
         });
@@ -749,7 +746,6 @@ context("Equipment maintenance test", () => {
           it("Select 'Equipment calibration document'", () => {
             SystemRequirement("REQ-2900");
             cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-              CyRoutes.EmployeesGet,
               CyRoutes.DocRevPreview,
               CyRoutes.AvailableMaintenanceForms,
               CyRoutes.AvailableMaintenanceForms,
@@ -787,7 +783,7 @@ context("Equipment maintenance test", () => {
             cy.get("[data-cy=\"maintenance.status\"]")
               .eq(0).then(($el) => {
                 const text = $el.text().replace(/\u00a0/g, "");
-                expect(text).to.contain(`PMDone - Due Date: ${prevMaintenanceComplianceDate}`);
+                expect(text).to.contain(`PMDone - Due date: ${prevMaintenanceComplianceDate}`);
               });
           });
 
@@ -808,7 +804,7 @@ context("Equipment maintenance test", () => {
             cy.get("[data-cy=\"maintenance.status\"]")
               .eq(1).then(($el) => {
                 const text = $el.text().replace(/\u00a0/g, "");
-                expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+                expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
               });
           });
 
@@ -1023,7 +1019,7 @@ context("Equipment maintenance test", () => {
 
       context("Fill new calbration form", () => {
         it("Navigate to EQ document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(equipmentURL);
           });
         });
@@ -1102,7 +1098,7 @@ context("Equipment maintenance test", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Navigate to EQ document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(equipmentURL);
           });
         });

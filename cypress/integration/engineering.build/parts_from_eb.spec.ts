@@ -214,7 +214,6 @@ context("Parts from EB flow test", () => {
 
         it("Clicks on 'Add new part' button", () => {
           cy.wrapWithWaitOnApiCalls([
-            CyRoutes.GetRequiredApprovers,
             CyRoutes.DocPreview], () => {
             cy.ptClickCreateNewPart();
           });
@@ -279,7 +278,7 @@ context("Parts from EB flow test", () => {
 
       it("Choose an existing part from the list of available parts", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=\"childrenParts\"]").arrowType(EXISTING_PART_NAME + "{downarrow}{enter}");
+          cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect(EXISTING_PART_NAME);
         });
       });
 
@@ -464,10 +463,13 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });
+
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release the part", () => {
@@ -519,10 +521,13 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });
+
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify that a new revision has been created", () => {

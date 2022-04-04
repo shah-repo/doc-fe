@@ -6,7 +6,6 @@ import {
   Modal,
   Typography,
 } from "@material-ui/core";
-import { size } from "lodash";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as InReviewIcon } from "../../../../../../assets/images/in_review_status.svg";
@@ -15,15 +14,19 @@ import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.s
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../../state/ducks/dashboard.new/my.feeds";
+import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../../../state/ducks/dashboard.new/my.feeds/constants";
 import Text from "../../../../../components/Text";
 import { documentVersionPath } from "../../../../../document.revision/utils/paths";
 import Colors from "../../../../../layout/theme/utils/colors";
 import { getDocIcon, getStatusLabel } from "../../../common/DocIcon";
+import DocId from "../../../common/DocId/presenter";
+import DocTitle from "../../../common/DocTitle/presenter";
 import { HoverStyleChip } from "../../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../../common/StyledListItem";
 import { StyleTooltip } from "../../../common/StyleTooltip";
 import { DocTypeGroups } from "../../../common/types";
+import { getPendingTooltipText } from "../../../common/Utils";
 import EmailModal from "../../../dialogs/email/EmailDialog";
 import { styles } from "./pendingReview.styles";
 
@@ -74,6 +77,8 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const { count, pending, approved, primaryText, secondaryText } =
+    getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -100,7 +105,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
     }
   };
   return (
@@ -116,51 +121,14 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
             <>
               <Grid container={true} wrap="nowrap" alignItems="center">
                 <Grid item={true}>
-                  <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {docId}
-                    </Typography>
-                  </Link>
+                  <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId}/>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </>
-                    }
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={documentVersionPath(docRevId || "", docDocumentId)}
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyBold} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                  <DocTitle
+                    url= {documentVersionPath(docRevId || "", docDocumentId)}
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -227,20 +195,13 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text
-                          translation="assigned.users.count"
-                          values={{
-                            count:
-                              size(docRevPendingApprovals) +
-                              size(docRevApprovedApprovals),
-                          }}
+                          translation={primaryText}
+                          values={{ count }}
                         />
                         <br />
                         <Text
-                          translation="approved.and.pending.count"
-                          values={{
-                            approved: size(docRevApprovedApprovals),
-                            pending: size(docRevPendingApprovals),
-                          }}
+                          translation={secondaryText}
+                          values={{ approved, pending }}
                         />
                       </>
                     }

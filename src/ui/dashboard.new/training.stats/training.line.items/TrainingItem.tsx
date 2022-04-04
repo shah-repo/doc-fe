@@ -17,6 +17,7 @@ import Text from "../../../components/Text";
 import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
+  id: string;
   avatar: Nullable<string>;
   name: string;
   initialColor: string;
@@ -27,6 +28,7 @@ interface TrainingItemProps {
 }
 
 const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
+  id,
   name,
   avatar,
   initialColor,
@@ -113,8 +115,6 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           >
             {documentId}
           </Typography>
-        </Grid>
-        <Grid item={true}>
           <Typography
             component="span"
             variant="body2"

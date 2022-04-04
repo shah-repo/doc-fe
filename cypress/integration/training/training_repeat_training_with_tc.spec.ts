@@ -158,7 +158,6 @@ context("Repeat Training with Training Curriculum", () => {
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -172,7 +171,6 @@ context("Repeat Training with Training Curriculum", () => {
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -712,7 +710,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if"]`).first().check();
-      cy.get(`[data-cy="validators.required_if.name"]`).arrowType("Radio BTN req{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Radio BTN req" );
       cy.get(`input[type="checkbox"][value="2"]`).last().check();
       cy.fbAddNewFieldButton();
     });
@@ -825,6 +823,12 @@ context("Repeat Training with Training Curriculum", () => {
           fileName: downloadFile,
         });
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -869,7 +873,9 @@ context("Repeat Training with Training Curriculum", () => {
         tmpRegex = new RegExp( `Output Document Type\\nTraining Curriculum test`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/PERIODIC TRAINING/);
 
@@ -878,6 +884,8 @@ context("Repeat Training with Training Curriculum", () => {
         expect(el).match(/Refresh\/repeat training periodically\?\n Yes/);
 
         expect(el).match(/Training Frequency \(in days\)/);
+
+        expect(el).match(/TRAINEES DETAILS/);
 
         expect(el).match(/Released/);
 
@@ -897,8 +905,6 @@ context("Repeat Training with Training Curriculum", () => {
         tmpRegex = new
         RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/TRAINEES DETAILS/);
 
         expect(el).match(/Groups to Train/);
 
@@ -961,9 +967,9 @@ context("Repeat Training with Training Curriculum", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -990,7 +996,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -1002,12 +1008,12 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Select Groups to train 'Owner as approver'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Owner as approver{downarrow}{enter}");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Owner as approver");
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("radio button group option 3 checked", () => {
@@ -1111,6 +1117,12 @@ context("Repeat Training with Training Curriculum", () => {
           fileName: downloadFile,
         });
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -1144,7 +1156,9 @@ context("Repeat Training with Training Curriculum", () => {
 
         expect(el).match(/Description\ntest training curricula refresh \/ repeat/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/PERIODIC TRAINING/);
 
@@ -1157,6 +1171,9 @@ context("Repeat Training with Training Curriculum", () => {
         expect(el).match(/TRAINEES DETAILS/);
 
         expect(el).match(/Groups to Train\nOwner as approver/);
+
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Draft/);
 
@@ -1175,9 +1192,6 @@ context("Repeat Training with Training Curriculum", () => {
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");
@@ -1334,7 +1348,9 @@ context("Repeat Training with Training Curriculum", () => {
 
         expect(el).match(/Description\ntest training curricula refresh \/ repeat/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/PERIODIC TRAINING/);
 
@@ -1347,6 +1363,9 @@ context("Repeat Training with Training Curriculum", () => {
         expect(el).match(/TRAINEES DETAILS/);
 
         expect(el).match(/Groups to Train\nOwner as approver/);
+
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
 
@@ -1365,9 +1384,6 @@ context("Repeat Training with Training Curriculum", () => {
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");

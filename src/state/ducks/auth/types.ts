@@ -122,6 +122,7 @@ export interface IotCredentials {
   endpoint: string;
   environment: string;
   companyId: string;
+  employeeId: string;
   region: string;
 }
 
@@ -175,7 +176,6 @@ export enum Permission {
   COMPANY_BOOTSTRAP = "COMPANY_BOOTSTRAP",
   COMPANY_CREATE = "COMPANY_CREATE",
   COMPANY_DELETE = "COMPANY_DELETE",
-  COMPANY_DROPBOX_INTEGRATION = "COMPANY_DROPBOX_INTEGRATION",
   COMPANY_GET = "COMPANY_GET",
   COMPANY_UPDATE = "COMPANY_UPDATE",
   COMPANY_UPDATE_CURRENT = "COMPANY_UPDATE_CURRENT",

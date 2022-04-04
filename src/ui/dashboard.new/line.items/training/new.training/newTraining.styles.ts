@@ -10,7 +10,11 @@ export const styles = makeStyles((theme: Theme) =>
       paddingLeft: "10px",
     },
     link: {
-      color: Colors.black,
+      "color": Colors.black,
+      "textDecoration": "none",
+      "&:hover": {
+        textDecoration: "underline",
+      },
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
@@ -36,7 +40,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
-      lineHeight: "16px",
       color: Colors.latest_yellow_varient,
     },
     typographyOverdue: {
@@ -44,7 +47,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
-      lineHeight: "16px",
       color: Colors.latest_red_varient,
       letterSpacing: 0,
     },

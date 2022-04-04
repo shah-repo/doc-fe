@@ -218,7 +218,7 @@ context("Approval request implementation tasks", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").arrowClick();
       cy.get("[data-cy=\"title\"]").arrowType("Task One");
       cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
-      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[2].email}{downarrow}{enter}`);
+      cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[2].email}`);
       cy.poAddDateRequired();
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
@@ -246,6 +246,13 @@ context("Approval request implementation tasks", () => {
     it("Check approval request status is 'Implementation'", () => {
       SystemRequirement("REQ-0020", "REQ-0730");
       cy.arVerifyStatus({ status: "Implementation" });
+    });
+
+    it("Verify export", () => {
+      cy.exportVerifyEmail({
+        status: "Implementation", filename: "-Approval-request-from-newly-created-form",
+        pdfStatus: "IMPLEMENTATION", type: "approval request",
+      });
     });
 
     it("Check 'Implementation task' status is 'Pending'", () => {

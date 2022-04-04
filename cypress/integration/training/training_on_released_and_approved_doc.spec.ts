@@ -144,7 +144,6 @@ context("Training for same document that was first released and then revised and
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -158,7 +157,6 @@ context("Training for same document that was first released and then revised and
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -688,9 +686,9 @@ context("Training for same document that was first released and then revised and
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -713,7 +711,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select document 'released document' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released document{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released document");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -729,12 +727,12 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -742,7 +740,7 @@ context("Training for same document that was first released and then revised and
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
     });
@@ -834,6 +832,7 @@ context("Training for same document that was first released and then revised and
 
     it("Select AR", () => {
       cy.arFilterARListByNameAndStatus({ title: "Approved document", status: "IN_REVIEW" });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve AR", () => {

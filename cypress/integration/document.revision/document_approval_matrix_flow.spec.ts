@@ -201,9 +201,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
   });
 
@@ -416,7 +414,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("Verify training can be deselected", () => {
       SystemRequirement("REQ-0290");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickTrainingRequired();
       });
       cy.drIsTrainingRequired({ shouldBe: false });

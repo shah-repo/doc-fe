@@ -173,7 +173,7 @@ context("Autocomplete 'Supplier list' test", () => {
           });
 
           it("Select 'Supplier lists' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Supplier list{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Supplier list" });
           });
 
           it("Click 'Add' button", () => {
@@ -204,11 +204,11 @@ context("Autocomplete 'Supplier list' test", () => {
             if (response.body.length > 0 ) {
               const suppliers = response.body;
               suppliers.forEach((supplier) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text",
                     `${supplier.document.docId} - rev ${supplier.displayRevision} - ${supplier.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

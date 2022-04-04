@@ -125,9 +125,7 @@ context.skip("Autosave trigger after 30 sec", () => {
   context("Edit Revision Stage after reload page and Autosave should trigger", () => {
     it("Select 'New Document Revision'", () => {
       cy.navigToDocumentList();
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
-        cy.drFilterDocListByNameAndStatus({ title: "New Document Revision", status: "Draft" });
-      });
+      cy.drFilterDocListByNameAndStatus({ title: "New Document Revision", status: "Draft" });
     });
 
     it("Autosave should trigger after changing Revision Stage", () => {

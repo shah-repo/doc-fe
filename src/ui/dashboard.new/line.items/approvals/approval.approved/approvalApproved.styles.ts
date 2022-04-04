@@ -9,9 +9,6 @@ export const styles = makeStyles(() =>
     icon: {
       width: "15px",
     },
-    link: {
-      color: Colors.black,
-    },
     listItem: {
       paddingLeft: "1px",
     },

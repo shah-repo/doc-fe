@@ -1,5 +1,6 @@
-import { chain, filter, find } from "lodash";
+import { chain, filter, find, pick } from "lodash";
 import { createSelector } from "reselect";
+import { sortStringsByKey } from "../../../common/utils/helpers";
 import Config from "../../../config";
 import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
 import { ApplicationState } from "../../reducers";
@@ -12,7 +13,6 @@ const slackTeamId = (state: ApplicationState) => state.company.selectedCompany.t
 const isSlackIntegrationEnabled = (state: ApplicationState) => state.company.selectedCompany.slackIntegrationEnabled;
 const isHelloSignIntegrationEnabled = (state: ApplicationState) =>
   state.company.companyMine.helloSignIntegrationEnabled;
-const isDropboxEnabled = (state: ApplicationState) => state.company.companyMine.dropboxEnabled;
 
 const getWhiteLabeling = createSelector(
   getSelectedCompany,
@@ -45,10 +45,16 @@ const getNavigationTitle = (state: ApplicationState, category: string) => {
   return menuItem?.label;
 };
 
+const getActiveEmployees = (state: ApplicationState) =>
+  chain(state.company.companyMine.employees)
+    .filter({ active: true })
+    .map((employee) => pick(employee, ["id", "user.name"]))
+    .value()
+    .sort(sortStringsByKey("user.name"));
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
-  isDropboxEnabled,
   slackTeamId,
   getSelectedCompany,
   companyIdSelector,
@@ -62,4 +68,5 @@ export default {
   getAutosaveEnabled,
   getRedlineActive,
   getNavigationTitle,
+  getActiveEmployees,
 };

@@ -1,6 +1,6 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { IotService } from "../../../common/utils/iot/mqttClient";
+import { IotService } from "../../../common/utils/iot/iotService";
 import { ResetPasswordValues } from "../../../ui/users/types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
@@ -98,8 +98,10 @@ const login = (
       dispatch(authUser(data));
 
       if ((data.employees || []).length === 1) {
-        dispatch(companyActions.selectCompany(data.employees[0].company));
-        dispatch(getIotCreds());
+        const employee = data.employees[0];
+
+        dispatch(companyActions.selectCompany(employee.company));
+        dispatch(selectEmployee(employee));
       }
     },
     handlers,
@@ -255,7 +257,6 @@ const getIotCreds = (): ApiAction =>
     method: "get",
     includeAuthorization: true,
     onSuccess: (iotCredentials, dispatch) => {
-      setIotCreds(iotCredentials);
       dispatch(setCredentials(iotCredentials));
     },
   });
@@ -323,4 +324,5 @@ export default {
   toggleCustomLabels,
   resetPassword,
   sendPasswordResetEmail,
+  setCredentials,
 };

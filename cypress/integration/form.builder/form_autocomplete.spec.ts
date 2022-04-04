@@ -993,7 +993,7 @@ context("Autocomplete test", () => {
     it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
     });
@@ -1016,7 +1016,7 @@ context("Autocomplete test", () => {
 
     it("Select 'Part document' for Part lot", () => {
       cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
-      cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
     });
 
     it("Check 100% override", () => {
@@ -1288,11 +1288,11 @@ context("Autocomplete test", () => {
 
     it("Verify count of 'Document revisions' in the list", () => {
       SystemRequirement("FB-0050");
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 13 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 14 });
     });
 
     it("Verify count of 'Approval requests' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 10 });
+      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 11 });
     });
 
     it("Verify count of 'Approvers' in the list", () => {
@@ -1305,7 +1305,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document types' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 28 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 29 });
     });
 
     it("Verify count of 'Supplier list' in the list", () => {
@@ -1389,7 +1389,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document revisions (all versions)' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-all", length: 13 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-all", length: 14 });
     });
 
     it("Verify count of 'Materials' in the list", () => {
