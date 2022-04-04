@@ -113,7 +113,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                   <div
                     style={{ width: "100%", height: "100%" }}
                     dangerouslySetInnerHTML={{
-                      __html: _formState?.getValue(name)?.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" ) || "",
+                      __html: _formState?.getValue(name)?.replace(/<[^/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" ) || "",
                     }}
                   />
                 )}
