@@ -7,12 +7,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   getFormattedDateString,
-  MomentFormats
+  MomentFormats,
 } from "../../../common/utils/date";
 import { authSelectors } from "../../../state/ducks/auth";
 import {
   ActionTypes,
-  LINE_ITEMS_STATUS_TYPES
+  LINE_ITEMS_STATUS_TYPES,
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
