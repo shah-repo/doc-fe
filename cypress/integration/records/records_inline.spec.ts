@@ -3,6 +3,7 @@
 
 import moment from "moment-timezone";
 import path from "path";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -13,8 +14,10 @@ let createdCompany;
 let loginResponse;
 let secondEmployee;
 let recFormId;
+let adminEmployee;
+let RDdocumentType;
 
-let multipleCompanies;
+
 let emailsFromInbox;
 const pages = ["", "", "", ""];
 let downloadUrl;
@@ -68,12 +71,99 @@ context("Record inline Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          RDdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Legal Record");
           done();
         });
       });
     });
   });
+
+  // context("[API]Update record document type", () => {
+  //   it("Change fields config in record document type", () => {
+  //     cy.drUpdateDocumentTypeName({
+  //       sessionId: loginResponse.sessionId,
+  //       employeeId: adminEmployee.id,
+  //       id: RDdocumentType[0].id,
+  //       payload: {
+  //         fieldsConfig: {
+  //           D: {
+  //             visible: false,
+  //             required: false,
+  //           },
+  //           E: {
+  //             label: "Record Type",
+  //             visible: false,
+  //             required: true,
+  //           },
+  //           F: {
+  //             label: "Record ID",
+  //             visible: false,
+  //             required: true,
+  //           },
+  //           G: {
+  //             visible: false,
+  //             required: false,
+  //           },
+  //           I: {
+  //             visible: false,
+  //           },
+  //           J: {
+  //             visible: false,
+  //           },
+  //           K: {
+  //             label: "Void",
+  //             visible: true,
+  //           },
+  //           L: {
+  //             label: "Correction",
+  //             visible: true,
+  //           },
+  //           N: {
+  //             label: "Approve and Release",
+  //             visible: true,
+  //           },
+  //           O: {
+  //             label: "Record History",
+  //             visible: true,
+  //           },
+  //           R: {
+  //             visible: false,
+  //           },
+  //           S: {
+  //             label: "Update Record",
+  //             visible: true,
+  //           },
+  //           A1: {
+  //             label: "WIP",
+  //             visible: true,
+  //           },
+  //           A2: {
+  //             label: "Voided",
+  //             visible: true,
+  //           },
+  //           A3: {
+  //             label: "Archive",
+  //             visible: true,
+  //           },
+  //           P1: {
+  //             label: "WIP",
+  //             visible: true,
+  //           },
+  //           P2: {
+  //             label: "Voided",
+  //             visible: true,
+  //           },
+  //           P3: {
+  //             label: "Archive",
+  //             visible: true,
+  //           },
+  //         },
+  //       },
+  //     });
+  //   });
+  // });
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
@@ -118,26 +208,25 @@ context("Record inline Flow", () => {
         cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
-      it("Add textfield", () => {
+      it("Add first textfield", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectTextField();
-        cy.fbAddLabelName({ name: "Textfield for inline" });
+        cy.fbAddLabelName({ name: "First textfield for inline" });
         cy.fbAddField();
       });
 
-      it("Add inline approval", () => {
+      it("Add first inline approval", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.fbSelectInlineApproval();
         });
-        cy.get("[name=\"label\"]").arrowType("Inline field");
+        cy.get("[name=\"label\"]").arrowType("First inline field");
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddField();
       });
 
       it("Add second textfield", () => {
         cy.fbClickAddNewHiddenBtn();
-
         cy.fbSelectTextField();
         cy.fbAddLabelName({ name: "Second textfield for inline" });
         cy.fbAddField();
@@ -157,7 +246,7 @@ context("Record inline Flow", () => {
       });
 
       it("Add Checkbox group", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
         cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
         cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
         cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
@@ -171,7 +260,7 @@ context("Record inline Flow", () => {
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
         cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
         cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -337,15 +426,13 @@ context("Record inline Flow", () => {
 
           expect(el).match(/APPROVALS\nApprovers/);
 
-          expect(el).match(/Textfield for inline/);
+          expect(el).match(/First textfield for inline/);
 
-          expect(el).match(/Inline field\nInline approval pending/);
+          expect(el).match(/First inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
           expect(el).match(/Second textfield for inline/);
-
-          expect(el).match(/Checkbox\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -371,7 +458,7 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/TEXT FIELD/);
+          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
           expect(el).match(/Second inline field\nInline approval pending/);
 
@@ -577,15 +664,13 @@ context("Record inline Flow", () => {
 
           expect(el).match(/APPROVALS\nApprovers/);
 
-          expect(el).match(/Textfield for inline/);
+          expect(el).match(/First textfield for inline/);
 
-          expect(el).match(/Inline field\nInline approval pending/);
+          expect(el).match(/First inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
           expect(el).match(/Second textfield for inline/);
-
-          expect(el).match(/Checkbox\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -609,11 +694,11 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/TEXT FIELD/);
-
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
+
+          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -638,6 +723,8 @@ context("Record inline Flow", () => {
           expect(el).match(tmpRegex);
 
           expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+          expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -721,13 +808,8 @@ context("Record inline Flow", () => {
       });
 
       it("Upload attachment 'image.jpg'", () => {
-        cy.get("#AttachmentFieldPresenter-field").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
-          cy.elUploadAttachment({
-            fileName: "image.jpg",
-            el: "AttachmentFieldPresenter-field",
-          });
-        });
+        cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
+        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click();
         cy.progressBarShouldNotExist();
       });
 
