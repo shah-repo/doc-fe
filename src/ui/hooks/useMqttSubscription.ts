@@ -1,16 +1,22 @@
 import { useEffect } from "react";
+import { IotService } from "../../common/utils/iot/iotService";
+
+const iotService = IotService.getInstance();
 
 const useMqttSubscription = (
-  subscribe: () => void,
-  unsubscribe: () => void,
+  topic: string,
+  callback: (...args: any[]) => any | Promise<any>,
 ) => {
   useEffect(() => {
-    subscribe();
+    if (topic && callback) {
+      iotService.subscribeToTopic(topic, callback);
+    }
     return () => {
-      unsubscribe();
+      if (topic && callback) {
+        iotService.unsubscribeFromTopic(topic, callback);
+      }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subscribe, unsubscribe]);
+  }, [topic, callback]);
 };
 
 export default useMqttSubscription;

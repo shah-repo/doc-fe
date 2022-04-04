@@ -3,7 +3,8 @@
 import * as AWSMqttClient from "aws-mqtt";
 import { Credentials } from "aws-sdk/global";
 import debug from "debug";
-import { Dictionary, isEmpty, some } from "lodash";
+import { EventEmitter } from "events";
+import { some, uniq } from "lodash";
 import moment from "moment";
 import MQTTPattern from "mqtt-pattern";
 import { IotCredentials } from "../../../state/ducks/auth/types";
@@ -33,9 +34,7 @@ interface IAwsMqttClient {
   };
 }
 
-let credentialsMqtt: IotCredentials;
-let creatingClient = false;
-let retrySubscriptions: Dictionary<any> = {};
+type NotifType = (...args: any) => void;
 
 export class IotService {
   public static getInstance(): IotService {
@@ -47,122 +46,86 @@ export class IotService {
   }
 
   private static instance: IotService;
-
-  private emitter: any = {};
-  private connectedSubscriptions: Dictionary<any> = {};
-
+  private emitter = new EventEmitter();
+  private connectedSubscriptionsTopics: string[] = [];
+  private connectedSubscriptions: {topic: string; notif: NotifType}[] = [];
+  private credentialsMqtt!: IotCredentials;
   private constructor(
     public mqttClientInstance: AwsMqttClient,
   ) {
     this.mqttClientInstance = mqttClientInstance;
-  }
-
-  public async updateMqttClient(endpointRedux: any): Promise<any> {
-    credentialsMqtt = endpointRedux;
-    loggerDebug("(updateMqttClient) Updating credentials");
-    await this.createMqttClient();
+    this.emitter.setMaxListeners(100);
   }
 
   public end() {
-    this.mqttClientInstance.end();
+    if (this.mqttClientInstance) {
+      this.mqttClientInstance.end();
+    }
   }
 
-  public subscribeToTopic(topic: string, notif: any): any {
-    if (!this.isConnected()) {
-      loggerDebug("(subscribeToTopic) Could not subscribe. Client not connected", topic);
-      retrySubscriptions[topic] = notif;
-      return;
-    }
+  public async subscribeToTopic(topic: string, notif: NotifType): Promise<any> {
+    this.emitter.addListener(topic, notif);
+    this.connectedSubscriptionsTopics.push(topic);
+    this.connectedSubscriptions.push({ notif, topic });
 
-    this.subscribe(topic, notif);
+    await this.subscribeToTopicMqttClientInstance(topic);
   }
 
-  public async unsubscribeFromTopic(topic: string) {
-    if (!this.isConnected()) {
-      loggerDebug("(unsubscribeFromTopic) Could not unsubscribe. Client not connected", topic);
-      return;
+  public async unsubscribeFromTopic(topic: string, notif: NotifType) {
+    const connectedTopicIndexToPop = this.connectedSubscriptionsTopics
+      .findIndex((s) => s === topic);
+    if (connectedTopicIndexToPop > -1) {
+      this.connectedSubscriptionsTopics =
+        this.connectedSubscriptionsTopics.filter((_, index) => connectedTopicIndexToPop !== index);
     }
 
-    const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
-    const topicSubscribed = some(Object.keys(this.mqttClientInstance._resubscribeTopics),
-      (id) => id === fullTopic,
-    );
-    if (topicSubscribed) {
+    const connectedSubsIndexToPop = this.connectedSubscriptions
+      .findIndex((s) => s.topic === topic && s.notif === notif);
+    if (connectedSubsIndexToPop > -1) {
+      this.connectedSubscriptions =
+        this.connectedSubscriptions.filter((_, index) => connectedSubsIndexToPop !== index);
+    }
+    this.emitter.removeListener(topic, notif);
 
-      loggerDebug(`(unsubscribeFromTopic) unsubscribed from ${topic}`);
-      await this.mqttClientInstance.unsubscribe(fullTopic);
-
-      delete this.emitter[fullTopic];
-      delete this.connectedSubscriptions[topic];
+    if (this.emitter.listenerCount(topic)) {
+      loggerDebug(
+        `(unsubscribeFromTopic) There are listeners for topic ${topic}, ` +
+        `skipping unsubscribeFromTopicMqttClientInstance`);
     } else {
-      loggerDebug(`(unsubscribeFromTopic) cannot unsubscribe from ${topic}, not subscribed`);
+      await this.unsubscribeFromTopicMqttClientInstance(topic);
+      loggerDebug(`(unsubscribeFromTopic) No more listeners for topic ${topic}, unsubscribing`);
     }
   }
 
   public async unsubscribeAll() {
-    if (!this.isConnected()) {
-      loggerDebug("(unsubscribeAll) Could not unsubscribe all. Client not connected");
-      return;
+    for (const topic of this.connectedSubscriptionsTopics) {
+      await this.unsubscribeFromTopicMqttClientInstance(topic);
     }
 
-    const hasSubscriptions = !isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
-    if (hasSubscriptions) {
-      const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
-
-      loggerDebug("(unsubscribeAll) unsubscribed from all");
-      await this.mqttClientInstance.unsubscribe(topics);
-      this.emitter = {};
-      this.connectedSubscriptions = {};
-    }
-  }
-
-  public subscribedTopics() {
-    if (this.mqttClientInstance && this.mqttClientInstance._resubscribeTopics) {
-      return Object.keys(this.mqttClientInstance._resubscribeTopics);
-    }
-    loggerDebug("(subscribedTopics) No client available");
-    return [];
+    this.connectedSubscriptionsTopics = [];
+    this.connectedSubscriptions = [];
+    this.emitter.removeAllListeners();
   }
 
   public isConnected() {
     return this.mqttClientInstance && this.mqttClientInstance.connected;
   }
 
-  private async subscribe(topic: string, notif: any): Promise<any> {
-    const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
-    const noSubscriptions = isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
-    const alreadySubscribed = some(Object.keys(this.mqttClientInstance._resubscribeTopics),
-      (id) => id === fullTopic,
-    );
-
-    if (noSubscriptions || !alreadySubscribed) {
-      await this.mqttClientInstance.subscribe(
-        MQTTPattern.clean(fullTopic),
-      );
-      this.emitter[fullTopic] = notif;
-      this.connectedSubscriptions[topic] = notif;
-      loggerDebug(`(subscribe) Subscribed to : '${topic}'`);
-    } else {
-      loggerDebug(`(subscribe) already subscribed to '${topic}'`);
-    }
-  }
-
-  private async createMqttClient() {
-    if (creatingClient) {
-      return;
-    }
+  public async updateMqttClient(endpointRedux: any): Promise<any> {
+    this.credentialsMqtt = endpointRedux;
+    loggerDebug("(updateMqttClient) Updating credentials");
 
     const clientConfig: IAwsMqttClient = {
-      region: credentialsMqtt.region,
+      region: this.credentialsMqtt.region,
       credentials: new Credentials(
         {
-          accessKeyId: credentialsMqtt.credentials.AccessKeyId,
-          secretAccessKey: credentialsMqtt.credentials.SecretAccessKey,
-          sessionToken: credentialsMqtt.credentials.SessionToken,
+          accessKeyId: this.credentialsMqtt.credentials.AccessKeyId,
+          secretAccessKey: this.credentialsMqtt.credentials.SecretAccessKey,
+          sessionToken: this.credentialsMqtt.credentials.SessionToken,
         },
       ),
-      clientId: `mqtt-client-${credentialsMqtt.environment}-${new Date().valueOf()}-${(Math.floor((Math.random() * 100000) + 1))}`,
-      endpoint: credentialsMqtt.endpoint,
+      clientId: `mqtt-client-${this.credentialsMqtt.environment}-${new Date().valueOf()}-${(Math.floor((Math.random() * 100000) + 1))}`,
+      endpoint: this.credentialsMqtt.endpoint,
       will: {
         topic: "WillMsg",
         payload: "Connection Closed abnormally..!",
@@ -171,7 +134,6 @@ export class IotService {
       },
     };
 
-    creatingClient = true;
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
 
     this.mqttClientInstance.on("error", (error) => {
@@ -194,38 +156,78 @@ export class IotService {
       loggerDebug("(createMqttClient) on end");
     });
 
-    this.mqttClientInstance.on("connect", (connack) => {
+    this.mqttClientInstance.on("connect", async (connack) => {
       loggerDebug("(createMqttClient) on connect", connack);
-      for (const topic of Object.keys(this.connectedSubscriptions)) {
-        this.subscribe(topic, this.connectedSubscriptions[topic]);
+      for (const cs of this.connectedSubscriptions) {
+        await this.subscribeToTopicMqttClientInstance(cs.topic);
       }
-      for (const topic of Object.keys(retrySubscriptions)) {
-        this.subscribe(topic, retrySubscriptions[topic]);
-      }
-      creatingClient = false;
-      retrySubscriptions = {};
     });
 
-    this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
-      const emitterKey = Object.keys(this.emitter).find((pattern: string) =>
-        MQTTPattern.matches(pattern, topic),
-      );
+    this.mqttClientInstance.on("message", (fullTopic: string, message: ArrayBufferView) => {
 
-      if (!emitterKey) {
-        return;
+      const topicsToNotify = uniq(this.connectedSubscriptionsTopics
+        .filter((pattern: string) => {
+          const fullPattern = this.generateFullTopic(pattern);
+          const match = MQTTPattern.matches(fullPattern, fullTopic);
+
+          return match;
+        }));
+      for (const topicToNotify of topicsToNotify) {
+        const params = MQTTPattern.extract(this.generateFullTopic(topicToNotify), fullTopic);
+        loggerDebug("(createMqttClient) on message received", {
+          params,
+          topic: fullTopic,
+          decodedMessage: new TextDecoder("utf-8").decode(message),
+        });
+        this.emitter.emit(topicToNotify, new TextDecoder("utf-8").decode(message), params);
       }
-
-      const params = MQTTPattern.extract(emitterKey, topic);
-      loggerDebug("(createMqttClient) on message received", {
-        params,
-        topic,
-        decodedMessage: new TextDecoder("utf-8").decode(message),
-      });
-      this.emitter[emitterKey] && this.emitter[emitterKey](new TextDecoder("utf-8").decode(message), params);
     });
   }
-}
 
+  private async subscribeToTopicMqttClientInstance(topic: string) {
+    if (!this.isConnected()) {
+      loggerDebug("(subscribeToTopicMqttClientInstance) Client not connected. Could not subscribe.", topic);
+      return;
+    }
+
+    const fullTopic = this.generateFullTopic(topic);
+
+    const alreadySubscribed = some(
+      Object.keys(this.mqttClientInstance._resubscribeTopics),
+      (id) => id === fullTopic,
+    );
+
+    if (!alreadySubscribed) {
+      await this.mqttClientInstance.subscribe(
+        MQTTPattern.clean(fullTopic),
+      );
+      loggerDebug(`(subscribeToTopicMqttClientInstance) Subscribed to : '${topic}'`);
+    } else {
+      loggerDebug(`(subscribeToTopicMqttClientInstance) Already subscribed to '${topic}'`);
+    }
+  }
+
+  private async unsubscribeFromTopicMqttClientInstance(topic: string) {
+    if (!this.isConnected()) {
+      loggerDebug("(unsubscribeFromTopicMqttClientInstance) Could not unsubscribe. Client not connected", topic);
+      return;
+    }
+    const fullTopic = this.generateFullTopic(topic);
+    const topicSubscribed = some(Object.keys(this.mqttClientInstance._resubscribeTopics),
+      (id) => id === fullTopic,
+    );
+    if (topicSubscribed) {
+      await this.mqttClientInstance.unsubscribe(fullTopic);
+      loggerDebug(`(unsubscribeFromTopicMqttClientInstance) Unsubscribed from ${topic}`);
+    } else {
+      loggerDebug(`(unsubscribeFromTopicMqttClientInstance) Could not unsubscribe. Not subscribed to topic ${topic}`);
+    }
+  }
+
+  private generateFullTopic(topic: string) {
+    return `${this.credentialsMqtt.environment}/${this.credentialsMqtt.companyId}/${topic}`;
+  }
+}
 
 export const areValidCredentials = (credentials: IotCredentials, currenEmployeeId: string) => {
   if (!credentials) {
