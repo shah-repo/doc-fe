@@ -17,6 +17,8 @@ export type FBPOApprovalsProps =
   currentUser?: string;
   documentStatus: DocumentStatus;
   dialogState?: FBDialogState;
+  isRequester: (id: string) => boolean;
+  onApproverDelete?: (id: string) => void;
 };
 
 export type FBPOApprovalsConstructor = FBInlineApprovalConstructor & {
