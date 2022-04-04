@@ -6,6 +6,7 @@ import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
@@ -45,7 +46,9 @@ import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import UpgradeToLatestContainer from "./presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
-interface Props extends FormikProps<DocumentRevisionFormValues> {
+interface Props
+  extends FormikProps<DocumentRevisionFormValues>,
+  RouteComponentProps {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -114,6 +117,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   redlineActive,
   lastSavedTimestamp,
   mode,
+  history,
 }) => {
   useScrollIntoView();
   const classes = styles();
@@ -292,9 +296,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           errors={errors}
         />
         <PromptIfDirty
-          dirty={dirty}
-          doNotPrompt={doNotPrompt}
-          onDirtyFlagChange={onDirtyFlagChange}
+          when={dirty}
+          navigate={(path) => {
+            history.push(path);
+          }}
+          shouldBlockNavigation={() => {
+            if (dirty) {
+              return true;
+            }
+            return false;
+          }}
         />
         <Title
           name="name"
@@ -437,4 +448,4 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default (observer(DocumentRevisionFormPresenter));
+export default withRouter(observer(DocumentRevisionFormPresenter));
