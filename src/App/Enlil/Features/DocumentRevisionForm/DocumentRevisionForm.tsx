@@ -3,7 +3,7 @@ import { map } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
-import { DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
@@ -12,8 +12,7 @@ import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms
 import { FBWorkspace } from "../../../../ui/form.builder";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
-import FBTrainingInfoContainer from "./Components/FBTrainingInfo/FBTrainingInfo.container";
-import DocumentRevisionFormHeader from "./Components/FormHeader/DocumentRevisionFormHeader";
+import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
 
 const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> = ({
