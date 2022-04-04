@@ -190,6 +190,7 @@ DocumentRevisionFormContainerProps
     _formState?.setMode(mode);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
+
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabled: boolean = initialValues.id !== undefined;
