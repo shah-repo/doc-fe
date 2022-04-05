@@ -537,6 +537,7 @@ context("Document list test", () => {
       cy.get(".k-i-group-delete").click();
     });
   });
+
   context("Verifying and checking every arrow is clickable", () => {
     it("Verify that arrow on ID for sorting ", () => {
       cy.navigToDocumentList();
