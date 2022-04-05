@@ -638,17 +638,16 @@ context("Document list test", () => {
         cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
         cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        // cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
-        cy.pause();
       });
       it(`Verify DOC ID "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
         cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
         cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        // cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
@@ -657,7 +656,7 @@ context("Document list test", () => {
         cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
         cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        // cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
@@ -666,7 +665,7 @@ context("Document list test", () => {
         cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
         cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        // cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
@@ -691,7 +690,7 @@ context("Document list test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
         cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        // cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
@@ -699,7 +698,7 @@ context("Document list test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
         cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        // cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
@@ -707,7 +706,7 @@ context("Document list test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
         cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        // cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
