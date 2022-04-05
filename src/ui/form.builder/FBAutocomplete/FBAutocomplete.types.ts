@@ -13,7 +13,6 @@ export type FBAutocompleteProps =
  | "freeSolo"
  | "filterSelectedOptions"
  | "groupBy"
- | "disableClearable"
  > & {
    onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any;
    refresh?: () => any;
@@ -22,7 +21,4 @@ export type FBAutocompleteProps =
    inputStyle?: any;
    modifiedOptions?: any[];
    debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void;
-   isRequester?: (id: string) => boolean;
-   onApproverDelete?: (id: string) => void;
-   isPOApproval?: boolean;
  };
