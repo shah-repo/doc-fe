@@ -47,10 +47,10 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
 
   const closeModal = (cb) => {
     dialogPrompt.close();
-    updateLastLocation(null);
     if (cb) {
       cb();
     }
+    updateLastLocation(null);
   };
 
   UnsavedChangesDialogContext = React.createContext<UnsavedChangesDialogProps>({

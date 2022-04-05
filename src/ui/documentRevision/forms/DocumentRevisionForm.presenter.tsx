@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, isEmpty } from "lodash";
+import { flatten, isEmpty, isEqual } from "lodash";
 import { reaction } from "mobx";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
@@ -123,7 +123,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const intl = useIntl();
 
-  const { workspaceState } = FB.useStores();
+  const { workspaceState, formState } = FB.useStores();
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true, needsSignature: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
   const [forceNewRender, setNewRender] = React.useState();
@@ -296,12 +296,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           errors={errors}
         />
         <PromptIfDirty
-          when={dirty}
+          when={true}
           navigate={(path) => {
             history.push(path);
           }}
           shouldBlockNavigation={() => {
-            if (dirty) {
+            const isFBDirty = !isEqual(workspaceState?.formInput, formState?.getValues());
+            if (dirty || isFBDirty) {
               return true;
             }
             return false;
