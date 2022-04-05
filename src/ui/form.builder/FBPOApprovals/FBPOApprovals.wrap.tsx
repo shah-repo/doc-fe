@@ -4,6 +4,7 @@ import { compact, difference, filter, find, includes, isEmpty, map, minBy, union
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
@@ -33,11 +34,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     documentStatus,
     dialogState,
     disabled,
-    isRequester,
-    onApproverDelete,
-    isPOApproval,
     ...props
   }: T) => {
+    const history = useHistory();
+    const location = useLocation();
     const { workspaceState, formState } = FB.useStores();
     const { isSubmitting } = useFormikContext();
     const { document, changeRequest, id, isOutput } = workspaceState || {};
@@ -64,6 +64,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       } else {
         const stateApprovals = filter(poApprovalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
         poApprovalsState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
+        console.log("path :: ", location);
+        console.log("path :: ", location.pathname);
+        setTimeout(() => {
+          history.go(0);
+        }, 500);
+
+
       }
     }
 
@@ -150,9 +157,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         addApprover(difference(fieldValue, formValue));
-        if (props.type !== "poapprovals") {
-          removeApprover(difference(formValue, fieldValue));
-        }
+        removeApprover(difference(formValue, fieldValue));
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -165,10 +170,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
-    onApproverDelete = (id: string) => {
-      removeApprover([id]);
-    };
 
     const checkGroups = (id: string) => {
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
@@ -248,12 +249,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
 
-    isRequester = (approverId: string) => approverId === formState?.getFieldValue(PO_REQUESTOR_COMPONENT_NAME);
     return Component({
       ...(props as T),
-      isPOApproval: props.type === "poapprovals",
-      onApproverDelete,
-      isRequester,
       renderOption,
       isIncluded,
       approvalTransition,

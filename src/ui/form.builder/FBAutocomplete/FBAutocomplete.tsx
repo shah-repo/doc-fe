@@ -2,7 +2,7 @@ import { Box, Chip, IconButton, Popper, TextField, Typography } from "@material-
 import CachedIcon from "@material-ui/icons/Cached";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
-import React, { useMemo } from "react";
+import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
@@ -20,7 +20,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupBy,
   refresh,
   filterSelectedOptions = false,
-  disableClearable = false,
   freeSolo = false,
   multiple = false,
   options,
@@ -34,31 +33,10 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupByKey,
   value,
   inputStyle = {},
-  isRequester,
-  rules,
-  onApproverDelete,
-  isPOApproval,
-  name,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
   const CustomPopper = (props) => <Popper {...props} placement="bottom-start" />;
-  const renderInputData = useMemo(() => (<FBMapWrapper<any[]> collection={value as string[]}>
-    {(option, index) => {
-      const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
-        (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
-      return (
-        <Chip
-          key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-          label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
-          style={{ minHeight: "32px", height: "auto" }}
-          onDelete={() => onApproverDelete && onApproverDelete(option.id)}
-          disabled={name === "approvers" ?
-            isAlreadyApproved : disabled || (isRequester && isRequester(option.id))}
-        />
-      ); }}
-  </FBMapWrapper>),
-  [disabled, getOptionLabel, isRequester, optionLabelKey, name, value, workspaceState, onApproverDelete]);
   return (
     <>
       {includeQRScan && (
@@ -70,9 +48,9 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       )}
       <FBInput
         {...props}
-        {...{ multiple, defaultValue, loading, rules }}
+        {...{ multiple, defaultValue, loading }}
         type="autocomplete"
-        disabled={name === "approvers" ? false : disabled}
+        disabled={props.name === "approvers" ? false : disabled}
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
         <StyledAutoComplete
@@ -86,7 +64,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             defaultValue,
             freeSolo,
             filterOptions,
-            disableClearable,
           }}
           PopperComponent={CustomPopper}
           options={modifiedOptions}
@@ -104,12 +81,11 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   InputProps={{
                     ...params.InputProps,
                     ...(refresh) && { style: { paddingRight: "33px" } },
-                    ...(isPOApproval) && { startAdornment: renderInputData },
                   }}
                   inputProps={{
                     ...params.inputProps,
                     "style": { padding: "10.5px 0", ...inputStyle },
-                    "data-cy": name,
+                    "data-cy": props.name,
                   }}
                 />
               </Box>
@@ -122,22 +98,25 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               )}
             </Box>
           )}
-          renderTags={(value, getTagProps) => !isPOApproval && (
-            <FBMapWrapper<any[]> collection={value}>
-              {(option, index) => {
-                const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
-                  (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
-                return (
-                  <Chip
-                    key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-                    label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
-                    style={{ minHeight: "32px", height: "auto" }}
-                    {...getTagProps({ index })}
-                    disabled={name === "approvers" ? isAlreadyApproved : disabled}
-                  />
-                ); }}
-            </FBMapWrapper>
-          )}
+          renderTags={(value, getTagProps) => {
+            console.log("debug :: value :: ", props.name, value);
+            return (
+              <FBMapWrapper<any[]> collection={value}>
+                {(option, index) => {
+                  const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
+                    (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
+                  return (
+                    <Chip
+                      key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
+                      label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
+                      style={{ minHeight: "32px", height: "auto" }}
+                      {...getTagProps({ index })}
+                      disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
+                    />
+                  ); }}
+              </FBMapWrapper>
+            );
+          }}
         />
       </FBInput>
     </>
