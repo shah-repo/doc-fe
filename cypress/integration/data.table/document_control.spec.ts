@@ -573,7 +573,6 @@ context("Document list test", () => {
         cy.alVerifyFilterByStatus({ status: "CLOSED" });
       });
     });
-
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared", () => {
       cy.get(`button[data-cy="clearFilter"]`).should("exist").click();
     });
