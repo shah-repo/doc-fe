@@ -161,7 +161,7 @@ context("Document list test", () => {
     it("Navigate to document list landing page", () => {
       cy.navigToDocumentList();
     });
-    it("Verify that landing pages for Supplier List  use the new data table", () => {
+    it("Verify that landing pages use the new data table", () => {
       cy.get(`div[role="grid"]`).should("have.class", "k-grid");
     });
     it("Verify that landing pages for Document List  use the new data table", () => {
@@ -373,25 +373,7 @@ context("Document list test", () => {
     });
     it("User should be able to remove it", () => {
       cy.get(".k-i-group-delete").click();
-    });
-    it("Click Create a Approval Request button ", () => {
-      cy.arClickCreateAnAR();
-    });
-    it("Enter title AR title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Approval request form1" });
-    });
-    it("Enter description", () => {
-      cy.arEnterApprovalRequestDescription({ description: "description" });
-    });
-    it("Add document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "form1 description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "form1 justification" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.navigToDocumentList();
     });
     it("The system shall allow the user to open an AR from the AR list", () => {
       cy.navigToApprovalRequestList();
@@ -492,7 +474,6 @@ context("Document list test", () => {
       cy.landingPageLoadingElementShouldAppear();
       cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should("exist");
       cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
       cy.get(`th[aria-colindex="1"] span.k-i-sort-desc-sm`).should("exist");
     });
     it("Verify that arrow on Revision for sorting", () => {
@@ -500,7 +481,6 @@ context("Document list test", () => {
       cy.landingPageLoadingElementShouldAppear();
       cy.get(`th[aria-colindex="2"] span.k-i-sort-asc-sm`).should("exist");
       cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
       cy.get(`th[aria-colindex="2"] span.k-i-sort-desc-sm`).should("exist");
     });
     it("Verify that arrow on Document Title for sorting", () => {
@@ -595,21 +575,15 @@ context("Document list test", () => {
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared", () => {
-      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+      cy.get(`button[data-cy="clearFilter"]`).should("exist").click();
     });
     it("Verify that each filter for each column in the landing page is functional", () => {
-      cy.dlFilterByDocId({ docId: "CP-00003" });
-      cy.dlVerifyFilterByDocId({ docId: "CP-00003" });
       cy.dlFilterByRev({ revision: "1" });
       cy.dlVerifyFilterByRev({ revision: "1" });
-      cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
-      cy.dlVerifyFilterByDocTitle({ docTitle: documentRevisionName });
+      cy.dlFilterByDocId({ docId: "CP-00003" });
+      cy.dlVerifyFilterByDocId({ docId: "CP-00003" });
       cy.dlFilterByType({ type: "CP" });
       cy.dlVerifyFilterByType({ type: "CP" });
-      cy.dlFilterByOwner({ owner: USERS[2].name });
-      cy.dlVerifyFilterByOwner({ owner: USERS[2].name });
-      cy.dlFilterByStatus({ status: "Draft" });
-      cy.dlVerifyFilterByStatus({ status: "Draft" });
     });
     it("Verify that 'Export List' button is visible and enabled", () => {
       cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
@@ -618,7 +592,7 @@ context("Document list test", () => {
       it("Verify hide on Doc ID", () => {
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Doc ID");
         cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
-        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
+        cy.get("div.k-columnmenu-item").contains("Hide Column").arrowClick();
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Doc ID");
       });
       it("Verify unhide on Doc ID", () => {
@@ -629,167 +603,114 @@ context("Document list test", () => {
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Doc ID");
       });
       it("Verify freeze on Doc ID ", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Doc ID");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Doc ID");
         cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Revision");
-        cy.scrollTo("right");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Revision");
       });
       it("Verify un-freeze on Doc ID", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Revision");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Revision");
         cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Doc ID");
-        cy.scrollTo("right");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Doc ID");
       });
     });
     context("Click on the three dots on the column that have Select option and click", () => {
       it("Group column, Hide and Freeze column should be invoked", () => {
         cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
-        cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column");
-        cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Hide Column");
-        cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Freeze Column");
+        cy.get("div.k-columnmenu-item").contains("Group Column");
+        cy.get("div.k-columnmenu-item").contains("Hide Column");
+        cy.get("div.k-columnmenu-item").contains("Freeze Column");
       });
-      it("Click group column ", () => {
-        cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
-        cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
-      });
-      it("Column grouping should be displayed next to button Clear Filters ", () => {
-        cy.get(".k-group-indicator").eq(0).should("exist");
-      });
-      it("User should be able to remove it", () => {
-        cy.get(".k-i-group-delete").click();
-      });
-      it("Verify every page should have 25 items per page - verify that items per page can be changed", () => {
-        cy.get(".k-widget.k-dropdown").eq(9).should("have.text", "25");
-      });
-      it("Navigate to Column", () => {
-        cy.get(".k-master-row").eq(1).click();
-      });
-      it("Verify the filter on textbox and filter icon", () => {
-        cy.get(".k-textbox").eq(1).click();
+      it("Verify the filter on textbox", () => {
+        cy.get(".k-textbox").eq(0).click();
       });
       it("Click on the filter icon", () => {
-        cy.get(".k-icon.k-i-filter").eq(1).click();
+        cy.get(".k-select").eq(0).click();
       });
       it("Dropdown list with tooltip should appear and contains:", () => {
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
+        cy.dlClearFilters();
       });
       it(`Verify DOC ID "Is equal to" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-00002");
+        cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
-      });
-      it(`Select option Contains and verify that the filter is functional`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.landingPageLoadingElementShouldAppear();
-        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+        cy.pause();
       });
       it(`Verify DOC ID "Does not contain" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("2");
+        cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
         cy.landingPageLoadingElementShouldAppear();
-        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
-      });
-      it(`Verify DOC ID "Is equal to" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-00002");
-        cy.landingPageLoadingElementShouldAppear();
-        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
       it(`Verify DOC ID "Is not equal to" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-00002");
+        cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
         cy.landingPageLoadingElementShouldAppear();
-        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
       it(`Verify DOC ID "Starts with" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-0000");
-        cy.landingPageLoadingElementShouldAppear();
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
-      });
-      it(`Verify DOC ID "Ends with" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("2");
+        cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      });
+      it(`Verify DOC ID "Ends with" dropdown filter`, () => {
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
+        cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00002");
         cy.landingPageLoadingElementShouldAppear();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
       it(`Verify DOC ID "Is null" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
       it(`Verify DOC ID "Is not null" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
         cy.landingPageLoadingElementShouldAppear();
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
       it(`Verify DOC ID "Is empty" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
       it(`Verify DOC ID "Is not empty" dropdown filter`, () => {
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
         cy.landingPageLoadingElementShouldAppear();
-        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
-      });
-      it(`Navigate to column with option Select field`, () => {
-        cy.get(`th[aria-colindex="2"] button[title="Clear"]`).should("have.attr", "disabled");
-        cy.get(`th[aria-colindex="2"] span.k-input`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Released").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "Released");
-        cy.get(`th[aria-colindex="2"] button[title="Clear"]`).should("not.have.attr", "disabled");
-        cy.get(`th[aria-colindex="2"] button[title="Clear"]`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+        cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
       });
       it(`Verify that column with Select field have disabled crossed filter icon`, () => {
         cy.get(`span.k-icon.k-i-filter-clear`).eq(0).should("exist");
