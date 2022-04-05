@@ -760,19 +760,12 @@ context("NCO document type management", () => {
       cy.get("[data-grid-row-index='0']>td>span>input").eq(5).should("be.enabled");
     });
 
-    it("Cancle newly created document creation", () => {
+    it("Cancel newly created document creation", () => {
       cy.get("button>span svg[class*='makeStyles-Cancel-']").arrowClick();
     });
 
-    it("Reload page", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers], () => {
-        cy.reload();
-      });
-    });
-
     it("Check filters for document type management", () => {
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.filterDocTypeManagement({
         status: "Active", documentType: "Receivable", acronym: "RC-",
         privateNumber: "Yes", redline: "No", qms: "Yes", needsSignature: "Yes", training: "No",
@@ -887,6 +880,7 @@ context("NCO document type management", () => {
     });
 
     it("Click on edit added Doc Type", () => {
+      cy.wait(1500);
       cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
     });
 
@@ -905,6 +899,7 @@ context("NCO document type management", () => {
 
   context("Delete newly added Doc type", () => {
     it("Click on delete Doc Type", () => {
+      cy.wait(1500);
       cy.get("button>span svg[class*='makeStyles-Remove']").eq(0).arrowClick();
     });
 

@@ -86,6 +86,7 @@ Cypress.Commands.add("filterDocTypeManagement", (params: {status: string; docume
   startingNumber: string; revisionStage: string; usersWithoutTags?: string; group: string;
   equipmentProdEnforce: string; category: string; }) => {
   cy.get(`tr>th span[role="listbox"] span.k-input`).eq(0).arrowClick();
+  cy.listLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick();
   cy.listLoadingElementShouldNotExist();
   cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType(params.documentType).wait(500);
