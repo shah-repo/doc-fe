@@ -242,6 +242,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
 
+    disabledOptions = [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+
     return Component({
       ...(props as T),
       renderOption,
@@ -258,7 +260,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       documentStatus,
       dialogState,
       disabled,
-      disabledOptions: ["11ad6a33-4ae3-42cf-a6c6-c22a965efb54"],
+      disabledOptions: [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)],
     });
   };
 
