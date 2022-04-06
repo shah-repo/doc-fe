@@ -106,7 +106,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           subText = TrainingStatusChartLabelTypes.DUE;
           color = Colors.latest_yellow_varient;
           DoughnutChartOptions.series.data[0].itemStyle.color =
-          Colors.gray;
+          Colors.platinum_grey;
           DoughnutChartOptions.series.data[1].itemStyle.color =
           Colors.latest_yellow_varient;
         } else if (tabValue === 1) {
@@ -116,7 +116,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           DoughnutChartOptions.series.data[0].itemStyle.color =
           Colors.latest_red_varient;
           DoughnutChartOptions.series.data[1].itemStyle.color =
-          Colors.gray;
+          Colors.platinum_grey;
         }
         DoughnutChartOptions.title.text = text;
         DoughnutChartOptions.title.subtext = subText;
@@ -140,7 +140,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         DoughnutChartOptions.series.data.map((data, index) => {
           if (index !== evt?.dataIndex) {
             DoughnutChartOptions.series.data[index].itemStyle.color =
-              Colors.gray;
+              Colors.platinum_grey;
           }
           if (index === evt?.dataIndex && index === 0 ) {
             DoughnutChartOptions.series.data[index].itemStyle.color =
@@ -217,7 +217,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
               classes={{ root: classes.tab }}
               label={
                 <Box alignItems="center">
-                  <span className={classes.tabHeader}>
+                  <span className={`${classes.tabHeader} ${value !== 0 && classes.inactive}`}>
                     <Text translation="training.stats.all" />
                   </span>
                 </Box>
@@ -229,7 +229,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
               label={
                 <Box alignItems="center">
                   <span className={classes.overdueTab}></span>
-                  < span className={`${classes.tabHeader} ${classes.legend}`}>
+                  < span className={`${classes.tabHeader} ${classes.legend} ${value !== 1 && classes.inactive}`}>
                     <Text translation="common.overdue" />
                   </span>
                 </Box>
@@ -241,7 +241,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
               label={
                 <Box alignItems="center">
                   <span className={classes.dueInSevenTab}></span>
-                  <span className={`${classes.tabHeader} ${classes.legend}`}>
+                  <span className={`${classes.tabHeader} ${classes.legend} ${value !== 2 && classes.inactive}`}>
                     <Text translation="common.duein7days" />
                   </span>
                 </Box>

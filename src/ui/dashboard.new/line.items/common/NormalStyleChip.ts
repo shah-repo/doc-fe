@@ -18,6 +18,16 @@ const styles = () => ({
         ? Colors.latest_red_varient
         : Colors.latest_yellow_varient,
   },
+  iconSmall: {
+    height: "14px",
+    width: "13px",
+  },
+  labelSmall: {
+    "fontSize": "12px",
+    "fontWeight": 700,
+    "fontFamily": "Sora",
+    "text-transform": "uppercase",
+  },
 });
 
 export const NormalStyleChip = withStyles(styles)(Chip);

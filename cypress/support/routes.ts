@@ -28,6 +28,7 @@ export enum CyRoutes {
   PostOrPatchDocRev = "PostOrPatchDocRev",
   Login = "Login",
   GetDocumentTypes = "GetDocumentTypes",
+  ExportApprovaMatrixNCO = "ExportApprovaMatrixNCO",
   GetChangeRequests = "GetChangeRequests",
   ChangeRequestApprove = "ChangeRequestApprove",
   ChangeRequestApproveNew = "ChangeRequestApproveNew",
@@ -411,6 +412,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions?displayStatus*",
+    },
+  },
+  ExportApprovaMatrixNCO: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/export_approval_matrix_nco",
+    },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 50 * 1000,
     },
   },
   GetDocRevDocTypeCategory: {
