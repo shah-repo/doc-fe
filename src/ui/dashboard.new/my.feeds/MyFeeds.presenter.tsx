@@ -4,10 +4,12 @@ import { Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../common/utils/date";
+import { authSelectors } from "../../../state/ducks/auth";
 import {
   ActionTypes,
   LINE_ITEMS_STATUS_TYPES,
@@ -15,6 +17,7 @@ import {
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
+import { DialogHandler } from "../../hooks/useDialog";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
@@ -46,6 +49,7 @@ interface Props {
   feedItems: any;
   overallLimit: number;
   onLoadMoreData: () => void;
+  dialogPDF: DialogHandler;
 }
 
 const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
@@ -59,8 +63,11 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   onMouseLeaveItem,
   onMouseHoverItem,
   onLoadMoreData,
+  dialogPDF,
 }) => {
   const classes = styles();
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+
   const renderPendingActions = () => (
 
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
@@ -144,6 +151,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     unPinLineItem={unPinLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
@@ -224,6 +232,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     unPinLineItem={unPinLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
@@ -311,6 +320,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
                       pendingEmailSentAt={pendingAction.pendingEmailSentAt}
+                      dialogPDF={dialogPDF}
                     />
                     <Divider />
                   </>
@@ -359,6 +369,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
@@ -626,7 +637,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
     <AsyncGate
       asyncAction={loadMyFeeds}
       asyncState={loadMyFeedsListAsyncState}
-      startActionOnMount={true}
+      startActionOnMount={!!currentEmployeeId}
     >
       {feedItems.total > 0 && renderPendingActions()}
       {renderNoPendingActions}

@@ -329,6 +329,7 @@ context("Records test with Inline approval", () => {
       cy.contains("RD-00003").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.cmpTurnOffAutosave();
     });
 
     it("Rev 1 will be released and rev 2 will automatically be created", () => {

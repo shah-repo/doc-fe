@@ -32,7 +32,7 @@ import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
-import useDialog from "../../../../hooks/useDialog";
+import useDialog, { DialogHandler } from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
 import DocId from "../../common/DocId/presenter";
 import DocTitle from "../../common/DocTitle/presenter";
@@ -73,6 +73,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dialogPDF: DialogHandler;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -99,6 +100,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dialogPDF,
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -332,7 +334,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               </span>
             )}
-            {downloadPdfHover && (
+            {
               <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
@@ -342,10 +344,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <DownloadHtmlPreview
                     id={docRevId}
                     data-cy="transition-download-pdf"
+                    downloadPdfHover={downloadPdfHover}
+                    dialogPDF={dialogPDF}
                   />
                 </span>
               </StyleTooltip>
-            )}
+            }
             <span className={classes.actionIcon}>
               {!rejectHover && (
                 <RejectIcon

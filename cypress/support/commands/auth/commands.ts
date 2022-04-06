@@ -122,10 +122,7 @@ Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: stri
 });
 
 Cypress.Commands.add("authClickSignIn", () => {
-  cy.wrapWithWaitOnApiCall(
-    CyRoutes.Login, () => {
-      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
-    });
+  cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
 });
 
 Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId: string }) => {
@@ -157,6 +154,7 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
           _persist: JSON.stringify({ version: 2, rehydrated: true }),
         };
         cy.setLocalStorage("persist:auth", JSON.stringify(auth));
+        cy.setLocalStorage("debug", "enlil:*");
         cy.saveLocalStorage();
         cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
           cy.visit(CONFIG.FE_URL, { timeout: 50000 });

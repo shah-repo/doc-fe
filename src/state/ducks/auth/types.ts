@@ -1,6 +1,6 @@
 import { Nullable } from "../common/types";
 import { Employee } from "../company/types";
-import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from "./constants";
+import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from "./constants";
 
 export interface LoginRequestBody {
   email: string;
@@ -87,10 +87,6 @@ export interface ConfirmPasswordAction {
   type: typeof CONFIRM_FORGOT_PASSWORD_URL;
 }
 
-export interface NewUserSetPasswordAction {
-  type: typeof CONFIRM_SET_NEW_PASSWORD_URL;
-}
-
 export interface LogoutUserAction {
   type: typeof LOGOUT_USER;
 }
@@ -122,6 +118,7 @@ export interface IotCredentials {
   endpoint: string;
   environment: string;
   companyId: string;
+  employeeId: string;
   region: string;
 }
 
