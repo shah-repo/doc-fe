@@ -22,5 +22,8 @@ export type FBAutocompleteProps =
    inputStyle?: any;
    modifiedOptions?: any[];
    debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void;
+   /**
+    * @cfg {Boolean} Option to disable deletion of rendered chips using Backspace key.
+    */
    disableBackspace?: boolean;
  };

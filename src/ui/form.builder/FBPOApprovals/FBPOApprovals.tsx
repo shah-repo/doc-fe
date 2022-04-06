@@ -25,7 +25,6 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   documentStatus,
   dialogState,
   disabledOptions,
-  type,
   ...props
 }) => (
   <FBProvider {...{ dialogState }}>
