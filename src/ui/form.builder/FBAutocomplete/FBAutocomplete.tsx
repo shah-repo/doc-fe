@@ -50,11 +50,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       )}
       <FBInput
         {...props}
-        {...{
-          multiple,
-          defaultValue,
-          loading,
-        }}
+        {...{ multiple, defaultValue, loading }}
         type="autocomplete"
         disabled={props.name === "approvers" ? false : disabled}
       >
@@ -75,13 +71,13 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           PopperComponent={CustomPopper}
           options={modifiedOptions}
           onInputChange={debounceFilterInput}
-          ListboxComponent={groupByKey ? undefined : ListBoxComponent}
+          ListboxComponent={groupByKey ? undefined : ListBoxComponent }
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%">
                 <TextField
                   {...params}
-                  {...(!params.InputProps.startAdornment && { placeholder })}
+                  {...!params.InputProps.startAdornment && { placeholder }}
                   onChange={onInputChange}
                   onKeyDown={(event: any) => {
                     if (event.key === "Backspace") {
@@ -92,7 +88,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   variant="outlined"
                   InputProps={{
                     ...params.InputProps,
-                    ...(refresh && { style: { paddingRight: "33px" } }),
+                    ...(refresh) && { style: { paddingRight: "33px" } },
                   }}
                   inputProps={{
                     ...params.inputProps,
@@ -105,7 +101,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                 <Box ml={-4} display="flex" alignItems="center">
                   <IconButton size="small" onClick={refresh} {...{ disabled }}>
                     <CachedIcon fontSize="small" />
-                  </IconButton>
+                  </ IconButton>
                 </Box>
               )}
             </Box>
@@ -113,36 +109,18 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           renderTags={(value, getTagProps) => (
             <FBMapWrapper<any[]> collection={value}>
               {(option, index) => {
-                const isAlreadyApproved =
-                  workspaceState?.changeRequest?.approvals.find(
-                    (e) =>
-                      e.approver.id === get(option, "id") &&
-                      e.status === ApprovalStatus.Approved
-                  )
-                    ? true
-                    : false;
+                const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
+                  (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
                 const isOptionDisabled = disabledOptions.includes(option.id);
                 return (
                   <Chip
-                    key={`fb-autocomplete-${get(
-                      option,
-                      optionLabelKey
-                    )}-${index}`}
-                    label={
-                      <Box whiteSpace="normal">
-                        {getOptionLabel && getOptionLabel(option)}
-                      </Box>
-                    }
+                    key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
+                    label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}
                     {...getTagProps({ index })}
-                    disabled={
-                      props.name === "approvers"
-                        ? isAlreadyApproved
-                        : isOptionDisabled || disabled
-                    }
+                    disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
                   />
-                );
-              }}
+                ); }}
             </FBMapWrapper>
           )}
         />
