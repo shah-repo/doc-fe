@@ -22,4 +22,5 @@ export type FBAutocompleteProps =
    inputStyle?: any;
    modifiedOptions?: any[];
    debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void;
+   disableBackspace?: boolean;
  };

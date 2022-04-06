@@ -35,6 +35,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   value,
   inputStyle = {},
   disabledOptions = [],
+  disableBackspace = false,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -81,7 +82,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   onChange={onInputChange}
                   onKeyDown={(event: React.KeyboardEvent) => {
                     const key = event.keyCode || event.charCode;
-                    if (key === 8) {
+                    if (key === 8 && disableBackspace) {
                       event.stopPropagation();
                     }
                   }}
