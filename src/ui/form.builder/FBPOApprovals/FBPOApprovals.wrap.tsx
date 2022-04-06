@@ -4,7 +4,6 @@ import { compact, difference, filter, find, includes, isEmpty, map, minBy, union
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
@@ -36,8 +35,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     disabled,
     ...props
   }: T) => {
-    const history = useHistory();
-    const location = useLocation();
     const { workspaceState, formState } = FB.useStores();
     const { isSubmitting } = useFormikContext();
     const { document, changeRequest, id, isOutput } = workspaceState || {};
@@ -64,13 +61,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       } else {
         const stateApprovals = filter(poApprovalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
         poApprovalsState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
-        console.log("path :: ", location);
-        console.log("path :: ", location.pathname);
-        setTimeout(() => {
-          history.go(0);
-        }, 500);
-
-
       }
     }
 
@@ -158,6 +148,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
+        formState?.getInputState(name)?.setRender();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -167,6 +158,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (requestor) => {
         const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
         checkLineItems(poItems, requestor);
+        formState?.getInputState(name)?.setRender();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -244,7 +236,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     });
     const fieldValue = map(poApprovalsState?.getApprovals, "approver.id");
-    formState?.setFieldValue(`${name}`, fieldValue);
+    formState?.setFieldValue(`${name}`, fieldValue, true, false);
     documentStatus = document?.status as any;
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
