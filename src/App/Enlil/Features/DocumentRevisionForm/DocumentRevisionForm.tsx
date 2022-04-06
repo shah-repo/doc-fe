@@ -3,7 +3,7 @@ import { map } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
-import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
@@ -23,6 +23,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   _formState,
   _tabsState,
   _documentRevisionFormState,
+  workspaceState,
   documentRevision,
   bannerPortal,
   shouldShowUpgrade,
@@ -68,6 +69,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       headerBoxProps={{ maxHeight: "30%" }}
       contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
       values={formValues.values}
+      leftSidebar={DocumentRevisionLeftPanel}
       header= {
         <DocumentRevisionHeader
           {...{ bannerPortal, shouldShowUpgrade }}
@@ -141,7 +143,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             ...formValues.values as unknown as DocumentRevision,
                             ...documentRevision as unknown as DocumentRevision,
                           }}
-                          {... { autosaveEnabled }}
+                          {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
                           schema={schema}
                         />

@@ -8,7 +8,7 @@ import { documentsActions } from "../../../../state/ducks/documents";
 import { OptionType } from "../../../../ui/components/forms/fields/Autocomplete/types";
 import { DocumentCloneType } from "../../../../ui/documentRevision/Clone.container";
 import { DocumentRevisionFormValues } from "../../../../ui/documentRevision/forms/types";
-import { FBSchemaProps, FBWorkspaceMode } from "../../../../ui/form.builder";
+import { FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "../../../../ui/form.builder";
 
 export interface DocumentInfo {
   name: string;
@@ -50,6 +50,7 @@ export type DocumentRevisionFormProps =
   formInput?: Record<string, any>;
   autosaveEnabled: boolean;
   mode: FBWorkspaceMode;
+  workspaceState?: FBWorkspaceState;
 };
 
 export interface DocumentRevisionFormStateProps {
@@ -64,6 +65,7 @@ export interface DocumentRevisionFormStateProps {
   setFormMode: SMFormStateProps["setMode"];
   setFormAutosave: SMFormStateProps["setAutosave"];
   setDisabledAction: (disabledAction: boolean) =>  void;
+  setLeftPanelOpen: () => void;
   isHeaderHidden: boolean;
   documentRevision?: DocumentRevision;
   revisionChangeType?: RevisionChangeType;
@@ -85,4 +87,5 @@ export interface DocumentRevisionFormStateProps {
   formSchema: FBSchemaProps[];
   referenceValue: Id[];
   schema: FBSchemaProps[];
+  leftPanelOpen: boolean;
 }
