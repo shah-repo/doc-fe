@@ -650,7 +650,7 @@ context("Create company via API and create Suppliers document", () => {
         cy.ebApprove();
         dateOfApproval2 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval2MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
-        .format("MMMM D, YYYY hh:mm A");
+                                             .format("MMMM D, YYYY hh:mm A");
       });
     });
 
@@ -675,7 +675,7 @@ context("Create company via API and create Suppliers document", () => {
         cy.ebApprove();
         dateOfApproval3 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval3MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
-        .format("MMMM D, YYYY hh:mm A");
+                                             .format("MMMM D, YYYY hh:mm A");
       });
     });
 
