@@ -19,7 +19,6 @@ let createdCalibrationFormDocumentId;
 let pmSchemaFieldName;
 let calibrationSchemaFieldName;
 
-let loginResponse;
 const multipleCompanies = true;
 let pMFormId;
 let pMDocId;
@@ -84,7 +83,6 @@ context("Equipment maintenance and calibration", () => {
         email: FIRST_USER.email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
-        loginResponse = response;
         done();
       });
     });
