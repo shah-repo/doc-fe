@@ -237,7 +237,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     });
     const fieldValue = map(poApprovalsState?.getApprovals, "approver.id");
-    formState?.setFieldValue(`${name}`, fieldValue, true, false);
+    formState?.setFieldValue(`${name}`, fieldValue, true);
     documentStatus = document?.status as any;
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
