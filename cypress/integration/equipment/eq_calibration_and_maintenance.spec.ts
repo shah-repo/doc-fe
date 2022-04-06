@@ -20,7 +20,7 @@ let pmSchemaFieldName;
 let calibrationSchemaFieldName;
 
 let loginResponse;
-let multipleCompanies;
+const multipleCompanies = true;
 let pMFormId;
 let pMDocId;
 let calFormId;
@@ -85,7 +85,6 @@ context("Equipment maintenance and calibration", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -1387,8 +1386,6 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Selects company", () => {
-      cy.log(createdCompany.name);
-      cy.log(multipleCompanies);
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
@@ -1607,8 +1604,6 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Selects company", () => {
-      cy.log(createdCompany.name);
-      cy.log(multipleCompanies);
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
@@ -1937,8 +1932,6 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Selects company", () => {
-      cy.log(createdCompany.name);
-      cy.log(multipleCompanies);
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
@@ -2157,8 +2150,6 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Selects company", () => {
-      cy.log(createdCompany.name);
-      cy.log(multipleCompanies);
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
