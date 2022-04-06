@@ -13,6 +13,7 @@ export type FBAutocompleteProps =
  | "freeSolo"
  | "filterSelectedOptions"
  | "groupBy"
+ | "disableClearable"
  > & {
    onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any;
    refresh?: () => any;

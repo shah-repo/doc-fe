@@ -20,6 +20,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupBy,
   refresh,
   filterSelectedOptions = false,
+  disableClearable = false,
   freeSolo = false,
   multiple = false,
   options,
@@ -65,6 +66,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             defaultValue,
             freeSolo,
             filterOptions,
+            disableClearable,
           }}
           PopperComponent={CustomPopper}
           options={modifiedOptions}

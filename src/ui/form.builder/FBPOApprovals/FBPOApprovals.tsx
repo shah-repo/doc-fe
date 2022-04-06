@@ -44,6 +44,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           multiple={true}
           omitFormValue={true}
           filterSelectedOptions={true}
+          disableClearable={true}
           {...{ disabled, renderOption, loading, disabledOptions }}
         />
         <Box display="flex" flexWrap="wrap" my={2}>
