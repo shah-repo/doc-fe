@@ -79,8 +79,9 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   {...params}
                   {...!params.InputProps.startAdornment && { placeholder }}
                   onChange={onInputChange}
-                  onKeyDown={(event: any) => {
-                    if (event.key === "Backspace") {
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    const key = event.keyCode || event.charCode;
+                    if (key === 8) {
                       event.stopPropagation();
                     }
                   }}
