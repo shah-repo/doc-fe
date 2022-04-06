@@ -54,11 +54,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           multiple,
           defaultValue,
           loading,
-          disabledOptions,
-          prevValues: value,
         }}
         type="autocomplete"
-        componentName={props.type}
         disabled={props.name === "approvers" ? false : disabled}
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
