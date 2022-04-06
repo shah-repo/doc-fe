@@ -260,7 +260,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       documentStatus,
       dialogState,
       disabled,
-      disabledOptions: [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)],
+      disabledOptions,
     });
   };
 
