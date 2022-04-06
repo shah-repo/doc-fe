@@ -31,7 +31,7 @@ let dateOfApproval3MinuteAfter;
 let supFormId;
 let supDocId;
 let arId;
-let multipleCompanies;
+let multipleCompanies = true;
 let emailsFromInbox;
 const pages = ["", "", ""];
 let downloadUrl;
@@ -66,7 +66,6 @@ context("Create company via API and create Suppliers document", () => {
       password: CONFIG.SUPERADMIN_PASSWORD,
     }).then((response: any) => {
       loginResponse = response;
-      multipleCompanies = response.employees.length > 0;
 
       cy.cmpCreateCompany({
         specFilePath: __filename,
@@ -85,7 +84,6 @@ context("Create company via API and create Suppliers document", () => {
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response: any) => {
         createdCompany = response;
-        multipleCompanies = response.employees.length > 1 ? true : false;
         adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
         secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
         thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
