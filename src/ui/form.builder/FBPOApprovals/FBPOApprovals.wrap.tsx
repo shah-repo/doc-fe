@@ -33,6 +33,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     documentStatus,
     dialogState,
     disabled,
+    disabledOptions,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -257,6 +258,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       documentStatus,
       dialogState,
       disabled,
+      disabledOptions: ["11ad6a33-4ae3-42cf-a6c6-c22a965efb54"],
     });
   };
 

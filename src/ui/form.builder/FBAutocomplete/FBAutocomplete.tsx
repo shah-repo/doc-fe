@@ -33,6 +33,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupByKey,
   value,
   inputStyle = {},
+  disabledOptions = [],
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -98,25 +99,23 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               )}
             </Box>
           )}
-          renderTags={(value, getTagProps) => {
-            console.log("debug :: value :: ", props.name, value);
-            return (
-              <FBMapWrapper<any[]> collection={value}>
-                {(option, index) => {
-                  const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
-                    (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
-                  return (
-                    <Chip
-                      key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-                      label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
-                      style={{ minHeight: "32px", height: "auto" }}
-                      {...getTagProps({ index })}
-                      disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
-                    />
-                  ); }}
-              </FBMapWrapper>
-            );
-          }}
+          renderTags={(value, getTagProps) => (
+            <FBMapWrapper<any[]> collection={value}>
+              {(option, index) => {
+                const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
+                  (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
+                const isOptionDisabled = disabledOptions.includes(option.id);
+                return (
+                  <Chip
+                    key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
+                    label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
+                    style={{ minHeight: "32px", height: "auto" }}
+                    {...getTagProps({ index })}
+                    disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
+                  />
+                ); }}
+            </FBMapWrapper>
+          )}
         />
       </FBInput>
     </>
