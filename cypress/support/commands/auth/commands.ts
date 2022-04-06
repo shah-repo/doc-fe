@@ -122,10 +122,7 @@ Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: stri
 });
 
 Cypress.Commands.add("authClickSignIn", () => {
-  cy.wrapWithWaitOnApiCall(
-    CyRoutes.Login, () => {
-      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
-    });
+  cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
 });
 
 Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId: string }) => {

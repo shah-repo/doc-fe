@@ -13,7 +13,8 @@ let loginResponse;
 let employeeLoginFirst;
 
 const nameOfUserToSignUp = faker.name.findName();
-const emailOfUserToSignUp = `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`;
+const emailOfUserToSignUp =
+`enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLowerCase();
 
 context("Sign up user flow", () => {
   context("[API]Prepare company", () => {
