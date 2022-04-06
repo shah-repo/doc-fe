@@ -196,6 +196,9 @@ export type FBInputProps =
      * @cfg {string} Username that holds the lock.
      */
     lockOwnerName?: string;
+    oldOptions?: any;
+    disabledOptions?: string[];
+    componentName?: string;
   };
 
 export const OmitInputClones: FBInputType[] = [

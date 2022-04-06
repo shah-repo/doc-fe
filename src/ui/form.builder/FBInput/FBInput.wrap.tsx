@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { compact, Dictionary, difference, first, get, includes, intersection, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -74,6 +74,9 @@ export const withFBInput = <T extends FBInputProps>(
     isInputOwner,
     lockOwnerName,
     includeNotes,
+    disabledOptions = [],
+    oldOptions = [],
+    componentName,
     ...props
   }: T) => {
 
@@ -200,12 +203,22 @@ export const withFBInput = <T extends FBInputProps>(
     if (lockOwnerName && (ownerName !== lockOwnerName)) {
       disabled = disabled || lockedData?.locked || formState?.isBackdropOpen;
     }
+    const onChangeInput = (data, value, context) => {
+      const oldOptionIds = map(oldOptions, "id");
+      const currentOptions = map(value || [], "id");
+      const deletedOptions = difference(oldOptionIds, currentOptions);
+      if (deletedOptions.length && intersection(compact(disabledOptions), deletedOptions).length ) {
+        formState?.getInputState(name)?.setRender();
+        return;
+      }
+      onChange && onChange(data, value, context);
+    };
 
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
         name,
         disabled,
-        onChange,
+        onChange: componentName && componentName === "poapprovals" ? onChangeInput : onChange,
         ...(type !== "textfield" && { onBlur }),
         ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
