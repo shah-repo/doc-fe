@@ -4,7 +4,7 @@ import React from "react";
 import Colors from "../../layout/theme/utils/colors";
 import Text from "../Text";
 
-export interface Props {
+interface Props {
   visible: boolean;
   onCancel: (cb?: any) => void;
   onConfirm:  () => void;

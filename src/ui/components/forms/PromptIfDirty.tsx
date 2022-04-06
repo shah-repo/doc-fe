@@ -4,7 +4,7 @@ import useDialog from "../../hooks/useDialog";
 import { useFormContext } from "./FormContext";
 import UnsavedChangesDialog from "./UnsavedChangesDialog";
 
-export interface Props {
+interface Props {
   when: boolean;
   navigate: (path: any) => void;
   shouldBlockNavigation: (value?: any) =>  boolean;
