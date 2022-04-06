@@ -6,7 +6,7 @@ import { Nullable } from "../common/types";
 import { Group, GroupTag, IotCredentials, Permission } from "./types";
 
 const isAuthenticated = (state: ApplicationState): boolean =>
-  Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
+  Boolean(state.auth.user.sessionId);
 
 const currentUserEmail = (state: ApplicationState): string =>
   state.auth.user.email;

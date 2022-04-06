@@ -1716,12 +1716,13 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     it("Save document type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
         cy.get(`td input[value="Lot History Record"]`)
-          .parents("tr").find("button").eq(0).arrowClick();
+          .parents("tr").find("button").eq(0).arrowClick().wait(200);
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify Equipment Enforce Prod is checked", () => {
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains(/^Lot History Record$/)
         .parents("tr").find(`td[data-grid-col-index="12"] input`).should("be.checked");
     });

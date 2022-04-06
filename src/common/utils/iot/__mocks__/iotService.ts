@@ -8,13 +8,10 @@ export class IotService {
   }
   private static instance: IotService;
 
-  public async setMqttCreds(endpointRedux: any): Promise<any> {
+  public async updateMqttClient(endpointRedux: any): Promise<any> {
     return Promise.resolve();
   }
 
-  public async mqttClient() {
-    return Promise.resolve();
-  }
 
   public async subscribeToTopic(topic: any, notif: any): Promise<any> {
     return Promise.resolve();
@@ -25,10 +22,6 @@ export class IotService {
   }
 
   public async unsubscribeAll() {
-    return Promise.resolve();
-  }
-
-  public subscribedTopics() {
     return Promise.resolve();
   }
 }
