@@ -30,7 +30,7 @@ let dateOfApproval3MinuteAfter;
 let supFormId;
 let supDocId;
 let arId;
-let multipleCompanies = true;
+const multipleCompanies = true;
 let emailsFromInbox;
 const pages = ["", "", ""];
 let downloadUrl;
@@ -650,7 +650,7 @@ context("Create company via API and create Suppliers document", () => {
         cy.ebApprove();
         dateOfApproval2 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval2MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
-                                             .format("MMMM D, YYYY hh:mm A");
+          .format("MMMM D, YYYY hh:mm A");
       });
     });
 
@@ -675,7 +675,7 @@ context("Create company via API and create Suppliers document", () => {
         cy.ebApprove();
         dateOfApproval3 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval3MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
-                                             .format("MMMM D, YYYY hh:mm A");
+          .format("MMMM D, YYYY hh:mm A");
       });
     });
 
@@ -700,7 +700,7 @@ context("Create company via API and create Suppliers document", () => {
         cy.ebApprove();
         dateOfApproval1 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval1MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
-        .format("MMMM D, YYYY hh:mm A");
+          .format("MMMM D, YYYY hh:mm A");
       });
     });
 
@@ -1041,7 +1041,7 @@ context("Create company via API and create Suppliers document", () => {
             if (res.body !== "") {
               downloadUrl = res.body.url;
               const filetime = moment().tz("America/Los_Angeles")
-              .format("_YYYY-MMM-DD_HH-MM-SS");
+                .format("_YYYY-MMM-DD_HH-MM-SS");
               downloadFile  =  `${supDocId}${filetime}_draft.zip`;
               cy.downloadFile({
                 url: downloadUrl,
