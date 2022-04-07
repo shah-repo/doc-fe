@@ -35,13 +35,13 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   closeHistoryPanel,
 }) => {
   // Take from constants
-  const limit = 2;
+  const limit = 1;
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [opendrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<NullableArray<AuditDetailsProps[]>>([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(22);
   const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
@@ -49,7 +49,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const getTransalatedText = (key: string, values: TranslatedTextProps) =>
     intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
-  const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : groupId;
+  const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : "";
   const closeDrawer = () => {
     setOpenDrawer({ ...opendrawer, right: false });
     closeHistoryPanel(opendrawer.right);
@@ -67,7 +67,14 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       auditType: ACTION_TITLE_MAPPIING.Unknown,
       sortedIndex: 0,
     };
-    if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_EDITED") {
+    if (["resetPasswordEmailTimestamp", "resendConfirmationEmailTimestamp"].includes(auditRecord.fieldPath) && auditRecord.type === "OBJECT_EDITED") {
+      actionInfo = {
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ResetPassword, {}),
+        secondayText: getTransalatedText(ACTION_TITLE_MAPPIING.ResetPasswordDescription, {}),
+        auditType: ACTION_TITLE_MAPPIING.ResetPassword,
+        sortedIndex: 0,
+      };
+    } else if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_EDITED") {
       actionInfo = {
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeeNameUpdated, {}),
         secondayText: `${auditRecord.previousValue} to ${auditRecord.nextValue}`,
@@ -151,6 +158,13 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         });
       }
     }
+    if (auditTypes.includes(ACTION_TITLE_MAPPIING.ResetPassword)) {
+      sameGroup.unshift({
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ResetPasswordFor, {}),
+        secondayText: employeeDetails.user.name,
+        sortedIndex: 2,
+      });
+    }
     return sortBy(sameGroup, "sortedIndex");
   };
 
@@ -168,14 +182,17 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroup, {});
       }
       return { primaryText, secondayText: secondayText.join(", "), sortedIndex, auditType };
+      // return { primaryText, secondayText: uniq(secondayText).sort().join(", "), sortedIndex, auditType };
     });
     return addUserNameAndEmailBlock(sameGroup, employeeDetails);
   };
 
   const getCardGroups = (response) => {
     const auditRecords = map(response, (auditRecord) => {
-      const employeeDetails = getUserDetails(auditRecord.employeeId);
-      const ownerDetails = getUserDetails(auditRecord.ownerId);
+      console.log("debug employeeId :: ", auditRecord.employeeId, getUserDetails(auditRecord.employeeId));
+      console.log("debug ownerId :: ", auditRecord.ownerId, getUserDetails(auditRecord.ownerId));
+      const employeeDetails = getUserDetails(auditRecord.employeeId) || { user: { name: auditRecord.employeeName, email: "" } };
+      const ownerDetails = getUserDetails(auditRecord.ownerId) || { user: { name: auditRecord.ownerName, email: auditRecord.ownerEmail } };
       return {
         ...auditRecord,
         groupKey: `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`,
@@ -192,7 +209,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       cardGroups[groupKey] = {
         ...pick(auditRecordGroups[groupKey][0], [
           "timestamp",
-          "id",
+          "groupId",
           "ownerDetails",
           "employeeDetails",
         ]),
@@ -235,9 +252,10 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
          if (axios.isCancel(exception)) {
            return;
          }
-         if (exception.response.status === 504) {
+         if (exception?.response?.status === 504) {
            setErrorMessage(intl.formatMessage({ id: "api.error.gateway.timeout" }));
          }
+         console.error(exception);
        });
   };
 

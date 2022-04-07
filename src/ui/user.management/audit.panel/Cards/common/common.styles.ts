@@ -22,11 +22,12 @@ export default makeStyles(() =>
       margin: " 0px 0px",
     },
     description: {
-      fontWeight: 700,
-      lineHeight: "21px",
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontSize: "14px",
+      "fontWeight": 700,
+      "lineHeight": "21px",
+      "fontFamily": "Sora",
+      "fontStyle": "normal",
+      "fontSize": "14px",
+      "word-break": "break-word",
     },
   })
 );

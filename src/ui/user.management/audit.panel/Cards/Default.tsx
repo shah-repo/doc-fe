@@ -30,7 +30,7 @@ const Default: React.FunctionComponent<OwnProps> = ({ auditDetails }) => {
           <DetailDescription
             primaryText={groupItem.primaryText}
             secondayText= {groupItem.secondayText}
-            id={auditDetails.id}
+            groupId={auditDetails.groupId}
             key={index}
             employeeDetail={auditDetails.employeeDetails}
           />

@@ -122,7 +122,7 @@ export interface AuditDetailsProps {
   descriptions: DescriptionItemsProp[];
   // TODO: Update
   employeeDetails: any;
-  id: string;
+  groupId: string;
   ownerDetails: OwnerItemsProp;
   timestamp: string;
 }
@@ -142,4 +142,7 @@ export enum ACTION_TITLE_MAPPIING {
   DeletedFromGroups = "DeletedFromGroups",
   AddedUserName = "AddedUserName",
   AddedUserEmail = "AddedUserEmail",
+  ResetPassword = "ResetPassword",
+  ResetPasswordDescription = "ResetPasswordDescription",
+  ResetPasswordFor = "ResetPasswordFor",
 }
