@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import React, { useEffect, useState } from "react";
 import { Prompt } from "react-router-dom";
 import { FormSaveContext } from "../../documentRevision/forms/presenters/Actions";
