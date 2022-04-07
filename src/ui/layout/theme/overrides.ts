@@ -212,6 +212,10 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
         "&[data-cy='password'] fieldset": {
           borderWidth: "1px!important",
         },
+        "& input[data-cy='lhrstep-built-in']": {
+          "padding": "10.5px 5px!important",
+          "margin-right": 30,
+        },
       },
     },
   },
