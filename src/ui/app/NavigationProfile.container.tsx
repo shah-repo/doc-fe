@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { IotService } from "../../common/utils/iot/iotService";
 import { authActions, authSelectors } from "../../state/ducks/auth";
+import { tableSearchActions } from "../../state/ducks/tableSearch";
 import { LOGIN_URL } from "../constants/urls";
 import FBStore from "../form.builder/stores/ui/FBStore";
 import NavigationProfilePresenter from "./NavigationProfile.presenter";
@@ -45,13 +47,21 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const name = useSelector(authSelectors.currentUserName);
 
+  const dispatch = useDispatch();
+
   /** Handles click on the Switch Company button. */
   const handleSwitchCompany = () => {
-    history.push(LOGIN_URL);
+    dispatch(authActions.clearNonAuthData());
+    dispatch(tableSearchActions.clearAllTables());
+
+    IotService.getInstance().end();
+    dispatch(authActions.setCredentials(null));
+
     FBStore.clearStores();
+
+    history.push(LOGIN_URL);
   };
 
-  const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(authActions.logout());

@@ -31,6 +31,7 @@ import "./commands/company/commands";
 import "./commands/dashboard/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
+import "./commands/document.type.management/commands";
 import "./commands/engineering.build/commands";
 import "./commands/export/commands";
 import "./commands/filters/commands";

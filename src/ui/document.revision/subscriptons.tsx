@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { appGlobals } from "../../appGlobals";
-import { IotService } from "../../common/utils/iot/mqttClient";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
 import useActionCreator from "../hooks/useActionCreator";
@@ -16,29 +15,26 @@ const DocumentRevisionUpdatedSubscriptions: React.FunctionComponent<Props> = ({
     id,
   },
 }) => {
-  const iotService = IotService.getInstance();
-  const subscribe = () => {
-    iotService.subscribeToTopic(`+/hellosign_all_signed/${id}`, loadData);
-    // iotService.subscribeToTopic(`+/document_revisions/${id}/updated`, loadData);
-    iotService.subscribeToTopic(`+/hellosign_template_created/${id}`, loadData);
-    iotService.subscribeToTopic(`+/hellosign_signature_canceled/${id}`, loadData);
-  };
-  const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(`+/hellosign_all_signed/${id}`);
-    // iotService.unsubscribeFromTopic(`+/document_revisions/${id}/updated`);
-    iotService.unsubscribeFromTopic(`+/hellosign_template_created/${id}`);
-    iotService.unsubscribeFromTopic(`+/hellosign_signature_canceled/${id}`);
-  };
+
   const loadAction = useActionCreator(documentRevisionsActions.load);
   const async = useAsync();
-  const loadData = (msg: string) => {
+
+  const callback = useCallback(() => {
     if (appGlobals.omitReloadNotification) {
       appGlobals.omitReloadNotification = false;
       return;
     }
     async.start(loadAction, id, async);
-  };
-  useMqttSubscription(subscribe, unsubscribe);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const topicAllSigned = useMemo(() => `+/hellosign_all_signed/${id}`, [id]);
+  const topicTemplateCreated = useMemo(() => `+/hellosign_template_created/${id}`, [id]);
+  const topicSignatureCanceled = useMemo(() => `+/hellosign_signature_canceled/${id}`, [id]);
+
+  useMqttSubscription(topicAllSigned, callback);
+  useMqttSubscription(topicTemplateCreated, callback);
+  useMqttSubscription(topicSignatureCanceled, callback);
 
   return null;
 };

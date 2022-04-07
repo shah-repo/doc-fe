@@ -1,6 +1,8 @@
 import { AxiosRequestConfig } from "axios";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import apiClient from "../../state/apiClient";
+import { authSelectors } from "../../state/ducks/auth";
 import { FETCH_VALIDATORS_REMOTE_URL_URL, REMOTE_VALIDATORS_STATUS_URL } from "../../state/ducks/auth/constants";
 import { store } from "../../state/store";
 import { RemoteValidatorHelper } from "./remoteValidatorsHelper";
@@ -36,9 +38,13 @@ const fetchRemoteValidators = async () => {
 };
 
 const RemoteValidatorsLoader: React.FunctionComponent<{}> = () => {
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+
   useEffect(() => {
-    fetchRemoteValidators();
-  }, []);
+    if (currentEmployeeId) {
+      fetchRemoteValidators();
+    }
+  }, [currentEmployeeId]);
 
   return null;
 };
