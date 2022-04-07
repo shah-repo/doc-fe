@@ -4,6 +4,8 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { EForm } from "../../utils/constants/documentTypes/efm";
+import { EFM10605TemplateSchema } from "../../utils/constants/formTemplates/efm10605";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -46,12 +48,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              EForm,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -91,7 +88,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
               attachments: [],
               description: "<p>EFM-10605</p>",
               document: {
-                docId: "FM-00003",
+                docId: "EFM-10605",
                 documentType: {
                   id: formDocumentType[0].id,
                 },
@@ -114,7 +111,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
                 outputDocumentTypes: [{
                   id: cslDocumentType[0].id,
                 }],
-                schema: [],
+                schema: EFM10605TemplateSchema,
               },
 
             },
