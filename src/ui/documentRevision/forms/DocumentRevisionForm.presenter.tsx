@@ -1,5 +1,5 @@
 import { Box, Grid } from "@material-ui/core";
-import { FormikProps } from "formik";
+import { FormikProps, useFormikContext } from "formik";
 import { flatten, isEmpty, isEqual } from "lodash";
 import { reaction } from "mobx";
 import { observer } from "mobx-react";
@@ -122,6 +122,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   useScrollIntoView();
   const classes = styles();
   const intl = useIntl();
+  const formik = useFormikContext();
 
   const { workspaceState, formState } = FB.useStores();
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true, needsSignature: true });
@@ -286,7 +287,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       />
       <FormHeader {...{ isCreateDocumentDisabled }} />
       <FormWrapper
-        dirty={dirty}
+        dirty={formik.dirty}
         initialValues={initialValues}
         resetForm={resetForm}
       >
@@ -302,7 +303,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           }}
           shouldBlockNavigation={() => {
             const isFBDirty = !isEqual(workspaceState?.formInput, formState?.getValues());
-            if (dirty || isFBDirty) {
+            if (formik.dirty || isFBDirty) {
               return true;
             }
             return false;

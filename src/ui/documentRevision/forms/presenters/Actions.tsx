@@ -35,6 +35,8 @@ import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
 
+export let FormSaveContext = React.createContext<() => void>(() => { return; });
+
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
   const dispatch = useDispatch();
@@ -176,6 +178,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
     formik.submitForm();
   };
+
+  FormSaveContext = React.createContext<() => void>(
+    onFormClick,
+  );
 
   React.useEffect(() => {
     // Autosave when record is updated

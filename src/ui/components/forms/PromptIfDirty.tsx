@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Prompt } from "react-router-dom";
+import { FormSaveContext } from "../../documentRevision/forms/presenters/Actions";
 import useDialog from "../../hooks/useDialog";
-import { useFormContext } from "./FormContext";
 import UnsavedChangesDialog from "./UnsavedChangesDialog";
 
 interface Props {
@@ -26,7 +26,6 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   shouldBlockNavigation,
 }) => {
   const dialogPrompt = useDialog();
-  const { submitForm } = useFormContext();
 
   const [lastLocation, updateLastLocation] = useState<any>(null);
   const [confirmedNavigation, updateConfirmedNavigation] = useState(false);
@@ -57,6 +56,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     handleCloseDialogAfterSave,
     closeModal,
   });
+  const onFormClick = React.useContext(FormSaveContext);
 
   const handleBlockedNavigation = (nextLocation) => {
     if (!confirmedNavigation && shouldBlockNavigation(nextLocation)) {
@@ -68,7 +68,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
 
   const handleConfirmNavigationClick =  () => {
     if (value === "true") {
-      submitForm();
+      onFormClick();
       return;
     }
     handleCloseDialogAfterSave();
