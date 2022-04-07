@@ -112,3 +112,19 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
     },
   ],
 };
+
+export const LotHistoryRecordOperators: IdocumentTypeDto = {
+  documentTypeName: "Lot Hisotry Record Operators",
+  documentTypeAcronym: "LHRO-",
+  group: DOC_TYPE_GROUP.LHR,
+  category: Categories.Record,
+  isQms: true,
+  fieldsConfig:
+      {
+        U: {
+          visible: true,
+          required: false,
+          label: "Operators",
+        },
+      },
+};

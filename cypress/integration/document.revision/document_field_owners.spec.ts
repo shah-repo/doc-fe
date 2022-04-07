@@ -2,6 +2,8 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { FormOperatorsType } from "../../utils/constants/documentTypes/form";
+import { LotHistoryRecordOperators } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -44,27 +46,8 @@ context("Document Field Owners Test", () => {
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4], USERS[7]],
             documentTypes: [
-              {
-                documentTypeName: "Form Operators",
-                documentTypeAcronym: "FO-",
-                group: "FORM",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Lot Hisotry Record Operators",
-                documentTypeAcronym: "LHRO-",
-                group: "LHR",
-                category: "Record",
-                isQms: true,
-                fieldsConfig:
-                  {
-                    U: {
-                      visible: true,
-                      required: false,
-                      label: "Operators",
-                    },
-                  },
-              },
+              FormOperatorsType,
+              LotHistoryRecordOperators,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

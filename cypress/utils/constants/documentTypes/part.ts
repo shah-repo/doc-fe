@@ -10,3 +10,11 @@ export const Part: IdocumentTypeDto =   {
   needsSignature: true,
   category: Categories.Parts,
 };
+
+export const POPart: IdocumentTypeDto =  {
+  documentTypeName: "PO Part",
+  documentTypeAcronym: "PRT-",
+  group: DOC_TYPE_GROUP.PART,
+  category: Categories.Parts,
+  isQms: true,
+};

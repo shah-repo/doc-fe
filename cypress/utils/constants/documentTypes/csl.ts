@@ -1,5 +1,6 @@
 import { DOC_TYPE_GROUP } from "../../../../src/state/ducks/documentRevisions/documentType/types";
 import { DEFAUL_REV_STAGE, IdocumentTypeDto } from "../../../support/commands";
+import { Categories } from "../categories";
 
 const CSLName = "Component Specification Name";
 const CSLAcronym = "CSL-";
@@ -66,6 +67,87 @@ export const CSLDocType: IdocumentTypeDto = {
       deleteInFormDisabled: true,
     },
   ],
+  fieldsConfig: {
+    D: {
+      visible: false,
+      required: false,
+    },
+    E: {
+      label: "Record Type",
+      visible: true,
+      required: true,
+    },
+    F: {
+      label: "Record ID",
+      visible: false,
+      required: true,
+    },
+    G: {
+      visible: false,
+      required: false,
+    },
+    I: {
+      visible: false,
+    },
+    J: {
+      visible: false,
+    },
+    K: {
+      label: "Void",
+      visible: true,
+    },
+    L: {
+      label: "Correction",
+      visible: true,
+    },
+    N: {
+      label: "Finalize and Release",
+      visible: true,
+    },
+    O: {
+      label: "Record History",
+      visible: true,
+    },
+    R: {
+      visible: false,
+    },
+    S: {
+      label: "Update Record",
+      visible: true,
+    },
+    A1: {
+      label: "WIP",
+      visible: true,
+    },
+    A2: {
+      label: "Voided",
+      visible: true,
+    },
+    A3: {
+      label: "Archive",
+      visible: true,
+    },
+    P1: {
+      label: "WIP",
+      visible: true,
+    },
+    P2: {
+      label: "Voided",
+      visible: true,
+    },
+    P3: {
+      label: "Archive",
+      visible: true,
+    },
+  },
+};
+
+export const CSLDocument: IdocumentTypeDto =  {
+  documentTypeName: "CSL Document",
+  documentTypeAcronym: CSLAcronym,
+  category: Categories.Record,
+  group: DOC_TYPE_GROUP.PART_LOT,
+  isQms: true,
   fieldsConfig: {
     D: {
       visible: false,
