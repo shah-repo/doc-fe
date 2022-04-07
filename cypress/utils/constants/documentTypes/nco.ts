@@ -527,4 +527,4 @@ export const NCORecord: IdocumentTypeDto = {
       uniqueSchemaItem: true,
     },
   ],
-},
+};

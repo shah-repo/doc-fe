@@ -6,3 +6,9 @@ export const LHRTTest: IdocumentTypeDto = {
   documentTypeAcronym: "LHRT-",
   group: DOC_TYPE_GROUP.FORM, // check if this needs to be LHRT group instead.
 };
+
+export const LHRT: IdocumentTypeDto = {
+  documentTypeName: "LHR template",
+  documentTypeAcronym: "LHRT-",
+  group: DOC_TYPE_GROUP.LHRT,
+};

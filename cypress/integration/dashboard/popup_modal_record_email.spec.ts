@@ -5,6 +5,7 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[33];
@@ -59,13 +60,7 @@ context("Records email popup modal", () => {
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
-              {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-              },
+              RecordDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

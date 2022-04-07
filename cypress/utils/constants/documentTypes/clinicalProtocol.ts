@@ -9,4 +9,14 @@ export const ClinicalProtocolDocType: IdocumentTypeDto = {
   documentTypeAcronym: CPAcronym,
   group: DOC_TYPE_GROUP.OTHER,
   isQms: true,
+  canRedLine: true,
+};
+
+export const ClinicalProtocolPrivatePoolDocType: IdocumentTypeDto = {
+  documentTypeName: "Clinical Protocol",
+  documentTypeAcronym: "CP-",
+  group: DOC_TYPE_GROUP.OTHER,
+  isQms: true,
+  privateNumberPool: true,
+  startingNumber: 1,
 };

@@ -7,9 +7,10 @@ export const TestDocumentType: IdocumentTypeDto =  {
   documentTypeAcronym: "TDT-",
   group: DOC_TYPE_GROUP.OTHER,
   isQms: true,
+  canRedLine: true,
 };
 
-export const TestDocumentTypeRecord: IdocumentTypeDto =     {
+export const TestDocumentTypeRecord: IdocumentTypeDto = {
   documentTypeName: "Test Document Type",
   documentTypeAcronym: "TDT-",
   category: Categories.Record,
@@ -22,6 +23,23 @@ export const TestDocumentTypeRecord: IdocumentTypeDto =     {
       visible: true,
     },
   },
+};
+
+export const HistoryTestRecord: IdocumentTypeDto =   {
+  documentTypeName: "History Test Record",
+  documentTypeAcronym: "HTR-",
+  group: DOC_TYPE_GROUP.RECORD,
+  isQms: true,
+  needsSignature: true,
+  category: Categories.Record,
+};
+
+export const RecordDocumentType: IdocumentTypeDto = {
+  documentTypeName: "Record Document",
+  documentTypeAcronym: "RD-",
+  category: Categories.Record,
+  group: DOC_TYPE_GROUP.RECORD,
+  isQms: true,
 };
 
 export const AdditionalType: IdocumentTypeDto =    {
@@ -85,7 +103,7 @@ export const PrivatePoolTest: IdocumentTypeDto = {
   },
 };
 
-export const PublicPoolTest: IdocumentTypeDto =    {
+export const PublicPoolTest: IdocumentTypeDto = {
   documentTypeName: "Test Public Pool",
   documentTypeAcronym: "TPUP-",
   category: Categories.Record,
@@ -99,4 +117,11 @@ export const PublicPoolTest: IdocumentTypeDto =    {
       visible: true,
     },
   },
+};
+
+export const NonQMSType: IdocumentTypeDto = {
+  documentTypeName: "NonQMS Document",
+  documentTypeAcronym: "NQ",
+  group: DOC_TYPE_GROUP.OTHER,
+  isQms: false,
 };
