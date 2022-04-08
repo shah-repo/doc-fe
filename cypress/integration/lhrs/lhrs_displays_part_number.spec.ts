@@ -20,6 +20,7 @@ let initialArDocument;
 let cslDocumentType;
 let csPartDocumentType;
 let createdPartFormDocument;
+let createdCSPartDocument;
 let group;
 
 const EFM10605Rev = "EFM-10605 form";
@@ -194,6 +195,66 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
             sessionId: loginResponse.sessionId as unknown as string,
           }).then((response) => {
             createdPartFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPartFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+              },
+              employeeId: secondEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]Create CS Part", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: secondEmployee.id,
+          name: "AR Form For CS Part",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>CS Part revision</p>",
+              document: {
+                docId: "CS-02001",
+                documentType: {
+                  id: csPartDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formDocument: createdPartFormDocument,
+
+            },
+            employeeId: secondEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdCSPartDocument = response;
             cy.drAPIApproveAndRelease({
               documentId: createdPartFormDocument.id,
               payload: {
