@@ -12,9 +12,6 @@ const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
-const EXIST = "exist";
-// const rev = "Revision";
-
 
 let createdCompany;
 let loginResponse;
@@ -1072,12 +1069,6 @@ context("Equipment maintenance for checking History in all states", () => {
     });
   });
 
-  context("Login user", () => {
-    it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
-    });
-  });
-
   context("Navigate to Equipment Landing page", () => {
     it("Equipment Landing page", () => {
       cy.navigToEquipment();
@@ -1104,7 +1095,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
     it("Verify that the number of documents displayed match filter settings", () => {
       cy.dlVerifyDocCounter({ docCounterNumber: 4 });
-      cy.alClearFilters();
+      cy.grpClearFilter();
     });
 
     it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
@@ -1199,49 +1190,175 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Click one of the Equipment from landing page", () => {
-      cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "EQ-00004").click();
-    });
-
-    it("The system shall allow the user to open an equipment document from within the Equipment List", () => {
-      cy.navigToEquipment();
-      cy.get(`td[data-grid-col-index="0"]`).contains("EQ-00004").click();
+      cy.dlSelectFirstDocument();
     });
   });
 
-  context("Verify that arrow for sorting are present in all columns and verify asm and desc order", () => {
-    it("Verify that arrow on ID for sorting ", () => {
+  context("Sort 'ID'", () => {
+    it("ID should be in ascending order", () => {
       cy.navigToEquipment();
-      cy.verifyColumnSort({ columnIndex: "1" });
+      cy.contains("ID").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        .should("be.exist");
+      cy.verifyAscSort({ index: 0, colLength: 8 });
     });
 
-    it("Verify sorting arrow for Revision", () => {
-      cy.verifyColumnSort({ columnIndex: "2" });
+    it("ID should be in descending order", () => {
+      cy.contains("ID").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 0, colLength: 8 });
     });
 
-    it("Verify sorting arrow for State", () => {
-      cy.verifyColumnSort({ columnIndex: "3" });
+    it("Revision should be in ascending order", () => {
+      cy.contains("Revision").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
+        .should("be.exist");
+      cy.verifyAscSort({ index: 1, colLength: 8 });
     });
 
-    it("Verify sorting arrow for Title", () => {
-      cy.verifyColumnSort({ columnIndex: "4" });
+    it("Revision should be in descending order", () => {
+      cy.contains("Revision").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 1, colLength: 8 });
     });
 
-    it("Verify sorting arrow for EFT Owner", () => {
-      cy.verifyColumnSort({ columnIndex: "5" });
+    it("State should be in ascending order", () => {
+      cy.contains("State").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
+        .should("be.exist");
+      cy.verifyAscSort({ index: 2, colLength: 8 });
     });
 
-    it("Verify sorting arrow for Cal Due Date", () => {
-      cy.verifyColumnSort({ columnIndex: "6" });
+    it("State should be in descending order", () => {
+      cy.contains("State").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 2, colLength: 8 });
     });
 
-    it("Verify sorting arrow for PM Due Date", () => {
-      cy.verifyColumnSort({ columnIndex: "7" });
+    it("Title should be in ascending order", () => {
+      cy.contains("Title").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
+        .should("be.exist");
+      cy.verifyAscSort({ index: 3, colLength: 8 });
     });
 
-    it("Verify sorting arrow for EQ State", () => {
-      cy.verifyColumnSort({ columnIndex: "8" });
+    it("Title should be in descending order", () => {
+      cy.contains("Title").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 3, colLength: 8 });
+    });
+
+    it("EFT Owner should be in ascending order", () => {
+      cy.contains("EFT Owner").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
+        .should("be.exist");
+      cy.verifyAscSort({ index: 4, colLength: 8 });
+    });
+
+    it("EFT Owner should be in descending order", () => {
+      cy.contains("EFT Owner").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 4, colLength: 8 });
+    });
+
+    it("Cal Due Date should be in ascending order", () => {
+      cy.contains("Cal Due Date").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
+        .should("be.exist");
+      cy.verifyAscSort({ index: 5, colLength: 8 });
+    });
+
+    it("Cal Due Date should be in descending order", () => {
+      cy.contains("Cal Due Date").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 5, colLength: 8 });
+    });
+
+    it("PM Due Date should be in ascending order", () => {
+      cy.contains("PM Due Date").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
+        .should("be.exist");
+      cy.verifyAscSort({ index: 6, colLength: 8 });
+    });
+
+    it("PM Due Date should be in descending order", () => {
+      cy.contains("PM Due Date").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 6, colLength: 8 });
+    });
+
+    it("EQ Status should be in ascending order", () => {
+      cy.contains("EQ Status").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-asc-sm")
+        .should("be.exist");
+      cy.verifyAscSort({ index: 7, colLength: 8 });
+    });
+
+    it("EQ Status should be in descending order", () => {
+      cy.contains("EQ Status").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 7, colLength: 8 });
     });
   });
+
+  // context("Verify that arrow for sorting are present in all columns and verify asm and desc order", () => {
+  //   it("Verify that arrow on ID for sorting ", () => {
+  //     cy.navigToEquipment();
+  //     cy.verifyColumnSort({ columnIndex: "1" });
+  //   });
+
+  //   it("Verify sorting arrow for Revision", () => {
+  //     cy.verifyColumnSort({ columnIndex: "2" });
+  //   });
+
+  //   it("Verify sorting arrow for State", () => {
+  //     cy.verifyColumnSort({ columnIndex: "3" });
+  //   });
+
+  //   it("Verify sorting arrow for Title", () => {
+  //     cy.verifyColumnSort({ columnIndex: "4" });
+  //   });
+
+  //   it("Verify sorting arrow for EFT Owner", () => {
+  //     cy.verifyColumnSort({ columnIndex: "5" });
+  //   });
+
+  //   it("Verify sorting arrow for Cal Due Date", () => {
+  //     cy.verifyColumnSort({ columnIndex: "6" });
+  //   });
+
+  //   it("Verify sorting arrow for PM Due Date", () => {
+  //     cy.verifyColumnSort({ columnIndex: "7" });
+  //   });
+
+  //   it("Verify sorting arrow for EQ State", () => {
+  //     cy.verifyColumnSort({ columnIndex: "8" });
+  //   });
+  // });
 
   context("Verify that user is able to insert filter in every column", () => {
     it("Verify filter for ID", () => {
@@ -1270,7 +1387,7 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared'", () => {
-      cy.alClearFilters();
+      cy.grpClearFilter();
     });
 
     it("Column grouping", () => {
@@ -1289,7 +1406,7 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get(".k-grouping-row").eq(0).should("contain.text", "Equipment document").arrowClick();
       cy.get(".k-grouping-row").eq(1).should("contain.text", "Equipment document DRAFT").arrowClick();
       cy.get(".k-i-group-delete").click();
-      cy.alClearFilters();
+      cy.grpClearFilter();
     });
 
     it("Verify that 'Export List' button is visible and enabled", () => {
@@ -1340,10 +1457,6 @@ context("Equipment maintenance for checking History in all states", () => {
     // eslint-disable-next-line max-len
     it("User should be able to insert filter in input field and icon of the filter should be visible next to the field", () => {
       cy.get(".k-i-filter.k-icon").should("be.visible");
-    });
-
-    it("Click on the filter icon", () => {
-      cy.get(".k-i-filter.k-icon").click();
     });
   });
 
@@ -1447,7 +1560,7 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it(`Crossed filter icon should appear `, () => {
-      cy.get(".k-button.k-clear-button-visible").should("be.visible");
+      cy.get(".k-button.k-clear-button-visible").should("be.visible").wait(500);
     });
 
     it(`Select option Contains and verify that the filter is functional`, () => {
@@ -1464,6 +1577,7 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get(`th[aria-colindex="5"] span.k-select`).arrowClick();
       cy.get(`th[aria-colindex="6"] span.k-select`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
+      cy.grpClearFilter();
     });
 
     it("Navigate to column with option Select field", () => {
@@ -1478,10 +1592,10 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Select option from dropdown list", () => {
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick().wait(500);
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
     });
 
     it("Verify that filter is enabled and functional", () => {

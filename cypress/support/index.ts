@@ -29,7 +29,6 @@ import "./commands/auth/commands";
 import "./commands/company.replica/commands";
 import "./commands/company/commands";
 import "./commands/dashboard/commands";
-import "./commands/datatable/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
 import "./commands/document.type.management/commands";
