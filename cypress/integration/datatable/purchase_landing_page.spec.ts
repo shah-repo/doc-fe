@@ -4,7 +4,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -13,12 +12,25 @@ let adminEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
 let group;
+let equipmentDocumentType;
+let materialsDocumentType;
+let partDocumentType;
+let equipmentDocument;
+let partDocument;
 let createdPOFormDocument;
 let formDocumentType;
 let purchaseOrderDocumentType;
 let createdPODocument;
+let createdMaintenanceRecordFormDocument;
 
-context("Autocomplete test", () => {
+const equipmentNo = "ET-00003";
+const equipmentTitle = "Equipment document";
+const materialNo = "MT-00004";
+const materialTitle = "Material document";
+const partNo = "PRT-00005";
+const partTitle = "Part document";
+
+context("Purchase Order Landing Page", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -257,6 +269,9 @@ context("Autocomplete test", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
+          materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Material");
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
@@ -266,10 +281,156 @@ context("Autocomplete test", () => {
 
     it("[API]Login Admin", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
         done();
+      });
+    });
+
+    it("[API]Create equipment document", () => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Equipment document</p>",
+              document: {
+                docId: equipmentNo,
+                documentType: {
+                  id: equipmentDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: equipmentTitle,
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            equipmentDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: equipmentDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            });
+          });
+        });
+      });
+    });
+
+    it("[API]Create materials document", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Materials document</p>",
+          document: {
+            docId: materialNo,
+            documentType: {
+              id: materialsDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: materialTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        partDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: partDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
+
+    it("[API]Create part document", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Part document</p>",
+          document: {
+            docId: partNo,
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: partTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdMaintenanceRecordFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdMaintenanceRecordFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
       });
     });
 
@@ -484,7 +645,7 @@ context("Autocomplete test", () => {
     });
 
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     it("Navigate to document list", () => {
@@ -540,7 +701,7 @@ context("Autocomplete test", () => {
 
     it("Insert filter", () => {
       cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001").wait(500);
-      cy.alClearFilters();
+      cy.grpClearFilter();
     });
   });
 
@@ -561,6 +722,7 @@ context("Autocomplete test", () => {
       cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "1");
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
+      cy.grpClearFilter();
     });
   });
   context("Landing Page", () => {
@@ -574,11 +736,11 @@ context("Autocomplete test", () => {
 
     // eslint-disable-next-line max-len
     it("Verify that system maintain PO filter settings during an Enlil session when navigating away from and back to the landing page", () => {
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
       cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.navigToDocumentList();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.navigToPurchaseOrder();
       cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "PO-00001");
+      cy.grpClearFilter();
     });
 
     it("Verify that system display the number of PO's displayed that match the filter settings", () => {
@@ -593,7 +755,6 @@ context("Autocomplete test", () => {
 
   context("Verify that arrow for sorting are present in all columns and verify asm and desc order", () => {
     it("Verify that arrow on PO # for sorting ", () => {
-      cy.navigToEquipment();
       cy.verifyColumnSort({ columnIndex: "1" });
     });
 
@@ -634,12 +795,12 @@ context("Autocomplete test", () => {
 
     it("Verify filter for Revision", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="2"] input`).arrowType("1").wait(500);
+      cy.get(`[aria-colindex="2"] input`).arrowType("1");
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared'", () => {
-      cy.alClearFilters();
+      cy.grpClearFilter();
     });
   });
 
@@ -654,7 +815,7 @@ context("Autocomplete test", () => {
     it("Verify unhide", () => {
       cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "PO #");
       cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
-      cy.get("ul>li[role=menuitem]").contains("TITLE").parents("li").find("svg").arrowClick();
+      cy.get("ul>li[role=menuitem]").contains("PO #").parents("li").find("svg").arrowClick();
       cy.get("body").type("{esc}");
       cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "PO #");
     });
@@ -663,11 +824,11 @@ context("Autocomplete test", () => {
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "PO #");
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "PO #");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "PO #");
     });
 
     it("Verify un-freeze", () => {
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "PO #");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "PO #");
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "PO #");
@@ -680,6 +841,7 @@ context("Autocomplete test", () => {
       cy.get("div.k-columnmenu-item").contains("Group Column");
       cy.get("div.k-columnmenu-item").contains("Hide Column");
       cy.get("div.k-columnmenu-item").contains("Freeze Column");
+      cy.grpClearFilter();
     });
 
     // eslint-disable-next-line max-len
@@ -727,13 +889,7 @@ context("Autocomplete test", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.fbClickButton({ el: "updateRecord" });
-      });
+      cy.navigToPurchaseOrder();
     });
   });
 
@@ -742,61 +898,61 @@ context("Autocomplete test", () => {
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
-      cy.dlClearFilters();
+      cy.grpClearFilter();
     });
 
     it(`Verify "Does not contain" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is not equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Starts with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Ends with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -805,30 +961,30 @@ context("Autocomplete test", () => {
     });
 
     it(`Verify "Is not null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
 
     it(`Verify "Is empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
-      cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
+      cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is not empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
-      cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
+      cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
   });
