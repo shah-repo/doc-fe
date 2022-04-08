@@ -9,6 +9,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable public checkedGroups?: any[];
   @observable approvals?: FBInlineApprovalBody[];
+  @observable public isRequiredApprovals = false;
 
   // MARK: @config
   public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
@@ -30,6 +31,10 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
     return filter(this.approvals, (a) => a.status !== "ABANDONED" && a.type === "MASTER");
   }
 
+  @computed public get getIsRequiredApprovals() {
+    return this.isRequiredApprovals;
+  }
+
   public fetchRequiredApprovals = (documentRevisions: string[] = []) => {
     if (isEmpty(documentRevisions)) {
       this.groups = {};
@@ -42,6 +47,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   public onSuccess() {
     this.setGroups(this.data);
+    this.setIsRequiredApprovals();
     const filteredCheckedGroups = map(this.approvals, (approval) => values(this.groups)?.find((group) =>
       group.name === approval.signatureGroupName));
 
@@ -81,6 +87,9 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
     set(this, "approvals", approvals);
+
+  @action public setIsRequiredApprovals = () =>
+    set(this, "isRequiredApprovals", !this.isRequiredApprovals);
 
   public addApproval = (approval: Partial<FBInlineApprovalBody>) => {
     this.approvalApi.setBody(approval);

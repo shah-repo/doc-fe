@@ -106,20 +106,20 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
     };
 
-    // On add part items
+    // On required approval API call
     React.useEffect(() => reaction(
-      () => workspaceState?.formInputSync?.get("po-items-built-in"),
-      (poItems) => {
+      () => poApprovalsState.getIsRequiredApprovals,
+      () => {
         const approvers = map(poApprovalsState?.getApprovals, "approver.id");
+        const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
         // eslint-disable-next-line react-hooks/exhaustive-deps
         deletedRequestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-        if (poItems.items.length) {
+        if (poItems && poItems.items.length) {
           checkLineItems(poItems, deletedRequestor);
         } else if (approvers?.includes(deletedRequestor)) {
           checkLineItems(poItems, "");
         }
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }
     ), []);
 
     // On add approver
@@ -158,8 +158,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requestor) => {
         const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
-        checkLineItems(poItems, requestor);
-        formState?.getInputState(name)?.setRender();
+        if (!requestor) {
+          checkLineItems(poItems, requestor);
+          formState?.getInputState(name)?.setRender();
+        }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
