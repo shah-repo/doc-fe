@@ -768,17 +768,20 @@ context("Records flow", () => {
     });
   });
 
-  context("Fill in record attributes and send WIP notification", () => {
+  context("Fill in record attributes and release document", () => {
     it("Enters title 'Approval Record title'", () => {
-      cy.drEnterDocumentTitle({ name: "Approval Record title{enter}" });
+      cy.drEnterDocumentTitle({ name: "Approval Record title" });
+      cy.unClick();
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
       cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
       cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Checkbox option 1 checked", () => {
+      cy.get("[data-cy=\"Checkbox\"]").should("be.visible");
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
@@ -1029,12 +1032,7 @@ context("Records flow", () => {
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
+      cy.ebApprove();
     });
 
     it("Check doc Released status and click on Send To Email", () => {
