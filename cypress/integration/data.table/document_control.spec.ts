@@ -353,11 +353,11 @@ context("Document list test", () => {
     // eslint-disable-next-line max-len
     it("Verify that by default approval request list is sorted by most recent edited first  " + approvalRequestName, () => {
       cy.alClearFilters();
-      cy.get(`td[data-grid-col-index="1"]`).eq(0).should("contain.text", "Releasing FM-00002,DD Test");
+      cy.get(`td[data-grid-col-index="1"]`).eq(0).should("contain.text", "AR Form");
     });
 
     it("Hover over the AR title", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).realHover().should("have.text", "Approval Request Form");
+      cy.get(`th[role="columnheader"]`).eq(0).realHover().should("have.text", "AR ID");
     });
 
     it("Clear filters", () => {
@@ -399,6 +399,7 @@ context("Document list test", () => {
 
     it(`Verify drag and drop`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR99999");
+      cy.pause();
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
         toSelector: `th[aria-colindex="2"][role]>span>span`,
@@ -408,6 +409,7 @@ context("Document list test", () => {
     it("Column grouping", () => {
       cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
+      cy.pause();
     });
 
     it("Verify that data is sorted based on that column grouping", () => {
@@ -499,7 +501,6 @@ context("Document list test", () => {
 
   context("Verifying and checking every arrow is clickable", () => {
     it("Verify that arrow on ID for sorting ", () => {
-      cy.navigToDocumentList();
       cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should(`${EXIST}`);
