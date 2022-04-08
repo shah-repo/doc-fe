@@ -149,7 +149,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
-        formState?.getInputState(name)?.setRender();
+        setTimeout(() => {
+          formState?.getInputState(name)?.setRender();
+        });
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -158,9 +160,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requestor) => {
         const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+        const approvers = map(poApprovalsState?.getApprovals, "approver.id");
         if (!requestor) {
           checkLineItems(poItems, requestor);
           formState?.getInputState(name)?.setRender();
+        }
+        if (deletedRequestor !== requestor && approvers?.includes(deletedRequestor)) {
+          removeApprover([deletedRequestor]);
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
