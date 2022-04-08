@@ -47,7 +47,6 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   public onSuccess() {
     this.setGroups(this.data);
-    this.setIsRequiredApprovals();
     const filteredCheckedGroups = map(this.approvals, (approval) => values(this.groups)?.find((group) =>
       group.name === approval.signatureGroupName));
 
@@ -61,6 +60,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
     });
 
     this.checkedGroups = compact(filteredCheckedGroups);
+    this.setIsRequiredApprovals();
     super.onSuccess();
   }
 
