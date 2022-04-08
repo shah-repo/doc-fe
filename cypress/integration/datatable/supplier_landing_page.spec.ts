@@ -1,0 +1,477 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+// import moment from "moment";
+import "moment-timezone";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
+
+let createdCompany;
+let loginResponse;
+let supplierDocumentType;
+let adminEmployee;
+let group;
+
+context("Create company via API and create Suppliers document", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  it("[API] Creates company", (done: any) => {
+    SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
+    cy.authApiLogin({
+      email: CONFIG.SUPERADMIN_EMAIL,
+      password: CONFIG.SUPERADMIN_PASSWORD,
+    }).then((response) => {
+      loginResponse = response;
+
+      cy.cmpCreateCompany({
+        specFilePath: __filename,
+        payload: {
+          companyAdminEmail: USERS[1].email,
+          helloSignIntegrationEnabled: false,
+          helloSignTestMode: false,
+          importerEmail: IMPORTER_USER.email,
+          numOfRevStages: 3,
+          numOfDocDigits: 5,
+          remoteValidatorBundleName: "default",
+          slackIntegrationEnabled: false,
+          users: [USERS[2], USERS[3], USERS[4]],
+          acctCodes: ["code 1"],
+          addresses: ["Address 1"],
+        }, sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdCompany = response;
+        adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+        // secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+        // thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+        supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
+        done();
+      });
+    });
+  });
+
+  it("[API] Login admin tester", (done: any) => {
+    cy.authApiLogin({
+      email: USERS[1].email,
+      password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+    }).then((response) => {
+      loginResponse = response;
+      done();
+    });
+  });
+
+  it("[API]Creates suplier document", (done: any) => {
+    cy.grpGetGroupByName({
+      sessionId: loginResponse.sessionId,
+      employeeId: adminEmployee.id,
+      groupName: "Everyone",
+    }).then((response) => {
+      group = response;
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Test Supplier Document</p>",
+          document: {
+            docId: "SUP-00004",
+            documentType: {
+              id: supplierDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "API supplier",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then(() => {
+        done();
+      });
+    });
+  });
+
+  it("Login user to dashboard", () => {
+    cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+  });
+
+  context("Create supplier document", () => {
+    it("Navigate to supplier list", () => {
+      cy.navigToSuppliers();
+    });
+
+    it("Verify that landing pages for Supplier List  use the new data table", () => {
+      cy.get(`div[role="grid"]`).should("have.class", "k-grid");
+    });
+
+    it("Verify all columns are present", () => {
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Supplier ID");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Supplier Name");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Supplier Level");
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Supplier Status");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "State");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Owner");
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Approval ID");
+    });
+
+    it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
+      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+      cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+    });
+
+    it("Navigate to one of the columns", () => {
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "EQ-00003");
+    });
+
+    it(`Verify drag and drop`, () => {
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="1"][role]>span>span`,
+        toSelector: `th[aria-colindex="2"][role]>span>span`,
+      });
+    });
+
+    it("Column grouping", () => {
+      cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
+    });
+
+    it("Verify that data is sorted based on that column grouping", () => {
+      cy.get(".k-grouping-row").eq(0).should("contain.text", "API supplier").arrowClick();
+    });
+
+    it("Grouping columns should be displayed next to button Clear Filters", () => {
+      cy.get(".k-group-indicator").eq(0).should("have.text", "Supplier Name");
+    });
+
+    it("User should be able to remove it", () => {
+      cy.get(".k-i-group-delete").click();
+    });
+
+    it("Click on one of the documents from the Document list in the landing page", () => {
+      cy.get(".k-master-row").eq(0).arrowClick();
+    });
+
+    it("The system shall allow the user to open a document from within the Document List", () => {
+      cy.navigToSuppliers();
+      cy.get(".k-master-row").eq(0).arrowClick();
+    });
+  });
+
+  context("Create another supplier form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'Create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter title 'New Supplier Form'", () => {
+      cy.drEnterDocumentTitle({ name: "New Supplier Form 2" });
+    });
+
+    it("Enter description 'New Supplier Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Supplier Form description 2" });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'Supplier' document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Supplier" });
+      cy.unClick();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.navigToSuppliers();
+    });
+  });
+
+  context("Verify sorting arrows on each field", () => {
+    it("Verify sorting arrow for Supplier ID", () => {
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="0"]`).should("have.text", "SUP-00004");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="1"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="0"]`).should("have.text", "SUP-00004");
+    });
+
+    it("Verify sorting arrow for Supplier Name", () => {
+      cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="2"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="1"]`).should("have.text", "API supplier");
+      cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="2"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`td[data-grid-col-index="1"]`).should("have.text", "API supplier");
+    });
+
+    it("Verify sorting arrow for Supplier Level ", () => {
+      cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="3"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="3"] span.k-i-sort-desc-sm`).should("exist");
+    });
+
+    it("Verify sorting arrow for State", () => {
+      cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="5"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="5"] span.k-i-sort-desc-sm`).should("exist");
+    });
+
+    it("Verify sorting arrow for Owner", () => {
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
+    });
+
+    it("Verify sorting arrow for Approval ID", () => {
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
+    });
+  });
+
+  context("Verify filters on each field", () => {
+    it("Verify filter for ID", () => {
+      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("SUP-00004");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "SUP-00004");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Verify filter for Supplier Name", () => {
+      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "API supplier");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Verify hide and freeze", () => {
+    it("Verify hide on Suppiler Level", () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Supplier Level");
+      cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
+      cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Supplier Level");
+    });
+
+    it("Verify unhide on Suppiler Level", () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Supplier Level");
+      cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
+      cy.get("ul>li[role=menuitem]").contains("SUPPLIER LEVEL").parents("li").find("svg").arrowClick();
+      cy.get("body").type("{esc}");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Supplier Level");
+    });
+
+    it("Verify freeze on ID", () => {
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Supplier ID");
+      cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
+      cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Supplier Name");
+    });
+
+    it("Verify un-freeze on ID", () => {
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Supplier Name");
+      cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
+      cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Supplier ID");
+    });
+  });
+
+  context("Verify dropdown filters", () => {
+    it("Verify dropdown filters", () => {
+      cy.alClearFilters();
+      cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
+      "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
+    });
+
+    it(`Verify "Does not contain" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
+      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it(`Verify "Is equal to" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
+      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it(`Verify "Is not equal to" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
+      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it(`Verify "Starts with" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
+      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it(`Verify "Ends with" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
+      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it(`Verify "Is null" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Is null").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it(`Verify "Is not null" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it(`Verify "Is empty" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it(`Verify "Is not empty" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it("Insert filter", () => {
+      cy.get(`th[aria-colindex="1"] input`).arrowType("SUP-00004").wait(500);
+    });
+
+    it(`Crossed filter icon should appear `, () => {
+      cy.get(".k-button.k-clear-button-visible").should("be.visible");
+    });
+
+    it(`Select option Contains and verify that the filter is functional`, () => {
+      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Contains").arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it("Verify that each filter from the dropdown list for each column in the landing page is functional", () => {
+      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="4"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="5"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="6"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Navigate to column with option Select field", () => {
+      cy.get(`[aria-colindex="5"] [class="k-input"]`).arrowClick();
+      cy.get("li").contains("Draft").arrowClick().wait(500);
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Verify that column with Select field have disabled crossed filter", () => {
+      cy.get(".k-button-icon.k-clear-button-visible").should("exist");
+    });
+
+    it("Select option from dropdown list", () => {
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+    });
+
+    it("Verify that filter is enabled and functional", () => {
+      cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).should("be.visible").arrowClick();
+    });
+
+    it(`Crossed filter icon should appear `, () => {
+      cy.get(".k-button-icon.k-clear-button-visible").should("exist");
+    });
+  });
+});
