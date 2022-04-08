@@ -149,9 +149,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
-        setTimeout(() => {
-          formState?.getInputState(name)?.setRender();
-        });
+        formState?.getInputState(name)?.setRender();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
