@@ -6,6 +6,7 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -14,6 +15,7 @@ let loginResponse;
 let supplierDocumentType;
 let adminEmployee;
 let group;
+
 
 context("Suppliers landing page", () => {
   before(() => {
@@ -172,8 +174,8 @@ context("Suppliers landing page", () => {
   });
 
   context("Create supplier form", () => {
-    it("Navigate to supplier list", () => {
-      cy.navigToSuppliers();
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
     });
 
     it("Click on 'Create a document'", () => {
@@ -181,11 +183,11 @@ context("Suppliers landing page", () => {
     });
 
     it("Enter title 'New Supplier Form'", () => {
-      cy.drEnterDocumentTitle({ name: "New Supplier Form 2" });
+      cy.drEnterDocumentTitle({ name: "New Supplier Form" });
     });
 
     it("Enter description 'New Supplier Form description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Supplier Form description 2" });
+      cy.drEnterDocumentDescription({ description: "New Supplier Form description" });
     });
 
     it("Click on 'Form' document type", () => {
@@ -193,8 +195,15 @@ context("Suppliers landing page", () => {
     });
 
     it("Click on 'Supplier' document type", () => {
+      SystemRequirement("REQ-2400");
       cy.drSelectOutputDocumentType({ documentType: "Supplier" });
       cy.unClick();
+    });
+
+    it("Verify approval field is added as result of predefined schema", () => {
+      SystemRequirement("REQ-2400");
+      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
+      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -207,6 +216,33 @@ context("Suppliers landing page", () => {
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Create supplier document", () => {
+    it("Navigate to supplier list", () => {
+      SystemRequirement("REQ-2230");
+      cy.navigToSuppliers();
+    });
+
+    it("Click create new to create supplier", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.supCreateNew();
+      });
+    });
+
+    it("Enter 'Supplier Address/Phone'", () => {
+      SystemRequirement("REQ-2360");
+      cy.drEnterDocumentDescription({ description: "Test Supplier address" });
+    });
+
+    it("Enter 'Supplier Name'", () => {
+      SystemRequirement("REQ-2360");
+      cy.supEnterSuppName({ name: "Test Supplier" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateSupplierWithApiCall();
     });
   });
 
@@ -401,20 +437,21 @@ context("Suppliers landing page", () => {
       cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
       "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
+      cy.dlClearFilters();
     });
 
     it(`Verify "Does not contain" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
@@ -424,17 +461,17 @@ context("Suppliers landing page", () => {
     });
 
     it(`Verify "Is not equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Starts with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
@@ -444,7 +481,7 @@ context("Suppliers landing page", () => {
     });
 
     it(`Verify "Ends with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
@@ -454,7 +491,7 @@ context("Suppliers landing page", () => {
     });
 
     it(`Verify "Is null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -464,29 +501,29 @@ context("Suppliers landing page", () => {
     });
 
     it(`Verify "Is not null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
-    });
-
-    it(`Verify "Is empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
-      cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is not empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+      cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it(`Verify "Is empty" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
     });
 
@@ -517,7 +554,7 @@ context("Suppliers landing page", () => {
     it("Navigate to column with option Select field", () => {
       cy.get(`[aria-colindex="5"] [class="k-input"]`).arrowClick();
       cy.get("li").contains("Draft").arrowClick().wait(500);
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -529,7 +566,7 @@ context("Suppliers landing page", () => {
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
     });
 
     it(`Crossed filter icon should appear `, () => {
