@@ -20,6 +20,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupBy,
   refresh,
   filterSelectedOptions = false,
+  disableClearable = false,
   freeSolo = false,
   multiple = false,
   options,
@@ -33,6 +34,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupByKey,
   value,
   inputStyle = {},
+  disabledOptions = [],
+  disableBackspace = false,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -64,6 +67,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             defaultValue,
             freeSolo,
             filterOptions,
+            disableClearable,
           }}
           PopperComponent={CustomPopper}
           options={modifiedOptions}
@@ -76,6 +80,12 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   {...params}
                   {...!params.InputProps.startAdornment && { placeholder }}
                   onChange={onInputChange}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    const key = event.keyCode || event.charCode;
+                    if (key === 8 && disableBackspace) {
+                      event.stopPropagation();
+                    }
+                  }}
                   fullWidth
                   variant="outlined"
                   InputProps={{
@@ -86,6 +96,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                     ...params.inputProps,
                     "style": { padding: "10.5px 0", ...inputStyle },
                     "data-cy": props.name,
+                    "component-name": props.name,
                   }}
                 />
               </Box>
@@ -103,13 +114,14 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               {(option, index) => {
                 const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
                   (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
+                const isOptionDisabled = disabledOptions.includes(option.id);
                 return (
                   <Chip
                     key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}
                     {...getTagProps({ index })}
-                    disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
+                    disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
                   />
                 ); }}
             </FBMapWrapper>

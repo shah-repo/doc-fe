@@ -11,6 +11,11 @@ declare global {
       dtmSelectQMS(): Chainable<Subject>;
       dtmSelectNeedsSignature(): Chainable<Subject>;
       dtmSelectTraining(): Chainable<Subject>;
+      dtmUncheckPrivateNumber(): Chainable<Subject>;
+      dtmUncheckRedline(): Chainable<Subject>;
+      dtmUncheckQMS(): Chainable<Subject>;
+      dtmUncheckNeedsSignature(): Chainable<Subject>;
+      dtmUncheckTraining(): Chainable<Subject>;
       dtmSelectGroup(params: { group: string }): Chainable;
       dtmSelectUsersWithoutTags(params: { usersWithoutTags: string }): Chainable;
       dtmSelectRevisionStage(params: { revisionStage: string }): Chainable;
@@ -47,6 +52,26 @@ Cypress.Commands.add("dtmSelectNeedsSignature", () => {
 
 Cypress.Commands.add("dtmSelectTraining", () => {
   cy.get("[data-grid-row-index='0']>td>span>input").eq(4).check();
+});
+
+Cypress.Commands.add("dtmUncheckPrivateNumber", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(0).uncheck();
+});
+
+Cypress.Commands.add("dtmUncheckRedline", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(1).uncheck();
+});
+
+Cypress.Commands.add("dtmUncheckQMS", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(2).uncheck();
+});
+
+Cypress.Commands.add("dtmUncheckNeedsSignature", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(3).uncheck();
+});
+
+Cypress.Commands.add("dtmUncheckTraining", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(4).uncheck();
 });
 
 Cypress.Commands.add("dtmSelectGroup", (params: { group: string }) => {
