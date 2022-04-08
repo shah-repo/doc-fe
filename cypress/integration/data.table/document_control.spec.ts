@@ -312,7 +312,6 @@ context("Document list test", () => {
 
     it("clicks on 'Create Document", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.pause();
     });
 
     it("Verify Document ID", () => {
@@ -326,7 +325,6 @@ context("Document list test", () => {
     it("Verify that the system displays only documents in the documents list with corresponding data", () => {
       cy.navigToDocumentList();
       cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", `${formId}` );
-      cy.pause();
     });
   });
 
