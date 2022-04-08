@@ -1177,7 +1177,7 @@ context("NCO document type management multiple users", () => {
 
     context("Check that doc type can't be deleted", () => {
       it("Click on delete Doc Type", () => {
-        cy.wait(1500);
+        cy.wait(500);
         cy.get("button>span svg[class*='makeStyles-Remove']").eq(0).arrowClick();
       });
 
@@ -1204,10 +1204,20 @@ context("NCO document type management multiple users", () => {
         cy.get(`[data-cy="selectItem.document.documentType.id.Blue}"]`).should("not.exist");
         cy.get(`[data-cy="selectItem.document.documentType.id.Form"]`).arrowClick();
       });
+
+      it("Log out user", () => {
+        cy.authLogout();
+      });
     });
   });
 
   context("Obsolete NCO document", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+      });
+    });
+
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
