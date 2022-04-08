@@ -1325,41 +1325,6 @@ context("Equipment maintenance for checking History in all states", () => {
     });
   });
 
-  // context("Verify that arrow for sorting are present in all columns and verify asm and desc order", () => {
-  //   it("Verify that arrow on ID for sorting ", () => {
-  //     cy.navigToEquipment();
-  //     cy.verifyColumnSort({ columnIndex: "1" });
-  //   });
-
-  //   it("Verify sorting arrow for Revision", () => {
-  //     cy.verifyColumnSort({ columnIndex: "2" });
-  //   });
-
-  //   it("Verify sorting arrow for State", () => {
-  //     cy.verifyColumnSort({ columnIndex: "3" });
-  //   });
-
-  //   it("Verify sorting arrow for Title", () => {
-  //     cy.verifyColumnSort({ columnIndex: "4" });
-  //   });
-
-  //   it("Verify sorting arrow for EFT Owner", () => {
-  //     cy.verifyColumnSort({ columnIndex: "5" });
-  //   });
-
-  //   it("Verify sorting arrow for Cal Due Date", () => {
-  //     cy.verifyColumnSort({ columnIndex: "6" });
-  //   });
-
-  //   it("Verify sorting arrow for PM Due Date", () => {
-  //     cy.verifyColumnSort({ columnIndex: "7" });
-  //   });
-
-  //   it("Verify sorting arrow for EQ State", () => {
-  //     cy.verifyColumnSort({ columnIndex: "8" });
-  //   });
-  // });
-
   context("Verify that user is able to insert filter in every column", () => {
     it("Verify filter for ID", () => {
       cy.get(`[aria-colindex="1"] input`).arrowType("EQ-00001").wait(500);
@@ -1535,7 +1500,6 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
-
 
     it(`Verify "Is empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
