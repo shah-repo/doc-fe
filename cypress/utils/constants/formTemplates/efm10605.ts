@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
+
+import { FBSchemaProps } from "../../../../src/ui/form.builder";
+
 /* eslint-disable @typescript-eslint/camelcase */
-export const EFM10605TemplateSchema = [
+export const EFM10605TemplateSchema: FBSchemaProps[] = [
   {
     name: "section-i-part-information-kiapyvrw",
     type: "section",
@@ -10,7 +13,6 @@ export const EFM10605TemplateSchema = [
       "ON_STATE_TO_IN_REVIEW",
     ],
     validationMode: "default",
-    omitFinalValidation: true,
     applicableValidationSchema: true,
   },
   {
@@ -42,17 +44,11 @@ export const EFM10605TemplateSchema = [
     deleted: false,
     optionId: "21",
     placeholder: "[Select from the List]",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -94,18 +90,12 @@ export const EFM10605TemplateSchema = [
         value: "No",
       },
     ],
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -127,18 +117,12 @@ export const EFM10605TemplateSchema = [
         value: "New",
       },
     ],
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -181,18 +165,12 @@ export const EFM10605TemplateSchema = [
         ],
       },
     },
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "visibility",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -218,18 +196,12 @@ export const EFM10605TemplateSchema = [
       },
     },
     placeholder: "[Select from the List]",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "visibility",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -251,18 +223,12 @@ export const EFM10605TemplateSchema = [
       required_if: false,
     },
     placeholder: "",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "visibility",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -305,19 +271,12 @@ export const EFM10605TemplateSchema = [
       },
     },
     placeholder: "[Select from the List]",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
-    includeContext: true,
     outputDisabled: false,
     validationMode: "visibility",
-    formValuesRules: {
-
-    },
     editorProperties: [
       "includeContext",
     ],
@@ -334,7 +293,6 @@ export const EFM10605TemplateSchema = [
       "ON_STATE_TO_IN_REVIEW",
     ],
     validationMode: "default",
-    omitFinalValidation: true,
     applicableValidationSchema: true,
   },
   {
@@ -342,9 +300,7 @@ export const EFM10605TemplateSchema = [
     type: "blanktplform",
     index: 11,
     label: "Download Inspection Form",
-    gutter: false,
     deleted: true,
-    autosave: true,
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
@@ -379,18 +335,12 @@ export const EFM10605TemplateSchema = [
     rules: "",
     hidden: false,
     deleted: false,
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -407,7 +357,6 @@ export const EFM10605TemplateSchema = [
       "ON_STATE_TO_IN_REVIEW",
     ],
     validationMode: "default",
-    omitFinalValidation: true,
     applicableValidationSchema: true,
   },
   {
@@ -432,18 +381,12 @@ export const EFM10605TemplateSchema = [
       required: false,
       required_if: false,
     },
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "visibility",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -469,18 +412,12 @@ export const EFM10605TemplateSchema = [
         value: "Fail",
       },
     ],
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -498,17 +435,11 @@ export const EFM10605TemplateSchema = [
     hidden: false,
     deleted: false,
     placeholder: "",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -524,9 +455,6 @@ export const EFM10605TemplateSchema = [
     rules: "",
     hidden: false,
     deleted: true,
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
@@ -536,9 +464,6 @@ export const EFM10605TemplateSchema = [
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -555,7 +480,6 @@ export const EFM10605TemplateSchema = [
       "ON_STATE_TO_IN_REVIEW",
     ],
     validationMode: "default",
-    omitFinalValidation: true,
     applicableValidationSchema: true,
   },
   {
@@ -616,18 +540,12 @@ export const EFM10605TemplateSchema = [
       required_if: false,
     },
     placeholder: "[Create a PPNC record to complete investigation and disposition of this lot]",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "visibility",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -660,18 +578,12 @@ export const EFM10605TemplateSchema = [
       required_if: false,
     },
     placeholder: "[Create a PPNC record to complete investigation and disposition of this lot]",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "visibility",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -687,18 +599,12 @@ export const EFM10605TemplateSchema = [
     hidden: false,
     deleted: false,
     paragraph: "<p><strong>Final disposition quantities must equal the quantity received.</strong></p>",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -720,17 +626,11 @@ export const EFM10605TemplateSchema = [
       required_if: false,
     },
     placeholder: "",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -752,17 +652,11 @@ export const EFM10605TemplateSchema = [
       required_if: false,
     },
     placeholder: "",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -784,17 +678,11 @@ export const EFM10605TemplateSchema = [
       required_if: false,
     },
     placeholder: "",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -816,17 +704,11 @@ export const EFM10605TemplateSchema = [
       required_if: false,
     },
     placeholder: "",
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
@@ -842,9 +724,6 @@ export const EFM10605TemplateSchema = [
     rules: "",
     hidden: false,
     deleted: true,
-    rulesObject: {
-
-    },
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
@@ -854,9 +733,6 @@ export const EFM10605TemplateSchema = [
     deleteDisabled: false,
     outputDisabled: false,
     validationMode: "default",
-    formValuesRules: {
-
-    },
     editorProperties: [
 
     ],
