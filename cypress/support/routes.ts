@@ -75,6 +75,7 @@ export enum CyRoutes {
   PatchDocSecurity = "PatchDocSecurity",
   GetRevisionDocTypeGroupOptions = "GetRevisionDocTypeGroupOptions",
   PostDocRev = "PostDocRev",
+  PatchDocType = "PatchDocType",
   GroupGet = "GroupGet",
   GetDocRevDisplayStatus = "GetDocRevDisplayStatus",
   PostTasks = "PostTasks",
@@ -607,6 +608,16 @@ export const routes: ICyRoutes =   {
     callConfig: {
       responseTimeout: 50 * 1000,
       requestTimeout: 50 * 1000,
+    },
+  },
+  PatchDocType: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_type/*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   ChangeRequestApprove: {
