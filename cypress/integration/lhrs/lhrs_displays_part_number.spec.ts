@@ -4,7 +4,9 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CSLDocType } from "../../utils/constants/documentTypes/csl";
 import { EForm } from "../../utils/constants/documentTypes/efm";
+import { CSPart } from "../../utils/constants/documentTypes/part";
 import { EFM10605TemplateSchema } from "../../utils/constants/formTemplates/efm10605";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -16,7 +18,11 @@ let approvalRequestDocumentType;
 let formDocumentType;
 let initialArDocument;
 let cslDocumentType;
+let csPartDocumentType;
+let createdPartFormDocument;
 let group;
+
+const EFM10605Rev = "EFM-10605 form";
 
 context("LHRS displays part number and rev for Lot created out of EFM-01065", () => {
   before(() => {
@@ -49,6 +55,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
             addresses: ["Address 1"],
             documentTypes: [
               EForm,
+              CSLDocType,
+              CSPart,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -56,6 +64,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          cslDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, CSLDocType.documentTypeName);
+          csPartDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, CSPart.documentTypeName);
           done();
         });
       });
@@ -102,7 +112,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
                   ],
                 },
               },
-              name: "EFM-10605 form",
+              name: EFM10605Rev,
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -133,6 +143,87 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
           });
         });
       });
+    });
+
+    it("[API]Create Part form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: secondEmployee.id,
+          name: "AR Form For Part",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Part form</p>",
+              document: {
+                docId: "FM-00003",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part form document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: csPartDocumentType[0].id,
+                }],
+                schema: csPartDocumentType[0].schema,
+              },
+
+            },
+            employeeId: secondEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPartFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPartFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+              },
+              employeeId: secondEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+  });
+
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+    });
+  });
+
+  context("Create CSL revision from EFM-10605", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Open EFM-10605", () => {
+      cy.drClickOnSpecificDocFromList({ item: EFM10605Rev });
     });
   });
 });
