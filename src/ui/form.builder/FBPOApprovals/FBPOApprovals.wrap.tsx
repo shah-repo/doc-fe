@@ -158,13 +158,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requestor) => {
         const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
-        const approvers = map(poApprovalsState?.getApprovals, "approver.id");
         if (!requestor) {
           checkLineItems(poItems, requestor);
           formState?.getInputState(name)?.setRender();
-        }
-        if (deletedRequestor !== requestor && approvers?.includes(deletedRequestor)) {
-          removeApprover([deletedRequestor]);
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
