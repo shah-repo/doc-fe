@@ -31,6 +31,7 @@ export enum CyRoutes {
   ExportApprovaMatrixNCO = "ExportApprovaMatrixNCO",
   GetChangeRequests = "GetChangeRequests",
   ChangeRequestApprove = "ChangeRequestApprove",
+  ApprovalsAbandon = "ApprovalsAbandon",
   ChangeRequestApproveNew = "ChangeRequestApproveNew",
   ARPreview = "ARPreview",
   GroupsPost = "GroupsPost",
@@ -621,6 +622,15 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/change_requests/*/approve",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+    },
+  },
+  ApprovalsAbandon: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/approvals/*/abandon",
     },
     callConfig: {
       responseTimeout: 25 * 1000,
