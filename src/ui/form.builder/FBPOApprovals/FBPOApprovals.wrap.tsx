@@ -164,6 +164,16 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => {
+      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+      const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      if (requestor) {
+        checkLineItems(poItems, requestor);
+        formState?.getInputState(name)?.setRender();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const checkGroups = (id: string) => {
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
