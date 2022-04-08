@@ -216,6 +216,10 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
           "padding": "10.5px 5px!important",
           "margin-right": 30,
         },
+        "& input[component-name*='lhr-step-']": {
+          "padding": "10.5px 5px!important",
+          "margin-right": 30,
+        },
       },
     },
   },
