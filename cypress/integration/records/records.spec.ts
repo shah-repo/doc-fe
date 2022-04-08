@@ -315,7 +315,7 @@ context("Records flow", () => {
       });
     });
 
-    context("Verify email for  recordform notification", () => {
+    context("Verify email for recordform notification", () => {
       it("Get emails", () => {
         dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
