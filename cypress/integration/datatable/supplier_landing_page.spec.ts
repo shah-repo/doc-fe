@@ -15,7 +15,7 @@ let supplierDocumentType;
 let adminEmployee;
 let group;
 
-context("Create company via API and create Suppliers document", () => {
+context("Suppliers landing page", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -54,8 +54,6 @@ context("Create company via API and create Suppliers document", () => {
       }).then((response) => {
         createdCompany = response;
         adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-        // secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-        // thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
         supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
         done();
       });
@@ -141,7 +139,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Navigate to one of the columns", () => {
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "EQ-00003");
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "SUP-00004");
     });
 
     it(`Verify drag and drop`, () => {
@@ -169,18 +167,13 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click on one of the documents from the Document list in the landing page", () => {
-      cy.get(".k-master-row").eq(0).arrowClick();
-    });
-
-    it("The system shall allow the user to open a document from within the Document List", () => {
-      cy.navigToSuppliers();
-      cy.get(".k-master-row").eq(0).arrowClick();
+      cy.dlSelectFirstDocument();
     });
   });
 
-  context("Create another supplier form", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
+  context("Create supplier form", () => {
+    it("Navigate to supplier list", () => {
+      cy.navigToSuppliers();
     });
 
     it("Click on 'Create a document'", () => {
@@ -214,67 +207,140 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.navigToSuppliers();
     });
   });
 
   context("Verify sorting arrows on each field", () => {
-    it("Verify sorting arrow for Supplier ID", () => {
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`td[data-grid-col-index="0"]`).should("have.text", "SUP-00004");
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="1"] span.k-i-sort-desc-sm`).should("exist");
-      cy.get(`td[data-grid-col-index="0"]`).should("have.text", "SUP-00004");
+    context("Sort 'Supplier ID'", () => {
+      it("Navigate to supplier list", () => {
+        cy.navigToSuppliers();
+      });
+
+      it("Supplier ID should be in ascending order", () => {
+        cy.contains("Supplier ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 0, colLength: 7 });
+      });
+
+      it("Supplier ID should be in descending order", () => {
+        cy.contains("Supplier ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 0, colLength: 7 });
+      });
     });
 
-    it("Verify sorting arrow for Supplier Name", () => {
-      cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`td[data-grid-col-index="1"]`).should("have.text", "API supplier");
-      cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] span.k-i-sort-desc-sm`).should("exist");
-      cy.get(`td[data-grid-col-index="1"]`).should("have.text", "API supplier");
+    context("Sort 'Supplier Name'", () => {
+      it("Supplier Name should be in ascending order", () => {
+        cy.contains("Supplier Name").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 1, colLength: 7 });
+      });
+
+      it("Supplier Name should be in descending order", () => {
+        cy.contains("Supplier Name").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 1, colLength: 7 });
+      });
     });
 
-    it("Verify sorting arrow for Supplier Level ", () => {
-      cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="3"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="3"] span.k-i-sort-desc-sm`).should("exist");
+    context("Sort 'Supplier Level'", () => {
+      it("Supplier Level should be in ascending order", () => {
+        cy.contains("Supplier Level").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 2, colLength: 7 });
+      });
+
+      it("Supplier Level should be in descending order", () => {
+        cy.contains("Supplier Level").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 2, colLength: 7 });
+      });
     });
 
-    it("Verify sorting arrow for State", () => {
-      cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="5"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="5"] span.k-i-sort-desc-sm`).should("exist");
+    context("Sort 'Supplier Status'", () => {
+      it("Supplier Status should be in ascending order", () => {
+        cy.contains("Supplier Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 3, colLength: 7 });
+      });
+
+      it("Supplier Status should be in descending order", () => {
+        cy.contains("Supplier Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 3, colLength: 7 });
+      });
     });
 
-    it("Verify sorting arrow for Owner", () => {
-      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
+    context("Sort 'State'", () => {
+      it("State should be in ascending order", () => {
+        cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 4, colLength: 7 });
+      });
+
+      it("State should be in descending order", () => {
+        cy.contains("State").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 4, colLength: 7 });
+      });
     });
 
-    it("Verify sorting arrow for Approval ID", () => {
-      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
+    context("Sort 'Owner'", () => {
+      it("Owner should be in ascending order", () => {
+        cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 5, colLength: 7 });
+      });
+
+      it("Owner should be in descending order", () => {
+        cy.contains("Owner").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 5, colLength: 7 });
+      });
+    });
+
+    context("Sort 'Approval ID'", () => {
+      it("Approval ID should be in ascending order", () => {
+        cy.contains("Approval ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 6, colLength: 7 });
+      });
+
+      it("Approval ID should be in descending order", () => {
+        cy.contains("Approval ID").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 6, colLength: 7 });
+      });
     });
   });
 
@@ -331,7 +397,7 @@ context("Create company via API and create Suppliers document", () => {
 
   context("Verify dropdown filters", () => {
     it("Verify dropdown filters", () => {
-      cy.alClearFilters();
+      cy.grpClearFilter();
       cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
       "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
@@ -464,10 +530,6 @@ context("Create company via API and create Suppliers document", () => {
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-    });
-
-    it("Verify that filter is enabled and functional", () => {
-      cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).should("be.visible").arrowClick();
     });
 
     it(`Crossed filter icon should appear `, () => {
