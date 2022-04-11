@@ -207,6 +207,22 @@ services:
       AWS_S3_OBJECT_ACL: "public-read"
       AWS_S3_TEMP_URL_TTL: "15m"
       AWS_REGION: "us-west-2"
+  
+  enlil_cypress_wordservice:
+    container_name: enlil_cypress_wordservice
+    image: "enlil_cypress_wordservice:${WORDSERVICE_GIT_COMMIT_HASH}"
+    ports:
+      - ${ENLIL_COMPOSE_EXPOSE_WORD_SERVICE_PORT}:5000
+    expose:
+      - 5000
+    networks:
+      - enlil_cypress_network
+    environment:
+      AWS_CONTAINER_CREDENTIALS_RELATIVE_URI: ${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}
+      AWS_REGION: "us-west-2"
+      AWS_DEFAULT_REGION: "us-west-2"
+      KMS_KEY: 7d4eed48-6b75-46c2-ab89-9c1032189495
+      SNS_TOPIC_ARN: arn:aws:sns:us-west-2:817083319299:dev_accept_revisions_errors
 volumes:
   enlil_cypress_postgres_tmpfs_volume:
     driver_opts:
