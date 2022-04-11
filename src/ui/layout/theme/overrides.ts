@@ -212,9 +212,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
         "&[data-cy='password'] fieldset": {
           borderWidth: "1px!important",
         },
-        [`& .MuiAutocomplete-endAdornment`]: {
-          paddingRight: "0px!important",
-        },
       },
     },
   },
