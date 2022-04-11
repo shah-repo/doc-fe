@@ -726,14 +726,6 @@ context("Purchase Order Landing Page", () => {
     });
   });
   context("Landing Page", () => {
-    it("Navigate to from PO page", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Navigate back to PO page", () => {
-      cy.navigToPurchaseOrder();
-    });
-
     // eslint-disable-next-line max-len
     it("Verify that system maintain PO filter settings during an Enlil session when navigating away from and back to the landing page", () => {
       cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
@@ -754,36 +746,148 @@ context("Purchase Order Landing Page", () => {
   });
 
   context("Verify that arrow for sorting are present in all columns and verify asm and desc order", () => {
-    it("Verify that arrow on PO # for sorting ", () => {
-      cy.verifyColumnSort({ columnIndex: "1" });
+    context("Sort 'PO #'", () => {
+      it("PO # should be in ascending order", () => {
+        cy.contains("PO #").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("PO #").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 0, colLength: 8 });
+      });
+
+      it("PO # should be in descending order", () => {
+        cy.contains("PO #").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("PO #").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 0, colLength: 8 });
+      });
     });
 
-    it("Verify sorting arrow for Revision", () => {
-      cy.verifyColumnSort({ columnIndex: "2" });
+    context("Sort 'Revision'", () => {
+      it("Revision should be in ascending order", () => {
+        cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 1, colLength: 8 });
+      });
+
+      it("Revision should be in descending order", () => {
+        cy.contains("Revision").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 1, colLength: 8 });
+      });
     });
 
-    it("Verify sorting arrow for PO Status", () => {
-      cy.verifyColumnSort({ columnIndex: "3" });
+    context("Sort 'PO Status'", () => {
+      it("PO Status should be in ascending order", () => {
+        cy.contains("PO Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 2, colLength: 8 });
+      });
+
+      it("PO Status should be in descending order", () => {
+        cy.contains("PO Status").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 2, colLength: 8 });
+      });
     });
 
-    it("Verify sorting arrow for Supplier", () => {
-      cy.verifyColumnSort({ columnIndex: "4" });
+    context("Sort 'Supplier'", () => {
+      it("Supplier should be in ascending order", () => {
+        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 3, colLength: 8 });
+      });
+
+      it("Supplier should be in descending order", () => {
+        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 3, colLength: 8 });
+      });
     });
 
-    it("Verify sorting arrow for Part Number", () => {
-      cy.verifyColumnSort({ columnIndex: "5" });
+    context("Sort 'Part Number'", () => {
+      it("Part Number should be in ascending order", () => {
+        cy.contains("Part Number").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 4, colLength: 8 });
+      });
+
+      it("Part Number should be in descending order", () => {
+        cy.contains("Part Number").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 4, colLength: 8 });
+      });
     });
 
-    it("Verify sorting arrow for Amount", () => {
-      cy.verifyColumnSort({ columnIndex: "6" });
+    context("Sort 'Amount'", () => {
+      it("Amount should be in ascending order", () => {
+        cy.contains("Amount").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 5, colLength: 8 });
+      });
+
+      it("Amount should be in descending order", () => {
+        cy.contains("Amount").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 5, colLength: 8 });
+      });
     });
 
-    it("Verify sorting arrow for Requestor", () => {
-      cy.verifyColumnSort({ columnIndex: "7" });
+    context("Sort 'Requestor'", () => {
+      it("Requestor should be in ascending order", () => {
+        cy.contains("Requestor").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 6, colLength: 8 });
+      });
+
+      it("Requestor should be in descending order", () => {
+        cy.contains("Requestor").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 6, colLength: 8 });
+      });
     });
 
-    it("Verify sorting arrow for Issue Date", () => {
-      cy.verifyColumnSort({ columnIndex: "8" });
+    context("Sort 'Issue Date'", () => {
+      it("Issue Date should be in ascending order", () => {
+        cy.contains("Issue Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-asc-sm")
+          .should("be.exist");
+        cy.verifyAscSort({ index: 7, colLength: 8 });
+      });
+
+      it("Issue Date should be in descending order", () => {
+        cy.contains("Issue Date").eq(0).click();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-desc-sm")
+          .should("be.exist");
+        cy.verifyDesSort({ index: 7, colLength: 8 });
+      });
     });
   });
 
@@ -847,10 +951,6 @@ context("Purchase Order Landing Page", () => {
     // eslint-disable-next-line max-len
     it("User should be able to insert filter in input field and icon of the filter should be visible next to the field", () => {
       cy.get(".k-i-filter.k-icon").should("be.visible");
-    });
-
-    it("Click on the filter icon", () => {
-      cy.get(".k-i-filter.k-icon").click();
     });
   });
 
@@ -975,7 +1075,7 @@ context("Purchase Order Landing Page", () => {
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
