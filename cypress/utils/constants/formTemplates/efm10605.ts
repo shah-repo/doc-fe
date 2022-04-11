@@ -16,7 +16,7 @@ export const EFM10605TemplateSchema: FBSchemaProps[] = [
     applicableValidationSchema: true,
   },
   {
-    name: "lot_part",
+    name: "lot_part_deleted",
     type: "autocomplete",
     index: 1,
     label: "Part Number:",
@@ -35,7 +35,7 @@ export const EFM10605TemplateSchema: FBSchemaProps[] = [
     applicableValidationSchema: true,
   },
   {
-    name: "part-number-kurjshqb",
+    name: "lot_part",
     type: "autocomplete",
     index: 2,
     label: "Part Number:",
