@@ -3,7 +3,9 @@
 set -a
   export ENLIL_COMPOSE_SUITE_NUMBER="13"
 
-  export FE_GIT_COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8)
+  # export FE_GIT_COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8)
+  export FE_GIT_COMMIT_HASH="a1db627d"
+  
   export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
   export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
   export EXPORT_GIT_COMMIT_HASH=$(cd $EXPORT_REPO;git rev-parse HEAD | cut -c1-8)
