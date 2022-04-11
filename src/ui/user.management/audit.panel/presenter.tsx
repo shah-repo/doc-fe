@@ -35,7 +35,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   closeHistoryPanel,
 }) => {
   // Take from constants
-  const limit = 5;
+  const limit = 1;
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -43,6 +43,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [Items, setItems] = React.useState<NullableArray<AuditDetailsProps[]>>([]);
   const [page, setPage] = useState(0);
   const groups = useSelector(userManagementSelectors.groupsById);
+  console.log(JSON.stringify(groups));
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
 
@@ -70,16 +71,16 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     if (auditRecord.fieldPath === "employees") {
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
-          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroups, {}),
-          secondayText: getGroupName(auditRecord.nextValue),
-          auditType: ACTION_TITLE_MAPPIING.AddedToGroups,
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesAddedToGroup, { groupName: getGroupName(auditRecord.nextValue) }),
+          secondayText: auditRecord.employeeName,
+          auditType: ACTION_TITLE_MAPPIING.EmployeesAddedToGroup,
           sortedIndex: 3,
         };
       } else if (auditRecord.type === "ARRAY_DELETED") {
         actionInfo = {
-          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.DeletedFromGroups, {}),
-          secondayText: getGroupName(auditRecord.previousValue),
-          auditType: ACTION_TITLE_MAPPIING.DeletedFromGroups,
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroup, { groupName: getGroupName(auditRecord.previousValue) }),
+          secondayText: auditRecord.employeeName,
+          auditType: ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroup,
           sortedIndex: 3,
         };
       }
@@ -175,22 +176,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (!auditTypes.includes(ACTION_TITLE_MAPPIING.CreatedNewUser)) {
         sameGroup.unshift({
           primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedUserName, {}),
-          secondayText: employeeDetails.user.name,
-          sortedIndex: 1,
-        });
-      }
-    }
-    if (
-      auditTypes.includes(ACTION_TITLE_MAPPIING.DeletedFromGroups)
-    ) {
-      sameGroup.unshift({
-        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.RemovedUserEmail, {}),
-        secondayText: employeeDetails.user.email,
-        sortedIndex: 2,
-      });
-      if (!auditTypes.includes(ACTION_TITLE_MAPPIING.CreatedNewUser)) {
-        sameGroup.unshift({
-          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.RemovedUserName, {}),
           secondayText: employeeDetails.user.name,
           sortedIndex: 1,
         });

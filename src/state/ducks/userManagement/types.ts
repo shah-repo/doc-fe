@@ -149,4 +149,5 @@ export enum ACTION_TITLE_MAPPIING {
   EmployeesAddedToGroup= "EmployeesAddedToGroup",
   RemovedUserEmail="RemovedUserEmail",
   RemovedUserName="RemovedUserName",
+  RemovedGroupName="RemovedGroupName",
 }

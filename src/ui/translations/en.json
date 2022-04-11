@@ -1062,6 +1062,7 @@
   "user.management.audit.history.ResetPasswordFor": "For user",
   "user.management.audit.history.EmployeesDeleteFromGroup": "Employees were removed from group {groupName}",
   "user.management.audit.history.EmployeesAddedToGroup": "Employees were added to group {groupName}",
+  "user.management.audit.history.RemovedGroupName": "Employees removed from group",
   "api.token.title": "API Token",
   "api.token.key": "Key",
   "api.token.secret": "Secret",
