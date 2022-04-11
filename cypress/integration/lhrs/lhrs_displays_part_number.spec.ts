@@ -535,4 +535,270 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       });
     });
   });
+
+  context("Create CSL revision from revised EFM-10605", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Open EFM-10605", () => {
+      cy.drClickOnSpecificDocFromList({ item: EFM10605Rev });
+    });
+
+    it("Clicks on revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Clicks Save button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release revised EFM-10605", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    context("Create CSL revision from revised EFM-10605", () => {
+      it("Click on Create New button", () => {
+        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      });
+
+      it("Enter title", () => {
+        cy.drEnterDocumentTitle( { name: "CSL (revised EFM-10605) with part number and CS reference" });
+      });
+
+      it("Enter quantity received", () => {
+        cy.get("[name=\"lot_quantity\"]").arrowType("12");
+      });
+
+      it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
+        cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
+        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+      });
+
+      it("Click create document", () => {
+        cy.recClickSaveBtn();
+      });
+
+      context(`Verify '${CSPartDocumentTitle}' is selected`, () => {
+        it(`Verify '${CSPartDocumentTitle}' is selected for 'References'`, () => {
+          cy.get("[data-cy=\"referenceTo\"]").should("contain.text", `CS-02001 - 1 - ${CSPartDocumentTitle}`);
+        });
+
+        it(`Verify '${CSPartDocumentTitle}' is selected for 'Part Number'`, () => {
+          cy.get("[data-cy=\"lot_part\"]").should("have.attr", "value", `CS-02001 - rev 1 - ${CSPartDocumentTitle}`);
+        });
+      });
+
+      context("Release CSL", () => {
+        it("Add an Approval", () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+        });
+
+        it("Click 'Submit for Approval' button", () => {
+          cy.pmSubmitForApproval();
+        });
+
+        it("Click 'Approve' button", () => {
+          cy.ebApprove();
+        });
+      });
+    });
+  });
+
+  context("Create MPI document", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter title 'MPI document'", () => {
+      cy.drEnterDocumentTitle({ name: "MPI document (revised EFM-10605)" });
+    });
+
+    it("Enters description 'MPI Description'", () => {
+      cy.drEnterDocumentDescription({ description: "MPI Description" });
+    });
+
+    it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: MPI });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add 'CS Part' as Material to step #1", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    context("Release MPI", () => {
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Approve and release MPI document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+
+    context("Verify Materials", () => {
+      it("Verify materials of clone of Step #1", () => {
+        cy.contains("Step #1").parentsUntil("li")
+          .find("[data-cy=\"form.builder.mpi.procedure.materials.title\"]")
+          .should("have.text", `CS-02001 - ${CSPartDocumentTitle} | Qty: 3 each`);
+      });
+    });
+
+  });
+
+  context("Create LHRt document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill LHRt document attributes", () => {
+      it("Enter document title 'LHRt document'", () => {
+        cy.drEnterDocumentTitle({ name: "LHRt document (revised EFM-10605)" });
+      });
+
+      it("Fill LHRt document description", () => {
+        cy.drEnterDocumentDescription({ description: "LHRt document description" });
+      });
+
+      it("Select 'LHRt' document type", () => {
+        cy.drSelectDocumentType({ documentType: "LHR Template" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Lot History Record' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
+          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      context("Select created MPI in LHR template", () => {
+        it("Select MPI document for step #1 in LHRt", () => {
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+            $el.trigger("click");
+          });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document (revised EFM-10605)");
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+      });
+
+      context("Release LHRt", () => {
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Approve and release LHRt document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+  });
+
+  context("Create LHR", () => {
+    it("Click create new document from LHRt", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+    });
+
+    it("Enter initial quantity", () => {
+      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+    });
+
+    it("Select 'R&D' build type", () => {
+      cy.unClick();
+      cy.get("[value=\"R&D\"]").check();
+    });
+
+    it("Add 'Due Date'", () => {
+      cy.poAddDateRequired();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Start LHRs #1", () => {
+    it("Click 'START MPI'", () => {
+      cy.mpiStartStep({ stepNumber: 1 });
+    });
+
+    it(`Click 'SELECT' for CS '${CSPartDocumentTitle}'`, () => {
+      cy.get("[data-cy=\"form.builder.select\"]")
+        .eq(0)
+        .click({ force: true });
+    });
+
+    it(`Select lot 'LOT #${lotDateSuffix}03'`, () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[data-cy=usedOverride]").arrowClick();
+      cy.get("ul>li[role=option]").contains(`LOT #${lotDateSuffix}03`).arrowClick();
+    });
+
+    it("Select quantity in lot dialog", () => {
+      cy.get("input[name=\"quantity\"]").arrowType("5");
+    });
+
+    it("Click 'SAVE' on select lot dialog", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
+        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+          .eq(0)
+          .click();
+      });
+    });
+
+    context(`Lot is displayed under CS '${CSPartDocumentTitle}'`, () => {
+      it(`Verify LOT is selected for '${CSPartDocumentTitle}'`, () => {
+        cy.get("div[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").eq(0).parent()
+          .should("contain.text", `LOT #${lotDateSuffix}03`);
+      });
+    });
+  });
 });
