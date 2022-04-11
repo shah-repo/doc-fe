@@ -86,10 +86,9 @@ set +a
 echo "--| BE_GIT_COMMIT_HASH: $BE_GIT_COMMIT_HASH"
 echo "--| FE_GIT_COMMIT_HASH: $FE_GIT_COMMIT_HASH"
 echo "--| VALIDATORS_GIT_COMMIT_HASH: $VALIDATORS_GIT_COMMIT_HASH"
-echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
+echo "--| EXPORT_GIT_COMMIT_HASH: $EXPORT_GIT_COMMIT_HASH"
 echo "--| DOCXTOPDF_GIT_COMMIT_HASH: $DOCXTOPDF_GIT_COMMIT_HASH"
 echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
-echo "--| ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
 
 build_be () {
   cd $BE_REPO
@@ -175,11 +174,31 @@ build_docx_to_pdf () {
   fi
 }
 
+
+build_word_service () {
+  cd $BUILD_WORD_SERVICE_REPO
+  IMAGE=doc_export_${WORDSERVICE_GIT_COMMIT_HASH}
+
+  DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    echo "word-service image found"
+  else
+    echo "word-service image not found, building..."
+    ./scripts/cypress_build_images.sh
+    docker tag enlil_cypress_wordservice:$WORDSERVICE_GIT_COMMIT_HASH $DOCKER_IMAGE
+    docker push $DOCKER_IMAGE
+  fi
+}
+
 build_be &
 build_fe &
 build_validators &
 build_export &
 build_docx_to_pdf &
+build_word_service &
 wait
 
 echo "Done with building images"
