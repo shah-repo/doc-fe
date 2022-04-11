@@ -93,6 +93,10 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+### Enable debug logs
+Project is using `debug` package https://github.com/debug-js/debug
+set `debug` variable in localstorage to `enlil:*`
+More info: https://github.com/debug-js/debug#browser-support
 
 ## Cypress
 

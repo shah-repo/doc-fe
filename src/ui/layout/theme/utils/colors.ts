@@ -22,6 +22,7 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
+  platinum_grey = "#E2E2E2",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -36,6 +37,7 @@ enum Colors {
   cerulean="#01A6C7",
   light_slate_blue="#7B61FF",
   steel_blue="#457AB5",
+  topaz="#03C0C1",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -72,6 +74,7 @@ enum Colors {
   light_cyan="#DCF4FD",
   lochmara="#306AAC",
   peri_winkle_blue="#8295FA",
+  white_smoke="#F9F9F9"
 }
 
 export default Colors;

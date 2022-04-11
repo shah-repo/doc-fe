@@ -45,7 +45,7 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
         placement="top"
         arrow
       >
-        <IconButton onClick={handleClick}>
+        <IconButton onClick={handleClick} data-cy={"manageColumnsBtn"}>
           <ViewGridIcon />
         </IconButton>
       </StyleTooltip>

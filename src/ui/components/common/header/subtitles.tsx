@@ -3,7 +3,6 @@ import React from "react";
 import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 
-const LHR_BUILD_TYPE = "lhr-build-type";
 const LHR_SUBTITLE_PRECALC_KEY = "lshs_subtitle";
 
 const LABEL_LENGTH = 50;
@@ -17,7 +16,7 @@ const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: 
     </a>);
 
 const generateLHRSubtitle = (documentRevision: DocumentRevision) => <React.Fragment>
-  {`${documentRevision.document?.lot?.lotId}${documentRevision.formInput?.[LHR_BUILD_TYPE] === "R&D" ? "RD" : ""}`}
+  {`${documentRevision.document?.lot?.lotId}`}
 </React.Fragment>;
 
 const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {

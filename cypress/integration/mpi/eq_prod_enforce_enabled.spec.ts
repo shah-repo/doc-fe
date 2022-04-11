@@ -1716,12 +1716,13 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     it("Save document type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
         cy.get(`td input[value="Lot History Record"]`)
-          .parents("tr").find("button").eq(0).arrowClick();
+          .parents("tr").find("button").eq(0).arrowClick().wait(200);
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify Equipment Enforce Prod is checked", () => {
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains(/^Lot History Record$/)
         .parents("tr").find(`td[data-grid-col-index="12"] input`).should("be.checked");
     });
@@ -1950,13 +1951,11 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-          cy.listLoadingElementShouldAppear();
-        });
+        cy.drClickReviseDocument();
       });
 
       it("Update step #1 description", () => {
+        cy.cmpTurnOffAutosave();
         cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
         cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
       });
@@ -2168,13 +2167,11 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-          cy.listLoadingElementShouldAppear();
-        });
+        cy.drClickReviseDocument();
       });
 
       it("Update step #1 description", () => {
+        cy.cmpTurnOffAutosave();
         cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
         cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
       });

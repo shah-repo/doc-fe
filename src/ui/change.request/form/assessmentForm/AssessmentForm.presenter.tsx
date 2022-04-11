@@ -1,6 +1,7 @@
 import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React, { useEffect } from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
@@ -17,12 +18,14 @@ import styles from "./AssessmentForm.styles";
 
 interface Props
   extends WithStyles<typeof styles>,
-  FormikProps<ChangeRequestFormValues> {
+  FormikProps<ChangeRequestFormValues>,
+  RouteComponentProps {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
+
 export let formIdContext = React.createContext<string | undefined>(undefined);
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
@@ -30,16 +33,14 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   changeRequest,
   dirty,
-  setFieldValue,
-  doNotPrompt,
   isSubmitting,
   isValidating,
   initialValues,
   resetForm,
   errors,
   values,
-  submitForm,
   FBContainer,
+  history,
 }) => {
   const formContext = useFormContext();
   const didMount = useDidMount();
@@ -68,8 +69,16 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           errors={errors}
         />
         <PromptIfDirty
-          dirty={dirty}
-          doNotPrompt={doNotPrompt}
+          when={dirty}
+          navigate={(path) => {
+            history.push(path);
+          }}
+          shouldBlockNavigation={() => {
+            if (dirty) {
+              return true;
+            }
+            return false;
+          }}
         />
         <Box>
           <InputField
@@ -91,4 +100,4 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(AssessmentFormPresenter);
+export default withRouter(withStyles(styles)(AssessmentFormPresenter));
