@@ -28,8 +28,9 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   scheduledForDeletion: false,
 };
 
+// Autosave disable changes
 const AUTOSAVE_DEFAULT_STATE = {
-  autosaveEnabled: true,
+  autosaveEnabled: false,
 };
 
 const REDLINE_DEFAULT_STATE = {
@@ -110,7 +111,9 @@ const autosaveConfig = (
   switch (action.type) {
     case AUTOSAVE_CONFIG:
       return {
-        autosaveEnabled: !state.autosaveEnabled,
+        // Autosave disable changes
+        /* autosaveEnabled: !state.autosaveEnabled, */
+        autosaveEnabled: false,
       };
     case LOGOUT_USER:
       return AUTOSAVE_DEFAULT_STATE;
@@ -138,6 +141,6 @@ const redlineConfig = (
 export default combineReducers({
   selectedCompany,
   companyMine,
-  autosaveConfig,
   redlineConfig,
+  autosaveConfig,
 });
