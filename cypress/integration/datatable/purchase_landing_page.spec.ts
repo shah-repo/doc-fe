@@ -1087,6 +1087,42 @@ context("Purchase Order Landing Page", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
+
+    it("Insert filter", () => {
+      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001").wait(500);
+    });
+
+    it(`Crossed filter icon should appear `, () => {
+      cy.get(".k-button.k-clear-button-visible").should("be.visible").wait(500);
+    });
+
+    it(`Select option Contains and verify that the filter is functional`, () => {
+      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Contains").arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+    });
+
+    it("Verify that each filter from the dropdown list for each column in the landing page is functional", () => {
+      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="4"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="5"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="6"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.grpClearFilter();
+    });
+
+    it("Select option from dropdown list", () => {
+      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick().wait(500);
+      cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+    });
+
+    it(`Crossed filter icon should appear `, () => {
+      cy.get(".k-button-icon.k-clear-button-visible").should("exist");
+    });
   });
 });
 
