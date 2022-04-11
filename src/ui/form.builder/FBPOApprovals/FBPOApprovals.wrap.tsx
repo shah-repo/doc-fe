@@ -55,13 +55,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     isIncluded = (group: FBRequiredApprover): boolean =>
       (includes(map(poApprovalsState?.checkedGroups, "id"), group.id));
 
+    const getApprovals = (approvals) => approvals.filter((data) => data.status !== ApprovalStatus.Abandoned);
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
       if (approval.status === ApprovalStatus.Rejected || approval.status === ApprovalStatus.Approved) {
         window.location.reload();
       } else {
         const stateApprovals = filter(poApprovalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
-        poApprovalsState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
+        poApprovalsState?.setApprovals(getApprovals(unionBy(stateApprovals, [approval], "id")));
       }
     }
 
@@ -135,7 +136,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const filteredApprovals: FBInlineApprovalBody[] = compact(map(poApprovalsState.approvals, (approval) =>
           approval.approverId === data?.approverId ? data : approval
         ));
-        poApprovalsState.setApprovals(filteredApprovals);
+        poApprovalsState.setApprovals(getApprovals(filteredApprovals));
         if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();
         }
