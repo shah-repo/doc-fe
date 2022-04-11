@@ -7,7 +7,7 @@ import UnsavedChangesDialog from "./UnsavedChangesDialog";
 
 interface Props {
   when: boolean;
-  navigate: (path: any) => void;
+  navigate: (path: string) => void;
   shouldBlockNavigation: (value?: any) =>  boolean;
 }
 
