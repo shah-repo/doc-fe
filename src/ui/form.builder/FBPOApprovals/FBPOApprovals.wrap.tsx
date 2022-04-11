@@ -34,6 +34,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     dialogState,
     disabled,
     disabledOptions,
+    disableChipDelete,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -102,7 +103,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
       if (updateApprovers && requester && proceedToNewReq && !approvers?.includes(requester)) {
         addApprover([requester]);
-      } else if (!requester && approvers?.includes(deletedRequestor)) {
+      } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
         removeApprover([deletedRequestor]);
       }
     };
@@ -263,7 +264,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
 
-    disabledOptions = [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+    disabledOptions = [];
+    if (formState?.inputState.get(name)?.value.length) {
+      disabledOptions = isAdministrativeChange ? formState?.inputState.get(name)?.value : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+    }
 
     return Component({
       ...(props as T),
@@ -282,6 +286,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       dialogState,
       disabled,
       disabledOptions,
+      disableChipDelete: !isAdministrativeChange,
     });
   };
 
