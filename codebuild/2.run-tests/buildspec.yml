@@ -3,8 +3,8 @@ version: 0.2
 env:
   shell: bash
   exported-variables:
-     - AWS_DEFAULT_REGION
-     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+    - AWS_DEFAULT_REGION
+    - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 phases:
   install:
     commands:
@@ -13,6 +13,9 @@ phases:
       - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $commits_file_location | tr -d '"')
       - export BE_GIT_COMMIT_HASH=$(jq '.beCommit' $commits_file_location | tr -d '"')
       - export VALIDATORS_GIT_COMMIT_HASH=$(jq '.validatorsCommit' $commits_file_location | tr -d '"')
+      - export EXPORT_GIT_COMMIT_HASH=$(jq '.exportCommit' $commits_file_location | tr -d '"')
+      - export DOCXTOPDF_GIT_COMMIT_HASH=$(jq '.docxtopdfCommit' $commits_file_location | tr -d '"')
+      - export WORDSERVICE_GIT_COMMIT_HASH=$(jq '.wordServiceCommit' $commits_file_location | tr -d '"')
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - cd $CODEBUILD_SRC_DIR
       - source ./codebuild/2.run-tests/export_variables.sh
@@ -28,7 +31,7 @@ phases:
 reports:
   report-name-or-arn:
     files:
-      - '**/*'
+      - "**/*"
     base-directory: test-results/some_ci_build_id/json/junit
     file-format: JunitXml
 artifacts:
