@@ -69,18 +69,19 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       sortedIndex: 0,
     };
     if (auditRecord.fieldPath === "employees") {
+      const groupName = getGroupName(auditRecord.nextValue ? auditRecord.nextValue : auditRecord.previousValue);
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
-          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesAddedToGroup, { groupName: getGroupName(auditRecord.nextValue) }),
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesAddedToGroups, { groupName }),
           secondayText: auditRecord.employeeName,
-          auditType: ACTION_TITLE_MAPPIING.EmployeesAddedToGroup,
+          auditType: ACTION_TITLE_MAPPIING.EmployeesAddedToGroups,
           sortedIndex: 3,
         };
       } else if (auditRecord.type === "ARRAY_DELETED") {
         actionInfo = {
-          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroup, { groupName: getGroupName(auditRecord.previousValue) }),
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroups, { groupName }),
           secondayText: auditRecord.employeeName,
-          auditType: ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroup,
+          auditType: ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroups,
           sortedIndex: 3,
         };
       }
@@ -206,6 +207,12 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       }
       if (auditType === ACTION_TITLE_MAPPIING.DeletedFromGroups as string && secondayText.length <= 1) {
         primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.DeletedFromGroup, {});
+      }
+      if (auditType === ACTION_TITLE_MAPPIING.EmployeesAddedToGroups as string && secondayText.length <= 1) {
+        primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesAddedToGroup, {});
+      }
+      if (auditType === ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroups as string && secondayText.length <= 1) {
+        primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroup, {});
       }
       return { primaryText, secondayText: secondayText.join(", "), sortedIndex, auditType };
       // return { primaryText, secondayText: uniq(secondayText).sort().join(", "), sortedIndex, auditType };
