@@ -375,10 +375,8 @@ context("Document list test", () => {
     });
 
     it("Column grouping", () => {
-      cy.pause();
       cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
-      cy.pause();
     });
 
     it("Verify that data is sorted based on that column grouping", () => {
