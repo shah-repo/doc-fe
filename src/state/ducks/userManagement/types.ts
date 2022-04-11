@@ -145,4 +145,8 @@ export enum ACTION_TITLE_MAPPIING {
   ResetPassword = "ResetPassword",
   ResetPasswordDescription = "ResetPasswordDescription",
   ResetPasswordFor = "ResetPasswordFor",
+  EmployeesDeleteFromGroup = "EmployeesDeleteFromGroup",
+  EmployeesAddedToGroup= "EmployeesAddedToGroup",
+  RemovedUserEmail="RemovedUserEmail",
+  RemovedUserName="RemovedUserName",
 }

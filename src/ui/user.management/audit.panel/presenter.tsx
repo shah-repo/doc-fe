@@ -35,13 +35,13 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   closeHistoryPanel,
 }) => {
   // Take from constants
-  const limit = 1;
+  const limit = 5;
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [opendrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<NullableArray<AuditDetailsProps[]>>([]);
-  const [page, setPage] = useState(22);
+  const [page, setPage] = useState(0);
   const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
@@ -67,7 +67,30 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       auditType: ACTION_TITLE_MAPPIING.Unknown,
       sortedIndex: 0,
     };
-    if (["resetPasswordEmailTimestamp", "resendConfirmationEmailTimestamp"].includes(auditRecord.fieldPath) && auditRecord.type === "OBJECT_EDITED") {
+    if (auditRecord.fieldPath === "employees") {
+      if (auditRecord.type === "ARRAY_NEW") {
+        actionInfo = {
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroups, {}),
+          secondayText: getGroupName(auditRecord.nextValue),
+          auditType: ACTION_TITLE_MAPPIING.AddedToGroups,
+          sortedIndex: 3,
+        };
+      } else if (auditRecord.type === "ARRAY_DELETED") {
+        actionInfo = {
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.DeletedFromGroups, {}),
+          secondayText: getGroupName(auditRecord.previousValue),
+          auditType: ACTION_TITLE_MAPPIING.DeletedFromGroups,
+          sortedIndex: 3,
+        };
+      }
+    } else if (auditRecord.fieldPath === "employees" && auditRecord.type === "ARRAY_DELETED") {
+      actionInfo = {
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroup, { groupName: getGroupName(auditRecord.previousValue) }),
+        secondayText: auditRecord.employeeName,
+        auditType: ACTION_TITLE_MAPPIING.EmployeesDeleteFromGroup,
+        sortedIndex: 0,
+      };
+    } else if (["resetPasswordEmailTimestamp", "resendConfirmationEmailTimestamp"].includes(auditRecord.fieldPath) && auditRecord.type === "OBJECT_EDITED") {
       actionInfo = {
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.ResetPassword, {}),
         secondayText: getTransalatedText(ACTION_TITLE_MAPPIING.ResetPasswordDescription, {}),
@@ -142,8 +165,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     const auditTypes = map(sameGroup, "auditType");
     if (
       auditTypes.includes(ACTION_TITLE_MAPPIING.AddedToGroups) ||
-      auditTypes.includes(ACTION_TITLE_MAPPIING.AddedToGroup) ||
-      auditTypes.includes(ACTION_TITLE_MAPPIING.DeletedFromGroups)
+      auditTypes.includes(ACTION_TITLE_MAPPIING.AddedToGroup)
     ) {
       sameGroup.unshift({
         primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedUserEmail, {}),
@@ -153,6 +175,22 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (!auditTypes.includes(ACTION_TITLE_MAPPIING.CreatedNewUser)) {
         sameGroup.unshift({
           primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.AddedUserName, {}),
+          secondayText: employeeDetails.user.name,
+          sortedIndex: 1,
+        });
+      }
+    }
+    if (
+      auditTypes.includes(ACTION_TITLE_MAPPIING.DeletedFromGroups)
+    ) {
+      sameGroup.unshift({
+        primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.RemovedUserEmail, {}),
+        secondayText: employeeDetails.user.email,
+        sortedIndex: 2,
+      });
+      if (!auditTypes.includes(ACTION_TITLE_MAPPIING.CreatedNewUser)) {
+        sameGroup.unshift({
+          primaryText: getTransalatedText(ACTION_TITLE_MAPPIING.RemovedUserName, {}),
           secondayText: employeeDetails.user.name,
           sortedIndex: 1,
         });
@@ -180,6 +218,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       }
       if (auditType === ACTION_TITLE_MAPPIING.AddedToGroups as string && secondayText.length <= 1) {
         primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.AddedToGroup, {});
+      }
+      if (auditType === ACTION_TITLE_MAPPIING.DeletedFromGroups as string && secondayText.length <= 1) {
+        primaryText = getTransalatedText(ACTION_TITLE_MAPPIING.DeletedFromGroup, {});
       }
       return { primaryText, secondayText: secondayText.join(", "), sortedIndex, auditType };
       // return { primaryText, secondayText: uniq(secondayText).sort().join(", "), sortedIndex, auditType };
