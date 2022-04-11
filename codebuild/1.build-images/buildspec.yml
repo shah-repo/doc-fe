@@ -3,14 +3,17 @@ version: 0.2
 env:
   shell: bash
   exported-variables:
-     - AWS_DEFAULT_REGION
-     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+    - AWS_DEFAULT_REGION
+    - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 phases:
   pre_build:
     commands:
       - export FE_REPO="$CODEBUILD_SRC_DIR"
       - export BE_REPO="$CODEBUILD_SRC_DIR_backend_code"
       - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators_code"
+      - export EXPORT_REPO="$CODEBUILD_SRC_DIR_doc_export_code"
+      - export DOCXTOPDF_REPO="$CODEBUILD_SRC_DIR_docx_to_pdf_code"
+      - export BUILD_WORD_SERVICE_REPO="$CODEBUILD_SRC_DIR_word_service_code"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:

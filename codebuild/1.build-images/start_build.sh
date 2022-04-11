@@ -6,6 +6,10 @@ set -a
   export FE_GIT_COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8)
   export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
   export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
+  export EXPORT_GIT_COMMIT_HASH=$(cd $EXPORT_REPO;git rev-parse HEAD | cut -c1-8)
+  export DOCXTOPDF_GIT_COMMIT_HASH=$(cd $DOCXTOPDF_REPO;git rev-parse HEAD | cut -c1-8)
+  export WORDSERVICE_GIT_COMMIT_HASH=$(cd $BUILD_WORD_SERVICE_REPO;git rev-parse HEAD | cut -c1-8)
+
 set +a
 
 if [[ -z "${ENLIL_COMPOSE_SUITE_NUMBER}" ]]; then
@@ -28,6 +32,21 @@ if [[ -z "${VALIDATORS_REPO}" ]]; then
   exit
 fi
 
+if [[ -z "${EXPORT_REPO}" ]]; then
+  echo "EXPORT_REPO not set, exiting"
+  exit
+fi
+
+if [[ -z "${DOCXTOPDF_REPO}" ]]; then
+  echo "DOCXTOPDF_REPO not set, exiting"
+  exit
+fi
+
+if [[ -z "${BUILD_WORD_SERVICE_REPO}" ]]; then
+  echo "BUILD_WORD_SERVICE_REPO not set, exiting"
+  exit
+fi
+
 set -a
   export COMPOSE_PROJECT_NAME="enlil_codebuild"
 
@@ -39,6 +58,9 @@ set -a
   export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DIRECTOR_PORT="1234"
   export ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT="4219"
   export ENLIL_COMPOSE_EXPOSE_HAPROXY_PORT="80"
+  export ENLIL_COMPOSE_EXPOSE_GOTENBERG_PORT="3000"
+  export ENLIL_COMPOSE_EXPOSE_DOCXTOPDF_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+12))"
+  export ENLIL_COMPOSE_EXPOSE_WORD_SERVICE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+13))"
 
   export ENLIL_BE_ENV_NAME="CYPRESS_TEST_$ENLIL_COMPOSE_SUITE_NUMBER"
   
@@ -63,6 +85,9 @@ echo "--| BE_GIT_COMMIT_HASH: $BE_GIT_COMMIT_HASH"
 echo "--| FE_GIT_COMMIT_HASH: $FE_GIT_COMMIT_HASH"
 echo "--| VALIDATORS_GIT_COMMIT_HASH: $VALIDATORS_GIT_COMMIT_HASH"
 echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
+echo "--| DOCXTOPDF_GIT_COMMIT_HASH: $DOCXTOPDF_GIT_COMMIT_HASH"
+echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
+echo "--| ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
 
 build_be () {
   cd $BE_REPO
@@ -112,9 +137,47 @@ build_validators () {
   fi
 }
 
+build_export () {
+  cd $EXPORT_REPO
+  IMAGE=doc_export_${EXPORT_GIT_COMMIT_HASH}
+
+  DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    echo "doc-export image found"
+  else
+    echo "doc-export  image not found, building..."
+    ./scripts/cypress_build_images.sh
+    docker tag enlil_doc_export:$EXPORT_GIT_COMMIT_HASH $DOCKER_IMAGE
+    docker push $DOCKER_IMAGE
+  fi
+}
+
+build_docx_to_pdf () {
+  cd $DOCXTOPDF_REPO
+  IMAGE=doc_export_${DOCXTOPDF_GIT_COMMIT_HASH}
+
+  DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    echo "docx-to-pdf image found"
+  else
+    echo "docx-to-pdf  image not found, building..."
+    ./scripts/cypress_build_images.sh
+    docker tag enlil_cypress_docxtopdf:$DOCXTOPDF_GIT_COMMIT_HASH $DOCKER_IMAGE
+    docker push $DOCKER_IMAGE
+  fi
+}
+
 build_be &
 build_fe &
 build_validators &
+build_export &
+build_docx_to_pdf &
 wait
 
 echo "Done with building images"
