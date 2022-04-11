@@ -1,45 +1,99 @@
-import React, { useEffect } from "react";
+/* eslint-disable arrow-body-style */
+import React, { useEffect, useState } from "react";
 import { Prompt } from "react-router-dom";
+import { FormSaveContext } from "../../documentRevision/forms/presenters/Actions";
+import useDialog from "../../hooks/useDialog";
+import UnsavedChangesDialog from "./UnsavedChangesDialog";
 
-export interface Props {
-  dirty: boolean;
-  doNotPrompt?: boolean;
-  onDirtyFlagChange?: (dirty: boolean) => void;
+interface Props {
+  when: boolean;
+  navigate: (path: string) => void;
+  shouldBlockNavigation: (value?: any) =>  boolean;
 }
 
+interface UnsavedChangesDialogProps {
+  handleCloseDialogAfterSave: () => void;
+  closeModal: (cb?: any) => void;
+}
+
+export let UnsavedChangesDialogContext = React.createContext<UnsavedChangesDialogProps>({
+  handleCloseDialogAfterSave: () => { return; },
+  closeModal: () => { return; },
+});
+
 const PromptIfDirty: React.FunctionComponent<Props> = ({
-  dirty, doNotPrompt, onDirtyFlagChange,
+  navigate,
+  when,
+  shouldBlockNavigation,
 }) => {
-  useEffect(() => {
-    const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const cancelBeforeUnload = () => window.onbeforeunload = () => {};
+  const dialogPrompt = useDialog();
 
-    if (onDirtyFlagChange) {
-      onDirtyFlagChange(dirty);
+  const [lastLocation, updateLastLocation] = useState<any>(null);
+  const [confirmedNavigation, updateConfirmedNavigation] = useState(false);
+  const [value, setValue] = React.useState("true");
+
+  const showModal = (location) => {
+    dialogPrompt.open();
+    updateLastLocation(location);
+  };
+
+  const handleCloseDialogAfterSave = () => {
+    closeModal(() => {
+      if (lastLocation) {
+        updateConfirmedNavigation(true);
+      }
+    });
+  };
+
+  const closeModal = (cb) => {
+    dialogPrompt.close();
+    if (cb) {
+      cb();
     }
+    updateLastLocation(null);
+  };
 
-    if (doNotPrompt) {
-      cancelBeforeUnload();
+  UnsavedChangesDialogContext = React.createContext<UnsavedChangesDialogProps>({
+    handleCloseDialogAfterSave,
+    closeModal,
+  });
+  const onFormClick = React.useContext(FormSaveContext);
+
+  const handleBlockedNavigation = (nextLocation) => {
+    if (!confirmedNavigation && shouldBlockNavigation(nextLocation)) {
+      showModal(nextLocation);
+      return false;
+    }
+    return true;
+  };
+
+  const handleConfirmNavigationClick =  () => {
+    if (value === "true") {
+      onFormClick();
       return;
     }
+    handleCloseDialogAfterSave();
+  };
 
-    if (dirty) {
-      startBeforeUnload();
-    } else {
-      cancelBeforeUnload();
+  useEffect(() => {
+    if (confirmedNavigation) {
+      lastLocation && navigate(lastLocation.pathname);
+      updateConfirmedNavigation(false);
     }
-
-    return () => {
-      cancelBeforeUnload();
-    };
-  }, [dirty, doNotPrompt, onDirtyFlagChange]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirmedNavigation]);
 
   return (
-    <Prompt
-      when={dirty && !doNotPrompt}
-      message="Are you sure you want to leave? You have unsaved changes."
-    />
+    <>
+      <Prompt when={when} message={handleBlockedNavigation} />
+      <UnsavedChangesDialog
+        visible={dialogPrompt.isOpen}
+        onCancel={closeModal}
+        onConfirm={handleConfirmNavigationClick}
+        value={value}
+        setValue={setValue}
+      />
+    </>
   );
 };
 

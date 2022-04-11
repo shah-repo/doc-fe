@@ -3,6 +3,7 @@ import AppBar from "@material-ui/core/AppBar";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
+import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
 
 
@@ -33,7 +34,7 @@ const Header: React.FunctionComponent<Props> = ({
         />
         }
         {/* Autosave disbale changes  */}
-        {/* <AutosaveToggle/> */}
+        <AutosaveToggle/>
       </Grid>
     </Toolbar>
   </AppBar>

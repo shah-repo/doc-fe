@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import Text from "../components/Text";
 import Colors from "../layout/theme/utils/colors";
+import AutosaveToggle from "./autosave/autosave";
 import styles from "./NewHeader.styles";
 
 interface Props extends WithStyles<typeof styles> {
@@ -62,7 +63,7 @@ const Header: React.FunctionComponent<Props> = ({
               />
             )}
             {/* Autosave disable changes  */}
-            {/* <AutosaveToggle/> */}
+            <AutosaveToggle/>
           </Box>
         </Grid>
       </Grid>
