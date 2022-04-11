@@ -74,11 +74,12 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             history.push(path);
           }}
           shouldBlockNavigation={() => {
-            if (dirty) {
+            if (dirty && changeRequest) {
               return true;
             }
             return false;
           }}
+          isAR
         />
         <Box>
           <InputField

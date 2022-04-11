@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style */
 import React, { useEffect, useState } from "react";
 import { Prompt } from "react-router-dom";
+import { ARFormSaveContext } from "../../change.request/form/assessmentForm/Actions";
 import { FormSaveContext } from "../../documentRevision/forms/presenters/Actions";
 import useDialog from "../../hooks/useDialog";
 import UnsavedChangesDialog from "./UnsavedChangesDialog";
@@ -9,6 +10,7 @@ interface Props {
   when: boolean;
   navigate: (path: string) => void;
   shouldBlockNavigation: (value?: any) =>  boolean;
+  isAR: boolean;
 }
 
 interface UnsavedChangesDialogProps {
@@ -25,6 +27,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   navigate,
   when,
   shouldBlockNavigation,
+  isAR,
 }) => {
   const dialogPrompt = useDialog();
 
@@ -45,10 +48,10 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     });
   };
 
-  const closeModal = (cb) => {
+  const closeModal = async (cb) => {
     dialogPrompt.close();
     if (cb) {
-      cb();
+      await cb();
     }
     updateLastLocation(null);
   };
@@ -57,7 +60,9 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     handleCloseDialogAfterSave,
     closeModal,
   });
+
   const onFormClick = React.useContext(FormSaveContext);
+  const onARFormClick = React.useContext(ARFormSaveContext);
 
   const handleBlockedNavigation = (nextLocation) => {
     if (!confirmedNavigation && shouldBlockNavigation(nextLocation)) {
@@ -69,7 +74,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
 
   const handleConfirmNavigationClick =  () => {
     if (value === "true") {
-      onFormClick();
+      isAR ?  onARFormClick() : onFormClick();
       return;
     }
     handleCloseDialogAfterSave();

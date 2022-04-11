@@ -16,6 +16,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
@@ -302,12 +303,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             history.push(path);
           }}
           shouldBlockNavigation={() => {
-            const isFBDirty = !isEqual(workspaceState?.formInput, formState?.getValues());
-            if (formik.dirty || isFBDirty) {
+            const isFBDirty = !isEqual(workspaceState?.formInput || {}, formState?.getValues());
+            const isDocCreating = (history.location.pathname) as unknown as string === DOCUMENT_REVISION_CREATE_URL;
+
+            if ((formik.dirty || isFBDirty) && !isDocCreating) {
               return true;
             }
             return false;
           }}
+          isAR={false}
         />
         <Title
           name="name"
