@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import { compact, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
@@ -248,6 +248,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         poApprovalsState?.transitionApi.loading
       );
     });
+
+    useEffect(() => reaction(
+      () => poApprovalsState?.transitionApi.loading,
+      (loading) => {
+        if (id && !loading) {
+          poApprovalsState.fetchRequiredApprovals(id as unknown as string[]);
+        }
+      }), []);
     const fieldValue = map(poApprovalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`${name}`, fieldValue, true);
     documentStatus = document?.status as any;
