@@ -2,12 +2,12 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import moment from "moment-timezone";
 import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -26,6 +26,8 @@ const DocTitle = "Document title";
 const Type = "Type";
 const Owner = "Owner";
 const ARID = "AR ID";
+const currentDate = moment().tz("America/Los_Angeles").format("l");
+const approvalRequestName2 = "AR Form";
 
 context("Document list test", () => {
   before(() => {
@@ -41,7 +43,6 @@ context("Document list test", () => {
   });
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -179,19 +180,6 @@ context("Document list test", () => {
       cy.get(`div[role="grid"]`).should("have.class", "k-grid");
     });
 
-    it("Verify that landing pages for Document List  use the new data table", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${docIdStr}`);
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${Rev}`);
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${DocTitle}`);
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${Type}`);
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${Owner}`);
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${ARID}`);
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Status");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Effective Date");
-      cy.get(".k-indicator-container").eq(0).should(`${EXIST}`);
-      cy.get(".k-filtercell-operator").eq(0).should(`${EXIST}`);
-    });
-
     it("The user should not be able to edit line items dynamically", () => {
       cy.get(`th[role="columnheader"]`).eq(0).find("svg").should("not.exist");
     });
@@ -260,6 +248,7 @@ context("Document list test", () => {
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
         toSelector: `th[aria-colindex="2"][role]>span>span`,
       });
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "CP-");
     });
 
     it("column grouping", () => {
@@ -306,10 +295,169 @@ context("Document list test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
-    it("clicks on 'Create Document", () => {
+    // it("clicks on 'Create Document", () => {
+    //   cy.drClickCreateDocumentWithApiCall();
+    // });
+
+    it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
+
+    it("'Approve and Release' the document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Verify that the system displays only documents in the documents list with corresponding data", () => {
+      cy.navigToDocumentList();
+      cy.dlClearFilters();
+      cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "FM-" );
+      cy.get(`td[data-grid-col-index="0"]`).eq(1).should("contain.text", "CP-" );
+    });
   });
+
+  context("Verify filters on each field", () => {
+    context("Check docId filter", () => {
+      it("Clear filters", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by docId", () => {
+        cy.dlFilterByDocId({ docId: "CP-00003" });
+      });
+
+      it("Verify filter by docId", () => {
+        cy.dlVerifyFilterByDocId({ docId: "CP-00003" });
+      });
+
+      it("Verify document counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Check revision filter", () => {
+      it("Clear filters", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by revision", () => {
+        cy.dlFilterByRev({ revision: "1" });
+      });
+
+      it("Verify filter by revision", () => {
+        cy.dlVerifyFilterByRev({ revision: "1" });
+      });
+
+      it("Verify document counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 4 });
+      });
+    });
+
+    context("Check document title filter", () => {
+      it("Clear filters", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by document title", () => {
+        cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
+      });
+
+      it("Verify filter by document title", () => {
+        cy.dlVerifyFilterByDocTitle({ docTitle: documentRevisionName });
+      });
+
+      it("Verify document counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+      });
+    });
+
+    context("Check type filter", () => {
+      it("Clear filters", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by type", () => {
+        cy.dlFilterByType({ type: "CP" });
+      });
+
+      it("Verify filter by type", () => {
+        cy.dlVerifyFilterByType({ type: "CP" });
+      });
+
+      it("Verify document counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+      });
+    });
+
+    context("Check owner filter", () => {
+      it("Clear filters", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by owner", () => {
+        cy.dlFilterByOwner({ owner: USERS[2].name });
+      });
+
+      it("Verify filter by owner", () => {
+        cy.dlVerifyFilterByOwner({ owner: USERS[2].name });
+      });
+
+      it("Verify document counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
+      });
+    });
+
+    context("Check AR ID filter", () => {
+      it("Clear filters", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by AR ID", () => {
+        cy.dlFilterByArId({ arId: "AR99999" });
+      });
+
+      it("Verify filter by AR ID", () => {
+        cy.dlVerifyFilterByArId({ arId: "AR99999" });
+      });
+
+      it("Verify document counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Check status filter", () => {
+      it("Clear filters", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by status", () => {
+        cy.dlFilterByStatus({ status: "Released" });
+      });
+
+      it("Verify filter by status", () => {
+        cy.dlVerifyFilterByStatus({ status: "Released" });
+      });
+
+      it("Verify document counter on document list", () => {
+        cy.pause();
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Check effective date filter", () => {
+      it("Clear filters", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by effective date", () => {
+        cy.dlFilterByEffectiveDate({ effectiveDate: "Last 7 days" });
+      });
+
+      it("Verify filter by effective date", () => {
+        cy.dlVerifyFilterByEffectiveDate({ effectiveDate: currentDate });
+      });
+    });
+  });
+
 
   context("Approval Requests", () => {
     it("Navigate to Approval Requests Landing page", () => {
@@ -374,6 +522,15 @@ context("Document list test", () => {
       cy.dlClearFilters();
     });
 
+    it(`Verify drag and drop TRN ID header on second slot`, () => {
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR-");
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="1"][role]>span>span`,
+        toSelector: `th[aria-colindex="2"][role]>span>span`,
+      });
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR-");
+    });
+
     it("Column grouping", () => {
       cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
@@ -398,9 +555,91 @@ context("Document list test", () => {
       cy.get(".k-master-row").eq(0).arrowClick();
     });
 
-    it("Verify that the system displays only documents in the documents list with corresponding data", () => {
-      cy.navigToDocumentList();
-      cy.dlVerifyARIdIsPresentOnFirstDocument();
+    it("Verify that the system displays only AR in the AR list with corresponding data", () => {
+      cy.navigToApprovalRequestList();
+      cy.dlClearFilters();
+      cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "AR99999" );
+    });
+  });
+
+  context("Check for filters on approver request list", () => {
+    context("Check AR ID filter", () => {
+      it("Filter list by AR ID", () => {
+        cy.pause();
+        cy.alFilterByArId({ arId: "AR99999" });
+      });
+
+      it("Verify filter by AR ID", () => {
+        cy.alVerifyFilterByArId({ arId: "AR99999" });
+      });
+
+      it("Verify approval counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Check AR title filter", () => {
+      it("Clear filters", () => {
+        cy.alClearFilters();
+      });
+
+      it("Filter list by TITLE", () => {
+        cy.alFilterByTitle({ title: approvalRequestName2 });
+      });
+
+      it("Verify filter by TITLE", () => {
+        cy.alVerifyFilterByTitle({ title: approvalRequestName2 });
+      });
+
+      it("Verify approval counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Check OWNER filter", () => {
+      it("Clear filters", () => {
+        cy.alClearFilters();
+      });
+
+      it("Filter list by OWNER", () => {
+        cy.alFilterByOwner({ owner: USERS[1].name });
+      });
+
+      it("Verify filter by OWNER", () => {
+        cy.alVerifyFilterByOwner({ owner: USERS[1].name });
+      });
+
+      it("Verify approval counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Check STATUS filter", () => {
+      it("Clear filters", () => {
+        cy.alClearFilters();
+      });
+
+      it("Filter list by STATUS", () => {
+        cy.alFilterByStatus({ status: "CLOSED" });
+      });
+
+      it("Verify filter by STATUS", () => {
+        cy.alVerifyFilterByStatus({ status: "CLOSED" });
+      });
+
+      it("Verify approval counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Check clear button is clearing all filters", () => {
+      it("Clear filters", () => {
+        cy.alClearFilters();
+      });
+
+      it("Verify filters are cleared", () => {
+        cy.alVerifyFilterClear();
+      });
     });
   });
 
@@ -483,7 +722,6 @@ context("Document list test", () => {
         });
 
         it("Verify approvals field is automatically added", () => {
-          SystemRequirement("REQ-0980");
           cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
@@ -513,7 +751,6 @@ context("Document list test", () => {
       });
 
       it("Check if revision is in alpha revision stage", () => {
-        SystemRequirement("REQ-1030");
         cy.recCheckRevisionStage({ stage: "Revision A" });
       });
 
@@ -750,7 +987,7 @@ context("Document list test", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00006");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
