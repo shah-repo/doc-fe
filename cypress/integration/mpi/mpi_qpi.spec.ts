@@ -9,7 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { MPITest } from "../../utils/constants/documentTypes/mpi";
+import { MPITestProcedureDeletable } from "../../utils/constants/documentTypes/mpi";
 import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -66,7 +66,10 @@ context("Mpi/Qpi test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              MPITest,
+              {
+                ...MPITestProcedureDeletable,
+                documentTypeAcronym: "MPI-",
+              },
               QPITest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,

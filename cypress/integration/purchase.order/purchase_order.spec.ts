@@ -8,7 +8,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { POPart } from "../../utils/constants/documentTypes/part";
-import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
+import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -52,7 +52,7 @@ context("PO test", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               POPart,
-              PurchaseOrderTest,
+              PurchaseOrderDocType,
             ],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],

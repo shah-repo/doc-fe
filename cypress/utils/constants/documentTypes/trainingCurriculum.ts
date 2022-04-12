@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { DOC_TYPE_GROUP } from "../../../../src/state/ducks/documentRevisions/documentType/types";
 import { DEFAUL_REV_STAGE, IdocumentTypeDto } from "../../../support/commands";
 import { Categories } from "../categories";
@@ -52,7 +53,6 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       optionId: "36",
       validators: {
         required: true,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         required_if_in: false,
       },
       placeholder: "Select documents for training",
@@ -81,9 +81,7 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       ],
       validators: {
         required: true,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         required_if: false,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         required_if_in: false,
       },
       rulesObject: {},
@@ -102,7 +100,6 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       label: "Training Frequency (in days)",
       rules: "required_if:training-refresh-training-periodically,Yes",
       validators: {
-        // eslint-disable-next-line @typescript-eslint/camelcase
         required_if: {
           name: "training-refresh-training-periodically",
           value: [
