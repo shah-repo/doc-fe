@@ -188,7 +188,7 @@ build_word_service () {
   else
     echo "word-service image not found, building..."
     ./scripts/cypress_build_images.sh
-    docker tag enlil_cypress_wordservice_$WORDSERVICE_GIT_COMMIT_HASH $DOCKER_IMAGE
+    docker tag enlil_cypress_wordservice:$WORDSERVICE_GIT_COMMIT_HASH $DOCKER_IMAGE
     docker push $DOCKER_IMAGE
   fi
 }
