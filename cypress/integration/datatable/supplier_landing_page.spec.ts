@@ -8,7 +8,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -31,7 +30,6 @@ context("Suppliers landing page", () => {
   });
 
   it("[API] Creates company", (done: any) => {
-    SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
     cy.authApiLogin({
       email: CONFIG.SUPERADMIN_EMAIL,
       password: CONFIG.SUPERADMIN_PASSWORD,
@@ -140,15 +138,13 @@ context("Suppliers landing page", () => {
       cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
     });
 
-    it("Navigate to one of the columns", () => {
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "SUP-00004");
-    });
-
     it(`Verify drag and drop`, () => {
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "SUP-00004");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
         toSelector: `th[aria-colindex="2"][role]>span>span`,
       });
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "SUP-00004");
     });
 
     it("Column grouping", () => {
@@ -195,13 +191,11 @@ context("Suppliers landing page", () => {
     });
 
     it("Click on 'Supplier' document type", () => {
-      SystemRequirement("REQ-2400");
       cy.drSelectOutputDocumentType({ documentType: "Supplier" });
       cy.unClick();
     });
 
     it("Verify approval field is added as result of predefined schema", () => {
-      SystemRequirement("REQ-2400");
       cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
       cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
     });
@@ -221,7 +215,6 @@ context("Suppliers landing page", () => {
 
   context("Create supplier document", () => {
     it("Navigate to supplier list", () => {
-      SystemRequirement("REQ-2230");
       cy.navigToSuppliers();
     });
 
@@ -232,12 +225,10 @@ context("Suppliers landing page", () => {
     });
 
     it("Enter 'Supplier Address/Phone'", () => {
-      SystemRequirement("REQ-2360");
       cy.drEnterDocumentDescription({ description: "Test Supplier address" });
     });
 
     it("Enter 'Supplier Name'", () => {
-      SystemRequirement("REQ-2360");
       cy.supEnterSuppName({ name: "Test Supplier" });
     });
 
