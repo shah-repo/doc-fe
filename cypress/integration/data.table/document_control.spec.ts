@@ -249,6 +249,10 @@ context("Document list test", () => {
         toSelector: `th[aria-colindex="2"][role]>span>span`,
       });
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "CP-");
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="2"][role]>span>span`,
+        toSelector: `th[aria-colindex="1"][role]>span>span`,
+      });
     });
 
     it("column grouping", () => {
