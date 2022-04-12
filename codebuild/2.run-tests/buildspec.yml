@@ -28,11 +28,11 @@ phases:
   pre_build:
     commands:
       - cd $DOCKER_COMPOSE_FILE_LOCATION
-      - docker-compose up -d --scale enlil_cypress_server=$ENLIL_CYPRESS_SERVER_SCALE --scale enlil_cypress_worker_replicas=$ENLIL_CYPRESS_WORKER_SCALE
+      - docker-compose up --force-recreate --remove-orphans -d --scale enlil_cypress_server=$ENLIL_CYPRESS_SERVER_SCALE --scale enlil_cypress_worker_replicas=$ENLIL_CYPRESS_WORKER_SCALE
   build:
     commands:
       - docker ps
-      - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ./codebuild/2.run-tests/start_tests.sh
+      - docker exec -w /opt/app/tests enlil_cypress_test_run_container ./codebuild/2.run-tests/start_tests.sh
 
 reports:
   report-name-or-arn:

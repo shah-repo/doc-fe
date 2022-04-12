@@ -5,7 +5,7 @@ yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/copyToG
 
 ./scripts/cypress/utils/generate_testmail_credentials.sh
 
-export LIST_OF_SPECS_SERIALIZED=$(find cypress/integration -type f -name "*.ts" | sort | sed -n "$PIPELINE_STEP_NUMBER~""$PIPELINE_TOTAL_NUMBER_OF_STEPS""p" | sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}')
+export LIST_OF_SPECS_SERIALIZED=$(find cypress/integration/user.management -type f -name "*.ts" | sort | sed -n "$PIPELINE_STEP_NUMBER~""$PIPELINE_TOTAL_NUMBER_OF_STEPS""p" | sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}')
 
 export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 

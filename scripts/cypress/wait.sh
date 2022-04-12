@@ -22,7 +22,6 @@ done
 echo 'Waiting for backend .'
 until [ $(curl -o /dev/null -s -w %{http_code} $CYPRESS_BE_URL/api/v1/healthcheck/) = 200 ]; do
     echo 'Waiting for backend .'
-    docker ps
     sleep 2
 done
 echo ""
