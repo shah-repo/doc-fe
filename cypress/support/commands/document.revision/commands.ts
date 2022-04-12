@@ -31,6 +31,8 @@ declare global {
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
+      drGetDocIdElementFromUI(): Chainable<JQuery<HTMLElement>>;
+      drGetChangeRequestLinkElementFromUI(): Chainable<JQuery<HTMLElement>>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
       drFilterDocListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
@@ -435,6 +437,14 @@ Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
 
+Cypress.Commands.add("drGetDocIdElementFromUI", () => {
+  cy.get(`[id="HeaderInfo-docId"]`);
+});
+
+Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {
+  cy.get(`[id="ChangeRequestLink-linkButton"]`);
+});
+
 Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
   cy.get("[id=\"document.docId\"]").invoke("val").should("not.be.empty");
 });
@@ -718,7 +728,8 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 
 Cypress.Commands.add("drSelectUser", (...users: string[]) => {
   users.forEach((user) => {
-    cy.get(`[data-cy="field-securityEmployees"]`).autocompleteSelect(`${user}`);
+    cy.get(`[data-cy="field-securityEmployees"]`).arrowType(`${user}`).wait(500);
+    cy.get(`div[id^=react-select]`).contains(user).arrowClick();
   });
   cy.unClick();
 });

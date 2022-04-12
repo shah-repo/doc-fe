@@ -14,6 +14,7 @@ declare global {
       navigClickOnItem(params: { navigItem: NavigationItems }): Chainable<Subject>;
       navigToNestedItem(params: {navigItems: NavigationItems[]}): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
+      navigToDocumentTypeManagement(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
@@ -144,6 +145,16 @@ Cypress.Commands.add("navigToDocumentList", () => {
   cy.landingPageLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("navigToDocumentTypeManagement", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_TYPE_MANAGEMENT,
+    ],
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("navigToDocumentListWithUnsavedChanges", (params: { confirmPopup: boolean }) => {
   cy.navigToNestedItem({
     navigItems: [
@@ -228,6 +239,7 @@ Cypress.Commands.add("navigToTrainingRecords", () => {
       NavigationItems.TRAINING_RECORDS,
     ],
   });
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToTrainingCurriculums", () => {
@@ -240,4 +252,5 @@ Cypress.Commands.add("navigToTrainingCurriculums", () => {
       ],
     });
   });
+  cy.landingPageLoadingElementShouldNotExist();
 });

@@ -110,14 +110,11 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           <Typography
             component="span"
             variant="body2"
-            noWrap
             className={`${classes.docIdAndTitle} ${classes.margin5}`}
             color="textPrimary"
           >
             {documentId}
           </Typography>
-        </Grid>
-        <Grid item={true}>
           <Typography
             component="span"
             variant="body2"

@@ -63,6 +63,7 @@ export function KendoPanel<T>({
   gridData,
   tableCriteria,
   queryUrl = "",
+  rerender,
   onSelect,
 }: UserManagementProps<Partial<GetEmployeeResponse>>) {
   const intl = useIntl();
@@ -212,6 +213,12 @@ export function KendoPanel<T>({
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(gridData, initialDataState)
   );
+  useEffect(() => {
+    if (rerender) {
+      queryApi();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rerender]);
   useEffect(() => {
     if (didMount) {
       if (isEmpty(tableCriteria.queryDict)) {
