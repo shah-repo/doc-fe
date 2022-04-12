@@ -158,7 +158,7 @@ build_export () {
 
 build_docx_to_pdf () {
   cd $DOCXTOPDF_REPO
-  IMAGE=doc_export_${DOCXTOPDF_GIT_COMMIT_HASH}
+  IMAGE=docx_to_pdf_${DOCXTOPDF_GIT_COMMIT_HASH}
 
   DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
@@ -177,7 +177,7 @@ build_docx_to_pdf () {
 
 build_word_service () {
   cd $BUILD_WORD_SERVICE_REPO
-  IMAGE=doc_export_${WORDSERVICE_GIT_COMMIT_HASH}
+  IMAGE=word_service_${WORDSERVICE_GIT_COMMIT_HASH}
 
   DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
@@ -188,7 +188,7 @@ build_word_service () {
   else
     echo "word-service image not found, building..."
     ./scripts/cypress_build_images.sh
-    docker tag enlil_cypress_wordservice:$WORDSERVICE_GIT_COMMIT_HASH $DOCKER_IMAGE
+    docker tag enlil_cypress_wordservice_$WORDSERVICE_GIT_COMMIT_HASH $DOCKER_IMAGE
     docker push $DOCKER_IMAGE
   fi
 }
