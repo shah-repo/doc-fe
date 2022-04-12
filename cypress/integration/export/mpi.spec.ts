@@ -21,7 +21,7 @@ let materialsDocumentType;
 let equipmentDocument;
 let materialsDocument;
 
-context("Export Other internal doc", () => {
+context("Export MPI", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
