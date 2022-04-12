@@ -194,7 +194,7 @@ build_word_service () {
 }
 
 
-if [ $BE_GIT_COMMIT_HASH ]]; then
+if [[ $BE_GIT_COMMIT_HASH ]]; then
   build_be &
 fi
 if [[ $FE_GIT_COMMIT_HASH ]]; then

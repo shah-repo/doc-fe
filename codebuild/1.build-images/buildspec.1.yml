@@ -27,4 +27,4 @@ phases:
 
 artifacts:
   files:
-    - $FE_REPO/commit_hashes.json
+    - $FE_REPO/commit_hashes.1.json
