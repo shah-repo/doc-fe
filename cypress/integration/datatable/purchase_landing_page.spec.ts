@@ -671,14 +671,16 @@ context("Purchase Order Landing Page", () => {
       cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Issue Date");
     });
 
-    it("Navigate to one of the columns", () => {
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "PO-00001");
-    });
-
     it(`Verify drag and drop`, () => {
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "PO-00001");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
         toSelector: `th[aria-colindex="2"][role]>span>span`,
+      });
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "PO-00001");
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="2"][role]>span>span`,
+        toSelector: `th[aria-colindex="1"][role]>span>span`,
       });
     });
 
