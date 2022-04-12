@@ -25,11 +25,11 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - source $FE_REPO/codebuild/1.2.build-images/start_build.sh
+      - source $FE_REPO/codebuild/1.build-images/start_build.sh
   post_build:
     commands:
       - ls
-      - $FE_REPO/codebuild/1.2.build-images/export_commit_hashes.sh
+      - $FE_REPO/codebuild/1.build-images/export_commit_hashes.sh
       - echo "Done"
 
 artifacts:
