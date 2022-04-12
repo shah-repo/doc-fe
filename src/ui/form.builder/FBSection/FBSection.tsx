@@ -21,15 +21,16 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
     type="section"
   >
     <Box
-      bgcolor={Colors.medium_blue}
-      color="primary.contrastText"
-      py={1.5}
-      px={2}
-      fontSize="body1.fontSize"
-      fontWeight="fontWeightBold"
-      borderRadius={4}
+      color={Colors.almost_black}
+      my={0.625}
+      mx={0}
+      fontSize={16}
+      fontStyle="normal"
+      fontFamily="Sora"
+      lineHeight="24px"
+      fontWeight={600}
       id={name}
-      style={{ scrollMarginTop: 50 }}
+      style={{ scrollMarginTop: 50, borderBottom: `1px solid ${Colors.chinese_silver}` }}
     >
       {label && (
         <FBText
