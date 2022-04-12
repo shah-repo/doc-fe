@@ -480,7 +480,7 @@ context("Document list test", () => {
     });
 
     it("Verify that by default the AR list filter to display AR's with latest edited IN_REVIEW ", () => {
-      cy.alFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "IN_REVIEW");
     });
 
     it("Hover over the AR title", () => {
@@ -492,11 +492,11 @@ context("Document list test", () => {
     });
 
     it("AR description when the mouse hovers over the AR title", () => {
-      cy.get("tr.k-master-row>td").eq(1).realHover().should("have.text", "AR Form");
+      cy.get("tr.k-master-row>td").eq(1).realHover().should("have.text", "Releasing FM-00002, DD Test");
     });
 
     it("Verify filter by AR ID", () => {
-      cy.alVerifyFilterByArId({ arId: "AR99999" });
+      cy.alVerifyFilterByArId({ arId: "AR-00001" });
     });
 
     it("Navigate from the landing page", () => {
