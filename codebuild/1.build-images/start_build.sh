@@ -3,51 +3,51 @@
 set -a
   export ENLIL_COMPOSE_SUITE_NUMBER="13"
 
-  # export FE_GIT_COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8)
-  export FE_GIT_COMMIT_HASH="b1b04e54"
+  # # export FE_GIT_COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8)
+  # export FE_GIT_COMMIT_HASH="b1b04e54"
   
-  export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
-  export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
-  export EXPORT_GIT_COMMIT_HASH=$(cd $EXPORT_REPO;git rev-parse HEAD | cut -c1-8)
-  export DOCXTOPDF_GIT_COMMIT_HASH=$(cd $DOCXTOPDF_REPO;git rev-parse HEAD | cut -c1-8)
-  export WORDSERVICE_GIT_COMMIT_HASH=$(cd $BUILD_WORD_SERVICE_REPO;git rev-parse HEAD | cut -c1-8)
+  # export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
+  # export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
+  # export EXPORT_GIT_COMMIT_HASH=$(cd $EXPORT_REPO;git rev-parse HEAD | cut -c1-8)
+  # export DOCXTOPDF_GIT_COMMIT_HASH=$(cd $DOCXTOPDF_REPO;git rev-parse HEAD | cut -c1-8)
+  # export WORDSERVICE_GIT_COMMIT_HASH=$(cd $BUILD_WORD_SERVICE_REPO;git rev-parse HEAD | cut -c1-8)
 
 set +a
 
-if [[ -z "${ENLIL_COMPOSE_SUITE_NUMBER}" ]]; then
-  echo "ENLIL_COMPOSE_SUITE_NUMBER not set, exiting"
-  exit
-fi
+# if [[ -z "${ENLIL_COMPOSE_SUITE_NUMBER}" ]]; then
+#   echo "ENLIL_COMPOSE_SUITE_NUMBER not set, exiting"
+#   exit
+# fi
 
-if [[ -z "${BE_REPO}" ]]; then
-  echo "BE_REPO not set, exiting"
-  exit
-fi
+# if [[ -z "${BE_REPO}" ]]; then
+#   echo "BE_REPO not set, exiting"
+#   exit
+# fi
 
-if [[ -z "${FE_REPO}" ]]; then
-  echo "FE_REPO not set, exiting"
-  exit
-fi
+# if [[ -z "${FE_REPO}" ]]; then
+#   echo "FE_REPO not set, exiting"
+#   exit
+# fi
 
-if [[ -z "${VALIDATORS_REPO}" ]]; then
-  echo "VALIDATORS_REPO not set, exiting"
-  exit
-fi
+# if [[ -z "${VALIDATORS_REPO}" ]]; then
+#   echo "VALIDATORS_REPO not set, exiting"
+#   exit
+# fi
 
-if [[ -z "${EXPORT_REPO}" ]]; then
-  echo "EXPORT_REPO not set, exiting"
-  exit
-fi
+# if [[ -z "${EXPORT_REPO}" ]]; then
+#   echo "EXPORT_REPO not set, exiting"
+#   exit
+# fi
 
-if [[ -z "${DOCXTOPDF_REPO}" ]]; then
-  echo "DOCXTOPDF_REPO not set, exiting"
-  exit
-fi
+# if [[ -z "${DOCXTOPDF_REPO}" ]]; then
+#   echo "DOCXTOPDF_REPO not set, exiting"
+#   exit
+# fi
 
-if [[ -z "${BUILD_WORD_SERVICE_REPO}" ]]; then
-  echo "BUILD_WORD_SERVICE_REPO not set, exiting"
-  exit
-fi
+# if [[ -z "${BUILD_WORD_SERVICE_REPO}" ]]; then
+#   echo "BUILD_WORD_SERVICE_REPO not set, exiting"
+#   exit
+# fi
 
 set -a
   export COMPOSE_PROJECT_NAME="enlil_codebuild"
@@ -193,12 +193,32 @@ build_word_service () {
   fi
 }
 
-build_be &
-build_fe &
-build_validators &
-build_export &
-build_docx_to_pdf &
-build_word_service &
+
+if [ $BE_GIT_COMMIT_HASH ]]; then
+  build_be &
+fi
+if [[ $FE_GIT_COMMIT_HASH ]]; then
+  build_fe &
+fi
+if [[ $VALIDATORS_GIT_COMMIT_HASH ]]; then
+  build_validators &
+fi
+if [[ $EXPORT_GIT_COMMIT_HASH ]]; then
+  build_export &
+fi
+if [[ $DOCXTOPDF_GIT_COMMIT_HASH ]]; then
+  build_docx_to_pdf &
+fi
+if [[ $WORDSERVICE_GIT_COMMIT_HASH ]]; then
+  build_word_service &
+fi
+
+# build_be &
+# build_fe &
+# build_validators &
+# build_export &
+# build_docx_to_pdf &
+# build_word_service &
 wait
 
 echo "Done with building images"
