@@ -1476,10 +1476,8 @@ context("Receiving landing page test", () => {
   });
 
   context("Login user", () => {
-    context("Login user when he doesn't have privileges", () => {
-      it("Login user to dashboard", () => {
-        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
