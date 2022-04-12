@@ -20,7 +20,7 @@ set -a
 set +a
 
 docker build \
-  -f ./docker/cypress_web.Dockerfile \
+  -f ./docker/cypress_web_pipeline.Dockerfile \
   -t enlil_cypress_web:${FE_GIT_COMMIT_HASH} \
   --build-arg FE_GIT_COMMIT_HASH \
   --build-arg REACT_APP_API_ENDPOINT \
