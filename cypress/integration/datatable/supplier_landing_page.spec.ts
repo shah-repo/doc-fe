@@ -145,6 +145,10 @@ context("Suppliers landing page", () => {
         toSelector: `th[aria-colindex="2"][role]>span>span`,
       });
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "SUP-00004");
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="2"][role]>span>span`,
+        toSelector: `th[aria-colindex="1"][role]>span>span`,
+      });
     });
 
     it("Column grouping", () => {
