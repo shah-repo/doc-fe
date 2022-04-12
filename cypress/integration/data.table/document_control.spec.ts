@@ -7,6 +7,7 @@ import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -301,6 +302,12 @@ context("Document list test", () => {
 
     it("clicks on 'Create Document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document with selecting approver", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[1].name}`]);
+      });
     });
 
     it("Verify that the system displays only documents in the documents list with corresponding data", () => {
