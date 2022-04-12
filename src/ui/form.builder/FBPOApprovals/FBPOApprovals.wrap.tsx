@@ -268,7 +268,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     disabledOptions = [];
     if (formState?.inputState.get(name)?.value.length) {
-      disabledOptions = isAdministrativeChange ? formState?.inputState.get(name)?.value : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+      disabledOptions = isAdministrativeChange
+        ? formState?.inputState.get(name)?.value
+        : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
     }
 
     return Component({
