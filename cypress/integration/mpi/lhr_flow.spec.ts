@@ -10,7 +10,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
-import { MPITest } from "../../utils/constants/documentTypes/mpi";
+import { MPITestProcedureDeletable } from "../../utils/constants/documentTypes/mpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -78,7 +78,7 @@ context("LHR flow", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               LotHistoryRecordTest,
-              MPITest,
+              MPITestProcedureDeletable,
               LHRT,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,

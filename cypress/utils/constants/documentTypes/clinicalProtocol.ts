@@ -4,6 +4,13 @@ import { IdocumentTypeDto } from "../../../support/commands";
 const CPName = "Clinical Protocol";
 const CPAcronym = "CP-";
 
+export const ClinicalProtocolNotRedline: IdocumentTypeDto = {
+  documentTypeName: CPName,
+  documentTypeAcronym: CPAcronym,
+  group: DOC_TYPE_GROUP.OTHER,
+  isQms: true,
+};
+
 export const ClinicalProtocolDocType: IdocumentTypeDto = {
   documentTypeName: CPName,
   documentTypeAcronym: CPAcronym,
@@ -13,8 +20,8 @@ export const ClinicalProtocolDocType: IdocumentTypeDto = {
 };
 
 export const ClinicalProtocolPrivatePoolDocType: IdocumentTypeDto = {
-  documentTypeName: "Clinical Protocol",
-  documentTypeAcronym: "CP-",
+  documentTypeName: CPName,
+  documentTypeAcronym: CPAcronym,
   group: DOC_TYPE_GROUP.OTHER,
   isQms: true,
   privateNumberPool: true,

@@ -8,7 +8,7 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -62,8 +62,8 @@ context("Test training records and training curriculum landing page", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              ClinicalProtocolDocType,
-              TrainingCurriculum,
+              ClinicalProtocolNotRedline,
+              { ...TrainingCurriculum, documentTypeName: "Training Curriculum Test" },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
