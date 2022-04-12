@@ -119,6 +119,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         if (poItems && poItems.items.length) {
           checkLineItems(poItems, deletedRequestor);
         } else if (approvers?.includes(deletedRequestor)) {
+          const proceedToNewReq = poItems.items.some((item) =>
+            item.type === "service" || (item.type === "product" && item.partNumberDocId)
+          );
+          if (!proceedToNewReq) {
+            return;
+          }
           checkLineItems(poItems, "");
         }
       }
@@ -271,6 +277,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       disabledOptions = isAdministrativeChange
         ? formState?.inputState.get(name)?.value
         : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+
+      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+      const proceedToNewReq = poItems.items.some((item) =>
+        item.type === "service" || (item.type === "product" && item.partNumberDocId)
+      );
+      if (!proceedToNewReq) {
+        disabledOptions = [];
+      }
     }
 
     return Component({
