@@ -105,6 +105,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         addApprover([requester]);
       } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
         removeApprover([deletedRequestor]);
+      } else if (updateApprovers && requester && !proceedToNewReq && approvers?.includes(requester)) {
+        removeApprover([deletedRequestor]);
       }
     };
 
