@@ -509,7 +509,7 @@ context("Document list test", () => {
 
     it("Verify when navigating away from and back to the approval request list", () => {
       cy.dlClearFilters();
-      cy.alVerifyFilterByArId({ arId: "AR99999" });
+      cy.alVerifyFilterByArId({ arId: "AR-00001" });
       cy.navigToDocumentList();
       cy.navigToApprovalRequestList();
     });
@@ -525,12 +525,12 @@ context("Document list test", () => {
     });
 
     it(`Verify drag and drop TRN ID header on second slot`, () => {
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR99999");
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR-00001");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
         toSelector: `th[aria-colindex="2"][role]>span>span`,
       });
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "AR99999");
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "AR-00001");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="2"][role]>span>span`,
         toSelector: `th[aria-colindex="1"][role]>span>span`,
@@ -564,7 +564,7 @@ context("Document list test", () => {
     it("Verify that the system displays only AR in the AR list with corresponding data", () => {
       cy.navigToApprovalRequestList();
       cy.dlClearFilters();
-      cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "AR99999" );
+      cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "AR-00001" );
     });
   });
 
