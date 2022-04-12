@@ -28,8 +28,10 @@ export enum CyRoutes {
   PostOrPatchDocRev = "PostOrPatchDocRev",
   Login = "Login",
   GetDocumentTypes = "GetDocumentTypes",
+  ExportApprovaMatrixNCO = "ExportApprovaMatrixNCO",
   GetChangeRequests = "GetChangeRequests",
   ChangeRequestApprove = "ChangeRequestApprove",
+  ApprovalsAbandon = "ApprovalsAbandon",
   ChangeRequestApproveNew = "ChangeRequestApproveNew",
   ARPreview = "ARPreview",
   GroupsPost = "GroupsPost",
@@ -73,6 +75,7 @@ export enum CyRoutes {
   PatchDocSecurity = "PatchDocSecurity",
   GetRevisionDocTypeGroupOptions = "GetRevisionDocTypeGroupOptions",
   PostDocRev = "PostDocRev",
+  PatchDocType = "PatchDocType",
   GroupGet = "GroupGet",
   GetDocRevDisplayStatus = "GetDocRevDisplayStatus",
   PostTasks = "PostTasks",
@@ -413,6 +416,16 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions?displayStatus*",
     },
   },
+  ExportApprovaMatrixNCO: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/export_approval_matrix_nco",
+    },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 50 * 1000,
+    },
+  },
   GetDocRevDocTypeCategory: {
     requestConfig: {
       method: "GET",
@@ -597,6 +610,16 @@ export const routes: ICyRoutes =   {
       requestTimeout: 50 * 1000,
     },
   },
+  PatchDocType: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_type/*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 20 * 1000,
+    },
+  },
   ChangeRequestApprove: {
     requestConfig: {
       method: "POST",
@@ -610,6 +633,15 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/change_requests/*/approve",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+    },
+  },
+  ApprovalsAbandon: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/approvals/*/abandon",
     },
     callConfig: {
       responseTimeout: 25 * 1000,

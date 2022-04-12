@@ -26,7 +26,6 @@ import { ChangeRequestFormValues } from "../form/types";
 import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import Presenter from "./presenter";
-import ChangeRequestSummarySockets from "./sockets";
 import styles from "./styles";
 
 interface OwnProps extends DataProps<ChangeRequest> {
@@ -162,7 +161,6 @@ const Container: React.FunctionComponent<Props> = ({
   return (
     <FBProvider {...{ bookmarkState }}>
       <div className={classes.root}>
-        <ChangeRequestSummarySockets crId={dataProp.crId} />
         <div className={classes.appFrame}>
           {summaryFormikRenderer()}
         </div>

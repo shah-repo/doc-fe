@@ -66,9 +66,11 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     }, []);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    async.start(getCompanyMine, currentEmployeeId, async);
+    if (currentEmployeeId) {
+      async.start(getCompanyMine, currentEmployeeId, async);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [currentEmployeeId]);
   return (
     <Drawer
       PaperProps={{ id: "navigation" }}
