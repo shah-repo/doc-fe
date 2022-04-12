@@ -186,8 +186,7 @@ services:
       - ENLIL_WEB_URL=http://frontend:$ENLIL_COMPOSE_EXPOSE_FE_PORT
     networks:
       - enlil_cypress_network
-
-   enlil_cypress_docxtopdf:
+  enlil_cypress_docxtopdf:
     container_name: enlil_cypress_docxtopdf
     image: "enlil_cypress_docxtopdf:${DOCXTOPDF_GIT_COMMIT_HASH}"
     ports:
