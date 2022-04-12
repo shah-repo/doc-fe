@@ -14,6 +14,7 @@ const NewUserSetPasswordContainer: React.FunctionComponent<NewUserSetPasswordCon
 }) => {
   const dispatch = useDispatch();
   const isUserAuth = useSelector(authSelectors.isAuthenticated);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const parsedLocation = parse(location.search);
   const tempPass = parsedLocation.tempPass;
   const clientEmail = (parsedLocation.email as string).split(" ").join("+");
@@ -37,7 +38,7 @@ const NewUserSetPasswordContainer: React.FunctionComponent<NewUserSetPasswordCon
       clientEmail={clientEmail}
       onSubmit={onSubmit}
       asyncState={async.asyncState}
-      isUserAuthenticated={isUserAuth}
+      isUserAuthenticated={!!(isUserAuth && currentEmployeeId)}
       title="new.user.set.password"
     />
   );

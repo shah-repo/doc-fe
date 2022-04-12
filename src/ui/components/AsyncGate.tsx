@@ -1,5 +1,5 @@
 import { Button, LinearProgress, Typography, WithStyles, withStyles } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { AsyncState, AsyncStatus } from "../../state/types";
 import useDidMount from "../hooks/useDidMount";
 import styles from "./AsyncGate.styles";
@@ -22,17 +22,18 @@ const AsyncGate: React.FunctionComponent<Props> = ({
 }) => {
   const didMount = useDidMount();
 
-  const runAsyncAction = () => {
+  const runAsyncAction = useCallback(() => {
     if (asyncAction) {
       asyncAction();
     }
-  };
+  }, [asyncAction]);
 
-  useState(() => {
+  useEffect(() => {
     if (startActionOnMount) {
       runAsyncAction();
     }
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startActionOnMount]);
 
   if (asyncState.status === AsyncStatus.Success && didMount) {
     return (

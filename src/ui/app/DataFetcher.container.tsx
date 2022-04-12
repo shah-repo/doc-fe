@@ -22,13 +22,14 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   const getGroupWithGroupOptions = useActionCreator(documentTypeActions.getGroupWithGroupOptions);
 
   useEffect(() => {
-    dispatch(pageDetailsActions.allPageDetails());
-    dispatch(documentTypeActions.loadList());
-    dispatch(authActions.getSessionDetails(employeeId));
-    dispatch(authActions.loadUserGroups());
-    dispatch(userManagementActions.loadCompanyGroups());
-    dispatch(changeRequestsActions.loadAvailableApprovers());
-
+    if (employeeId) {
+      dispatch(pageDetailsActions.allPageDetails());
+      dispatch(documentTypeActions.loadList());
+      dispatch(authActions.getSessionDetails(employeeId));
+      dispatch(authActions.loadUserGroups());
+      dispatch(userManagementActions.loadCompanyGroups());
+      dispatch(changeRequestsActions.loadAvailableApprovers());
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, employeeId]);
 
@@ -37,9 +38,9 @@ const DataFetcherContainer: React.FunctionComponent = () => {
       setIotCreds(iotCredentials);
       return;
     }
-
-    dispatch(authActions.getIotCreds());
-
+    if (employeeId) {
+      dispatch(authActions.getIotCreds());
+    }
   }, [dispatch, employeeId, iotCredentials]);
 
   const intl = useIntl();
