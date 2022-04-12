@@ -23,8 +23,7 @@ IMAGE=fe_${FE_GIT_COMMIT_HASH}
 DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
 
 docker build \
-  -f ./docker/cypress_web_pipeline.Dockerfile \
-  --cache-from 817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO \ 
+  -f ./docker/cypress_web.Dockerfile \
   -t enlil_cypress_web:${FE_GIT_COMMIT_HASH} \
   --build-arg BUILDKIT_INLINE_CACHE=1 \
   --build-arg FE_GIT_COMMIT_HASH \
