@@ -1,12 +1,10 @@
 import { reaction } from "mobx";
-import React from "react";
+import React, { useCallback } from "react";
 import { FB } from "..";
-import { IotService } from "../../../common/utils/iot/mqttClient";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
 
 const FBZIPFileSocket: React.FunctionComponent<{docRevisionId: string}> = ({ docRevisionId }) => {
   const { fileUploadState } = FB.useStores();
-  const iotService = IotService.getInstance();
   const [topic, setTopic] = React.useState("");
   const [attachmentId, setAttachmentId] = React.useState("");
 
@@ -23,23 +21,12 @@ const FBZIPFileSocket: React.FunctionComponent<{docRevisionId: string}> = ({ doc
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
 
-  const subscribe = () => {
-    iotService.subscribeToTopic(
-      topic, getZIPAttachmentStatus
-    );
-  };
-
-  const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(
-      topic,
-    );
-  };
-
-  const getZIPAttachmentStatus = () => {
+  const getZIPAttachmentStatus = useCallback(() => {
     fileUploadState?.getZIPStatus(attachmentId);
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  useMqttSubscription(subscribe, unsubscribe);
+  useMqttSubscription(topic, getZIPAttachmentStatus);
 
   return null;
 };

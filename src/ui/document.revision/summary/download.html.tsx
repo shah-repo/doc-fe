@@ -1,12 +1,16 @@
+import { Dialog } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
 import { PDF } from "../../../state/ducks/documentRevisions/types";
 import AsyncButton from "../../components/AsyncButton";
+import ViewFileContent from "../../components/common/view.file/components/dialog.content";
+import { styles } from "../../components/common/view.file/utils/styles";
 import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import useDialog from "../../hooks/useDialog";
 
 interface Props {
   pdf?: PDF;
@@ -15,14 +19,18 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
   pdf,
 }) => {
   const intl = useIntl();
+  const dialog = useDialog();
+  const [URL, setURL] = React.useState<string>("");
+  const classes = styles({ isPDF: true });
+
   const action = useActionCreator(attachmentsActions.getAssetUrl);
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
-      window.onbeforeunload = null;
-      window.open(downloadInfo?.url, "_blank");
+      setURL(downloadInfo?.url || "");
+      dialog.open();
     },
     onError: () => {
-      toastError(intl.formatMessage({ id: "document.revision.download.html.error" }));
+      toastError(intl.formatMessage({ id: "document.revision.download.pdf.error" }));
     },
   });
 
@@ -35,14 +43,33 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <AsyncButton
-      label="common.download.html"
-      data-cy="downloadHtml"
-      onClick={handleClick}
-      asyncState={async.asyncState}
-      color="secondary"
-      variant="outlined"
-    />
+    <>
+      {dialog.isOpen && <Dialog
+        onClose={dialog.close}
+        open={dialog.isOpen}
+        classes={{
+          paper: classes.paper,
+        }}
+        maxWidth={"lg"}
+        fullWidth={true}
+      >
+        <ViewFileContent
+          asyncState={async.asyncState}
+          url={URL}
+          type={"PDF"}
+          handleClose={dialog.close}
+        />
+      </Dialog>}
+      <AsyncButton
+        label="common.download.pdf"
+        data-cy="downloadHtml"
+        onClick={handleClick}
+        asyncState={async.asyncState}
+        color="secondary"
+        variant="outlined"
+      />
+    </>
+
   );
 };
 

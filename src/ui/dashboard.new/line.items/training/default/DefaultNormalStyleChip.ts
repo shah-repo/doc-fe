@@ -7,6 +7,16 @@ const styles = () => ({
     backgroundColor: Colors.white,
     borderRadius: "3px",
   },
+  iconSmall: {
+    height: "14px",
+    width: "13px",
+  },
+  labelSmall: {
+    "fontSize": "12px",
+    "fontWeight": 700,
+    "fontFamily": "Sora",
+    "text-transform": "uppercase",
+  },
   colorPrimary: {
     color: (props) =>
       props.status === TrainingStatus.COMPLETED

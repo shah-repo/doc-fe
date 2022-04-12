@@ -40,7 +40,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
-      lineHeight: "16px",
       color: Colors.latest_yellow_varient,
     },
     typographyOverdue: {
@@ -48,7 +47,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
-      lineHeight: "16px",
       color: Colors.latest_red_varient,
       letterSpacing: 0,
     },
