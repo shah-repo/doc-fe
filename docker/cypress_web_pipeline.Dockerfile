@@ -31,8 +31,9 @@ COPY scripts/cypress_docker_run_web.sh /opt/app/scripts/
 COPY src/data/buildInfo.json /opt/app/src/data/buildInfo.json
 
 RUN NODE_ENV="development" yarn install --frozen-lockfile && \
-  yarn cache clean && \
-  yarn react-scripts --max_old_space_size=4096 build && \
+  yarn cache clean
+
+RUN yarn react-scripts --max_old_space_size=4096 build && \
   rm -rf node_modules
 
 LABEL enlil_cypress=$FE_GIT_COMMIT_HASH
