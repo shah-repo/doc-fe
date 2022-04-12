@@ -8,15 +8,21 @@ env:
 phases:
   install:
     commands:
-      - cd $CODEBUILD_SRC_DIR_env_build_artifacts
-      - export commits_file_location=$(find . -name commit_hashes.json)
-      - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $commits_file_location | tr -d '"')
-      - export BE_GIT_COMMIT_HASH=$(jq '.beCommit' $commits_file_location | tr -d '"')
-      - export VALIDATORS_GIT_COMMIT_HASH=$(jq '.validatorsCommit' $commits_file_location | tr -d '"')
-      - export EXPORT_GIT_COMMIT_HASH=$(jq '.exportCommit' $commits_file_location | tr -d '"')
-      - export DOCXTOPDF_GIT_COMMIT_HASH=$(jq '.docxtopdfCommit' $commits_file_location | tr -d '"')
-      - export WORDSERVICE_GIT_COMMIT_HASH=$(jq '.wordServiceCommit' $commits_file_location | tr -d '"')
+      # load commit hashes from build 1
+      - cd $CODEBUILD_SRC_DIR_build_artifacts_1
+      - export commits_file_location1=$(find . -name commit_hashes.json)
+      - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $commits_file_location1 | tr -d '"')
+      - export BE_GIT_COMMIT_HASH=$(jq '.beCommit' $commits_file_location1 | tr -d '"')
+      # load commit hashes from build 2
+      - cd $CODEBUILD_SRC_DIR_build_artifacts_2
+      - export commits_file_location2=$(find . -name commit_hashes.json)
+      - export VALIDATORS_GIT_COMMIT_HASH=$(jq '.validatorsCommit' $commits_file_location2 | tr -d '"')
+      - export EXPORT_GIT_COMMIT_HASH=$(jq '.exportCommit' $commits_file_location2 | tr -d '"')
+      - export DOCXTOPDF_GIT_COMMIT_HASH=$(jq '.docxtopdfCommit' $commits_file_location2 | tr -d '"')
+      - export WORDSERVICE_GIT_COMMIT_HASH=$(jq '.wordServiceCommit' $commits_file_location2 | tr -d '"')
+      # docker login
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      # source env variables
       - cd $CODEBUILD_SRC_DIR
       - source ./codebuild/2.run-tests/export_variables.sh
   pre_build:

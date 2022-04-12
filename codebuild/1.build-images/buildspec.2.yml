@@ -29,9 +29,9 @@ phases:
   post_build:
     commands:
       - ls
-      - $FE_REPO/codebuild/1.build-images/export_commit_hashes.sh "2"
+      - $FE_REPO/codebuild/1.build-images/export_commit_hashes.sh
       - echo "Done"
 
 artifacts:
   files:
-    - $FE_REPO/commit_hashes.2.json
+    - $FE_REPO/commit_hashes.json
