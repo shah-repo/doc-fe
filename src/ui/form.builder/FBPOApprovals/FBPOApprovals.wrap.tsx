@@ -149,11 +149,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
-        addApprover(difference(fieldValue, formValue));
-        removeApprover(difference(formValue, fieldValue));
+        const employeesToBeAdded = difference(fieldValue, formValue);
+        employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded);
+        const employeesToBeRemoved = difference(formValue, fieldValue);
+        employeesToBeRemoved.length > 0 && removeApprover(employeesToBeRemoved);
         formState?.getInputState(name)?.setRender();
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     React.useEffect(() => reaction(
