@@ -103,7 +103,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
       if (updateApprovers && requester && proceedToNewReq && !approvers?.includes(requester)) {
         addApprover([requester]);
-      } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
+      } else if (updateApprovers && approvers?.includes(deletedRequestor)) {
         removeApprover([deletedRequestor]);
       }
     };
@@ -119,12 +119,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         if (poItems && poItems.items.length) {
           checkLineItems(poItems, deletedRequestor);
         } else if (approvers?.includes(deletedRequestor)) {
-          const proceedToNewReq = poItems.items.some((item) =>
-            item.type === "service" || (item.type === "product" && item.partNumberDocId)
-          );
-          if (!proceedToNewReq) {
-            return;
-          }
           checkLineItems(poItems, "");
         }
       }
