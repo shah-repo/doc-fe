@@ -15,6 +15,9 @@ const FBEditorInstructionsDocument: React.FunctionComponent<FBEditorProps> = ({
       name="instructionsDocument"
       optionId="1"
       rules="required"
+      inputPropStyle={ { height: 47, borderWidth: 1, borderColor: "#CCD4D9", borderRadius: 3 } }
+      labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+      inputPropStyleSize="small"
     />
     {children}
   </FBEditor>

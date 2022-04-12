@@ -1,30 +1,45 @@
 import React from "react";
 import { FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
+import { styles } from "../styles/FBEditorTextField.styles";
 
 const FBEditorTextField: React.FunctionComponent<FBEditorProps> = ({
   children,
   inputProps: { type } = {},
   inputProps,
   ...props
-}) => (
-  <FBEditor {...props} {...{ inputProps }}>
-    <FBTextField
-      key={`fb-editor-field-${type}`}
-      dataCy={`fb-editor-field-${type}`}
-      label="form.builder.label"
-      name="label"
-      rules="required"
-    />
-    <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`} />
-    <FBTextField
-      type="number"
-      label="form.builder.rowNumber"
-      defaultValue={1}
-      name="rows"
-      key={`fb-editor-${type}`}
-    />
-    {children}
-  </FBEditor>
-);
+}) => {
+  const classes = styles();
+  return (
+    <FBEditor {...props} {...{ inputProps }}>
+      <FBTextField
+        key={`fb-editor-field-${type}`}
+        dataCy={`fb-editor-field-${type}`}
+        label="form.builder.label"
+        name="label"
+        rules="required"
+        className={classes.textfield}
+        boxProps={{ mb: 3.125, className: classes.error }}
+        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+      />
+      <FBEditorPlaceholder
+        key={`fb-editor-placeholder-${type}`}
+        boxProps={{ mb: 3.125, className: classes.error }}
+        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+        className={classes.textfield}
+      />
+      <FBTextField
+        type="number"
+        label="form.builder.rowNumber"
+        defaultValue={1}
+        name="rows"
+        key={`fb-editor-${type}`}
+        boxProps={{ mb: 3.125, className: classes.error }}
+        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+        className={classes.textfield}
+      />
+      {children}
+    </FBEditor>
+  );
+};
 
 export default FBEditorTextField;

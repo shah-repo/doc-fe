@@ -196,6 +196,10 @@ export type FBInputProps =
      * @cfg {string} Username that holds the lock.
      */
     lockOwnerName?: string;
+    /**
+     * @cfg {Bool} MUI Box props that can be passed to input section.
+     */
+    labelProps?: BoxProps;
   };
 
 export const OmitInputClones: FBInputType[] = [

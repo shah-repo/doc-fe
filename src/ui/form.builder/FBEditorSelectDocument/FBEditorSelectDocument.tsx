@@ -18,6 +18,9 @@ const FBEditorSelectDocument: React.FunctionComponent<FBEditorProps> = ({
       multiple={true}
       defaultValue={options}
       rules="required"
+      inputPropStyle={ { height: 47, borderWidth: 1, borderColor: "#CCD4D9", borderRadius: "3px" } }
+      labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+      inputPropStyleSize="small"
     />
     {children}
   </FBEditor>
