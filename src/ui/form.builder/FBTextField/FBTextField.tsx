@@ -1,6 +1,7 @@
 import { Box, TextField } from "@material-ui/core";
 import React from "react";
 import { FBInput, FBInputType, FBTextFieldProps } from "..";
+import { FBTextFieldStyles } from "../styles/FBTextField.styles";
 import { withFBTextField } from "./FBTextField.wrap";
 
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
@@ -21,38 +22,45 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   className,
   value,
   ...props
-}) => (
-  <FBInput {...props} {...{ error, defaultValue }} type={inputType as FBInputType}>
-    {mode === "preview" && (
-      <Box>{defaultValue}</Box>
-    )}
-    {mode !== "preview" && (
-      <TextField
-        data-cy={dataCy ? dataCy : props.name}
-        label=""
-        variant="outlined"
-        onBlur={(ev) => onBlur?.(ev)}
-        onFocus={(ev) => onFocus?.(ev)}
-        inputProps={{
-          ...inputProps,
-          ...(type === "number") && {
-            onWheel: (e) => { e.currentTarget.blur(); },
-          },
-        }}
-        {...{
-          type,
-          rows,
-          error,
-          multiline,
-          InputProps,
-          style,
-          placeholder,
-          className,
-          value,
-        }}
-      />
-    )}
-  </FBInput>
-);
+}) =>
+{
+  const classes = FBTextFieldStyles();
+  className = className ? className : classes.textfield;
+  return (
+    <FBInput {...props} {...{ error, defaultValue }} type={inputType as FBInputType}>
+      {mode === "preview" && (
+        <Box>{defaultValue}</Box>
+      )}
+      {mode !== "preview" && (
+        <TextField
+          data-cy={dataCy ? dataCy : props.name}
+          label=""
+          variant="outlined"
+          onBlur={(ev) => onBlur?.(ev)}
+          onFocus={(ev) => onFocus?.(ev)}
+          inputProps={{
+            ...inputProps,
+            ...(type === "number") && {
+              onWheel: (e) => { e.currentTarget.blur(); },
+            },
+          }}
+
+          {...{
+            type,
+            rows,
+            error,
+            multiline,
+            InputProps,
+            style,
+            placeholder,
+            className,
+            value,
+          }}
+
+        />
+      )}
+    </FBInput>
+  );
+};
 
 export default withFBTextField(FBTextField);
