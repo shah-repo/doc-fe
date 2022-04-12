@@ -1358,7 +1358,7 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get(`th[aria-colindex="4"] span.k-column-title`).should("not.have.text", "Title");
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-      cy.get(`th[aria-colindex="4"] span.k-column-title`).should("have.text", "Title");
+      cy.get(`th[aria-colindex="2"] span.k-column-title`).should("have.text", "Title");
     });
   });
 
@@ -1496,7 +1496,7 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Navigate to column with option Select field", () => {
-      cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+      cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
       cy.get("li").contains("Released").arrowClick().wait(500);
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       cy.landingPageLoadingElementShouldNotExist();
@@ -1514,7 +1514,7 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Verify that filter is enabled and functional", () => {
-      cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).should("be.visible").arrowClick();
+      cy.get(`th[aria-colindex="4"] span.k-i-filter-clear`).should("be.visible").arrowClick();
     });
 
     it(`Crossed filter icon should appear `, () => {
