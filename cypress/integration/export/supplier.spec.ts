@@ -9,7 +9,7 @@ let createdCompany;
 let loginResponse;
 let adminEmployee;
 
-context("Export Other internal doc", () => {
+context("Export Supplier", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -292,6 +292,7 @@ context("Export Other internal doc", () => {
 
   context("Supplier with Released status", () => {
     it("Click Approve button", () => {
+      cy.ebApprove();
     });
 
     it("Verify export", () => {
@@ -306,6 +307,7 @@ context("Export Other internal doc", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[1].name}`);
       cy.pmSubmitForApproval();
+      cy.ebApprove();
     });
 
     it("Select 'Superseded' record", () => {
@@ -339,12 +341,8 @@ context("Export Other internal doc", () => {
     });
 
     it("Click Approve", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-      cy.unClick();
-      cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.contains("PENDING APPROVAL").arrowClick();
+      cy.ebApprove();
     });
 
     it("Verify export", () => {
