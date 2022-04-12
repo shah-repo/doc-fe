@@ -59,6 +59,7 @@ set -a
   export ENLIL_COMPOSE_EXPOSE_WORD_SERVICE_PORT="5000"
 
   export ENLIL_BE_AWS_SQS_QUEUE_URL=${ENLIL_BE_AWS_SQS_QUEUE_URL:-"https://sqs.us-west-2.amazonaws.com/817083319299/cypress_codebuild_dev.fifo"}
+  export ENLIL_EXPORT_AWS_SQS_QUEUE_URL=${ENLIL_EXPORT_AWS_SQS_QUEUE_URL:-"https://sqs.us-west-2.amazonaws.com/817083319299/cypress_codebuild_dev_export.fifo"}
   export ENLIL_BE_ENV_NAME="CYPRESS_TEST_$ENLIL_COMPOSE_SUITE_NUMBER"
   
   export VALIDATORS_CYPRESS_FE_URL="http://validators:$ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT"
