@@ -30,8 +30,6 @@ let createdPMRecord;
 let createdCalibrationRecord;
 let createdEquipmentNumericRevision;
 let group;
-let formId;
-
 
 context("Equipment maintenance for checking History in all states", () => {
   before(() => {
@@ -1019,48 +1017,6 @@ context("Equipment maintenance for checking History in all states", () => {
         }).then(() => done());
       });
     });
-
-    it("[API]Create Equipment in DRAFT for numeric version", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          formDocument: {
-            id: createdEquipmentFormDocument.id,
-          },
-          formInput: {
-            "pm-ki5wtk5l": {
-              status: "Done",
-              frequency: 10,
-              instructions: "<p>Instructions for preventative maintenance</p>",
-              requirements: "Yes",
-              preventativeForm: createdPMForm.documentId,
-              // complianceDueDate: PM_DUE_DATE,
-            },
-            "fb-primary-owner-eq": adminEmployee.id,
-            "fb-coordinator-eq": adminEmployee.id,
-            "calibration-ki5wtyj0": {
-              status: "Done",
-              frequency: 5,
-              instructions: "<p>Instructions for calibration</p>",
-              requirements: "Yes",
-              preventativeForm: createdCalibrationForm.documentId,
-              // complianceDueDate: CAL_DUE_DATE,
-            },
-            "fb-default-eq-status": "Active",
-          },
-          description: "<p>Equipment document</p>",
-          name: "Equipment document DRAFT",
-          attachments: [],
-          referenceTo: [],
-          revisionChangeType: RevisionChangeType.NextRevision,
-          retrain: false,
-          document: {
-            id: createdEquipmentNumericRevision.documentId,
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then(() => done());
-    });
   });
 
   context("Login user", () => {
@@ -1094,7 +1050,7 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Verify that the number of documents displayed match filter settings", () => {
-      cy.dlVerifyDocCounter({ docCounterNumber: 4 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 3 });
       cy.grpClearFilter();
     });
 
@@ -1103,11 +1059,8 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
     });
 
-    it("Navigate to one of the columns", () => {
+    it(`drag and drop`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "EQ-00003");
-    });
-
-    it(`Verify drag and drop`, () => {
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
         toSelector: `th[aria-colindex="2"][role]>span>span`,
@@ -1115,17 +1068,18 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Column grouping", () => {
-      cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
     });
 
     it("Verify that data is sorted based on that column grouping", () => {
-      cy.get(".k-grouping-row").eq(0).should("contain.text", "Equipment document").arrowClick();
-      cy.get(".k-grouping-row").eq(1).should("contain.text", "Equipment document DRAFT").arrowClick();
+      cy.get(".k-grouping-row").eq(0).should("contain.text", "1").arrowClick();
+      cy.get(".k-grouping-row").eq(1).should("contain.text", "1A").arrowClick();
+      cy.get(".k-grouping-row").eq(1).should("contain.text", "A").arrowClick();
     });
 
     it("Grouping columns should be displayed next to button Clear Filters", () => {
-      cy.get(".k-group-indicator").eq(0).should("have.text", "Title");
+      cy.get(".k-group-indicator").eq(0).should("have.text", "Revision");
     });
 
     it("User should be able to remove it", () => {
@@ -1176,17 +1130,9 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Verify ID", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", "Equipment document");
-      cy.get("#HeaderInfo-docId").then((x) => {
-        formId = x.text();
-      });
-    });
-
     it("Verify that the system displays only Equipment in the Equipment Landing page with corresponding data", () => {
       cy.navigToEquipment();
-      cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", `${formId}` );
+      cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "EQ-" );
     });
 
     it("Click one of the Equipment from landing page", () => {
@@ -1328,7 +1274,7 @@ context("Equipment maintenance for checking History in all states", () => {
   context("Verify that user is able to insert filter in every column", () => {
     it("Verify filter for ID", () => {
       cy.get(`[aria-colindex="1"] input`).arrowType("EQ-00001").wait(500);
-      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify filter for Revision", () => {
@@ -1339,15 +1285,15 @@ context("Equipment maintenance for checking History in all states", () => {
 
     it("Verify filter for Title", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="4"] input`).arrowType("Equipment document Draft").wait(500);
+      cy.get(`[aria-colindex="4"] input`).arrowType("Equipment document").wait(500);
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 4 });
     });
 
     it("Verify filter for Owner", () => {
       cy.dlClearFilters();
       cy.get(`[aria-colindex="5"] input`).arrowType("Giovanni Reynolds").wait(500);
-      cy.dlVerifyDocCounter({ docCounterNumber: 5 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 4 });
       cy.wait(500);
     });
 
@@ -1356,20 +1302,20 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Column grouping", () => {
-      cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
     });
 
     it("Verify that data is sorted based on that column grouping", () => {
-      cy.get(".k-grouping-row").eq(0).should("contain.text", "Equipment document").arrowClick();
-      cy.get(".k-grouping-row").eq(1).should("contain.text", "Equipment document DRAFT").arrowClick();
+      cy.get(".k-grouping-row").eq(0).should("contain.text", "1").arrowClick();
+      // cy.get(".k-grouping-row").eq(1).should("contain.text", "Released").arrowClick();
     });
 
 
     it("Verify that user is able to search column when inserting filter", () => {
       cy.get(".k-textbox").eq(0).arrowType("EQ-00001").wait(500);
-      cy.get(".k-grouping-row").eq(0).should("contain.text", "Equipment document").arrowClick();
-      cy.get(".k-grouping-row").eq(1).should("contain.text", "Equipment document DRAFT").arrowClick();
+      cy.get(".k-grouping-row").eq(0).should("contain.text", "1").arrowClick();
+      // cy.get(".k-grouping-row").eq(1).should("contain.text", "Released").arrowClick();
       cy.get(".k-i-group-delete").click();
       cy.grpClearFilter();
     });
@@ -1434,17 +1380,17 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it(`Verify "Does not contain" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
@@ -1454,17 +1400,17 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it(`Verify "Is not equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Starts with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
@@ -1474,7 +1420,7 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it(`Verify "Ends with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("EQ-00004");
@@ -1484,7 +1430,7 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it(`Verify "Is null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1493,16 +1439,16 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it(`Verify "Is not null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1511,11 +1457,11 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it(`Verify "Is not empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
