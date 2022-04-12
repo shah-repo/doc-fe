@@ -518,12 +518,16 @@ context("Document list test", () => {
     });
 
     it(`Verify drag and drop TRN ID header on second slot`, () => {
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR-");
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR99999");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
         toSelector: `th[aria-colindex="2"][role]>span>span`,
       });
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR-");
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR99999");
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="2"][role]>span>span`,
+        toSelector: `th[aria-colindex="1"][role]>span>span`,
+      });
     });
 
     it("Column grouping", () => {
@@ -659,9 +663,15 @@ context("Document list test", () => {
     });
 
     it(`Verify drag and drop`, () => {
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "RD-");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
         toSelector: `th[aria-colindex="2"][role]>span>span`,
+      });
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "RD-");
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="2"][role]>span>span`,
+        toSelector: `th[aria-colindex="1"][role]>span>span`,
       });
     });
 
