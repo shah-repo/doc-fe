@@ -33,6 +33,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupByKey,
   value,
   inputStyle = {},
+  inputPropStyle = {},
+  inputPropStyleSize = "",
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -80,13 +82,14 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   variant="outlined"
                   InputProps={{
                     ...params.InputProps,
-                    ...(refresh) && { style: { paddingRight: "33px" } },
+                    ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
                   }}
                   inputProps={{
                     ...params.inputProps,
                     "style": { padding: "10.5px 0", ...inputStyle },
                     "data-cy": props.name,
                   }}
+                  size={inputPropStyleSize}
                 />
               </Box>
               {refresh && (

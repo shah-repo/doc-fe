@@ -6,11 +6,14 @@ const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
   name = "options",
   placeholder = "form.builder.options.placeholder",
   rules = "required",
+  className,
 }) => (
   <FBTextField
-    {...{ label, name, placeholder, rules }}
+    {...{ label, name, placeholder, rules, className }}
     rows={5}
     multiline
+    boxProps={{ mb: 3.125 }}
+    labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
     FBProps={{ inputType: "editoroptions" }}
   />
 );
