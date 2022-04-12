@@ -26,6 +26,7 @@ docker build \
   -f ./docker/cypress_web_pipeline.Dockerfile \
   --cache-from 817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO \ 
   -t enlil_cypress_web:${FE_GIT_COMMIT_HASH} \
+  --build-arg BUILDKIT_INLINE_CACHE=1 \
   --build-arg FE_GIT_COMMIT_HASH \
   --build-arg REACT_APP_API_ENDPOINT \
   --build-arg REACT_APP_WORKER_API_ENDPOINT \
