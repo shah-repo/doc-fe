@@ -765,6 +765,8 @@ context("Export maintenance record", () => {
 
       it("Finalize and release button click'", () => {
         cy.reload();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.recApproveAndReleaseInlineRecord();
       });
 

@@ -466,6 +466,8 @@ context("Export Engineering Build doc", () => {
 
       it("Finalize and release button click'", () => {
         cy.reload();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.recApproveAndReleaseInlineRecord();
       });
 
