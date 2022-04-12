@@ -34,6 +34,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     dialogState,
     disabled,
     disabledOptions,
+    disableChipDelete,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -102,7 +103,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
       if (updateApprovers && requester && proceedToNewReq && !approvers?.includes(requester)) {
         addApprover([requester]);
-      } else if (!requester && approvers?.includes(deletedRequestor)) {
+      } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
         removeApprover([deletedRequestor]);
       }
     };
@@ -148,11 +149,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
-        addApprover(difference(fieldValue, formValue));
-        removeApprover(difference(formValue, fieldValue));
+        const employeesToBeAdded = difference(fieldValue, formValue);
+        employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded);
+        const employeesToBeRemoved = difference(formValue, fieldValue);
+        employeesToBeRemoved.length > 0 && removeApprover(employeesToBeRemoved);
         formState?.getInputState(name)?.setRender();
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     React.useEffect(() => reaction(
@@ -263,7 +266,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // Should be disabled while submitting if group levels changes while adding/editing PO items
     disabled = disabled || loading || isSubmitting;
 
-    disabledOptions = [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+    disabledOptions = [];
+    if (formState?.inputState.get(name)?.value.length) {
+      disabledOptions = isAdministrativeChange
+        ? formState?.inputState.get(name)?.value
+        : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+    }
 
     return Component({
       ...(props as T),
@@ -282,6 +290,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       dialogState,
       disabled,
       disabledOptions,
+      disableChipDelete: !isAdministrativeChange,
     });
   };
 

@@ -36,6 +36,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   inputStyle = {},
   disabledOptions = [],
   disableBackspace = false,
+  disableChipDelete = false,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -113,7 +114,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               {(option, index) => {
                 const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
                   (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
-                const isOptionDisabled = disabledOptions.includes(option.id);
+                const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
                 return (
                   <Chip
                     key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
