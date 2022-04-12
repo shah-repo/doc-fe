@@ -564,7 +564,6 @@ context("Document list test", () => {
   context("Check for filters on approver request list", () => {
     context("Check AR ID filter", () => {
       it("Filter list by AR ID", () => {
-        cy.pause();
         cy.alFilterByArId({ arId: "AR99999" });
       });
 
@@ -661,32 +660,6 @@ context("Document list test", () => {
       cy.get(`button[data-cy="document.revision.export.list"]`).should(`${EXIST}`);
       cy.get("#DocumentByTypeListPresenter-openDocRev").realHover().should(`${EXIST}`);
     });
-
-    it(`Verify drag and drop`, () => {
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "RD-");
-      cy.dragAndDrop({
-        fromSelector: `th[aria-colindex="1"][role]>span>span`,
-        toSelector: `th[aria-colindex="2"][role]>span>span`,
-      });
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "RD-");
-      cy.dragAndDrop({
-        fromSelector: `th[aria-colindex="2"][role]>span>span`,
-        toSelector: `th[aria-colindex="1"][role]>span>span`,
-      });
-    });
-
-    it("Column grouping", () => {
-      cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
-      cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
-    });
-
-    it("Grouping columns should be displayed next to button Clear Filters", () => {
-      cy.get(".k-group-indicator").eq(0).should("have.text", "Title");
-    });
-
-    it("User should be able to remove it", () => {
-      cy.get(".k-i-group-delete").click();
-    });
   });
 
   context("Records Sorting", () => {
@@ -761,6 +734,34 @@ context("Document list test", () => {
 
       it("Navigate to Records", () => {
         cy.navigToRecords();
+      });
+    });
+
+    context("Drag and Drop", () => {
+      it(`Verify drag and drop`, () => {
+        cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "RD-");
+        cy.dragAndDrop({
+          fromSelector: `th[aria-colindex="1"][role]>span>span`,
+          toSelector: `th[aria-colindex="2"][role]>span>span`,
+        });
+        cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "RD-");
+        cy.dragAndDrop({
+          fromSelector: `th[aria-colindex="2"][role]>span>span`,
+          toSelector: `th[aria-colindex="1"][role]>span>span`,
+        });
+      });
+
+      it("Column grouping", () => {
+        cy.get(`th[aria-colindex="4"][role]>div.k-grid-column-menu`).arrowClick();
+        cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
+      });
+
+      it("Grouping columns should be displayed next to button Clear Filters", () => {
+        cy.get(".k-group-indicator").eq(0).should("have.text", "Title");
+      });
+
+      it("User should be able to remove it", () => {
+        cy.get(".k-i-group-delete").click();
       });
     });
 
