@@ -295,16 +295,8 @@ context("Document list test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
-    // it("clicks on 'Create Document", () => {
-    //   cy.drClickCreateDocumentWithApiCall();
-    // });
-
-    it("Click on 'Save' button", () => {
+    it("clicks on 'Create Document", () => {
       cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Verify that the system displays only documents in the documents list with corresponding data", () => {
@@ -438,7 +430,6 @@ context("Document list test", () => {
       });
 
       it("Verify document counter on document list", () => {
-        cy.pause();
         cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
