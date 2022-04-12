@@ -105,6 +105,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         addApprover([requester]);
       } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
         removeApprover([deletedRequestor]);
+      } else if (updateApprovers && requester && !proceedToNewReq && approvers?.includes(requester)) {
+        removeApprover([deletedRequestor]);
       }
     };
 
@@ -220,6 +222,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     function removeApprover(ids?: string[]) {
       if (!ids) { return; }
+      if (formState?.workspaceMode === "preview") { return; }
       map(ids, (approver) => {
         const approval = find(poApprovalsState?.getApprovals, (a) => a.approver?.id === approver);
         poApprovalsState?.removeCheckedGroups(approval?.signatureGroupName);
@@ -271,6 +274,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       disabledOptions = isAdministrativeChange
         ? formState?.inputState.get(name)?.value
         : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+
+      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+      const proceedToNewReq = poItems.items.some((item) =>
+        item.type === "service" || (item.type === "product" && item.partNumberDocId)
+      );
+      if (!proceedToNewReq) {
+        disabledOptions = [];
+      }
     }
 
     return Component({
