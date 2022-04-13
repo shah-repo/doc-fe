@@ -208,29 +208,6 @@ context("Document list test", () => {
     });
   });
 
-  context("Insert Filters", () => {
-    it("Clear filters", () => {
-      cy.dlClearFilters();
-    });
-
-    it("Filter list by docId", () => {
-      cy.dlFilterByDocId({ docId: "CP-00003" });
-    });
-
-    it("Verify filter by docId", () => {
-      cy.dlVerifyFilterByDocId({ docId: "CP-00003" });
-    });
-
-    it("Verify document counter on document list", () => {
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
-    });
-
-    it("Verify that the number of documents displayed match filter settings", () => {
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
-      cy.dlClearFilters();
-    });
-  });
-
   context("Verify description of the document when the mouse hovers over the document title", () => {
     it("Verify description on hover", () => {
       cy.dlVerifyDescriptionOnHover({ description: "Test Doc Rev Description2" });
@@ -525,7 +502,7 @@ context("Document list test", () => {
       cy.dlClearFilters();
     });
 
-    it(`Verify drag and drop TRN ID header on second slot`, () => {
+    it(`Verify drag and drop ID header on second slot`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR-00001");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
