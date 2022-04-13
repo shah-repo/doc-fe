@@ -17,9 +17,7 @@ const Description: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useDescription(documentTypeId, isQms);
-  const placeholder: string = isQms ?
-    "" :
-    intl.formatMessage({ id: "document.revision.no.qms.message" });
+  const placeholder: string = intl.formatMessage({ id: "form.builder.enter.description" });
 
   if (!isVisible) {
     return null;
