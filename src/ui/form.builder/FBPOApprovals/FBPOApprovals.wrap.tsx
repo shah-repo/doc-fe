@@ -121,7 +121,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         // eslint-disable-next-line react-hooks/exhaustive-deps
         deletedRequestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
         if (poItems && poItems.items.length) {
-          checkLineItems(poItems, deletedRequestor);
+          checkLineItems(
+            poItems,
+            workspaceState?.revisionChangeType ===
+              RevisionChangeType.AdministrativeChange
+              ? ""
+              : deletedRequestor
+          );
         } else if (approvers?.includes(deletedRequestor)) {
           checkLineItems(poItems, "");
         }
