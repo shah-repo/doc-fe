@@ -316,7 +316,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       </div>
       <Box className={classes.listItemContainer}>
         {map(Items, (auditDetails, groupKey) => (
-          <ListItem key={groupKey} disableGutters>
+          <ListItem key={groupKey} disableGutters style={{ padding: 0 }}>
             {<Default auditDetails={auditDetails} />}
           </ListItem>)
 

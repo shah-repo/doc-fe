@@ -6,8 +6,8 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { Nullable } from "../../../../../state/ducks/common/types";
-import UserAvatar from "../../../../app/UserMenu/UserAvatar";
 import styles from "./common.styles";
+import UserCard from "./UserCard";
 
 interface Props {
   timestamp: string;
@@ -30,12 +30,10 @@ const UserAvatarCard: React.FunctionComponent<Props> = ({
     <ListItem
       alignItems="flex-start"
       disableGutters
-      style={{
-        minWidth: "35px",
-      }}
+      style={{ padding: 0 }}
     >
-      <ListItemAvatar>
-        <UserAvatar avatar={avatar} initialColor={initialColor} name={name} />
+      <ListItemAvatar style={{ minWidth: 43 }}>
+        <UserCard avatar={avatar} initialColor={initialColor} name={name} />
       </ListItemAvatar>
 
       <ListItemText

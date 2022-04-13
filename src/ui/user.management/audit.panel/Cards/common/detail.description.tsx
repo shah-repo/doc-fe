@@ -20,7 +20,7 @@ const DetailDescription: React.FunctionComponent<OwnProps> = ({
 }) => {
   const classes = styles();
   return (
-    <>
+    <Box marginTop={1.875}>
       <Box
         color={Colors.font_gray}
         fontSize={12}>
@@ -29,10 +29,7 @@ const DetailDescription: React.FunctionComponent<OwnProps> = ({
       <Box color={Colors.almost_black} fontSize={14} className={classes.description} whiteSpace={"wrap"}>
         {secondaryText}
       </Box>
-      <Box color={Colors.red} fontSize={6}>
-        {groupId}
-      </Box>
-    </>
+    </Box>
   );
 };
 
