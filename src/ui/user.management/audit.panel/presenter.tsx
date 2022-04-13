@@ -11,7 +11,7 @@ import apiClient from "../../../state/apiClient";
 import { NullableArray } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { HISTORY_URL } from "../../../state/ducks/userManagement/constants";
+import { UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPING, AuditDetailsProps } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
@@ -312,7 +312,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      setErrorMessage("");
      const requestConfig: AxiosRequestConfig = {
        method: "get",
-       url: HISTORY_URL,
+       url: UM_AUDIT_URL,
        params: { offset: page, limit },
        paramsSerializer: (params) => qs.stringify(params),
        headers: {
