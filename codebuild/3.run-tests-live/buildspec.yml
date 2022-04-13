@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   shell: bash
-  variables: 
+  variables:
     COMPOSE_PROJECT_NAME: "enlil_codebuild"
   exported-variables:
     - AWS_DEFAULT_REGION
@@ -20,12 +20,12 @@ phases:
   build:
     commands:
       - docker ps
-      - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ./codebuild/3.run-tests-live/start_tests.sh
+      - docker exec -w /opt/app/tests enlil_cypress_test_run_container ./codebuild/3.run-tests-live/start_tests.sh
 
 reports:
   report-name-or-arn:
     files:
-      - '**/*'
+      - "**/*"
     base-directory: test-results/some_ci_build_id/json/junit
     file-format: JunitXml
 artifacts:

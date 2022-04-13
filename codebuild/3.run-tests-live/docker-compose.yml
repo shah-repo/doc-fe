@@ -19,6 +19,7 @@ services:
           - director
 
   test_run_container:
+    container_name: enlil_cypress_test_run_container
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
     command: tail -F anything
     volumes:

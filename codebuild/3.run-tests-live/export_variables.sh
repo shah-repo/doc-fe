@@ -1,9 +1,9 @@
 set -a
   export COMPOSE_PROJECT_NAME=enlil_codebuild
-  export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"https://api.prod2.enlil.io"}
-  export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"https://prod2.enlil.io"}
-  export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
+  export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"https://api.dev.enlil.io"}
+  export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"https://dev.enlil.io"}
+  export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"enlil.testmail+sysadmin@gmail.com"}
   export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!Admin"}
-  export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-"15"}
-  export CYPRESS_VIDEO=${CYPRESS_VIDEO:-"true"}
+  export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-"4"}
+  export CYPRESS_VIDEO=${CYPRESS_VIDEO:-"false"}
 set +a

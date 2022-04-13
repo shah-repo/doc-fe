@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mv ../node_modules ./
+# mv ../node_modules ./
 yarn install --frozen-lockfile
 source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "CODEBUILD"
 ./scripts/cypress/wait.sh
