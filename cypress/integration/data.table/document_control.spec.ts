@@ -492,7 +492,7 @@ context("Document list test", () => {
     });
 
     it("AR description when the mouse hovers over the AR title", () => {
-      cy.get("tr.k-master-row>td").eq(1).realHover().should("have.text", "Releasing FM-00002, DD Test");
+      cy.alVerifyDescriptionOnHover({ description: "Releasing FM-00002, DD Test" });
     });
 
     it("Verify filter by AR ID", () => {
@@ -552,17 +552,16 @@ context("Document list test", () => {
 
     it("User should be able to remove it", () => {
       cy.get(".k-i-group-delete").click();
-      cy.navigToDocumentList();
     });
 
     it("The system shall allow the user to open an AR from the AR list", () => {
-      cy.navigToApprovalRequestList();
+      // cy.navigToApprovalRequestList();
       cy.dlClearFilters();
       cy.get(".k-master-row").eq(0).arrowClick();
     });
 
     it("Verify that the system displays only AR in the AR list with corresponding data", () => {
-      cy.navigToApprovalRequestList();
+      // cy.navigToApprovalRequestList();
       cy.dlClearFilters();
       cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "AR-00001" );
     });
@@ -692,6 +691,54 @@ context("Document list test", () => {
 
         it("Enters description 'Lot History Record description'", () => {
           cy.drEnterDocumentDescription({ description: "Lot History Record description" });
+        });
+
+        it("Selects 'Form' document type from dropdown", () => {
+          cy.drSelectDocumentType({ documentType: "Form" });
+        });
+
+        it("Selects 'Record Document' output document type from dropdown", () => {
+          cy.drSelectOutputDocumentType({ documentType: "Record Document" });
+        });
+
+        it("Select 'Numeric' revision stage", () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+
+        it("Verify approvals field is automatically added", () => {
+          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        });
+
+        context("Creates document and releases it", () => {
+          it("Click create document after filling document", () => {
+            cy.drClickCreateDocumentWithApiCall();
+          });
+
+          it("Approve and Release document", () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          });
+        });
+      });
+    });
+
+    context("Create second Record with form", () => {
+      context("Start document creation flow", () => {
+        it("Navigates to document list", () => {
+          cy.navigToDocumentList();
+        });
+
+        it("Clicks on 'create a document' button", () => {
+          cy.cmpClickCreateNewDocument();
+        });
+      });
+
+      context("Fill in document attributes", () => {
+        it("Enters title 'Approval Record'", () => {
+          cy.drEnterDocumentTitle({ name: "Approval Record" });
+        });
+
+        it("Enters description 'Approval Record description'", () => {
+          cy.drEnterDocumentDescription({ description: "Approval Record description" });
         });
 
         it("Selects 'Form' document type from dropdown", () => {
