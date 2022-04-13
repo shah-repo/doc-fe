@@ -70,7 +70,7 @@ const editSelectedEmployeeGroups = (
   payload: employee,
 });
 
-const editSelectedEmployeeActiveStatus = (
+const editSelectedEmployeeAciveStatus = (
   employee: GetEmployeeResponse,
 ): EditActiveStatusAction => ({
   type: EDIT_EMPLOYEE_ACTIVE_STATUS,
@@ -103,7 +103,7 @@ const editEmployeeActiveStatus = (
     method: "patch",
     data: body,
     onSuccess: (employee, dispatch) => {
-      dispatch(editSelectedEmployeeActiveStatus(employee));
+      dispatch(editSelectedEmployeeAciveStatus(employee));
     },
     handlers,
   });
