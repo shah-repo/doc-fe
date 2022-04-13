@@ -9,6 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -561,7 +562,7 @@ context("Document list test", () => {
     });
 
     it("Verify that the system displays only AR in the AR list with corresponding data", () => {
-      // cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestList();
       cy.dlClearFilters();
       cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "AR-00001" );
     });
@@ -706,6 +707,7 @@ context("Document list test", () => {
         });
 
         it("Verify approvals field is automatically added", () => {
+          SystemRequirement("REQ-0980");
           cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
@@ -754,6 +756,7 @@ context("Document list test", () => {
         });
 
         it("Verify approvals field is automatically added", () => {
+          SystemRequirement("REQ-0980");
           cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
@@ -769,7 +772,7 @@ context("Document list test", () => {
       });
     });
 
-    context("Create new record without inline approval form and check if they are in alpha revision", () => {
+    context("Check if there are multiple record forms to select", () => {
       it("Navigate to Records", () => {
         cy.navigToRecords();
       });
@@ -778,12 +781,77 @@ context("Document list test", () => {
         cy.recCreateRecordFromLandingPage();
       });
 
+      it("Check if multiple record forms exist", () => {
+        cy.recCheckIfMultilpeFormsAreAvailable({
+          recordType: "Record Document",
+          recordForms: ["Approval Record", "Lot History Record"],
+        });
+      });
+    });
+
+    context("Create new record without inline approval form and check if they are in alpha revision", () => {
+      it("Create new record button click", () => {
+        cy.recCreateRecordFromLandingPage();
+      });
+
       it("Select 'Approval Record' form", () => {
-        cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document" });
+        cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document", recordForm: "Approval Record" });
       });
 
       it("Check if revision is in alpha revision stage", () => {
         cy.recCheckRevisionStage({ stage: "Revision A" });
+      });
+    });
+
+    context("Fill in record attributes and release document", () => {
+      it("Enters title 'Approval Record title'", () => {
+        cy.drEnterDocumentTitle({ name: "Approval Record title" });
+        cy.unClick();
+      });
+
+      it("Add first Approver'", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Save Record'", () => {
+        cy.drSaveDocumentWithoutaudit();
+      });
+
+      it("release button click'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+      });
+    });
+
+    context("Create second Record with Draft state", () => {
+      it("Navigate to Records", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Filter list by TITLE as Approval Record", () => {
+        cy.dlClearFilters();
+        cy.dlFilterByDocTitle({ docTitle: "Approval Record" });
+      });
+
+      it("Click on Approval Record", () => {
+        cy.get(`.k-master-row`).first().arrowClick();
+      });
+
+      it("Clicks on 'create New' button", () => {
+        cy.drCreateNewDocumentFromFormRecord();
+      });
+
+      it("Enters title as Approval Record title", () => {
+        cy.drEnterDocumentTitle({ name: "Approval Record title" });
+      });
+
+      it("Enters description", () => {
+        cy.drEnterDocumentDescription({ description: "Approval Record description" });
+      });
+
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Navigate to Records", () => {
@@ -877,7 +945,6 @@ context("Document list test", () => {
       });
     });
 
-
     context("Sort 'Title'", () => {
       it("Title should be in ascending order", () => {
         cy.contains("Title").eq(0).click();
@@ -953,8 +1020,8 @@ context("Document list test", () => {
 
   context("Verify filters on each field", () => {
     it(`Verify filter for ${docIdStr}`, () => {
-      cy.dlFilterByDocId({ docId: "RD-00006" });
-      cy.dlVerifyFilterByDocId({ docId: "RD-00006" });
+      cy.dlFilterByDocId({ docId: "RD-00007" });
+      cy.dlVerifyFilterByDocId({ docId: "RD-00007" });
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
@@ -962,14 +1029,14 @@ context("Document list test", () => {
       cy.dlClearFilters();
       cy.dlFilterByRev({ revision: "A" });
       cy.dlVerifyFilterByRev({ revision: "A" });
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
     });
 
     it(`Verify filter for ${Owner}`, () => {
       cy.dlClearFilters();
       cy.dlFilterByOwner({ owner: USERS[2].name });
       cy.dlVerifyFilterByOwner({ owner: USERS[2].name });
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared", () => {
@@ -979,8 +1046,8 @@ context("Document list test", () => {
     it("Verify that each filter for each column in the landing page is functional", () => {
       cy.dlFilterByRev({ revision: "A" });
       cy.dlVerifyFilterByRev({ revision: "A" });
-      cy.dlFilterByDocId({ docId: "RD-00006" });
-      cy.dlVerifyFilterByDocId({ docId: "RD-00006" });
+      cy.dlFilterByDocId({ docId: "RD-00007" });
+      cy.dlVerifyFilterByDocId({ docId: "RD-00007" });
       cy.dlClearFilters();
     });
 
@@ -1044,57 +1111,57 @@ context("Document list test", () => {
     });
 
     it(`Verify ${docIdStr} "Is equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00006");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify ${docIdStr} "Does not contain" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00006");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify ${docIdStr} "Is not equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00006");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify ${docIdStr} "Starts with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00006");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify ${docIdStr} "Ends with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00006");
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify ${docIdStr} "Is null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1103,16 +1170,16 @@ context("Document list test", () => {
     });
 
     it(`Verify ${docIdStr} "Is not null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify ${docIdStr} "Is empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1121,11 +1188,11 @@ context("Document list test", () => {
     });
 
     it(`Verify ${docIdStr} "Is not empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
