@@ -145,7 +145,6 @@ context("Training Flow test", () => {
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -159,7 +158,6 @@ context("Training Flow test", () => {
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -788,9 +786,9 @@ context("Training Flow test", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -822,7 +820,7 @@ context("Training Flow test", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -838,13 +836,13 @@ context("Training Flow test", () => {
     });
 
     it("Select Groups to train 'Developers'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Developers{downarrow}{enter}");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Developers");
     });
 
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
         });
     });
 
@@ -857,7 +855,7 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
     });
@@ -927,10 +925,10 @@ context("Training Flow test", () => {
 
     it("Select 'One-Time Training test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview, CyRoutes.EmployeesGet,
-        CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("One-Time Training test{downarrow}{enter}");
+          .autocompleteSelect("One-Time Training test");
       });
     });
 
@@ -959,7 +957,7 @@ context("Training Flow test", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
 
     it("Select force training option 'Yes'", () => {
@@ -967,13 +965,13 @@ context("Training Flow test", () => {
     });
 
     it("Select training group 'Developers'", () => {
-      cy.get("[name=training-select-groups-to-train]").arrowType("Developers{downarrow}{enter}");
+      cy.get("[name=training-select-groups-to-train]").autocompleteSelect("Developers");
     });
 
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
         });
     });
 
@@ -982,7 +980,7 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
     });
@@ -990,7 +988,7 @@ context("Training Flow test", () => {
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
     });
@@ -1079,8 +1077,7 @@ context("Training Flow test", () => {
 
   context("Verify Training Records with timestamp on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.training\"]").arrowClick();
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
+      cy.navigToTrainingRecords();
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
@@ -1105,10 +1102,10 @@ context("Training Flow test", () => {
 
     it("Select 'One-Time Training test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview, CyRoutes.EmployeesGet,
-        CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("One-Time Training test{downarrow}{enter}");
+          .autocompleteSelect("One-Time Training test");
       });
     });
 
@@ -1125,7 +1122,7 @@ context("Training Flow test", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
 
     it("Select force training option 'Yes'", () => {
@@ -1135,7 +1132,7 @@ context("Training Flow test", () => {
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
         });
     });
 
@@ -1144,7 +1141,7 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
     });
@@ -1152,7 +1149,7 @@ context("Training Flow test", () => {
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
     });
@@ -1198,8 +1195,7 @@ context("Training Flow test", () => {
     });
 
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.training\"]").arrowClick();
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
+      cy.navigToTrainingRecords();
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {

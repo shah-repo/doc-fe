@@ -222,7 +222,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Choose an existing part from the list of available parts", () => {
-      cy.get("[data-cy=\"childrenParts\"]").arrowType("Test Part{downarrow}{enter}");
+      cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Test Part");
     });
 
     it("Click on 'Add a field'", () => {
@@ -266,7 +266,7 @@ context("Document Operators Access Test", () => {
         cy.reload();
         cy.progressBarShouldAppear();
       });
-      cy.listLoadingElementShouldExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {

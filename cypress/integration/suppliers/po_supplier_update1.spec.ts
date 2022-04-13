@@ -408,7 +408,7 @@ context("Purchase Supplier Update1", () => {
       it("Release supplier", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -420,20 +420,9 @@ context("Purchase Supplier Update1", () => {
       it("Update Supplier name and Release it", () => {
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("1");
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickCreateDocumentWithApiCall();
 
-        cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
         cy.ebApprove();
       });
@@ -452,7 +441,7 @@ context("Purchase Supplier Update1", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -474,23 +463,13 @@ context("Purchase Supplier Update1", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
-        cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
+        cy.dlFilterByDocId({ docId: "SUP-00002" });
+        cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("2");
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickCreateDocumentWithApiCall();
 
-        cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
         cy.ebApprove();
       });
@@ -552,23 +531,13 @@ context("Purchase Supplier Update1", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
-        cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
+        cy.dlFilterByDocId({ docId: "SUP-00002" });
+        cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("3");
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickCreateDocumentWithApiCall();
 
-        cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
         cy.ebApprove();
       });
@@ -618,24 +587,14 @@ context("Purchase Supplier Update1", () => {
         cy.dlClearFilters();
         cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
         cy.drClickReviseDocument();
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickCreateDocumentWithApiCall();
+        cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description1" });
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.unClick();
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithApiCall();
+        cy.pmSubmitForApproval();
+        cy.progressBarShouldAppear();
         cy.ebApprove();
       });
 

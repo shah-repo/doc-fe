@@ -10,7 +10,6 @@ import {
   Modal,
   Typography,
 } from "@material-ui/core";
-import { size } from "lodash";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -24,16 +23,20 @@ import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.sv
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
+import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../../state/ducks/dashboard.new/my.feeds/constants";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
+import ApprovalTitle from "../../common/ApprovalTitle/presenter";
 import { getDocIcon } from "../../common/DocIcon";
+import DocId from "../../common/DocId/presenter";
 import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
+import { getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./pendingReview.styles";
 
@@ -42,6 +45,7 @@ interface Props {
   type: string;
   title: string;
   arId: string;
+  arChangeRequestId: string;
   arStatus: string;
   timestamp: string;
   pendingApprovers: {
@@ -78,6 +82,7 @@ interface Props {
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
   arId,
+  arChangeRequestId,
   timestamp,
   docRevs,
   title,
@@ -98,6 +103,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const { count, pending, approved, primaryText, secondaryText } =
+    getPendingTooltipText(pendingApprovers, approvedApprovers);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -134,7 +141,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
     }
   };
 
@@ -164,45 +171,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true}>
-                  <Link
-                    href={changeRequestEditPath(id)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {arId}
-                    </Typography>
-                  </Link>
+                  <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={title}
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={changeRequestEditPath(id)}
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyBold} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {title}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)}  title={title}/>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -258,18 +230,15 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text
-                          translation="assigned.users.count"
-                          values={{
-                            count:
-                              size(pendingApprovers) + size(approvedApprovers),
-                          }}
+                          translation={primaryText}
+                          values={{ count }}
                         />
                         <br />
                         <Text
-                          translation="approved.and.pending.count"
+                          translation={secondaryText}
                           values={{
-                            approved: size(approvedApprovers),
-                            pending: size(pendingApprovers),
+                            approved,
+                            pending,
                           }}
                         />
                       </>

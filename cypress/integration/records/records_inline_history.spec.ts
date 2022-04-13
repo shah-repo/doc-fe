@@ -226,7 +226,7 @@ context("Record inline history Flow", () => {
         SystemRequirement("REQ-4340");
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
           cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
-          cy.get("ul[role=listbox]>li").contains(USERS[2].email).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
         });
       });
 

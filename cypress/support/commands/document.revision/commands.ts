@@ -31,6 +31,8 @@ declare global {
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
+      drGetDocIdElementFromUI(): Chainable<JQuery<HTMLElement>>;
+      drGetChangeRequestLinkElementFromUI(): Chainable<JQuery<HTMLElement>>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
       drFilterDocListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
@@ -163,7 +165,7 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[data-cy=\"referenceTo\"]").arrowClick().arrowType(item + "{downarrow}{enter}");
+    cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(item);
   });
 });
 
@@ -226,7 +228,7 @@ Cypress.Commands.add("drClearDocumentTitle", () => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
     cy.unClick();
   });
@@ -277,14 +279,15 @@ Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?: { approverName?: string; toastifyExists?: boolean }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   if (params !== undefined && params.approverName !== undefined)
   {
-    cy.get("[data-cy='field-approvals']").arrowType(`${params.approverName}{downarrow}{enter}`);
+    cy.get("[data-cy='field-approvals']").arrowType(params.approverName);
+    cy.get("[id^='react-select-']").contains(params.approverName).arrowClick();
   }
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.unClick();
@@ -352,7 +355,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
     routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
   }
   else {
-    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApprovers];
+    routesToWait = [CyRoutes.PostOrPatchDocRev];
   }
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {
@@ -435,6 +438,14 @@ Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
 
+Cypress.Commands.add("drGetDocIdElementFromUI", () => {
+  cy.get(`[id="HeaderInfo-docId"]`);
+});
+
+Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {
+  cy.get(`[id="ChangeRequestLink-linkButton"]`);
+});
+
 Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
   cy.get("[id=\"document.docId\"]").invoke("val").should("not.be.empty");
 });
@@ -449,8 +460,11 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.dlClearFilters();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
@@ -534,7 +548,8 @@ Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOpti
 
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
-  cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").arrowType(`${params.username}{downarrow}{enter}`, { force: true });
+  cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
+    .autocompleteSelect(`${params.username}`, { force: true });
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy='add-user'").eq(2).arrowClick();
   });
@@ -584,9 +599,7 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
 });
 
 Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-    cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
-  });
+  cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
@@ -611,8 +624,7 @@ Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
 Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
   cy.listLoadingElementShouldNotExist();
   employees.forEach((employee) => {
-    cy.get("[data-cy=\"employees\"]").arrowClick();
-    cy.get(".MuiAutocomplete-popper").contains(employee).arrowClick();
+    cy.get("[data-cy=\"employees\"]").autocompleteSelect(employee);
   });
 });
 
@@ -656,9 +668,9 @@ Cypress.Commands.add("drNewTypeTrainingSelect", () => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseDialog", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-  });
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+
+  cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
 });
 
@@ -725,9 +737,10 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 
 Cypress.Commands.add("drSelectUser", (...users: string[]) => {
   users.forEach((user) => {
-    cy.get(`[data-cy="field-securityEmployees"]`).arrowType(`${user}{downarrow}{enter}`);
+    cy.get(`[data-cy="field-securityEmployees"]`).arrowType(`${user}`).wait(500);
+    cy.get(`div[id^=react-select]`).contains(user).arrowClick();
   });
-  cy.get(`[data-cy="field-securityEmployees"]`).arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
@@ -743,9 +756,11 @@ Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
 
 Cypress.Commands.add("drSelectGroup", (...groups: string[]) => {
   groups.forEach((group) => {
-    cy.get(`[data-cy="field-securityGroups"]`).arrowType(`${group}{downarrow}{enter}`);
+    cy.get(`[data-cy="field-securityGroups"]`).arrowType(group);
+    cy.get("div[id^=react-select]").contains(group).arrowClick();
   });
-  cy.get(`[data-cy="field-securityGroups"]`).arrowClick();
+
+  cy.unClick();
 });
 
 Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
@@ -763,7 +778,7 @@ Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean})
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names: string[], params?: { toastifyExists: boolean }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();

@@ -1,6 +1,6 @@
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
-import { filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
-import React from "react";
+import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
+import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBAutocompleteProps, FBOptionValueType } from "..";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -14,6 +14,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     getOptionDisabled,
     getOptionLabel,
     filterOptions,
+    debounceFilterInput,
     groupBy,
     optionLabelKey = "text",
     optionValueKey = "value",
@@ -43,6 +44,12 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
 
     const intl = useIntl();
+
+    const [modifiedOptions, setModifiedOptions] = useState(options);
+
+    useEffect(() => {
+      setModifiedOptions(options);
+    }, [options]);
 
     function getDefault() {
       function  sliceValue(value: any) {
@@ -100,9 +107,22 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     };
 
     if (!filterOptions) {
-      const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
-      filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
+      // disable filtering on client
+      filterOptions = (options) => options;
     }
+
+    const onFilterInputChange = (event, inputValue) => {
+      if (inputValue && inputValue.length > 2) {
+        const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
+        const filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
+        const updatedOptions = filterOptions(options, { inputValue });
+        setModifiedOptions(updatedOptions);
+      } else if (!inputValue) {
+        setModifiedOptions(options);
+      }
+    };
+
+    debounceFilterInput = debounce(onFilterInputChange, 1000);
 
     if (isUndefined(defaultValue)) {
       defaultValue = "";
@@ -113,8 +133,11 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       getOptionDisabled,
       getOptionLabel,
       filterOptions,
+      debounceFilterInput,
       groupBy,
+      groupByKey,
       options,
+      modifiedOptions,
       defaultValue,
       optionValueKey,
       optionLabelKey,
@@ -129,6 +152,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       name,
       disabled,
       includeQRScan,
+      disabledOptions,
     });
   };
 

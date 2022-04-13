@@ -87,6 +87,7 @@ Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType
 
 Cypress.Commands.add("dlFilterByDocId", (params: {docId: string }) => {
   cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
@@ -95,6 +96,7 @@ Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
 
 Cypress.Commands.add("dlFilterByRev", (params: {revision: string }) => {
   cy.get(`[aria-colindex="2"] input`).arrowType(params.revision).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
@@ -103,6 +105,7 @@ Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
 
 Cypress.Commands.add("dlFilterByDocTitle", (params: {docTitle: string }) => {
   cy.get(`[aria-colindex="3"] input`).arrowType(params.docTitle).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocTitle", (params: {docTitle: string }) => {
@@ -112,6 +115,7 @@ Cypress.Commands.add("dlVerifyFilterByDocTitle", (params: {docTitle: string }) =
 Cypress.Commands.add("dlFilterByType", (params: {type: string }) => {
   cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
   cy.get("li").contains(params.type).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByType", (params: {type: string }) => {
@@ -120,6 +124,7 @@ Cypress.Commands.add("dlVerifyFilterByType", (params: {type: string }) => {
 
 Cypress.Commands.add("dlFilterByOwner", (params: {owner: string }) => {
   cy.get(`[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
@@ -128,6 +133,7 @@ Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
 
 Cypress.Commands.add("dlFilterByArId", (params: {arId: string }) => {
   cy.get(`[aria-colindex="6"] input`).arrowType(params.arId).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
@@ -145,10 +151,8 @@ Cypress.Commands.add("dlVerifyFilterByStatus", (params: {status: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByEffectiveDate", (params: {effectiveDate: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
-    cy.get("li").contains(params.effectiveDate).arrowClick().wait(500);
-  });
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.effectiveDate).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -160,11 +164,11 @@ Cypress.Commands.add("dlVerifyFilterClear", () => {
   cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "Select Type");
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "All");
   cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="6"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).should("have.text", "Select State");
-  cy.get(`[aria-colindex="8"] [class="k-input"]`).should("have.text", "Select Item");
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).should("have.text", "All");
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).should("have.text", "All");
 });
 
 function getListItemNumber(text: string) {
@@ -182,7 +186,7 @@ Cypress.Commands.add("dlVerifyDocCounter", (params: {docCounterNumber: integerTy
 });
 
 Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string}) => {
-  cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div")
+  cy.get("tr.k-master-row>td").eq(2)
     .trigger("mouseover");
   cy.get("div[role=tooltip]>div").should("have.text", params.description);
 });

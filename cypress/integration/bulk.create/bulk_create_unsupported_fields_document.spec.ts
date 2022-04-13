@@ -122,7 +122,6 @@ context("Bulk create unsupported fields for documents", () => {
                       name: "blc-text-field-kv6ef2ii",
                       rows: 1,
                       type: "textfield",
-                      index: 0,
                       label: "BLC text field",
                       rules: "",
                       hidden: false,
@@ -140,7 +139,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "-kv6effxq",
                       type: "paragraph",
-                      index: 1,
                       rules: "",
                       hidden: false,
                       deleted: false,
@@ -157,7 +155,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-text-editor-kv6efdw2",
                       type: "texteditor",
-                      index: 2,
                       label: "BLC Text Editor",
                       rules: "",
                       hidden: false,
@@ -177,7 +174,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-date-picker-kv6efc5r",
                       type: "datepicker",
-                      index: 3,
                       label: "BLC Date picker",
                       rules: "",
                       hidden: false,
@@ -197,7 +193,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-radio-button-group-kv6efaga",
                       type: "radiogroup",
-                      index: 4,
                       label: "BLC radio button group",
                       rules: "",
                       hidden: false,
@@ -228,7 +223,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-select-field-kv6ef7ot",
                       type: "select",
-                      index: 5,
                       label: "BLC select field",
                       rules: "",
                       hidden: false,
@@ -260,7 +254,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-checkbox-group-kv6ef53q",
                       type: "checkboxgroup",
-                      index: 6,
                       label: "BLC Checkbox group",
                       rules: "",
                       hidden: false,
@@ -291,7 +284,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-autocomplete-kv803wt2",
                       type: "autocomplete",
-                      index: 7,
                       label: "BLC autocomplete",
                       rules: "",
                       hidden: false,
@@ -310,7 +302,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-quantity-kv804z8m",
                       type: "quantity",
-                      index: 9,
                       label: "BLC quantity",
                       rules: "",
                       hidden: false,
@@ -327,7 +318,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-timer-kv8058rz",
                       type: "timer",
-                      index: 10,
                       label: "BLC timer",
                       rules: "",
                       hidden: false,
@@ -344,7 +334,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-po-kv80636x",
                       type: "purchaseorder",
-                      index: 11,
                       label: "BLC po",
                       rules: "",
                       hidden: false,
@@ -361,7 +350,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-receive-kv806fzf",
                       type: "poreceive",
-                      index: 12,
                       label: "BLC receive",
                       rules: "",
                       hidden: false,
@@ -378,7 +366,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "-kv806ph2",
                       type: "approvalMatrix",
-                      index: 13,
                       rules: "",
                       hidden: false,
                       deleted: false,
@@ -394,7 +381,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-instruction-media-upload-kv80744w",
                       type: "instructionsmediaupload",
-                      index: 14,
                       label: "BLC instruction media upload",
                       rules: "",
                       hidden: false,
@@ -412,7 +398,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-evidence-media-upload-kv807eyt",
                       type: "evidencemediaupload",
-                      index: 15,
                       label: "BLC evidence media upload",
                       rules: "",
                       hidden: false,
@@ -430,7 +415,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "fb-parts-kv807mm4",
                       type: "parts",
-                      index: 16,
                       rules: "",
                       hidden: false,
                       deleted: false,
@@ -447,7 +431,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "fb-procedure-section-kv807mm4",
                       type: "section",
-                      index: 17,
                       label: "form.builder.procedure",
                       rules: "",
                       hidden: false,
@@ -464,7 +447,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "-kv807mmc",
                       type: "procedure",
-                      index: 18,
                       rules: "",
                       hidden: false,
                       deleted: false,
@@ -484,7 +466,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "fb-mpi-procedure-section-kv807qce",
                       type: "section",
-                      index: 19,
                       label: "form.builder.mpiprocedure",
                       rules: "",
                       hidden: false,
@@ -501,7 +482,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "-kv807qck",
                       type: "mpiprocedure",
-                      index: 20,
                       rules: "",
                       hidden: false,
                       deleted: false,
@@ -533,7 +513,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-equip-kv807ymj",
                       type: "eqmaintenance",
-                      index: 21,
                       label: "BLC equip",
                       rules: "eq_maintenance_required",
                       hidden: false,
@@ -556,7 +535,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-text-with-range-kv808ai0",
                       type: "textfieldwithrange",
-                      index: 22,
                       label: "BLC text with range",
                       rules: "",
                       hidden: false,
@@ -580,7 +558,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-suppliers-kv808n9y",
                       type: "supplier",
-                      index: 23,
                       label: "BLC suppliers",
                       rules: "",
                       hidden: false,
@@ -600,7 +577,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-lhrs-kv808yq3",
                       type: "lhrstep",
-                      index: 24,
                       label: "BLC lhrs",
                       rules: "",
                       hidden: false,
@@ -626,7 +602,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-hyperlink-kv80ag5k",
                       type: "hyperlink",
-                      index: 25,
                       label: "BLC hyperlink",
                       rules: "",
                       hidden: false,
@@ -647,7 +622,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-file-upload-kv80aw6k",
                       type: "fileupload",
-                      index: 26,
                       label: "BLC file upload",
                       rules: "",
                       hidden: false,
@@ -667,7 +641,6 @@ context("Bulk create unsupported fields for documents", () => {
                     {
                       name: "blc-btf-kv80b7gb",
                       type: "blanktplform",
-                      index: 27,
                       label: "BLC BTF",
                       rules: "",
                       hidden: false,
@@ -687,7 +660,7 @@ context("Bulk create unsupported fields for documents", () => {
                       deleteInFormDisabled: false,
                       applicableValidationSchema: true,
                     },
-                  ],
+                  ].map((x, index) => ({ ...x, index })),
                 },
               },
               employeeId: adminEmployee.id as unknown as string,
@@ -786,13 +759,11 @@ context("Bulk create unsupported fields for documents", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Test Document Type").arrowClick();
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Document Type");
       });
 
       it("Select 'yes' to have Document id column", () => {

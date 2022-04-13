@@ -1,12 +1,14 @@
-import { Box, Chip, IconButton, TextField, Typography } from "@material-ui/core";
+import { Box, Chip, IconButton, Popper, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
-import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
+import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
+import { StyledAutoComplete } from "./StyledAutoComplete";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onInputChange,
@@ -14,24 +16,31 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   getOptionLabel,
   renderOption,
   filterOptions,
+  debounceFilterInput,
   groupBy,
   refresh,
   filterSelectedOptions = false,
+  disableClearable = false,
   freeSolo = false,
   multiple = false,
   options,
+  modifiedOptions,
   defaultValue,
   includeQRScan,
   optionLabelKey = "",
   placeholder,
   disabled,
   loading,
+  groupByKey,
   value,
   inputStyle = {},
+  disabledOptions = [],
+  disableBackspace = false,
+  disableChipDelete = false,
   ...props
 }) => {
-
   const { workspaceState } = FB.useStores();
+  const CustomPopper = (props) => <Popper {...props} placement="bottom-start" />;
   return (
     <>
       {includeQRScan && (
@@ -48,20 +57,23 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         disabled={props.name === "approvers" ? false : disabled}
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
-        <Autocomplete
-
+        <StyledAutoComplete
           {...{
             getOptionDisabled,
             getOptionLabel,
             renderOption,
             filterSelectedOptions,
             groupBy,
-            options,
             multiple,
             defaultValue,
             freeSolo,
             filterOptions,
+            disableClearable,
           }}
+          PopperComponent={CustomPopper}
+          options={modifiedOptions}
+          onInputChange={debounceFilterInput}
+          ListboxComponent={groupByKey ? undefined : ListBoxComponent }
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%">
@@ -69,6 +81,12 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   {...params}
                   {...!params.InputProps.startAdornment && { placeholder }}
                   onChange={onInputChange}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    const key = event.keyCode || event.charCode;
+                    if (key === 8 && disableBackspace) {
+                      event.stopPropagation();
+                    }
+                  }}
                   fullWidth
                   variant="outlined"
                   InputProps={{
@@ -77,7 +95,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   }}
                   inputProps={{
                     ...params.inputProps,
-                    "style": { padding: "10.5px 0", ...inputStyle },
+                    "style": { padding: "10.5px 0", ...inputStyle, marginRight: disabled ? "28px" : "0px" },
                     "data-cy": props.name,
                   }}
                 />
@@ -96,13 +114,14 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               {(option, index) => {
                 const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
                   (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
+                const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
                 return (
                   <Chip
                     key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}
                     {...getTagProps({ index })}
-                    disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
+                    disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
                   />
                 ); }}
             </FBMapWrapper>

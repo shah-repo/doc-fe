@@ -231,7 +231,7 @@ context("Approval request form", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
@@ -345,6 +345,12 @@ context("Approval request form", () => {
         `${releasedFormId}-1-New-Approval-request-form-template.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -386,11 +392,15 @@ context("Approval request form", () => {
 
         expect(el).match(/Output Document Type\nApproval Request/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/APPROVAL REQUEST DETAILS/);
 
         expect(el).match(/DOCUMENT #1\nDescription of change\nJustification of change/);
+
+        expect(el).match(/DOCUMENT #2/);
 
         expect(el).match(/Released/);
 
@@ -410,7 +420,7 @@ context("Approval request form", () => {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW APPROVAL REQUEST FORM TEMPLATE`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/DOCUMENT #2\nDescription of change\nJustification of change/);
+        expect(el).match(/Description of change\nJustification of change/);
 
         tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);

@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
@@ -31,8 +32,10 @@ import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
-import useDialog from "../../../../hooks/useDialog";
+import useDialog, { DialogHandler } from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import DocId from "../../common/DocId/presenter";
+import DocTitle from "../../common/DocTitle/presenter";
 import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
@@ -70,6 +73,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dialogPDF: DialogHandler;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -96,6 +100,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dialogPDF,
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -280,59 +285,17 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <Link
-                    href={
-                      docId
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {docId}
-                    </Typography>
-                  </Link>
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    docId={docId}
+                  />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </>
-                    }
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={
-                        docRevId
-                          ? documentVersionPath(docRevId || "", docDocumentId)
-                          : "#"
-                      }
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyBold}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                  <DocTitle
+                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
                 </Grid>
               </Grid>
               <Grid
@@ -371,7 +334,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               </span>
             )}
-            {downloadPdfHover && (
+            {
               <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
@@ -381,10 +344,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <DownloadHtmlPreview
                     id={docRevId}
                     data-cy="transition-download-pdf"
+                    downloadPdfHover={downloadPdfHover}
+                    dialogPDF={dialogPDF}
                   />
                 </span>
               </StyleTooltip>
-            )}
+            }
             <span className={classes.actionIcon}>
               {!rejectHover && (
                 <RejectIcon
@@ -493,8 +458,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Grid>
                     <Grid item md={9} sm={6}>
-                      <Link
-                        href={
+                      <RouterLink
+                        to={
                           poItem.rtext
                             ? documentVersionPath(
                               purchaseOrderSupplierDocRevId || "",
@@ -503,6 +468,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                             : "#"
                         }
                         color="inherit"
+                        className={classes.link}
                       >
                         <Typography
                           component="span"
@@ -512,7 +478,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                         >
                           {poItem.rtext}
                         </Typography>
-                      </Link>
+                      </RouterLink>
                     </Grid>
                   </Grid>
                 </StyledListItem>

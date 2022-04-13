@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
-import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
@@ -25,7 +25,10 @@ import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
 import Text from "../../../../components/Text";
 import { TRAINING_URL } from "../../../../constants/urls";
 import { CompletedOnDateOptions } from "../../../../document.revision/utils/types";
+import gridConfiguration from "../../../../training/grid/column.definition";
+import { TRAINING_TABLE_NAME } from "../../../../training/grid/container";
 import { DateFields } from "../../../../training/kendo/types";
+import { Translation } from "../../../../translations/types";
 import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
 import { HoverStyleChip } from "../../common/HoverStyleChip";
 import { NormalStyleChip } from "../../common/NormalStyleChip";
@@ -75,6 +78,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const count = size(pendingTrainees);
+  const translationField = count > 1 ? "training.users.counts" : "training.users.count";
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
   };
@@ -101,7 +106,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
-      dispatch(trainingActions.loadTrainingList());
+      dispatch(trainingActions.loadTrainingList({}));
     }
   };
   const pendingTraineesNames = pendingTrainees
@@ -111,14 +116,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     let filterDate = {};
     if (trainingStatus === TrainingStatus.OVERDUE) {
       filterDate = {
-        text: CompletedOnDateOptions.OVERDUE,
-        value: moment().endOf("day").toISOString(),
+        operator: "eq",
+        value: CompletedOnDateOptions.OVERDUE,
         field: DateFields.DUE_ON,
       };
     } else {
       filterDate = {
-        text: CompletedOnDateOptions.NEXT_WEEK,
-        value: moment().add(7, "d").startOf("day").toISOString(),
+        operator: "eq",
+        value: CompletedOnDateOptions.NEXT_WEEK,
         field: DateFields.DUE_ON,
       };
     }
@@ -128,31 +133,33 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         filters: [
           {
             field: "documentRevision.name",
-            operator: "contains",
+            operator: "eq",
             value: docRevName,
           },
           {
             field: "documentRevision.displayRevision",
-            operator: "contains",
+            operator: "eq",
             value: docRevVersion,
           },
           {
             field: "trainingPlan.document.docId",
-            operator: "contains",
+            operator: "eq",
             value: docId,
+          },
+          {
+            ...filterDate,
           },
         ],
       },
       sort: [
         {
-          field: "document.trId",
+          field: "trId",
           dir: "asc",
         },
       ],
       skip: 0,
       take: 25,
       group: [],
-      customDueOnFilterDate: filterDate,
     };
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -160,10 +167,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           apiError: "",
           scrollToIndex: 0,
           forceUpdate: false,
-          kendoConfig: JSON.stringify(filterKendoConfig),
-          columnConfig: JSON.stringify([]),
+          queryDict: {
+            dataState: filterKendoConfig,
+          },
+          columnConfig: JSON.stringify(gridConfiguration.columns),
         },
-        "training"
+        TRAINING_TABLE_NAME
       )
     );
   };
@@ -194,8 +203,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <Link
-                    href={TRAINING_URL}
+                  <RouterLink
+                    to={TRAINING_URL}
                     color="inherit"
                     className={classes.link}
                     onClick={setTrainingSearchCriteria}
@@ -209,7 +218,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     >
                       {docId}
                     </Typography>
-                  </Link>
+                  </RouterLink>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <StyleTooltip
@@ -223,8 +232,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     arrow
                     PopperProps={{ popperOptions: {} }}
                   >
-                    <Link
-                      href={TRAINING_URL}
+                    <RouterLink
+                      to={TRAINING_URL}
                       color="inherit"
                       className={classes.link}
                       onClick={setTrainingSearchCriteria}
@@ -239,7 +248,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         <Text translation="dashboard.revision" />
                         &nbsp;{docRevVersion} {docRevName}
                       </Typography>
-                    </Link>
+                    </RouterLink>
                   </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
@@ -303,9 +312,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text
-                          translation="training.users.count"
+                          translation={translationField as Translation}
                           values={{
-                            count: size(pendingTrainees),
+                            count,
                             status:
                               trainingStatus === TrainingStatus.OVERDUE
                                 ? TrainingStatus.OVERDUE

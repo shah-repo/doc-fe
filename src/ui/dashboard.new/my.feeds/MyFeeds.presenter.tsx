@@ -4,10 +4,12 @@ import { Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../common/utils/date";
+import { authSelectors } from "../../../state/ducks/auth";
 import {
   ActionTypes,
   LINE_ITEMS_STATUS_TYPES,
@@ -15,6 +17,7 @@ import {
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
+import { DialogHandler } from "../../hooks/useDialog";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
@@ -31,6 +34,7 @@ import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.rev
 import POTaskApproval from "../line.items/purchase.order/task.approval/POTaskApproval";
 import NONPOTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
 import TrainingItem from "../line.items/training/default/DefaultTraining";
+import { LoadMoreButton } from "../LoadMoreButton";
 import { styles } from "./MyFeeds.styles";
 
 interface Props {
@@ -42,23 +46,32 @@ interface Props {
   onMouseHoverItem: (id: string) => void;
   loadMyFeedsListAsyncState: AsyncState;
   // TO DO:: Needs to add type definitions
-  feedItems: any[];
+  feedItems: any;
+  overallLimit: number;
+  onLoadMoreData: () => void;
+  dialogPDF: DialogHandler;
 }
 
 const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   loadMyFeeds,
   loadMyFeedsListAsyncState,
   feedItems,
+  overallLimit,
   pinLineItem,
   unPinLineItem,
   hoverItemId,
   onMouseLeaveItem,
   onMouseHoverItem,
+  onLoadMoreData,
+  dialogPDF,
 }) => {
   const classes = styles();
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+
   const renderPendingActions = () => (
+
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
-      {feedItems
+      {feedItems.results
         .map((pendingAction, index) => {
           switch (pendingAction.type) {
             case ActionTypes.EQ_MAINTENANCE_OWNER_OR_COORDINATOR:
@@ -138,6 +151,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     unPinLineItem={unPinLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
@@ -218,6 +232,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     unPinLineItem={unPinLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
@@ -305,6 +320,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
                       pendingEmailSentAt={pendingAction.pendingEmailSentAt}
+                      dialogPDF={dialogPDF}
                     />
                     <Divider />
                   </>
@@ -353,6 +369,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
                     hoverItemId={hoverItemId}
+                    dialogPDF={dialogPDF}
                   />
                   <Divider />
                 </>
@@ -566,6 +583,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     <PendingReview
                       key={index}
                       id={pendingAction.id}
+                      arChangeRequestId={pendingAction.arChangeRequestId}
                       type={pendingAction.type}
                       arId={pendingAction.arId}
                       title={pendingAction?.arTitle}
@@ -602,9 +620,12 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               );
           }
         })}
+
+      <LoadMoreButton onLoadMore={onLoadMoreData} disable={ overallLimit >= feedItems.total } id="myFeedBoxLoadMore"/>
     </List>
+
   );
-  const renderNoPendingActions = feedItems.length === 0 && (
+  const renderNoPendingActions = feedItems.total === 0 && (
     <Typography className={classes.noPendingActions}>
       <Text
         translation="dashboard.noPendingActions"
@@ -616,9 +637,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
     <AsyncGate
       asyncAction={loadMyFeeds}
       asyncState={loadMyFeedsListAsyncState}
-      startActionOnMount={true}
+      startActionOnMount={!!currentEmployeeId}
     >
-      {feedItems.length > 0 && renderPendingActions()}
+      {feedItems.total > 0 && renderPendingActions()}
       {renderNoPendingActions}
     </AsyncGate>
   );

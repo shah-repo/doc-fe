@@ -524,7 +524,7 @@ context("Autosave on blur", () => {
                             },
                           },
                           formInput: {
-                            "receivable-kdptzei2": createdPODocument.id,
+                            "receivable-kdptzei2": { id: createdPODocument.id },
                           },
                         },
                         employeeId: adminEmployee.id,
@@ -566,7 +566,7 @@ context("Autosave on blur", () => {
                                 },
                               },
                               formInput: {
-                                "receivable-kdptzei2": createdPODocument.id,
+                                "receivable-kdptzei2": { id: createdPODocument.id },
                               },
                             },
                             employeeId: adminEmployee.id,
@@ -634,7 +634,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -644,7 +644,7 @@ context("Autosave on blur", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2", "option3");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -653,8 +653,8 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
-      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
 
@@ -664,7 +664,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -673,7 +673,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -683,7 +683,7 @@ context("Autosave on blur", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
       cy.fbGroupOptions("option1", "option2");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -693,7 +693,7 @@ context("Autosave on blur", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -702,7 +702,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -711,7 +711,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -720,7 +720,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "fb-timer" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -729,7 +729,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
       cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -738,7 +738,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
       cy.fbEnterNameValue({ name: "label", value: "fb-receive-purchase-order" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -746,7 +746,7 @@ context("Autosave on blur", () => {
     it("Add Approval Matrix", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -755,7 +755,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "PO Approval Matrix" });
       cy.fbEnterNameValue({ name: "label", value: "fb-po-approval-matrix" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -763,7 +763,7 @@ context("Autosave on blur", () => {
     it("Add Procedure", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -773,7 +773,7 @@ context("Autosave on blur", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "fb-equipment" });
       cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -783,7 +783,7 @@ context("Autosave on blur", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
       cy.fbEnterNameValue({ name: "label", value: "fb-range" });
       cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -792,7 +792,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Approvals" });
       cy.fbEnterNameValue({ name: "label", value: "fb-approvals" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -801,7 +801,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
       cy.fbEnterNameValue({ name: "label", value: "fb-task" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -810,8 +810,8 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
-      cy.get("[data-cy=\"options\"]").arrowType("AR Form{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -820,7 +820,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "instructions-media-upload" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -829,7 +829,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "evidence-media-upload" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -838,7 +838,7 @@ context("Autosave on blur", () => {
       cy.contains("instructions-media-upload").parentsUntil("li")
         .find("[data-cy=\"albumMediaButton\"]").arrowClick();
 
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.elUploadAttachment({
           fileName: "image.jpg",
           el: "fb-mediaalbum-upload-instructions-media-upload",
@@ -847,7 +847,7 @@ context("Autosave on blur", () => {
     });
 
     it("Delete image from Instructions Media Upload", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[id^="fb-mediaalbum-upload-instructions-media-upload-"]`)
           .parent().find("button").eq(3).click({ force: true });
       });
@@ -864,15 +864,11 @@ context("Autosave on blur", () => {
     });
 
     it("Enters title 'New document from form'", () => {
-      cy.drEnterDocumentTitle({ name: "New document from form" });
+      cy.drEnterDocumentTitleWithWait({ name: "New document from form" });
     });
 
     it("Enters description 'New document from form description'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drEnterDocumentDescription({ description: "New document from form description" });
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-
+      cy.drEnterDocumentDescriptionWithWait({ description: "New document from form description" });
     });
 
     it("Fill TextField and check for autosave", () => {
@@ -916,7 +912,7 @@ context("Autosave on blur", () => {
 
     it("Select Autocomplete field and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy^=fb-autocomplete-]").arrowType("FM-000{downarrow}{enter}");
+        cy.get("[data-cy^=fb-autocomplete-]").autocompleteSelect("FM-000");
         cy.unClick();
       });
     });
@@ -924,7 +920,7 @@ context("Autosave on blur", () => {
     it("Remove Autocomplete field and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy^=fb-autocomplete-]").click();
-        cy.get("[name^=fb-autocomplete-]>div>div:nth-child(1)>div>div>button").eq(0).click();
+        cy.get("[name^=fb-autocomplete-] button").eq(0).click();
         cy.unClick();
       });
     });
@@ -997,7 +993,7 @@ context("Autosave on blur", () => {
     });
 
     it("Select PO receivable and check for autosave", () => {
-      cy.get("[data-cy^=\"porec-fb-receive-purchase-order-\"]").arrowType("POT-0000{downarrow}{enter}");
+      cy.get("[data-cy^=\"porec-fb-receive-purchase-order-\"]").autocompleteSelect("POT-0000");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.unClick();
       });
@@ -1077,7 +1073,7 @@ context("Autosave on blur", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.unClick();
       });
@@ -1103,7 +1099,7 @@ context("Autosave on blur", () => {
       cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick();
       cy.get("[data-cy=\"title\"]").arrowType("Task One");
       cy.get("#fb-mpiprocedure-ref-description").arrowClick({ force: true }).arrowType("Task Description");
-      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[1].email}{downarrow}{enter}`);
+      cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);
       cy.get("[name=\"dueDate\"]").parent().find("button").arrowClick({ force: true });
       // eslint-disable-next-line max-len
       cy.xpath(
@@ -1116,7 +1112,7 @@ context("Autosave on blur", () => {
 
     it("Select REQ and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy^=\"fb-select-doc-\"]").arrowType("FM-00001{downarrow}{enter}");
+        cy.get("[data-cy^=\"fb-select-doc-\"]").autocompleteSelect("FM-00001");
         cy.unClick();
       });
     });
@@ -1213,7 +1209,7 @@ context("Autosave on blur", () => {
       }).as("response");
 
       cy.unClick();
-      cy.get("[data-cy^=fb-autocomplete-]").arrowType("FM-000{downarrow}{enter}");
+      cy.get("[data-cy^=fb-autocomplete-]").autocompleteSelect("FM-000");
       cy.unClick();
 
       cy.wait("@response", { responseTimeout: 90 * 1000 });

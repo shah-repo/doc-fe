@@ -314,7 +314,7 @@ context("Document Creation Flow", () => {
 
     context("Check primary attachment function", () => {
       it("Save document", () => {
-        cy.drClickCreateSupplierWithApiCallAudit();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Set attachment as primary", () => {
@@ -339,7 +339,7 @@ context("Document Creation Flow", () => {
 
     context("Check training for next revision", () => {
       it("Save document", () => {
-        cy.drClickCreateSupplierWithApiCallAudit();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and Release document", () => {

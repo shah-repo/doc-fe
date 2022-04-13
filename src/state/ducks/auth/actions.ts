@@ -1,6 +1,6 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { IotService } from "../../../common/utils/iot/mqttClient";
+import { IotService } from "../../../common/utils/iot/iotService";
 import { ResetPasswordValues } from "../../../ui/users/types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
@@ -9,7 +9,7 @@ import { companyActions } from "../company";
 import { Employee } from "../company/types";
 import { userManagementActions } from "../userManagement";
 import { AUTH_AWS_IOT_URL, AUTH_USER, CHANGE_PASSWORD_URL, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SEND_PASSWORD_RESET_EMAIL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
-import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoginRequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, NewUserSetPasswordAction, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from "./types";
+import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoginRequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from "./types";
 
 const authSignup = (): SignupAction => ({
   type: SIGNUP_URL,
@@ -21,10 +21,6 @@ const authForgotPassword = (): ForgotPasswordAction => ({
 
 const authConfirmPassword = (): ConfirmPasswordAction => ({
   type: CONFIRM_FORGOT_PASSWORD_URL,
-});
-
-const authNewUserSetPassword = (): NewUserSetPasswordAction => ({
-  type: CONFIRM_SET_NEW_PASSWORD_URL,
 });
 
 const authUser = (data: AuthResponse): AuthUserAction => ({
@@ -85,6 +81,17 @@ const editSelectedEmployee = (
     handlers,
   });
 
+const onLoginSuccessCallback = (data: AuthResponse, dispatch) => {
+  dispatch(authUser(data));
+
+  if ((data.employees || []).length === 1) {
+    const employee = data.employees[0];
+
+    dispatch(companyActions.selectCompany(employee.company));
+    dispatch(selectEmployee(employee));
+  }
+};
+
 const login = (
   loginValues: LoginRequestBody,
   handlers: Handlers,
@@ -94,14 +101,7 @@ const login = (
     method: "post",
     data: loginValues,
     includeAuthorization: false,
-    onSuccess: (data: AuthResponse, dispatch) => {
-      dispatch(authUser(data));
-
-      if ((data.employees || []).length === 1) {
-        dispatch(companyActions.selectCompany(data.employees[0].company));
-        dispatch(getIotCreds());
-      }
-    },
+    onSuccess: onLoginSuccessCallback,
     handlers,
   });
 
@@ -159,15 +159,7 @@ const newUserSetPassword = (
     method: "post",
     data: confirmValues,
     includeAuthorization: false,
-    onSuccess: (m, dispatch) => {
-      dispatch(authNewUserSetPassword());
-      dispatch(
-        login(
-          { email: confirmValues.email, password: confirmValues.newPassword },
-          handlers,
-        ),
-      );
-    },
+    onSuccess: onLoginSuccessCallback,
     handlers,
   });
 
@@ -255,7 +247,6 @@ const getIotCreds = (): ApiAction =>
     method: "get",
     includeAuthorization: true,
     onSuccess: (iotCredentials, dispatch) => {
-      setIotCreds(iotCredentials);
       dispatch(setCredentials(iotCredentials));
     },
   });
@@ -323,4 +314,5 @@ export default {
   toggleCustomLabels,
   resetPassword,
   sendPasswordResetEmail,
+  setCredentials,
 };

@@ -150,7 +150,7 @@ context("Autocomplete 'Document types' test", () => {
           });
 
           it("Select 'Document typess' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Document types{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Document types" });
           });
 
           it("Click 'Add' button", () => {
@@ -174,26 +174,12 @@ context("Autocomplete 'Document types' test", () => {
               Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").arrowClick();
-
             if (response.body.length > 0 ) {
-              const docTypes = response.body;
-              docTypes.forEach((docType) => {
-                cy.get("ul[role=listbox]>li").should("contain.text", docType.documentTypeName);
-              });
-              cy.get("ul[role=listbox]>li")
-                .then(($lis) => {
-                  expect($lis).to.have.length(response.body.length);
-                });
-            } else {
-              cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+              const docTypes = response.body.map((x) => x.documentTypeName);
+
+              cy.get(`div[role=dialog] [data-cy^="test-label-"]`).verifyAutocompleteList(docTypes);
             }
           });
-        });
-
-        it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 24);
         });
       });
     });

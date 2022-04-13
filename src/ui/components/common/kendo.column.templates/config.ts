@@ -1,3 +1,5 @@
+import { DurationCell } from "../../../async.tasks/grid/cell.templates/DurationCell";
+import { DocumentTypeCellTemplate } from "../../../document.revision/grid/cell.templates/DocumentTypeCellTemplate";
 import { CustomGridCellProps } from "../kendo/types";
 import { CommonCell } from "./CommonCell";
 import { DateCompleted } from "./DateCompleted";
@@ -11,6 +13,8 @@ interface CellTemplateProps {
   DateCompleted: (props: CustomGridCellProps) => JSX.Element | null;
   DateInfo: (props: CustomGridCellProps) => JSX.Element | null;
   CommonCell: (props: CustomGridCellProps) => JSX.Element | null;
+  DocumentTypeCellTemplate: (props: CustomGridCellProps) => JSX.Element | null;
+  DurationCell: (props: CustomGridCellProps) => JSX.Element | null;
 }
 
 export const cellTemplateMapping: CellTemplateProps = {
@@ -19,4 +23,6 @@ export const cellTemplateMapping: CellTemplateProps = {
   DateCompleted,
   DateInfo,
   CommonCell,
+  DocumentTypeCellTemplate,
+  DurationCell,
 };

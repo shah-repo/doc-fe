@@ -1,5 +1,3 @@
-import { ActionCreator } from "redux";
-import { ApiAction } from "../../../state/types";
 import { KendoPanelProps } from "../../components/common/kendo/types";
 import { TableColumnActionType } from "../../components/table/column/types";
 
@@ -38,8 +36,5 @@ export interface AddUserManage {
 
 export interface UserManagementProps<T> extends KendoPanelProps<T>{
   onSelect: GridRowSelection<T>;
-  hasDropboxPermission: boolean;
-  dropboxAsync: any;
-  enableDropboxAction: ActionCreator<ApiAction<any, any>>;
-  isCompanyDropboxEnabled: boolean | undefined;
+  rerender: boolean;
 }

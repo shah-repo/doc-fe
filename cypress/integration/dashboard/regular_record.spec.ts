@@ -215,23 +215,17 @@ context("Regular Records test", () => {
       cy.contains("Approvals").should("exist");
       cy.drCheckDocumentStatus({ status: "Draft" });
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("exist");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowType(USERS[1].name + "{downarrow}{enter}");
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowType(USERS[2].name + "{downarrow}{enter}");
-      });
+
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
     it("Save Record'", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Submit for approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Status is 'In Review'", () => {

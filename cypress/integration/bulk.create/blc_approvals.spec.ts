@@ -385,13 +385,11 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Document with approvals for BLC").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document with approvals for BLC");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Approvals Document Type").arrowClick();
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Approvals Document Type");
       });
 
       it("Select 'no' to have Document id column", () => {
@@ -454,13 +452,12 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Document with inline approvals for BLC").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]")
+          .autocompleteSelect("Document with inline approvals for BLC");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Approvals Inline Type").arrowClick();
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Approvals Inline Type");
       });
 
       it("Select 'no' to have Document id column", () => {

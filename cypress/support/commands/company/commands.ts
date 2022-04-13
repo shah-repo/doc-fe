@@ -190,6 +190,7 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       cy.get("button.Toastify__close-button--success").arrowClick();
     }
   });
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("cmpCompanyDoesntExist", (params: { name: string; multiple: boolean }) => {
@@ -208,6 +209,7 @@ Cypress.Commands.add("cmpSelectCompanyAlreadyLoggedIn", (params: { name: string;
     });
 
     addTestContext("companyName", params.name);
+    cy.progressBarShouldNotExist();
   }
 });
 
@@ -217,12 +219,7 @@ Cypress.Commands.add("cmpVerifyCompanyAvatar", (params: { name: string; avatarSo
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
-    cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
-  });
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
-  cy.checkToastMessage({ exists: false });
+  cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
