@@ -533,7 +533,7 @@ export function KendoPanel<T>({
   return (
     <Box>
       <Box mb={2}>
-        <Grid container={true} justify="space-between" alignItems="center">
+        <Grid container justify="space-between" alignItems="center">
           <Grid item xs >
             <GridTitle translation="navigation.user.management" />
           </Grid>

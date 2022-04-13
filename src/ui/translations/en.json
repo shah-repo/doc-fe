@@ -1065,6 +1065,7 @@
   "user.management.audit.history.EmployeesDeleteFromGroup": "Employee removed from group {groupName}",
   "user.management.audit.history.EmployeesAddedToGroup": "Employee added to group {groupName}",
   "user.management.audit.history.RemovedGroupName": "Employees removed from group",
+  "user.management.audit": "History",
   "api.token.title": "API Token",
   "api.token.key": "Key",
   "api.token.secret": "Secret",
@@ -1234,6 +1235,5 @@
   "documenttype.view.schema": "View schema",
   "documenttype.edit.config": "Edit Field config",
   "documenttype.view.config": "View Field config",
-  "common.load.more": "Load More",
-  "user.management.audit": "History"
+  "common.load.more": "Load More"
 }

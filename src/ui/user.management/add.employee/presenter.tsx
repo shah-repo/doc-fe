@@ -3,7 +3,6 @@ import React from "react";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import AuditItemsContainer from "../audit.panel/container";
-// import AuditPanel from "../auditPanel/audit.panel";
 import AddEmployeeDialogPresenter from "./dialog.presenter";
 import AddEmployeeFormContainer from "./form.container";
 
