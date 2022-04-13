@@ -8,7 +8,7 @@ const commonButtonStyles = {
   "fontFamily": "Sora",
   "text-transform": "capitalize",
 };
-export const styles = makeStyles((theme: Theme) =>
+export const  styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: "100%",
@@ -37,7 +37,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     exportListbutton: {
       ...commonButtonStyles,
-      marginRight: theme.spacing(1.825),
       paddingRight: theme.spacing(2.5),
       paddingLeft: theme.spacing(2.5),
       border: `1px solid ${Colors.navy}`,
