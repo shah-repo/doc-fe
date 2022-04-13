@@ -1303,26 +1303,28 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.wait(500);
     });
 
+    it("Verify filter for Cal Due Date", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="6"] input`).arrowType("N/A").wait(500);
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.wait(500);
+    });
+
+    it("Verify filter for PM Due Date", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="7"] input`).arrowType("N/A").wait(500);
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.wait(500);
+    });
+
+    it("Verify filter for EQ Status", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="8"] input`).arrowType("Inactive").wait(500);
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.wait(500);
+    });
+
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared'", () => {
-      cy.grpClearFilter();
-    });
-
-    it("Column grouping", () => {
-      cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
-      cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
-    });
-
-    it("Verify that data is sorted based on that column grouping", () => {
-      cy.get(".k-grouping-row").eq(0).should("contain.text", "1").arrowClick();
-      // cy.get(".k-grouping-row").eq(1).should("contain.text", "Released").arrowClick();
-    });
-
-
-    it("Verify that user is able to search column when inserting filter", () => {
-      cy.get(".k-textbox").eq(0).arrowType("EQ-00001").wait(500);
-      cy.get(".k-grouping-row").eq(0).should("contain.text", "1").arrowClick();
-      // cy.get(".k-grouping-row").eq(1).should("contain.text", "Released").arrowClick();
-      cy.get(".k-i-group-delete").click();
       cy.grpClearFilter();
     });
 
