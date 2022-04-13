@@ -187,6 +187,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
       const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
       const damGroups = approversGroups.filter((group) => group.type === GroupType.REVISION_APPROVAL);
+
       if (isEmpty(poApprovalsState.checkedGroups)) {
         const groupToSign = minBy(poamGroups, "documentStage");
         poApprovalsState.setCheckedGroups(groupToSign);
