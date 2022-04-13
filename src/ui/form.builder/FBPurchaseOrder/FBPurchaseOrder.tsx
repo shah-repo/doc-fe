@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
+import Colors from "../../layout/theme/utils/colors";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 
@@ -33,11 +34,18 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
         )}
         {!disabled && (
           <FBButton
-            fullWidth={true}
             label="form.builder.add.item"
             onClick={() => handleItem && handleItem()}
-            variant="outlined"
-            style={{ margin: 0 }}
+            variant="contained"
+            style={{
+              backgroundColor: Colors.navy,
+              borderRadius: "100px",
+              fontFamily: "Sora",
+              fontSize: 12,
+              fontWeight: 600,
+              color: Colors.white,
+              border: `1px solid ${Colors.navy}`,
+            }}
             {...{ disabled }}
           />
         )}
