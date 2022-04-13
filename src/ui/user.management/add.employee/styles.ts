@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 export default makeStyles((theme: Theme) =>
   createStyles({
@@ -17,6 +18,41 @@ export default makeStyles((theme: Theme) =>
     },
     slackLogo: {
       marginRight: "5px",
+    },
+    Button: {
+      "margin": "0px",
+      "boxShadow": "none",
+      "borderRadius": 100,
+      "background": Colors.navy,
+      "color": Colors.white,
+      "fontFamily": "Sora",
+      "paddingRight": theme.spacing(2.5),
+      "paddingLeft": theme.spacing(2.5),
+      "textTransform": "none",
+      "&:hover": {
+        background: Colors.navy,
+      },
+    },
+    historyButton: {
+      margin: "0 10px",
+      boxShadow: "none",
+      width: "86px",
+      height: "36px",
+      borderRadius: 100,
+      background: Colors.light_blue,
+      color: Colors.navy,
+      fontFamily: "Sora",
+      fontSize: "12px",
+      padding: "20px",
+      justifyContent: "center",
+      alignItems: "center",
+      // "paddingRight": theme.spacing(2.5),
+      // "paddingLeft": theme.spacing(2.5),
+      marginRight: theme.spacing(1.25),
+      textTransform: "none",
+      // "&:hover": {
+      //   background: Colors.light_blue,
+      // },
     },
   }),
 );
