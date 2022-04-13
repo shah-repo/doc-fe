@@ -26,6 +26,7 @@ enum Colors {
   raven = "#767B87",
   whitest_grey="#EBEDF2",
   lightest_grey1="#CCD4D9",
+  athens_gray= "#F5F6F8",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",

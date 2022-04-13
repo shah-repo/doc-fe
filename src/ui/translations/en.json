@@ -1026,6 +1026,8 @@
   "form.builder.done": "Done",
   "form.builder.close": "Close",
   "form.builder.lhr.build.switch": "Yes switch build type",
+  "form.builder.enter.title": "Clike to Enter Title",
+  "form.builder.enter.description": "Clike to Enter Description",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",
