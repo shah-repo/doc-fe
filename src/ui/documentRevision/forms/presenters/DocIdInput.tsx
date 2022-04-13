@@ -1,3 +1,4 @@
+import { createStyles, makeStyles } from "@material-ui/core";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -20,6 +21,20 @@ interface Props {
   type?: DocumentCloneType;
 }
 
+const styles = makeStyles(() =>
+  createStyles({
+    docIdInput: {
+      "&.MuiInputBase-root": {
+        marginTop: 10,
+        padding: 0,
+      },
+      "& .MuiInputBase-input": {
+        padding: 10,
+      },
+    },
+  }),
+);
+
 const DocIdInput: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isDisabled,
@@ -28,6 +43,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   setDocId,
   type,
 }) => {
+  const classes = styles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
   React.useEffect(() => {
     if (loadProposedDocIdState.status === AsyncStatus.Error) {
@@ -72,6 +88,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
           onChange: handleDocIdChange,
         }}
         validate={validators}
+        inputStyleProps={classes.docIdInput}
       />
     </CustomLabelTooltip>
   );
