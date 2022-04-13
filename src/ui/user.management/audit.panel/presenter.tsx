@@ -39,7 +39,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [opendrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
+  const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<NullableArray<AuditDetailsProps[]>>([]);
   const [page, setPage] = useState(0);
   const groups = useSelector(userManagementSelectors.groupsById);
@@ -51,8 +51,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
   const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : "";
   const closeDrawer = () => {
-    setOpenDrawer({ ...opendrawer, right: false });
-    closeHistoryPanel(opendrawer.right);
+    setOpenDrawer({ ...openDrawer, right: false });
+    closeHistoryPanel(openDrawer.right);
   };
 
   React.useEffect(() => {
@@ -68,7 +68,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       sortedIndex: 0,
     };
     if (auditRecord.fieldPath === "employees") {
-      const groupName = getGroupName(auditRecord.nextValue === "undefined" ? auditRecord.previousValue : auditRecord.nextValue);
+      const groupName = getGroupName(
+        auditRecord.nextValue === "undefined" ? auditRecord.previousValue : auditRecord.nextValue
+      );
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
           primaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroups, { groupName: "" })}-ADDED-TO-GROUP-${groupName}`,
@@ -84,7 +86,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           sortedIndex: 3,
         };
       }
-    } else if (["resetPasswordEmailTimestamp", "resendConfirmationEmailTimestamp"].includes(auditRecord.fieldPath) && auditRecord.type === "OBJECT_EDITED") {
+    } else if (
+      ["resetPasswordEmailTimestamp", "resendConfirmationEmailTimestamp"].includes(auditRecord.fieldPath) &&
+      auditRecord.type === "OBJECT_EDITED") {
       actionInfo = {
         primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPassword, {}),
         secondaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPasswordDescription, {}),
@@ -206,22 +210,60 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         primaryText = getTranslatedText(ACTION_TITLE_MAPPING.DeletedFromGroup, {});
       }
       if (auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups && secondaryText.length <= 1) {
-        primaryText = primaryText.replace(getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroups, { groupName: "" }), getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroup, { groupName: "" }));
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroups, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroup, { groupName: "" })
+        );
       }
       if (auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups && secondaryText.length <= 1) {
-        primaryText = primaryText.replace(getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups, { groupName: "" }), getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: "" }));
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: "" })
+        );
       }
       let secondaryTextHtml = <span>{secondaryText.join(", ")}</span>;
       let primaryTextHtml = <span>{primaryText}</span>;
       if (auditType === ACTION_TITLE_MAPPING.EmployeeNameUpdated) {
         const items = secondaryText[0].split("-NAME-UP-DATED-TO-");
-        secondaryTextHtml = <><span>{items[0]}</span><span style={{ color: Colors.font_gray, padding: "0 2px" }}>to</span><span>{items[1]}</span></>;
-      } else if (auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups || auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup) {
+        secondaryTextHtml = (
+          <>
+            <span>{items[0]}</span>
+            <span style={{ color: Colors.font_gray, padding: "0 2px" }}>
+              to
+            </span>
+            <span>{items[1]}</span>
+          </>
+        );
+      } else if (
+        auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups ||
+        auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup
+      ) {
         const items = primaryText.split("-DELETED-FROM-GROUP-");
-        primaryTextHtml = <><span>{items[0]}</span><span style={{ color: Colors.font_black, padding: "0 2px", fontWeight: 700 }}>{items[1]}</span></>;
-      } else if (auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups || auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup) {
+        primaryTextHtml = (
+          <>
+            <span>{items[0]}</span>
+            <span
+              style={{
+                color: Colors.font_black,
+                padding: "0 2px",
+                fontWeight: 700,
+              }}
+            >
+              {items[1]}
+            </span>
+          </>
+        );
+      } else if (
+        auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups ||
+        auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup
+      ) {
         const items = primaryText.split("-ADDED-TO-GROUP-");
-        primaryTextHtml = <><span>{items[0]}</span><span style={{ color: Colors.font_black, padding: "0 2px", fontWeight: 700 }}>{items[1]}</span></>;
+        primaryTextHtml = (
+          <>
+            <span>{items[0]}</span>
+            <span style={{ color: Colors.font_black, padding: "0 2px", fontWeight: 700 }} > {items[1]} </span>
+          </>
+        );
       }
       return { primaryText: primaryTextHtml, secondaryText: secondaryTextHtml, sortedIndex, auditType };
       // return { primaryText, secondaryText: uniq(secondaryText).sort().join(", "), sortedIndex, auditType };
@@ -231,8 +273,12 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
 
   const getCardGroups = (response) => {
     const auditRecords = map(response, (auditRecord) => {
-      const employeeDetails = getUserDetails(auditRecord.employeeId) || { user: { name: auditRecord.employeeName, email: "" } };
-      const ownerDetails = getUserDetails(auditRecord.ownerId) || { user: { name: auditRecord.ownerName, email: auditRecord.ownerEmail } };
+      const employeeDetails = getUserDetails(auditRecord.employeeId) || {
+        user: { name: auditRecord.employeeName, email: "" },
+      };
+      const ownerDetails = getUserDetails(auditRecord.ownerId) || {
+        user: { name: auditRecord.ownerName, email: auditRecord.ownerEmail },
+      };
       return {
         ...auditRecord,
         groupKey: `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`,
@@ -295,7 +341,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
          if (exception?.response?.status === 504) {
            setErrorMessage(intl.formatMessage({ id: "api.error.gateway.timeout" }));
          }
-         console.error(exception);
        });
   };
 
@@ -311,7 +356,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
               color="default"
               onClick={() => closeDrawer()}
               aria-label="Close"
-              id="histoy-closepanel"
               disableFocusRipple
               disableRipple
               disableTouchRipple
@@ -332,7 +376,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     </>
   );
   return (
-    <Drawer anchor="right" open={opendrawer.right} onClose={() => closeDrawer()}>
+    <Drawer anchor="right" open={openDrawer.right} onClose={() => closeDrawer()}>
       {isLoading && <LinearProgress />}
       <Box width={300}>{renderAuditRecords()}</Box>
       {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
