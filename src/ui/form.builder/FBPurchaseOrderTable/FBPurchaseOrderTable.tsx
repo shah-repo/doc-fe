@@ -1,6 +1,5 @@
 import { TableBody } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
@@ -25,15 +24,16 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   name,
 }) => (
   <Table className={classes?.root}>
-    <TableHead>
-      <TableRow>
+    {/* Commenting as per design */}
+    {/* <TableHead>
+       <TableRow>
         <FBTableCell
           colSpan={8}
           label={mode === "form" ? "form.builder.details" : "form.builder.select.line.to.receive.against"}
         />
         <FBTableCell colSpan={3} label={mode === "form" ? "form.builder.field.ext.amount" : ""} align="right" />
       </TableRow>
-    </TableHead>
+    </TableHead>*/}
     <TableBody>
       <TableRow>
         <FBTableCell colSpan={8}>
