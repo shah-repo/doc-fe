@@ -187,8 +187,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
       const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
       const damGroups = approversGroups.filter((group) => group.type === GroupType.REVISION_APPROVAL);
-      const groupToSign = minBy(poamGroups, "documentStage");
       if (isEmpty(poApprovalsState.checkedGroups)) {
+        const groupToSign = minBy(poamGroups, "documentStage");
         poApprovalsState.setCheckedGroups(groupToSign);
         if (damGroups) {
           const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
@@ -202,7 +202,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
           damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
         }
-        return sign?.name || groupToSign?.name;
+        return sign?.name;
       }
     };
 
