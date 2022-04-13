@@ -20,4 +20,5 @@ export type FBButtonProps =
   >
   & {
     dataCy?: string;
+    className? : string;
   };

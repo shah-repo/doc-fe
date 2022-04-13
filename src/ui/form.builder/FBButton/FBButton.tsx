@@ -11,6 +11,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   gutter,
   hidden,
   style,
+  className,
   ...props
 }) => (
   <Button
@@ -22,7 +23,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
       ...style,
       ...hidden && { display: "none" },
     }}
-  >
+    className={className}>
     {isString(label) && (
       <FBText locale={label} />
     )}
