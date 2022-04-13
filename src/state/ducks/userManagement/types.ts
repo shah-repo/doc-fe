@@ -112,7 +112,7 @@ interface UserItemProp {
   initialColor: string;
   name: string;
 }
-export interface OwnerItemsProp {
+interface OwnerItemsProp {
   active: boolean;
   id: string;
   user: UserItemProp;
@@ -126,8 +126,6 @@ export interface AuditDetailsProps {
   ownerDetails: OwnerItemsProp;
   timestamp: string;
 }
-
-export type HistoryState = UMAuditResponse;
 
 export enum ACTION_TITLE_MAPPING {
   AddedToGroups = "AddedToGroups",

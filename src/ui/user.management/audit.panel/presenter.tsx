@@ -11,7 +11,7 @@ import apiClient from "../../../state/apiClient";
 import { NullableArray } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
+import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPING, AuditDetailsProps } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
@@ -35,13 +35,13 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   closeHistoryPanel,
 }) => {
   // Take from constants
-  const limit = 1;
+  const limit = UM_AUDIT_HISTORY_LIMIT;
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<NullableArray<AuditDetailsProps[]>>([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(UM_AUDIT_HISTORY_INITIAL_OFFSET);
   const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
