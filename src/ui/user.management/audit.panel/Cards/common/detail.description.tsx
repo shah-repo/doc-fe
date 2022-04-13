@@ -6,7 +6,7 @@ import styles from "./common.styles";
 
 interface OwnProps {
   primaryText: string;
-  secondayText: string;
+  secondaryText: string;
   groupId: string;
   // TODO: Update
   employeeDetail: any;
@@ -14,7 +14,7 @@ interface OwnProps {
 
 const DetailDescription: React.FunctionComponent<OwnProps> = ({
   primaryText,
-  secondayText,
+  secondaryText,
   groupId,
   employeeDetail,
 }) => {
@@ -27,7 +27,7 @@ const DetailDescription: React.FunctionComponent<OwnProps> = ({
         {primaryText}
       </Box>
       <Box color={Colors.almost_black} fontSize={14} className={classes.description} whiteSpace={"wrap"}>
-        {secondayText}
+        {secondaryText}
       </Box>
       <Box color={Colors.red} fontSize={6}>
         {groupId}

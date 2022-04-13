@@ -102,7 +102,7 @@ export interface HistoryListApiResponse {
 // TODO: Remove above Types
 interface DescriptionItemsProp {
   primaryText: string;
-  secondayText: string;
+  secondaryText: string;
 }
 
 interface UserItemProp {
@@ -129,7 +129,7 @@ export interface AuditDetailsProps {
 
 export type HistoryState = HistoryListApiResponse;
 
-export enum ACTION_TITLE_MAPPIING {
+export enum ACTION_TITLE_MAPPING {
   AddedToGroups = "AddedToGroups",
   AddedToGroup = "AddedToGroup",
   CreatedNewUser = "CreatedNewUser",
