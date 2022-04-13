@@ -21,7 +21,7 @@ export const API_TOKEN = "/api_tokens";
 export const API_TOKEN_URL = `${API_TOKEN}/generate`;
 export const API_TOKEN_REVOKE_URL = `${API_TOKEN}/revoke`;
 
-export const USR_MGMT_AUDIT_LIST = "userManagement/HISTORY_LIST";
+export const UM_AUDIT_LIST = "userManagement/HISTORY_LIST";
 export const UM_AUDIT_ASYNC = "userManagement/UM_AUDIT_ASYNC";
 
 export const UM_AUDIT_URL = "/employees/audit";

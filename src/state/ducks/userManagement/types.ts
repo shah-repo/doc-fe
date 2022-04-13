@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { Group, GroupTag, GroupType, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common/types";
 import { Company, Employee } from "../company/types";
-import { COMPANY_GROUPS_LIST, USR_MGMT_AUDIT_LIST } from "./constants";
+import { COMPANY_GROUPS_LIST, UM_AUDIT_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
@@ -88,7 +88,7 @@ interface History {
   pendingTrainees?: any[] | undefined;
 }
 export interface UMAuditHistoryAction {
-  type: typeof USR_MGMT_AUDIT_LIST;
+  type: typeof UM_AUDIT_LIST;
   payload: UMAuditResponse;
   initialLoad?: boolean;
 }
