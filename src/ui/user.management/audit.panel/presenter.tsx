@@ -91,65 +91,70 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         auditType: ACTION_TITLE_MAPPING.ResetPassword,
         sortedIndex: 0,
       };
-    } else if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_EDITED") {
-      actionInfo = {
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.EmployeeNameUpdated, {}),
-        secondaryText: `${auditRecord.previousValue}-NAME-UP-DATED-TO-${auditRecord.nextValue}`,
-        auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
-        sortedIndex: 0,
-      };
-    } else if (auditRecord.fieldPath === "groups" && auditRecord.type === "ARRAY_NEW") {
-      if (auditRecord.previousValue === "undefined") {
+    } else if (auditRecord.fieldPath === "name") {
+      if (auditRecord.type === "STRING_EDITED") {
         actionInfo = {
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedToGroups, {}),
-          secondaryText: getGroupName(auditRecord.nextValue),
-          auditType: ACTION_TITLE_MAPPING.AddedToGroups,
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.EmployeeNameUpdated, {}),
+          secondaryText: `${auditRecord.previousValue}-NAME-UP-DATED-TO-${auditRecord.nextValue}`,
+          auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
+          sortedIndex: 0,
+        };
+      } else if (auditRecord.type === "STRING_NEW") {
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, { employeeName: auditRecord.nextValue }),
+          secondaryText: intl.formatMessage({ id: "common.active" }),
+          auditType: ACTION_TITLE_MAPPING.ActivateUser,
+          sortedIndex: 1,
+        };
+      }
+    } else if (auditRecord.fieldPath === "groups") {
+      if (auditRecord.type === "ARRAY_NEW") {
+        if (auditRecord.previousValue === "undefined") {
+          actionInfo = {
+            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedToGroups, {}),
+            secondaryText: getGroupName(auditRecord.nextValue),
+            auditType: ACTION_TITLE_MAPPING.AddedToGroups,
+            sortedIndex: 3,
+          };
+        }
+      } else if (auditRecord.type === "ARRAY_DELETED") {
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.DeletedFromGroups, {}),
+          secondaryText: getGroupName(auditRecord.previousValue),
+          auditType: ACTION_TITLE_MAPPING.DeletedFromGroups,
           sortedIndex: 3,
         };
       }
-    } else if (auditRecord.fieldPath === "groups" && auditRecord.type === "ARRAY_DELETED") {
-      actionInfo = {
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.DeletedFromGroups, {}),
-        secondaryText: getGroupName(auditRecord.previousValue),
-        auditType: ACTION_TITLE_MAPPING.DeletedFromGroups,
-        sortedIndex: 3,
-      };
-    } else if (auditRecord.fieldPath === "active" && auditRecord.type === "BOOLEAN_NEW") {
-      actionInfo = {
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.CreatedNewUser, {}),
-        secondaryText: auditRecord.employeeName,
-        auditType: ACTION_TITLE_MAPPING.CreatedNewUser,
-        sortedIndex: 0,
-      };
-    } else if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_NEW") {
-      actionInfo = {
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, { employeeName: auditRecord.nextValue }),
-        secondaryText: intl.formatMessage({ id: "common.active" }),
-        auditType: ACTION_TITLE_MAPPING.ActivateUser,
-        sortedIndex: 1,
-      };
-    }
-    else if (auditRecord.fieldPath === "active" && auditRecord.type === "BOOLEAN_EDITED") {
-      if (auditRecord.previousValue === "true" && auditRecord.nextValue === "false") {
+    } else if (auditRecord.fieldPath === "active") {
+      if (auditRecord.type === "BOOLEAN_NEW") {
         actionInfo = {
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.DeactivateUser, {}),
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.CreatedNewUser, {}),
           secondaryText: auditRecord.employeeName,
-          auditType: ACTION_TITLE_MAPPING.DeactivateUser,
+          auditType: ACTION_TITLE_MAPPING.CreatedNewUser,
           sortedIndex: 0,
         };
-      }
-      if (auditRecord.previousValue === "false" && auditRecord.nextValue === "true") {
-        actionInfo = {
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, {
-            employeeName: employeeDetails?.user?.name,
-          }),
-          secondaryText:
-            auditRecord.nextValue === "true"
-              ? intl.formatMessage({ id: "common.active" })
-              : intl.formatMessage({ id: "common.inactive" }),
-          auditType: ACTION_TITLE_MAPPING.ActivateUser,
-          sortedIndex: 0,
-        };
+      } else if (auditRecord.type === "BOOLEAN_EDITED") {
+        if (auditRecord.previousValue === "true" && auditRecord.nextValue === "false") {
+          actionInfo = {
+            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.DeactivateUser, {}),
+            secondaryText: auditRecord.employeeName,
+            auditType: ACTION_TITLE_MAPPING.DeactivateUser,
+            sortedIndex: 0,
+          };
+        }
+        if (auditRecord.previousValue === "false" && auditRecord.nextValue === "true") {
+          actionInfo = {
+            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, {
+              employeeName: employeeDetails?.user?.name,
+            }),
+            secondaryText:
+              auditRecord.nextValue === "true"
+                ? intl.formatMessage({ id: "common.active" })
+                : intl.formatMessage({ id: "common.inactive" }),
+            auditType: ACTION_TITLE_MAPPING.ActivateUser,
+            sortedIndex: 0,
+          };
+        }
       }
     }
     return actionInfo;
