@@ -12,6 +12,7 @@ interface InputOwnProps extends FieldOwnProps {
   actionsRenderer?: () => any;
   lpignore?: boolean;
   dataCy?: string;
+  inputStyleProps?: string;
 }
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
@@ -22,6 +23,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
   actionsRenderer,
   lpignore = true,
   dataCy,
+  inputStyleProps,
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
@@ -37,6 +39,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
           inputProps?.onBlur?.(evt);
           submitForm();
         }}
+        className={inputStyleProps}
       />
     </Field>
   );
