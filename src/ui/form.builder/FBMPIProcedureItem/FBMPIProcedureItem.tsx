@@ -59,18 +59,22 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
     <FBDialog />
     <Box
       bgcolor={Colors.gray}
-      color="white"
-      style={{ borderTopLeftRadius: "4px", borderTopRightRadius: "4px" }}
-      fontWeight="fontWeightBold"
+      color= {Colors.almost_black}
+      fontWeight={600}
+      fontFamily="Sora"
+      fontStyle ="normal"
+      fontSize= "12px"
       display="flex"
+      lineHeight= "15px"
+      height="44px"
+      boxShadow= {`0px 1px 0px ${Colors.chinese_silver}`}
     >
       <FBText
         {...{ loading }}
         boxProps={{
           flexGrow: 1,
           display: "flex",
-          py: 1.7,
-          pl: 2,
+          p: 1.5,
         }}
         locale={FBProcedureItemLocale[type]}
       />
