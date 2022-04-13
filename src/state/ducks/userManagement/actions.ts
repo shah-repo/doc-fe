@@ -5,7 +5,7 @@ import { authActions } from "../auth";
 import { Group, User } from "../auth/types";
 import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
 import { EditActiveStatusAction, EditGroupsAction, EditUserInfoAction } from "../tableSearch/types";
-import { ADD_EMPLOYEE_POST_ASYNC, API_TOKEN, API_TOKEN_DELETE_ASYNC, API_TOKEN_GET_ASYNC, API_TOKEN_POST_ASYNC, API_TOKEN_REVOKE_URL, API_TOKEN_URL, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, EMPLOYEES_URL, EMPLOYEE_GET_ASYNC, GROUPS_ME_GET_ASYNC, GROUPS_ME_URL, GROUPS_URL, GROUP_GET_BY_ID, SLACK_URL, UM_ADIT_HISTORY_INITIAL_PAYLOAD, UM_AUDIT_ASYNC, UM_AUDIT_URL, USR_MGMT_AUDIT_HISTORY_INITIAL_STATE, USR_MGMT_AUDIT_LIST } from "./constants";
+import { ADD_EMPLOYEE_POST_ASYNC, API_TOKEN, API_TOKEN_DELETE_ASYNC, API_TOKEN_GET_ASYNC, API_TOKEN_POST_ASYNC, API_TOKEN_REVOKE_URL, API_TOKEN_URL, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, EMPLOYEES_URL, EMPLOYEE_GET_ASYNC, GROUPS_ME_GET_ASYNC, GROUPS_ME_URL, GROUPS_URL, GROUP_GET_BY_ID, SLACK_URL, UM_AUDIT_ASYNC, UM_AUDIT_HISTORY_INITIAL_PAYLOAD, UM_AUDIT_HISTORY_INITIAL_STATE, UM_AUDIT_URL, USR_MGMT_AUDIT_LIST } from "./constants";
 import { AddEmployeeRequest, ApiTokenData, CompanyGroupsListAction, EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody, GetApiTokenList, GetEmployeeResponse, GetSlackUrl, LoadCompanyGroups, UMAuditHistoryAction, UMAuditResponse } from "./types";
 
 const companyGroupsList = (
@@ -151,7 +151,7 @@ const revokeApiToken = (id: string, handlers: Handlers): ApiAction<GetApiTokenLi
   });
 
 
-const usrMgmtAuditHistoryList = (response: UMAuditResponse = USR_MGMT_AUDIT_HISTORY_INITIAL_STATE, initialLoad = true):
+const usrMgmtAuditHistoryList = (response: UMAuditResponse = UM_AUDIT_HISTORY_INITIAL_STATE, initialLoad = true):
 UMAuditHistoryAction => ({
   type: USR_MGMT_AUDIT_LIST,
   payload: response,
@@ -159,14 +159,14 @@ UMAuditHistoryAction => ({
 });
 
 const loadUsrMgmtAudiHistoryList = (queryPayload): ApiAction<UMAuditResponse> => {
-  const payload = isEmpty(queryPayload) ? UM_ADIT_HISTORY_INITIAL_PAYLOAD : queryPayload;
+  const payload = isEmpty(queryPayload) ? UM_AUDIT_HISTORY_INITIAL_PAYLOAD : queryPayload;
   return apiAction({
     url: UM_AUDIT_URL,
     method: "get",
     params: payload,
     asyncType: UM_AUDIT_ASYNC,
     onSuccess: (response, dispatch) => {
-      dispatch(usrMgmtAuditHistoryList(response, payload.offset === UM_ADIT_HISTORY_INITIAL_PAYLOAD.offset));
+      dispatch(usrMgmtAuditHistoryList(response, payload.offset === UM_AUDIT_HISTORY_INITIAL_PAYLOAD.offset));
     },
   });
 };

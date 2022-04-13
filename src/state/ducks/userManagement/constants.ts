@@ -26,13 +26,13 @@ export const UM_AUDIT_ASYNC = "userManagement/UM_AUDIT_ASYNC";
 
 export const UM_AUDIT_URL = "/employees/audit";
 // TODO: Check below constants
-export const HISTORY_INITIAL_OFFSET = 0;
-export const HISTORY_LIMIT = 50;
-export const  UM_ADIT_HISTORY_INITIAL_PAYLOAD = {
-  offset: HISTORY_INITIAL_OFFSET,
-  limit: HISTORY_LIMIT,
+export const UM_AUDIT_HISTORY_INITIAL_OFFSET = 0;
+export const UM_AUDIT_HISTORY_LIMIT = 50;
+export const UM_AUDIT_HISTORY_INITIAL_PAYLOAD = {
+  offset: UM_AUDIT_HISTORY_INITIAL_OFFSET,
+  limit: UM_AUDIT_HISTORY_LIMIT,
 };
-export const USR_MGMT_AUDIT_HISTORY_INITIAL_STATE = {
+export const UM_AUDIT_HISTORY_INITIAL_STATE = {
   results: [],
   page_total: 0,
   total: 0,

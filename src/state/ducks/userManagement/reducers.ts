@@ -1,7 +1,7 @@
 import { get, isEmpty, keyBy, set, unionBy, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, UM_AUDIT_ASYNC, USR_MGMT_AUDIT_HISTORY_INITIAL_STATE, USR_MGMT_AUDIT_LIST } from "./constants";
+import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, UM_AUDIT_ASYNC, UM_AUDIT_HISTORY_INITIAL_STATE, USR_MGMT_AUDIT_LIST } from "./constants";
 import { CompanyGroupsListAction, GroupsAllIdsState, GroupsByIdState, HistoryState, LoadCompanyGroup, UMAuditHistoryAction } from "./types";
 
 export const groupsById = (
@@ -34,7 +34,7 @@ export const groupsAllIds = (
 };
 
 const history = (
-  state: HistoryState = USR_MGMT_AUDIT_HISTORY_INITIAL_STATE,
+  state: HistoryState = UM_AUDIT_HISTORY_INITIAL_STATE,
   action: UMAuditHistoryAction
 ): HistoryState => {
   const actionResult = get(action.payload, "results");
