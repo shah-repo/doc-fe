@@ -272,18 +272,15 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
 
   const getCardGroups = (response) => {
     const auditRecords = map(response, (auditRecord) => {
-      const employeeDetails = getUserDetails(auditRecord.employeeId) || {
-        user: { name: auditRecord.employeeName, email: "" },
-      };
-      const ownerDetails = getUserDetails(auditRecord.ownerId) || {
-        user: { name: auditRecord.ownerName, email: auditRecord.ownerEmail },
-      };
+      const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp } = auditRecord;
+      const employeeDetails = getUserDetails(employeeId) || { user: { name: employeeName, email: "" } };
+      const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
       return {
         ...auditRecord,
-        groupKey: `${auditRecord.groupId}-${auditRecord.timestamp}-${auditRecord.ownerId}`,
+        groupKey: `${groupId}-${timestamp}-${ownerId}`,
         ownerDetails,
         employeeDetails,
-        timestamp: `${getFormattedDateString(auditRecord.timestamp, MomentFormats.BriefDateTime)}`,
+        timestamp: `${getFormattedDateString(timestamp, MomentFormats.BriefDateTime)}`,
         ...getDescription(auditRecord, ownerDetails, employeeDetails),
       };
     });
@@ -292,12 +289,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     const cardGroups = {};
     each(auditRecordGroups, (groupedItems, groupKey) => {
       cardGroups[groupKey] = {
-        ...pick(auditRecordGroups[groupKey][0], [
-          "timestamp",
-          "groupId",
-          "ownerDetails",
-          "employeeDetails",
-        ]),
+        ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails", "employeeDetails"]),
         descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails),
       };
     });
