@@ -18,34 +18,30 @@ interface Props {
       name: string;
     };
   };
-
 }
-const UserAvatarCard: React.FunctionComponent<Props> = ({
-  timestamp,
-  userDetails,
-}) => {
+
+const UserAvatarCard: React.FunctionComponent<Props> = ({ timestamp, userDetails }) => {
   const { avatar, initialColor, name } = { ...userDetails.user };
   const classes = styles();
   return (
-    <ListItem
-      alignItems="flex-start"
-      disableGutters
-      style={{ padding: 0 }}
-    >
+    <ListItem alignItems="flex-start" disableGutters style={{ padding: 0 }}>
       <ListItemAvatar style={{ minWidth: 43 }}>
         <UserCard avatar={avatar} initialColor={initialColor} name={name} />
       </ListItemAvatar>
-
       <ListItemText
-        primary={<Typography className={classes.generalInfo}>{name}</Typography>}
-        secondary={<Typography
-          component="span"
-          variant="body2"
-          color="textPrimary"
-          className={classes.secondaryText}
-        >
-          {timestamp}
-        </Typography>}
+        primary={
+          <Typography className={classes.generalInfo}>{name}</Typography>
+        }
+        secondary={
+          <Typography
+            component="span"
+            variant="body2"
+            color="textPrimary"
+            className={classes.secondaryText}
+          >
+            {timestamp}
+          </Typography>
+        }
       />
     </ListItem>
   );

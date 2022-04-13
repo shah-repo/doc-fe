@@ -1,12 +1,12 @@
 import React from "react";
 import AuditItemPresenter from "./presenter";
 
-interface OwnProps {
+interface Props {
   openHistoryPanel: boolean;
   closeHistoryPanel: () => void;
 }
 
-const AuditItemsContainer: React.FunctionComponent<OwnProps> = ({
+const AuditItemsContainer: React.FunctionComponent<Props> = ({
   openHistoryPanel,
   closeHistoryPanel,
 }) => <AuditItemPresenter openHistoryPanel={openHistoryPanel} closeHistoryPanel={closeHistoryPanel}/>;

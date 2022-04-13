@@ -6,27 +6,21 @@ import styles from "./card.styles";
 import DetailDescription from "./common/detail.description";
 import UserAvatarCard from "./common/userAvatar";
 
-interface OwnProps {
+interface Props {
   auditDetails:  AuditDetailsProps;
 }
 
-const Default: React.FunctionComponent<OwnProps> = ({ auditDetails }) => {
+const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
   const classes = styles();
   return (
     <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
       <Box display="grid">
-        <UserAvatarCard
-          timestamp={auditDetails.timestamp}
-          userDetails={auditDetails.ownerDetails}
-        />
-        {/* Below in secondaryText add ${auditDetails.id} at the end for testing only. It should be cleaned up later */}
+        <UserAvatarCard timestamp={auditDetails.timestamp} userDetails={auditDetails.ownerDetails} />
         {map(auditDetails.descriptions, (groupItem, index) => (
           <DetailDescription
-            primaryText={groupItem.primaryText}
-            secondaryText= {groupItem.secondaryText}
-            groupId={auditDetails.groupId}
             key={index}
-            employeeDetail={auditDetails.employeeDetails}
+            primaryText={groupItem.primaryText}
+            secondaryText={groupItem.secondaryText}
           />
         ))}
       </Box>

@@ -23,8 +23,8 @@ const styles = makeStyles(() =>
         backgroundColor: "transparent",
       },
     },
-  },
-  ));
+  })
+);
 interface Props {
   disable?: boolean;
   onLoadMore: () => void;
@@ -32,7 +32,13 @@ interface Props {
   label?: string;
   id?: string;
 }
-export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = false, onLoadMore, position = "left", label = "common.load.more", id = "boxLoadMore" }) => {
+export const LoadMoreButton: React.FunctionComponent<Props> = ({
+  disable = false,
+  onLoadMore,
+  position = "left",
+  label = "common.load.more",
+  id = "boxLoadMore",
+}) => {
   const classes = styles();
   return (
     <Box style={{ float: position }}>
@@ -45,7 +51,7 @@ export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = fals
       >
         <Text message={label} />
       </Button>
-      <LoadMore fill={disable ? Colors.hint_gray : Colors.navy}/>
+      <LoadMore fill={disable ? Colors.hint_gray : Colors.navy} />
     </Box>
-  )
-  ; };
+  );
+};

@@ -17,7 +17,8 @@ const styles = makeStyles((theme: Theme) =>
       fontFamily: "Sora",
       letterSpacing: 0,
     }),
-  }));
+  })
+);
 
 interface Props {
   avatar: Nullable<string>;
@@ -25,13 +26,8 @@ interface Props {
   name: string;
 }
 
-const UserCard: React.FunctionComponent<Props> = ({
-  avatar,
-  initialColor,
-  name,
-}) => {
+const UserCard: React.FunctionComponent<Props> = ({ avatar, initialColor, name }) => {
   const classes = styles({ initialColor });
-
   return (
     <>
       {avatar ?

@@ -7,25 +7,16 @@ import styles from "./common.styles";
 interface OwnProps {
   primaryText: string;
   secondaryText: string;
-  groupId: string;
-  // TODO: Update
-  employeeDetail: any;
 }
 
 const DetailDescription: React.FunctionComponent<OwnProps> = ({
   primaryText,
   secondaryText,
-  groupId,
-  employeeDetail,
 }) => {
   const classes = styles();
   return (
     <Box marginTop={1.875}>
-      <Box
-        color={Colors.font_gray}
-        fontSize={12}>
-        {primaryText}
-      </Box>
+      <Box color={Colors.font_gray} fontSize={12}>{primaryText}</Box>
       <Box color={Colors.almost_black} fontSize={14} className={classes.description} whiteSpace={"wrap"}>
         {secondaryText}
       </Box>
