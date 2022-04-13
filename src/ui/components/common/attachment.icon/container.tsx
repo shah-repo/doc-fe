@@ -368,7 +368,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   });
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", marginTop: "2rem" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", marginTop: sortedAttachments.length ? "2rem" : "0rem" }}>
       <AttachmentRedLineWarningDialog
         isDialogOpen={redlineWarningDialogHandler.isOpen}
         onSubmit={warningSubmit}
