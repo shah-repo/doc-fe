@@ -28,7 +28,7 @@ phases:
   pre_build:
     commands:
       - cd $DOCKER_COMPOSE_FILE_LOCATION
-      - docker-compose up --force-recreate --remove-orphans --scale enlil_cypress_server=$ENLIL_CYPRESS_SERVER_SCALE --scale enlil_cypress_worker_replicas=$ENLIL_CYPRESS_WORKER_SCALE &
+      - docker-compose up --force-recreate --remove-orphans -d --scale enlil_cypress_server=$ENLIL_CYPRESS_SERVER_SCALE --scale enlil_cypress_worker_replicas=$ENLIL_CYPRESS_WORKER_SCALE
   build:
     commands:
       - docker ps
