@@ -9,9 +9,9 @@ phases:
   pre_build:
     commands:
       - export FE_REPO="$CODEBUILD_SRC_DIR"
-      # remote-js-validators
-      - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators_code"
-      - export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
+      # doc-be
+      - export BE_REPO="$CODEBUILD_SRC_DIR_backend_code"
+      - export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
       # doc-export
       - export EXPORT_REPO="$CODEBUILD_SRC_DIR_doc_export_code"
       - export EXPORT_GIT_COMMIT_HASH=$(cd $EXPORT_REPO;git rev-parse HEAD | cut -c1-8)
