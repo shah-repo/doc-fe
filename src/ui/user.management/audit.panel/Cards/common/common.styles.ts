@@ -24,10 +24,8 @@ export default makeStyles(() =>
       letterSpacing: 0,
     },
     description: {
-      "fontWeight": 700,
       "lineHeight": "21px",
       "fontFamily": "Sora",
-      "fontStyle": "normal",
       "fontSize": 14,
       "word-break": "break-word",
       "letterSpacing": 0,

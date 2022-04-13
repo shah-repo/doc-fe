@@ -37,7 +37,7 @@ const UserCard: React.FunctionComponent<Props> = ({
       {avatar ?
         <Avatar className={classes.avatar} alt={name} src={avatar} /> :
         <Avatar className={classes.avatar} data-cy="header-userInitials">
-          <Box letterSpacing={0}>{getInitalsFromName(name)}</Box>
+          <Box letterSpacing={0} style={{ textTransform: "uppercase" }}>{getInitalsFromName(name)}</Box>
         </Avatar>
       }
     </>

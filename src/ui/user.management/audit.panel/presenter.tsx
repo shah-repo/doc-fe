@@ -102,7 +102,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     } else if (auditRecord.fieldPath === "name" && auditRecord.type === "STRING_EDITED") {
       actionInfo = {
         primaryText: getTransalatedText(ACTION_TITLE_MAPPING.EmployeeNameUpdated, {}),
-        secondaryText: `${auditRecord.previousValue} to ${auditRecord.nextValue}`,
+        secondaryText: `${auditRecord.previousValue}-NAME-UP-DATED-TO-${auditRecord.nextValue}`,
         auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
         sortedIndex: 0,
       };
@@ -214,7 +214,14 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups as string && secondaryText.length <= 1) {
         primaryText = getTransalatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, {});
       }
-      return { primaryText, secondaryText: secondaryText.join(", "), sortedIndex, auditType };
+      let secondaryTextHtml = <span>{secondaryText.join(", ")}</span>;
+      if (auditType === ACTION_TITLE_MAPPING.EmployeeNameUpdated) {
+        const names = secondaryText[0].split("-NAME-UP-DATED-TO-");
+        secondaryTextHtml = <><span>{names[0]}</span><span style={{ color: "#767B87", padding: "0 2px" }}>to</span><span>{names[1]}</span></>;
+      } else {
+
+      }
+      return { primaryText, secondaryText: secondaryTextHtml, sortedIndex, auditType };
       // return { primaryText, secondaryText: uniq(secondaryText).sort().join(", "), sortedIndex, auditType };
     });
     return addUserNameAndEmailBlock(sameGroup, employeeDetails);
