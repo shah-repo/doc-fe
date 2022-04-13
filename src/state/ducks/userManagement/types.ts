@@ -87,7 +87,7 @@ interface History {
   // TODO: Update this
   pendingTrainees?: any[] | undefined;
 }
-export interface HistoryListAction {
+export interface UMAuditHistoryAction {
   type: typeof USR_MGMT_AUDIT_LIST;
   payload: UMAuditResponse;
   initialLoad?: boolean;

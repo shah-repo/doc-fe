@@ -32,7 +32,7 @@ export const  UM_ADIT_HISTORY_INITIAL_PAYLOAD = {
   offset: HISTORY_INITIAL_OFFSET,
   limit: HISTORY_LIMIT,
 };
-export const HISTORY_LIST_INITIAL_STATE = {
+export const USR_MGMT_AUDIT_HISTORY_INITIAL_STATE = {
   results: [],
   page_total: 0,
   total: 0,
