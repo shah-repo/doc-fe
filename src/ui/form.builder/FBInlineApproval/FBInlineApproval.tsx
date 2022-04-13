@@ -35,16 +35,16 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       borderLeft={0}
       borderRight={0}
       borderTop={0}
-      borderColor={isApproved ? Colors.light_green : Colors.medium_red}
+      borderColor={isApproved ? Colors.light_green : Colors.latest_red_varient}
     >
       {isApproved && <CheckCircleIcon style={{ color: Colors.light_green }} />}
-      {!isApproved && <ErrorIcon style={{ color: Colors.medium_red }} />}
+      {!isApproved && <ErrorIcon style={{ color: Colors.latest_red_varient }} />}
       <Box ml={1} width="100%" display="flex" mt={0.3}>
         {isApproved && <FBText locale="form.builder.approved" />}
         {!isApproved && (
           <>
-            <FBText boxProps={{ flexGrow: 1 }} locale="form.builder.approval.pending" />
-            <FBText boxProps={{ fontSize: "caption.fontSize", mt: 0.2 }} locale="form.builder.approval.instruction" />
+            <FBText boxProps={{ flexGrow: 1, fontSize: "14px", fontFamily: "Sora", fontStyle: "normal", fontWeight: "600", color: Colors.latest_red_varient, lineHeight: "15px" }} locale="form.builder.approval.pending" />
+            <FBText boxProps={{ fontSize: "12px", fontFamily: "Sora", fontStyle: "normal", fontWeight: "400", color: Colors.almost_black, lineHeight: "15px" }} locale="form.builder.approval.instruction" />
           </>
         )}
       </Box>
