@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, createStyles, makeStyles, Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import Select, { components, createFilter } from "react-select";
@@ -35,10 +35,20 @@ export const selectStyles = {
   }),
   control: (base) => ({
     ...base,
-    minHeight: "52px",
-    padding: "5px 3px",
+    minHeight: "40px",
   }),
 };
+
+const styles = makeStyles(() =>
+  createStyles({
+    title: {
+      color: Colors.almost_black,
+      fontSize: "12px",
+      fontFamily: "Sora",
+      fontWeight: 600,
+    },
+  }),
+);
 
 export const MultiValueRemove = (props) => (
   <components.MultiValueRemove {...props}>
@@ -57,6 +67,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   isDisabled = false,
   ...fieldProps
 }) => {
+  const classes = styles();
   const { submitForm } = useFormContext();
   const onChange = (value: ValueType<OptionType>) => {
     fieldProps.onChange?.(value);
@@ -81,8 +92,8 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
 
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={0.4}>
-        <Typography variant="h5">
+      <Box mb={1.25}>
+        <Typography variant="h5" className={classes.title}>
           <Text message={fieldProps.label} />
         </Typography>
       </Box>

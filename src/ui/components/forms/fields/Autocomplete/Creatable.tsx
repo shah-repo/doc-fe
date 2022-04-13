@@ -1,4 +1,3 @@
-import { Box, Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import { useState } from "react";
@@ -7,7 +6,6 @@ import { SelectComponentsProps } from "react-select/base";
 import CreatableSelect, { CreatableProps } from "react-select/creatable";
 import { ActionMeta, ValueType } from "react-select/src/types";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
-import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
@@ -18,6 +16,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   creatableProps: SelectComponentsProps & CreatableProps<any>;
   options: OptionType[];
   isDisabled?: boolean;
+  placeholder?: string;
 }
 
 type CreatablePropsWithFormik = AutocompleteOwnProps &
@@ -28,6 +27,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   creatableProps,
   options,
   isDisabled = false,
+  placeholder,
   ...fieldProps
 }) => {
   const formikValue = fieldProps.field.value;
@@ -74,14 +74,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
 
   const stringify = (option: OptionType) => option.label;
   const filterOption = createFilter({ ignoreAccents: false, stringify });
-
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={1}>
-        <Typography variant="h6">
-          <Text message={fieldProps.label} />
-        </Typography>
-      </Box>
       <CreatableSelect
         inputValue={inputValue}
         value={value}
@@ -95,13 +89,12 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
             ...base,
             backgroundColor: Colors.white,
             borderColor: Colors.hint_gray,
-            minHeight: "52px",
-            padding: "5px 3px",
+            minHeight: "32px",
           }),
         }}
         isClearable={Boolean(formikValue)}
         components={{ DropdownIndicator: null }}
-        placeholder={null}
+        placeholder={placeholder || null}
         openMenuOnClick={false}
         openMenuOnFocus={false}
         createOptionPosition="first"
