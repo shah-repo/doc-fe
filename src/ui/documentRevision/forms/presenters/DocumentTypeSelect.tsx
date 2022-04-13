@@ -1,3 +1,4 @@
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { useSelector } from "react-redux";
@@ -29,6 +30,20 @@ interface Props extends RouteComponentProps {
   documentTypeId?: string;
 }
 
+const styles = makeStyles((theme: Theme) =>
+  createStyles({
+    selectComponent: {
+      "& .MuiSelect-root": {
+        padding: 10,
+      },
+      "&.MuiInputBase-root": {
+        marginTop: 10,
+        padding: 0,
+      },
+    },
+  }),
+);
+
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDocRevStatusDraft,
   type,
@@ -40,7 +55,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const { isVisible, label, tooltipConfig, validation: validators } = useDocumentTypeSelect(documentTypeId);
   const { _formState, _documentRevisionFormState } = SM.useStores() || {};
   const formik = useFormikContext();
-
+  const classes = styles();
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const asyncDocumentProposedId = useAsync({
     onSuccess: () => {
@@ -183,6 +198,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         options={options}
         validate={validators}
         includeEmpty={false}
+        inputStyleProps={classes.selectComponent}
       />
     </CustomLabelTooltip>
   );
