@@ -26,6 +26,9 @@ const classes = {
     flex: "0 0 50%",
     display: "flex",
     justifyContent: "flex-start",
+    fontSize: "12px",
+    fontWeight: 600,
+    fontFamily: "Sora",
   },
 };
 
@@ -46,7 +49,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box marginBottom="33px">
+    <Box marginBottom="30px">
       <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
         <Typography variant="h6" style = {classes.attachmentHeadText}>
           <Text message={label}/>
