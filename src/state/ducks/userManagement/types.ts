@@ -120,3 +120,9 @@ export enum ACTION_TITLE_MAPPING {
   RemovedUserName="RemovedUserName",
   RemovedGroupName="RemovedGroupName",
 }
+
+export enum UM_AUDIT_CONCAT_KEYS {
+  NameSeparator = "-NAME-UPDATED-TO-",
+  DeleteFromGroup = "-DELETED-FROM-GROUP-",
+  AddToGroup = "-ADDED-TO-GROUP-"
+}

@@ -11,7 +11,7 @@ import apiClient from "../../../state/apiClient";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
-import { ACTION_TITLE_MAPPING, AuditDetailsProps } from "../../../state/ducks/userManagement/types";
+import { ACTION_TITLE_MAPPING, AuditDetailsProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
@@ -72,14 +72,14 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       );
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
-          primaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroups, { groupName: "" })}-ADDED-TO-GROUP-${groupName}`,
+          primaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroups, { groupName: "" })}${UM_AUDIT_CONCAT_KEYS.AddToGroup}${groupName}`,
           secondaryText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPING.EmployeesAddedToGroups,
           sortedIndex: 3,
         };
       } else if (auditRecord.type === "ARRAY_DELETED") {
         actionInfo = {
-          primaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups, { groupName: "" })}-DELETED-FROM-GROUP-${groupName}`,
+          primaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups, { groupName: "" })}${UM_AUDIT_CONCAT_KEYS.DeleteFromGroup}${groupName}`,
           secondaryText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups,
           sortedIndex: 3,
@@ -237,7 +237,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups ||
         auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup
       ) {
-        const items = primaryText.split("-DELETED-FROM-GROUP-");
+        const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.DeleteFromGroup);
         primaryTextHtml = (
           <>
             <span>{items[0]}</span>
@@ -256,7 +256,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups ||
         auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup
       ) {
-        const items = primaryText.split("-ADDED-TO-GROUP-");
+        const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.AddToGroup);
         primaryTextHtml = (
           <>
             <span>{items[0]}</span>
