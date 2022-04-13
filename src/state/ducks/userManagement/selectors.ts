@@ -34,16 +34,10 @@ const getOfficialGroups = createSelector(
   (groupOptions) => groupOptions.filter((option) => option.isOfficial),
 );
 
-const historyList = (state: ApplicationState) => state.userManagement.history;
-
-const getLoadHistoryListAsyncInfo = (state: ApplicationState): AsyncState => state.userManagement.loadHistoryAsyncInfo;
-
 export default {
   getGroupsOptions,
   getLoadGroupsAsyncState,
   getDefaultGroups,
   getOfficialGroups,
-  getLoadHistoryListAsyncInfo,
-  historyList,
   groupsById,
 };
