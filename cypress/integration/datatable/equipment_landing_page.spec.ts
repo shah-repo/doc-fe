@@ -1079,9 +1079,9 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Verify that data is sorted based on that column grouping", () => {
-      cy.get(".k-grouping-row").eq(0).should("contain.text", "1").arrowClick();
-      cy.get(".k-grouping-row").eq(1).should("contain.text", "1A").arrowClick();
-      cy.get(".k-grouping-row").eq(1).should("contain.text", "A").arrowClick();
+      cy.get(".k-grouping-row").eq(0).should("have.text", "1").arrowClick();
+      cy.get(".k-grouping-row").eq(1).should("have.text", "1A").arrowClick();
+      cy.get(".k-grouping-row").eq(2).should("have.text", "A").arrowClick();
     });
 
     it("Grouping columns should be displayed next to button Clear Filters", () => {
