@@ -72,4 +72,3 @@ export interface TypographyProps {
 }
 
 export type Nullable<T> = T | null;
-export type NullableArray<T> = T | [];

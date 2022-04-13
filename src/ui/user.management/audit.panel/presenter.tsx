@@ -8,7 +8,6 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import apiClient from "../../../state/apiClient";
-import { NullableArray } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
@@ -40,7 +39,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
-  const [Items, setItems] = React.useState<NullableArray<AuditDetailsProps[]>>([]);
+  const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
   const [page, setPage] = useState(UM_AUDIT_HISTORY_INITIAL_OFFSET);
   const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
@@ -324,12 +323,11 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
        .request(requestConfig)
        .then((resp) => resp)
        .then(({ data }) => {
-         //  TODO: Page is added for testing. Need to remove
          const cardGroups = getCardGroups(data.results || []);
-         setItems((prevState: NullableArray<AuditDetailsProps[]>) => [
+         setItems((prevState: AuditDetailsProps[]) => [
            ...prevState,
            ...values(cardGroups),
-         ] as NullableArray<AuditDetailsProps[]>);
+         ] as AuditDetailsProps[]);
          setPage((prevPageNumber) => prevPageNumber + limit);
          setIsLoading(false);
        })
