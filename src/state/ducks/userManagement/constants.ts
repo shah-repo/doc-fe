@@ -21,19 +21,7 @@ export const API_TOKEN = "/api_tokens";
 export const API_TOKEN_URL = `${API_TOKEN}/generate`;
 export const API_TOKEN_REVOKE_URL = `${API_TOKEN}/revoke`;
 
-export const UM_AUDIT_LIST = "userManagement/HISTORY_LIST";
-export const UM_AUDIT_ASYNC = "userManagement/UM_AUDIT_ASYNC";
-
 export const UM_AUDIT_URL = "/employees/audit";
 // TODO: Check below constants
 export const UM_AUDIT_HISTORY_INITIAL_OFFSET = 0;
 export const UM_AUDIT_HISTORY_LIMIT = 50;
-export const UM_AUDIT_HISTORY_INITIAL_PAYLOAD = {
-  offset: UM_AUDIT_HISTORY_INITIAL_OFFSET,
-  limit: UM_AUDIT_HISTORY_LIMIT,
-};
-export const UM_AUDIT_HISTORY_INITIAL_STATE = {
-  results: [],
-  page_total: 0,
-  total: 0,
-};

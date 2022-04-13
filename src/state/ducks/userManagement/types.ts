@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { Group, GroupTag, GroupType, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common/types";
 import { Company, Employee } from "../company/types";
-import { COMPANY_GROUPS_LIST, UM_AUDIT_LIST } from "./constants";
+import { COMPANY_GROUPS_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
@@ -69,37 +69,6 @@ export interface GetApiTokenList {
   name: string;
   active: boolean;
 }
-
-// Update Once get Api Response ... Currently Its training
-interface History {
-  pendingEmailSentAt: Nullable<string>;
-  trainingStatus: string;
-  docId: string;
-  docDocumentId: string;
-  docRevName: string;
-  docRevVersion: string;
-  trainingRecordId?: string;
-  docRevId: string;
-  id: string;
-  type: string;
-  timestamp: string;
-  pinned: boolean;
-  // TODO: Update this
-  pendingTrainees?: any[] | undefined;
-}
-export interface UMAuditHistoryAction {
-  type: typeof UM_AUDIT_LIST;
-  payload: UMAuditResponse;
-  initialLoad?: boolean;
-}
-export interface UMAuditResponse {
-  results: History[];
-  page_total: number;
-  total: number;
-}
-
-// Updated Audit Detail Props
-// TODO: Remove above Types
 interface DescriptionItemsProp {
   primaryText: string;
   secondaryText: string;
