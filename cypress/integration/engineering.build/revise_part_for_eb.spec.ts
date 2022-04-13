@@ -195,54 +195,49 @@ context("Revise Part from EB and release cloned EB test", () => {
     });
   });
 
-  context("Create an EB", () => {
+  context("Create an EB with revision canceled draft", () => {
     context("Create a part", () => {
-      context("Start document creation flow", () => {
-        it("Turn off autosave", () => {
-          cy.cmpTurnOffAutosave();
-        });
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
 
-        it("Navigate to parts", () => {
-          cy.navigToParts();
-        });
+      it("Navigate to parts", () => {
+        cy.navigToParts();
+      });
 
-        it("Clicks on 'Add new part' button", () => {
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.GetRequiredApprovers,
-            CyRoutes.DocPreview], () => {
-            cy.ptClickCreateNewPart();
-          });
+      it("Clicks on 'Add new part' button", () => {
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.DocPreview], () => {
+          cy.ptClickCreateNewPart();
         });
       });
 
-      context("Fill in the part attributes", () => {
-        it(`Enter title '${PART_NAME}'`, () => {
-          cy.drEnterDocumentTitle({ name: PART_NAME });
-        });
+      it(`Enter title '${PART_NAME}'`, () => {
+        cy.drEnterDocumentTitle({ name: PART_NAME });
+      });
 
-        it("Enter description 'Test Part description'", () => {
-          cy.drEnterDocumentDescription({ description: "Test Part description" });
-        });
+      it("Enter description 'Test Part description'", () => {
+        cy.drEnterDocumentDescription({ description: "Test Part description" });
+      });
 
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
 
-        it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+      it("Approve and Release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
 
-        it("Revise document", () => {
-          cy.drClickReviseDocument();
-        });
+      it("Revise document", () => {
+        cy.drClickReviseDocument();
+      });
 
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
 
-        it("Click on 'Cancel Draft'", () => {
-          cy.drCancelDraftFromMenu();
-        });
+      it("Click on 'Cancel Draft'", () => {
+        cy.drCancelDraftFromMenu();
       });
     });
 
@@ -260,9 +255,7 @@ context("Revise Part from EB and release cloned EB test", () => {
           recordType: "Engineering Build",
         });
       });
-    });
 
-    context("Fill in the EB attributes", () => {
       it("Enter title 'Test Engineering Build'", () => {
         cy.drEnterDocumentTitle({ name: "Test Engineering Build" });
       });
@@ -276,7 +269,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
     });
 
-    context("Choose a part and submit for approval", () => {
+    context("Choose a part", () => {
       it("Choose an released part from the list of available parts", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
           cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
@@ -302,10 +295,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       it("Select EB document", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "EB-00001" });
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.EmployeesGet, CyRoutes.GetDocRevs, CyRoutes.SessionDetails], () => {
-          cy.ebSelectFirstDocument();
-        });
+        cy.ebSelectFirstDocument();
       });
 
       it("Add an Approval", () => {
@@ -313,9 +303,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.pmSubmitForApproval();
       });
 
       it("Check if the part is displayed in the document summary", () => {
@@ -335,27 +323,20 @@ context("Revise Part from EB and release cloned EB test", () => {
       it("Select EB document", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "EB-00002" });
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.EmployeesGet, CyRoutes.GetDocRevs, CyRoutes.SessionDetails], () => {
-          cy.ebSelectFirstDocument();
-        });
+        cy.ebSelectFirstDocument();
       });
-
 
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.pmSubmitForApproval();
       });
 
       it("Check if the part is displayed in the document summary", () => {
         cy.ebCheckIfPartIsInSummary({ partName: PART_NAME });
       });
-
 
       it("Approve record button click", () => {
         cy.ebApprove();
