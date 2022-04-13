@@ -18,6 +18,7 @@ interface SelectOwnProps extends FieldOwnProps {
   options: SelectOption[];
   includeEmpty?: boolean;
   inputFieldProps?: InputBaseProps;
+  inputStyleProps?: string;
 }
 
 type SelectPropsWithFormik = SelectOwnProps &
@@ -29,6 +30,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
   options,
   includeEmpty = true,
   inputFieldProps,
+  inputStyleProps,
   ...fieldProps
 }) => {
   const { field } = fieldProps;
@@ -50,6 +52,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
       <MuiSelect
         {...fieldProps.field}
         {...selectProps}
+        className={inputStyleProps}
         data-cy={`select.${fieldProps.field.name}`}
         input={<InputField name={fieldProps.field.name} {...inputFieldProps}/>}
         onChange={(evt, child) => {
