@@ -4,6 +4,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -744,6 +745,51 @@ context("Purchase Order Landing Page", () => {
     it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
       cy.get(`button[data-cy="clearFilter"]`).should("exist");
       cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+    });
+  });
+
+  context("Create 'Purchase Order' document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'po title'", () => {
+      cy.drEnterDocumentTitle({ name: "po title" });
+    });
+
+    it("Enter document description 'Purchase Order document description'", () => {
+      cy.drEnterDocumentDescription({ description: "Purchase Order document description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Purchase Order test' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Purchase Order test" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.fbClickButton({ el: "updateRecord" });
+      });
     });
   });
 
