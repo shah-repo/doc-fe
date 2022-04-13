@@ -158,15 +158,15 @@ HistoryListAction => ({
   initialLoad,
 });
 
-const loadHistoryList = (queryPayload): ApiAction<UMAuditResponse> => {
-  const finalPayload = isEmpty(queryPayload) ? UM_ADIT_HISTORY_INITIAL_PAYLOAD : queryPayload;
+const loadUsrMgmtAudiHistoryList = (queryPayload): ApiAction<UMAuditResponse> => {
+  const payload = isEmpty(queryPayload) ? UM_ADIT_HISTORY_INITIAL_PAYLOAD : queryPayload;
   return apiAction({
     url: UM_AUDIT_URL,
     method: "get",
-    params: finalPayload,
+    params: payload,
     asyncType: UM_AUDIT_ASYNC,
     onSuccess: (response, dispatch) => {
-      dispatch(usrMgmtAuditHistoryList(response, finalPayload.offset === UM_ADIT_HISTORY_INITIAL_PAYLOAD.offset));
+      dispatch(usrMgmtAuditHistoryList(response, payload.offset === UM_ADIT_HISTORY_INITIAL_PAYLOAD.offset));
     },
   });
 };
@@ -186,5 +186,5 @@ export default {
   revokeApiToken,
   loadGroupById,
   usrMgmtAuditHistoryList,
-  loadHistoryList,
+  loadUsrMgmtAudiHistoryList,
 };
