@@ -20,21 +20,16 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   // load history panel
   const [openHistoryPanel, setHistoryPanel] = React.useState<boolean>(false);
-
-  const onHistoryPanelClick = () => {
-    setHistoryPanel(!openHistoryPanel);
-  };
+  const onHistoryPanelClick = () => { setHistoryPanel(!openHistoryPanel); };
   return (
     <Box>
       <Button
         variant="contained"
         onClick={onHistoryPanelClick}
-        id="um-audit"
         className={classes.historyButton}
       >
         <Text message="user.management.audit" />
       </Button>
-
       <Button
         variant="contained"
         onClick={openDialog}
