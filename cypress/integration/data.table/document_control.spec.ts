@@ -204,6 +204,7 @@ context("Document list test", () => {
     context("Verify most recent edited document is first on list", () => {
       it("Verify first document is: " + documentRevisionName, () => {
         cy.dlVerifyFilterByDocTitle({ docTitle: documentRevisionName });
+        cy.dlClearFilters();
       });
     });
   });
