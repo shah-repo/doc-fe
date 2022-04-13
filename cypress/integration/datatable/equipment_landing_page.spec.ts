@@ -1054,9 +1054,10 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.grpClearFilter();
     });
 
-    it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
+    it(`Verify that Button 'Clear Filter', 'Export List' and 'Add New Equipment' are present`, () => {
       cy.get(`button[data-cy="clearFilter"]`).should("exist");
       cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+      cy.get("[id=DocumentByTypeListPresenter-openDocRev]").should("exist");
     });
 
     it(`drag and drop`, () => {
