@@ -829,7 +829,7 @@ context("Document list test", () => {
       });
 
       it("Enters title as Approval Record title", () => {
-        cy.drEnterDocumentTitle({ name: "Approval Record title" });
+        cy.drEnterDocumentTitle({ name: "AR title" });
       });
 
       it("Enters description", () => {
@@ -1018,11 +1018,53 @@ context("Document list test", () => {
       cy.dlVerifyDocCounter({ docCounterNumber: 2 });
     });
 
+    it(`Verify filter for state`, () => {
+      cy.dlClearFilters();
+      cy.get(`th[aria-colindex="3"] span.k-input`).should("have.text", "All");
+      cy.get(`th[aria-colindex="3"] span.k-input`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Draft").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="3"] span.k-input`).should("have.text", "Draft");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it(`Verify filter for Title`, () => {
+      cy.dlClearFilters();
+      cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "");
+      cy.get(`th[aria-colindex="2"] input`).arrowType("Approval Record title");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "Approval Record title");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
     it(`Verify filter for ${owner}`, () => {
       cy.dlClearFilters();
       cy.dlFilterByOwner({ owner: USERS[2].name });
       cy.dlVerifyFilterByOwner({ owner: USERS[2].name });
       cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+    });
+
+    it(`Verify filter for Released Date`, () => {
+      cy.dlClearFilters();
+      cy.get(`th[aria-colindex="3"] span.k-input`).should("have.text", "All");
+      cy.get(`th[aria-colindex="3"] span.k-input`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="3"] span.k-input`).should("have.text", "");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it(`Verify filter for Form ID`, () => {
+      cy.dlClearFilters();
+      cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "");
+      cy.get(`th[aria-colindex="2"] input`).arrowType("FM-00005");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "FM-00005");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared", () => {
