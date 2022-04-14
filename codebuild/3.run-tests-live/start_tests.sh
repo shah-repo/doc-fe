@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+ENLIL_ENV=$1
+
 source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "$ENLIL_ENV"
 yarn install --frozen-lockfile
 ./scripts/cypress/wait.sh

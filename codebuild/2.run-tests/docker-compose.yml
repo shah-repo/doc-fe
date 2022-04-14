@@ -44,6 +44,9 @@ services:
       cypress_network:
     depends_on:
       - enlil_fe_server
+    environment:
+    - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
+    - SLACK_TOKEN=${SLACK_TOKEN}
 
   enlil_fe_server:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:fe_${FE_GIT_COMMIT_HASH}

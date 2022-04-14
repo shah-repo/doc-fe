@@ -1,5 +1,4 @@
-version: "3.8"
-
+version: "3."
 services:
   director:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.1.1
@@ -18,6 +17,10 @@ services:
       - "$FE_REPO:/opt/app/tests"
     networks:
       cypress_network:
+    environment:
+    - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
+    - ENLIL_ENV=${ENLIL_ENV}
+    - SLACK_TOKEN=${SLACK_TOKEN}
       
 networks:
   cypress_network:
