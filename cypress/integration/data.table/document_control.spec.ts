@@ -19,17 +19,20 @@ let group;
 
 const documentRevisionName = "AR Form";
 const secondDocumentRevName = "Second document for testing";
-const DDTitle = "DD Test";
+const ddTitle = "DD Test";
 const docTypeOne = "Design Document";
 const docIdStr = "Doc ID";
 const EXIST = "exist";
-const Rev = "Revision";
-const DocTitle = "Document title";
-const Type = "Type";
-const Owner = "Owner";
-const ARID = "AR ID";
+const rev = "Revision";
+const docTitle = "Document title";
+const type = "Type";
+const owner = "Owner";
+const arId = "AR ID";
+const status = "Status";
+const effectiveDate = "Effective Date";
 const currentDate = moment().tz("America/Los_Angeles").format("l");
 const approvalRequestName2 = "AR Form";
+const cpDocId = "CP-00003";
 
 context("Document list test", () => {
   before(() => {
@@ -104,7 +107,7 @@ context("Document list test", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description1</p>",
             document: {
-              docId: "CP-00003",
+              docId: `${cpDocId}`,
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },
@@ -188,13 +191,13 @@ context("Document list test", () => {
 
     it("Verify all the columns", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${docIdStr}`);
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${Rev}`);
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${DocTitle}`);
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${Type}`);
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${Owner}`);
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${ARID}`);
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Status");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Effective Date");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${rev}`);
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${docTitle}`);
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${type}`);
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${owner}`);
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${arId}`);
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", `${status}`);
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", `${effectiveDate}`);
     });
 
     it("Verify that the Document List filter to display released documents when starting a new Enlil session", () => {
@@ -246,7 +249,7 @@ context("Document list test", () => {
     });
 
     it("Grouping columns should be displayed next to button Clear Filters", () => {
-      cy.get(".k-group-indicator").eq(0).should("have.text", `${Type}`);
+      cy.get(".k-group-indicator").eq(0).should("have.text", `${type}`);
     });
 
     it("User should be able to remove it", () => {
@@ -263,7 +266,7 @@ context("Document list test", () => {
     });
 
     it("type a title", () => {
-      cy.drEnterDocumentTitle({ name: `${DDTitle}{enter}` });
+      cy.drEnterDocumentTitle({ name: `${ddTitle}{enter}` });
     });
 
     it("type a description", () => {
@@ -304,11 +307,11 @@ context("Document list test", () => {
       });
 
       it("Filter list by docId", () => {
-        cy.dlFilterByDocId({ docId: "CP-00003" });
+        cy.dlFilterByDocId({ docId: `${cpDocId}` });
       });
 
       it("Verify filter by docId", () => {
-        cy.dlVerifyFilterByDocId({ docId: "CP-00003" });
+        cy.dlVerifyFilterByDocId({ docId: `${cpDocId}` });
       });
 
       it("Verify document counter on document list", () => {
@@ -450,9 +453,9 @@ context("Document list test", () => {
     });
 
     it("Verify that landing pages for Document List  use the new data table", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${ARID}`);
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${arId}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "AR Title");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${Owner}`);
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);
       cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Status");
       cy.get(".k-indicator-container").eq(0).should(`${EXIST}`);
       cy.get(".k-filtercell-operator").eq(0).should(`${EXIST}`);
@@ -632,10 +635,10 @@ context("Document list test", () => {
 
     it("Verify all the columns are present", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "ID");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${Rev}`);
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${rev}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "State");
       cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Title");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${Owner}`);
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${owner}`);
       cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Released Date");
     });
 
@@ -940,19 +943,19 @@ context("Document list test", () => {
       });
     });
 
-    context("Sort 'Owner'", () => {
-      it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
+    context(`Sort ${owner}`, () => {
+      it(`${owner} should be in ascending order`, () => {
+        cy.contains(`${owner}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${owner}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 7 });
       });
 
-      it("Owner should be in descending order", () => {
-        cy.contains("Owner").eq(0).click();
+      it(`${owner} should be in descending order`, () => {
+        cy.contains(`${owner}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${owner}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 7 });
       });
@@ -1002,14 +1005,14 @@ context("Document list test", () => {
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
-    it(`Verify filter for ${Rev}`, () => {
+    it(`Verify filter for ${rev}`, () => {
       cy.dlClearFilters();
       cy.dlFilterByRev({ revision: "A" });
       cy.dlVerifyFilterByRev({ revision: "A" });
       cy.dlVerifyDocCounter({ docCounterNumber: 2 });
     });
 
-    it(`Verify filter for ${Owner}`, () => {
+    it(`Verify filter for ${owner}`, () => {
       cy.dlClearFilters();
       cy.dlFilterByOwner({ owner: USERS[2].name });
       cy.dlVerifyFilterByOwner({ owner: USERS[2].name });
@@ -1038,11 +1041,11 @@ context("Document list test", () => {
       cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "ID");
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item").contains("Hide Column").arrowClick();
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${Rev}`);
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${rev}`);
     });
 
     it(`Verify unhide on ID`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${Rev}`);
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${rev}`);
       cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
       cy.get("ul>li[role=menuitem]").contains("ID").parents("li").find("svg").arrowClick();
       cy.get("body").type("{esc}");
@@ -1053,11 +1056,11 @@ context("Document list test", () => {
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `ID`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${Rev}`);
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${rev}`);
     });
 
     it(`Verify un-freeze on ID`, () => {
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${Rev}`);
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${rev}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `ID`);
