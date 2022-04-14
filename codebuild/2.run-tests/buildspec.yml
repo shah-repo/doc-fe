@@ -8,6 +8,8 @@ env:
 phases:
   install:
     commands:
+      - set -e
+      - export FE_REPO="$CODEBUILD_SRC_DIR"
       # load commit hashes from build 1
       - cd $CODEBUILD_SRC_DIR_build_artifacts_1
       - export commits_file_location1=$(find . -name commit_hashes.json)
@@ -20,13 +22,12 @@ phases:
       - export EXPORT_GIT_COMMIT_HASH=$(jq '.exportCommit' $commits_file_location2 | tr -d '"')
       - export DOCXTOPDF_GIT_COMMIT_HASH=$(jq '.docxtopdfCommit' $commits_file_location2 | tr -d '"')
       - export WORDSERVICE_GIT_COMMIT_HASH=$(jq '.wordServiceCommit' $commits_file_location2 | tr -d '"')
+      # print commit hashes
       - $CODEBUILD_SRC_DIR/codebuild/helper/print_hashes.sh
       # docker login
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       # source env variables
-      - export FE_REPO="$CODEBUILD_SRC_DIR"
-      - cd $FE_REPO
-      - source ./codebuild/2.run-tests/export_variables.sh
+      - source $FE_REPO/codebuild/2.run-tests/export_variables.sh
   pre_build:
     commands:
       - cd $DOCKER_COMPOSE_FILE_LOCATION

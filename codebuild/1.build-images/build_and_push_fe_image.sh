@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ./scripts/cypress_generate_server_info.sh
 
@@ -44,8 +45,6 @@ docker build \
   --build-arg REACT_APP_CONSOLE_TOAST \
   --build-arg REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT \
    .
-
-
 
 docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH} $DOCKER_IMAGE
 docker push $DOCKER_IMAGE
