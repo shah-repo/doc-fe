@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 x-const:
   be_env_vars: &BE_ENV_VARS
     AWS_CONTAINER_CREDENTIALS_RELATIVE_URI: ${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}

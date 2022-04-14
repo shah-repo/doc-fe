@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 x-const:
   fe_env_vars: &FE_ENV_VARS
     - CYPRESS_BE_URL=${CYPRESS_BE_URL}
