@@ -5,31 +5,31 @@ ENV=$1
 
 case "$ENV" in
 
-"DEV")  
+"dev")  
   export CYPRESS_BE_URL="https://api.dev.enlil.io"
   export CYPRESS_FE_URL="https://dev.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
   export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
-"DEMO")  
+"demo")  
   export CYPRESS_BE_URL="https://api.demo.enlil.io"
   export CYPRESS_FE_URL="https://demo.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
   export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
-"SANDBOX")  
+"sandbox")  
   export CYPRESS_BE_URL="https://api.sandbox.enlil.io"
   export CYPRESS_FE_URL="https://sandbox.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
   export CYPRESS_SUPERADMIN_PASSWORD=$CY_SUPERADMIN_PASSWORD_SANDBOX
   ;;
-"PROD") 
+"prod") 
   export CYPRESS_BE_URL="https://api.enlil.io"
   export CYPRESS_FE_URL="https://enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
   export CYPRESS_SUPERADMIN_PASSWORD=$CY_SUPERADMIN_PASSWORD_PROD
   ;;
-"PROD2")  
+"prod2")  
   export CYPRESS_BE_URL="https://api.prod2.enlil.io"
   export CYPRESS_FE_URL="https://prod2.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"

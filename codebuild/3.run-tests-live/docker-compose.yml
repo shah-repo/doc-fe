@@ -1,12 +1,4 @@
 version: "3.8"
-x-const:
-  fe_env_vars: &FE_ENV_VARS
-    - CYPRESS_BE_URL=${CYPRESS_BE_URL}
-    - CYPRESS_FE_URL=${CYPRESS_FE_URL}
-    - CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL}
-    - CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD}
-    - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
-    - CYPRESS_VIDEO=${CYPRESS_VIDEO}
 
 services:
   director:
@@ -26,8 +18,6 @@ services:
       - "$FE_REPO:/opt/app/tests"
     networks:
       cypress_network:
-    environment:
-      *FE_ENV_VARS
       
 networks:
   cypress_network:
