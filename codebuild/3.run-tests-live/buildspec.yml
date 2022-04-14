@@ -2,8 +2,6 @@ version: 0.2
 
 env:
   shell: bash
-  variables:
-    COMPOSE_PROJECT_NAME: "enlil_codebuild"
   exported-variables:
     - AWS_DEFAULT_REGION
     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI

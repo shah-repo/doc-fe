@@ -2,6 +2,8 @@
 set -e
 
 ENV=$1
+echo "ENVIRONMENT $ENVIRONMENT"
+echo "ENV $ENV"
 
 case "$ENV" in
 
@@ -42,7 +44,7 @@ case "$ENV" in
   export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!Admin"}
   ;;
 *) 
-  echo "unknwon environment, exiting"
+  echo "unknown environment, exiting"
   exit 1;
   ;;
 esac
