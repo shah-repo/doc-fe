@@ -15,7 +15,6 @@ let supplierDocumentType;
 let adminEmployee;
 let group;
 
-
 context("Suppliers landing page", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
