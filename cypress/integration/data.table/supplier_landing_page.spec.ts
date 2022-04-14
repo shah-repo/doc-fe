@@ -424,6 +424,7 @@ context("Suppliers landing page", () => {
       cy.landingPageLoadingElementShouldAppear();
       cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Draft");
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify filter for Owner", () => {
