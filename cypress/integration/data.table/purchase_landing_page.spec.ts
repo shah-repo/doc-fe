@@ -701,33 +701,8 @@ context("Purchase Order Landing Page", () => {
     it("Verify that User should be able to remove column grouping", () => {
       cy.get(".k-i-group-delete").click();
     });
-
-    it("Insert filter", () => {
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001").wait(500);
-      cy.grpClearFilter();
-    });
   });
 
-  context("Insert Several filters", () => {
-    it("Verify filter for ID", () => {
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "PO-00001");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
-    it("Verify filter for Revision", () => {
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="2"] input`).arrowType("1");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "1");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.grpClearFilter();
-    });
-  });
   context("Landing Page", () => {
     // eslint-disable-next-line max-len
     it("Verify that system maintain PO filter settings during an Enlil session when navigating away from and back to the landing page", () => {
@@ -749,47 +724,30 @@ context("Purchase Order Landing Page", () => {
   });
 
   context("Create 'Purchase Order' document", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Click create document", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it("Enter document title 'po title'", () => {
-      cy.drEnterDocumentTitle({ name: "po title" });
-    });
-
-    it("Enter document description 'Purchase Order document description'", () => {
-      cy.drEnterDocumentDescription({ description: "Purchase Order document description" });
-    });
-
-    it("Select 'Form' document type", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Select 'Purchase Order test' output document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Purchase Order test" });
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.fbClickButton({ el: "updateRecord" });
+    it("Click on 'Create PO' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
       });
+    });
+
+    it("Check for PO ID uniqueness - ID should be POT-00001", () => {
+      cy.poCheckStatus( "POT-00001" );
+    });
+
+    it("Click on 'Purchase Order' on sidebar", () => {
+      cy.navigToPurchaseOrder();
+    });
+
+    it("Click on existing PO that was created before", () => {
+      cy.poClickOnSpecificPOFromList({ item: "POT-00001" });
+    });
+
+    it("Check status of PO should be Draft", () => {
+      cy.poCheckStatus("Draft" );
+    });
+
+    it("Click on 'Purchase Order' on sidebar", () => {
+      cy.navigToPurchaseOrder();
     });
   });
 
@@ -948,6 +906,42 @@ context("Purchase Order Landing Page", () => {
     it("Verify filter for Revision", () => {
       cy.dlClearFilters();
       cy.get(`[aria-colindex="2"] input`).arrowType("1");
+      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+    });
+
+    it("Verify filter for 'PO Status'", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="3"] input`).arrowType("Open");
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+    });
+
+    it("Verify filter for 'Supplier'", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="4"] input`).arrowType("N/A");
+      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+    });
+
+    it("Verify filter for 'Part Number'", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="5"] input`).arrowType("N/A");
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+    });
+
+    it("Verify filter for 'Amount'", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="6"] input`).arrowType("N/A");
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+    });
+
+    it("Verify filter for 'Requestor'", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="7"] input`).arrowType("Giovanni Reynolds");
+      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+    });
+
+    it("Verify filter for 'Issue Date'", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="8"] input`).arrowType("N/A");
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
@@ -1050,17 +1044,17 @@ context("Purchase Order Landing Page", () => {
     });
 
     it(`Verify "Does not contain" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Is equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
@@ -1070,17 +1064,17 @@ context("Purchase Order Landing Page", () => {
     });
 
     it(`Verify "Is not equal to" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
     it(`Verify "Starts with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
@@ -1090,7 +1084,7 @@ context("Purchase Order Landing Page", () => {
     });
 
     it(`Verify "Ends with" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
       cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
@@ -1100,7 +1094,7 @@ context("Purchase Order Landing Page", () => {
     });
 
     it(`Verify "Is null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1109,26 +1103,26 @@ context("Purchase Order Landing Page", () => {
     });
 
     it(`Verify "Is not null" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
 
-    it(`Verify "Is empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+    it(`Verify "Is not empty" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
-    it(`Verify "Is not empty" dropdown filter`, () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+    it(`Verify "Is empty" dropdown filter`, () => {
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1165,7 +1159,7 @@ context("Purchase Order Landing Page", () => {
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick().wait(500);
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
     });
 
     it(`Crossed filter icon should appear `, () => {
