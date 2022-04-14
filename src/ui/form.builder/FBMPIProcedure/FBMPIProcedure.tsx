@@ -27,9 +27,10 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
       pb={3}
       mt={-2.7}
       color={Colors.hint_gray}
-      borderBottom={2}
+      borderBottom={1}
     >
       <FBProvider {...{ mpiProcedureState }}>
+        {/* TODO: As per design editor title and button should be in line */}
         {!isPreview && (
           <Box display="flex" flexDirection="row-reverse" mt={3.125}>
             <CloneIcon
@@ -75,6 +76,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                 flexDirection="row"
                 mt={5}
               >
+
                 {!isPreview && (
                   <Box
                     width={11.51}
@@ -109,7 +111,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
               width={10}
               mt={2.7}
               border={0.5}
-              borderColor={Colors.chinese_silver}
+              borderColor={Colors.hint_gray}
               borderBottom={0}
               borderLeft={0}
               borderRight={0}

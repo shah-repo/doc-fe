@@ -1,5 +1,4 @@
 import { Box, IconButton } from "@material-ui/core";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
@@ -26,6 +25,7 @@ import {
   FBProvider,
   FBText,
 } from "..";
+import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/icon_add.svg";
 import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
 import { MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
@@ -58,7 +58,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   <FBProvider {...{ dialogState, mpiProcedureState }}>
     <FBDialog />
     <Box
-      bgcolor={Colors.gray}
+      bgcolor={Colors.athens_gray}
       color= {Colors.almost_black}
       fontWeight={600}
       fontFamily="Sora"
@@ -67,7 +67,9 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
       display="flex"
       lineHeight= "15px"
       height="44px"
-      boxShadow= {`0px 1px 0px ${Colors.chinese_silver}`}
+      boxShadow= {`0 1px 0 ${Colors.chinese_silver}`}
+      borderRadius="3px 3px 0 0"
+      border = {`1px solid ${Colors.chinese_silver}`}
     >
       <FBText
         {...{ loading }}
@@ -83,9 +85,9 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           variant="text"
           color="inherit"
           dataCy= {`${FBProcedureItemLocale[type]}.btn`}
-          startIcon={<AddCircleIcon />}
+          startIcon={<AddNewIcon />}
           label={{
-            locale: "form.builder.action.mode",
+            // locale: "form.builder.action.mode",
             values: {
               mode: FBFormMode.add,
               title: `${FBProcedureItemLocale[type]}|s`,
@@ -113,7 +115,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
       <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
         {(item: FBProcedureItemConfig, index) => (
           <Box
-            border={1}
             borderLeft={0}
             borderRight={0}
             borderTop={0}
@@ -127,14 +128,21 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               alignItems="center"
               p={1.5}
               minHeight={55}
+              border={1}
+              borderRadius= "0 0 3px 3px"
             >
               <Box flexGrow={1}>
                 <FBText
                   locale={getProcedureLocale?.(item)}
                   values={getProcedureValues?.(item)}
                   boxProps={{
-                    color: Colors.black,
+                    color: Colors.raven,
                     flexGrow: 1,
+                    fontFamily: "Sora",
+                    fontStyle: "normal",
+                    fontWeight: 400,
+                    fontSize: "14px",
+                    lineHeight: "18px",
                   }}
                 />
                 <Observer>
