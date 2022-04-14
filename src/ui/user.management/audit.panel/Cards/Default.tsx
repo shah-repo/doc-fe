@@ -11,12 +11,13 @@ interface Props {
 }
 
 const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
+  const { timestamp, ownerDetails, descriptions } = auditDetails;
   const classes = styles();
   return (
     <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
       <Box display="grid">
-        <UserAvatarCard timestamp={auditDetails.timestamp} userDetails={auditDetails.ownerDetails} />
-        {map(auditDetails.descriptions, (groupItem, index) => (
+        <UserAvatarCard timestamp={timestamp} userDetails={ownerDetails} />
+        {map(descriptions, (groupItem, index) => (
           <DetailDescription
             key={index}
             primaryText={groupItem.primaryText}

@@ -59,7 +59,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getDescription = (auditRecord, ownerDetails, employeeDetails) => {
+  const getDescription = (auditRecord, employeeDetails) => {
     let actionInfo = {
       primaryText: ACTION_TITLE_MAPPING.Unknown as string,
       secondaryText: auditRecord.id,
@@ -150,10 +150,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
             primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, {
               employeeName: employeeDetails?.user?.name,
             }),
-            secondaryText:
-              auditRecord.nextValue === "true"
-                ? intl.formatMessage({ id: "common.active" })
-                : intl.formatMessage({ id: "common.inactive" }),
+            secondaryText: auditRecord.nextValue === "true"
+              ? intl.formatMessage({ id: "common.active" })
+              : intl.formatMessage({ id: "common.inactive" }),
             auditType: ACTION_TITLE_MAPPING.ActivateUser,
             sortedIndex: 0,
           };
@@ -265,7 +264,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         );
       }
       return { primaryText: primaryTextHtml, secondaryText: secondaryTextHtml, sortedIndex, auditType };
-      // return { primaryText, secondaryText: uniq(secondaryText).sort().join(", "), sortedIndex, auditType };
     });
     return addUserNameAndEmailBlock(sameGroup, employeeDetails);
   };
@@ -281,7 +279,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         ownerDetails,
         employeeDetails,
         timestamp: `${getFormattedDateString(timestamp, MomentFormats.BriefDateTime)}`,
-        ...getDescription(auditRecord, ownerDetails, employeeDetails),
+        ...getDescription(auditRecord, employeeDetails),
       };
     });
     // Create a Group Data for each Card to be represented
@@ -289,7 +287,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     const cardGroups = {};
     each(auditRecordGroups, (groupedItems, groupKey) => {
       cardGroups[groupKey] = {
-        ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails", "employeeDetails"]),
+        ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails"]),
         descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails),
       };
     });
