@@ -421,7 +421,7 @@ context("Suppliers landing page", () => {
       cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
       cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
       cy.get("ul>li[role=option]").contains("Draft").arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Draft");
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.landingPageLoadingElementShouldNotExist();
