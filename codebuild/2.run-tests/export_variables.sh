@@ -60,7 +60,7 @@ set -a
   export ENLIL_COMPOSE_EXPOSE_WORD_SERVICE_PORT="5000"
 
   export ENLIL_BE_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/${AWS_ACCOUNT_ID}/cypress_terraform_test_dev_${ENLIL_COMPOSE_SUITE_NUMBER}.fifo"
-  export ENLIL_EXPORT_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/${AWS_ACCOUNT_ID}/cypress_terraform_test_dev_${ENLIL_COMPOSE_SUITE_NUMBER}.fifo"
+  export ENLIL_EXPORT_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/${AWS_ACCOUNT_ID}/cypress_terraform_test_dev_export_${ENLIL_COMPOSE_SUITE_NUMBER}.fifo"
   export ENLIL_BE_ENV_NAME="CYPRESS_TEST_$ENLIL_COMPOSE_SUITE_NUMBER"
   
   export VALIDATORS_CYPRESS_FE_URL="http://validators:$ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT"
