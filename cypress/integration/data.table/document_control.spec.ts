@@ -22,7 +22,6 @@ const secondDocumentRevName = "Second document for testing";
 const ddTitle = "DD Test";
 const docTypeOne = "Design Document";
 const docIdStr = "Doc ID";
-const EXIST = "exist";
 const rev = "Revision";
 const docTitle = "Document title";
 const type = "Type";
@@ -34,6 +33,8 @@ const currentDate = moment().tz("America/Los_Angeles").format("l");
 const approvalRequestName2 = "AR Form";
 const cpDocId = "CP-00003";
 const arTitle = "AR Title";
+const rmId = "RD-00007";
+const id = "ID";
 
 context("Document list test", () => {
   before(() => {
@@ -221,9 +222,9 @@ context("Document list test", () => {
 
   context("Verify that Button Clear Filter, Export List and Create a Document are present", () => {
     it("Verify that Button 'Clear Filter', 'Export List' and 'Create a Document' are present", () => {
-      cy.get(`button[data-cy="clearFilter"]`).should(`${EXIST}`);
-      cy.get(`button[data-cy="document.revision.export.list"]`).should(`${EXIST}`);
-      cy.get(`button[data-cy="document.revision.create"]`).should(`${EXIST}`);
+      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+      cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+      cy.get(`button[data-cy="document.revision.create"]`).should("exist");
     });
 
     it(`Verify drag and drop`, () => {
@@ -462,8 +463,8 @@ context("Document list test", () => {
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${arTitle}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);
       cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${status}`);
-      cy.get(".k-indicator-container").eq(0).should(`${EXIST}`);
-      cy.get(".k-filtercell-operator").eq(0).should(`${EXIST}`);
+      cy.get(".k-indicator-container").eq(0).should("exist");
+      cy.get(".k-filtercell-operator").eq(0).should("exist");
     });
 
     it("Verify that by default the AR list filter to display AR's with latest edited IN_REVIEW ", () => {
@@ -502,16 +503,16 @@ context("Document list test", () => {
     });
 
     it("Verify that Button 'Clear Filter', 'Export List' and 'Create an Approval Request' are present", () => {
-      cy.get(`button[data-cy="clearFilter"]`).should(`${EXIST}`);
-      cy.get(`button[data-cy="document.revision.export.list"]`).should(`${EXIST}`);
-      cy.get(`button[data-cy="change.request.create"]`).should(`${EXIST}`);
+      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+      cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+      cy.get(`button[data-cy="change.request.create"]`).should("exist");
     });
 
     it("Clear filters", () => {
       cy.dlClearFilters();
     });
 
-    it(`Verify drag and drop ID header on second slot`, () => {
+    it(`Verify drag and drop ${id} header on second slot`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "AR-00001");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
@@ -639,7 +640,7 @@ context("Document list test", () => {
     });
 
     it("Verify all the columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "ID");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${id}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${rev}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "State");
       cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Title");
@@ -648,9 +649,9 @@ context("Document list test", () => {
     });
 
     it("Verify that Button 'Clear Filter', 'Export List' and 'Create a Record' are present", () => {
-      cy.get(`button[data-cy="clearFilter"]`).should(`${EXIST}`);
-      cy.get(`button[data-cy="document.revision.export.list"]`).should(`${EXIST}`);
-      cy.get("#DocumentByTypeListPresenter-openDocRev").realHover().should(`${EXIST}`);
+      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+      cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+      cy.get("#DocumentByTypeListPresenter-openDocRev").realHover().should("exist");
     });
   });
 
@@ -872,23 +873,23 @@ context("Document list test", () => {
       });
     });
 
-    context("Sort 'ID'", () => {
+    context(`Sort ${id}`, () => {
       it("Navigate to Records landing page", () => {
         cy.navigToRecords();
       });
 
-      it("ID should be in ascending order", () => {
-        cy.contains("ID").eq(0).click();
+      it(`${id} should be in ascending order`, () => {
+        cy.contains(`${id}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${id}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 7 });
       });
 
-      it("ID should be in descending order", () => {
-        cy.contains("ID").eq(0).click();
+      it(`${id} should be in descending order`, () => {
+        cy.contains(`${id}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${id}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 7 });
       });
@@ -984,19 +985,19 @@ context("Document list test", () => {
       });
     });
 
-    context("Sort 'Form ID'", () => {
-      it("Form ID should be in ascending order", () => {
-        cy.contains("Form ID").eq(0).click();
+    context(`Sort Form ${id}`, () => {
+      it(`Form ${id} should be in ascending order`, () => {
+        cy.contains(`Form ${id}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`Form ${id}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 7 });
       });
 
-      it("Form ID should be in descending order", () => {
-        cy.contains("Form ID").eq(0).click();
+      it(`Form ${id} should be in descending order`, () => {
+        cy.contains(`Form ${id}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`Form ${id}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 7 });
       });
@@ -1005,8 +1006,8 @@ context("Document list test", () => {
 
   context("Verify filters on each field", () => {
     it(`Verify filter for ${docIdStr}`, () => {
-      cy.dlFilterByDocId({ docId: "RD-00007" });
-      cy.dlVerifyFilterByDocId({ docId: "RD-00007" });
+      cy.dlFilterByDocId({ docId: `${rmId}` });
+      cy.dlVerifyFilterByDocId({ docId: `${rmId}` });
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
@@ -1025,50 +1026,50 @@ context("Document list test", () => {
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared", () => {
-      cy.get(`button[data-cy="clearFilter"]`).should(`${EXIST}`).click();
+      cy.get(`button[data-cy="clearFilter"]`).should("exist").click();
     });
 
     it("Verify that each filter for each column in the landing page is functional", () => {
       cy.dlFilterByRev({ revision: "A" });
       cy.dlVerifyFilterByRev({ revision: "A" });
-      cy.dlFilterByDocId({ docId: "RD-00007" });
-      cy.dlVerifyFilterByDocId({ docId: "RD-00007" });
+      cy.dlFilterByDocId({ docId: `${rmId}` });
+      cy.dlVerifyFilterByDocId({ docId: `${rmId}` });
       cy.dlClearFilters();
     });
 
     it("Verify that 'Export List' button is visible and enabled", () => {
-      cy.get(`button[data-cy="document.revision.export.list"]`).should(`${EXIST}`);
+      cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
     });
   });
 
   context("Click on the three dots", () => {
-    it(`Verify hide on ID`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "ID");
+    it(`Verify hide on ${id}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${id}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item").contains("Hide Column").arrowClick();
       cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${rev}`);
     });
 
-    it(`Verify unhide on ID`, () => {
+    it(`Verify unhide on ${id}`, () => {
       cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${rev}`);
       cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
-      cy.get("ul>li[role=menuitem]").contains("ID").parents("li").find("svg").arrowClick();
+      cy.get("ul>li[role=menuitem]").contains(`${id}`).parents("li").find("svg").arrowClick();
       cy.get("body").type("{esc}");
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "ID");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${id}`);
     });
 
-    it(`Verify freeze on ID`, () => {
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `ID`);
+    it(`Verify freeze on ${id}`, () => {
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${id}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${rev}`);
     });
 
-    it(`Verify un-freeze on ID`, () => {
+    it(`Verify un-freeze on ${id}`, () => {
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${rev}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `ID`);
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${id}`);
     });
   });
 
@@ -1099,7 +1100,7 @@ context("Document list test", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
+      cy.get(`th[aria-colindex="1"] input`).arrowType(`${rmId}`);
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1109,7 +1110,7 @@ context("Document list test", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
+      cy.get(`th[aria-colindex="1"] input`).arrowType(`${rmId}`);
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1119,7 +1120,7 @@ context("Document list test", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
+      cy.get(`th[aria-colindex="1"] input`).arrowType(`${rmId}`);
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1129,7 +1130,7 @@ context("Document list test", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
+      cy.get(`th[aria-colindex="1"] input`).arrowType(`${rmId}`);
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1139,7 +1140,7 @@ context("Document list test", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RD-00007");
+      cy.get(`th[aria-colindex="1"] input`).arrowType(`${rmId}`);
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1182,7 +1183,7 @@ context("Document list test", () => {
     });
 
     it(`Verify that column with Select field have disabled crossed filter icon`, () => {
-      cy.get(`span.k-icon.k-i-filter-clear`).eq(0).should(`${EXIST}`);
+      cy.get(`span.k-icon.k-i-filter-clear`).eq(0).should("exist");
     });
   });
 });
