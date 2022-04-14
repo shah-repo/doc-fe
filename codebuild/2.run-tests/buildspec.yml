@@ -24,7 +24,8 @@ phases:
       # docker login
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       # source env variables
-      - cd $CODEBUILD_SRC_DIR
+      - export FE_REPO="$CODEBUILD_SRC_DIR"
+      - cd $FE_REPO
       - source ./codebuild/2.run-tests/export_variables.sh
   pre_build:
     commands:
