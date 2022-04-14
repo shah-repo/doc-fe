@@ -74,18 +74,10 @@ set -a
   export ECR_REPO="codebuild"
 set +a
 
-echo "--| BE_GIT_COMMIT_HASH: $BE_GIT_COMMIT_HASH"
-echo "--| FE_GIT_COMMIT_HASH: $FE_GIT_COMMIT_HASH"
-echo "--| VALIDATORS_GIT_COMMIT_HASH: $VALIDATORS_GIT_COMMIT_HASH"
-echo "--| EXPORT_GIT_COMMIT_HASH: $EXPORT_GIT_COMMIT_HASH"
-echo "--| DOCXTOPDF_GIT_COMMIT_HASH: $DOCXTOPDF_GIT_COMMIT_HASH"
-echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
-
 aws sqs purge-queue --region=us-west-2 --queue-url $ENLIL_BE_AWS_SQS_QUEUE_URL
 aws sqs purge-queue --region=us-west-2 --queue-url $ENLIL_EXPORT_AWS_SQS_QUEUE_URL
 
 check_be_server_image() {
-  # cd $BE_REPO
   IMAGE=be_server_${BE_GIT_COMMIT_HASH}
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
   IMAGE_FOUND=$?
@@ -97,11 +89,9 @@ check_be_server_image() {
     echo "BE server image not found"
     exit
   fi
-  # cd $HEAD_PWD
 }
 
 check_be_worker_image() {
-  # cd $BE_REPO
   IMAGE=be_worker_${BE_GIT_COMMIT_HASH}
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
   IMAGE_FOUND=$?
@@ -113,11 +103,9 @@ check_be_worker_image() {
     echo "BE worker image not found"
     exit
   fi
-  # cd $HEAD_PWD
 }
 
 check_be_migration_image() {
-  # cd $BE_REPO
   IMAGE=be_migration_${BE_GIT_COMMIT_HASH}
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
   IMAGE_FOUND=$?
@@ -129,11 +117,9 @@ check_be_migration_image() {
     echo "BE migration image not found"
     exit
   fi
-  # cd $HEAD_PWD
 }
 
 check_fe_image () {
-  # cd $FE_REPO
   IMAGE=fe_${FE_GIT_COMMIT_HASH}
   DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
@@ -146,11 +132,9 @@ check_fe_image () {
     echo "FE image not found"
     exit
   fi
-  # cd $HEAD_PWD
 }
 
 check_validators_image() {
-  # cd $VALIDATORS_REPO
   IMAGE=validators_${VALIDATORS_GIT_COMMIT_HASH}
   DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
@@ -163,12 +147,10 @@ check_validators_image() {
     echo "Validators image not found"
     exit
   fi
-  # cd $HEAD_PWD
 }
 
 
 check_export_image() {
-  # cd $EXPORT_REPO
   IMAGE=doc_export_${EXPORT_GIT_COMMIT_HASH}
 
   DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
@@ -182,11 +164,9 @@ check_export_image() {
     echo "doc-export image not found"
     exit
   fi
-  # cd $HEAD_PWD
 }
 
 check_docx_to_pdf_image() {
-  # cd $DOCXTOPDF_REPO
   IMAGE=doc_export_${DOCXTOPDF_GIT_COMMIT_HASH}
 
   DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
@@ -200,7 +180,6 @@ check_docx_to_pdf_image() {
     echo "docx-to-pdf image not found"
     exit
   fi
-  # cd $HEAD_PWD
 }
 
 check_be_server_image
