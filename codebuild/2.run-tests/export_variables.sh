@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 if [[ -z "${ENLIL_COMPOSE_SUITE_NUMBER}" ]]; then
   echo "ENLIL_COMPOSE_SUITE_NUMBER not set, exiting"
