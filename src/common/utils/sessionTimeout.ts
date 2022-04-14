@@ -10,6 +10,7 @@ export class SessionTimeoutService {
 
 
   private static instance: SessionTimeoutService;
+  // eslint-disable-next-line arrow-body-style
   private callbackFunction: () => void = () => { return; };
   private timer: any;
 
