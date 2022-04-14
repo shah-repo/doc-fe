@@ -3,9 +3,9 @@ import { useFormikContext } from "formik";
 import { isEqual, isUndefined, keys, omit } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
-import { companyActions, companySelectors } from "../../../../state/ducks/company";
+import { companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -35,9 +35,11 @@ import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
 
+// eslint-disable-next-line arrow-body-style
+export let FormSaveContext = React.createContext<() => void>(() => { return; });
+
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
-  const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
   const { isCreateDocumentDisabled } = props;
@@ -164,7 +166,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     if (redlineActive) {
       formik.setFieldValue("redline", true);
       workspaceState?.setMode("form");
-      dispatch(companyActions.autosaveConfig());
+      // dispatch(companyActions.autosaveConfig());
     }
     setFBValue();
     if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
@@ -176,6 +178,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
     formik.submitForm();
   };
+
+  FormSaveContext = React.createContext<() => void>(
+    onFormClick,
+  );
 
   React.useEffect(() => {
     // Autosave when record is updated
