@@ -534,7 +534,6 @@ context("Document list test", () => {
     });
 
     it("The system shall allow the user to open an AR from the AR list", () => {
-      // cy.navigToApprovalRequestList();
       cy.dlClearFilters();
       cy.get(".k-master-row").eq(0).arrowClick();
     });
