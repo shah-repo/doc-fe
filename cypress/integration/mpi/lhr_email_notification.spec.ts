@@ -3,7 +3,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
 import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -34,8 +33,10 @@ enum BUILD_TYPE {
 const LHRTTitle = "LHRt document";
 const CSPartDocumentTitle = "Part Document";
 const MPIDocumentTitle =  "MPI document";
-const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
+const dataCyFbApprovals = "[data-cy^=\"fb-approvals-fb-approvals\"]";
+const dataCyOptions = "ul>li[role=option]";
+const lhrInitialQuantityName = "[name=\"lhr_initial_quantity\"]";
 
 context("LHRs email notifications", () => {
   before(() => {
@@ -429,13 +430,13 @@ context("LHRs email notifications", () => {
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
-        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.get(dataCyOptions).contains(CSPartDocumentTitle).arrowClick();
       });
 
       context("Select created MPI in LHR template", () => {
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("[data-cy=\"lhrstep-built-in\"]").arrowType(MPIDocumentTitle);
-          cy.get("ul>li[role=option]").contains(MPIDocumentTitle).arrowClick();
+          cy.get(dataCyOptions).contains(MPIDocumentTitle).arrowClick();
         });
       });
 
@@ -465,7 +466,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      cy.get(lhrInitialQuantityName).arrowType("10");
     });
 
     it(`Select '${BUILD_TYPE.Production}' build type`, () => {
@@ -484,7 +485,7 @@ context("LHRs email notifications", () => {
       });
     });
 
-    context("Start LHRs #1", () => {
+    context("Start and Release LHRs #1", () => {
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -507,16 +508,16 @@ context("LHRs email notifications", () => {
       });
 
       it("Add a first Approval", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+        cy.get(dataCyFbApprovals).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+          cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
         });
       });
 
       it("Add a second Approval", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+        cy.get(dataCyFbApprovals).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
+          cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
         });
       });
 
@@ -543,7 +544,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      cy.get(lhrInitialQuantityName).arrowType("10");
     });
 
     it(`Select '${BUILD_TYPE.RD}' build type`, () => {
@@ -585,16 +586,16 @@ context("LHRs email notifications", () => {
       });
 
       it("Add a first Approval", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+        cy.get(dataCyFbApprovals).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+          cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
         });
       });
 
       it("Add a second Approval", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+        cy.get(dataCyFbApprovals).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
+          cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
         });
       });
 
@@ -621,7 +622,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      cy.get(lhrInitialQuantityName).arrowType("10");
     });
 
     it(`Select '${BUILD_TYPE.Production}' build type`, () => {
@@ -649,7 +650,7 @@ context("LHRs email notifications", () => {
       });
     });
 
-    context("Start LHRs #1", () => {
+    context("Start and Release LHRs #1", () => {
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -672,16 +673,16 @@ context("LHRs email notifications", () => {
       });
 
       it("Add a first Approval", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+        cy.get(dataCyFbApprovals).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+          cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
         });
       });
 
       it("Add a second Approval", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+        cy.get(dataCyFbApprovals).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
+          cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
         });
       });
 
