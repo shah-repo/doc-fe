@@ -33,6 +33,7 @@ const effectiveDate = "Effective Date";
 const currentDate = moment().tz("America/Los_Angeles").format("l");
 const approvalRequestName2 = "AR Form";
 const cpDocId = "CP-00003";
+const arTitle = "AR Title";
 
 context("Document list test", () => {
   before(() => {
@@ -391,16 +392,16 @@ context("Document list test", () => {
       });
     });
 
-    context("Check AR ID filter", () => {
+    context(`Check ${arId} filter`, () => {
       it("Clear filters", () => {
         cy.dlClearFilters();
       });
 
-      it("Filter list by AR ID", () => {
+      it(`Filter list by ${arId}`, () => {
         cy.dlFilterByArId({ arId: "AR99999" });
       });
 
-      it("Verify filter by AR ID", () => {
+      it(`Verify filter by ${arId}`, () => {
         cy.dlVerifyFilterByArId({ arId: "AR99999" });
       });
 
@@ -439,6 +440,10 @@ context("Document list test", () => {
       it("Verify filter by effective date", () => {
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: currentDate });
       });
+
+      it("Verify document counter on document list", () => {
+        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
+      });
     });
   });
 
@@ -454,19 +459,20 @@ context("Document list test", () => {
 
     it("Verify that landing pages for Document List  use the new data table", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${arId}`);
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "AR Title");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${arTitle}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Status");
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${status}`);
       cy.get(".k-indicator-container").eq(0).should(`${EXIST}`);
       cy.get(".k-filtercell-operator").eq(0).should(`${EXIST}`);
     });
 
     it("Verify that by default the AR list filter to display AR's with latest edited IN_REVIEW ", () => {
       cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "IN_REVIEW");
+      cy.pause();
     });
 
     it("Hover over the AR title", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).realHover().should("have.text", "AR ID");
+      cy.get(`th[role="columnheader"]`).eq(0).realHover().should("have.text", `${arId}`);
     });
 
     it("Clear filters", () => {
@@ -477,7 +483,7 @@ context("Document list test", () => {
       cy.alVerifyDescriptionOnHover({ description: "Releasing FM-00002, DD Test" });
     });
 
-    it("Verify filter by AR ID", () => {
+    it(`Verify filter by ${arId}`, () => {
       cy.alVerifyFilterByArId({ arId: "AR-00001" });
     });
 
@@ -549,12 +555,12 @@ context("Document list test", () => {
   });
 
   context("Check for filters on approver request list", () => {
-    context("Check AR ID filter", () => {
-      it("Filter list by AR ID", () => {
+    context(`Check ${arId} filter`, () => {
+      it(`Filter list by ${arId}`, () => {
         cy.alFilterByArId({ arId: "AR99999" });
       });
 
-      it("Verify filter by AR ID", () => {
+      it(`Verify filter by ${arId}`, () => {
         cy.alVerifyFilterByArId({ arId: "AR99999" });
       });
 
