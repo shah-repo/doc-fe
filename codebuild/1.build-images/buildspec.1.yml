@@ -15,6 +15,7 @@ phases:
       # remote-js-validators
       - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators_code"
       - export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
+      - $CODEBUILD_SRC_DIR/codebuild/helper/print_hashes.sh
       #docker login
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
