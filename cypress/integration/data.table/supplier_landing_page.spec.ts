@@ -387,6 +387,7 @@ context("Suppliers landing page", () => {
     });
 
     it("Verify filter for Supplier Name", () => {
+      cy.dlClearFilters();
       cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
       cy.landingPageLoadingElementShouldNotExist();
@@ -396,47 +397,52 @@ context("Suppliers landing page", () => {
     });
 
     it("Verify filter for Supplier Level", () => {
+      cy.dlClearFilters();
       cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="3"] input`).arrowType("");
+      cy.get(`th[aria-colindex="3"] input`).arrowType("open");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "open");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify filter for Supplier Status", () => {
+      cy.dlClearFilters();
       cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="4"] input`).arrowType("");
+      cy.get(`th[aria-colindex="4"] input`).arrowType("close");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "close");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify filter for State", () => {
-      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "All");
-      cy.get(`th[aria-colindex="5"] input`).arrowType("Draft");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "Draft");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlClearFilters();
+      cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
+      cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Draft").arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Draft");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
     });
 
     it("Verify filter for Owner", () => {
-      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "All");
-      cy.get(`th[aria-colindex="6"] input`).arrowType("");
+      cy.dlClearFilters();
+      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="6"] input`).arrowType("Giovanni Reynolds");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "Draft");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "Giovanni Reynolds");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify filter for Approval ID", () => {
+      cy.dlClearFilters();
       cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="7"] input`).arrowType("");
+      cy.get(`th[aria-colindex="7"] input`).arrowType("1");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "1");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
