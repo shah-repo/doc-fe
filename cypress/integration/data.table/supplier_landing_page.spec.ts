@@ -396,26 +396,6 @@ context("Suppliers landing page", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Verify filter for Supplier Level", () => {
-      cy.dlClearFilters();
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="3"] input`).arrowType("open");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "open");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
-    it("Verify filter for Supplier Status", () => {
-      cy.dlClearFilters();
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="4"] input`).arrowType("close");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "close");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
     it("Verify filter for State", () => {
       cy.dlClearFilters();
       cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
@@ -434,16 +414,6 @@ context("Suppliers landing page", () => {
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "Giovanni Reynolds");
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
-    it("Verify filter for Approval ID", () => {
-      cy.dlClearFilters();
-      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="7"] input`).arrowType("1");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "1");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
