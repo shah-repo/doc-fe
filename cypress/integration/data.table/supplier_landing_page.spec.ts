@@ -235,9 +235,14 @@ context("Suppliers landing page", () => {
     it("Enter 'Supplier Name'", () => {
       cy.supEnterSuppName({ name: "Test Supplier" });
     });
-
+    it("Add first Approver'", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+    });
     it("Click create document after filling document", () => {
       cy.drClickCreateSupplierWithApiCall();
+    });
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
     });
   });
 
@@ -402,7 +407,7 @@ context("Suppliers landing page", () => {
       cy.get("ul>li[role=option]").contains("Draft").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Draft");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -571,7 +576,7 @@ context("Suppliers landing page", () => {
     it("Navigate to column with option Select field", () => {
       cy.get(`[aria-colindex="5"] [class="k-input"]`).arrowClick();
       cy.get("li").contains("Draft").arrowClick().wait(500);
-      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -583,7 +588,7 @@ context("Suppliers landing page", () => {
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it(`Crossed filter icon should appear `, () => {
