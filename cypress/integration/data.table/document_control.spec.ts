@@ -442,7 +442,7 @@ context("Document list test", () => {
       });
 
       it("Verify document counter on document list", () => {
-        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
   });
@@ -468,7 +468,6 @@ context("Document list test", () => {
 
     it("Verify that by default the AR list filter to display AR's with latest edited IN_REVIEW ", () => {
       cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "IN_REVIEW");
-      cy.pause();
     });
 
     it("Hover over the AR title", () => {
