@@ -1139,6 +1139,9 @@ context("Equipment maintenance for checking History in all states", () => {
     it("Verify that the system displays only Equipment in the Equipment Landing page with corresponding data", () => {
       cy.navigToEquipment();
       cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "EQ-" );
+      cy.get(`td[data-grid-col-index="1"]`).first().should("contain.text", "EQ-" );
+      cy.get(`td[data-grid-col-index="2"]`).first().should("contain.text", "EQ-" );
+      cy.get(`td[data-grid-col-index="3"]`).first().should("contain.text", "EQ-" );
     });
 
     it("Click one of the Equipment from landing page", () => {
@@ -1326,6 +1329,14 @@ context("Equipment maintenance for checking History in all states", () => {
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared'", () => {
       cy.grpClearFilter();
+      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "All");
+      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
     });
 
     it("Verify that 'Export List' button is visible and enabled", () => {
@@ -1373,8 +1384,7 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get("div.k-columnmenu-item").contains("Freeze Column");
     });
 
-    // eslint-disable-next-line max-len
-    it("User should be able to insert filter in input field and icon of the filter should be visible next to the field", () => {
+    it("User should be able to insert filter in input field and icon of the filter", () => {
       cy.get(".k-i-filter.k-icon").should("be.visible");
     });
   });
@@ -1487,18 +1497,8 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
     });
 
-    it("Verify that each filter from the dropdown list for each column in the landing page is functional", () => {
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="4"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="5"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="6"] span.k-select`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.grpClearFilter();
-    });
-
     it("Navigate to column with option Select field", () => {
+      cy.grpClearFilter();
       cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
       cy.get("li").contains("Released").arrowClick().wait(500);
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
