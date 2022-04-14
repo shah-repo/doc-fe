@@ -414,10 +414,10 @@ context("Suppliers landing page", () => {
     it("Verify filter for Owner", () => {
       cy.dlClearFilters();
       cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="6"] input`).arrowType("Giovanni Reynolds");
+      cy.get(`th[aria-colindex="6"] input`).arrowType("Harry Bartoletti");
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "Giovanni Reynolds");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+      cy.get(`th[aria-colindex="6"] input`).should("not.have.attr", "value", "Giovanni Reynolds");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
