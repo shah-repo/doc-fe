@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, For
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import Colors from "../../layout/theme/utils/colors";
+import { Translation } from "../../translations/types";
 import Text from "../Text";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
   onConfirm:  () => void;
   value: string;
   setValue:  (value) => void;
+  content: Translation;
+  title: Translation;
 }
 
 const UnsavedChangesDialog: React.FunctionComponent<Props> = ({
@@ -18,6 +21,8 @@ const UnsavedChangesDialog: React.FunctionComponent<Props> = ({
   onConfirm,
   value,
   setValue,
+  content,
+  title,
 }) => {
 
   const handleChange = (event) => {
@@ -33,7 +38,7 @@ const UnsavedChangesDialog: React.FunctionComponent<Props> = ({
     >
       <DialogTitle disableTypography style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography style={{ color: Colors.almost_black, fontSize: 14, fontWeight: 600, fontFamily: "Sora" }}>
-          <Text translation="document.revision.unsaved.changes.title" />
+          <Text translation={title} />
         </Typography>
         <IconButton onClick={() => onCancel()} size="small" style={{ borderRadius: 6 }}>
           <CloseIcon />
@@ -44,7 +49,7 @@ const UnsavedChangesDialog: React.FunctionComponent<Props> = ({
         <Typography
           style={{ color: Colors.almost_black, fontSize: 12, fontWeight: 400, fontFamily: "Sora", marginTop: 20 }}
         >
-          <Text translation="document.revision.unsaved.changes.alert" />
+          <Text translation={content} />
         </Typography>
         {/** Radio group values have to be string to show properly */}
         <RadioGroup value={value} onChange={handleChange} style={{ marginTop: 30 }}>

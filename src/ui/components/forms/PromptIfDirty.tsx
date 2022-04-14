@@ -33,7 +33,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
 
   const [lastLocation, updateLastLocation] = useState<any>(null);
   const [confirmedNavigation, updateConfirmedNavigation] = useState(false);
-  const [value, setValue] = React.useState("true");
+  const [value, setRadioValue] = React.useState("true");
 
   const showModal = (location) => {
     dialogPrompt.open();
@@ -96,7 +96,9 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
         onCancel={closeModal}
         onConfirm={handleConfirmNavigationClick}
         value={value}
-        setValue={setValue}
+        setValue={setRadioValue}
+        content={"document.revision.unsaved.changes.alert"}
+        title={"document.revision.unsaved.changes.title"}
       />
     </>
   );
