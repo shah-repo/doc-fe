@@ -20,9 +20,6 @@ let approvalRequestDocumentType;
 let initialArDocument;
 let group;
 
-let firstApprover;
-let secondApprover;
-
 let partDocumentType;
 let createdPartDocument;
 
@@ -280,8 +277,6 @@ context("LHRs email notifications", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          firstApprover = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          secondApprover = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           done();
