@@ -330,11 +330,12 @@ context("PO approval test", () => {
       cy.unClick();
     });
 
-    it("Add an Approval and save", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-      });
+    it(`Select '${USERS[2].name}' for Requestor`, () => {
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+    });
+
+    it("Save PO", () => {
       cy.poSaveDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

@@ -26,7 +26,7 @@ let createdClinicalProtocolForm;
 let developersGroup;
 let createdClinicalProtocolForm2;
 const assignDate = moment().tz("America/Los_Angeles").format("l");
-const dueDate = moment().tz("America/Los_Angeles").add(1, "month").subtract(1, "days").format("l");
+const dueDate = moment().tz("America/Los_Angeles").add(1, "month").format("l");
 
 context("Test training records and training curriculum landing page", () => {
   before(() => {

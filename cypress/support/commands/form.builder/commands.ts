@@ -71,6 +71,7 @@ declare global {
       fbClickLabelEditHiddenBtn(params: { label: string }): Chainable<Subject>;
       fbAutocompleteType(params: { autocompleteOption: string }): Chainable<Subject>;
       dtSelectDefaultRevisionStage(params: { defaultRevisionStage: string}): Chainable<Subject>;
+      fbClickRemoveBtn(params: { label: string }): Chainable<Subject>;
     }
   }
 }
@@ -364,4 +365,8 @@ Cypress.Commands.add("fbVerifyAutocompleteElementLength", (params: { el: string;
 
 Cypress.Commands.add("fbClickLabelEditHiddenBtn", (params: { label: string }) => {
   cy.contains(params.label).parentsUntil("li").find("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true });
+});
+
+Cypress.Commands.add("fbClickRemoveBtn", (params: { label: string }) => {
+  cy.contains(params.label).parentsUntil("li").find("[data-cy=\"remove-schema-item\"]").first().arrowClick({ force: true });
 });

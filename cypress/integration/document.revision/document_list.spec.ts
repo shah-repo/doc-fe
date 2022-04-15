@@ -115,6 +115,7 @@ context("Document list test", () => {
         });
       });
     });
+
     it("[API]Creates document revision for document list test 2", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
@@ -149,6 +150,7 @@ context("Document list test", () => {
       });
     });
   });
+
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });

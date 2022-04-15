@@ -1,0 +1,408 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+
+let createdCompany;
+let loginResponse;
+let employeeLoginFirst;
+let secondEmployee;
+let recordDocumentType;
+let approvalRequestDocumentType;
+let formDocumentType;
+let group;
+let initialArDocument;
+let createdRecordFormDocument;
+let recordUrl;
+let arUrl;
+
+context("Export Part doc", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  context("[API]Prepare company", () => {
+    it("[API]Create company", (done: any) => {
+      cy.authApiLogin({
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: USERS[1].email,
+            importerEmail: IMPORTER_USER.email,
+            users: [USERS[2], USERS[3], USERS[4]],
+          }, sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          recordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          done();
+        });
+      });
+    });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[2].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API]Create and release form for Part", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: secondEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Part form</p>",
+              document: {
+                docId: "FM-00004",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part form",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: recordDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    label: "form.builder.approvals",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-l02u8tzp",
+                    uniqueSchemaItem: true,
+                    index: 0,
+                  },
+                ],
+              },
+            },
+            employeeId: secondEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdRecordFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdRecordFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+              },
+              employeeId: secondEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+  });
+
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
+    });
+  });
+
+  context("Create a Part from form", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Select the Part form", () => {
+      cy.dlFilterByDocTitle({ docTitle: "Part form" });
+
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Enter title", () => {
+      cy.drEnterDocumentTitle( { name: "Part form" });
+    });
+
+    it("Enter description", () => {
+      cy.drEnterDocumentDescription({ description: "Description" });
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Part with Draft status", () => {
+    it("Verify export", () => {
+      cy.exportVerifyEmail({ status: "Draft", filename: "-1-Part-form" });
+    });
+  });
+
+  context("Part with Released status", () => {
+    context("Add Part with Released", () => {
+      it("Approve and release the form", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+
+      it("Verify export", () => {
+        cy.exportVerifyEmail({ status: "Released", filename: "-1-Part-form" });
+      });
+    });
+  });
+
+  context("Part with Obsolete status", () => {
+    it("Revise document with 'Obsolete' option", () => {
+      cy.drClickReviseDocument();
+      cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Verify export", () => {
+      cy.exportVerifyEmail({ status: "Obsolete", filename: "-OBS-Part-form" });
+    });
+  });
+
+  context("Part with Superseded status", () => {
+    it("Select 'Superseded' record", () => {
+      cy.contains("Superseded").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify export", () => {
+      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-Part-form" });
+    });
+  });
+
+  context("Part with Voided status", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Select the Part form", () => {
+      cy.get("[data-cy=\"clearFilter\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.dlFilterByDocTitle({ docTitle: "Part form" });
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Enter title", () => {
+      cy.drEnterDocumentTitle( { name: "Part form" });
+    });
+
+    it("Enter description", () => {
+      cy.drEnterDocumentDescription({ description: "Description" });
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Click Void button", () => {
+      cy.arVoidAR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify export", () => {
+      cy.exportVerifyEmail({ status: "Voided", filename: "-1-Void" });
+    });
+  });
+
+  context("Part with Pending Change status", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Select the Part form", () => {
+      cy.get("[data-cy=\"clearFilter\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.dlFilterByDocTitle({ docTitle: "Part form" });
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Enter title", () => {
+      cy.drEnterDocumentTitle( { name: "Part form" });
+    });
+
+    it("Enter description", () => {
+      cy.drEnterDocumentDescription({ description: "Description" });
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.url().then((url: any) => {
+        recordUrl = url;
+      });
+    });
+
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Click Create a Approval Request button", () => {
+      cy.arClickCreateAnAR();
+    });
+
+    it("Enter title AR title", () => {
+      cy.arEnterApprovalRequestTitle({ title: "test title" });
+    });
+
+    it("Enter description", () => {
+      cy.arEnterApprovalRequestDescription({ description: "test description" });
+    });
+
+    it("Add created document", () => {
+      cy.arClickAddDocument();
+      cy.arChoseSpecificProposedDocument({ name: "Part form" });
+      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+      cy.arClickAddBtnOnAddDocumentsDialog();
+    });
+
+    it("Click Create Approval Request", () => {
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
+    it("Add Approver'", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[1].name, noWait: true });
+    });
+
+    it("Click on Save", () => {
+      cy.arSaveApiCall();
+      cy.url().then((url: any) => {
+        arUrl = url;
+      });
+    });
+
+    it("Navigate to Part", () => {
+      cy.visit(recordUrl);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify export", () => {
+      cy.exportVerifyEmail({ status: "Pending Change", filename: "-1-Part-form" });
+    });
+  });
+
+  context("Part with In Review status", () => {
+    it("Navigate to AR", () => {
+      cy.visit(arUrl);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Send To Review'", () => {
+      cy.arClickSendToReview();
+    });
+
+    it("Navigate to Part", () => {
+      cy.visit(recordUrl);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify export", () => {
+      cy.exportVerifyEmail({ status: "In Review", filename: "-1-Part-form" });
+    });
+  });
+
+  context("Part with Approved status", () => {
+    it("Navigate to AR", () => {
+      cy.visit(arUrl);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Approve Submission'", () => {
+      cy.arApproveAR();
+    });
+
+    it("Navigate to Part", () => {
+      cy.visit(recordUrl);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify export", () => {
+      cy.exportVerifyEmail({ status: "Approved", filename: "-1-Part-form" });
+    });
+  });
+
+});
+
+export { };
+

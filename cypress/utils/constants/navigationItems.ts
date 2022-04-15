@@ -21,4 +21,5 @@ export enum NavigationItems{
   TRAINING= "training",
   TRAINING_RECORDS= "trainingRecords",
   TRAINING_CURRICULUMS= "trainingCurriculums",
+  EB = "engineeringBuilds",
 }

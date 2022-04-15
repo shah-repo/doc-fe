@@ -884,7 +884,7 @@ context("NCO document type management", () => {
       cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
     });
 
-    it("Click on edit added Doc Type", () => {
+    it("Inactivate doc type", () => {
       cy.get("[data-grid-row-index='0']>td>span>span>span").eq(0).arrowClick();
       cy.get("li").contains("Inactive").arrowClick();
     });
