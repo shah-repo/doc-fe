@@ -3,11 +3,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
+import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { lotDateSuffix } from "../../utils/constants/dateHandler";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 
@@ -17,6 +19,9 @@ let adminEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
 let group;
+
+let firstApprover;
+let secondApprover;
 
 let partDocumentType;
 let createdPartDocument;
@@ -37,6 +42,13 @@ const MPIDocumentTitle =  "MPI document";
 const dataCyFbApprovals = "[data-cy^=\"fb-approvals-fb-approvals\"]";
 const dataCyOptions = "ul>li[role=option]";
 const lhrInitialQuantityName = "[name=\"lhr_initial_quantity\"]";
+
+const dateAfterEmailShouldArrive = new Date();
+let emailsFromInbox: IMAPEmail[];
+
+const LHR4 = "LHR-00004";
+const LHR6 = "LHR-00006";
+const LHR7 = "LHR-00007";
 
 context("LHRs email notifications", () => {
   before(() => {
@@ -268,6 +280,8 @@ context("LHRs email notifications", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          firstApprover = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          secondApprover = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           done();
@@ -688,6 +702,108 @@ context("LHRs email notifications", () => {
 
       it("Click 'Submit for Approval' button", () => {
         cy.pmSubmitForApproval();
+      });
+    });
+  });
+
+
+  context("Verify emails for submitted LHR", () => {
+    it("Verify emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        wait_time_sec: 5,
+        max_wait_time_sec: 50,
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+      };
+
+      cy.wait(10000);
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify emails for LHR A", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [
+            `Hello <b>${USERS[2].name},</b><br/><br/>`,
+            `<b>${LHR4}, LOT #${lotDateSuffix()}01</b> is in review and you are an approver.`,
+          ],
+        },
+        {
+          sentToUser: USERS[3].email,
+          contains: [
+            `Hello <b>${USERS[3].name},</b><br/><br/>`,
+            `<b>${LHR4}, LOT #${lotDateSuffix()}01</b> is in review and you are an approver.`,
+          ],
+        },
+
+      ];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+
+    it("Verify emails for LHR B", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [
+            `Hello <b>${USERS[2].name},</b><br/><br/>`,
+            `<b>${LHR6}, LOT #${lotDateSuffix()}02RD</b> is in review and you are an approver.`,
+          ],
+        },
+        {
+          sentToUser: USERS[3].email,
+          contains: [
+            `Hello <b>${USERS[3].name},</b><br/><br/>`,
+            `<b>${LHR6}, LOT #${lotDateSuffix()}02RD</b> is in review and you are an approver.`,
+          ],
+        },
+      ];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+
+    it("Verify emails for LHR C", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [
+            `Hello <b>${USERS[2].name},</b><br/><br/>`,
+            `<b>${LHR7}, LOT #${lotDateSuffix()}03RD</b> is in review and you are an approver.`,
+          ],
+        },
+        {
+          sentToUser: USERS[3].email,
+          contains: [
+            `Hello <b>${USERS[3].name},</b><br/><br/>`,
+            `<b>${LHR7}, LOT #${lotDateSuffix()}03RD</b> is in review and you are an approver.`,
+          ],
+        },
+      ];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
       });
     });
   });
