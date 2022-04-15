@@ -164,7 +164,7 @@ Cypress.Commands.add("cmpUpdatePageDetails", (
 });
 
 Cypress.Commands.add("cmpTurnOffAutosave", () => {
-  // cy.get("[name=\"toggleAutosave\"]").uncheck();
+  cy.get("[name=\"toggleAutosave\"]").uncheck();
 });
 
 Cypress.Commands.add("cmpTurnOnAutosave", () => {

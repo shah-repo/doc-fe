@@ -2,8 +2,6 @@
 set -e
 
 ENV=$1
-echo "ENVIRONMENT $ENVIRONMENT"
-echo "ENV $ENV"
 
 case "$ENV" in
 
@@ -53,7 +51,7 @@ export CI_BUILD_ID="some_ci_build_id"
 export CYPRESS_KONFIG_ENV="development"
 export NODE_ENV="development"
 export CYPRESS_BROWSER="chrome"
-export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-"1"}
+export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-"6"}
 export CYPRESS_INTEGRATION_FOLDER="cypress/integration/document.revision2"
 export CYPRESS_SKIP_ON_RUN_FAILURE="true"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
