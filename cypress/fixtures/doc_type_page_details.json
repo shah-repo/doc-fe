@@ -271,77 +271,101 @@
       ]
     },
     {
-      "createdAt": "2020-11-24T10:30:28.447Z",
-      "updatedAt": "2021-03-11T15:25:56.508Z",
-      "id": "be60f3b4-d577-4bcd-b8f1-bb6ea350fa06",
-      "category": "Equipment",
-      "addNewBtnLabel": "Add new Equipment",
-      "columns": [
-        {
-          "label": "ID",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "document.docId",
-          "showOnAndroid": true
-        },
-        {
-          "fn": "DOCUMENT_REVISION_VERSION",
-          "label": "Revision",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "precalc.revision",
-          "sourcePath": ["revisionStage:revision"],
-          "showOnAndroid": true
-        },
-        {
-          "label": "State",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "status",
-          "showOnAndroid": true
-        },
-        {
-          "label": "Title",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "name",
-          "showOnAndroid": true
-        },
-        {
-          "fn": "USER_NAME",
-          "label": "EFT Owner",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "precalc.fb_primary_owner_eq",
-          "sourcePath": ["formInput.fb-primary-owner-eq"],
-          "showOnAndroid": true
-        },
-        {
-          "fn": "CALIBRATION_DUE_DATE_EQ",
-          "label": "Cal Due Date",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "precalc.cali_due_date",
-          "sourcePath": ["irrelevant"],
-          "showOnAndroid": true
-        },
-        {
-          "fn": "PM_DUE_DATE_EQ",
-          "label": "PM Due Date",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "precalc.pm_due_date",
-          "sourcePath": ["irrelevant"],
-          "showOnAndroid": true
-        },
-        {
-          "label": "EQ Status",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "formInput.fb-default-eq-status",
-          "sourcePath": ["formInput.fb-default-eq-status"],
-          "showOnAndroid": true
-        }
+      "createdAt":"2020-11-09T16:21:30.577Z",
+      "updatedAt":"2021-12-08T20:49:27.118Z",
+      "id":"f1fe0aa1-425a-40db-b78c-ad3955d480aa",
+      "category":"Equipment",
+      "addNewBtnLabel":"Add Equipment",
+      "columns":[
+         {
+            "label":"ID",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"document.docId",
+            "showOnAndroid":true
+         },
+         {
+            "fn":"DOCUMENT_REVISION_VERSION",
+            "label":"Revision",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"precalc.revision",
+            "sourcePath":[
+               "revisionStage:revision"
+            ],
+            "showOnAndroid":true
+         },
+         {
+            "label":"State",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"status",
+            "showOnAndroid":true
+         },
+         {
+            "label":"Title",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"name",
+            "showOnAndroid":true
+         },
+         {
+            "fn":"USER_NAME",
+            "label":"Owner",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"precalc.fb_primary_owner_eq",
+            "sourcePath":[
+               "formInput.fb-primary-owner-eq",
+               "formInput.tl-owner-kp2x7d28"
+            ],
+            "showOnAndroid":true
+         },
+         {
+            "fn":"CALIBRATION_DUE_DATE_EQ",
+            "label":"Cal Due Date",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"precalc.cali_due_date",
+            "sourcePath":[
+               "irrelevant"
+            ],
+            "showOnAndroid":true
+         },
+         {
+            "fn":"PM_DUE_DATE_EQ",
+            "label":"PM Due Date",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"precalc.pm_due_date",
+            "sourcePath":[
+               "irrelevant"
+            ],
+            "showOnAndroid":true
+         },
+         {
+            "label":"EQ Status",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"formInput.fb-default-eq-status",
+            "sourcePath":[
+               "formInput.fb-default-eq-status"
+            ],
+            "showOnAndroid":true
+         },
+         {
+            "fn":"VALUE_FROM_SELECT_WITH_OPTION_OTHER",
+            "label":"Location",
+            "fieldName":"irrelevant",
+            "showOnWeb":true,
+            "valuePath":"precalc.eq_location",
+            "sourcePath":[
+               "formInput.tl-location-kp2x8dsq",
+               "formInput.location-kngiboz9",
+               "formInput.select-kwxzwt6w"
+            ],
+            "showOnAndroid":true
+         }
       ]
     },
     {
