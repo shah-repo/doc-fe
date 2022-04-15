@@ -644,7 +644,9 @@ context("Purchase Order Landing Page", () => {
         done();
       });
     });
+  });
 
+  context("Landing Page", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
@@ -704,15 +706,6 @@ context("Purchase Order Landing Page", () => {
   });
 
   context("Landing Page", () => {
-    // eslint-disable-next-line max-len
-    it("Verify that system maintain PO filter settings during an Enlil session when navigating away from and back to the landing page", () => {
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
-      cy.navigToDocumentList();
-      cy.navigToPurchaseOrder();
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "PO-00001");
-      cy.grpClearFilter();
-    });
-
     it("Verify that system display the number of PO's displayed that match the filter settings", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
@@ -899,54 +892,78 @@ context("Purchase Order Landing Page", () => {
 
   context("Verify that each filter for each column in the landing page is functional ", () => {
     it("Verify filter for  PO #", () => {
-      cy.get(`[aria-colindex="1"] input`).arrowType("PO-00001").wait(500);
+      cy.get(`[aria-colindex="1"] input`).arrowType("POT-00001").wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "POT-00001");
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify filter for Revision", () => {
-      cy.dlClearFilters();
       cy.get(`[aria-colindex="2"] input`).arrowType("1");
-      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "1");
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify filter for 'PO Status'", () => {
-      cy.dlClearFilters();
-      cy.get(`[aria-colindex="3"] input`).arrowType("Open");
+      cy.get(`[aria-colindex="3"] input`).arrowType("N/A");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "N/A");
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify filter for 'Supplier'", () => {
-      cy.dlClearFilters();
       cy.get(`[aria-colindex="4"] input`).arrowType("N/A");
-      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`[aria-colindex="4"] input`).should("have.attr", "value", "N/A");
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify filter for 'Part Number'", () => {
-      cy.dlClearFilters();
       cy.get(`[aria-colindex="5"] input`).arrowType("N/A");
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify filter for 'Amount'", () => {
-      cy.dlClearFilters();
       cy.get(`[aria-colindex="6"] input`).arrowType("N/A");
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify filter for 'Requestor'", () => {
-      cy.dlClearFilters();
       cy.get(`[aria-colindex="7"] input`).arrowType("Giovanni Reynolds");
-      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
     it("Verify filter for 'Issue Date'", () => {
-      cy.dlClearFilters();
       cy.get(`[aria-colindex="8"] input`).arrowType("N/A");
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
+    it("system maintain PO filter when navigating away from and back to the landing page", () => {
+      cy.navigToDocumentList();
+      cy.navigToPurchaseOrder();
+      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "POT-00001");
+      cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "1");
+      cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "N/A");
+      cy.get(`[aria-colindex="4"] input`).should("have.attr", "value", "N/A");
+      cy.get(`[aria-colindex="5"] input`).arrowType("N/A");
+      cy.get(`[aria-colindex="6"] input`).arrowType("N/A");
+      cy.get(`[aria-colindex="7"] input`).arrowType("Giovanni Reynolds");
+      cy.get(`[aria-colindex="8"] input`).arrowType("N/A");
+    });
+
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared'", () => {
       cy.grpClearFilter();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "");
     });
   });
 
@@ -990,8 +1007,7 @@ context("Purchase Order Landing Page", () => {
       cy.grpClearFilter();
     });
 
-    // eslint-disable-next-line max-len
-    it("User should be able to insert filter in input field and icon of the filter should be visible next to the field", () => {
+    it("User should be able to insert filter in input field and icon be visible next to the field", () => {
       cy.get(".k-i-filter.k-icon").should("be.visible");
     });
   });
@@ -1142,17 +1158,6 @@ context("Purchase Order Landing Page", () => {
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Contains").arrowClick();
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
-    });
-
-    it("Verify that each filter from the dropdown list for each column in the landing page is functional", () => {
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="4"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="5"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="6"] span.k-select`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.grpClearFilter();
     });
 
     it("Select option from dropdown list", () => {
