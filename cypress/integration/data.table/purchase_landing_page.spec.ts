@@ -646,7 +646,7 @@ context("Purchase Order Landing Page", () => {
     });
   });
 
-  context("Landing Page", () => {
+  context("Purchase order Landing Page", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
@@ -716,7 +716,7 @@ context("Purchase Order Landing Page", () => {
     });
   });
 
-  context("Create 'Purchase Order' document", () => {
+  context("Create first 'Purchase Order' document", () => {
     it("Click on 'Create PO' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
@@ -1012,7 +1012,7 @@ context("Purchase Order Landing Page", () => {
     });
   });
 
-  context("Create 'Purchase Order' document", () => {
+  context("Create second 'Purchase Order' document", () => {
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
     });
