@@ -14,7 +14,7 @@ services:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
     command: tail -F anything
     volumes:
-      - "$FE_REPO:/opt/app/tests"
+      - "$FE_REPO:/opt/app"
     networks:
       cypress_network:
     environment:

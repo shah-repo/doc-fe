@@ -35,7 +35,7 @@ phases:
   build:
     commands:
       - docker ps
-      - docker exec -w /opt/app/tests enlil_cypress_test_run_container ./codebuild/2.run-tests/start_tests.sh
+      - docker exec -w /opt/app enlil_cypress_test_run_container ./codebuild/2.run-tests/start_tests.sh
 
 reports:
   report-name-or-arn:
