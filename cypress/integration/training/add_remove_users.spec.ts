@@ -6,6 +6,7 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -956,6 +957,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[7].name} should be present`, () => {
+      SystemRequirement("REQ-4560");
       cy.trLandingPageUsername({ username: USERS[7].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -1022,6 +1024,7 @@ context("Add/Remove users from Training Curriculum", () => {
       });
 
       it("Verify training notification should be present", () => {
+        SystemRequirement("REQ-4560");
         cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       });
     });

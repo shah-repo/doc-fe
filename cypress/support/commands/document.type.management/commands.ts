@@ -11,12 +11,18 @@ declare global {
       dtmSelectQMS(): Chainable<Subject>;
       dtmSelectNeedsSignature(): Chainable<Subject>;
       dtmSelectTraining(): Chainable<Subject>;
+      dtmUncheckPrivateNumber(): Chainable<Subject>;
+      dtmUncheckRedline(): Chainable<Subject>;
+      dtmUncheckQMS(): Chainable<Subject>;
+      dtmUncheckNeedsSignature(): Chainable<Subject>;
+      dtmUncheckTraining(): Chainable<Subject>;
       dtmSelectGroup(params: { group: string }): Chainable;
       dtmSelectUsersWithoutTags(params: { usersWithoutTags: string }): Chainable;
       dtmSelectRevisionStage(params: { revisionStage: string }): Chainable;
       dtmAddDocType(params: { docType: string }): Chainable;
       dtmAddAcronym(params: { acronym: string }): Chainable;
       dtmAddStartingNumber(params: { startingNumber: string }): Chainable;
+      dtmAddCategory(params: {category: string}): Chainable;
       filterDocTypeManagement(params: {status: string; documentType: string; acronym: string;
         privateNumber: string; redline: string; qms: string; needsSignature: string; training: string;
         startingNumber: string; revisionStage: string; usersWithoutTags?: string; group: string;
@@ -49,9 +55,29 @@ Cypress.Commands.add("dtmSelectTraining", () => {
   cy.get("[data-grid-row-index='0']>td>span>input").eq(4).check();
 });
 
+Cypress.Commands.add("dtmUncheckPrivateNumber", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(0).uncheck();
+});
+
+Cypress.Commands.add("dtmUncheckRedline", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(1).uncheck();
+});
+
+Cypress.Commands.add("dtmUncheckQMS", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(2).uncheck();
+});
+
+Cypress.Commands.add("dtmUncheckNeedsSignature", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(3).uncheck();
+});
+
+Cypress.Commands.add("dtmUncheckTraining", () => {
+  cy.get("[data-grid-row-index='0']>td>span>input").eq(4).uncheck();
+});
+
 Cypress.Commands.add("dtmSelectGroup", (params: { group: string }) => {
   cy.get(`tr>td span[role="listbox"] span.k-input`).eq(3).scrollIntoView().arrowClick();
-  cy.get("li").contains(params.group).arrowClick();
+  cy.get("li").contains(new RegExp("^" + params.group + "$", "g")).arrowClick();
 });
 
 Cypress.Commands.add("dtmSelectRevisionStage", (params: { revisionStage: string }) => {
@@ -68,12 +94,16 @@ Cypress.Commands.add("dtmAddStartingNumber", (params: { startingNumber: string }
   cy.get("[data-grid-row-index='0']>td>span>span>input").arrowType(params.startingNumber);
 });
 
+Cypress.Commands.add("dtmAddDocType", (params: { docType: string }) => {
+  cy.get("[data-grid-row-index='0']>td>input").eq(0).clear().arrowType(params.docType);
+});
+
 Cypress.Commands.add("dtmAddAcronym", (params: { acronym: string }) => {
   cy.get("[data-grid-row-index='0']>td>input").eq(1).clear().arrowType(params.acronym);
 });
 
-Cypress.Commands.add("dtmAddDocType", (params: { docType: string }) => {
-  cy.get("[data-grid-row-index='0']>td>input").eq(0).clear().arrowType(params.docType);
+Cypress.Commands.add("dtmAddCategory", (params: { category: string }) => {
+  cy.get("[data-grid-row-index='0']>td>input").eq(2).clear().arrowType(params.category);
 });
 
 Cypress.Commands.add("dtmClearFilters", () => {
