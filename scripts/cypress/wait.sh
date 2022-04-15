@@ -13,13 +13,13 @@ fi
 echo "CYPRESS_FE_URL $CYPRESS_FE_URL"
 echo "CYPRESS_BE_URL $CYPRESS_BE_URL"
 
-print 'Waiting for backend .'
+printf 'Waiting for backend .'
 until [ $(curl -o /dev/null -s -w %{http_code} $CYPRESS_BE_URL/api/v1/healthcheck/) = 200 ]; do
     printf '.'
     sleep 2
 done
 
-print 'Waiting for frontend .'
+printf 'Waiting for frontend .'
 until $(curl --output /dev/null --silent --head --fail $CYPRESS_FE_URL); do
     printf '.'
     sleep 2
