@@ -721,18 +721,14 @@ context("Create receivable test", () => {
         });
 
         it("Click 'Add new receiving'", () => {
-          cy.recCreateNew();
-        });
-
-        it("Add an Approval", () => {
-          cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
+            cy.recCreateNew();
           });
         });
 
-        it("Save PO", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+        it("Add an Approval", () => {
+          cy.wait(1000);
+          cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         });
 
         it("Click 'Submit for Approval' button", () => {

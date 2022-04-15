@@ -285,7 +285,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
 
       const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
-      const proceedToNewReq = poItems.items.some((item) =>
+      const proceedToNewReq = poItems?.items.some((item) =>
         item.type === "service" || (item.type === "product" && item.partNumberDocId)
       );
       if (!proceedToNewReq) {
