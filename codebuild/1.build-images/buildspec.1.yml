@@ -11,7 +11,8 @@ phases:
       - set -e
       # doc-fe
       - export FE_REPO="$CODEBUILD_SRC_DIR"
-      - export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD | cut -c1-8)
+      # - export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD | cut -c1-8)
+      - export FE_GIT_COMMIT_HASH=5ec5cc43
       # remote-js-validators
       - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators_code"
       - export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
