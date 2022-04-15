@@ -296,12 +296,10 @@ context("Document list test", () => {
     it("Verify that the system displays only documents in the documents list with corresponding data", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
-      cy.dlFilterByType({ type: "All" });
       cy.get(`td[data-grid-col-index="0"]`).first().should("contain.text", "FM-" );
       cy.get(`td[data-grid-col-index="0"]`).eq(1).should("contain.text", "CP-" );
       cy.get(`td[data-grid-col-index="0"]`).eq(2).should("contain.text", "CP-" );
       cy.get(`td[data-grid-col-index="0"]`).eq(3).should("contain.text", "FM-" );
-      cy.pause();
     });
   });
 
@@ -461,7 +459,7 @@ context("Document list test", () => {
       cy.get(`div[role="grid"]`).should("have.class", "k-grid");
     });
 
-    it("Verify that landing pages for Document List  use the new data table", () => {
+    it("Verify approval request landing page default column headers", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${arId}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${arTitle}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);
