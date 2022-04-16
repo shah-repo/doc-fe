@@ -718,7 +718,7 @@ context("DAM approvals in LHR", () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist")
+      cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
       cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
     });
 
