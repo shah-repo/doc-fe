@@ -1,6 +1,6 @@
 import { Chip, withStyles } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
 import { TrainingStatus } from "../../../../state/ducks/dashboard/types";
+import Colors from "../../../layout/theme/utils/colors";
 
 const styles = () => ({
   root: {
@@ -12,6 +12,16 @@ const styles = () => ({
   },
   colorPrimary: {
     color: Colors.white,
+  },
+  iconSmall: {
+    height: "14px",
+    width: "13px",
+  },
+  labelSmall: {
+    "fontSize": "12px",
+    "fontWeight": 700,
+    "fontFamily": "Sora",
+    "text-transform": "uppercase",
   },
 });
 

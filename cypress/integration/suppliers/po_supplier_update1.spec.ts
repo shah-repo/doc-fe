@@ -438,23 +438,21 @@ context("Purchase Supplier Update1", () => {
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 2 - New Supplier1");
       });
 
-      it("Add an Approval", () => {
-        cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+      it(`Select '${USERS[2].name}' for Requestor`, () => {
+        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
       });
 
       it("clicks on 'Save' button", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Add an Approval", () => {
+        cy.poAddApproverOnApproverList({ approver: USERS[2].name });
+      });
+
       it("Click 'Submit for Approval' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.pmSubmitForApproval();
       });
 
       it("check status should be 'Pending Approval'", () => {

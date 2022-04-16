@@ -14,6 +14,16 @@ const styles = () => ({
   colorPrimary: {
     color: Colors.font_gray,
   },
+  iconSmall: {
+    height: "14px",
+    width: "13px",
+  },
+  labelSmall: {
+    "fontSize": "12px",
+    "fontWeight": 700,
+    "fontFamily": "Sora",
+    "text-transform": "uppercase",
+  },
 });
 
 export const NormalStyleChip = withStyles(styles)(Chip);

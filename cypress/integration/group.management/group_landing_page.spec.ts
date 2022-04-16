@@ -98,6 +98,42 @@ context("Group Landing Page Flow", () => {
   });
 
   context("Validate that the columns exist on the group page", () => {
+    it("Verify landing page table is using Kendo grid", () => {
+      cy.get(`div[role="grid"]`).should("have.class", "k-grid");
+    });
+
+    it("Verify all columns are present", () => {
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Group Type");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Name");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Members");
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Permissions");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Tags");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Parent Groups");
+    });
+
+    it(`Verify buttons "Clear Filter" and "Add Group" are present`, () => {
+      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+      cy.get(`button[data-cy="Group-openDialog"]`).should("exist");
+    });
+
+    it(`Verify only groups are present in table`, () => {
+      const groups = [
+        "Developers",
+        "User Management",
+        "Groups Management",
+        "Groups Management Unofficial",
+        "Owner as approver",
+        "Everyone",
+        "Can be approver",
+        "Company Admin",
+        "Async Tasks"];
+
+      cy.get(`td[data-grid-col-index="1"]`).each(($el) => {
+        const groupName = $el.text();
+        expect(groupName).to.be.oneOf(groups);
+      });
+    });
+
     it("Verifies that group name column exists", () => {
       SystemRequirement("REQ-2580");
       cy.grpVerifyGroupNameIsPresentOnFirstGroup();
@@ -144,9 +180,31 @@ context("Group Landing Page Flow", () => {
       cy.grpFilterByName({ name: "Everyone" });
     });
 
+    it("Verify memebers in group", () => {
+      const members = [
+        USERS[1].name,
+        USERS[2].name,
+        USERS[3].name,
+        USERS[4].name,
+      ];
+
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).then(($el) => {
+        const membersString = $el.text();
+
+        members.forEach((member) => {
+          expect(membersString).to.include(member);
+        });
+      });
+    });
+
     it("Filters groups by member", () => {
       SystemRequirement("REQ-2600");
       cy.grpFilterByMembers({ member: USERS[1].name });
+    });
+
+    it(`Verify Group Type dropdown has "Official" and "Unofficial"`, () => {
+      cy.get(`[aria-colindex="1"] [class="k-input"]`).arrowClick();
+      cy.get("ul>li[role=option]").should("have.text", "OfficialUnofficial");
     });
 
     it("Filters groups by type", () => {
@@ -155,15 +213,21 @@ context("Group Landing Page Flow", () => {
     });
   });
 
-  context("Validate that filters are maintained during session", () => {
+  context("Validate filters", () => {
     const GROUP_NAME = "Everyone";
     const GROUP_MEMBER = USERS[1].name;
     const GROUP_TYPE = "Official";
+    const PERMISSION = "EMPLOYEE_GET";
+    const TAG = "QMS_DEFAULT";
 
     it("Sets the filters", () => {
       cy.grpSetNameFilter({ name: GROUP_NAME });
       cy.grpSetMembersFilter({ member: GROUP_MEMBER });
       cy.grpSetTypeFilter({ type: GROUP_TYPE });
+      cy.grpSetPermissionsFilter({ permission: PERMISSION });
+      cy.grpSetTagsFilter({ tag: TAG });
+      cy.get(`th[aria-colindex="6"] span.k-select`).arrowClick({ force: true });
+      cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
     });
 
     it("Navigates to dashboard", () => {
@@ -176,10 +240,32 @@ context("Group Landing Page Flow", () => {
 
     it("Checks if the filters are mantained", () => {
       // SystemRequirement("REQ-2620");
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.grpCheckIfNameFilterIsSet({ name: GROUP_NAME });
       cy.grpCheckIfMembersFilterIsSet({ member: GROUP_MEMBER });
       cy.log(GROUP_TYPE);
       cy.grpCheckIfTypeFilterIsSet({ groupType: GROUP_TYPE });
+      cy.grpCheckIfPermissionFilterIsSet({ permission: PERMISSION });
+      cy.grpCheckIfTagFilterIsSet({ tag: TAG });
+    });
+
+    it("Verify clear filter", () => {
+      cy.dlClearFilters();
+      cy.get(`th[aria-colindex="1"] span.k-input`).should("have.text", "All");
+      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
+    });
+
+    it(`Verify grouping`, () => {
+      cy.get("tr.k-grouping-row").should("not.exist");
+      cy.get(`th[aria-colindex="1"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.get("div.k-columnmenu-item").eq(0).arrowClick();
+      cy.get("tr.k-grouping-row").should("have.length", "1");
+      cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
+      cy.get("tr.k-grouping-row").should("not.exist");
     });
   });
 
@@ -192,6 +278,26 @@ context("Group Landing Page Flow", () => {
     it("Verifies that Unofficial group exists", () => {
       // SystemRequirement("REQ-2630");
       cy.grpCheckIfGroupTypeExists({ type: "Unofficial" });
+    });
+  });
+
+  context("Verify drag and drop", () => {
+    it(`Verify drag and drop Group Type header on second slot`, () => {
+      cy.dlClearFilters();
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "Official");
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="1"][role]>span>span`,
+        toSelector: `th[aria-colindex="2"][role]>span>span`,
+      });
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "Official");
+    });
+  });
+
+  context("Verify dropdown filter list", () => {
+    it(`Verify dropdown filter list on Name header`, () => {
+      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
+      "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
     });
   });
 });

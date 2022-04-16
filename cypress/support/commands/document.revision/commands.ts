@@ -39,6 +39,7 @@ declare global {
       drFilterDocListByDocIdAndStatus(params: { docId: string; status: string }): Chainable<Subject>;
       drChangeOwner(params: { employee: string }): Chainable<Subject>;
       drChangeOwnerFromMenu(params: { employee: string }): Chainable<Subject>;
+      drCancelDraftFromMenu(): Chainable<Subject>;
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
@@ -485,6 +486,14 @@ Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => 
   cy.drChangeOwner({ employee: params.employee });
 });
 
+Cypress.Commands.add("drCancelDraftFromMenu", () => {
+  cy.get("#HeaderMenuButton").arrowClick();
+  cy.get("[data-cy=\"cancelDraftButton\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.CancelDraft], () => {
+    cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+  });
+});
+
 Cypress.Commands.add("drClickUpgradeForm", () => {
   cy.get("[data-cy=\"formUpgradeButton\"]").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.UpgradeToReleasedForm, () => {
@@ -728,7 +737,8 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 
 Cypress.Commands.add("drSelectUser", (...users: string[]) => {
   users.forEach((user) => {
-    cy.get(`[data-cy="field-securityEmployees"]`).autocompleteSelect(`${user}`);
+    cy.get(`[data-cy="field-securityEmployees"]`).arrowType(`${user}`).wait(500);
+    cy.get(`div[id^=react-select]`).contains(user).arrowClick();
   });
   cy.unClick();
 });
