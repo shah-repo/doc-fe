@@ -15,7 +15,7 @@ let employeeLoginFirst;
 let formId;
 let formIdElement;
 let emailsFromInbox;
-const pages = ["", "", "", ""];
+const pages = ["", "", "", "", ""];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -90,7 +90,6 @@ context("Add and edit FB fields - Test 1", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -118,7 +117,6 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Selects 'Test Document Type' output document type from dropdown", () => {
-      // SystemRequirement("REQ-0490");
       cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
     });
 
@@ -323,6 +321,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "EB Procedure" });
       cy.fbAddNewFieldButton();
+      cy.pause();
     });
 
     it("Edit TextField", () => {
@@ -444,7 +443,6 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "Approval Roles" });
       cy.fbAddNewFieldButton();
     });
-
 
     it("Edit PO Approval Matrix", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-po-approval-matrix" });
@@ -676,25 +674,29 @@ context("Add and edit FB fields - Test 1", () => {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${formId}-1-New-Document-Revision.pdf`,
         }).then((cdata) => {
-        expect(cdata.numpages).eq(4);
-        expect(cdata.text).match(/Page 1 of 4/);
-        expect(cdata.text).match(/Page 2 of 4/);
-        expect(cdata.text).match(/Page 3 of 4/);
-        expect(cdata.text).match(/Page 4 of 4/);
+        expect(cdata.numpages).eq(5);
+        expect(cdata.text).match(/Page 1 of 5/);
+        expect(cdata.text).match(/Page 2 of 5/);
+        expect(cdata.text).match(/Page 3 of 5/);
+        expect(cdata.text).match(/Page 4 of 5/);
+        expect(cdata.text).match(/Page 5 of 5/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
         arr.forEach((element) => {
-          if (element.includes("Page 1 of 4")) {
+          if (element.includes("Page 1 of 5")) {
             pages[0] = element;
           }
-          if (element.includes("Page 2 of 4")) {
+          if (element.includes("Page 2 of 5")) {
             pages[1] = element;
           }
-          if (element.includes("Page 3 of 4")) {
+          if (element.includes("Page 3 of 5")) {
             pages[2] = element;
           }
-          if (element.includes("Page 4 of 4")) {
+          if (element.includes("Page 4 of 5")) {
             pages[3] = element;
+          }
+          if (element.includes("Page 5 of 5")) {
+            pages[4] = element;
           }
         });
       });
