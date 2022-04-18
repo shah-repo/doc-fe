@@ -765,20 +765,9 @@ context("Document list test", () => {
       it("Create new record button click", () => {
         cy.recCreateRecordFromLandingPage();
       });
-
-      it("Check if multiple record forms exist", () => {
-        cy.recCheckIfMultilpeFormsAreAvailable({
-          recordType: "Record Document",
-          recordForms: ["Approval Record", "Lot History Record"],
-        });
-      });
     });
 
     context("Create new record without inline approval form and check if they are in alpha revision", () => {
-      it("Create new record button click", () => {
-        cy.recCreateRecordFromLandingPage();
-      });
-
       it("Select 'Approval Record' form", () => {
         cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document", recordForm: "Approval Record" });
       });
