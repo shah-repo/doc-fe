@@ -1033,7 +1033,8 @@ context("Document list test", () => {
       cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "");
       cy.get(`[aria-colindex="4"] input`).arrowType("Approval Record title").wait(1500);
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`[aria-colindex="4"]`).find(`input[class="k-textbox"]`).should("have.attr", "value", "Approval Record title");
+      cy.get(`[aria-colindex="4"]`).find(`input[class="k-textbox"]`)
+        .should("have.attr", "value", "Approval Record title");
       cy.get(`[data-grid-row-index="0"]`).should("contain", "Approval Record title");
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
@@ -1067,16 +1068,6 @@ context("Document list test", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
-
-    // it(`Verify filter for Form ID`, () => {
-    //   cy.dlClearFilters();
-    //   cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "");
-    //   cy.get(`th[aria-colindex="7"] input`).arrowType("FM-00005");
-    //   cy.landingPageLoadingElementShouldNotExist();
-    //   cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "FM-00005");
-    //   cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-    //   cy.landingPageLoadingElementShouldNotExist();
-    // });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared", () => {
       cy.get(`button[data-cy="clearFilter"]`).should("exist").click();
