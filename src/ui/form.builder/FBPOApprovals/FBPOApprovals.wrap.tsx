@@ -103,6 +103,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       const proceedToNewReq = poItems.items.some((item) =>
         item.type === "service" || (item.type === "product" && item.partNumberDocId)
       );
+      if (!proceedToNewReq) { return false; }
       if (updateApprovers && requester && proceedToNewReq && !approvers?.includes(requester)) {
         addApprover([requester]);
       } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
