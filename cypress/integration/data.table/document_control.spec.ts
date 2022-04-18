@@ -1065,7 +1065,7 @@ context("Document list test", () => {
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[aria-colindex="7"]`).find(`input[class="k-textbox"]`).should("have.attr", "value", "FM-00006");
       cy.get(`[data-grid-row-index="0"]`).should("contain", "FM-00006");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
