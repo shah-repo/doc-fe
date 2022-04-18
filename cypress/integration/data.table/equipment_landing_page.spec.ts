@@ -1292,6 +1292,14 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
+    it("Verify filter for State", () => {
+      cy.dlClearFilters();
+      cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Draft").arrowClick();
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.wait(500);
+    });
+
     it("Verify filter for Title", () => {
       cy.dlClearFilters();
       cy.get(`[aria-colindex="4"] input`).arrowType("Equipment document").wait(500);
