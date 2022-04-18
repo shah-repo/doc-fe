@@ -1331,12 +1331,12 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.grpClearFilter();
       cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
       cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "All");
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "All");
       cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
       cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
       cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "");
     });
 
     it("Verify that 'Export List' button is visible and enabled", () => {
