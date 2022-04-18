@@ -98,7 +98,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     React.useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
       (poItems) => {
-        const previousPOItems = poApprovalsState.getPrevPOItems();
+        const previousPOItems = poApprovalsState.getPrevPOItems;
         const isEnlilPOItemsExist = checkEnlilProductExist(poItems);
         const isPrevEnlilPOItemsExist = checkEnlilProductExist(previousPOItems);
         poApprovalsState.setPrevPOItems(poItems);
