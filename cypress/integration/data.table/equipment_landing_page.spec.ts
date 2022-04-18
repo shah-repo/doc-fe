@@ -1372,7 +1372,7 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get(`th[aria-colindex="4"] span.k-column-title`).should("not.have.text", "Title");
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-      cy.get(`th[aria-colindex="4"] span.k-column-title`).should("have.text", "Title");
+      cy.get(`th[aria-colindex="2"] span.k-column-title`).should("have.text", "Title");
     });
   });
 
