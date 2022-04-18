@@ -1060,10 +1060,10 @@ context("Document list test", () => {
     it(`Verify filter for Form ID`, () => {
       cy.dlClearFilters();
       cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "");
-      cy.get(`[aria-colindex="7"] input`).arrowType("FM-00005").wait(1500);
+      cy.get(`[aria-colindex="7"] input`).arrowType("FM-00006").wait(1500);
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`[aria-colindex="7"]`).find(`input[class="k-textbox"]`).should("have.attr", "value", "FM-00005");
-      cy.get(`[data-grid-row-index="0"]`).should("contain", "FM-00005");
+      cy.get(`[aria-colindex="7"]`).find(`input[class="k-textbox"]`).should("have.attr", "value", "FM-00006");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "FM-00006");
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
