@@ -64,6 +64,7 @@ import { NameCell } from "./cell.template/NameCell";
 import { ParentsCell } from "./cell.template/ParentsCell";
 import { PermissionsCell } from "./cell.template/PermissionsCell";
 import { TagsCell } from "./cell.template/TagsCell";
+import GMExport from "./GMExport";
 import KendoGridStyles from "./styles";
 
 interface GroupManagementProps {
@@ -574,6 +575,9 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         <Grid container={true} alignItems="center">
           <Grid item xs>
             <GridTitle translation="navigation.group.management" />
+          </Grid>
+          <Grid item>
+            <GMExport gridData={gridData} columns={columnDefinitions} />
           </Grid>
           <Grid item>
             {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
