@@ -118,6 +118,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
         removeApprover([deletedRequestor]);
       } else if (updateApprovers && requester && !proceedToNewReq && approvers?.includes(requester)) {
+        if (poApprovalsState.getDidMountPhase) { return; }
         removeApprover([deletedRequestor]);
       }
     };
@@ -141,7 +142,23 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
               ? ""
               : deletedRequestor
           );
+          // For adding missing required approvals
+          if (poApprovalsState.getDidMountPhase) {
+            const prevApprovers = workspaceState?.formInputSync?.get(name);
+            const diffIds = difference(Object.values(prevApprovers), approvers);
+            if (diffIds.length) {
+              addApprover(difference(approvers, [deletedRequestor]));
+              if (approvers.length === 0) {
+                addApprover(difference([deletedRequestor], approvers));
+              }
+            }
+            if (approvers.length === 0) {
+              addApprover(difference(Object.values(prevApprovers), [deletedRequestor]));
+            }
+            poApprovalsState.setDidMount(false);
+          }
         } else if (approvers?.includes(deletedRequestor)) {
+          if (poApprovalsState.getDidMountPhase) { return; }
           checkLineItems(poItems, "");
         }
       }
