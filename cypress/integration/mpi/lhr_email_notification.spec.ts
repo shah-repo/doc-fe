@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable no-useless-escape */
 /* eslint-disable @typescript-eslint/camelcase */
 // eslint-disable-next-line spaced-comment
@@ -16,6 +18,8 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+let secondApprover;
+let thirdApprover;
 let approvalRequestDocumentType;
 let initialArDocument;
 let group;
@@ -277,6 +281,8 @@ context("LHRs email notifications", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondApprover = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          thirdApprover = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           done();
@@ -498,6 +504,18 @@ context("LHRs email notifications", () => {
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
+      });
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
+      });
+      it("Enter 'Rejected quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+      });
+      it("Save changes in LHRs", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
@@ -575,6 +593,18 @@ context("LHRs email notifications", () => {
     context("Start and Release LHRs #1", () => {
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
+      });
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
+      });
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
+      });
+      it("Enter 'Rejected quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+      });
+      it("Save changes in LHRs", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
@@ -662,6 +692,18 @@ context("LHRs email notifications", () => {
     context("Start and Release LHRs #1", () => {
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
+      });
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
+      });
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
+      });
+      it("Enter 'Rejected quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+      });
+      it("Save changes in LHRs", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
@@ -799,6 +841,232 @@ context("LHRs email notifications", () => {
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Confirm Emails for revised LHR", () => {
+    context("Approve LHRs as Approver 1", () => {
+      it(`Login approver 1 to dashboard`, () => {
+        cy.authLogout();
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondApprover.id });
+      });
+
+      ["C", "B", "A"].forEach((lhrName) => {
+        it(`Click approve for the LHR ${lhrName}`, () => {
+          cy.wrapWithWaitOnApiCalls(
+            [CyRoutes.PostApprovalsApprove], () => {
+              cy.contains("needs your approval for").eq(0).trigger("mouseover");
+              cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+              cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+              cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+              cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+            });
+
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.checkToastMessage({ exists: false });
+        });
+      });
+    });
+
+    context("Approve LHRs as Approver 2", () => {
+      it(`Login approver 2 to dashboard`, () => {
+        cy.authLogout();
+        cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdApprover.id });
+      });
+
+      ["C", "B", "A"].forEach((lhrName) => {
+        it(`Click approve for the LHR ${lhrName}`, () => {
+          cy.wrapWithWaitOnApiCalls(
+            [CyRoutes.PostApprovalsApprove], () => {
+              cy.contains("needs your approval for").eq(0).trigger("mouseover");
+              cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+              cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+              cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+              cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+            });
+
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.checkToastMessage({ exists: false });
+        });
+      });
+    });
+
+    context("Login as LHR owner", () => {
+      it(`Login owner to dashboard`, () => {
+        cy.authLogout();
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      });
+    });
+
+    context(`Submit for approval revised LHR A - Build Type: ${BUILD_TYPE.RD}`, () => {
+      it("Navigate to LHR A Document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.visit(lhr1DocUrl);
+        });
+      });
+
+      it("Revise LHR", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Navigate to revised LHR", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+        });
+      });
+
+      it(`Select '${BUILD_TYPE.RD}' build type`, () => {
+        cy.unClick();
+        cy.get(`[value=\"${BUILD_TYPE.RD}\"]`).check();
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      context("Add approvers to LHR A", () => {
+        it("Add a first Approval", () => {
+          cy.get(dataCyFbApprovals).arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
+          });
+        });
+
+        it("Add a second Approval", () => {
+          cy.get(dataCyFbApprovals).arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
+          });
+        });
+
+        it("Click 'Submit for Approval' button", () => {
+          cy.pmSubmitForApproval();
+        });
+      });
+    });
+
+    context(`Submit for approval revised LHR B - Build Type: ${BUILD_TYPE.RD}`, () => {
+      it("Navigate to LHR B Document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.visit(lhr2DocUrl);
+        });
+      });
+
+      it("Revise LHR", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Navigate to revised LHR", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+        });
+      });
+
+      it(`Select '${BUILD_TYPE.RD}' build type`, () => {
+        cy.unClick();
+        cy.get(`[value=\"${BUILD_TYPE.RD}\"]`).check();
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      context("Add approvers to LHR B", () => {
+        it("Add a first Approval", () => {
+          cy.get(dataCyFbApprovals).arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
+          });
+        });
+
+        it("Add a second Approval", () => {
+          cy.get(dataCyFbApprovals).arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
+          });
+        });
+
+        it("Click 'Submit for Approval' button", () => {
+          cy.pmSubmitForApproval();
+        });
+      });
+    });
+
+    context("Verify emails for submitted LHR", () => {
+      it("Verify emails", () => {
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          wait_time_sec: 5,
+          max_wait_time_sec: 50,
+          include_body: true,
+          after: dateAfterEmailShouldArrive,
+        };
+
+        cy.wait(10000);
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          if (emails) {
+            emailsFromInbox = emails;
+          }
+          else {
+            assert.fail("No email found");
+          }
+        });
+      });
+
+      it("Verify emails for LHR A", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[2].email,
+            contains: [
+              `Hello <b>${USERS[2].name},</b><br/><br/>`,
+              `<b>${LHR4}, LOT #${lotDateSuffix()}01RD</b> is in review and you are an approver.`,
+            ],
+          },
+          {
+            sentToUser: USERS[3].email,
+            contains: [
+              `Hello <b>${USERS[3].name},</b><br/><br/>`,
+              `<b>${LHR4}, LOT #${lotDateSuffix()}01RD</b> is in review and you are an approver.`,
+            ],
+          },
+
+        ];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+
+      it("Verify emails for LHR B", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[2].email,
+            contains: [
+              `Hello <b>${USERS[2].name},</b><br/><br/>`,
+              `<b>${LHR6}, LOT #${lotDateSuffix()}02RD</b> is in review and you are an approver.`,
+            ],
+          },
+          {
+            sentToUser: USERS[3].email,
+            contains: [
+              `Hello <b>${USERS[3].name},</b><br/><br/>`,
+              `<b>${LHR6}, LOT #${lotDateSuffix()}02RD</b> is in review and you are an approver.`,
+            ],
+          },
+        ];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
       });
     });
   });
