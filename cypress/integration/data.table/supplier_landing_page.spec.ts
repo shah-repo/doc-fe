@@ -228,16 +228,16 @@ context("Suppliers landing page", () => {
       });
     });
 
+    it("turnoff autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enter 'Supplier Address/Phone'", () => {
       cy.drEnterDocumentDescription({ description: "Test Supplier address" });
     });
 
     it("Enter 'Supplier Name'", () => {
       cy.supEnterSuppName({ name: "Test Supplier" });
-    });
-
-    it("turnoff autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
 
     it("Click create document after filling document", () => {
