@@ -244,7 +244,10 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
+      cy.pause();
+      // cy.atchUploadAttachment({ fileName: "test.docx" });
     });
 
     it("Add Blank Template Form", () => {
@@ -252,6 +255,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
+      cy.elUploadAttachment({ fileName: "TestTemplate.json", el: "fb-attachment-field-fb-blank-template-" });
     });
 
     it("Add Step", () => {
@@ -315,6 +319,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
+      cy.pause();
     });
 
     it("Add EB Procedure", () => {
