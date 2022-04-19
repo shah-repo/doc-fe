@@ -1060,6 +1060,14 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get("[id=DocumentByTypeListPresenter-openDocRev]").should("exist");
     });
 
+    it("ID should be in descending order", () => {
+      cy.contains("ID").eq(0).click();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.contains("ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        .should("be.exist");
+      cy.verifyDesSort({ index: 0, colLength: 8 });
+    });
+
     it(`drag and drop`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "EQ-00003");
       cy.dragAndDrop({
