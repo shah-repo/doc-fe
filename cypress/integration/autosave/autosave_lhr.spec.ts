@@ -2,8 +2,10 @@
 /// <reference types="Cypress" />
 
 import moment from "moment-timezone";
+import path from "path";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -442,6 +444,19 @@ context("Autosave LHR", () => {
           });
         });
 
+        // it("Add attachment", () => {
+        //   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        //     cy.contains("Step #1").parentsUntil("li")
+        //       .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+        //     cy.elUploadAttachment({
+        //       fileName: "image.jpg",
+        //       el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+        //     });
+        //   });
+        //   cy.progressBarShouldNotExist();
+        //   cy.listLoadingElementShouldNotExist();
+        // });
+
         it("Add 'Part document' to step #1", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
             cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
@@ -455,8 +470,39 @@ context("Autosave LHR", () => {
         });
       });
 
+      context("Fill step #2", () => {
+        it("Add step #2", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddStep();
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Fill step #2 description", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Add 'Part document' to step #2", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
+          });
+        });
+
+        it("Add 'Equipment two' to step #2", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
+          });
+        });
+      });
+
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
+          cy.pause();
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
             cy.drApproveAndReleaseDocumentWithoutSelectingForm();
           });
@@ -690,7 +736,7 @@ context("Autosave LHR", () => {
 
             expect(el).match(/End Quantity/);
 
-            tmpRegex = new RegExp( `Build Type\n(.*)R\\&D Production`, "gi" );
+            tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
             expect(el).match(tmpRegex);
 
             expect(el).match(/Due Date/);
@@ -921,9 +967,10 @@ context("Autosave LHR", () => {
 
             expect(el).match(/End Quantity/);
 
-            expect(el).match(/Build Type\n R&D Production/);
-
             expect(el).match(/Due Date/);
+
+            tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
+            expect(el).match(tmpRegex);
 
             expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
 
@@ -1089,7 +1136,9 @@ context("Autosave LHR", () => {
 
     it("check due date", () => {
       cy.get("[name=\"lhr-due-date\"]").invoke("val").should("be.exist");
+      cy.pause();
     });
+
   });
 
   context("Complete first step in LHR", () => {
@@ -1180,21 +1229,21 @@ context("Autosave LHR", () => {
         cy.get("[name=\"lhrs-rejected-quantity\"]").should("have.value", "2");
       });
 
-      it("Check doc status for WIP and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "WIP" });
-        cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01");
-        cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
-        cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
-          lhrDocId = $docIdElement.text();
-        });
-        cy.sendToEmail();
-      });
+      // it("Check doc status for WIP and click on Send To Email", () => {
+      //   cy.drCheckDocumentStatus({ status: "WIP" });
+      //   cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01");
+      //   cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
+      //   cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
+      //     lhrDocId = $docIdElement.text();
+      //   });
+      //   cy.sendToEmail();
+      // });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-        cy.checkToastMessageContains({
-          message: "File will be sent to your email shortly.",
-        });
-      });
+      // it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      //   cy.checkToastMessageContains({
+      //     message: "File will be sent to your email shortly.",
+      //   });
+      // });
 
     });
   });
