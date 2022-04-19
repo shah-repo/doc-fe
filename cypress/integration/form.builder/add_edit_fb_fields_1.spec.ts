@@ -256,6 +256,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
       cy.elUploadAttachment({ fileName: "TestTemplate.json", el: "fb-attachment-field-fb-blank-template-" });
+      cy.pause();
     });
 
     it("Add Step", () => {
