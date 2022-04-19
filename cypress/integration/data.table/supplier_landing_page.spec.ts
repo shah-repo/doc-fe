@@ -459,14 +459,18 @@ context("Suppliers landing page", () => {
     it("Verify hide on Suppiler Level", () => {
       cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Supplier Level");
       cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Supplier Level");
     });
 
     it("Verify unhide on Suppiler Level", () => {
       cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Supplier Level");
       cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=menuitem]").contains("SUPPLIER LEVEL").parents("li").find("svg").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("body").type("{esc}");
       cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Supplier Level");
     });
@@ -474,14 +478,18 @@ context("Suppliers landing page", () => {
     it("Verify freeze on ID", () => {
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Supplier ID");
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Supplier Name");
     });
 
     it("Verify un-freeze on ID", () => {
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Supplier Name");
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Supplier ID");
     });
   });
@@ -490,6 +498,7 @@ context("Suppliers landing page", () => {
     it("Verify dropdown filters", () => {
       cy.grpClearFilter();
       cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
       "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       cy.dlClearFilters();
@@ -498,7 +507,9 @@ context("Suppliers landing page", () => {
     it(`Verify "Does not contain" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
@@ -508,7 +519,9 @@ context("Suppliers landing page", () => {
     it(`Verify "Is equal to" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
@@ -518,7 +531,9 @@ context("Suppliers landing page", () => {
     it(`Verify "Is not equal to" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
@@ -528,7 +543,9 @@ context("Suppliers landing page", () => {
     it(`Verify "Starts with" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
@@ -538,7 +555,9 @@ context("Suppliers landing page", () => {
     it(`Verify "Ends with" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
@@ -548,6 +567,7 @@ context("Suppliers landing page", () => {
     it(`Verify "Is null" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
@@ -558,6 +578,7 @@ context("Suppliers landing page", () => {
     it(`Verify "Is not null" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
@@ -567,6 +588,7 @@ context("Suppliers landing page", () => {
     it(`Verify "Is not empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
@@ -576,6 +598,7 @@ context("Suppliers landing page", () => {
     it(`Verify "Is empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
@@ -592,8 +615,11 @@ context("Suppliers landing page", () => {
 
     it(`Select option Contains and verify that the filter is functional`, () => {
       cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Contains").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify that each filter from the dropdown list for each column in the landing page is functional", () => {
@@ -608,6 +634,7 @@ context("Suppliers landing page", () => {
 
     it("Navigate to column with option Select field", () => {
       cy.get(`[aria-colindex="5"] [class="k-input"]`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("li").contains("Draft").arrowClick().wait(500);
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
