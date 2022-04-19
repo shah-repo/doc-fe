@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import apiClient from "../../../state/apiClient";
 import { companySelectors } from "../../../state/ducks/company";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPING, AuditDetailsProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
@@ -45,11 +46,12 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   // const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
+  const groups = useSelector(userManagementSelectors.groupsById);
+  const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : "";
 
   const getTranslatedText = (key: string, values: TranslatedTextProps) =>
     intl.formatMessage({ id: `group.management.audit.history.${key}` }, values);
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
-  // const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : "";
   const closeDrawer = () => {
     setOpenDrawer({ ...openDrawer, right: false });
     closeHistoryPanel(openDrawer.right);
@@ -59,6 +61,16 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     fetchAuditRecords();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const parseStringArrary = (value: string) => {
+    let addedPermissions = "";
+    try {
+      addedPermissions = (JSON.parse(value) as string[]).join(",");
+    } catch (error) {
+      addedPermissions = value;
+    }
+    return addedPermissions;
+  };
 
   const getDescription = (auditRecord, employeeDetails) => {
     let actionInfo = {
@@ -73,7 +85,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.EmployeeNameUpdated, {}),
           secondaryText: `${auditRecord.previousValue}-NAME-UP-DATED-TO-${auditRecord.nextValue}`,
           auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
-          sortedIndex: 0,
+          sortedIndex: 1,
         };
       } else if (auditRecord.type === "STRING_NEW") {
         actionInfo = {
@@ -84,41 +96,83 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         };
       }
     }
+    if (auditRecord.fieldPath === "employees") {
+      if (auditRecord.type === "ARRAY_NEW") {
+        const addedMember = getUserDetails(auditRecord.nextValue) || { user: { name: "", email: "" } };
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedMembers, {}),
+          secondaryText: addedMember.user?.name,
+          auditType: ACTION_TITLE_MAPPING.AddedMembers,
+          sortedIndex: 2,
+        };
+      }
+      if (auditRecord.type === "ARRAY_DELETED") {
+        const removedMember = getUserDetails(auditRecord.previousValue) || { user: { name: "", email: "" } };
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedMembers, {}),
+          secondaryText: removedMember.user?.name,
+          auditType: ACTION_TITLE_MAPPING.RemovedMembers,
+          sortedIndex: 2,
+        };
+      }
+    }
+    if (auditRecord.fieldPath === "permissions") {
+      if (auditRecord.type === "ARRAY_NEW") {
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedPermissions, {}),
+          secondaryText: parseStringArrary(auditRecord.nextValue),
+          auditType: ACTION_TITLE_MAPPING.AddedPermissions,
+          sortedIndex: 3,
+        };
+      }
+      if (auditRecord.type === "ARRAY_DELETED") {
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedPermissions, {}),
+          secondaryText: auditRecord.previousValue,
+          auditType: ACTION_TITLE_MAPPING.RemovedPermissions,
+          sortedIndex: 4,
+        };
+      }
+    }
+    if (auditRecord.fieldPath === "tags") {
+      if (auditRecord.type === "ARRAY_NEW") {
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedTags, {}),
+          secondaryText: parseStringArrary(auditRecord.nextValue),
+          auditType: ACTION_TITLE_MAPPING.AddedTags,
+          sortedIndex: 4,
+        };
+      }
+      if (auditRecord.type === "ARRAY_DELETED") {
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedTags, {}),
+          secondaryText: auditRecord.previousValue,
+          auditType: ACTION_TITLE_MAPPING.RemovedTags,
+          sortedIndex: 4,
+        };
+      }
+    }
+    if (auditRecord.fieldPath === "parents") {
+      if (auditRecord.type === "ARRAY_NEW") {
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroups, {}),
+          secondaryText: getGroupName( auditRecord.nextValue),
+          auditType: ACTION_TITLE_MAPPING.AddedParentGroups,
+          sortedIndex: 4,
+        };
+      }
+    }
     return actionInfo;
   };
 
   const addUserNameAndEmailBlock = (sameGroup, employeeDetails) => {
-    const auditTypes = map(sameGroup, "auditType");
-    if (
-      auditTypes.includes(ACTION_TITLE_MAPPING.AddedToGroups) ||
-      auditTypes.includes(ACTION_TITLE_MAPPING.AddedToGroup)
-    ) {
-      sameGroup.unshift({
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedUserEmail, {}),
-        secondaryText: employeeDetails.user.email || "N/A",
-        sortedIndex: 2,
-      });
-      if (!auditTypes.includes(ACTION_TITLE_MAPPING.CreatedNewUser)) {
-        sameGroup.unshift({
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedUserName, {}),
-          secondaryText: employeeDetails.user.name || "N/A",
-          sortedIndex: 1,
-        });
-      }
-    }
-    if (auditTypes.includes(ACTION_TITLE_MAPPING.ResetPassword)) {
-      sameGroup.unshift({
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPasswordFor, {}),
-        secondaryText: employeeDetails.user.name || "N/A",
-        sortedIndex: 2,
-      });
-    }
+    console.log(sameGroup);
     return sortBy(sameGroup, "sortedIndex");
   };
 
   const createGroups = (groupedItems, employeeDetails) => {
     const similarGroups = groupBy(groupedItems, "primaryText");
-    const sameGroup = map(similarGroups, (items, key) => {
+    let sameGroup = map(similarGroups, (items, key) => {
       const auditType = items[0].auditType;
       let sortedIndex = 0;
       let primaryText = key;
@@ -191,6 +245,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       }
       return { primaryText: primaryTextHtml, secondaryText: secondaryTextHtml, sortedIndex, auditType };
     });
+    sameGroup = sortBy(sameGroup, "sortedIndex");
     return addUserNameAndEmailBlock(sameGroup, employeeDetails);
   };
 
@@ -199,6 +254,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp, companyId } = auditRecord;
       const employeeDetails = getUserDetails(employeeId) || { user: { name: employeeName, email: "" } };
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
+      console.log("groupKey :: ", `${groupId}-${timestamp}-${ownerId}`);
       return {
         ...auditRecord,
         groupKey: `${groupId}-${timestamp}-${ownerId}`,

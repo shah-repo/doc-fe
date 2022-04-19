@@ -121,6 +121,13 @@ export enum ACTION_TITLE_MAPPING {
   RemovedUserName="RemovedUserName",
   RemovedGroupName="RemovedGroupName",
   AddedGroup = "AddedGroup",
+  AddedMembers = "AddedMembers",
+  AddedPermissions = "AddedPermissions",
+  AddedTags= "AddedTags",
+  AddedParentGroups="AddedParentGroups",
+  RemovedMembers="RemovedMembers",
+  RemovedPermissions="RemovedPermissions",
+  RemovedTags="RemovedTags",
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
