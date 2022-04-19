@@ -236,6 +236,10 @@ context("Suppliers landing page", () => {
       cy.supEnterSuppName({ name: "Test Supplier" });
     });
 
+    it("turnoff autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateSupplierWithApiCall();
     });
@@ -601,7 +605,7 @@ context("Suppliers landing page", () => {
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
     });
 
