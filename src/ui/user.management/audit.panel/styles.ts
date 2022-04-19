@@ -70,6 +70,7 @@ export default makeStyles(() =>
     listItemContainer: {
       maxHeight: "calc(100vh - 80px)",
       overflow: "auto",
+      paddingBottom: "30px",
     },
   })
 );

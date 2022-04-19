@@ -1,5 +1,6 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
+import { UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
 import Text from "../../components/Text";
 import AuditItemsContainer from "../audit.panel/container";
 import AddEmployeeDialogPresenter from "./dialog.presenter";
@@ -42,6 +43,7 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
         <AuditItemsContainer
           openHistoryPanel={openHistoryPanel}
           closeHistoryPanel={onHistoryPanelClick}
+          queryURL={UM_AUDIT_URL}
         />
       }
       <AddEmployeeDialogPresenter isOpen={isOpen} closeDialog={closeDialog}>

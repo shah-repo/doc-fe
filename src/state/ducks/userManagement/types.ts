@@ -94,6 +94,7 @@ export interface AuditDetailsProps {
   groupId: string;
   ownerDetails: OwnerItemsProp;
   timestamp: string;
+  companyId? : string;
 }
 
 export enum ACTION_TITLE_MAPPING {

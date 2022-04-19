@@ -1,6 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
+import AuditItemsContainer from "../../user.management/audit.panel/container";
 import AddGroupStyles from "./AddGroup.styles";
 import AddGroup from "./Group";
 
@@ -18,8 +19,19 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
   closeDialog,
 }) => {
   const classes = AddGroupStyles();
+  // load history panel
+  const [openHistoryPanel, setHistoryPanel] = React.useState<boolean>(false);
+  const onHistoryPanelClick = () => { setHistoryPanel(!openHistoryPanel); };
   return (
     <Box>
+      <Button
+        variant="contained"
+        onClick={onHistoryPanelClick}
+        id="Group-openDialog"
+        className={classes.historyButton}
+      >
+        <Text message="user.management.audit" />
+      </Button>
       <Button
         variant="contained"
         onClick={openDialog}
@@ -35,6 +47,14 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
         title={"group.management.create.group"}
         isCreateMode={true}
       />
+      {/* TODO: Move URL In common Constants */}
+      {openHistoryPanel &&
+        <AuditItemsContainer
+          openHistoryPanel={openHistoryPanel}
+          closeHistoryPanel={onHistoryPanelClick}
+          queryURL="/groups/audit"
+        />
+      }
     </Box>
   ); };
 

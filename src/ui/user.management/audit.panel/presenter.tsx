@@ -1,7 +1,7 @@
 import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { each, groupBy, isEmpty, map, pick, sortBy, values } from "lodash";
+import { each, groupBy, isEmpty, map, pick, sortBy, values, without } from "lodash";
 import qs from "query-string";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -10,7 +10,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import apiClient from "../../../state/apiClient";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
+import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPING, AuditDetailsProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
@@ -23,6 +23,7 @@ let call: CancelTokenSource;
 interface OwnProps {
   openHistoryPanel: boolean;
   closeHistoryPanel: (panel: boolean) => void;
+  queryURL: string;
 }
 
 interface TranslatedTextProps {
@@ -32,6 +33,7 @@ interface TranslatedTextProps {
 const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
+  queryURL,
 }) => {
   // Take from constants
   const limit = UM_AUDIT_HISTORY_LIMIT;
@@ -110,7 +112,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           sortedIndex: 1,
         };
       }
-    } else if (auditRecord.fieldPath === "groups") {
+    } else if (auditRecord.fieldPath === "groups" || auditRecord.fieldPath === "permissions" || auditRecord.fieldPath === "tags" || auditRecord.fieldPath === "parents") {
       if (auditRecord.type === "ARRAY_NEW") {
         if (auditRecord.previousValue === "undefined") {
           actionInfo = {
@@ -170,13 +172,13 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     ) {
       sameGroup.unshift({
         primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedUserEmail, {}),
-        secondaryText: employeeDetails.user.email,
+        secondaryText: employeeDetails.user.email || "N/A",
         sortedIndex: 2,
       });
       if (!auditTypes.includes(ACTION_TITLE_MAPPING.CreatedNewUser)) {
         sameGroup.unshift({
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedUserName, {}),
-          secondaryText: employeeDetails.user.name,
+          secondaryText: employeeDetails.user.name || "N/A",
           sortedIndex: 1,
         });
       }
@@ -184,7 +186,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     if (auditTypes.includes(ACTION_TITLE_MAPPING.ResetPassword)) {
       sameGroup.unshift({
         primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPasswordFor, {}),
-        secondaryText: employeeDetails.user.name,
+        secondaryText: employeeDetails.user.name || "N/A",
         sortedIndex: 2,
       });
     }
@@ -219,7 +221,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: "" })
         );
       }
-      let secondaryTextHtml = <span>{secondaryText.join(", ")}</span>;
+      let secondaryTextHtml = <span>{without(secondaryText, undefined, "").length ?
+        secondaryText.join(", ") : "N/A"}</span>;
       let primaryTextHtml = <span>{primaryText}</span>;
       if (auditType === ACTION_TITLE_MAPPING.EmployeeNameUpdated) {
         const items = secondaryText[0].split("-NAME-UP-DATED-TO-");
@@ -270,7 +273,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
 
   const getCardGroups = (response) => {
     const auditRecords = map(response, (auditRecord) => {
-      const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp } = auditRecord;
+      const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp, companyId } = auditRecord;
       const employeeDetails = getUserDetails(employeeId) || { user: { name: employeeName, email: "" } };
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
       return {
@@ -278,6 +281,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         groupKey: `${groupId}-${timestamp}-${ownerId}`,
         ownerDetails,
         employeeDetails,
+        companyId,
         timestamp: `${getFormattedDateString(timestamp, MomentFormats.BriefDateTime)}`,
         ...getDescription(auditRecord, employeeDetails),
       };
@@ -287,7 +291,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     const cardGroups = {};
     each(auditRecordGroups, (groupedItems, groupKey) => {
       cardGroups[groupKey] = {
-        ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails"]),
+        ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails", "companyId"]),
         descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails),
       };
     });
@@ -301,7 +305,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      setErrorMessage("");
      const requestConfig: AxiosRequestConfig = {
        method: "get",
-       url: UM_AUDIT_URL,
+       url: queryURL,
        params: { offset: page, limit },
        paramsSerializer: (params) => qs.stringify(params),
        headers: {
