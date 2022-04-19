@@ -235,12 +235,15 @@ context("Suppliers landing page", () => {
     it("Enter 'Supplier Name'", () => {
       cy.supEnterSuppName({ name: "Test Supplier" });
     });
-    it("Add first Approver'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
-    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateSupplierWithApiCall();
     });
+
+    it("Add first Approver'", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+    });
+
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
     });
