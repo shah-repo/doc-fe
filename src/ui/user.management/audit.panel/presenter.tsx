@@ -290,6 +290,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     const auditRecordGroups = groupBy(auditRecords, "groupKey");
     const cardGroups = {};
     each(auditRecordGroups, (groupedItems, groupKey) => {
+      console.log(groupedItems);
       cardGroups[groupKey] = {
         ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails", "companyId"]),
         descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails),

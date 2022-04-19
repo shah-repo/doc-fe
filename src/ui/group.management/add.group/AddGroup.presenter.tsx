@@ -1,7 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
-import AuditItemsContainer from "../../user.management/audit.panel/container";
+import AuditItemsContainer from "../audit.panel/container";
 import AddGroupStyles from "./AddGroup.styles";
 import AddGroup from "./Group";
 
@@ -59,3 +59,5 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
   ); };
 
 export default AddGroupPresenter;
+
+

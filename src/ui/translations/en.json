@@ -1118,6 +1118,7 @@
   "group.management.edit.group": "Edit Group",
   "group.management.group.type": "Group Type",
   "group.management.list.of.users": "Start typing to see the list of users…",
+  "group.management.audit.history.AddedGroup": "AddedGroup",
   "change.owner": "Change Owner",
   "change.owner.update": "Update Owner",
   "DRAFT": "Draft",

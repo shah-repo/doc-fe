@@ -24,4 +24,4 @@ export const API_TOKEN_REVOKE_URL = `${API_TOKEN}/revoke`;
 export const UM_AUDIT_URL = "/employees/audit";
 // TODO: Check below constants
 export const UM_AUDIT_HISTORY_INITIAL_OFFSET = 0;
-export const UM_AUDIT_HISTORY_LIMIT = 50;
+export const UM_AUDIT_HISTORY_LIMIT = 1;

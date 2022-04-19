@@ -120,6 +120,7 @@ export enum ACTION_TITLE_MAPPING {
   RemovedUserEmail="RemovedUserEmail",
   RemovedUserName="RemovedUserName",
   RemovedGroupName="RemovedGroupName",
+  AddedGroup = "AddedGroup",
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
