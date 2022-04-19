@@ -4,7 +4,7 @@ import { Prompt } from "react-router-dom";
 import { ARFormSaveContext } from "../../change.request/form/assessmentForm/Actions";
 import { FormSaveContext } from "../../documentRevision/forms/presenters/Actions";
 import useDialog from "../../hooks/useDialog";
-import UnsavedChangesDialog from "./UnsavedChangesDialog";
+import UnsavedChangesSessionDialog from "./UnsavedChangesSessionDialog/UnsavedChangesDialog";
 
 interface Props {
   when: boolean;
@@ -91,14 +91,17 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   return (
     <>
       <Prompt when={when} message={handleBlockedNavigation} />
-      <UnsavedChangesDialog
+      <UnsavedChangesSessionDialog
         visible={dialogPrompt.isOpen}
         onCancel={closeModal}
+        onClose={closeModal}
         onConfirm={handleConfirmNavigationClick}
         value={value}
         setValue={setRadioValue}
         content={"document.revision.unsaved.changes.alert"}
         title={"document.revision.unsaved.changes.title"}
+        confirmText={"common.leave"}
+        cancelText={"common.go.back"}
       />
     </>
   );

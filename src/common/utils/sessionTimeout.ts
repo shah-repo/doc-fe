@@ -13,6 +13,7 @@ export class SessionTimeoutService {
   // eslint-disable-next-line arrow-body-style
   private callbackFunction: () => void = () => { return; };
   private timer: any;
+  private alertMinutes = 1000 * 60 * 43;
 
   private constructor() {
     this.runTimer();
@@ -21,7 +22,7 @@ export class SessionTimeoutService {
   private runTimer = () => {
     this.timer = setTimeout(() => {
       this.callbackFunction();
-    }, 10000);
+    }, this.alertMinutes);
   };
 
   public setTimeoutCallback(callback: () => void) {

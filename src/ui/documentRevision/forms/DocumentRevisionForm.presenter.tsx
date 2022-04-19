@@ -17,7 +17,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
-import UnsavedChangesDialog from "../../components/forms/UnsavedChangesDialog";
+import SessionTimer from "../../components/forms/SessionTimer";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
@@ -132,10 +132,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true, needsSignature: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
   const [forceNewRender, setNewRender] = React.useState();
-  const [value, setRadioValue] = React.useState("true");
   const { revisionChangeType } = values || {};
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
   const { schema = [] } =  workspaceState || {};
+  const isFormDirty = !isEqual(workspaceState?.formInput || {}, formState?.getValues()) || formik.dirty;
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -290,15 +290,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       xs={12}
     >
       <RedlineBanner {...{ bannerPortal }}/>
-      <UnsavedChangesDialog
-        visible={sessionDialog.isOpen}
-        onCancel={sessionDialog.close}
-        onConfirm={sessionDialog.close}
-        value={value}
-        setValue={setRadioValue}
-        content={"document.revision.session.unsaved.changes.alert"}
-        title={"document.revision.session.unsaved.changes.title"}
-      />
+      <SessionTimer {...{ sessionDialog, isFormDirty }}/>
       <UpgradeToLatestContainer
         type="banner"
         docRevId={documentRevision?.id}

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import useDialog from "../hooks/useDialog";
 
-const tenMinutes = 1000 * 60 * 3;
+const tenMinutes = 1000 * 60 * 10;
 
 const PingServer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
