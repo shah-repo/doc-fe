@@ -810,6 +810,18 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
   cy.listLoadingElementShouldNotExist();
 });
 
+function compareStringsEmptyStringLast(a: string, b: string) {
+  if (a.length === 0) {
+    return 1;
+  }
+
+  if (b.length === 0) {
+    return -1;
+  }
+
+  return (a <= b) ? -1 : 1;
+}
+
 Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number}) => {
   const cellContents: string[] = [];
   cy.get("tr.k-master-row")
@@ -821,7 +833,7 @@ Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number
     })
     .then(() => {
       const actual = cellContents.slice();
-      cy.wrap(actual).should("deep.eq", cellContents);
+      cy.wrap(actual).should("deep.eq", cellContents.sort(compareStringsEmptyStringLast).reverse());
     });
 });
 
@@ -836,7 +848,7 @@ Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number
     })
     .then(() => {
       const actual = cellContents.slice();
-      cy.wrap(actual).should("deep.eq", cellContents.sort());
+      cy.wrap(actual).should("deep.eq", cellContents.sort(compareStringsEmptyStringLast));
     });
 });
 
