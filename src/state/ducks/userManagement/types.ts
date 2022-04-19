@@ -106,6 +106,7 @@ export enum ACTION_TITLE_MAPPING {
   ActivateUser = "ActivateUser",
   Unknown = "Unknown",
   EmployeeNameUpdated = "EmployeeNameUpdated",
+  GroupNameUpdated = "GroupNameUpdated",
   DeletedFromGroup = "DeletedFromGroup",
   DeletedFromGroups = "DeletedFromGroups",
   AddedUserName = "AddedUserName",
@@ -122,12 +123,23 @@ export enum ACTION_TITLE_MAPPING {
   RemovedGroupName="RemovedGroupName",
   AddedGroup = "AddedGroup",
   AddedMembers = "AddedMembers",
+  AddedMember = "AddedMember",
   AddedPermissions = "AddedPermissions",
+  AddedPermission="AddedPermission",
   AddedTags= "AddedTags",
+  AddedTag= "AddedTag",
   AddedParentGroups="AddedParentGroups",
+  AddedParentGroup="AddedParentGroup",
   RemovedMembers="RemovedMembers",
+  RemovedMember="RemovedMember",
   RemovedPermissions="RemovedPermissions",
+  RemovedPermission="RemovedPermission",
   RemovedTags="RemovedTags",
+  RemovedTag="RemovedTag",
+  RemovedParentGroups="RemovedParentGroups",
+  RemovedParentGroup="RemovedParentGroup",
+  UpdatedGroups="UpdatedGroups",
+  UpdatedGroup="UpdatedGroup"
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {

@@ -46,6 +46,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   // const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
+
   const groups = useSelector(userManagementSelectors.groupsById);
   const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : "";
 
@@ -82,17 +83,17 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     if (auditRecord.fieldPath === "name") {
       if (auditRecord.type === "STRING_EDITED") {
         actionInfo = {
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.EmployeeNameUpdated, {}),
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.GroupNameUpdated, {}),
           secondaryText: `${auditRecord.previousValue}-NAME-UP-DATED-TO-${auditRecord.nextValue}`,
-          auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
-          sortedIndex: 1,
+          auditType: ACTION_TITLE_MAPPING.GroupNameUpdated,
+          sortedIndex: 2,
         };
       } else if (auditRecord.type === "STRING_NEW") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedGroup, {}),
           secondaryText: auditRecord.nextValue,
           auditType: ACTION_TITLE_MAPPING.AddedGroup,
-          sortedIndex: 1,
+          sortedIndex: 2,
         };
       }
     }
@@ -103,16 +104,16 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedMembers, {}),
           secondaryText: addedMember.user?.name,
           auditType: ACTION_TITLE_MAPPING.AddedMembers,
-          sortedIndex: 2,
+          sortedIndex: 3,
         };
       }
-      if (auditRecord.type === "ARRAY_DELETED") {
+      else if (auditRecord.type === "ARRAY_DELETED") {
         const removedMember = getUserDetails(auditRecord.previousValue) || { user: { name: "", email: "" } };
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedMembers, {}),
           secondaryText: removedMember.user?.name,
           auditType: ACTION_TITLE_MAPPING.RemovedMembers,
-          sortedIndex: 2,
+          sortedIndex: 3,
         };
       }
     }
@@ -122,10 +123,10 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedPermissions, {}),
           secondaryText: parseStringArrary(auditRecord.nextValue),
           auditType: ACTION_TITLE_MAPPING.AddedPermissions,
-          sortedIndex: 3,
+          sortedIndex: 4,
         };
       }
-      if (auditRecord.type === "ARRAY_DELETED") {
+      else if (auditRecord.type === "ARRAY_DELETED") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedPermissions, {}),
           secondaryText: auditRecord.previousValue,
@@ -140,15 +141,15 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedTags, {}),
           secondaryText: parseStringArrary(auditRecord.nextValue),
           auditType: ACTION_TITLE_MAPPING.AddedTags,
-          sortedIndex: 4,
+          sortedIndex: 5,
         };
       }
-      if (auditRecord.type === "ARRAY_DELETED") {
+      else if (auditRecord.type === "ARRAY_DELETED") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedTags, {}),
           secondaryText: auditRecord.previousValue,
           auditType: ACTION_TITLE_MAPPING.RemovedTags,
-          sortedIndex: 4,
+          sortedIndex: 5,
         };
       }
     }
@@ -156,30 +157,45 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroups, {}),
-          secondaryText: getGroupName( auditRecord.nextValue),
+          secondaryText: getGroupName(auditRecord.nextValue),
           auditType: ACTION_TITLE_MAPPING.AddedParentGroups,
-          sortedIndex: 4,
+          sortedIndex: 6,
+        };
+      }
+      else if (auditRecord.type === "ARRAY_DELETED") {
+        actionInfo = {
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedParentGroups, {}),
+          secondaryText: getGroupName(auditRecord.previousValue),
+          auditType: ACTION_TITLE_MAPPING.RemovedParentGroups,
+          sortedIndex: 6,
         };
       }
     }
     return actionInfo;
   };
 
-  const addUserNameAndEmailBlock = (sameGroup, employeeDetails) => {
-    console.log(sameGroup);
+  const addUpdatedGroupName = (sameGroup, employeeDetails, companyGroupName) => {
+    const auditTypes = map(sameGroup, "auditType");
+    if (
+      !auditTypes.includes(ACTION_TITLE_MAPPING.GroupNameUpdated) &&
+      !auditTypes.includes(ACTION_TITLE_MAPPING.AddedGroup)
+    ) {
+      sameGroup.unshift({
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroup, {}),
+        secondaryText: companyGroupName || "N/A",
+        sortedIndex: 1,
+      });
+    }
     return sortBy(sameGroup, "sortedIndex");
   };
 
-  const createGroups = (groupedItems, employeeDetails) => {
+  const createGroups = (groupedItems, employeeDetails, companyGroupName) => {
     const similarGroups = groupBy(groupedItems, "primaryText");
     let sameGroup = map(similarGroups, (items, key) => {
       const auditType = items[0].auditType;
-      let sortedIndex = 0;
+      const sortedIndex =  map(items, "sortedIndex")[0] || 0;
       let primaryText = key;
       const secondaryText = map(items, "secondaryText");
-      if (auditType === ACTION_TITLE_MAPPING.AddedToGroups || auditType === ACTION_TITLE_MAPPING.DeletedFromGroups) {
-        sortedIndex = items[0].sortedIndex;
-      }
       if (auditType === ACTION_TITLE_MAPPING.AddedToGroups && secondaryText.length <= 1) {
         primaryText = getTranslatedText(ACTION_TITLE_MAPPING.AddedToGroup, {});
       }
@@ -198,10 +214,74 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: "" })
         );
       }
+      // Added Permission
+      if (auditType === ACTION_TITLE_MAPPING.AddedPermissions && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedPermissions, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedPermission, { groupName: "" })
+        );
+      }
+      // Removed Permission
+      if (auditType === ACTION_TITLE_MAPPING.RemovedPermissions && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedPermissions, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedPermission, { groupName: "" })
+        );
+      }
+      // UpadatedGroup
+      if (auditType === ACTION_TITLE_MAPPING.UpdatedGroups && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroups, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroup, { groupName: "" })
+        );
+      }
+      // Added tags
+      if (auditType === ACTION_TITLE_MAPPING.AddedTags && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedTags, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedTag, { groupName: "" })
+        );
+      }
+      // Remove tags
+      if (auditType === ACTION_TITLE_MAPPING.RemovedTags && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedTags, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedTag, { groupName: "" })
+        );
+      }
+      // Added ParentGroups
+      if (auditType === ACTION_TITLE_MAPPING.AddedParentGroups && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroups, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroup, { groupName: "" })
+        );
+      }
+      // Remove Parent Group
+      if (auditType === ACTION_TITLE_MAPPING.RemovedParentGroups && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedParentGroups, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedParentGroup, { groupName: "" })
+        );
+      }
+      // Added Members
+      if (auditType === ACTION_TITLE_MAPPING.AddedMembers && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedMembers, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedMember, { groupName: "" })
+        );
+      }
+
+      // Remove members
+      if (auditType === ACTION_TITLE_MAPPING.RemovedMembers && secondaryText.length <= 1) {
+        primaryText = primaryText.replace(
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedMembers, { groupName: "" }),
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedMember, { groupName: "" })
+        );
+      }
       let secondaryTextHtml = <span>{without(secondaryText, undefined, "").length ?
         secondaryText.join(", ") : "N/A"}</span>;
       let primaryTextHtml = <span>{primaryText}</span>;
-      if (auditType === ACTION_TITLE_MAPPING.EmployeeNameUpdated) {
+      if (auditType === ACTION_TITLE_MAPPING.GroupNameUpdated) {
         const items = secondaryText[0].split("-NAME-UP-DATED-TO-");
         secondaryTextHtml = (
           <>
@@ -246,21 +326,21 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       return { primaryText: primaryTextHtml, secondaryText: secondaryTextHtml, sortedIndex, auditType };
     });
     sameGroup = sortBy(sameGroup, "sortedIndex");
-    return addUserNameAndEmailBlock(sameGroup, employeeDetails);
+    return addUpdatedGroupName(sameGroup, employeeDetails, companyGroupName);
   };
 
   const getCardGroups = (response) => {
     const auditRecords = map(response, (auditRecord) => {
-      const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp, companyId } = auditRecord;
+      const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp, companyId, companyGroupId } = auditRecord;
       const employeeDetails = getUserDetails(employeeId) || { user: { name: employeeName, email: "" } };
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
-      console.log("groupKey :: ", `${groupId}-${timestamp}-${ownerId}`);
       return {
         ...auditRecord,
         groupKey: `${groupId}-${timestamp}-${ownerId}`,
         ownerDetails,
         employeeDetails,
         companyId,
+        companyGroupId,
         timestamp: `${getFormattedDateString(timestamp, MomentFormats.BriefDateTime)}`,
         ...getDescription(auditRecord, employeeDetails),
       };
@@ -269,10 +349,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     const auditRecordGroups = groupBy(auditRecords, "groupKey");
     const cardGroups = {};
     each(auditRecordGroups, (groupedItems, groupKey) => {
-      console.log(groupedItems);
       cardGroups[groupKey] = {
         ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails", "companyId"]),
-        descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails),
+        descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails, getGroupName(auditRecordGroups[groupKey][0].companyGroupId)),
       };
     });
     return cardGroups;
