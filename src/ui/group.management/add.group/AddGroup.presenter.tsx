@@ -58,5 +58,3 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
   ); };
 
 export default AddGroupPresenter;
-
-
