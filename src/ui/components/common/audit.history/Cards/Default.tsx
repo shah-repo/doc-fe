@@ -14,7 +14,7 @@ const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {
   const { timestamp, ownerDetails, descriptions } = auditDetails;
   const classes = styles();
   return (
-    <Box width={"100%"} fontFamily="Sora" className={classes.outerContainer}>
+    <Box className={classes.outerContainer}>
       <Box display="grid">
         <UserAvatarCard timestamp={timestamp} userDetails={ownerDetails} />
         {map(descriptions, (groupItem, index) => (
