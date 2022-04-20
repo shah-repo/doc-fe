@@ -13,7 +13,7 @@ export default makeStyles(() =>
       fontFamily: "Sora",
       fontWeight: 600,
       fontSize: 14,
-      color: Colors.font_black,
+      color: Colors.almost_black,
       letterSpacing: 0,
     },
     description: {

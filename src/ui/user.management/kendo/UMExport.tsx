@@ -3,15 +3,17 @@ import { isEmpty, map, startCase } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
+import { UMExportDataProp } from "../../../state/ducks/userManagement/types";
 import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
+import { KendoColumn } from "../../components/common/kendo/types";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { styles } from "../../documentType/list/styles";
 import useDialog from "../../hooks/useDialog";
 
 interface Props {
-  gridData: any[];
-  columns: any[];
+  gridData: Partial<UMExportDataProp>[];
+  columns: KendoColumn[];
 }
 const UMExport: React.FunctionComponent<Props> = ({ gridData, columns }) => {
   const classes = styles();
