@@ -10,6 +10,11 @@ const styles = makeStyles(() =>
       "& .MuiIconButton-colorSecondary": {
         color: Colors.navy,
       },
+      "& .MuiTypography-root": {
+        fontSize: "14px",
+        fontFamily: "Sora",
+        fontWeight: 400,
+      },
     },
   }));
 

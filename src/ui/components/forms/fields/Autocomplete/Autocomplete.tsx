@@ -37,6 +37,16 @@ export const selectStyles = {
     ...base,
     minHeight: "40px",
   }),
+  option: (base) => ({
+    ...base,
+    fontFamily: "Sora",
+  }),
+  placeholder: (base) => ({
+    ...base,
+    fontFamily: "Sora",
+    letterSpacing: "normal",
+    color: Colors.disable_text,
+  }),
 };
 
 const styles = makeStyles(() =>

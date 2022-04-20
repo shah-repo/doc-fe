@@ -89,7 +89,8 @@ enum Colors {
   light_gray_border="#CCD4D9",
   // Platinum
   platinum="#E5E5E5",
-  chinese_silver="#C8CACF"
+  chinese_silver="#C8CACF",
+  disable_text="#999999",
 }
 
 export default Colors;

@@ -13,5 +13,6 @@ export const styles = {
     fontFamily: "Sora",
     fontWeight: 600,
     fontSize: 12,
+    color: Colors.almost_black,
   },
 };

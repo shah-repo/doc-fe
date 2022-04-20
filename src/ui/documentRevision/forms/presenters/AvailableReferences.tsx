@@ -217,6 +217,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
+                placeholder="Select..."
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
@@ -230,7 +231,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 }}
                 inputProps={{
                   ...params.inputProps,
-                  style: { padding: "10.5px 0" },
+                  style: { padding: "10.5px 10px", fontFamily: "Sora" },
                 }}
               />
             </Box>

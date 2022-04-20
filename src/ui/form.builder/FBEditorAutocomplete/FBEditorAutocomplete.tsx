@@ -1,7 +1,6 @@
 import { filter } from "lodash";
 import React from "react";
 import { FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
-import Colors from "../../layout/theme/utils/colors";
 import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
 import { styles } from "../styles/FBEditorTextField.styles";
 
@@ -18,6 +17,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
         boxProps={{ mb: 3.125, className: classes.error }}
         labelProps={AutoCompleteStyles.labelProps}/>
       <FBEditorPlaceholder key={`fb-editor-placeholder-${type}-${index}`}
+        boxProps={{ mb: 3.125, className: classes.error }}
         labelProps={AutoCompleteStyles.labelProps}
         className={classes.textfield}/>
       <FBAutocomplete
@@ -28,7 +28,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
         name="optionId"
         key={`fb-editor-${type}-${index}`}
         rules="required"
-        inputPropStyle={{ height: 40, background: Colors.white, border: `1px solid ${Colors.gray_goose}`, borderRadius: 3 }}
+        inputPropStyle={AutoCompleteStyles.inputPropStyle}
         labelProps={AutoCompleteStyles.labelProps}
         inputPropStyleSize="small"
       />

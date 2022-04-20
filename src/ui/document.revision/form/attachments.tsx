@@ -6,6 +6,7 @@ import AttachmentField from "../../components/common/attachment.field/container"
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 import { useAttachments } from "../../hooks/docCustomization/useCustomization";
+import Colors from "../../layout/theme/utils/colors";
 
 interface Props {
   isDisabled: boolean;
@@ -29,6 +30,7 @@ const classes = {
     fontSize: "12px",
     fontWeight: 600,
     fontFamily: "Sora",
+    color: Colors.almost_black,
   },
 };
 

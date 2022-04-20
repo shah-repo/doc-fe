@@ -1,6 +1,7 @@
 import { Box, Icon } from "@material-ui/core";
 import React from "react";
 import { FBButton, FBDialog, FBEditorValidationProps, FBProvider, FBRadioGroup, FBSchema } from "..";
+import Colors from "../../layout/theme/utils/colors";
 import { withFBEditorValidation } from "./FBEditorValidation.wrap";
 
 const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
@@ -31,6 +32,7 @@ const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
             value: "disabled",
           },
         ]}
+        labelProps={{ fontFamily: "Sora", fontWeight: 600, fontSize: 14, color: Colors.almost_black, lineHeight: "18px" }}
       />
     </Box>
     {customValidationEnabled && (

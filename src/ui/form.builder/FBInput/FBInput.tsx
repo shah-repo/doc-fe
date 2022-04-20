@@ -27,6 +27,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   includeNotes,
   isOutput,
   lockOwnerName,
+  labelProps,
 }) => (
   <>
     {!hidden && (
@@ -52,7 +53,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
               )}
             </Observer>
             {!includes(FBInputState.omitLabel, type) && label && (
-              <FBLabel {...{ error, label, loading }} />
+              <FBLabel {...{ error, label, loading, labelProps }} />
             )}
           </Box>
 
