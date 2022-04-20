@@ -1,8 +1,8 @@
 import { Box, Button, createStyles, makeStyles } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as LoadMore } from "../../../assets/images/load_more_arrow.svg";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
+import { ReactComponent as LoadMore } from "../../../../assets/images/load_more_arrow.svg";
+import Text from "../../../components/Text";
+import Colors from "../../../layout/theme/utils/colors";
 
 const styles = makeStyles(() =>
   createStyles({

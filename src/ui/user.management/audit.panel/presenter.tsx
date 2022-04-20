@@ -13,10 +13,10 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPING, AuditDetailsProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
+import Default from "../../components/common/audit.history/Cards/Default";
+import { LoadMoreButton } from "../../components/common/audit.history/LoadMoreButton";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
-import Default from "./Cards/Default";
-import { LoadMoreButton } from "./LoadMoreButton";
 import styles from "./styles";
 
 let call: CancelTokenSource;

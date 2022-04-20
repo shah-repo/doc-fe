@@ -5,7 +5,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { Nullable } from "../../../../../state/ducks/common/types";
+import { Nullable } from "../../../../../../state/ducks/common/types";
 import styles from "./common.styles";
 import UserCard from "./UserCard";
 

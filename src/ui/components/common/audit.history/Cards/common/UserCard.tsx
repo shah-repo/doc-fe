@@ -1,8 +1,8 @@
 import { Avatar, Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
-import Colors from "../../../../layout/theme/utils/colors";
+import { Nullable } from "../../../../../../state/ducks/common/types";
+import Colors from "../../../../../layout/theme/utils/colors";
+import { getInitalsFromName } from "../../../../icons/avatar/helpers";
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
