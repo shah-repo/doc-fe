@@ -13,7 +13,7 @@ export default makeStyles(() =>
       fontFamily: "Sora",
       fontWeight: 600,
       fontSize: "12px",
-      color: Colors.font_black,
+      color: Colors.almost_black,
       margin: "0 2px",
     },
     iconContainer: {

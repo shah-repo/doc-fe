@@ -8,8 +8,7 @@ enum Colors {
   water="#EEF3FF",
   // black
   black = "#000",
-  almost_black = "#080B11",
-  font_black = "#080B11",
+  almost_black = "#080B11", // font_black
   // gray
   hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
