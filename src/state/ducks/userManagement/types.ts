@@ -11,6 +11,10 @@ export interface GetEmployeeResponse {
   user: User;
 }
 
+export interface UMExportDataProp extends GetEmployeeResponse {
+  status: string;
+}
+
 export interface GetSlackUrl {
   url: string;
 }
