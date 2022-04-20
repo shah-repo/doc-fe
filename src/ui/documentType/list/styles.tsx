@@ -8,7 +8,7 @@ const commonButtonStyles = {
   "fontFamily": "Sora",
   "text-transform": "capitalize",
 };
-export const  styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: "100%",

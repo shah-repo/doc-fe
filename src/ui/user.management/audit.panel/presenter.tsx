@@ -13,10 +13,10 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPING, AuditDetailsProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
+import Default from "../../components/common/audit.history/Cards/Default";
+import { LoadMoreButton } from "../../components/common/audit.history/LoadMoreButton";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
-import Default from "./Cards/Default";
-import { LoadMoreButton } from "./LoadMoreButton";
 import styles from "./styles";
 
 let call: CancelTokenSource;
@@ -100,7 +100,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (auditRecord.type === "STRING_EDITED") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.EmployeeNameUpdated, {}),
-          secondaryText: `${auditRecord.previousValue}-NAME-UP-DATED-TO-${auditRecord.nextValue}`,
+          secondaryText: `${auditRecord.previousValue}${UM_AUDIT_CONCAT_KEYS.NameSeparator}${auditRecord.nextValue}`,
           auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
           sortedIndex: 0,
         };
@@ -225,7 +225,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         secondaryText.join(", ") : "N/A"}</span>;
       let primaryTextHtml = <span>{primaryText}</span>;
       if (auditType === ACTION_TITLE_MAPPING.EmployeeNameUpdated) {
-        const items = secondaryText[0].split("-NAME-UP-DATED-TO-");
+        const items = secondaryText[0].split(UM_AUDIT_CONCAT_KEYS.NameSeparator);
         secondaryTextHtml = (
           <>
             <span>{items[0]}</span>

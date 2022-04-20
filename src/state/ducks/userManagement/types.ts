@@ -89,8 +89,7 @@ interface OwnerItemsProp {
 
 export interface AuditDetailsProps {
   descriptions: DescriptionItemsProp[];
-  // TODO: Update
-  employeeDetails: any;
+  employeeDetails: Employee;
   groupId: string;
   ownerDetails: OwnerItemsProp;
   timestamp: string;

@@ -1,7 +1,7 @@
 
 import { Box } from "@material-ui/core";
 import React from "react";
-import Colors from "../../../../layout/theme/utils/colors";
+import Colors from "../../../../../layout/theme/utils/colors";
 import styles from "./common.styles";
 
 interface OwnProps {
