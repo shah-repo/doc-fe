@@ -7,16 +7,10 @@ import Colors from "../../../layout/theme/utils/colors";
 const styles = makeStyles(() =>
   createStyles({
     loadMoreButton: {
-      "position": "static",
-      "left": "0%",
-      "right": "18.54%",
-      "top": "0%",
-      "bottom": "0%",
       "font-family": "Sora",
       "fontSize": "10px",
       "font-weight": 600,
       "letter-spacing": "0.5px",
-      "text-transform": "uppercase",
       "color": Colors.navy,
       "margin": 0,
       "&:hover": {
@@ -28,20 +22,18 @@ const styles = makeStyles(() =>
 interface Props {
   disable?: boolean;
   onLoadMore: () => void;
-  position?;
   label?: string;
   id?: string;
 }
 export const LoadMoreButton: React.FunctionComponent<Props> = ({
   disable = false,
   onLoadMore,
-  position = "left",
   label = "common.load.more",
   id = "boxLoadMore",
 }) => {
   const classes = styles();
   return (
-    <Box style={{ float: position }}>
+    <Box style={{ float: "left" }}>
       <Button
         onClick={() => onLoadMore()}
         className={classes.loadMoreButton}

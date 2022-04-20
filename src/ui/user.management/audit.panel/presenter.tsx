@@ -98,7 +98,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (auditRecord.type === "STRING_EDITED") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.EmployeeNameUpdated, {}),
-          secondaryText: `${auditRecord.previousValue}-NAME-UP-DATED-TO-${auditRecord.nextValue}`,
+          secondaryText: `${auditRecord.previousValue}${UM_AUDIT_CONCAT_KEYS.NameSeparator}${auditRecord.nextValue}`,
           auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
           sortedIndex: 0,
         };
@@ -222,7 +222,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       let secondaryTextHtml = <span>{secondaryText.join(", ")}</span>;
       let primaryTextHtml = <span>{primaryText}</span>;
       if (auditType === ACTION_TITLE_MAPPING.EmployeeNameUpdated) {
-        const items = secondaryText[0].split("-NAME-UP-DATED-TO-");
+        const items = secondaryText[0].split(UM_AUDIT_CONCAT_KEYS.NameSeparator);
         secondaryTextHtml = (
           <>
             <span>{items[0]}</span>
