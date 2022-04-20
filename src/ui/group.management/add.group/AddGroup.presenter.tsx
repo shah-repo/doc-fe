@@ -52,7 +52,6 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
         <AuditItemsContainer
           openHistoryPanel={openHistoryPanel}
           closeHistoryPanel={onHistoryPanelClick}
-          queryURL="/groups/audit"
         />
       }
     </Box>

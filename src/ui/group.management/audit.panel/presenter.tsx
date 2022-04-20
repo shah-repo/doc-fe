@@ -10,7 +10,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import apiClient from "../../../state/apiClient";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT } from "../../../state/ducks/userManagement/constants";
+import { GM_AUDIT_HISTORY_INITIAL_OFFSET, GM_AUDIT_HISTORY_LIMIT, GM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPING, AuditDetailsProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Default from "../../components/common/audit.history/Cards/Default";
@@ -23,7 +23,6 @@ let call: CancelTokenSource;
 interface OwnProps {
   openHistoryPanel: boolean;
   closeHistoryPanel: (panel: boolean) => void;
-  queryURL: string;
 }
 
 interface TranslatedTextProps {
@@ -33,16 +32,15 @@ interface TranslatedTextProps {
 const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
-  queryURL,
 }) => {
   // Take from constants
-  const limit = UM_AUDIT_HISTORY_LIMIT;
+  const limit = GM_AUDIT_HISTORY_LIMIT;
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
-  const [page, setPage] = useState(UM_AUDIT_HISTORY_INITIAL_OFFSET);
+  const [page, setPage] = useState(GM_AUDIT_HISTORY_INITIAL_OFFSET);
   // const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
@@ -383,7 +381,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      setErrorMessage("");
      const requestConfig: AxiosRequestConfig = {
        method: "get",
-       url: queryURL,
+       url: GM_AUDIT_URL,
        params: { offset: page, limit },
        paramsSerializer: (params) => qs.stringify(params),
        headers: {
