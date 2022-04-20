@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { ACTION_TITLE_MAPPING, AuditProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
+import { ACTION_TITLE_MAPPING, UM_AUDIT_CONCAT_KEYS, UserManagementAuditProps } from "../../../state/ducks/userManagement/types";
 import Colors from "../../layout/theme/utils/colors";
 import AuditItemPresenter from "./presenter";
 
@@ -62,7 +62,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     return sortBy(sameGroup, "sortedIndex");
   };
 
-  const getDescription = (auditRecord, employeeDetails) => {
+  const getDescription = (auditRecord: UserManagementAuditProps, employeeDetails) => {
     let actionInfo = {
       primaryText: ACTION_TITLE_MAPPING.Unknown as string,
       secondaryText: auditRecord.id,
@@ -242,7 +242,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     return addUserNameAndEmailBlock(sameGroup, employeeDetails);
   };
 
-  const getCardGroups = (auditData: AuditProps[]) => {
+  const getCardGroups = (auditData: UserManagementAuditProps[]) => {
     const auditRecords = map(auditData, (auditRecord) => {
       const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp } = auditRecord;
       const employeeDetails = getUserDetails(employeeId) || { user: { name: employeeName, email: "" } };
