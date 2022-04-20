@@ -149,3 +149,15 @@ export enum UM_AUDIT_CONCAT_KEYS {
   DeleteFromGroup = "-DELETED-FROM-GROUP-",
   AddToGroup = "-ADDED-TO-GROUP-"
 }
+
+export interface AuditProps {
+  fieldPath: string;
+  type: string;
+  employeeId: string;
+  employeeName: string;
+  ownerId: string;
+  ownerName: string;
+  ownerEmail: string;
+  groupId: string;
+  timestamp: string;
+}
