@@ -3,10 +3,10 @@ import { KendoColumn, KendoGridConfiguration, PageState } from "../../components
 
 const columns: KendoColumn[] = [
   {
-    field: "isOfficial",
+    field: "groupType",
     title: "group.management.group.type",
     show: true,
-    filter: "boolean",
+    filter: "text",
     groupable: true,
     orderIndex: 1,
     showColumnMenu: true,
