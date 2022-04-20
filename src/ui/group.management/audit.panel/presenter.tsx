@@ -31,6 +31,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const intl = useIntl();
   const limit = GM_AUDIT_HISTORY_LIMIT;
   const [isLoading, setIsLoading] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
@@ -50,6 +51,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      call?.cancel();
      call = axios.CancelToken.source();
      setIsLoading(true);
+     setLoadMore(true);
      setErrorMessage("");
      const requestConfig: AxiosRequestConfig = {
        method: "get",
@@ -72,6 +74,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
          ] as AuditDetailsProps[]);
          setPage((prevPageNumber) => prevPageNumber + limit);
          setIsLoading(false);
+         setLoadMore(data.page_total > 0);
        })
        .catch((exception) => {
          setIsLoading(false);
@@ -120,7 +123,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       {isLoading && <LinearProgress />}
       <Box width={300}>{renderAuditRecords()}</Box>
       {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
-      {<LoadMoreButton disable={isLoading} onLoadMore={fetchAuditRecords}  id="historyLoadMore" />}
+      {<LoadMoreButton disable={isLoading || !loadMore} onLoadMore={fetchAuditRecords}  id="historyLoadMore" />}
     </Drawer>
   );
 };
