@@ -33,7 +33,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
 }) => {
-  // Take from constants
   const limit = GM_AUDIT_HISTORY_LIMIT;
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +40,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
   const [page, setPage] = useState(GM_AUDIT_HISTORY_INITIAL_OFFSET);
-  // const groups = useSelector(userManagementSelectors.groupsById);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const intl = useIntl();
 
