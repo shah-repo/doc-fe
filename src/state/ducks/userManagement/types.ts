@@ -161,3 +161,21 @@ export interface AuditProps {
   groupId: string;
   timestamp: string;
 }
+
+export interface GroupManagementAuditProps {
+  fieldPath: string;
+  type: string;
+  employeeId: string;
+  employeeName: string;
+  ownerId: string;
+  ownerName: string;
+  ownerEmail: string;
+  groupId: string;
+  timestamp: string;
+  companyId: string;
+  companyGroupId: string;
+  id: string;
+  previousValue: string;
+  nextValue: string;
+}
+
