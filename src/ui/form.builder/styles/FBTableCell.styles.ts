@@ -18,6 +18,7 @@ export const FBTableCellStyles = makeStyles(() =>
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "18px",
+      fontFamily: "Sora",
     },
     cellBackground: {
       fontWeight: 600,
