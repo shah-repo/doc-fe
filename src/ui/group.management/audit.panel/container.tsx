@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { ACTION_TITLE_MAPPING, GMAuditProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
+import { ACTION_TITLE_MAPPING, GMAuditGroupProps, GMAuditProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import Colors from "../../layout/theme/utils/colors";
 import AuditItemPresenter from "./presenter";
 
@@ -27,13 +27,13 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     intl.formatMessage({ id: `group.management.audit.history.${key}` }, values);
 
   const groups = useSelector(userManagementSelectors.groupsById);
-  const getGroupName = (groupId) => groups[groupId] ? groups[groupId].name : "";
+  const getGroupName = (groupId: string) => groups[groupId] ? groups[groupId].name : "";
 
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
 
 
-  const addUpdatedGroupName = (sameGroup, employeeDetails, companyGroupName) => {
+  const addUpdatedGroupName = (sameGroup, companyGroupName) => {
     const auditTypes = map(sameGroup, "auditType");
     if (
       !auditTypes.includes(ACTION_TITLE_MAPPING.GroupNameUpdated) &&
@@ -48,7 +48,10 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     return sortBy(sameGroup, "sortedIndex");
   };
 
-  const createGroups = (groupedItems, employeeDetails, companyGroupName) => {
+  const createGroups = (
+    groupedItems: GMAuditGroupProps[],
+    companyGroupName: string
+  ) => {
     const similarGroups = groupBy(groupedItems, "primaryText");
     let sameGroup = map(similarGroups, (items, key) => {
       const auditType = items[0].auditType;
@@ -185,7 +188,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       return { primaryText: primaryTextHtml, secondaryText: secondaryTextHtml, sortedIndex, auditType };
     });
     sameGroup = sortBy(sameGroup, "sortedIndex");
-    return addUpdatedGroupName(sameGroup, employeeDetails, companyGroupName);
+    return addUpdatedGroupName(sameGroup, companyGroupName);
   };
 
   const parseStringArray = (value: string) => {
@@ -337,8 +340,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           "companyId",
         ]),
         descriptions: createGroups(
-          groupedItems,
-          auditRecordGroups[groupKey][0].employeeDetails,
+          groupedItems as GMAuditGroupProps[],
           getGroupName(auditRecordGroups[groupKey][0].companyGroupId)
         ),
       };

@@ -192,3 +192,13 @@ export interface GMAuditProps {
   nextValue: string;
 }
 
+export interface GMAuditGroupProps extends GMAuditProps {
+  primaryText: string;
+  secondaryText: string;
+  auditType: ACTION_TITLE_MAPPING;
+  sortedIndex: number;
+  groupKey: string;
+  ownerDetails: Partial<Employee>;
+  employeeDetails: Partial<Employee>;
+}
+

@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
+import { Box, Drawer, IconButton, LinearProgress } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { isEmpty, map, values } from "lodash";
@@ -107,9 +107,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       </div>
       <Box className={classes.listItemContainer}>
         {map(Items, (auditDetails, groupKey) => (
-          <ListItem key={groupKey} disableGutters style={{ padding: 0 }}>
+          <Box key={groupKey} style={{ padding: 0 }}>
             {<Default auditDetails={auditDetails} />}
-          </ListItem>)
+          </Box>)
 
         )}
       </Box>
