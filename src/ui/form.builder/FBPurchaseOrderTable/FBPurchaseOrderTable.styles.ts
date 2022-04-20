@@ -30,7 +30,7 @@ const FBPurchaseOrderClasses = makeStyles({
     "& tr": {
       cursor: "pointer",
       height: "45px",
-      border: "1px solid #C8CACF",
+      border: `1px solid ${Colors.chinese_silver}`,
     },
     "& td": {
       padding: "0px 8px",
