@@ -6,7 +6,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -49,7 +48,6 @@ context("Test Supplier Landing Page for Supira", () => {
 
   context("Test setup", () => {
     it("[API] Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");  // TODO: Update to correct REQs
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
