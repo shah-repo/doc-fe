@@ -175,7 +175,7 @@ export interface UMAuditGroupProps extends UMAuditProps {
   employeeDetails: Partial<Employee>;
 }
 
-export interface GroupManagementAuditProps {
+export interface GMAuditProps {
   fieldPath: string;
   type: string;
   employeeId: string;

@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import apiClient from "../../../state/apiClient";
 import { GM_AUDIT_HISTORY_INITIAL_OFFSET, GM_AUDIT_HISTORY_LIMIT, GM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
-import { AuditDetailsProps, GroupManagementAuditProps } from "../../../state/ducks/userManagement/types";
+import { AuditDetailsProps, GMAuditProps } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Default from "../../components/common/audit.history/Cards/Default";
 import { LoadMoreButton } from "../../components/common/audit.history/LoadMoreButton";
@@ -19,7 +19,7 @@ let call: CancelTokenSource;
 interface OwnProps {
   openHistoryPanel: boolean;
   closeHistoryPanel: (panel: boolean) => void;
-  getCardGroups: (records: GroupManagementAuditProps[]) => object;
+  getCardGroups: (records: GMAuditProps[]) => object;
 }
 
 const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({

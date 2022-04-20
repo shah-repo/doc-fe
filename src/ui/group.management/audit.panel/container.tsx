@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { ACTION_TITLE_MAPPING, GroupManagementAuditProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
+import { ACTION_TITLE_MAPPING, GMAuditProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import Colors from "../../layout/theme/utils/colors";
 import AuditItemPresenter from "./presenter";
 
@@ -198,7 +198,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     return addedPermissions;
   };
 
-  const getDescription = (auditRecord: GroupManagementAuditProps, employeeDetails) => {
+  const getDescription = (auditRecord: GMAuditProps, employeeDetails) => {
     let actionInfo = {
       primaryText: ACTION_TITLE_MAPPING.Unknown as string,
       secondaryText: auditRecord.id,
@@ -299,7 +299,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     return actionInfo;
   };
 
-  const getCardGroups = (response: GroupManagementAuditProps[]) => {
+  const getCardGroups = (response: GMAuditProps[]) => {
     const auditRecords = map(response, (auditRecord) => {
       const {
         employeeId,
