@@ -298,7 +298,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
             <span>{items[0]}</span>
             <span
               style={{
-                color: Colors.font_black,
+                color: Colors.almost_black,
                 padding: "0 2px",
                 fontWeight: 700,
               }}
@@ -315,7 +315,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
         primaryTextHtml = (
           <>
             <span>{items[0]}</span>
-            <span style={{ color: Colors.font_black, padding: "0 2px", fontWeight: 700 }} > {items[1]} </span>
+            <span style={{ color: Colors.almost_black, padding: "0 2px", fontWeight: 700 }} > {items[1]} </span>
           </>
         );
       }
