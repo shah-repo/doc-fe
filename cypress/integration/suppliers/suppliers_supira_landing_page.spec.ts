@@ -537,7 +537,7 @@ context("Test Supplier Landing Page for Supira", () => {
           const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
           it(`${columnHeader} should be in ascending order`, () => {
-            cy.contains(columnHeaderRegex).eq(0).click();
+            cy.contains(columnHeaderRegex).eq(0).arrowClick();
             cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
               .should("be.exist");
             cy.wait(200);
@@ -545,7 +545,7 @@ context("Test Supplier Landing Page for Supira", () => {
           });
 
           it(`${columnHeader} should be in descending order`, () => {
-            cy.contains(columnHeaderRegex).eq(0).click();
+            cy.contains(columnHeaderRegex).eq(0).arrowClick();
             cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
               .should("be.exist");
             cy.wait(200);
