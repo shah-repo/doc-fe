@@ -13,6 +13,7 @@ declare global {
     interface Chainable<Subject> {
       drCreateDocumentRevision(params: { payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       drGetDocumentType(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
+      drGetDocRevs(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
@@ -136,6 +137,16 @@ Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; session
   cy.request({
     method: "GET",
     url: `${CONFIG.BE_URL}/api/v1/document_type`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response ? response.body : []);
+});
+
+Cypress.Commands.add("drGetDocRevs", (params: { employeeId: string; sessionId: string }) => {
+  cy.request({
+    method: "GET",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
     headers: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },

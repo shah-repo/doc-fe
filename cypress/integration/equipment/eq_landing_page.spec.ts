@@ -1491,308 +1491,6 @@ context("NCO document type management", () => {
     });
   });
 
-  context("Add new Doc Type", () => {
-    it("Navigate to document type management", () => {
-      cy.navigToDocumentTypeManagement();
-    });
-
-    it("Click on 'Add Document Type'", () => {
-      cy.dtmClickAddDocumentType();
-    });
-
-    it("Add Document type name", () => {
-      cy.dtmAddDocType({ docType: "Tooling" });
-    });
-
-    it("Add Acronym", () => {
-      cy.dtmAddAcronym({ acronym: "TL-" });
-    });
-
-    it("Check QMS checkbox", () => {
-      cy.dtmSelectQMS();
-    });
-
-    it("Check Needs Signature checkbox", () => {
-      cy.dtmSelectNeedsSignature();
-    });
-
-    it("Select Group 'EQUIPMENT'", () => {
-      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("right").wait(1000);
-      cy.dtmSelectGroup({ group: "EQUIPMENT" });
-    });
-
-    it("Check Needs Signature checkbox", () => {
-      cy.dtmAddCategory({ category: "Equipment" });
-    });
-
-    it("Create Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
-      });
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-  });
-
-
-  context("Add Tooling DocRev", () => {
-    it("[API]Get Company and DocTypes", (done: any) => {
-      cy.request({
-        method: "GET",
-        url: `${CONFIG.BE_URL}/api/v1/document_type`,
-        headers: {
-          Authorization: `bearer ${loggedInEmployee.id}:${loginResponse.sessionId}`,
-        },
-      }).then((res) => {
-        if (res.body.length > 0 ) {
-          toolingDocType = res.body.find(
-            (docType: any) => docType.documentTypeName.includes("Tooling")
-          );
-        }
-        done();
-      });
-    });
-
-    it("[API]Create TL form", (done: any) => {
-      cy.arGetArDocumentByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: loggedInEmployee.id,
-        name: "AR Form",
-      }).then((response) => {
-        initialArDocument = response ? response[0] : {};
-        cy.drCreateDocumentRevision({
-          payload: {
-            attachments: [],
-            description: "<p>Tooling form</p>",
-            document: {
-              docId: "FM-00006",
-              documentType: {
-                id: formDocumentType.id,
-              },
-              securityList: {
-                operators: [],
-                securityEmployees: [],
-                securityGroups: [],
-              },
-            },
-            name: "Tooling form document",
-            referenceTo: [],
-            retrain: false,
-            revisionChangeType: RevisionChangeType.NextRevision,
-            revisionStage: 1,
-            formTemplate: {
-              outputDocumentTypes: [{
-                id: toolingDocType.id,
-              }],
-              schema: [
-                {
-                  name: "fb-default-eq-status",
-                  type: "radiogroup",
-                  index: 0,
-                  label: "EQ Status",
-                  rules: "required",
-                  options: [
-                    {
-                      text: "Active",
-                      value: "Active",
-                    },
-                    {
-                      text: "Inactive",
-                      value: "Inactive",
-                    },
-                  ],
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  deleteDisabled: true,
-                  deleteInFormDisabled: true,
-                },
-                {
-                  name: "fb-primary-owner-eq",
-                  type: "autocomplete",
-                  index: 1,
-                  label: "Primary Owner",
-                  optionId: "13",
-                  placeholder: "Select employee as primary owner",
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  deleteDisabled: true,
-                  validationAttribute: "Primary Owner",
-                  deleteInFormDisabled: true,
-                  applicableValidationSchema: true,
-                },
-                {
-                  name: "fb-coordinator-eq",
-                  type: "autocomplete",
-                  index: 2,
-                  label: "Coordinator",
-                  optionId: "13",
-                  placeholder: "Select employee as coordinator",
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  deleteDisabled: true,
-                  validationAttribute: "Coordinator",
-                  deleteInFormDisabled: true,
-                  applicableValidationSchema: true,
-                },
-                {
-                  index: 3,
-                  type: "eqmaintenance",
-                  name: "pm-ki5wtk5l",
-                  editorConfig: {
-                    type: "preventativeMaintenance",
-                  },
-                  editorProperties: [],
-                  label: "Preventative Maintenance",
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  applicableValidationSchema: true,
-                  validationAttribute: "PM",
-                },
-                {
-                  index: 4,
-                  type: "eqmaintenance",
-                  name: "calibration-ki5wtyj0",
-                  editorConfig: {
-                    type: "calibration",
-                  },
-                  editorProperties: [],
-                  label: "Calibration",
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  applicableValidationSchema: true,
-                  validationAttribute: "Calibration",
-                },
-                {
-                  name: "location-kngiboz9",
-                  type: "select",
-                  index: 5,
-                  label: "Location:",
-                  options: [
-                    {
-                      text: "R&D ",
-                      value: "R&D ",
-                    },
-                    {
-                      text: "Hemolysis ",
-                      value: "Hemolysis ",
-                    },
-                    {
-                      text: "Portable",
-                      value: "Portable",
-                    },
-                    {
-                      text: "CER (Controlled Environment Room)",
-                      value: "CER (Controlled Environment Room)",
-                    },
-                    {
-                      text: "IQC",
-                      value: "IQC",
-                    },
-                    {
-                      text: "form.builder.other",
-                      value: "includeContext",
-                    },
-                  ],
-                  placeholder: "[Select from the List]",
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  validationMode: "default",
-                  editorProperties: [
-                    "includeContext",
-                  ],
-                  validationAttribute: "Location:",
-                  applicableValidationSchema: true,
-                },
-              ],
-            },
-
-          },
-          employeeId: loggedInEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then((response) => {
-          createdEquipmentFormDocument = response;
-          cy.drAPIApproveAndRelease({
-            documentId: createdEquipmentFormDocument.id,
-            payload: {
-              effectiveDate: (new Date()).toISOString(),
-              documentType: { id: approvalRequestDocumentType.id },
-              formDocument: { id: initialArDocument.id },
-              approversWithSignatures: [{ approver: { id: loggedInEmployee.id } }],
-            },
-            employeeId: loggedInEmployee.id,
-            sessionId: loginResponse.sessionId,
-          }).then(() => done());
-        });
-      });
-    });
-
-    it("[API]Create Tooling document with Numeric revision", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Equipment document</p>",
-          document: {
-            docId: "TL-00001",
-            documentType: {
-              id: toolingDocType.id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [],
-            },
-          },
-          name: "Tooling document",
-          formDocument: {
-            id: createdEquipmentFormDocument.id,
-          },
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formInput: {
-            "fb-default-eq-status": "Active",
-            "fb-primary-owner-eq": loggedInEmployee.id,
-            "fb-coordinator-eq": loggedInEmployee.id,
-            "pm-ki5wtk5l": {
-              requirements: "Yes",
-              preventativeForm: createdPMForm.documentId,
-              frequency: 10,
-              instructions: "<p>Instructions for preventative maintenance</p>",
-            },
-            "calibration-ki5wtyj0": {
-              requirements: "Yes",
-              preventativeForm: createdCalibrationForm.documentId,
-              frequency: 5,
-              instructions: "<p>Instructions for calibration</p>",
-            },
-            "location-kngiboz9": "Portable",
-          },
-        },
-        employeeId: loggedInEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdEquipmentNumericRevision = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdEquipmentNumericRevision.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType.id },
-            formDocument: { id: initialArDocument.id },
-            approversWithSignatures: [{ approver: { id: loggedInEmployee.id } }],
-          },
-          employeeId: loggedInEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
-      });
-    });
-  });
-
   context("Navigate and verify Equipment Landing Page", () => {
     it("Click on Equipment list", () => {
       cy.navigToEquipmentList();
@@ -1813,9 +1511,526 @@ context("NCO document type management", () => {
 
     it("Clear Filters", () => {
       cy.dtmClearFilters();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
     });
   });
+
+  context("Create equipment maintenace document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Click 'ADD NEW EQUIPMENT'", () => {
+      cy.get("[id='DocumentByTypeListPresenter-openDocRev']").arrowClick();
+      cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
+        cy.get("div[id^=react-select]").contains("Equipment or Fixture").arrowClick();
+      });
+    });
+
+    it("Enter title 'Equipment maintenance document'", () => {
+      cy.drEnterDocumentTitle({ name: "Manual Equipment" });
+    });
+
+    it("Enter description 'Equipment maintenance'", () => {
+      cy.drEnterDocumentDescription({ description: "Equipment maintenance Manual" });
+    });
+
+    it("Select 'Active' as EQ status", () => {
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+    });
+
+    it("Select Primary Owner", () => {
+      // cy.get("[data-cy='fb-primary-owner-eq']").arrowType(USERS[1].name);
+      cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+    });
+
+    it("Select document 'Yes' for preventative maintenance required", () => {
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+    });
+
+    it("Select 'Maintenance record form' for preventative maintenance required", () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains("Preventative Maintenance form").arrowClick();
+    });
+
+    it("Select preventative maintenance frequency", () => {
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType("10");
+    });
+
+    it("Type preventative maintenance instruction", () => {
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
+        .type("Instructions for preventative maintenance").wait(500);
+      cy.unClick();
+    });
+
+    it("Select document 'Yes' for calibration required", () => {
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+    });
+
+    it("Select 'Maintenance record form' for calibration required", () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains("Calibration form").arrowClick();
+    });
+
+    it("Select calibration frequency", () => {
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType("5");
+    });
+
+    it("Type preventative maintenance instruction", () => {
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy,\"calibration\")]/../div[2]")
+        .type("Instructions for calibration").wait(500);
+      cy.unClick();
+    });
+
+    it("Select Portable Location", () => {
+      cy.get("[id*=select-location]").eq(0).arrowClick();
+      cy.get("ul>li[data-value='Portable']").arrowClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    context("Verify owner", () => {
+      it("Click on Equipment list", () => {
+        cy.navigToEquipmentList();
+      });
+
+      it("Filter by title", () => {
+        cy.filterEquipmentTitle({ name: "Manual Equipment" });
+      });
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Verify Owner name", () => {
+        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
+          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
+        });
+      });
+
+      it("Change Primary Owner", () => {
+        cy.get("[aria-label='Open']").eq(1).arrowClick();
+        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
+        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on Equipment list", () => {
+        cy.navigToEquipmentList();
+      });
+
+      it("Verify Owner name", () => {
+        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
+          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[2].name);
+        });
+      });
+    });
+
+    context("Release EQ", () => {
+      it("[API] Release EQ'", (done: any) => {
+        cy.drGetDocRevs({ employeeId: loggedInEmployee.id, sessionId: loginResponse.sessionId })
+          .then((documentRevisionsRes) => {
+            const manualDocRev = (documentRevisionsRes || []).find((x: any) => x.name === "Manual Equipment") as any;
+            cy.drAPIApproveAndRelease({
+              documentId: manualDocRev.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType.id },
+                formDocument: { id: initialArDocument.id },
+                approversWithSignatures: [{ approver: { id: loggedInEmployee.id } }],
+              },
+              employeeId: loggedInEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+      });
+
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+    });
+
+    context("Revise EQ and verify owner", () => {
+      it("Revise Equipment", () => {
+        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      });
+      it("Change Primary Owner", () => {
+        cy.get("[aria-label='Open']").eq(1).arrowClick();
+        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
+        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
+      it("Click on Equipment list", () => {
+        cy.navigToEquipmentList();
+      });
+
+      it("Verify Owner name", () => {
+        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
+          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
+        });
+      });
+    });
+  });
+
+
+  context("Create Tooling Eqipment", () => {
+    context("Add Tooling DocRev", () => {
+      it("[API]Get Company and DocTypes", (done: any) => {
+        cy.request({
+          method: "GET",
+          url: `${CONFIG.BE_URL}/api/v1/document_type`,
+          headers: {
+            Authorization: `bearer ${loggedInEmployee.id}:${loginResponse.sessionId}`,
+          },
+        }).then((res) => {
+          if (res.body.length > 0 ) {
+            toolingDocType = res.body.find(
+              (docType: any) => docType.documentTypeName.includes("Tool")
+            );
+          }
+          done();
+        });
+      });
+
+      it("[API]Create TL form", (done: any) => {
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: loggedInEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response ? response[0] : {};
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Tooling form</p>",
+              document: {
+                docId: "FM-00006",
+                documentType: {
+                  id: formDocumentType.id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [],
+                },
+              },
+              name: "Tooling form document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: toolingDocType.id,
+                }],
+                schema: [
+                  {
+                    name: "fb-default-eq-status",
+                    type: "radiogroup",
+                    index: 0,
+                    label: "EQ Status",
+                    rules: "required",
+                    options: [
+                      {
+                        text: "Active",
+                        value: "Active",
+                      },
+                      {
+                        text: "Inactive",
+                        value: "Inactive",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-primary-owner-eq",
+                    type: "autocomplete",
+                    index: 1,
+                    label: "TL Owner",
+                    optionId: "13",
+                    placeholder: "Select employee as primary owner",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Primary Owner",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-coordinator-eq",
+                    type: "autocomplete",
+                    index: 2,
+                    label: "Coordinator",
+                    optionId: "13",
+                    placeholder: "Select employee as coordinator",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Coordinator",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    index: 3,
+                    type: "eqmaintenance",
+                    name: "pm-ki5wtk5l",
+                    editorConfig: {
+                      type: "preventativeMaintenance",
+                    },
+                    editorProperties: [],
+                    label: "Preventative Maintenance",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "PM",
+                  },
+                  {
+                    index: 4,
+                    type: "eqmaintenance",
+                    name: "calibration-ki5wtyj0",
+                    editorConfig: {
+                      type: "calibration",
+                    },
+                    editorProperties: [],
+                    label: "Calibration",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "Calibration",
+                  },
+                  {
+                    name: "location-kngiboz9",
+                    type: "select",
+                    index: 5,
+                    label: "Location:",
+                    options: [
+                      {
+                        text: "R&D ",
+                        value: "R&D ",
+                      },
+                      {
+                        text: "Hemolysis ",
+                        value: "Hemolysis ",
+                      },
+                      {
+                        text: "Portable",
+                        value: "Portable",
+                      },
+                      {
+                        text: "CER (Controlled Environment Room)",
+                        value: "CER (Controlled Environment Room)",
+                      },
+                      {
+                        text: "IQC",
+                        value: "IQC",
+                      },
+                      {
+                        text: "form.builder.other",
+                        value: "includeContext",
+                      },
+                    ],
+                    placeholder: "[Select from the List]",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    validationMode: "default",
+                    editorProperties: [
+                      "includeContext",
+                    ],
+                    validationAttribute: "Location:",
+                    applicableValidationSchema: true,
+                  },
+                ],
+              },
+
+            },
+            employeeId: loggedInEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then((response) => {
+            createdEquipmentFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdEquipmentFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType.id },
+                formDocument: { id: initialArDocument.id },
+                approversWithSignatures: [{ approver: { id: loggedInEmployee.id } }],
+              },
+              employeeId: loggedInEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+
+      it("[API]Create Tooling document with Numeric revision", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Equipment document</p>",
+            document: {
+              docId: "TL-00001",
+              documentType: {
+                id: toolingDocType.id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [],
+              },
+            },
+            name: "Tooling document",
+            formDocument: {
+              id: createdEquipmentFormDocument.id,
+            },
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formInput: {
+              "fb-default-eq-status": "Active",
+              "fb-primary-owner-eq": loggedInEmployee.id,
+              "fb-coordinator-eq": loggedInEmployee.id,
+              "pm-ki5wtk5l": {
+                requirements: "Yes",
+                preventativeForm: createdPMForm.documentId,
+                frequency: 10,
+                instructions: "<p>Instructions for preventative maintenance</p>",
+              },
+              "calibration-ki5wtyj0": {
+                requirements: "Yes",
+                preventativeForm: createdCalibrationForm.documentId,
+                frequency: 5,
+                instructions: "<p>Instructions for calibration</p>",
+              },
+              "location-kngiboz9": "Portable",
+            },
+          },
+          employeeId: loggedInEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    context("Verify owner", () => {
+      it("Clear Filters", () => {
+        cy.dtmClearFilters();
+        cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
+      });
+
+
+      it("Filter by title", () => {
+        cy.filterEquipmentTitle({ name: "Tooling document" });
+      });
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Verify Owner name", () => {
+        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
+          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
+        });
+      });
+
+      it("Change Primary Owner", () => {
+        cy.get("[aria-label='Open']").eq(1).arrowClick();
+        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
+        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on Equipment list", () => {
+        cy.navigToEquipmentList();
+      });
+
+      it("Verify Owner name", () => {
+        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
+          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[2].name);
+        });
+      });
+    });
+
+    context("Release EQ", () => {
+      it("[API] Release EQ'", (done: any) => {
+        cy.drGetDocRevs({ employeeId: loggedInEmployee.id, sessionId: loginResponse.sessionId })
+          .then((documentRevisionsRes) => {
+            const manualDocRev = (documentRevisionsRes || []).find((x: any) => x.name === "Tooling document") as any;
+            cy.drAPIApproveAndRelease({
+              documentId: manualDocRev.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType.id },
+                formDocument: { id: initialArDocument.id },
+                approversWithSignatures: [{ approver: { id: loggedInEmployee.id } }],
+              },
+              employeeId: loggedInEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+      });
+    });
+
+    context("Revise EQ and verify owner", () => {
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Revise Equipment", () => {
+        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      });
+
+      it("Change Primary Owner", () => {
+        cy.get("[aria-label='Open']").eq(1).arrowClick();
+        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
+        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
+      it("Click on Equipment list", () => {
+        cy.navigToEquipmentList();
+      });
+
+      it("Verify Owner name", () => {
+        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
+          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
+        });
+      });
+    });
+  });
+
 });
 
 export { };
