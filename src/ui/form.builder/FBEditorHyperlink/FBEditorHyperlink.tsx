@@ -1,5 +1,6 @@
 import React from "react";
 import { FBEditor, FBEditorProps, FBTextField } from "..";
+import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
 import { styles } from "../styles/FBEditorTextField.styles";
 
 const FBEditorHyperlink: React.FunctionComponent<FBEditorProps> = ({
@@ -13,7 +14,7 @@ const FBEditorHyperlink: React.FunctionComponent<FBEditorProps> = ({
     <FBEditor {...props} {...{ inputProps }}>
       <FBTextField label="form.builder.label" name="label" rules="required"  className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
-        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}/>
+        labelProps={AutoCompleteStyles.labelProps}/>
       <FBTextField
         type="url"
         label="URL"
@@ -22,7 +23,7 @@ const FBEditorHyperlink: React.FunctionComponent<FBEditorProps> = ({
         rules="required"
         className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
-        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+        labelProps={AutoCompleteStyles.labelProps}
       />
       {children}
     </FBEditor>

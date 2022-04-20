@@ -1,21 +1,10 @@
-import { createStyles, makeStyles } from "@material-ui/core";
 import * as React from "react";
 import InputField from "../../../components/forms/fields/Input";
+import { styles } from "./styles/DocIdInput.styles";
 
 interface Props {
   isDisabled: boolean;
 }
-
-const styles = makeStyles(() =>
-  createStyles({
-    textbox: {
-      "&.MuiInputBase-root": {
-        padding: 0,
-        marginTop: 10,
-      },
-    },
-  }),
-);
 
 const RenderHtmlField: React.FunctionComponent<Props> = ({ isDisabled = false }) => {
   const classes = styles();
@@ -24,7 +13,7 @@ const RenderHtmlField: React.FunctionComponent<Props> = ({ isDisabled = false })
       name="renderHTML"
       label="common.renderHTML"
       inputProps={{ id: "RenderHTML", rows: 5, multiline: true, disabled: isDisabled }}
-      inputStyleProps={classes.textbox}
+      inputStyleProps={classes.input}
     />
   );
 };

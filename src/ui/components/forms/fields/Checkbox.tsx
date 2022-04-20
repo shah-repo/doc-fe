@@ -14,7 +14,6 @@ interface CheckboxOwnProps extends FieldOwnProps {
 
 interface OwnProps {
   label: Translation;
-  className: string;
 }
 
 type CheckboxPropsWithFormik = CheckboxOwnProps & FormikFieldProps & OwnProps;

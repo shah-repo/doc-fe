@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBCheckbox, FBData, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBPassPercentage, FBRange, FBSelect, FBTextField } from "..";
+import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
 import { styles } from "../styles/FBEditorCheckbox.styles";
 import { withFBEditorTextFieldWithRange } from "./FBEditorTextFieldWithRange.wrap";
 
@@ -22,11 +23,11 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
         rules="required"
         className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
-        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+        labelProps={AutoCompleteStyles.labelProps}
       />
       <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`}
         boxProps={{ mb: 3.125 }}
-        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+        labelProps={AutoCompleteStyles.labelProps}
         className={classes.textfield} />
 
       <Box mb={5}>

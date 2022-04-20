@@ -1,4 +1,3 @@
-import { createStyles, makeStyles } from "@material-ui/core";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -11,6 +10,7 @@ import { toastError } from "../../../components/notifications";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocId } from "../../../hooks/docCustomization/useCustomization";
 import { DocumentCloneType } from "../../Clone.container";
+import { styles } from "./styles/DocIdInput.styles";
 
 interface Props {
   isDisabled: boolean;
@@ -20,20 +20,6 @@ interface Props {
   setDocId: ((docId: string) => DocumentProposedIdSetAction) | undefined;
   type?: DocumentCloneType;
 }
-
-const styles = makeStyles(() =>
-  createStyles({
-    docIdInput: {
-      "&.MuiInputBase-root": {
-        marginTop: 10,
-        padding: 0,
-      },
-      "& .MuiInputBase-input": {
-        padding: 10,
-      },
-    },
-  }),
-);
 
 const DocIdInput: React.FunctionComponent<Props> = ({
   documentTypeId = "",
@@ -88,7 +74,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
           onChange: handleDocIdChange,
         }}
         validate={validators}
-        inputStyleProps={classes.docIdInput}
+        inputStyleProps={classes.input}
       />
     </CustomLabelTooltip>
   );

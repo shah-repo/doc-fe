@@ -1,5 +1,6 @@
 import React from "react";
 import { FBCheckboxGroup, FBData, FBEditor, FBEditorProps } from "..";
+import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
 import { styles } from "../styles/FBEditorTextField.styles";
 
 const FBEditorAction: React.FunctionComponent<FBEditorProps> = ({
@@ -18,7 +19,7 @@ const FBEditorAction: React.FunctionComponent<FBEditorProps> = ({
         optionLabelKey="description"
         rules="required"
         boxProps={{ mb: 3.125, className: classes.error }}
-        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+        labelProps={AutoCompleteStyles.labelProps}
         className={classes.textfield}
       />
       {children}

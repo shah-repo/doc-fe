@@ -1,6 +1,7 @@
 import React from "react";
 import { FBCheckbox, FBEditor, FBEditorProps, FBTextField } from "..";
 import Text from "../../components/Text";
+import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
 import { styles } from "../styles/FBEditorTextField.styles";
 
 const FBEditorMediaAlbum: React.FunctionComponent<FBEditorProps> = ({
@@ -22,7 +23,7 @@ const FBEditorMediaAlbum: React.FunctionComponent<FBEditorProps> = ({
             {...includeDefaultValue && { defaultValue }}
             className={classes.textfield}
             boxProps={{ mb: 3.125, className: classes.error }}
-            labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+            labelProps={AutoCompleteStyles.labelProps}
           />
         )}
       </Text>

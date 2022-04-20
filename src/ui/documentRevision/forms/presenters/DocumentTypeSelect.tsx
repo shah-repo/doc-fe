@@ -1,4 +1,3 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { useSelector } from "react-redux";
@@ -21,6 +20,7 @@ import { DocumentCloneType } from "../../Clone.container";
 import { checkIsDocumentEditableSchema, checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from "../../helpers/checkDocumentGroup";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
+import { styles } from "./styles/DocIdInput.styles";
 
 interface Props extends RouteComponentProps {
   isDocRevStatusDraft: boolean;
@@ -29,20 +29,6 @@ interface Props extends RouteComponentProps {
   isDisabled: boolean;
   documentTypeId?: string;
 }
-
-const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    selectComponent: {
-      "& .MuiSelect-root": {
-        padding: 10,
-      },
-      "&.MuiInputBase-root": {
-        marginTop: 10,
-        padding: 0,
-      },
-    },
-  }),
-);
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDocRevStatusDraft,
@@ -198,7 +184,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         options={options}
         validate={validators}
         includeEmpty={false}
-        inputStyleProps={classes.selectComponent}
+        inputStyleProps={classes.input}
       />
     </CustomLabelTooltip>
   );

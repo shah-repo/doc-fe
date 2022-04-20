@@ -1,4 +1,4 @@
-import { Box, createStyles, makeStyles, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { companySelectors } from "../../../../state/ducks/company";
@@ -8,7 +8,7 @@ import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
 import { useRevisionStageSelect } from "../../../hooks/docCustomization/useCustomization";
-import Colors from "../../../layout/theme/utils/colors";
+import { styles } from "./styles/RevisionStage.styles";
 
 interface Props {
   isDisabled: boolean;
@@ -17,24 +17,6 @@ interface Props {
   documentTypeId: string;
   defaultRevisionStage: string;
 }
-
-const styles = makeStyles(() =>
-  createStyles({
-    title: {
-      color: Colors.almost_black,
-      fontSize: "12px",
-      fontFamily: "Sora",
-      fontWeight: 600,
-    },
-    radioButton: {
-      "& .MuiTypography-root": {
-        fontSize: "14px",
-        fontFamily: "Sora",
-        fontWeight: 400,
-      },
-    },
-  }),
-);
 
 const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,

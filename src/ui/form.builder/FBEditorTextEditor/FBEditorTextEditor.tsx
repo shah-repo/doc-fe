@@ -1,5 +1,6 @@
 import React from "react";
 import { FBEditor, FBEditorOptions, FBEditorProps, FBTextField } from "..";
+import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
 import { editorOptionStyles } from "../styles/FBEditorOptions.styles";
 import { styles } from "../styles/FBEditorTextField.styles";
 
@@ -19,7 +20,7 @@ const FBEditorTextEditor: React.FunctionComponent<FBEditorProps> = ({
         rules="required"
         className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
-        labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+        labelProps={AutoCompleteStyles.labelProps}
       />
       <FBEditorOptions
         key={`fb-editor-options-${type}`}

@@ -2,6 +2,7 @@ import { InputAdornment } from "@material-ui/core";
 import React from "react";
 import { FBConditionalWrapper, FBEditor, FBEditorProps, FBTextField } from "..";
 import Text from "../../components/Text";
+import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
 import { styles } from "../styles/FBEditorTextField.styles";
 
 const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
@@ -42,7 +43,7 @@ const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
             }}
             className={classes.textfield}
             boxProps={{ mb: 3.125, className: classes.error }}
-            labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+            labelProps={AutoCompleteStyles.labelProps}
           />
         )}
       </Text>

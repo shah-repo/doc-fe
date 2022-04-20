@@ -1,5 +1,7 @@
 import React from "react";
 import { FBAutocompleteAsync, FBEditor, FBEditorLabel, FBEditorProps } from "..";
+import Colors from "../../layout/theme/utils/colors";
+import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
 
 const FBEditorSelectDocument: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -18,8 +20,8 @@ const FBEditorSelectDocument: React.FunctionComponent<FBEditorProps> = ({
       multiple={true}
       defaultValue={options}
       rules="required"
-      inputPropStyle={ { height: 47, borderWidth: 1, borderColor: "#CCD4D9", borderRadius: "3px" } }
-      labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+      inputPropStyle={ { height: 47, borderWidth: 1, borderColor: Colors.gray_goose, borderRadius: "3px" } }
+      labelProps={AutoCompleteStyles.labelProps}
       inputPropStyleSize="small"
     />
     {children}

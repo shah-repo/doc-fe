@@ -1,5 +1,6 @@
 import React from "react";
 import { FBTextField, FBTextFieldProps } from "..";
+import { styles } from "../styles/FBAutocomplete.styles";
 
 const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
   label = "form.builder.options",
@@ -13,7 +14,7 @@ const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
     rows={5}
     multiline
     boxProps={{ mb: 3.125 }}
-    labelProps={{ mb: 1.25, fontFamily: "Sora", fontWeight: 600, fontSize: 12 }}
+    labelProps={styles.labelProps}
     FBProps={{ inputType: "editoroptions" }}
   />
 );
