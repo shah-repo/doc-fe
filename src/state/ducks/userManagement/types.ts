@@ -150,7 +150,7 @@ export enum UM_AUDIT_CONCAT_KEYS {
   AddToGroup = "-ADDED-TO-GROUP-"
 }
 
-export interface AuditProps {
+export interface UMAuditProps {
   fieldPath: string;
   type: string;
   employeeId: string;
@@ -160,6 +160,19 @@ export interface AuditProps {
   ownerEmail: string;
   groupId: string;
   timestamp: string;
+  id: string;
+  nextValue: string;
+  previousValue: string;
+}
+
+export interface UMAuditGroupProps extends UMAuditProps {
+  primaryText: string;
+  secondaryText: string;
+  auditType: ACTION_TITLE_MAPPING;
+  sortedIndex: number;
+  groupKey: string;
+  ownerDetails: Partial<Employee>;
+  employeeDetails: Partial<Employee>;
 }
 
 export interface GroupManagementAuditProps {

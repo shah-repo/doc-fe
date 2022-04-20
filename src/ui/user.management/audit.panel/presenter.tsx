@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton, LinearProgress, ListItem } from "@material-ui/core";
+import { Box, Drawer, IconButton, LinearProgress } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { isEmpty, map, values } from "lodash";
@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import apiClient from "../../../state/apiClient";
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
-import { AuditDetailsProps, AuditProps } from "../../../state/ducks/userManagement/types";
+import { AuditDetailsProps, UMAuditProps } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Default from "../../components/common/audit.history/Cards/Default";
 import { LoadMoreButton } from "../../components/common/audit.history/LoadMoreButton";
@@ -20,7 +20,7 @@ let call: CancelTokenSource;
 interface OwnProps {
   openHistoryPanel: boolean;
   closeHistoryPanel: (panel: boolean) => void;
-  getCardGroups: (auditRecords: AuditProps[]) => object;
+  getCardGroups: (auditRecords: UMAuditProps[]) => object;
 }
 
 const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
@@ -108,9 +108,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       </div>
       <Box className={classes.listItemContainer}>
         {map(Items, (auditDetails, groupKey) => (
-          <ListItem key={groupKey} disableGutters style={{ padding: 0 }}>
+          <Box key={groupKey} style={{ padding: 0 }}>
             {<Default auditDetails={auditDetails} />}
-          </ListItem>)
+          </Box>)
 
         )}
       </Box>
