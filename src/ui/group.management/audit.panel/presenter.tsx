@@ -13,10 +13,10 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT } from "../../../state/ducks/userManagement/constants";
 import { ACTION_TITLE_MAPPING, AuditDetailsProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
+import Default from "../../components/common/audit.history/Cards/Default";
+import { LoadMoreButton } from "../../components/common/audit.history/LoadMoreButton";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
-import Default from "./Cards/Default";
-import { LoadMoreButton } from "./LoadMoreButton";
 import styles from "./styles";
 
 let call: CancelTokenSource;
@@ -63,7 +63,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const parseStringArrary = (value: string) => {
+  const parseStringArray = (value: string) => {
     let addedPermissions = "";
     try {
       addedPermissions = (JSON.parse(value) as string[]).join(",");
@@ -121,7 +121,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedPermissions, {}),
-          secondaryText: parseStringArrary(auditRecord.nextValue),
+          secondaryText: parseStringArray(auditRecord.nextValue),
           auditType: ACTION_TITLE_MAPPING.AddedPermissions,
           sortedIndex: 4,
         };
@@ -139,7 +139,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedTags, {}),
-          secondaryText: parseStringArrary(auditRecord.nextValue),
+          secondaryText: parseStringArray(auditRecord.nextValue),
           auditType: ACTION_TITLE_MAPPING.AddedTags,
           sortedIndex: 5,
         };
@@ -228,7 +228,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           getTranslatedText(ACTION_TITLE_MAPPING.RemovedPermission, { groupName: "" })
         );
       }
-      // UpadatedGroup
+      // UpdatedGroup
       if (auditType === ACTION_TITLE_MAPPING.UpdatedGroups && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroups, { groupName: "" }),
@@ -331,7 +331,17 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
 
   const getCardGroups = (response) => {
     const auditRecords = map(response, (auditRecord) => {
-      const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp, companyId, companyGroupId } = auditRecord;
+      const {
+        employeeId,
+        employeeName,
+        ownerId,
+        ownerName,
+        ownerEmail,
+        groupId,
+        timestamp,
+        companyId,
+        companyGroupId,
+      } = auditRecord;
       const employeeDetails = getUserDetails(employeeId) || { user: { name: employeeName, email: "" } };
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
       return {
@@ -350,8 +360,17 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     const cardGroups = {};
     each(auditRecordGroups, (groupedItems, groupKey) => {
       cardGroups[groupKey] = {
-        ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails", "companyId"]),
-        descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails, getGroupName(auditRecordGroups[groupKey][0].companyGroupId)),
+        ...pick(auditRecordGroups[groupKey][0], [
+          "timestamp",
+          "groupId",
+          "ownerDetails",
+          "companyId",
+        ]),
+        descriptions: createGroups(
+          groupedItems,
+          auditRecordGroups[groupKey][0].employeeDetails,
+          getGroupName(auditRecordGroups[groupKey][0].companyGroupId)
+        ),
       };
     });
     return cardGroups;
