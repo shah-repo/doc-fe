@@ -444,19 +444,6 @@ context("Autosave LHR", () => {
           });
         });
 
-        // it("Add attachment", () => {
-        //   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        //     cy.contains("Step #1").parentsUntil("li")
-        //       .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-        //     cy.elUploadAttachment({
-        //       fileName: "image.jpg",
-        //       el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-        //     });
-        //   });
-        //   cy.progressBarShouldNotExist();
-        //   cy.listLoadingElementShouldNotExist();
-        // });
-
         it("Add 'Part document' to step #1", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
             cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
@@ -470,35 +457,36 @@ context("Autosave LHR", () => {
         });
       });
 
-      context("Fill step #2", () => {
-        it("Add step #2", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddStep();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+      // context("Fill step #2", () => {
+      //   it("Add step #2", () => {
+      //     cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+      //       cy.mpiAddStep();
+      //     });
+      //     cy.progressBarShouldNotExist();
+      //     cy.listLoadingElementShouldNotExist();
+      //   });
 
-        it("Fill step #2 description", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+      //   it("Fill step #2 description", () => {
+      //     cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+      //       cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
+      //     });
+      //     cy.progressBarShouldNotExist();
+      //     cy.listLoadingElementShouldNotExist();
+      //   });
 
-        it("Add 'Part document' to step #2", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
-          });
-        });
+      //   it("Add 'Part document' to step #2", () => {
+      //     cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+      //       cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
+      //     });
+      //   });
 
-        it("Add 'Equipment two' to step #2", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
-          });
-        });
-      });
+      //   it("Add 'Equipment two' to step #2", () => {
+      //     cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+      //       cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
+      //     });
+      //     cy.pause();
+      //   });
+      // });
 
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
@@ -544,6 +532,10 @@ context("Autosave LHR", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
       });
 
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
       it("Add Checkbox group", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
         cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
@@ -573,6 +565,7 @@ context("Autosave LHR", () => {
       });
 
       it("Click create document", () => {
+        cy.pause();
         cy.drClickCreateDocumentWithApiCall();
       });
 
@@ -581,6 +574,7 @@ context("Autosave LHR", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
           cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
+        cy.pause();
       });
 
       context("Select created MPI in LHR template", () => {
@@ -591,6 +585,7 @@ context("Autosave LHR", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
             cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           });
+          cy.pause();
         });
 
         it("Verify form Draft status and click on Send To Email", () => {
