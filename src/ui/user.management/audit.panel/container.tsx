@@ -3,9 +3,11 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { User } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
+import { Employee } from "../../../state/ducks/company/types";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { ACTION_TITLE_MAPPING, UM_AUDIT_CONCAT_KEYS, UserManagementAuditProps } from "../../../state/ducks/userManagement/types";
+import { ACTION_TITLE_MAPPING, UMAuditGroupProps, UMAuditProps, UM_AUDIT_CONCAT_KEYS } from "../../../state/ducks/userManagement/types";
 import Colors from "../../layout/theme/utils/colors";
 import AuditItemPresenter from "./presenter";
 
@@ -62,7 +64,10 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     return sortBy(sameGroup, "sortedIndex");
   };
 
-  const getDescription = (auditRecord: UserManagementAuditProps, employeeDetails) => {
+  const getDescription = (
+    auditRecord: UMAuditProps,
+    employeeDetails: Employee | { user: Partial<User> }
+  ) => {
     let actionInfo = {
       primaryText: ACTION_TITLE_MAPPING.Unknown as string,
       secondaryText: auditRecord.id,
@@ -71,43 +76,63 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     };
     if (auditRecord.fieldPath === "employees") {
       const groupName = getGroupName(
-        auditRecord.nextValue === "undefined" ? auditRecord.previousValue : auditRecord.nextValue
+        auditRecord.nextValue === "undefined"
+          ? auditRecord.previousValue
+          : auditRecord.nextValue
       );
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
-          primaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroups, { groupName: "" })}${UM_AUDIT_CONCAT_KEYS.AddToGroup}${groupName}`,
+          primaryText: `${getTranslatedText(
+            ACTION_TITLE_MAPPING.EmployeesAddedToGroups,
+            { groupName: "" }
+          )}${UM_AUDIT_CONCAT_KEYS.AddToGroup}${groupName}`,
           secondaryText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPING.EmployeesAddedToGroups,
           sortedIndex: 3,
         };
       } else if (auditRecord.type === "ARRAY_DELETED") {
         actionInfo = {
-          primaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups, { groupName: "" })}${UM_AUDIT_CONCAT_KEYS.DeleteFromGroup}${groupName}`,
+          primaryText: `${getTranslatedText(
+            ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups,
+            { groupName: "" }
+          )}${UM_AUDIT_CONCAT_KEYS.DeleteFromGroup}${groupName}`,
           secondaryText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups,
           sortedIndex: 3,
         };
       }
     } else if (
-      ["resetPasswordEmailTimestamp", "resendConfirmationEmailTimestamp"].includes(auditRecord.fieldPath) &&
-      auditRecord.type === "OBJECT_EDITED") {
+      [
+        "resetPasswordEmailTimestamp",
+        "resendConfirmationEmailTimestamp",
+      ].includes(auditRecord.fieldPath) &&
+      auditRecord.type === "OBJECT_EDITED"
+    ) {
       actionInfo = {
         primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPassword, {}),
-        secondaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPasswordDescription, {}),
+        secondaryText: getTranslatedText(
+          ACTION_TITLE_MAPPING.ResetPasswordDescription,
+          {}
+        ),
         auditType: ACTION_TITLE_MAPPING.ResetPassword,
         sortedIndex: 0,
       };
     } else if (auditRecord.fieldPath === "name") {
       if (auditRecord.type === "STRING_EDITED") {
         actionInfo = {
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.EmployeeNameUpdated, {}),
+          primaryText: getTranslatedText(
+            ACTION_TITLE_MAPPING.EmployeeNameUpdated,
+            {}
+          ),
           secondaryText: `${auditRecord.previousValue}${UM_AUDIT_CONCAT_KEYS.NameSeparator}${auditRecord.nextValue}`,
           auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
           sortedIndex: 0,
         };
       } else if (auditRecord.type === "STRING_NEW") {
         actionInfo = {
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, { employeeName: auditRecord.nextValue }),
+          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, {
+            employeeName: auditRecord.nextValue,
+          }),
           secondaryText: intl.formatMessage({ id: "common.active" }),
           auditType: ACTION_TITLE_MAPPING.ActivateUser,
           sortedIndex: 1,
@@ -117,7 +142,10 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       if (auditRecord.type === "ARRAY_NEW") {
         if (auditRecord.previousValue === "undefined") {
           actionInfo = {
-            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedToGroups, {}),
+            primaryText: getTranslatedText(
+              ACTION_TITLE_MAPPING.AddedToGroups,
+              {}
+            ),
             secondaryText: getGroupName(auditRecord.nextValue),
             auditType: ACTION_TITLE_MAPPING.AddedToGroups,
             sortedIndex: 3,
@@ -125,7 +153,10 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         }
       } else if (auditRecord.type === "ARRAY_DELETED") {
         actionInfo = {
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.DeletedFromGroups, {}),
+          primaryText: getTranslatedText(
+            ACTION_TITLE_MAPPING.DeletedFromGroups,
+            {}
+          ),
           secondaryText: getGroupName(auditRecord.previousValue),
           auditType: ACTION_TITLE_MAPPING.DeletedFromGroups,
           sortedIndex: 3,
@@ -134,28 +165,41 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     } else if (auditRecord.fieldPath === "active") {
       if (auditRecord.type === "BOOLEAN_NEW") {
         actionInfo = {
-          primaryText: getTranslatedText(ACTION_TITLE_MAPPING.CreatedNewUser, {}),
+          primaryText: getTranslatedText(
+            ACTION_TITLE_MAPPING.CreatedNewUser,
+            {}
+          ),
           secondaryText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPING.CreatedNewUser,
           sortedIndex: 0,
         };
       } else if (auditRecord.type === "BOOLEAN_EDITED") {
-        if (auditRecord.previousValue === "true" && auditRecord.nextValue === "false") {
+        if (
+          auditRecord.previousValue === "true" &&
+          auditRecord.nextValue === "false"
+        ) {
           actionInfo = {
-            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.DeactivateUser, {}),
+            primaryText: getTranslatedText(
+              ACTION_TITLE_MAPPING.DeactivateUser,
+              {}
+            ),
             secondaryText: auditRecord.employeeName,
             auditType: ACTION_TITLE_MAPPING.DeactivateUser,
             sortedIndex: 0,
           };
         }
-        if (auditRecord.previousValue === "false" && auditRecord.nextValue === "true") {
+        if (
+          auditRecord.previousValue === "false" &&
+          auditRecord.nextValue === "true"
+        ) {
           actionInfo = {
             primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, {
-              employeeName: employeeDetails?.user?.name,
+              employeeName: employeeDetails?.user?.name || "",
             }),
-            secondaryText: auditRecord.nextValue === "true"
-              ? intl.formatMessage({ id: "common.active" })
-              : intl.formatMessage({ id: "common.inactive" }),
+            secondaryText:
+              auditRecord.nextValue === "true"
+                ? intl.formatMessage({ id: "common.active" })
+                : intl.formatMessage({ id: "common.inactive" }),
             auditType: ACTION_TITLE_MAPPING.ActivateUser,
             sortedIndex: 0,
           };
@@ -165,7 +209,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     return actionInfo;
   };
 
-  const createGroups = (groupedItems, employeeDetails) => {
+  const createGroups = (groupedItems: UMAuditGroupProps[], employeeDetails: Partial<Employee>) => {
     const similarGroups = groupBy(groupedItems, "primaryText");
     const sameGroup = map(similarGroups, (items, key) => {
       const auditType = items[0].auditType;
@@ -242,8 +286,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     return addUserNameAndEmailBlock(sameGroup, employeeDetails);
   };
 
-  const getCardGroups = (auditData: UserManagementAuditProps[]) => {
-    const auditRecords = map(auditData, (auditRecord) => {
+  const getCardGroups = (auditData: UMAuditProps[]) => {
+    const auditRecords = map(auditData, (auditRecord: UMAuditProps) => {
       const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp } = auditRecord;
       const employeeDetails = getUserDetails(employeeId) || { user: { name: employeeName, email: "" } };
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
@@ -262,7 +306,10 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     each(auditRecordGroups, (groupedItems, groupKey) => {
       cardGroups[groupKey] = {
         ...pick(auditRecordGroups[groupKey][0], ["timestamp", "groupId", "ownerDetails"]),
-        descriptions: createGroups(groupedItems, auditRecordGroups[groupKey][0].employeeDetails),
+        descriptions: createGroups(
+          groupedItems as UMAuditGroupProps[],
+          auditRecordGroups[groupKey][0].employeeDetails as Partial<Employee>
+        ),
       };
     });
     return cardGroups;
