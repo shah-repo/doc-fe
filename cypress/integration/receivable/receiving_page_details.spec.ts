@@ -50,6 +50,7 @@ const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
+const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/DD/YYYY");
 
 context("Receivable test with Page Details", () => {
   before(() => {
@@ -1190,9 +1191,19 @@ context("Receivable test with Page Details", () => {
       });
     });
 
+
     context("Save and release form", () => {
-      it("Click create document after filling document", () => {
+      it("Click create document", () => {
+        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }, (req) => {
+          req.reply((res) => {
+            if (res.body !== "") {
+              const response = res.body;
+              receivingName = response.formTemplate.schema[1].name;
+            }
+          });
+        }).as("response");
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait("@response", { requestTimeout: 20000, responseTimeout: 20000 });
       });
 
       it("Approve and release document", () => {
@@ -1962,7 +1973,8 @@ context("Receivable test with Page Details", () => {
 
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/APPROVALS\nNone/);
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| PENDING`);
+          expect(el).match(tmpRegex);
 
           expect(el).match(/Receivable\nPOT-00001 - rev 1 - New Purchase Order/);
 
@@ -1975,14 +1987,15 @@ context("Receivable test with Page Details", () => {
           // eslint-disable-next-line max-len
           expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
 
-          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document2000each${receivingReleasedDate}\\$5.00`, "gi" );
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00`, "gi" );
           expect(el).match(tmpRegex);
 
           // eslint-disable-next-line max-len
-          tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n1000each${receivingReleasedDate}\\$11.00`, "gi" );
+          tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n100100each${receivingReleasedDate}\\$11.00`, "gi" );
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp( `3SRV123N/A\nDescription for\nSRV123\n20each\\$190.00`, "gi" );
+          tmpRegex = new RegExp( `3SRV123N/A\nDescription for\nSRV123\n22each\\$190.00`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp( `${TEXTFIELD_LABEL}\n${CHECKBOX_REQUIRED_IF_VALUE}` );
@@ -1990,7 +2003,7 @@ context("Receivable test with Page Details", () => {
 
           expect(el).match(/checkboxGroup\n1 2 3/);
 
-          expect(el).match(/WIP/);
+          expect(el).match(/Pending Approval/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
@@ -2088,7 +2101,7 @@ context("Receivable test with Page Details", () => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
             const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${releasedFormId}${filetime}.zip`;
+            downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -2151,27 +2164,51 @@ context("Receivable test with Page Details", () => {
 
           expect(el).match(/image.jpg/);
 
-          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| 
-          ${receivingReleasedDate}`);
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Released/);
-
-          tmpRegex = new RegExp( `${TEXTFIELD_LABEL}\n${CHECKBOX_REQUIRED_IF_VALUE}` );
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Receivable\nPOT-00001 - rev 1 - New Purchase Order/);
 
-          // expect(el).match(/Requestor\nGiovanni Reynolds (enlil.testmail+cy1@gmail.com)/);
-          tmpRegex = new RegExp(`Requestor\\n${USERS[1].name} \\- .*@.*`);
+          tmpRegex = new RegExp( `Requestor\n${USERS[1].name}(.*)@(.*)`, "gi" );
+
           expect(el).match(tmpRegex);
 
           expect(el).match(/Supplier\nSUP-00001 - rev 1 - API Supplier Document/);
 
+          // eslint-disable-next-line max-len
+          expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n100100each${receivingReleasedDate}\\$11.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `3SRV123N/A\nDescription for\nSRV123\n22each\\$190.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `${TEXTFIELD_LABEL}\n${CHECKBOX_REQUIRED_IF_VALUE}` );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/checkboxGroup\n1 2 3/);
+
+          expect(el).match(/Released/);
+
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
 
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
           expect(el).match(/Page 1 of 1/);
+
+          tmpRegex = new RegExp(`${RADIO_BUTTON_GROUP_LABEL}`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
         }
       });
     });
@@ -2200,7 +2237,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Verify Released Date", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", receivingReleasedDate);
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", receivingReleasedDateMonth);
     });
 
     it("Verify Supplier", () => {

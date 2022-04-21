@@ -660,7 +660,7 @@ context("Create receivable test", () => {
           const poItems: PurchaseOrderItem[] = [{
             index: 1,
             partNumber: "",
-            descritpion: "",
+            description: "",
             ordered: 5,
             received: 0,
             units: "hours",
@@ -670,7 +670,7 @@ context("Create receivable test", () => {
           {
             index: 2,
             partNumber: "",
-            descritpion: "",
+            description: "",
             ordered: 6,
             received: 0,
             units: "hours",
