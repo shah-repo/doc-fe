@@ -1,7 +1,7 @@
 import { Approval } from "aws-sdk/clients/codecommit";
 import { compact, filter, isEmpty, map, values } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBRequiredApprover } from "..";
+import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
@@ -10,6 +10,8 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
   @observable public checkedGroups?: any[];
   @observable approvals?: FBInlineApprovalBody[];
   @observable public isRequiredApprovals = false;
+  @observable public prevPOItems;
+  @observable public didMountPhase = false;
 
   // MARK: @config
   public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
@@ -23,6 +25,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       return;
     }
     this.fetchRequiredApprovals(id);
+    this.setDidMount(true);
     this.checkedGroups = [];
   }
 
@@ -33,6 +36,14 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   @computed public get getIsRequiredApprovals() {
     return this.isRequiredApprovals;
+  }
+
+  @computed public get getPrevPOItems() {
+    return this.prevPOItems;
+  }
+
+  @computed public get getDidMountPhase() {
+    return this.didMountPhase;
   }
 
   public fetchRequiredApprovals = (documentRevisions: string[] = []) => {
@@ -90,6 +101,12 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   @action public setIsRequiredApprovals = () =>
     set(this, "isRequiredApprovals", !this.isRequiredApprovals);
+
+  @action public setPrevPOItems = (poItems: FBPurchaseOrderValue) =>
+    set(this, "prevPOItems", poItems);
+
+  @action public setDidMount = (mount: boolean) =>
+    set(this, "didMountPhase", mount);
 
   public addApproval = (approval: Partial<FBInlineApprovalBody>) => {
     this.approvalApi.setBody(approval);
