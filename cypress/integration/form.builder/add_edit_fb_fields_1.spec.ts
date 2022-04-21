@@ -6,6 +6,7 @@ import moment from "moment-timezone";
 import path from "path";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -561,8 +562,24 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("fb-instructions1").should("exist");
     });
 
+    it("Upload attachment 'video.mp4'", () => {
+      SystemRequirement("REQ-2990");
+      cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
+        cy.pmUploadAttachment({ fileName: "video.mp4" });
+      });
+      cy.progressBarShouldNotExist();
+    });
+
     it("Verify EB Procedure", () => {
       cy.contains("Step #1").should("exist");
+    });
+
+
+    it("Save document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
@@ -725,6 +742,8 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Attachments\nMaterials\nEquipment/);
 
+        expect(el).match(/fb-instructions1/);
+
         expect(el).match(/Draft/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -746,7 +765,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/fb-instructions1/);
+        expect(el).match(/video.mp4/);
 
         expect(el).match(/FB-PO-APPROVAL-MATRIX1/);
 
@@ -1051,6 +1070,8 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Attachments\nMaterials\nEquipment/);
 
+        expect(el).match(/fb-instructions1/);
+
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1072,7 +1093,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/fb-instructions1/);
+        expect(el).match(/video.mp4/);
 
         expect(el).match(/FB-PO-APPROVAL-MATRIX1/);
 
