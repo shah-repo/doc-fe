@@ -1,7 +1,7 @@
 import { truncate } from "lodash";
 import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, useContext, useEffect, useRef } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
-import { StyleTooltip } from "./StyledTooltip";
+import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
 
 const LISTBOX_PADDING = 8; // px
 const OuterElementContext = createContext({});
@@ -43,7 +43,7 @@ const renderRow = (props: ListChildComponentProps) => {
     <StyleTooltip
       ref={inputRef}
       title={data[index].props.children}
-      placement="top"
+      placement="right"
       arrow
     >
       {listItem}
