@@ -1,5 +1,8 @@
+import { Tooltip, TooltipProps } from "@material-ui/core";
+import { truncate } from "lodash";
 import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, useContext, useEffect, useRef } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
+import { tooltipStyles } from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 
 const LISTBOX_PADDING = 8; // px
 const OuterElementContext = createContext({});
@@ -17,9 +20,25 @@ const InnerElementType = forwardRef<HTMLDivElement>((props, ref) => {
 });
 InnerElementType.displayName = "InnerElementType";
 
+const StyledTooltip = (props: TooltipProps) => {
+  const classes = tooltipStyles();
+  return <Tooltip arrow classes={classes} {...props} />;
+};
+
 const renderRow = (props: ListChildComponentProps) => {
   const { data, index, style } = props;
-  return cloneElement(data[index], {
+  const inputRef = React.createRef();
+  const spreadedData = {
+    ...data[index],
+    props: {
+      ...data[index].props,
+      children: truncate(data[index].props.children, {
+        length: 28,
+        omission: " ...",
+      }),
+    },
+  };
+  const listItem = cloneElement(spreadedData, {
     style: {
       ...style,
       top: (style.top as number) + LISTBOX_PADDING,
@@ -29,6 +48,9 @@ const renderRow = (props: ListChildComponentProps) => {
       whiteSpace: "nowrap",
     },
   });
+  return (
+    <StyledTooltip ref={inputRef} arrow placement="right" title={data[index].props.children}>{listItem}</StyledTooltip>
+  );
 };
 
 const useResetCache = (data: any) => {
