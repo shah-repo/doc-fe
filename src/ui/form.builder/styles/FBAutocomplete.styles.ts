@@ -1,3 +1,4 @@
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
 export const styles = {
@@ -16,3 +17,19 @@ export const styles = {
     color: Colors.almost_black,
   },
 };
+
+
+export const FBAutoCompleteStyle = makeStyles(() =>
+  createStyles({
+    root: {
+      "& .MuiAutocomplete-inputRoot": {
+        padding: 0,
+      },
+      "& input": {
+        fontSize: "12px",
+        fontFamily: "Sora",
+        color: Colors.almost_black,
+      },
+    },
+  })
+);

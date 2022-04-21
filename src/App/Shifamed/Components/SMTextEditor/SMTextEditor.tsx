@@ -31,6 +31,9 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     {...boxProps}
     data-cy={dataCy || name || label}
     flexDirection="row"
+    fontFamily="Sora"
+    color={Colors.almost_black}
+    fontSize= "12px"
   >
     <Box display="flex">
       {isString(label) && (
