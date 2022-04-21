@@ -27,7 +27,7 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
         variant="contained"
         onClick={onHistoryPanelClick}
         className={classes.historyButton}
-        data-cy="UM-openHistoryPanel"
+        data-cy="um-open-history-panel"
       >
         <Text message="user.management.audit" />
       </Button>

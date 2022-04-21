@@ -101,7 +101,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
               disableFocusRipple
               disableRipple
               disableTouchRipple
-              data-cy="UM-closeHistoryPanel"
+              data-cy="um-close-history-panel"
             >
               <CloseIcon style={{ color: Colors.gray }} />
             </IconButton>
