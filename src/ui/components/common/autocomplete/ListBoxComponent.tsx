@@ -1,7 +1,7 @@
 import { truncate } from "lodash";
 import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, useContext, useEffect, useRef } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
-import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
+import { StyleTooltip } from "./StyledTooltip";
 
 const LISTBOX_PADDING = 8; // px
 const OuterElementContext = createContext({});
@@ -22,7 +22,7 @@ InnerElementType.displayName = "InnerElementType";
 const renderRow = (props: ListChildComponentProps) => {
   const { data, index, style } = props;
   const inputRef = React.createRef();
-  const spreadedData = {
+  const tooltipItem = {
     ...data[index],
     props: {
       ...data[index].props,
@@ -32,14 +32,10 @@ const renderRow = (props: ListChildComponentProps) => {
       }),
     },
   };
-  const listItem = cloneElement(spreadedData, {
+  const listItem = cloneElement(tooltipItem, {
     style: {
       ...style,
       top: (style.top as number) + LISTBOX_PADDING,
-      clear: "both",
-      display: "inline-block",
-      overflow: "hidden",
-      whiteSpace: "nowrap",
     },
   });
   return (
