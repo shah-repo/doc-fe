@@ -1,8 +1,7 @@
-import { Tooltip, TooltipProps } from "@material-ui/core";
 import { truncate } from "lodash";
 import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, useContext, useEffect, useRef } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
-import { tooltipStyles } from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
+import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
 
 const LISTBOX_PADDING = 8; // px
 const OuterElementContext = createContext({});
@@ -19,11 +18,6 @@ const InnerElementType = forwardRef<HTMLDivElement>((props, ref) => {
   return <ul {...props} {...outerProps} style={{ height: "auto" }} />;
 });
 InnerElementType.displayName = "InnerElementType";
-
-const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <Tooltip arrow classes={classes} {...props} />;
-};
 
 const renderRow = (props: ListChildComponentProps) => {
   const { data, index, style } = props;
@@ -49,7 +43,15 @@ const renderRow = (props: ListChildComponentProps) => {
     },
   });
   return (
-    <StyledTooltip ref={inputRef} arrow placement="right" title={data[index].props.children}>{listItem}</StyledTooltip>
+    <StyleTooltip
+      ref={inputRef}
+      title={data[index].props.children}
+      placement="top"
+      arrow
+    >
+      {listItem}
+    </StyleTooltip>
+
   );
 };
 
