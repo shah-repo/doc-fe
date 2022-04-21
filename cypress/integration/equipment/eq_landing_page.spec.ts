@@ -1608,12 +1608,6 @@ context("NCO document type management", () => {
         cy.dlSelectFirstDocument();
       });
 
-      it("Verify Owner name", () => {
-        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
-          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
-        });
-      });
-
       it("Change Primary Owner", () => {
         cy.get("[aria-label='Open']").eq(1).arrowClick();
         cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
@@ -1630,9 +1624,34 @@ context("NCO document type management", () => {
       });
 
       it("Verify Owner name", () => {
-        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
-          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[2].name);
-        });
+        cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[2].name);
+      });
+
+      it("Verify Location Selected", () => {
+        cy.get("tr.k-master-row").first().find("td").eq(8).contains("Portable");
+      });
+    });
+
+    context("Verify location", () => {
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Change Location to IQC", () => {
+        cy.get("[id*=select-location]").eq(0).arrowClick();
+        cy.get("ul>li[data-value='IQC']").arrowClick();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on Equipment list", () => {
+        cy.navigToEquipmentList();
+      });
+
+      it("Verify Location value", () => {
+        cy.get("tr.k-master-row").first().find("td").eq(8).contains("IQC");
       });
     });
 
@@ -1661,7 +1680,7 @@ context("NCO document type management", () => {
       });
     });
 
-    context("Revise EQ and verify owner", () => {
+    context("Revise EQ and verify data on landing page", () => {
       it("Revise Equipment", () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
@@ -1670,6 +1689,11 @@ context("NCO document type management", () => {
         cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
         cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
         cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      });
+
+      it("Change Location to Portable", () => {
+        cy.get("[id*=select-location]").eq(0).arrowClick();
+        cy.get("ul>li[data-value='Portable']").arrowClick();
       });
 
       it("Save document", () => {
@@ -1681,13 +1705,14 @@ context("NCO document type management", () => {
       });
 
       it("Verify Owner name", () => {
-        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
-          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
-        });
+        cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
+      });
+
+      it("Verify Location value", () => {
+        cy.get("tr.k-master-row").first().find("td").eq(8).contains("Portable");
       });
     });
   });
-
 
   context("Create Tooling Eqipment", () => {
     context("Add Tooling DocRev", () => {
@@ -1951,12 +1976,6 @@ context("NCO document type management", () => {
         cy.dlSelectFirstDocument();
       });
 
-      it("Verify Owner name", () => {
-        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
-          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
-        });
-      });
-
       it("Change Primary Owner", () => {
         cy.get("[aria-label='Open']").eq(1).arrowClick();
         cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
@@ -1973,9 +1992,30 @@ context("NCO document type management", () => {
       });
 
       it("Verify Owner name", () => {
-        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
-          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[2].name);
-        });
+        cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[2].name);
+      });
+    });
+
+    context("Verify location", () => {
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Change Location to IQC", () => {
+        cy.get("[id*=select-location]").eq(0).arrowClick();
+        cy.get("ul>li[data-value='IQC']").arrowClick();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on Equipment list", () => {
+        cy.navigToEquipmentList();
+      });
+
+      it("Verify Location value", () => {
+        cy.get("tr.k-master-row").first().find("td").eq(8).contains("IQC");
       });
     });
 
@@ -1999,7 +2039,7 @@ context("NCO document type management", () => {
       });
     });
 
-    context("Revise EQ and verify owner", () => {
+    context("Revise EQ and verify data on landing page", () => {
       it("Select first Equipment on list", () => {
         cy.dlSelectFirstDocument();
       });
@@ -2015,6 +2055,11 @@ context("NCO document type management", () => {
         cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
       });
 
+      it("Change Location to Portable", () => {
+        cy.get("[id*=select-location]").eq(0).arrowClick();
+        cy.get("ul>li[data-value='Portable']").arrowClick();
+      });
+
       it("Save document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
@@ -2024,9 +2069,11 @@ context("NCO document type management", () => {
       });
 
       it("Verify Owner name", () => {
-        Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
-          cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
-        });
+        cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
+      });
+
+      it("Verify Location value", () => {
+        cy.get("tr.k-master-row").first().find("td").eq(8).contains("Portable");
       });
     });
   });
