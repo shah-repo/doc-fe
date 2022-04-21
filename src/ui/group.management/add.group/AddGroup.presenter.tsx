@@ -47,7 +47,6 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
         title={"group.management.create.group"}
         isCreateMode={true}
       />
-      {/* TODO: Move URL In common Constants */}
       {openHistoryPanel &&
         <AuditItemsContainer
           openHistoryPanel={openHistoryPanel}
