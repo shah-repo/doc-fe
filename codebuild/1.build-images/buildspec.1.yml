@@ -3,14 +3,22 @@ version: 0.2
 env:
   shell: bash
   exported-variables:
-     - AWS_DEFAULT_REGION
-     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+    - AWS_DEFAULT_REGION
+    - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 phases:
   pre_build:
     commands:
+      - set -e
+      # doc-fe
       - export FE_REPO="$CODEBUILD_SRC_DIR"
-      - export BE_REPO="$CODEBUILD_SRC_DIR_backend_code"
+      # - export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD | cut -c1-8)
+      - export FE_GIT_COMMIT_HASH=5ec5cc43
+      # remote-js-validators
       - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators_code"
+      - export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
+      # print commit hashes
+      - $CODEBUILD_SRC_DIR/codebuild/helper/print_hashes.sh
+      # docker login
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
