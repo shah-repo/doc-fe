@@ -36,7 +36,7 @@ Cypress.Commands.add("alVerifyStartingFilter", () => {
 });
 
 Cypress.Commands.add("alClearFilters", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.PostChangeRequestsSearch, () => {
     cy.get("#clearFilter").arrowClick();
   });
   cy.landingPageLoadingElementShouldNotExist();
@@ -44,6 +44,7 @@ Cypress.Commands.add("alClearFilters", () => {
 
 Cypress.Commands.add("alFilterByArId", (params: {arId: string }) => {
   cy.get(`[aria-colindex="1"] input`).arrowType(params.arId).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("alVerifyFilterByArId", (params: {arId: string }) => {
@@ -52,6 +53,7 @@ Cypress.Commands.add("alVerifyFilterByArId", (params: {arId: string }) => {
 
 Cypress.Commands.add("alFilterByTitle", (params: {title: string }) => {
   cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("alVerifyFilterByTitle", (params: {title: string }) => {
@@ -60,6 +62,7 @@ Cypress.Commands.add("alVerifyFilterByTitle", (params: {title: string }) => {
 
 Cypress.Commands.add("alFilterByOwner", (params: {owner: string }) => {
   cy.get(`[aria-colindex="3"] input`).arrowType(params.owner).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("alVerifyFilterByOwner", (params: {owner: string }) => {
@@ -74,17 +77,18 @@ Cypress.Commands.add("alFilterByStatus", (params: {status: string }) => {
 
 Cypress.Commands.add("alVerifyFilterByStatus", (params: {status: string }) => {
   cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", params.status);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("alVerifyFilterClear", () => {
   cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "Select State");
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "All");
 });
 
 Cypress.Commands.add("alVerifyDescriptionOnHover", (params: {description: string}) => {
-  cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>a>div>div")
+  cy.get("tr.k-master-row>td").eq(1)
     .trigger("mouseover");
   cy.get("div[role=tooltip]>div").should("have.text", params.description);
 });

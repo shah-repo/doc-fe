@@ -789,8 +789,8 @@ context("Bulk create flow", () => {
           "FM-00003 - rev 1 - Document for bulk creation"];
 
         cy.get("[data-cy=\"fb-form-document-to-be-used\"]").click();
-        cy.get("ul[role=listbox]>li").should("have.length", 5);
-        cy.get("ul[role=listbox]>li").each(($document) => {
+        cy.get("ul>li[role=option]").should("have.length", 5);
+        cy.get("ul>li[role=option]").each(($document) => {
           expect($document.text()).to.be.oneOf(allowedDocuments);
         });
 
@@ -798,13 +798,11 @@ context("Bulk create flow", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").click();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Test Document Type").click();
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Document Type");
       });
 
       it("Select 'yes' to have Document id column", () => {

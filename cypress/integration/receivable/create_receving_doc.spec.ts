@@ -721,34 +721,23 @@ context("Create receivable test", () => {
         });
 
         it("Click 'Add new receiving'", () => {
-          cy.recCreateNew();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
+            cy.recCreateNew();
+          });
         });
 
         it("Add an Approval", () => {
-          cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-          });
-        });
-
-        it("Save PO", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.wait(1000);
+          cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         });
 
         it("Click 'Submit for Approval' button", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          });
+          cy.pmSubmitForApproval();
         });
 
         it("Click 'Approve' button", () => {
           SystemRequirement("REQ-1860");
-          cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-          });
+          cy.ebApprove();
         });
 
         it("Verify receivable status is 'Current'", () => {

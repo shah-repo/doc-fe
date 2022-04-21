@@ -152,7 +152,7 @@ context("Copyable Checkbox test", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "ac-wi-ch" });
-        cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
 
@@ -163,7 +163,7 @@ context("Copyable Checkbox test", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "ac-wo-ch" });
-        cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
         cy.fbAddNewFieldButton();
 
         cy.contains("ac-wo-ch").trigger("mouseover");
@@ -393,7 +393,8 @@ context("Copyable Checkbox test", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev,
         CyRoutes.AvailableMaintenanceForms], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm").arrowType("Engineering Build{downarrow}{enter}");
+        cy.get("#MultipleFormTemplate-selectDocForm").arrowClick();
+        cy.get("div[id^=react-select]").contains("Engineering Build").arrowClick();
       });
     });
 
@@ -454,8 +455,8 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select Autocompletes", () => {
-      cy.get("[data-cy^=\"ac-wi-ch-\"]").arrowClick().arrowType("test title{downarrow}{enter}");
-      cy.get("[data-cy^=\"ac-wo-ch-\"]").arrowClick().arrowType("test title{downarrow}{enter}");
+      cy.get("[data-cy^=\"ac-wi-ch-\"]").arrowClick().autocompleteSelect("eb-title");
+      cy.get("[data-cy^=\"ac-wo-ch-\"]").arrowClick().autocompleteSelect("eb-title");
     });
 
     it("Select Procedure", () => {
@@ -630,7 +631,7 @@ context("Copyable Checkbox test", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
       cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
       cy.fbAddNewFieldButton();
     });
 

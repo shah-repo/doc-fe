@@ -7,8 +7,8 @@ import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType/types";
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
+import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType/types";
 import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FBDocumentRevisionProps, FinalizeAndReleaseRequest, SecurityList, UpdateFormRequestBody } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -24,12 +24,17 @@ const documentRevisionSet = (
   payload: { documentRevision, requestBody, docRevId },
 });
 
-const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevision[]> => {
-  const url = states.length === 0
-    ? DOCUMENT_REVISION_ROOT_URL
-    : states.reduce((acc, state) => acc, `${DOCUMENT_REVISION_ROOT_URL}?`);
+const loadList = (
+  states: DocumentRevisionStatus[] = [],
+  queryParams: DocRevQueryParam
+): ApiAction<DocumentRevision[]> => {
+  const url =
+    states.length === 0
+      ? DOCUMENT_REVISION_ROOT_URL
+      : states.reduce((acc, state) => acc, `${DOCUMENT_REVISION_ROOT_URL}?`);
   return apiAction({
     url,
+    params: queryParams,
     method: "get",
     asyncType: DOCUMENT_REVISION_LIST_ASYNC,
     onSuccess: (documentRevisions, dispatch) => {
@@ -74,7 +79,6 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   method: "patch",
   data: body,
   onSuccess: (documentRevision, dispatch) => {
-    dispatch(loadAudit(id));
     dispatch(documentRevisionSet(documentRevision));
     // dispatch(documentRevisionSet(undefined, body, id));
   },
@@ -355,6 +359,15 @@ const fetchAvailableForms = (
     handlers,
   });
 
+const fetchAvailableParts = (
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: DOCUMENT_REVISION_PARTS_URL,
+    method: "get",
+    handlers,
+  });
+
 const createFaiInspection = (
   data: CreateInspectionBody,
   handlers: Handlers,
@@ -446,4 +459,6 @@ export default {
   exportToEmail,
   updateForm,
   getFormMappingTemplate,
+  fetchAvailableParts,
 };
+

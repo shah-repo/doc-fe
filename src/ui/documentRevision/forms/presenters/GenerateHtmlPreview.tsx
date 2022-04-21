@@ -3,7 +3,6 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { IotService } from "../../../../common/utils/iot/mqttClient";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/types";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -16,6 +15,7 @@ import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import useMqttSubscription from "../../../hooks/useMqttSubscription";
 
 interface Props {
   id?: string;
@@ -41,30 +41,27 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
       toastInfo(intl.formatMessage({ id: "document.revision.download.html.request" }));
     },
     onError: () => {
-      unsubscribe();
       toastError(intl.formatMessage({ id: "document.revision.download.pdf.error" }));
     },
   });
 
   const handleClick = () => {
-    subscribe();
     setHtmlRequested(true);
     templateAsync.start(templateAction, id, templateAsync);
   };
 
-  const iotService = IotService.getInstance();
-  const subscribe = () => iotService.subscribeToTopic(`${employeeId}/document_revisions/${id}/pdf`, getAssetUrl);
-  const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(`${employeeId}/document_revisions/${id}/pdf`);
-    setHtmlRequested(false);
-  };
-
-  const getAssetUrl = (message: string) => {
+  const callback = React.useCallback((message: string) => {
     const json = JSON.parse(message).data.message;
     const { url } = JSON.parse(json);
-    unsubscribe();
     assetAsync.start(assetAction, url, assetAsync);
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const topic = React.useMemo(() =>
+    `${employeeId}/document_revisions/${id}/pdf`
+  , [employeeId, id]);
+
+  useMqttSubscription(topic, callback);
 
   const assetAction = useActionCreator(attachmentsActions.getAssetUrl);
   const assetAsync = useAsync<AttachmentDownloadResponse>({

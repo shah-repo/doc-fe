@@ -1,11 +1,14 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
 import "moment-timezone";
+import moment from "moment-timezone";
+import path from "path";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let adminEmployee;
 let createdCompany;
@@ -16,10 +19,28 @@ let createdCalibrationFormDocumentId;
 let pmSchemaFieldName;
 let calibrationSchemaFieldName;
 
+const multipleCompanies = true;
+let pMFormId;
+let pMDocId;
+let calFormId;
+let calDocId;
+let emailsFromInbox;
+const pages = ["", "", "", ""];
+let downloadUrl;
+let tmpRegex;
+let downloadFile;
+let dateAfterEmailShouldArrive;
+let fileId;
+let arId;
+
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
+
+const dateOffset = (5 * 1000);
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Equipment maintenance and calibration", () => {
   before(() => {
@@ -54,6 +75,15 @@ context("Equipment maintenance and calibration", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           done();
         });
+      });
+    });
+
+    it("[API]Login first user", (done: any) => {
+      cy.authApiLogin({
+        email: FIRST_USER.email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      }).then((response) => {
+        done();
       });
     });
   });
@@ -201,17 +231,467 @@ context("Equipment maintenance and calibration", () => {
       cy.unClick();
     });
 
-    context("Create and release form", () => {
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
 
-      it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.url().then((url: any) => {
-          createdPMFormDocumentId = url.split("/").pop();
+    it("Add Checkbox group", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("input[value^=\"visibility\"]").check();
+      cy.get(`input[name="validators.required_if_in"]`).check();
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
+      cy.get(`input[type="checkbox"][value="3"]`).last().check();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Verify form draft status and Send To Email", () => {
+    it("Verify form Draft status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative Maintenance form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        pMFormId = $docIdElement.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify draft form email notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${pMFormId}`,
+      };
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file containing training form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${pMFormId}${filetime}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${pMFormId}-1-Preventative-Maintenance-form.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${pMFormId}-1-Preventative-Maintenance-form.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
         });
       });
+    });
+
+    it("Verify page 1 for PM form", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nPreventative Maintenance form description/);
+
+        expect(el).match(/Output Document Type\nMaintenance Record/);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 for PM form", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment Maintenance Section/);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 for PM form", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
+    });
+  });
+
+  context("Approve and release form", () => {
+    it("Approve and release form", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.url().then((url: any) => {
+        createdPMFormDocumentId = url.split("/").pop();
+      });
+    });
+
+    it("Verify form Draft status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative Maintenance form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        pMFormId = $docIdElement.text();
+      });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify released form email notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${pMFormId}`,
+      };
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file containing training form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${pMFormId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${pMFormId}-1-Preventative-Maintenance-form.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${pMFormId}-1-Preventative-Maintenance-form.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for PM form", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nPreventative Maintenance form description/);
+
+        expect(el).match(/Output Document Type\nMaintenance Record/);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 for PM form", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment Maintenance Section/);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 for PM form", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
     });
   });
 
@@ -249,17 +729,465 @@ context("Equipment maintenance and calibration", () => {
       cy.unClick();
     });
 
-    context("Create and release form", () => {
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
 
-      it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.url().then((url: any) => {
-          createdCalibrationFormDocumentId = url.split("/").pop();
+    it("Add Checkbox group", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("input[value^=\"visibility\"]").check();
+      cy.get(`input[name="validators.required_if_in"]`).check();
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
+      cy.get(`input[type="checkbox"][value="3"]`).last().check();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Verify form Draft status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        calFormId = $docIdElement.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify draft form email notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${calFormId}`,
+      };
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file containing training form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${calFormId}${filetime}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${calFormId}-1-Calibration-form.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${calFormId}-1-Calibration-form.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
         });
       });
+    });
+
+    it("Verify page 1 for CAL form", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nCalibration form description/);
+
+        expect(el).match(/Output Document Type\nMaintenance Record/);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 for CAL form", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment Maintenance Section/);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 for CAL form", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
+    });
+  });
+
+  context("Approve and release form", () => {
+    it("Approve and release CAL form", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.url().then((url: any) => {
+        createdCalibrationFormDocumentId = url.split("/").pop();
+      });
+    });
+
+    it("Verify form released status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        calFormId = $docIdElement.text();
+      });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify released form email notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${calFormId}`,
+      };
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file containing training form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${calFormId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${calFormId}-1-Calibration-form.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${calFormId}-1-Calibration-form.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for CAL form", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nCalibration form description/);
+
+        expect(el).match(/Output Document Type\nMaintenance Record/);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 for CAL form", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment Maintenance Section/);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 for CAL form", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
     });
   });
 
@@ -409,18 +1337,317 @@ context("Equipment maintenance and calibration", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
-    it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Checkbox option 1 checked", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    });
+
+    it("Add first Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
+    });
+
+    it("Add second Approver'", () => {
+      cy.pmAddApproverOnApproverList({ approver: SECOND_USER.name });
+    });
+
+    it("Remove second Approver'", () => {
+      cy.contains(`${SECOND_USER.name} - ${SECOND_USER.email}`).parent().next().arrowClick();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Extract document Id", () => {
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        pMDocId = $docIdElement.text();
+      });
     });
 
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-        cy.ebApprove();
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as first Approver", () => {
+      cy.authLogin({
+        email: FIRST_USER.email,
       });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Rejecting request", () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+    });
+
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as admin user", () => {
+      cy.authLogin({
+        email: ADMIN_USER.email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it(`Verify reject notification`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .should("contain", FIRST_USER.name)
+        .and("contain", "REJECTED")
+        .and("contain", pMDocId);
+    });
+
+    it("Open doc to check WIP state", () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .contains(pMDocId).last().arrowClick();
+    });
+  });
+
+  context("Check doc WIP status and click on Send To Email", () => {
+    it("Check doc WIP status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        pMDocId = $docIdElement.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email receive for 'Export for document'", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${pMDocId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing PM request notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${pMDocId}${filetime}_WIP.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify attached image.jpg file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${pMDocId}-A-Preventative-maintenance-document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(1);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp( "\\n\\n");
+
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 1")) {
+            pages[0] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 in WIP document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 1")) {
+        tmpRegex = new
+        RegExp( `Maintenance Record\n${pMDocId}, Revision A\nPREVENTATIVE MAINTENANCE DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/MAINTENANCE DETAILS/);
+
+        expect(el).match(/Equipment\nEQ-00001 - 1 Equipment document/);
+
+        tmpRegex = new RegExp(`Maintainer\n${ADMIN_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| DRAFT\\n1 2 3`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
+        expect(el).not.match(tmpRegex);
+
+        tmpRegex = new RegExp(`REJECTED`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/WIP/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 1/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+  });
+
+  context("Approve record and release", () => {
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as first approver", () => {
+      cy.authLogin({
+        email: FIRST_USER.email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Accept Approval Request with password prompt", () => {
+      SystemRequirement("REQ-0920");
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.ChangeRequestApprove, () => {
+          cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+
+    it("Verify there is no dashboard notifications", () => {
+      SystemRequirement("REQ-2200");
+      cy.cmpVerifyNoPendingActions();
+    });
+
+    it("Logout from existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as admin user", () => {
+      cy.authLogin({
+        email: ADMIN_USER.email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it(`Verify approval notification`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .should("contain", FIRST_USER.name)
+        .and("contain", "APPROVED")
+        .and("contain", pMDocId);
+    });
+
+    it("Open doc to check released state", () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .contains(pMDocId).last().arrowClick();
     });
 
     it("Verify status is 'Released'", () => {
@@ -428,9 +1655,176 @@ context("Equipment maintenance and calibration", () => {
     });
   });
 
+  context("Check doc Released status and click on Send To Email", () => {
+    it("Check doc released status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        pMDocId = $docIdElement.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email receive for 'Export for document'", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${pMDocId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing approval request notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${pMDocId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify attached image.jpg file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${pMDocId}-A-Preventative-maintenance-document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(1);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp( "\\n\\n");
+
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 1")) {
+            pages[0] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 in Released document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 1")) {
+        tmpRegex = new
+        RegExp( `Maintenance Record\n${pMDocId}, Revision A\nPREVENTATIVE MAINTENANCE DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/MAINTENANCE DETAILS/);
+
+        expect(el).match(/Equipment\nEQ-00001 - 1 Equipment document/);
+
+        tmpRegex = new RegExp(`Maintainer\n${ADMIN_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| APPROVED \\| ${docRelDate}.*\n.*\\n1 2 3`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
+        expect(el).not.match(tmpRegex);
+
+        tmpRegex = new RegExp(`REJECTED`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 1/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+  });
+
   context("Create Calibration record", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
@@ -483,36 +1877,500 @@ context("Equipment maintenance and calibration", () => {
             cy.wrap($el).arrowClick();
           }
         });
-
     });
 
     it("Create 'Calibration document'", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
-    it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Checkbox option 1 checked", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    });
+
+    it("Add first Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
+    });
+
+    it("Add second Approver'", () => {
+      cy.pmAddApproverOnApproverList({ approver: SECOND_USER.name });
+    });
+
+    it("Remove second Approver'", () => {
+      cy.contains(`${SECOND_USER.name} - ${SECOND_USER.email}`).parent().next().arrowClick();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Extract document Id", () => {
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        calDocId = $docIdElement.text();
+      });
     });
 
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-        cy.ebApprove();
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as first Approver", () => {
+      cy.authLogin({
+        email: FIRST_USER.email,
       });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Rejecting request", () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+    });
+
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as admin user", () => {
+      cy.authLogin({
+        email: ADMIN_USER.email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it(`Verify reject notification`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .should("contain", FIRST_USER.name)
+        .and("contain", "REJECTED")
+        .and("contain", calDocId);
+    });
+
+    it("Open doc to check WIP state", () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .contains(calDocId).last().arrowClick();
+    });
+  });
+
+  context("Check doc WIP status and click on Send To Email", () => {
+    it("Check doc WIP status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        calDocId = $docIdElement.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email receive for 'Export for document'", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${calDocId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing Calibration document", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${calDocId}${filetime}_WIP.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify attached image.jpg file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${calDocId}-A-Calibration-document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(1);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp( "\\n\\n");
+
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 1")) {
+            pages[0] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 in CAL document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 1")) {
+        tmpRegex = new
+        RegExp( `Maintenance Record\n${calDocId}, Revision A\nCALIBRATION DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/MAINTENANCE DETAILS/);
+
+        expect(el).match(/Equipment\nEQ-00001 - 1 Equipment document/);
+
+        tmpRegex = new RegExp(`Maintainer\n${ADMIN_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| DRAFT\\n1 2 3`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
+        expect(el).not.match(tmpRegex);
+
+        tmpRegex = new RegExp(`REJECTED`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/WIP/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 1/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+  });
+
+  context("Approve record and release", () => {
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as first approver", () => {
+      cy.authLogin({
+        email: FIRST_USER.email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Accept Approval Request with password prompt", () => {
+      SystemRequirement("REQ-0920");
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.ChangeRequestApprove, () => {
+          cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+
+    it("Verify there is no dashboard notifications", () => {
+      SystemRequirement("REQ-2200");
+      cy.cmpVerifyNoPendingActions();
+    });
+
+    it("Logout from existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as admin user", () => {
+      cy.authLogin({
+        email: ADMIN_USER.email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it(`Verify approval notification`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .should("contain", FIRST_USER.name)
+        .and("contain", "APPROVED")
+        .and("contain", calDocId);
+    });
+
+    it("Open doc to check released state", () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .contains(calDocId).last().arrowClick();
     });
 
     it("Verify status is 'Released'", () => {
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.wait(10000);
+    });
+  });
+
+  context("Check doc Released status and click on Send To Email", () => {
+    it("Check doc released status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        calDocId = $docIdElement.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email receive for 'Export for document'", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${calDocId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing Calibration notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${calDocId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify attached image.jpg file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${calDocId}-A-Calibration-document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(1);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp( "\\n\\n");
+
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 1")) {
+            pages[0] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 in Released document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 1")) {
+        tmpRegex = new
+        RegExp( `Maintenance Record\n${calDocId}, Revision A\nCALIBRATION DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/MAINTENANCE DETAILS/);
+
+        expect(el).match(/Equipment\nEQ-00001 - 1 Equipment document/);
+
+        tmpRegex = new RegExp(`Maintainer\n${ADMIN_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| APPROVED \\| ${docRelDate}.*\n.*\\n1 2 3`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
+        expect(el).not.match(tmpRegex);
+
+        tmpRegex = new RegExp(`REJECTED`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 1/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
     });
   });
 
   context("Verify Maintenance History is now only History", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
@@ -541,7 +2399,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`PMDone - Due Date: ${prevMaintenanceComplianceDate}`);
+          expect(text).to.contain(`PMDone - Due date: ${prevMaintenanceComplianceDate}`);
         });
     });
 
@@ -552,7 +2410,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+          expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
         });
     });
   });
@@ -567,7 +2425,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click revise on maintenance record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drClickReviseDocument();
       });
       cy.progressBarShouldNotExist();
@@ -590,6 +2448,8 @@ context("Equipment maintenance and calibration", () => {
         if (!monthYearText.includes(month)) {
           cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(0).arrowClick();
         }
+
+        cy.wait(500);
 
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
@@ -630,7 +2490,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click revise on maintenance record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drClickReviseDocument();
       });
       cy.progressBarShouldNotExist();
@@ -655,6 +2515,7 @@ context("Equipment maintenance and calibration", () => {
         }
 
         cy.wait(500);
+
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
           .each(($el) => {
@@ -687,7 +2548,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify Due date calculation", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
@@ -699,7 +2560,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`PMDone - Due Date: ${prevMaintenanceComplianceDate}`);
+          expect(text).to.contain(`PMDone - Due date: ${prevMaintenanceComplianceDate}`);
         });
     });
 
@@ -710,7 +2571,7 @@ context("Equipment maintenance and calibration", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`CALDue - Due Date: ${calibrationComplianceDate}`);
+          expect(text).to.contain(`CALDue - Due date: ${calibrationComplianceDate}`);
         });
     });
   });

@@ -14,6 +14,8 @@ declare global {
       grpVerifyGroupMembersIsPresentOnFirstGroup(): Chainable;
       grpVerifyGroupTypeIsPresentOnFirstGroup(): Chainable;
       grpSetNameFilter(params: { name: string }): Chainable;
+      grpSetPermissionsFilter(params: { permission: string }): Chainable;
+      grpSetTagsFilter(params: { tag: string }): Chainable;
       grpSetMembersFilter(params: { member: string }): Chainable;
       grpSetTypeFilter(params: { type: string }): Chainable;
       grpFilterByName(params: { name: string }): Chainable;
@@ -26,6 +28,8 @@ declare global {
       grpCheckIfNameFilterIsSet(params: { name: string }): Chainable;
       grpCheckIfMembersFilterIsSet(params: { member: string }): Chainable;
       grpCheckIfTypeFilterIsSet(params: { groupType: string }): Chainable;
+      grpCheckIfPermissionFilterIsSet(params: { permission: string }): Chainable;
+      grpCheckIfTagFilterIsSet(params: { tag: string }): Chainable;
       grpNavigateToDashboard(): Chainable;
       grpCheckIfGroupTypeExists(params: { type: string }): Chainable;
       grpClickAddGroup(): Chainable;
@@ -169,6 +173,14 @@ Cypress.Commands.add("grpSetTypeFilter", (params: {type: string}) => {
   cy.get("li").contains(params.type).arrowClick().wait(500);
 });
 
+Cypress.Commands.add("grpSetPermissionsFilter", (params: {permission: string}) => {
+  cy.get(`[aria-colindex="4"] input`).arrowType(params.permission).wait(500);
+});
+
+Cypress.Commands.add("grpSetTagsFilter", (params: {tag: string}) => {
+  cy.get(`[aria-colindex="5"] input`).arrowType(params.tag).wait(500);
+});
+
 Cypress.Commands.add("grpClearFilter", () => {
   cy.get("#clearFilter").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
@@ -214,6 +226,14 @@ Cypress.Commands.add("grpCheckIfMembersFilterIsSet", (params: { member: string }
 
 Cypress.Commands.add("grpCheckIfTypeFilterIsSet", (params: { groupType: string }) => {
   cy.get(`[aria-colindex="1"] [class="k-input"]`).should("have.text", params.groupType);
+});
+
+Cypress.Commands.add("grpCheckIfPermissionFilterIsSet", (params: { permission: string }) => {
+  cy.get(`[aria-colindex="4"] input`).should("have.value", params.permission);
+});
+
+Cypress.Commands.add("grpCheckIfTagFilterIsSet", (params: { tag: string }) => {
+  cy.get(`[aria-colindex="5"] input`).should("have.value", params.tag);
 });
 
 Cypress.Commands.add("grpNavigateToDashboard", () => {

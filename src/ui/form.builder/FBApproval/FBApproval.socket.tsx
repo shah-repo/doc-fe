@@ -1,8 +1,7 @@
 import { get, maxBy } from "lodash";
 import { reaction } from "mobx";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { FB, FBApprovalSocketProps, FBApprovalState, FBFieldName } from "..";
-import { IotService } from "../../../common/utils/iot/mqttClient";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
 
@@ -12,7 +11,6 @@ const FBApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = ({
   const { workspaceState } = FB.useStores();
   const { id, documentId } = workspaceState || {};
   const approvalState: FBApprovalState = get(FB.useStores(), `${FBFieldName.ApprovalState}-${name}`);
-  const iotService = IotService.getInstance();
 
   React.useEffect(() => reaction(
     () => approvalState?.getDocumentApi.data,
@@ -30,23 +28,14 @@ const FBApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
 
-  const subscribe = () => {
-    iotService.subscribeToTopic(
-      `+/document_revisions/${id}/updated`,
-      reload
-    );
-  };
 
-  const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(
-      `+/document_revisions/${id}/updated`,
-    );
-  };
-
-  const reload = (resp: string) => {
+  const callback = useCallback(() => {
     approvalState?.getDocument(documentId);
-  };
-  useMqttSubscription(subscribe, unsubscribe);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const topic = useMemo(() => `+/document_revisions/${id}/updated`, [id]);
+
+  useMqttSubscription(topic, callback);
 
   return null;
 };

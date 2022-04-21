@@ -157,7 +157,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -171,7 +170,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -701,7 +699,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
@@ -815,6 +813,12 @@ context("Repeat One Time Training with Training Curriculum", () => {
         `${releasedFormId}-1-One-Time-training-form-title.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -856,7 +860,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         expect(el).match(/Output Document Type\nOne-Time Training test/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
 
@@ -866,6 +872,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
           .match(/Force retraining \(everyone will be retrained regardless of their current status\)\n Yes/);
 
         expect(el).match(/TRAINEES DETAILS/);
+
+        expect(el).match(/Groups to Train/);
 
         expect(el).match(/Released/);
 
@@ -884,8 +892,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Groups to Train/);
 
         expect(el).match(/Users to Train \(if applicable\)/);
 
@@ -940,12 +946,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Select 'One-Time Training test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview, CyRoutes.EmployeesGet,
-        CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("One-Time Training test{downarrow}{enter}");
-      });
+      // eslint-disable-next-line max-len
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowType("One-Time Training test",  { force: true }).wait(1500).arrowType("{downarrow}{enter}",  { force: true });
     });
 
     it("Enter training title 'One-Time training title'", () => {
@@ -965,7 +967,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
 
     it("Select force training option 'Yes'", () => {
@@ -973,8 +975,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("Checkbox option 2 checked", () => {
@@ -1079,6 +1081,12 @@ context("Repeat One Time Training with Training Curriculum", () => {
           fileName: downloadFile,
         });
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content for draft document", () => {
@@ -1112,7 +1120,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         expect(el).match(/Description\nTEST EXPORT PDF/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
 
@@ -1128,6 +1138,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(el).match(/Groups to Train\nNone/);
 
         tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Draft/);
@@ -1149,9 +1162,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp( `Checkbox\n(.*)\n(.*)\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).not.match(/TEXT FIELD/);
@@ -1291,6 +1301,12 @@ context("Repeat One Time Training with Training Curriculum", () => {
           fileName: downloadFile,
         });
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -1325,7 +1341,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         expect(el).match(/Description\nTEST EXPORT PDF/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
 
@@ -1340,6 +1358,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(el).match(/Groups to Train\nNone/);
 
         tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
@@ -1363,13 +1384,10 @@ context("Repeat One Time Training with Training Curriculum", () => {
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\n(.*)\n1 2 3`, "gi" );
-        expect(el).match(tmpRegex);
-
         expect(el).not.match(/TEXT FIELD/);
 
         tmpRegex = new
-        RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
+        RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);

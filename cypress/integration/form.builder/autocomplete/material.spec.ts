@@ -154,7 +154,7 @@ context("Autocomplete 'Material' test", () => {
           });
 
           it("Select 'Material' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Materials{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Materials" });
           });
 
           it("Click 'Add' button", () => {
@@ -185,11 +185,11 @@ context("Autocomplete 'Material' test", () => {
             if (response.body.length > 0 ) {
               const materials = response.body;
               materials.forEach((material) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text",
                     `${material.document.docId} - rev ${material.displayRevision} - ${material.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

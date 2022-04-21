@@ -6,6 +6,7 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -143,7 +144,6 @@ context("Training notifications for documents with approved and released revisio
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -157,7 +157,6 @@ context("Training notifications for documents with approved and released revisio
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -556,9 +555,9 @@ context("Training notifications for documents with approved and released revisio
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -581,7 +580,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -599,7 +598,7 @@ context("Training notifications for documents with approved and released revisio
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
         });
     });
 
@@ -608,7 +607,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
     });
@@ -616,7 +615,7 @@ context("Training notifications for documents with approved and released revisio
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
     });
@@ -637,6 +636,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click training notification and check doc with Approved status", () => {
+      SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
     });
@@ -650,6 +650,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click training notification and check doc with Released status", () => {
+      SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
     });

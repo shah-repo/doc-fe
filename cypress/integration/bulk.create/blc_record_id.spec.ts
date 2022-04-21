@@ -463,9 +463,7 @@ context("Bulk create public, private and reserved record-ids", () => {
     });
 
     it("Click create new from form button", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     context("Fill Bulk creation document atributes", () => {
@@ -485,13 +483,11 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Test Private Pool").arrowClick();
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Private Pool");
       });
 
       it("Select 'yes' to have Document id column", () => {
@@ -743,9 +739,7 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Click create new from form button", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+        cy.drCreateNewDocumentFromForm();
       });
 
       context("Fill Bulk creation document atributes", () => {
@@ -765,13 +759,11 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Select form to be used for bulk creation", () => {
-          cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
+          cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
         });
 
         it("Select document type to be used for bulk creation", () => {
-          cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("Test Public Pool").arrowClick();
+          cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Public Pool");
         });
 
         it("Select 'yes' to have Document id column", () => {
@@ -840,9 +832,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Clicks on 'Test Private Pool' type", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-            cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Private Pool" });
-          });
+          cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Private Pool" });
         });
 
         it("Verify assigned record ID is one not reserved in BLC", () => {
@@ -874,9 +864,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Clicks on 'Test Private Pool' type", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-            cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Private Pool" });
-          });
+          cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Private Pool" });
         });
 
         it("Verify assigned record ID is one released reserved in BLC", () => {

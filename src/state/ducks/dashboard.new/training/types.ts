@@ -5,7 +5,7 @@ interface User {
   employeeId: string;
   userName: string;
 }
-export interface Training {
+interface Training {
   pendingEmailSentAt: Nullable<string>;
   trainingStatus: string;
   docId: string;
@@ -22,7 +22,13 @@ export interface Training {
 }
 export interface TrainingListAction {
   type: typeof TRAINING_LIST;
-  payload: Training[];
+  payload: TrainingListApiResponse;
+  initialLoad?: boolean;
+}
+export interface TrainingListApiResponse {
+  results: Training[];
+  page_total: number;
+  total: number;
 }
 
-export type TrainingState = Training[];
+export type TrainingState = TrainingListApiResponse;

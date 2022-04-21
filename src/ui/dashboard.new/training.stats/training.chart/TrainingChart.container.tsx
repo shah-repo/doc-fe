@@ -12,15 +12,15 @@ const TrainingChart: React.FunctionComponent<TrainingChartProps> = ({
   tabValue,
   infoChangeTab,
 }) => {
-  const overdueTrainingData = useSelector(
-    trainingStatsSelectors.overdueTrainingData
+  const overdueTrainingChartData = useSelector(
+    trainingStatsSelectors.overdueTrainingChartData
   );
-  const dueTrainingData = useSelector(trainingStatsSelectors.dueTrainingData);
+  const dueTrainingChartData = useSelector(trainingStatsSelectors.dueTrainingChartData);
   return (
     <TrainingChartPresenter
       tabValue={tabValue}
-      overdue={overdueTrainingData?.length || 0}
-      dueInSeven={dueTrainingData?.length || 0}
+      overdue={overdueTrainingChartData}
+      dueInSeven={dueTrainingChartData}
       infoChangeTab={infoChangeTab}
     />
   );

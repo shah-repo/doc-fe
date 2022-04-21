@@ -145,7 +145,6 @@ context("Training by Groups", () => {
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -159,7 +158,6 @@ context("Training by Groups", () => {
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -725,9 +723,9 @@ context("Training by Groups", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -750,7 +748,7 @@ context("Training by Groups", () => {
     });
 
     it("Select document 'released doc1' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released doc1{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -766,22 +764,18 @@ context("Training by Groups", () => {
     });
 
     it("Select Groups to train 'Group1 and Group2'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Group1{downarrow}{enter}");
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Group2{downarrow}{enter}");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Click Approve", () => {
@@ -826,9 +820,8 @@ context("Training by Groups", () => {
     it("Click on 'Revise Document'", () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApprovers,
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        CyRoutes.PostDocRev, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -838,7 +831,7 @@ context("Training by Groups", () => {
     });
 
     it("Add new Group to train 'Group3'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Group3{downarrow}{enter}");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
     });
 
     it("Remove group Group1", () => {
@@ -848,7 +841,7 @@ context("Training by Groups", () => {
 
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit, CyRoutes.PatchDocRev], () => {
+        CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });

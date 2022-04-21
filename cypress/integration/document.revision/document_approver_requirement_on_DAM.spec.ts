@@ -165,7 +165,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
@@ -323,7 +323,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
         expect(el).match(/Output Document Type\nDocument Approval Matrix/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/APPROVAL ROLES/);
 
@@ -518,7 +520,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
         expect(el).match(/Output Document Type\nDocument Approval Matrix/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/APPROVAL ROLES/);
 
@@ -596,7 +600,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.drAddAnotherRoleBtn();
       });
-
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -902,7 +905,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         RegExp( `Description\n${DAMDocument}`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/Draft/);
 
@@ -1164,7 +1169,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         RegExp( `Description\n${DAMDocument}`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/Released/);
 

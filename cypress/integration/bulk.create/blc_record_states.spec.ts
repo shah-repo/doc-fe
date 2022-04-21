@@ -718,8 +718,8 @@ context("Bulk create record headers", () => {
           "FM-00002 - rev 2 - Revised document for bulk creation",
           "FM-00003 - rev 1 - Bulk create form"];
         cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").should("have.length", 3);
-        cy.get("ul[role=listbox]>li").each(($document) => {
+        cy.get("ul>li[role=option]").should("have.length", 3);
+        cy.get("ul>li[role=option]").each(($document) => {
           expect($document.text()).to.be.oneOf(BLCDocumentFormList);
         });
         cy.unClick();
@@ -747,23 +747,19 @@ context("Bulk create record headers", () => {
           "Receivable",
           "Approval Request",
           "Test Document Type",
-          "Additional Document Type"];
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").should("have.length", 21);
-        cy.get("ul[role=listbox]>li").each(($document) => {
-          expect($document.text()).to.be.oneOf(documentTypeList);
-        });
-        cy.unClick();
+          "Additional Document Type",
+          "Paper Lot History Record",
+        ];
+
+        cy.get(`[data-cy="fb-output-document-type"]`).verifyAutocompleteList(documentTypeList);
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Revised document for bulk creation").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Revised document for bulk creation");
       });
 
-      it("Select wrong document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Suppliers").arrowClick();
+      it("Select document type to be used for bulk creation", () => {
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Suppliers");
       });
 
       it("Select 'no' to have Document id column", () => {
@@ -804,8 +800,9 @@ context("Bulk create record headers", () => {
 
     context("Add correct type and release bulk create", () => {
       it("Select correct document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Test Document Type").arrowClick();
+        cy.get(`[name="fb-output-document-type"]`).arrowClick().find("button").eq(0).arrowClick();
+        cy.unClick();
+        cy.get(`[data-cy="fb-output-document-type"]`).autocompleteSelect("Test Document Type");
       });
 
       it("Save bulk document", () => {

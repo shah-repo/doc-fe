@@ -30,7 +30,6 @@ const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent
       <Grid container={true} spacing={0}>
         <Grid item={true} sm={12} className={classes.mt8}>
           <TextField
-            fullWidth
             id="datetime-local"
             label={<Text translation="async.tasks.password.update" />}
             type="datetime-local"
@@ -44,7 +43,6 @@ const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent
         <Grid item={true} sm={12} className={classes.mt8}>
           <TextField
             id="filled-textarea"
-            fullWidth
             label={<Text translation="async.tasks.user.emails" />}
             multiline
             onChange={handleUserEmailsChange}

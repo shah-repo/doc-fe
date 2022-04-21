@@ -224,8 +224,8 @@ context("Checkboxes test2", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "ia-wi-ch" });
-        cy.get("[data-cy=\"editorConfig.approvers\"]").arrowType(`${USERS[1].email }{downarrow}{enter}`);
-        cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
+        cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "ia-wi-ch" } );
@@ -235,8 +235,8 @@ context("Checkboxes test2", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "ia-wo-ch" });
-        cy.get("[data-cy=\"editorConfig.approvers\"]").arrowType(`${USERS[1].email }{downarrow}{enter}`);
-        cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
+        cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "ia-wo-ch" } );
       });
@@ -313,7 +313,7 @@ context("Checkboxes test2", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).arrowClick();
         cy.fbEnterNameValue({ name: "label", value: "mpi-wi-ch" });
-        cy.get("[data-cy=\"instructionsDocument\"]").arrowType("AR Form{downarrow}{enter}");
+        cy.get("[data-cy=\"instructionsDocument\"]").autocompleteSelect("AR Form");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "mpi-wi-ch" } );
@@ -323,7 +323,7 @@ context("Checkboxes test2", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).arrowClick();
         cy.fbEnterNameValue({ name: "label", value: "mpi-wo-ch" });
-        cy.get("[data-cy=\"instructionsDocument\"]").arrowType("AR Form{downarrow}{enter}");
+        cy.get("[data-cy=\"instructionsDocument\"]").autocompleteSelect("AR Form");
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "mpi-wo-ch" } );
       });
@@ -332,7 +332,7 @@ context("Checkboxes test2", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
         cy.fbEnterNameValue({ name: "label", value: "sd-wi-ch" });
-        cy.get("[data-cy=\"options\"]").arrowType("AR Form{downarrow}{enter}");
+        cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "sd-wi-ch" } );
@@ -342,7 +342,7 @@ context("Checkboxes test2", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
         cy.fbEnterNameValue({ name: "label", value: "sd-wo-ch" });
-        cy.get("[data-cy=\"options\"]").arrowType("AR Form{downarrow}{enter}");
+        cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "sd-wo-ch" } );
       });

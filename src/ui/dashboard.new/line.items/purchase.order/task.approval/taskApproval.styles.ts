@@ -19,7 +19,11 @@ export const styles = makeStyles(() =>
       paddingLeft: "10px",
     },
     link: {
-      color: Colors.black,
+      "color": Colors.black,
+      "textDecoration": "none",
+      "&:hover": {
+        textDecoration: "underline",
+      },
     },
     icon: {
       width: "15px",

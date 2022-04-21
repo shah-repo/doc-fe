@@ -1,3 +1,5 @@
+import { size } from "lodash";
+import { Translation } from "../../../translations/types";
 
 export const formatCurrency = (data: string) =>  {
   const language = "en";
@@ -23,4 +25,31 @@ export const linearScale = (domain: number[], range: number[]) => {
     return result;
   };
   return scale;
+};
+
+export const scrollToBottom = (selector) => {
+  const el = document.querySelector<HTMLElement>(selector);
+  el?.scrollIntoView({ behavior: "smooth" });
+};
+
+export const getPendingTooltipText = (pendingCount, approvedCount) => {
+  const pending = size(pendingCount);
+  const approved = size(approvedCount);
+  const count = pending + approved;
+  const primaryText = count > 1 ? "assigned.users.counts" : "assigned.users.count";
+  let secondaryText = "approved.and.pending.count.many.to.many";
+  if (approved <= 1 && pending > 1) {
+    secondaryText = "approved.and.pending.count.one.to.many";
+  } else if (approved <= 1 && pending <= 1) {
+    secondaryText = "approved.and.pending.count.one.to.one";
+  } else if (approved > 1 && pending <= 1) {
+    secondaryText = "approved.and.pending.count.many.to.one";
+  }
+  return {
+    count,
+    pending,
+    approved,
+    primaryText: primaryText as Translation,
+    secondaryText: secondaryText as Translation,
+  };
 };

@@ -402,13 +402,11 @@ context("Bulk create record headers", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Test Document Type").arrowClick();
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Document Type");
       });
 
       it("Select 'yes' to have Document id column", () => {

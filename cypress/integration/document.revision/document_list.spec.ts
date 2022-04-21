@@ -51,7 +51,7 @@ context("Document list test", () => {
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
+                documentTypeAcronym: "CP-",
                 group: "OTHER",
                 isQms: true,
               },
@@ -115,6 +115,7 @@ context("Document list test", () => {
         });
       });
     });
+
     it("[API]Creates document revision for document list test 2", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
@@ -149,6 +150,7 @@ context("Document list test", () => {
       });
     });
   });
+
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
@@ -447,7 +449,7 @@ context("Document list test", () => {
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
       SystemRequirement("REQ-0130");
-      cy.dlVerifyDescriptionOnHover({ description: "\nTest Doc Rev Description1\n" });
+      cy.dlVerifyDescriptionOnHover({ description: "Test Doc Rev Description1" });
     });
   });
 });
