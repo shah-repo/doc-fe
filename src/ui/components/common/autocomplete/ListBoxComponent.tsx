@@ -36,6 +36,7 @@ const renderRow = (props: ListChildComponentProps) => {
     style: {
       ...style,
       top: (style.top as number) + LISTBOX_PADDING,
+      whiteSpace: "nowrap",
     },
   });
   return (
