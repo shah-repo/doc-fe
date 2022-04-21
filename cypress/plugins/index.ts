@@ -83,5 +83,29 @@ export default (on, config) => {
       });
     });
   });
+
+  on("before:browser:launch", (browser, launchOptions) => {
+    if (browser.isHeadless) {
+      const width = 1280;
+      const height = 960;
+
+      if ((browser.name === "chrome" || browser.name === "chromium")) {
+        launchOptions.args.push(`--window-size=${width},${height}`);
+        launchOptions.args.push("--force-device-scale-factor=1");
+      }
+
+      if (browser.name === "electron") {
+        launchOptions.preferences.width = width;
+        launchOptions.preferences.height = height;
+      }
+
+      if (browser.name === "firefox") {
+        launchOptions.args.push(`--width=${width}`);
+        launchOptions.args.push(`--height=${height}`);
+      }
+    }
+
+    return launchOptions;
+  });
 };
 
