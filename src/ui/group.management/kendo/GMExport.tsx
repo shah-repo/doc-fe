@@ -45,7 +45,7 @@ const GMExport: React.FunctionComponent<Props> = ({ gridData, columns }) => {
         variant="outlined"
         className={classes.exportListbutton}
         id="ListPresenter-export-list"
-        data-cy="document.revision.export.list"
+        data-cy="gm-open-export-dialog"
         onClick={dialog.open}
       >
         <Box display="flex">

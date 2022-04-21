@@ -96,12 +96,14 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           </div>
           <div className={classes.iconContainer} >
             <IconButton
+              style={{ width: "23px" }}
               color="default"
               onClick={() => closeDrawer()}
               aria-label="Close"
               disableFocusRipple
               disableRipple
               disableTouchRipple
+              data-cy="gm-close-history-panel"
             >
               <CloseIcon style={{ color: Colors.gray }} />
             </IconButton>

@@ -27,7 +27,7 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
       <Button
         variant="contained"
         onClick={onHistoryPanelClick}
-        id="Group-openDialog"
+        data-cy="gm-open-history-panel"
         className={classes.historyButton}
       >
         <Text message="user.management.audit" />
