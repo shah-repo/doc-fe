@@ -8,7 +8,7 @@ services:
       - 27017
   enlil_cypress_dashboard_director:
     container_name: enlil_cypress_dashboard_director
-    image: agoldis/sorry-cypress-director:2.1.1
+    image: agoldis/sorry-cypress-director:1.1.1
     environment:
       DASHBOARD_URL: "http://localhost:${ENLIL_COMPOSE_EXPOSE_SORRY_CY_DASHBOARD_PORT}"
       MONGODB_URI: "mongodb://enlil_cypress_dashboard_mongo:27017"
@@ -21,7 +21,7 @@ services:
       - enlil_cypress_dashboard_mongo
   enlil_cypress_dashboard_api:
     container_name: enlil_cypress_dashboard_api
-    image: agoldis/sorry-cypress-api:2.1.1
+    image: agoldis/sorry-cypress-api:1.1.1
     environment:
       MONGODB_URI: "mongodb://enlil_cypress_dashboard_mongo:27017"
       MONGODB_DATABASE: "sorry-cypress"
@@ -31,7 +31,7 @@ services:
       - enlil_cypress_dashboard_mongo
   enlil_cypress_dashboard_server:
     container_name: enlil_cypress_dashboard_server
-    image: agoldis/sorry-cypress-dashboard:2.1.1
+    image: agoldis/sorry-cypress-dashboard:1.1.1
     environment:
       GRAPHQL_SCHEMA_URL: "http://localhost:${ENLIL_COMPOSE_EXPOSE_SORRY_CY_API_PORT}"
       GRAPHQL_CLIENT_CREDENTIALS: ''
