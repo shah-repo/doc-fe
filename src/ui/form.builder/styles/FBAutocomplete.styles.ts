@@ -3,11 +3,11 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const styles = {
   inputPropStyle: {
-    height: 40,
+    minHeight: 40,
     background: Colors.white,
     border: `1px solid ${Colors.gray_goose}`,
     borderRadius: 3,
-    padding: "0 0 0 6px",
+    padding: "0 80px 0 6px",
   },
   labelProps: {
     mb: 1.25,

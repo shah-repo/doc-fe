@@ -1,4 +1,4 @@
-import { Box, Chip, IconButton, Popper, TextField, Typography } from "@material-ui/core";
+import { Box, IconButton, Popper, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
@@ -8,7 +8,7 @@ import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
-import { StyledAutoComplete } from "./StyledAutoComplete";
+import { StyledAutoComplete, StyledChip } from "./StyledAutoComplete";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onInputChange,
@@ -107,7 +107,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                 const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
                   (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
                 return (
-                  <Chip
+                  <StyledChip
                     key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}

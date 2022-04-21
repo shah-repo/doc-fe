@@ -23,6 +23,10 @@ const renderRow = (props: ListChildComponentProps) => {
     style: {
       ...style,
       top: (style.top as number) + LISTBOX_PADDING,
+      clear: "both",
+      display: "inline-block",
+      overflow: "hidden",
+      whiteSpace: "nowrap",
     },
   });
 };
