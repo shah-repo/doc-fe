@@ -1,8 +1,8 @@
 #!/bin/bash
+set -e
 
-mv ../node_modules ./
+source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "$ENLIL_ENV"
 yarn install --frozen-lockfile
-source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "CODEBUILD"
 ./scripts/cypress/wait.sh
 ENLIL_DIRECTOR_HOST="director" ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
 ./scripts/cypress/utils/generate_requirements_json_file.sh

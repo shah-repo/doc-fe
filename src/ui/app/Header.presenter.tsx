@@ -33,6 +33,7 @@ const Header: React.FunctionComponent<Props> = ({
           label="Show customizable labels"
         />
         }
+        {/* Autosave disbale changes  */}
         <AutosaveToggle/>
       </Grid>
     </Toolbar>

@@ -1,11 +1,12 @@
 import { Box, Grid } from "@material-ui/core";
-import { FormikProps } from "formik";
-import { flatten, isEmpty } from "lodash";
+import { FormikProps, useFormikContext } from "formik";
+import { flatten, isEmpty, isEqual } from "lodash";
 import { reaction } from "mobx";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
@@ -15,6 +16,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
@@ -45,7 +47,9 @@ import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import UpgradeToLatestContainer from "./presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
-interface Props extends FormikProps<DocumentRevisionFormValues> {
+interface Props
+  extends FormikProps<DocumentRevisionFormValues>,
+  RouteComponentProps {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -114,12 +118,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   redlineActive,
   lastSavedTimestamp,
   mode,
+  history,
 }) => {
   useScrollIntoView();
   const classes = styles();
   const intl = useIntl();
+  const formik = useFormikContext();
 
-  const { workspaceState } = FB.useStores();
+  const { workspaceState, formState } = FB.useStores();
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true, needsSignature: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
   const [forceNewRender, setNewRender] = React.useState();
@@ -282,7 +288,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       />
       <FormHeader {...{ isCreateDocumentDisabled }} />
       <FormWrapper
-        dirty={dirty}
+        dirty={formik.dirty}
         initialValues={initialValues}
         resetForm={resetForm}
       >
@@ -292,9 +298,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           errors={errors}
         />
         <PromptIfDirty
-          dirty={dirty}
-          doNotPrompt={doNotPrompt}
-          onDirtyFlagChange={onDirtyFlagChange}
+          when={true}
+          navigate={(path) => {
+            history.push(path);
+          }}
+          shouldBlockNavigation={() => {
+            const isFBDirty = !isEqual(workspaceState?.formInput || {}, formState?.getValues());
+            const isDocCreating = (history.location.pathname) as unknown as string === DOCUMENT_REVISION_CREATE_URL;
+
+            if ((formik.dirty || isFBDirty) && !isDocCreating) {
+              return true;
+            }
+            return false;
+          }}
+          isAR={false}
         />
         <Title
           name="name"
@@ -437,4 +454,4 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default (observer(DocumentRevisionFormPresenter));
+export default withRouter(observer(DocumentRevisionFormPresenter));

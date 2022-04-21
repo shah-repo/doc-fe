@@ -1,13 +1,4 @@
-version: "3.9"
-x-const:
-  fe_env_vars: &FE_ENV_VARS
-    - CYPRESS_BE_URL=${CYPRESS_BE_URL}
-    - CYPRESS_FE_URL=${CYPRESS_FE_URL}
-    - CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL}
-    - CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD}
-    - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
-    - CYPRESS_VIDEO=${CYPRESS_VIDEO}
-
+version: "3.8"
 services:
   director:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.1.1
@@ -19,14 +10,17 @@ services:
           - director
 
   test_run_container:
+    container_name: enlil_cypress_test_run_container
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
     command: tail -F anything
     volumes:
-      - "$FE_REPO:/opt/app/tests"
+      - "$FE_REPO:/opt/app"
     networks:
       cypress_network:
     environment:
-      *FE_ENV_VARS
+    - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
+    - ENLIL_ENV=${ENLIL_ENV}
+    - SLACK_TOKEN=${SLACK_TOKEN}
       
 networks:
   cypress_network:
