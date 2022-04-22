@@ -244,7 +244,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
               {...getTagProps({ index })}
               key={option.value}
               label={option.label}
-              style={{ minHeight: "32px", height: "auto" }}
+              style={{ minHeight: "32px", height: "auto", fontFamily: "Sora" }}
               disabled={option.deleteDisabled}
             />
           ))

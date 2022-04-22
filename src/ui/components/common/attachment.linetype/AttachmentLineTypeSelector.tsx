@@ -56,6 +56,9 @@ const styles = makeStyles((theme) => ({
     width: 20,
     height: 20,
   }),
+  button: {
+    fontFamily: "Sora",
+  },
 }));
 
 
@@ -129,6 +132,7 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
       { (!isChangeRequestFormOnScreenContext && !isRecord) &&
       <Button
         color="primary"
+        className={classes.button}
         startIcon={<AttachFileIcon />}
         onClick={openDialog}
         id="AttachmentFieldPresenter-linkButton"

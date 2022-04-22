@@ -25,6 +25,7 @@ export const selectStyles = {
   multiValue: (base) => ({
     ...base,
     background: Colors.light_blue,
+    fontFamily: "Sora",
   }),
   multiValueRemove: (base) => ({
     ...base,
@@ -45,7 +46,7 @@ export const selectStyles = {
     ...base,
     fontFamily: "Sora",
     letterSpacing: "normal",
-    color: Colors.disable_text,
+    color: Colors.spanish_gray,
   }),
 };
 

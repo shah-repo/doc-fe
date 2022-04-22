@@ -7,6 +7,7 @@ import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents/t
 import { AsyncStatus } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
 import { toastError } from "../../../components/notifications";
+import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocId } from "../../../hooks/docCustomization/useCustomization";
 import { DocumentCloneType } from "../../Clone.container";
@@ -75,6 +76,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
         }}
         validate={validators}
         inputStyleProps={classes.input}
+        labelProps={AutoCompleteStyles.labelProps}
       />
     </CustomLabelTooltip>
   );

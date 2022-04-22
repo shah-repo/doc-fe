@@ -1,4 +1,4 @@
-import { InputBaseProps, MenuItem, Select as MuiSelect } from "@material-ui/core";
+import { BoxProps, InputBaseProps, MenuItem, Select as MuiSelect } from "@material-ui/core";
 import { SelectProps as MuiSelectProps } from "@material-ui/core/Select";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
@@ -19,6 +19,7 @@ interface SelectOwnProps extends FieldOwnProps {
   includeEmpty?: boolean;
   inputFieldProps?: InputBaseProps;
   inputStyleProps?: string;
+  labelProps?: BoxProps;
 }
 
 type SelectPropsWithFormik = SelectOwnProps &
@@ -31,6 +32,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
   includeEmpty = true,
   inputFieldProps,
   inputStyleProps,
+  labelProps,
   ...fieldProps
 }) => {
   const { field } = fieldProps;
@@ -48,7 +50,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
   ));
 
   return (
-    <Field {...fieldProps} >
+    <Field {...fieldProps} labelProps={labelProps} >
       <MuiSelect
         {...fieldProps.field}
         {...selectProps}

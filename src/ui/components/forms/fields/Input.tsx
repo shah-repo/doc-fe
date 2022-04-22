@@ -1,3 +1,4 @@
+import { BoxProps } from "@material-ui/core";
 import { InputBaseProps as MuiInputProps } from "@material-ui/core/InputBase";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
@@ -13,6 +14,7 @@ interface InputOwnProps extends FieldOwnProps {
   lpignore?: boolean;
   dataCy?: string;
   inputStyleProps?: string;
+  labelProps?: BoxProps;
 }
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
@@ -24,11 +26,12 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
   lpignore = true,
   dataCy,
   inputStyleProps,
+  labelProps,
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
   return (
-    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
+    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} labelProps={labelProps} inputLabelProps={{ shrink: true }} >
       <MuiInput
         required={false}
         inputProps={{ "data-lpignore": lpignore, "data-cy": dataCy }}

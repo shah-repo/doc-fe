@@ -88,7 +88,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   }}
                   inputProps={{
                     ...params.inputProps,
-                    "style": { padding: "10.5px 0", ...inputStyle },
+                    "style": { padding: "10.5px 0", ...inputStyle, fontFamily: "Sora" },
                     "data-cy": props.name,
                   }}
                   size={inputPropStyleSize}
@@ -112,7 +112,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   <StyledChip
                     key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
-                    style={{ minHeight: "32px", height: "auto" }}
+                    style={{ minHeight: "32px", height: "auto", fontFamily: "Sora" }}
                     {...getTagProps({ index })}
                     disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
                   />

@@ -11,6 +11,7 @@ import { userManagementSelectors } from "../../../../state/ducks/userManagement"
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
 import { FBEditorPropertiesType, FBSchemaProps } from "../../../form.builder";
+import { styles as FBAutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
@@ -185,6 +186,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         validate={validators}
         includeEmpty={false}
         inputStyleProps={classes.input}
+        labelProps={FBAutoCompleteStyles.labelProps}
       />
     </CustomLabelTooltip>
   );

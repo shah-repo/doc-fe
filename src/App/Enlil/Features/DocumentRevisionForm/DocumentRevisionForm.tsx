@@ -102,11 +102,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 tabs={tabLabels}
                 boxProps={{ stretchY: "100%" }}
               >
-                {map(tabConfig, (tabInfo: TabInfo) => {
+                {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
-                  return <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
+                  return <SMBox key={index} height="100%" overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} px={8} stretchY="100%">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}
