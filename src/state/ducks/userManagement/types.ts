@@ -122,6 +122,26 @@ export enum ACTION_TITLE_MAPPING {
   RemovedUserEmail="RemovedUserEmail",
   RemovedUserName="RemovedUserName",
   RemovedGroupName="RemovedGroupName",
+  GroupNameUpdated = "GroupNameUpdated",
+  AddedGroup = "AddedGroup",
+  AddedMembers = "AddedMembers",
+  AddedMember = "AddedMember",
+  AddedPermissions = "AddedPermissions",
+  AddedPermission="AddedPermission",
+  AddedTags= "AddedTags",
+  AddedTag= "AddedTag",
+  AddedParentGroups="AddedParentGroups",
+  AddedParentGroup="AddedParentGroup",
+  RemovedMembers="RemovedMembers",
+  RemovedMember="RemovedMember",
+  RemovedPermissions="RemovedPermissions",
+  RemovedPermission="RemovedPermission",
+  RemovedTags="RemovedTags",
+  RemovedTag="RemovedTag",
+  RemovedParentGroups="RemovedParentGroups",
+  RemovedParentGroup="RemovedParentGroup",
+  UpdatedGroups="UpdatedGroups",
+  UpdatedGroup="UpdatedGroup"
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
@@ -154,3 +174,31 @@ export interface UMAuditGroupProps extends UMAuditProps {
   ownerDetails: Partial<Employee>;
   employeeDetails: Partial<Employee>;
 }
+
+export interface GMAuditProps {
+  fieldPath: string;
+  type: string;
+  employeeId: string;
+  employeeName: string;
+  ownerId: string;
+  ownerName: string;
+  ownerEmail: string;
+  groupId: string;
+  timestamp: string;
+  companyId: string;
+  companyGroupId: string;
+  id: string;
+  previousValue: string;
+  nextValue: string;
+}
+
+export interface GMAuditGroupProps extends GMAuditProps {
+  primaryText: string;
+  secondaryText: string;
+  auditType: ACTION_TITLE_MAPPING;
+  sortedIndex: number;
+  groupKey: string;
+  ownerDetails: Partial<Employee>;
+  employeeDetails: Partial<Employee>;
+}
+
