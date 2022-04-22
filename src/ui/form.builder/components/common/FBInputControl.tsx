@@ -21,8 +21,8 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
     <FormControl {...{ error, fullWidth }}>
       {children}
       {!isEmpty(helperText) && (
-        <FormHelperText>
-          <Box color={error ? "" : "primary.main"}>{helperText}</Box>
+        <FormHelperText style={{ fontFamily: "Sora" }}>
+          <Box color={error ? "" : "primary.main"} fontFamily={"Sora"}>{helperText}</Box>
         </FormHelperText>
       )}
       {showContext && (

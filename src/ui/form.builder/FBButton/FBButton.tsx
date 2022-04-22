@@ -25,10 +25,11 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
     }}
     className={className}>
     {isString(label) && (
-      <FBText locale={label} />
+      <FBText labelProps={{ fontFamily: "Sora" }} locale={label} />
     )}
     {hasIn(label, "locale") && (
       <FBText
+        labelProps={{ fontFamily: "Sora" }}
         locale={(label as FBLabelLocaleProps).locale}
         values={(label as FBLabelLocaleProps).values}
       />
