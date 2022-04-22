@@ -1,3 +1,4 @@
+import { PasswordType } from "aws-sdk/clients/cognitoidentityserviceprovider";
 import axios from "axios";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import { checkIsDocumentRecord } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
@@ -319,11 +320,13 @@ const setPrimaryAttachment = (
     handlers,
   });
 
-const cloneEB = (id: string, handlers: Handlers): ApiAction<DocumentRevision> => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/copy/${id}`,
-  method: "post",
-  handlers,
-});
+const cloneEB = (id: string, payload: PasswordType, handlers: Handlers): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/copy/${id}`,
+    method: "post",
+    data: payload,
+    handlers,
+  });
 
 const getDocRevStatuses = (
   handlers: Handlers,
