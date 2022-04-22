@@ -4,6 +4,9 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { Part } from "../../utils/constants/documentTypes/part";
+import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
+import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let adminEmployeeLoginResponse;
@@ -57,137 +60,9 @@ context("Receivable test with Page Details", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
+              Part,
               {
-                documentTypeName: PART_DOCUMENT_TYPE_NAME,
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
-              {
-                documentTypeName: "Purchase Order test",
-                documentTypeAcronym: "POT-",
-                group: "PO",
-                category: "Purchase Order",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    label: "Description",
-                    visible: true,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    label: "Cancel PO",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Close PO",
-                    visible: true,
-                  },
-                  M: {
-                    label: "Type of Change",
-                    visible: true,
-                    required: true,
-                  },
-                  N: {
-                    label: "Add Approvers",
-                    visible: false,
-                    required: false,
-                  },
-                  O: {
-                    label: "PO History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  S: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  V: {
-                    label: "Create PO",
-                    visible: true,
-                  },
-                  W: {
-                    label: "Revision Stage",
-                    visible: false,
-                  },
-                  A1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  A4: {
-                    label: "Released",
-                    visible: false,
-                  },
-                  A5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  A6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  P4: {
-                    label: "Released",
-                    visible: false,
-                  },
-                  P5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  P6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                },
+                ...PurchaseOrderTest,
                 schema: [
                   {
                     name: "po-status-built-in",
@@ -323,112 +198,7 @@ context("Receivable test with Page Details", () => {
                   },
                 ],
               },
-              {
-                documentTypeName: "Receivable test",
-                documentTypeAcronym: "RCT-",
-                group: "RECEIVABLE",
-                category: "Receive",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    visible: false,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Update",
-                    visible: false,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Correction",
-                    visible: true,
-                  },
-                  M: {
-                    label: "Type of Revision Change",
-                    visible: true,
-                    required: true,
-                  },
-                  N: {
-                    label: "Create Receving Record",
-                    visible: true,
-                  },
-                  O: {
-                    label: "Record History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  S: {
-                    label: "Update Record",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  A4: {
-                    label: "Released",
-                    visible: true,
-                  },
-                  A5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  P4: {
-                    label: "Released",
-                    visible: true,
-                  },
-                  P5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                },
-              },
+              ReceivableTest,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {

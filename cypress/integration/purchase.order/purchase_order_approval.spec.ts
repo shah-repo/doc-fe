@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -51,7 +52,7 @@ context("PO approval test", () => {
               {
                 documentTypeName: "PO Part",
                 documentTypeAcronym: "PRT-",
-                group: "PART",
+                group: DOC_TYPE_GROUP.PART,
                 isQms: true,
               },
             ],
