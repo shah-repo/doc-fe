@@ -227,7 +227,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiFormHelperText: {
     root: {
-      fontFamily: "Sora",
+      fontFamily: "Open Sans, sans-serif;",
     },
   },
 });
