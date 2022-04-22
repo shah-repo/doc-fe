@@ -8,7 +8,7 @@ enum Colors {
   water="#EEF3FF",
   // black
   black = "#000",
-  almost_black = "#080B11",
+  almost_black = "#080B11", // font_black
   // gray
   hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
@@ -22,6 +22,7 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
+  link_water = "#ccd4d9",
   platinum_grey = "#E2E2E2",
   // blue
   light_blue = "#edf4ff",

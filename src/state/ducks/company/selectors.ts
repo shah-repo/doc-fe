@@ -52,6 +52,8 @@ const getActiveEmployees = (state: ApplicationState) =>
     .value()
     .sort(sortStringsByKey("user.name"));
 
+const getAllEmployees = (state: ApplicationState) => state.company.companyMine.employees;
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
@@ -69,4 +71,5 @@ export default {
   getRedlineActive,
   getNavigationTitle,
   getActiveEmployees,
+  getAllEmployees,
 };

@@ -11,6 +11,10 @@ export interface GetEmployeeResponse {
   user: User;
 }
 
+export interface UMExportDataProp extends GetEmployeeResponse {
+  status: string;
+}
+
 export interface GetSlackUrl {
   url: string;
 }
@@ -68,4 +72,85 @@ export interface GetApiTokenList {
   id: string;
   name: string;
   active: boolean;
+}
+interface DescriptionItemsProp {
+  primaryText: string;
+  secondaryText: string;
+}
+
+interface UserItemProp {
+  avatar: Nullable<string>;
+  email: string;
+  id: string;
+  initialColor: string;
+  name: string;
+}
+interface OwnerItemsProp {
+  active: boolean;
+  id: string;
+  user: UserItemProp;
+}
+
+export interface AuditDetailsProps {
+  descriptions: DescriptionItemsProp[];
+  employeeDetails: Employee;
+  groupId: string;
+  ownerDetails: OwnerItemsProp;
+  timestamp: string;
+}
+
+export enum ACTION_TITLE_MAPPING {
+  AddedToGroups = "AddedToGroups",
+  AddedToGroup = "AddedToGroup",
+  CreatedNewUser = "CreatedNewUser",
+  CreatedNewUserEmail = "CreatedNewUserEmail",
+  DeactivateUser = "DeactivateUser",
+  ActivateUser = "ActivateUser",
+  Unknown = "Unknown",
+  EmployeeNameUpdated = "EmployeeNameUpdated",
+  DeletedFromGroup = "DeletedFromGroup",
+  DeletedFromGroups = "DeletedFromGroups",
+  AddedUserName = "AddedUserName",
+  AddedUserEmail = "AddedUserEmail",
+  ResetPassword = "ResetPassword",
+  ResetPasswordDescription = "ResetPasswordDescription",
+  ResetPasswordFor = "ResetPasswordFor",
+  EmployeesDeleteFromGroup = "EmployeesDeleteFromGroup",
+  EmployeesAddedToGroup= "EmployeesAddedToGroup",
+  EmployeesDeleteFromGroups = "EmployeesDeleteFromGroups",
+  EmployeesAddedToGroups= "EmployeesAddedToGroups",
+  RemovedUserEmail="RemovedUserEmail",
+  RemovedUserName="RemovedUserName",
+  RemovedGroupName="RemovedGroupName",
+}
+
+export enum UM_AUDIT_CONCAT_KEYS {
+  NameSeparator = "-NAME-UPDATED-TO-",
+  DeleteFromGroup = "-DELETED-FROM-GROUP-",
+  AddToGroup = "-ADDED-TO-GROUP-"
+}
+
+export interface UMAuditProps {
+  fieldPath: string;
+  type: string;
+  employeeId: string;
+  employeeName: string;
+  ownerId: string;
+  ownerName: string;
+  ownerEmail: string;
+  groupId: string;
+  timestamp: string;
+  id: string;
+  nextValue: string;
+  previousValue: string;
+}
+
+export interface UMAuditGroupProps extends UMAuditProps {
+  primaryText: string;
+  secondaryText: string;
+  auditType: ACTION_TITLE_MAPPING;
+  sortedIndex: number;
+  groupKey: string;
+  ownerDetails: Partial<Employee>;
+  employeeDetails: Partial<Employee>;
 }
