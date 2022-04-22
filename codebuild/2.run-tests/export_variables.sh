@@ -166,7 +166,7 @@ check_export_image() {
 }
 
 check_docx_to_pdf_image() {
-  IMAGE=doc_export_${DOCXTOPDF_GIT_COMMIT_HASH}
+  IMAGE=docx_to_pdf_${DOCXTOPDF_GIT_COMMIT_HASH}
 
   DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
