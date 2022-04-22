@@ -5,6 +5,7 @@ import React from "react";
 import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
 import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 import FBInlinePendingApprovalSocket from "./FBInlinePendingApproval.socket";
 
@@ -135,7 +136,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
     <FBDialog />
     <FBInlinePendingApprovalSocket/>
     <FBInlineApprovalSocket {...{ name }} />
-    <FBInput {...props} {...{ name, rules }} type="inlineapproval">
+    <FBInput {...props} {...{ name, rules }} type="inlineapproval" labelProps={FBFontStyle.labelProps}>
       <FBInlineApprovalChild {...props} {...{ name }}/>
     </FBInput>
   </FBProvider>

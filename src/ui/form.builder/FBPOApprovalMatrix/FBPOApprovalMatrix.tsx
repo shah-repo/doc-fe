@@ -36,7 +36,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
           label="form.builder.add.item"
           onClick={handleAdd}
           variant="outlined"
-          style={{ margin: "8px 0" }}
+          style={{ margin: "8px 0", fontFamily: "Sora" }}
         />
       </Box>
     </FBInput>

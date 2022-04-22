@@ -12,7 +12,11 @@ const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
   qrValue,
   mode,
 }) => (
-  <Box>
+  <Box fontFamily="Sora"
+    fontStyle= "normal"
+    fontWeight= "600"
+    fontSize= "12px"
+    lineHeight= "15px">
     {mode === "qr" && (
       <>
         <Box display="flex" flexDirection="row-reverse" py={0.8}>

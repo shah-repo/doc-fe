@@ -12,8 +12,10 @@ import { withFBPOApprovalMatrixTable } from "./FBPOApprovalMatrixTable.wrap";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: Colors.light_gray,
-    color: theme.palette.common.black,
+    color: Colors.almost_black,
     textTransform: "uppercase",
+    fontFamily: "Sora",
+    fontSize: "12px",
   },
   body: {
     fontSize: 14,
@@ -27,6 +29,7 @@ const StyledTableCell = withStyles((theme) => ({
 const useStyles = makeStyles({
   root: {
     maxWidth: "100%",
+    fontFamily: "Sora",
   },
   editable: {
     cursor: "pointer",

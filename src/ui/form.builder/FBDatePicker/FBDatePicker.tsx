@@ -6,6 +6,7 @@ import moment from "moment";
 import React from "react";
 import { FBInput } from "..";
 import { getStartOfDayDateString, TIME_ZONE } from "../../../common/utils/date";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { FBTextFieldStyles } from "../styles/FBTextField.styles";
 import { FBDatePickerProps } from "./FBDatePicker.types";
 import { withDatePicker } from "./FBDatePicker.wrap";
@@ -20,7 +21,7 @@ const FBDatePicker: React.FunctionComponent<FBDatePickerProps> = ({
 }) => {
   const classes = FBTextFieldStyles();
   return (
-    <FBInput {...props} withState={true} type="datepicker" >
+    <FBInput {...props} withState={true} type="datepicker" labelProps={FBFontStyle.labelProps}>
       <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
         <Observer>
           {() => (

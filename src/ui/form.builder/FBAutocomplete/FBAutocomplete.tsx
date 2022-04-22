@@ -7,6 +7,7 @@ import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
 import Text from "../../components/Text";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 import { StyledAutoComplete, StyledChip } from "./StyledAutoComplete";
 
@@ -53,6 +54,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         {...{ multiple, defaultValue, loading }}
         type="autocomplete"
         disabled={props.name === "approvers" ? false : disabled}
+        labelProps={FBFontStyle.labelProps}
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
         <StyledAutoComplete
