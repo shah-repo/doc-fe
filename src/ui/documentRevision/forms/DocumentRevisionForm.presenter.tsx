@@ -7,6 +7,7 @@ import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { SessionTimeoutService } from "../../../common/utils/sessionTimeout";
 import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
@@ -16,12 +17,14 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
+import SessionTimer from "../../components/forms/SessionTimer";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
+import useDialog from "../../hooks/useDialog";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import { DocumentCloneType } from "../Clone.container";
@@ -57,9 +60,7 @@ interface Props
   showRevisionTypeChange?: boolean;
   proposedDocId?: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
-  doNotPrompt?: boolean;
   documentTypesById: DocumentTypeByIdState;
-  onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
   type?: DocumentCloneType;
   handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
@@ -99,8 +100,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setDocId,
   dirty,
   resetForm,
-  doNotPrompt,
-  onDirtyFlagChange,
   isSubmitting,
   isValidating,
   errors,
@@ -124,7 +123,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const intl = useIntl();
   const formik = useFormikContext();
-
+  const sessionDialog = useDialog();
+  const sessionService = SessionTimeoutService.getInstance();
+  const timeoutCallback = () => {
+    sessionDialog.open();
+  };
   const { workspaceState, formState } = FB.useStores();
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true, needsSignature: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
@@ -132,6 +135,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const { revisionChangeType } = values || {};
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
   const { schema = [] } =  workspaceState || {};
+  const isFormDirty = !isEqual(workspaceState?.formInput || {}, formState?.getValues()) || formik.dirty;
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -198,6 +202,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     type,
     lastSavedTimestamp,
   });
+
+  useEffect(() => {
+    sessionService.setTimeoutCallback(timeoutCallback);
+    return () => {
+      sessionService.stopSessionTimer();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -278,6 +290,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       xs={12}
     >
       <RedlineBanner {...{ bannerPortal }}/>
+      <SessionTimer {...{ sessionDialog, isFormDirty }}/>
       <UpgradeToLatestContainer
         type="banner"
         docRevId={documentRevision?.id}
