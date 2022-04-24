@@ -236,28 +236,8 @@ context("Record inline Flow", () => {
         cy.fbAddField();
       });
 
-      it("Add second textfield", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectTextField();
-        cy.fbAddLabelName({ name: "Second textfield for inline" });
-        cy.fbAddField();
-      });
-
-      it("Add second inline approval", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectInlineApproval();
-        cy.get("[name=\"label\"]").arrowType("Second inline field");
-        cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
-        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
-        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
-        cy.fbAddField();
-      });
-
-      it("Upload attachement picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-      });
-
       it("Add Checkbox group", () => {
+        cy.fbClickAddNewHiddenBtn();
         cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
         cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
         cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
@@ -272,6 +252,7 @@ context("Record inline Flow", () => {
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+        cy.fbClickAddNewHiddenBtn();
         cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
         cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
         cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
@@ -283,6 +264,37 @@ context("Record inline Flow", () => {
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Add second textfield", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: "Second textfield for inline" });
+        cy.fbAddField();
+      });
+
+      it("Add second inline approval", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectInlineApproval();
+        cy.get("[name=\"label\"]").arrowType("Second inline field");
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
+      });
+
+      it("Choose group to Everyone", () => {
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+        cy.fbAddField();
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it(`Drag and drop approval block to last`, () => {
+        cy.dragAndDropTopDown({
+          fromSelector: ".MuiBox-root>div>ul>li:eq(0)",
+          toSelector: ".MuiBox-root>div>ul>li:eq(-1)",
+        });
       });
     });
 
@@ -436,15 +448,13 @@ context("Record inline Flow", () => {
 
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/APPROVALS\nApprovers/);
-
           expect(el).match(/Textfield for inline/);
 
           expect(el).match(/Inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Second textfield for inline/);
+          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -470,11 +480,13 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+          expect(el).match(/Second textfield for inline/);
 
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -525,7 +537,7 @@ context("Record inline Flow", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
 
-      it("Verify form Draft status and click on Send To Email", () => {
+      it("Verify form Released status and click on Send To Email", () => {
         cy.drCheckDocumentStatus({ status: "Released" });
         cy.arCheckTitleInEditableAndMatches({ name: "Inline Form Document Revision" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
@@ -674,15 +686,13 @@ context("Record inline Flow", () => {
 
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/APPROVALS\nApprovers/);
-
           expect(el).match(/Textfield for inline/);
 
           expect(el).match(/Inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Second textfield for inline/);
+          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -706,11 +716,13 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/Second textfield for inline/);
+
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -783,20 +795,14 @@ context("Record inline Flow", () => {
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        SystemRequirement("REQ-1080");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
-          cy.unClick();
-        });
+        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
+        cy.unClick();
       });
 
       it("Enter text 'First entry' in second textfield for inline", () => {
-        SystemRequirement("REQ-1080");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
-            .type("First entry");
-          cy.unClick();
-        });
+        cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
+          .type("First entry");
+        cy.unClick();
       });
 
       it("Select approver for first inline", () => {
@@ -995,9 +1001,6 @@ context("Record inline Flow", () => {
 
           expect(el).match(/Textfield for inline\nFirst entry/);
 
-          tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| PENDING`);
-          expect(el).match(tmpRegex);
-
           expect(el).match(/Second textfield for inline\nFirst entry/);
 
           tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| DRAFT`);
@@ -1023,6 +1026,12 @@ context("Record inline Flow", () => {
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
+
+          tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| PENDING`);
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| DRAFT`);
+          expect(el).match(tmpRegex);
         }
       });
     });
@@ -1051,14 +1060,9 @@ context("Record inline Flow", () => {
 
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
-          SystemRequirement("REQ-1080", "REQ-1100");
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostOrPatchDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
-            cy.unClick();
-            cy.progressBarShouldNotExist();
-          });
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
+          cy.unClick();
+          cy.progressBarShouldNotExist();
         });
 
         it("Save record", () => {
@@ -1105,14 +1109,9 @@ context("Record inline Flow", () => {
 
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
-          SystemRequirement("REQ-1080");
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostOrPatchDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
-            cy.unClick();
-            cy.progressBarShouldNotExist();
-          });
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
+          cy.unClick();
+          cy.progressBarShouldNotExist();
         });
 
         it("Save record", () => {
@@ -1325,7 +1324,8 @@ context("Record inline Flow", () => {
             tmpRegex = new RegExp(`Release Details\\nReleased by: ${USERS[2].name}\\nReleased Date: ${docRelDate}`);
             expect(el).match(tmpRegex);
 
-            tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
+            // eslint-disable-next-line max-len
+            tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n${USERS[2].name} \\| Approved \\| ${docRelDate}`, "gi" );
             expect(el).match(tmpRegex);
 
             tmpRegex = RegExp( `${USERS[3].name}`, "gi" );
