@@ -221,7 +221,6 @@ context("Send PO Owner an email notification when a PO is approved", () => {
 
         it("Select Order Date", () => {
           cy.get("input[name^=ordered]").parent().find("button").arrowClick();
-
           cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
         });
       });
@@ -291,17 +290,7 @@ context("Send PO Owner an email notification when a PO is approved", () => {
     });
 
     it("Click approve for the Purchase Order", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostApprovalsApprove], () => {
-          cy.contains("needs your approval for").eq(0).trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+      cy.dashApproverFirstFromList();
     });
   });
 
@@ -318,8 +307,6 @@ context("Send PO Owner an email notification when a PO is approved", () => {
     });
 
     context("Verify email for approved PO", () => {
-
-
       it("Verify emails", () => {
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
