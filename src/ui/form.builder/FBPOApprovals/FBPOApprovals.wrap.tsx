@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import { compact, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
@@ -54,6 +54,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
     );
     const didMount = useDidMount();
+    const hasPOItems = useRef(false);
 
     isIncluded = (group: FBRequiredApprover): boolean =>
       (includes(map(poApprovalsState?.checkedGroups, "id"), group.id));
@@ -90,9 +91,18 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
+    const checkEnlilProductExist = (poItems: FBPurchaseOrderValue) =>
+      poItems?.items?.some(
+        (item) => item.type === "service" || (item.type === "product" && item.partNumberDocId)
+      );
     React.useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
-      () => {
+      (poItems) => {
+        const previousPOItems = poApprovalsState.getPrevPOItems;
+        const isEnlilPOItemsExist = checkEnlilProductExist(poItems);
+        const isPrevEnlilPOItemsExist = checkEnlilProductExist(previousPOItems);
+        poApprovalsState.setPrevPOItems(poItems);
+        hasPOItems.current = !(isEnlilPOItemsExist || isPrevEnlilPOItemsExist);
         outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,6 +118,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
         removeApprover([deletedRequestor]);
       } else if (updateApprovers && requester && !proceedToNewReq && approvers?.includes(requester)) {
+        if (poApprovalsState.getDidMountPhase) { return; }
         removeApprover([deletedRequestor]);
       }
     };
@@ -118,6 +129,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => {
         const approvers = map(poApprovalsState?.getApprovals, "approver.id");
         const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+        if (hasPOItems.current) {
+          return;
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
         deletedRequestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
         if (poItems && poItems.items.length) {
@@ -128,7 +142,23 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
               ? ""
               : deletedRequestor
           );
+          // For adding missing required approvals
+          if (poApprovalsState.getDidMountPhase) {
+            const prevApprovers = workspaceState?.formInputSync?.get(name);
+            const diffIds = difference(Object.values(prevApprovers), approvers);
+            if (diffIds.length) {
+              addApprover(difference(approvers, [deletedRequestor]));
+              if (approvers.length === 0) {
+                addApprover(difference([deletedRequestor], approvers));
+              }
+            }
+            if (approvers.length === 0) {
+              addApprover(difference(Object.values(prevApprovers), [deletedRequestor]));
+            }
+            poApprovalsState.setDidMount(false);
+          }
         } else if (approvers?.includes(deletedRequestor)) {
+          if (poApprovalsState.getDidMountPhase) { return; }
           checkLineItems(poItems, "");
         }
       }
@@ -180,8 +210,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
     React.useEffect(() => {
+      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+      poApprovalsState.setPrevPOItems(poItems);
       if (didMount) {
-        const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
         const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
         if (requestor) {
           checkLineItems(poItems, requestor);
@@ -271,6 +302,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         if (id && !loading) {
           poApprovalsState.fetchRequiredApprovals(id as unknown as string[]);
         }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       }), []);
     const fieldValue = map(poApprovalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`${name}`, fieldValue, true);

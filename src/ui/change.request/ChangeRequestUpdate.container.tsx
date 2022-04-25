@@ -12,6 +12,7 @@ import { ChangeRequestFormValues } from "../change.request/form/types";
 import { changeRequestPreviewPath } from "../change.request/utils/paths";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
+import { UnsavedChangesDialogContext } from "../components/forms/PromptIfDirty";
 import useAsync from "../hooks/useAsync";
 import { canEditChangeRequest } from "./helpers";
 
@@ -42,10 +43,15 @@ ChangeRequestUpdateContainerProps
 
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+  const unsavedChangesDialog = React.useContext(UnsavedChangesDialogContext);
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
+      unsavedChangesDialog.handleCloseDialogAfterSave();
       setDoNotPrompt(true);
       loadAudit(changeRequest.id);
+    },
+    onError: () => {
+      unsavedChangesDialog.closeModal();
     },
   });
   if (!canEditChangeRequest(changeRequest, currentUserEmail)) {

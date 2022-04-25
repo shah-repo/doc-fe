@@ -773,7 +773,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Create Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -787,7 +787,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Click on edit added Doc Type", () => {
-      cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.wait(1000);
     });
 
@@ -807,7 +807,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Confirm Edit added Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -912,7 +912,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Click on edit added Doc Type", () => {
-      cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.wait(1000);
     });
 
@@ -922,7 +922,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Confirm Edit added Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -941,7 +941,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Click on edit added Doc Type", () => {
-      cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.wait(1000);
     });
 
@@ -951,7 +951,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Confirm Edit added Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -972,7 +972,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Click on edit added Doc Type", () => {
-      cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.wait(1000);
     });
 
@@ -983,7 +983,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Confirm Edit added Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -991,7 +991,7 @@ context("NCO document type management with record doc type", () => {
     context("Check that doc type can't be deleted", () => {
       it("Click on delete Doc Type", () => {
         cy.wait(1000);
-        cy.get("button>span svg[class*='makeStyles-Remove']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
       });
 
       // Currenty there is no error message from system when you try to delete - it should be
