@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 import { int } from "aws-sdk/clients/datapipeline";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
+import { encodeString } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -714,7 +715,7 @@ Cypress.Commands.add("drAPIApproveAndRelease", (params: {
     url: `${CONFIG.BE_URL}/api/v1/document_revisions/release/` + params.documentId,
     body: params.payload,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${CONFIG.DEFAULT_ENLIL_USER_PASSWORD}`,
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${encodeString(CONFIG.DEFAULT_ENLIL_USER_PASSWORD)}`,
     },
   }).then((response) => response.body);
 });

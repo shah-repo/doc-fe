@@ -21,18 +21,16 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   const dropDownData = [
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
-      value: true,
+      value: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
     },
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
-      value: false,
+      value: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
     },
   ];
   const isEdit = dataItem.inEdit;
   const disabled = dataItem.isNewRecord || false;
-  const formattedValue = get(dataItem, field || "")
-    ? intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
-    : intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] });
+  const formattedValue = get(dataItem, field || "");
   if (rowType === "groupHeader") {
     return null;
   }
@@ -64,7 +62,9 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
         <DropDownList
           disabled={disabled}
           onChange={handleChange}
-          value={dropDownData.find((c) => c.value === dataValue)}
+          value={
+            dropDownData.find((c) => c.value === dataValue) || dropDownData[0]
+          }
           data={dropDownData}
           textField="text"
         />
