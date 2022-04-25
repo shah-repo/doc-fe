@@ -25,12 +25,16 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
     {() => (
       <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
         <Box py={3} px={6}>
-          {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
-          {isTitleVisible && (
-            <CustomLabelTooltip {...{ tooltipConfig }}>
-              <SummaryField label={titleLabel} value={name} labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
-            </CustomLabelTooltip>
-          )}
+          <Box mb={3.75}>
+            {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
+          </Box>
+          <Box mb={3.75}>
+            {isTitleVisible && (
+              <CustomLabelTooltip {...{ tooltipConfig }}>
+                <SummaryField label={titleLabel} value={name} labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
+              </CustomLabelTooltip>
+            )}
+          </Box>
           {isDescriptionVisible && (
             <SummaryFieldWithHtml label={descriptionLabel} value={description} labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
           )}

@@ -27,14 +27,14 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
   return (
     <ListItem style={{ padding: 0 }}>
       <Typography variant="h6">
-        <Box>
+        <Box fontFamily="Sora" fontSize={12}>
           <Text translation="common.crid"/>
         </Box>
         <Link
           to={changeRequestEditPath(changeRequest.id)}
           target="_blank"
           id="ChangeRequestLink-linkButton"
-          style={{ textDecoration: "none" }}
+          style={{ textDecoration: "none", fontFamily: "Sora", fontSize: "14px" }}
         >
           <Tooltip title={stripTags(changeRequest.description)} id="ChangeRequestLink-tootlip" >
             <span>{changeRequest.crId}</span>

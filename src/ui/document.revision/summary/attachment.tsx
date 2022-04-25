@@ -42,7 +42,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
   };
 
   const emptyAttachmentsRenderer = isAttachmentEmpty && (
-    <Typography variant="h5" style={{ marginTop: "10px", fontFamily: "Sora", fontSize: "14px" }}>
+    <Typography variant="h5" style={{ marginTop: "10px", fontFamily: "Sora", fontSize: "14px", marginBottom: "30px" }}>
       <Text message="common.no.attachments"/>
     </Typography>
   );
