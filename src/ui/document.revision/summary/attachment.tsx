@@ -4,6 +4,7 @@ import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/t
 import AttachmentDownloadAllButton from "../../components/common/attachment.downloadAll/AttachmentDownloadAllButton";
 import AttachmentField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
+import Colors from "../../layout/theme/utils/colors";
 
 export interface Props {
   isAttachmentEmpty: boolean;
@@ -22,6 +23,10 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
       flex: "0 0 50%",
       display: "flex",
       justifyContent: "flex-start",
+      fontFamily: "Sora",
+      fontWeight: 600,
+      fontSize: 12,
+      color: Colors.almost_black,
     },
 
     buttonRight: {
@@ -37,7 +42,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
   };
 
   const emptyAttachmentsRenderer = isAttachmentEmpty && (
-    <Typography variant="h5" style={{ marginTop: "24px" }}>
+    <Typography variant="h5" style={{ marginTop: "10px", fontFamily: "Sora", fontSize: "14px" }}>
       <Text message="common.no.attachments"/>
     </Typography>
   );

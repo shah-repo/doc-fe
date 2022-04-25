@@ -16,6 +16,10 @@ export const styles = {
     fontSize: 12,
     color: Colors.almost_black,
   },
+  labelFont: {
+    fontFamily: "Sora",
+    fontSize: 14,
+  },
 };
 
 

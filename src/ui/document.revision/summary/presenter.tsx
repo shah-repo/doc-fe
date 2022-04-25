@@ -19,6 +19,7 @@ import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from ".
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
+import { styles as AutoCompleteStyles } from "../../form.builder/styles/FBAutocomplete.styles";
 import { useTraining } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -156,12 +157,16 @@ const Presenter: React.FunctionComponent<Props> = ({
           <SummaryField
             label="document.revision.trainingRequired"
             value={<Text translation={`common.${retrain}` as Translation} />}
+            labelProps={AutoCompleteStyles.labelProps}
+            labelFont={AutoCompleteStyles.labelFont}
           />
         }
         {formTemplate && (
           <SummaryField
             label="document.output.type"
             value={outputDocumentTypeName}
+            labelProps={{ ...AutoCompleteStyles.labelProps }}
+            labelFont={{ ...AutoCompleteStyles.labelFont, marginBottom: 14 }}
           />
         )}
         {isEB && parent && (

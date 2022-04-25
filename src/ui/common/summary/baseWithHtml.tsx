@@ -12,6 +12,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   label,
   value,
   classes,
+  labelProps,
+  labelFont,
 }) => {
   const [editor, setEditor] = useState();
   useEffect(() => {
@@ -22,7 +24,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
     <Grid item={true} xs={12} style={{ marginBottom: "-24px" }}>
       {label && (
         <Grid item={true} xs={12} id="BaseWithhtml-label">
-          <Typography variant="h6">
+          <Typography style={labelProps}>
             <Text message={label} />
           </Typography>
         </Grid>
@@ -33,6 +35,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
           editorState={editor}
           toolbarHidden={true}
           editorClassName={classes.descriptionContainer}
+          editorStyle={labelFont}
         />
       </Grid>
     </Grid>
