@@ -236,7 +236,7 @@ context("NCO document type management", () => {
     });
 
     it("Cancel newly created document creation", () => {
-      cy.get("button>span svg[class*='makeStyles-Cancel-']").arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
     });
 
     it("Check filters for document type management", () => {
@@ -306,7 +306,7 @@ context("NCO document type management", () => {
 
     it("Create Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -314,7 +314,7 @@ context("NCO document type management", () => {
 
   context("Edit Doc Type", () => {
     it("Click on edit added Doc Type", () => {
-      cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
     });
 
     it("Edit Document type name", () => {
@@ -327,7 +327,7 @@ context("NCO document type management", () => {
 
     it("Confirm Edit added Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -356,7 +356,7 @@ context("NCO document type management", () => {
 
     it("Click on edit added Doc Type", () => {
       cy.wait(1500);
-      cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
     });
 
     it("Inactivate doc type", () => {
@@ -366,7 +366,7 @@ context("NCO document type management", () => {
 
     it("Confirm Edit added Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -375,7 +375,7 @@ context("NCO document type management", () => {
   context("Delete newly added Doc type", () => {
     it("Click on delete Doc Type", () => {
       cy.wait(1500);
-      cy.get("button>span svg[class*='makeStyles-Remove']").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
     });
 
     it("Confirm deleted Doc Type is no longer in the list", () => {
