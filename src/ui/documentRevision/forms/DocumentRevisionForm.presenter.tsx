@@ -316,10 +316,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             history.push(path);
           }}
           shouldBlockNavigation={() => {
-            const isFBDirty = !isEqual(workspaceState?.formInput || {}, formState?.getValues());
+            const isFormInputDirty = !isEqual(workspaceState?.formInput || {}, formState?.getValues());
+            const isSchemaDirty = !isEqual(workspaceState?.schema || [], values?.formTemplate?.schema || []);
             const isDocCreating = (history.location.pathname) as unknown as string === DOCUMENT_REVISION_CREATE_URL;
 
-            if ((formik.dirty || isFBDirty) && !isDocCreating) {
+            if ((formik.dirty || isFormInputDirty || isSchemaDirty) && !isDocCreating) {
               return true;
             }
             return false;
