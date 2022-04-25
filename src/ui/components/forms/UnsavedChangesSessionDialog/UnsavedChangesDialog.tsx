@@ -1,24 +1,38 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, IconButton, Radio, RadioGroup, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
-import Colors from "../../layout/theme/utils/colors";
-import Text from "../Text";
+import { Translation } from "../../../translations/types";
+import Text from "../../Text";
+import { styles } from "./UnsavedChangesSessionDialog.styles";
 
 interface Props {
-  visible: boolean;
   onCancel: (cb?: any) => void;
-  onConfirm:  () => void;
-  value: string;
+  onConfirm: () => void;
+  onClose: (cb?: any) => void;
   setValue:  (value) => void;
+  visible: boolean;
+  value: string;
+  content: Translation;
+  title: Translation;
+  optionsTitle?: Translation;
+  confirmText: Translation;
+  cancelText: Translation;
 }
 
-const UnsavedChangesDialog: React.FunctionComponent<Props> = ({
-  visible,
+const UnsavedChangesSessionDialog: React.FunctionComponent<Props> = ({
   onCancel,
   onConfirm,
-  value,
+  onClose,
   setValue,
+  visible,
+  value,
+  content,
+  title,
+  optionsTitle,
+  confirmText,
+  cancelText,
 }) => {
+  const classes = styles();
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -31,23 +45,27 @@ const UnsavedChangesDialog: React.FunctionComponent<Props> = ({
       fullWidth
       style={{ fontFamily: "Sora" }}
     >
-      <DialogTitle disableTypography style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography style={{ color: Colors.almost_black, fontSize: 14, fontWeight: 600, fontFamily: "Sora" }}>
-          <Text translation="document.revision.unsaved.changes.title" />
+      <DialogTitle disableTypography className={classes.dialogTitle}>
+        <Typography className={classes.title}>
+          <Text translation={title} />
         </Typography>
-        <IconButton onClick={() => onCancel()} size="small" style={{ borderRadius: 6 }}>
+        <IconButton onClick={() => onClose()} size="small" className={classes.iconButton}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
       <Divider/>
-      <DialogContent style={{ paddingLeft: 50, paddingBottom: 40 }}>
-        <Typography
-          style={{ color: Colors.almost_black, fontSize: 12, fontWeight: 400, fontFamily: "Sora", marginTop: 20 }}
-        >
-          <Text translation="document.revision.unsaved.changes.alert" />
+      <DialogContent className={classes.dialogContent}>
+        <Typography className={classes.content}>
+          <Text translation={content} />
         </Typography>
+        {
+          optionsTitle &&
+          <Typography className={classes.optionsTitle}>
+            <Text translation={optionsTitle} />
+          </Typography>
+        }
         {/** Radio group values have to be string to show properly */}
-        <RadioGroup value={value} onChange={handleChange} style={{ marginTop: 30 }}>
+        <RadioGroup value={value} onChange={handleChange}>
           <FormControlLabel
             value={"true"}
             control={
@@ -57,7 +75,7 @@ const UnsavedChangesDialog: React.FunctionComponent<Props> = ({
               />
             }
             label={
-              <Typography style={{ color: Colors.almost_black, fontSize: 14, fontFamily: "Sora" }}>
+              <Typography className={classes.radioOption}>
                 <Text translation="common.true" />
               </Typography>
             }
@@ -71,36 +89,34 @@ const UnsavedChangesDialog: React.FunctionComponent<Props> = ({
               />
             }
             label={
-              <Typography style={{ color: Colors.almost_black, fontSize: 14, fontFamily: "Sora" }}>
+              <Typography className={classes.radioOption}>
                 <Text translation="common.false" />
               </Typography>
             }
           />
         </RadioGroup>
       </DialogContent>
-      <DialogActions
-        style={{ backgroundColor: Colors.white_smoke, paddingRight: 20 }}
-      >
+      <DialogActions className={classes.dialogActions}>
         <Button
           type="submit"
           variant="outlined"
           color="primary"
-          style={{ borderRadius: 200, fontSize: 12 }}
+          className={classes.submitButton}
           onClick={() => onConfirm()}
         >
-          <Text translation={"common.leave"} />
+          <Text translation={confirmText} />
         </Button>
         <Button
           variant="contained"
           color="primary"
-          style={{ borderRadius: 200, color: Colors.white, fontSize: 12 }}
+          className={classes.cancelButton}
           onClick={() => onCancel()}
         >
-          <Text translation={"common.go.back"} />
+          <Text translation={cancelText} />
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default UnsavedChangesDialog;
+export default UnsavedChangesSessionDialog;
