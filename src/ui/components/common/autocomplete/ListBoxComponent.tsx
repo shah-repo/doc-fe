@@ -1,6 +1,7 @@
 import { truncate } from "lodash";
 import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, useContext, useEffect, useRef } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
+import { SM } from "../../../../App";
 import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
 
 const LISTBOX_PADDING = 8; // px
@@ -22,14 +23,15 @@ InnerElementType.displayName = "InnerElementType";
 const renderRow = (props: ListChildComponentProps) => {
   const { data, index, style } = props;
   const inputRef = React.createRef();
+  const { _documentRevisionFormState } = SM.useStores();
   const tooltipItem = {
     ...data[index],
     props: {
       ...data[index].props,
-      children: truncate(data[index].props.children, {
+      children: _documentRevisionFormState?.leftPanelOpen ? truncate(data[index].props.children, {
         length: 28,
         omission: " ...",
-      }),
+      }) : data[index].props.children,
     },
   };
   const listItem = cloneElement(tooltipItem, {
