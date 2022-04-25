@@ -935,10 +935,6 @@ context("Receivable test with Page Details", () => {
         it("Login user to dashboard", () => {
           cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
         });
-
-        it("Turn off autosave", () => {
-          cy.cmpTurnOffAutosave();
-        });
       });
     });
 
@@ -1103,10 +1099,6 @@ context("Receivable test with Page Details", () => {
   context("Create receiving form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
 
     it("Clicks on 'create a document' button", () => {
@@ -1791,10 +1783,6 @@ context("Receivable test with Page Details", () => {
       cy.navigToReceivableList();
     });
 
-    it("Type 'Test' inside title field", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Verify Receipt ID", () => {
       cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "RCT-00001");
     });
@@ -2254,10 +2242,6 @@ context("Receivable test with Page Details", () => {
   });
 
   context("Verify old receiving form", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Create new record button click", () => {
       cy.recCreateRecordFromLandingPage();
     });
