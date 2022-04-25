@@ -291,6 +291,7 @@ context("Record inline Flow", () => {
       });
 
       it(`Drag and drop approval block to last`, () => {
+        cy.get("[data-cy=\"form.builder.approvals\"]").first().contains("Approvals").arrowClick();
         cy.dragAndDropTopDown({
           fromSelector: ".MuiBox-root>div>ul>li:eq(0)",
           toSelector: ".MuiBox-root>div>ul>li:eq(-1)",
@@ -454,19 +455,17 @@ context("Record inline Flow", () => {
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
-
+          tmpRegex = new RegExp(`Print: ${footerDate}`);
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-
+          tmpRegex = new RegExp(`Effective Date: N/A`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 3/);
@@ -480,8 +479,6 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Second textfield for inline/);
-
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
@@ -493,11 +490,10 @@ context("Record inline Flow", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
-
+          tmpRegex = new RegExp(`Print: ${footerDate}`);
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+          tmpRegex = new RegExp(`Effective Date: N/A`);
 
           expect(el).match(tmpRegex);
 
@@ -519,12 +515,10 @@ context("Record inline Flow", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
-
+          tmpRegex = new RegExp(`Print: ${footerDate}`);
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-
+          tmpRegex = new RegExp(`Effective Date: N/A`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 3 of 3/);
@@ -692,7 +686,7 @@ context("Record inline Flow", () => {
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -715,8 +709,6 @@ context("Record inline Flow", () => {
 
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
-
-          expect(el).match(/Second textfield for inline/);
 
           expect(el).match(/Second inline field\nInline approval pending/);
 

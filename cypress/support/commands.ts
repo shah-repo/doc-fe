@@ -343,7 +343,7 @@ Cypress.Commands.add("verifyAutocompleteList", { prevSubject: "element" }, (
 Cypress.Commands.add("dragAndDrop", (params: {fromSelector: string; toSelector: string}) => {
   cy.get(params.fromSelector)
     .realMouseDown({ position: "center", button: "left" });
-  cy.wait(2000);
+  cy.wait(3000);
   cy.get(params.toSelector)
     .realMouseMove(0, 0, { position: "center" })
     .realMouseUp();
@@ -352,7 +352,7 @@ Cypress.Commands.add("dragAndDrop", (params: {fromSelector: string; toSelector: 
 Cypress.Commands.add("dragAndDropTopDown", (params: {fromSelector: string; toSelector: string}) => {
   cy.get(params.fromSelector)
     .realMouseDown({ position: "top" });
-  cy.wait(2000);
+  cy.wait(3000);
   cy.get(params.toSelector)
     .realMouseMove(0, 200, { position: "bottom" })
     .realMouseUp();
