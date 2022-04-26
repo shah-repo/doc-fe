@@ -1912,8 +1912,6 @@ context("Receivable test with Page Details", () => {
     it("Extract the lot id created", () => {
       cy.get("[data-cy=\"lots\"]").then((el) => {
         lotId = el.text().split(" ");
-        cy.log(lotId[0]);
-        cy.log(lotId[1]);
       });
     });
   });
