@@ -109,3 +109,108 @@ export const ReceivableTest: IdocumentTypeDto = {
     },
   },
 };
+
+export const ReceivableExport: IdocumentTypeDto = {
+  documentTypeName: "Receivable Test",
+  documentTypeAcronym: "RC-",
+  category: "Receive",
+  group: DOC_TYPE_GROUP.RECEIVABLE,
+  isQms: true,
+  fieldsConfig: {
+    C: {
+      visible: false,
+      required: false,
+    },
+    D: {
+      visible: false,
+      required: false,
+    },
+    E: {
+      visible: false,
+      required: true,
+    },
+    F: {
+      visible: false,
+      required: true,
+    },
+    G: {
+      visible: false,
+      required: false,
+    },
+    I: {
+      label: "Update",
+      visible: false,
+    },
+    J: {
+      visible: false,
+    },
+    K: {
+      label: "Void",
+      visible: true,
+    },
+    L: {
+      label: "Correction",
+      visible: true,
+    },
+    M: {
+      label: "Type of Revision Change",
+      visible: true,
+      required: true,
+    },
+    N: {
+      label: "Create Receving Record",
+      visible: true,
+    },
+    O: {
+      label: "Record History",
+      visible: true,
+    },
+    R: {
+      visible: false,
+    },
+    S: {
+      label: "Update Record",
+      visible: true,
+    },
+    A1: {
+      label: "WIP",
+      visible: true,
+    },
+    A2: {
+      label: "Voided",
+      visible: true,
+    },
+    A3: {
+      label: "Archive",
+      visible: true,
+    },
+    A4: {
+      label: "Released",
+      visible: true,
+    },
+    A5: {
+      label: "Pending Approval",
+      visible: true,
+    },
+    P1: {
+      label: "WIP",
+      visible: true,
+    },
+    P2: {
+      label: "Void",
+      visible: true,
+    },
+    P3: {
+      label: "Archive",
+      visible: true,
+    },
+    P4: {
+      label: "Released",
+      visible: true,
+    },
+    P5: {
+      label: "Pending Approval",
+      visible: true,
+    },
+  },
+};
