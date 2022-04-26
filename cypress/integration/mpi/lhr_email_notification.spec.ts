@@ -773,15 +773,6 @@ context("LHRs email notifications", () => {
         });
       });
 
-      it(`Select '${BUILD_TYPE.RD}' build type`, () => {
-        cy.unClick();
-        cy.get(`[value=\"${BUILD_TYPE.RD}\"]`).check();
-      });
-
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
       context("Add approvers to LHR B", () => {
         it("Add a first Approval", () => {
           cy.get(dataCyFbApprovals).arrowClick();
@@ -873,7 +864,7 @@ context("LHRs email notifications", () => {
           receivedEmails: emailsFromInbox,
           emailsToTest: emailsThatShouldBeReceived,
           getEmailsSincedate: dateAfterEmailShouldArrive,
-          assertNumberOfEmailsFoundInList: 1,
+          assertNumberOfEmailsFoundInList: 2,
         });
       });
     });
