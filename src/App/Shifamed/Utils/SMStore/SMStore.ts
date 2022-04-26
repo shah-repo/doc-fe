@@ -1,6 +1,7 @@
 import { first, get, has, isArray, isEmpty, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
 import { smStoreClient, SMStoreError, SMStorePassword, SMStoreProps, SMStoreRequestMethod, SMStoreRequestSet, storeClient } from "../../..";
+import { encodeString } from "../../../../common/utils/helpers";
 import { store } from "../../../../state/store";
 import { toastError } from "../../../../ui/components/notifications";
 
@@ -62,7 +63,7 @@ class SMStore implements SMStoreProps {
     const { employeeId, sessionId } = store.getState().auth.user;
 
     if (password) {
-      authorization = `bearer_password ${employeeId}:${sessionId}:${password}`;
+      authorization = `bearer_password ${employeeId}:${sessionId}:${encodeString(password)}`;
     } else {
       authorization = `bearer ${employeeId}:${sessionId}`;
     }

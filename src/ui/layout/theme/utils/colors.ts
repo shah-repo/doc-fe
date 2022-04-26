@@ -74,6 +74,7 @@ enum Colors {
   light_cyan="#DCF4FD",
   lochmara="#306AAC",
   peri_winkle_blue="#8295FA",
+  white_smoke="#F9F9F9"
 }
 
 export default Colors;
