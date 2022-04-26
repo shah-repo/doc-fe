@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -36,12 +37,7 @@ context("Export restricted access doc", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
             users: [USERS[2], USERS[3], USERS[4]],
           }, sessionId: loginResponse.sessionId as unknown as string,
