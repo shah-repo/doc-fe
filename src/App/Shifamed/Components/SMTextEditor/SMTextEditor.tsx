@@ -32,6 +32,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     data-cy={dataCy || name || label}
     flexDirection="row"
     fontFamily="Sora"
+    fontWeight={600}
     color={Colors.almost_black}
     fontSize= "12px"
   >

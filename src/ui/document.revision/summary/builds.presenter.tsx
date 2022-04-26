@@ -1,4 +1,4 @@
-import { Box, createStyles, IconButton, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { Box, BoxProps, createStyles, IconButton, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { HighlightOffOutlined } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -14,6 +14,8 @@ interface OwnProps {
   isDraft?: boolean;
   handleRemoveBuild: () => void;
   showRemoveButton?: boolean;
+  labelProps?: BoxProps;
+  labelFont?: BoxProps;
 }
 
 type Props = OwnProps & DataProps<DocumentRevision[]>;
@@ -41,6 +43,8 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
   isDraft,
   showRemoveButton,
   handleRemoveBuild,
+  labelProps,
+  labelFont,
 }) => {
   const classes = styles();
 
@@ -72,6 +76,7 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
               variant="caption"
               color="primary"
               noWrap={true}
+              style={labelFont}
             >
               {`${docRev.document?.docId} - ${stripTags(docRev.name)}`}
             </Typography>
@@ -94,16 +99,15 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
 
   const buildsEmptyRenderer = () => (
     <Box ml={isDraft ? 0 : 2}>
-      <Typography variant="h5" >
+      <Typography variant="h5" style={labelFont}>
         <Text message="common.none"/>
       </Typography>
     </Box>
   );
   return (
     <Box pb={3}>
-      <ListItem data-cy="BuildsPresenter-label"
-        style={{ paddingLeft: isDraft ? 0 : 16 }}>
-        <Typography variant="h6">
+      <ListItem data-cy="BuildsPresenter-label" disableGutters>
+        <Typography variant="h6" style={labelProps}>
           <Text message={label} />
         </Typography>
       </ListItem>
