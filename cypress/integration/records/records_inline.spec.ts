@@ -7,6 +7,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -59,14 +60,7 @@ context("Record inline Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Record one",
-                documentTypeAcronym: "RD-",
-                group: "RECORD",
-                isQms: true,
-                needsSignature: true,
-                category: "Record",
-              },
+              RecordOne,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

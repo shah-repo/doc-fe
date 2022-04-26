@@ -2,6 +2,7 @@
 // import "../../node_modules/cypress-movie/src/arrow
 import path from "path";
 import { Result } from "pdf-parse";
+import { DOC_TYPE_GROUP } from "../../src/state/ducks/documentRevisions/documentType/types";
 import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
@@ -69,17 +70,22 @@ export interface IUser {
   name: string;
 }
 
+export enum DEFAUL_REV_STAGE {
+  NUMERIC = "Numeric",
+  ALPHA = "Alpha"
+}
+
 interface IfieldsConfig{
   [key: string]: {
     visible: boolean;
     required?: boolean;
     label?: string;};
 }
-interface IdocumentTypeDto {
+export interface IdocumentTypeDto {
   documentTypeName: string;
   documentTypeAcronym: string;
   isQms?: boolean;
-  group: string;
+  group: DOC_TYPE_GROUP;
   privateNumberPool?: boolean;
   startingNumber?: number;
   needsSignature?: boolean;
@@ -89,7 +95,7 @@ interface IdocumentTypeDto {
   canRedLine?: boolean;
   defaultTraining?: boolean;
   hiddenForCreationForUsersWithoutTags?: any[];
-  defaultRevStage?: string;
+  defaultRevStage?: DEFAUL_REV_STAGE;
   active?: boolean;
 }
 

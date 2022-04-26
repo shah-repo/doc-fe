@@ -2,6 +2,7 @@ import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React, { useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { SessionTimeoutService } from "../../../../common/utils/sessionTimeout";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
@@ -11,6 +12,8 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
+import SessionTimer from "../../../components/forms/SessionTimer";
+import useDialog from "../../../hooks/useDialog";
 import useDidMount from "../../../hooks/useDidMount";
 import FormHeader from "../../form/assessmentForm/FormHeader";
 import { ChangeRequestFormValues } from "../types";
@@ -44,9 +47,15 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const formContext = useFormContext();
   const didMount = useDidMount();
+  const sessionDialog = useDialog();
+  const sessionService = SessionTimeoutService.getInstance();
+
   formIdContext = React.createContext<string | undefined>(
     values.formDocument?.id,
   );
+  const timeoutCallback = () => {
+    sessionDialog.open();
+  };
 
   useEffect(() => {
     if (didMount) {
@@ -55,8 +64,17 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    sessionService.setTimeoutCallback(timeoutCallback);
+    return () => {
+      sessionService.stopSessionTimer();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className={classes.container}>
+      <SessionTimer sessionDialog={sessionDialog} isFormDirty={dirty} isAR/>
       <FormHeader {...{ changeRequest, asyncState }}/>
       <FormWrapper
         dirty={dirty}
