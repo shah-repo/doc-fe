@@ -8,6 +8,8 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { Material } from "../../utils/constants/documentTypes/material";
+import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -67,22 +69,8 @@ context("Procedure and parts flow test", () => {
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: PART_DOCUMENT_TYPE_NAME,
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
-              {
-                documentTypeName: "Material",
-                documentTypeAcronym: "MT-",
-                group: "MATERIAL",
-                isQms: true,
-                needsSignature: true,
-                category: "Materials",
-              },
+              Part,
+              Material,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

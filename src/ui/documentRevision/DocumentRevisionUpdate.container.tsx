@@ -9,6 +9,7 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import { UnsavedChangesDialogContext } from "../components/forms/PromptIfDirty";
+import { SessionTimerDialogContext } from "../components/forms/SessionTimer";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import FBStore from "../form.builder/FBStore/FBStore";
@@ -53,10 +54,12 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
   const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
   const unsavedChangesDialog = React.useContext(UnsavedChangesDialogContext);
+  const sessionTimerDialogClose = React.useContext(SessionTimerDialogContext);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       unsavedChangesDialog.handleCloseDialogAfterSave();
+      sessionTimerDialogClose();
       setLastSavedTimestamp(getFormattedDateString(Date.now(), MomentFormats.Time));
       if (redlineActive) {
         dispatch(companyActions.redlineConfig(false));
@@ -64,6 +67,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       setDoNotPrompt(true);
     },
     onError: () => {
+      sessionTimerDialogClose();
       unsavedChangesDialog.closeModal();
     },
   });

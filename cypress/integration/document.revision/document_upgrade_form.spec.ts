@@ -7,6 +7,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordDocumentType, TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -50,19 +51,8 @@ context("Document form upgrade", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-              },
+              RecordDocumentType,
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

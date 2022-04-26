@@ -4,6 +4,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ApprovalsDocType, ApprovalsInlineType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -44,34 +45,8 @@ context("Bulk create approvals block/inline test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Approvals Document Type",
-                documentTypeAcronym: "ADT-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
-              {
-                documentTypeName: "Approvals Inline Type",
-                documentTypeAcronym: "AIT-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
+              ApprovalsDocType,
+              ApprovalsInlineType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

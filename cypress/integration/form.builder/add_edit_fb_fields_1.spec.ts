@@ -7,6 +7,7 @@ import path from "path";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -57,12 +58,7 @@ context("Add and edit FB fields - Test 1", () => {
             importerEmail: USERS[5].email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-              },
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
