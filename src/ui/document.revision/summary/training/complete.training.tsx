@@ -1,4 +1,4 @@
-import { Box, Link } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -63,9 +63,7 @@ const CompleteTraining: React.FunctionComponent<Props> = ({
 
   return (
     <Box mt={5} ml={2}>
-      <Link onClick={openDialog} style={{ fontSize: "1rem" }}>
-        <Text translation="training.acknowledge.completion.link" />
-      </Link>
+      <Text translation="training.acknowledge.completion.link" />
       <TrainingDialog
         transitionDialog={dialog}
         openDialog={openDialog}

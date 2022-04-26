@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CPExport } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -37,12 +38,7 @@ context("Export Form doc", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
+              CPExport,
             ],
             users: [USERS[2], USERS[3], USERS[4]],
           }, sessionId: loginResponse.sessionId as unknown as string,

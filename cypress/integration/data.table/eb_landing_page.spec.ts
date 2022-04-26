@@ -6,6 +6,8 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
+import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -53,30 +55,8 @@ context("Test Engineering Build landing page", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Engineering Build Test",
-                documentTypeAcronym: "EB-",
-                privateNumberPool: true,
-                canRedLine: false,
-                isQms: true,
-                needsSignature: true,
-                defaultTraining: false,
-                startingNumber: 1,
-                hiddenForCreationForUsersWithoutTags: [],
-                group: "ENGINEERING_BUILD",
-                category: "EB",
-                schema: [],
-                defaultRevStage: "Alpha",
-                active: true,
-              },
-              {
-                documentTypeName: "Part",
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
+              EngineeringBuild,
+              Part,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

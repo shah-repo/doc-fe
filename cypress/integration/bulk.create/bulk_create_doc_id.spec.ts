@@ -3,6 +3,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -64,7 +65,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
               {
                 documentTypeName: "Test Private Pool",
                 documentTypeAcronym: "TPP-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
                 canRedLine: true,
                 privateNumberPool: true,
@@ -72,7 +73,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
               {
                 documentTypeName: "Test Public Pool",
                 documentTypeAcronym: "TPUP-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
                 canRedLine: true,
                 privateNumberPool: false,
