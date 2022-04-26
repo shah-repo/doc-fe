@@ -27,3 +27,10 @@ export const ClinicalProtocolPrivatePoolDocType: IdocumentTypeDto = {
   privateNumberPool: true,
   startingNumber: 1,
 };
+
+export const CPExport: IdocumentTypeDto = {
+  documentTypeName: CPName,
+  documentTypeAcronym: "CP",
+  group: DOC_TYPE_GROUP.OTHER,
+  isQms: true,
+};
