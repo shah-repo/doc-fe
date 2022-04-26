@@ -699,7 +699,7 @@ context("NCO document type management", () => {
     });
 
     it("Upload Page Details JSON", () => {
-      cy.atchUploadPageDetailsJSONForNCO({ fileName: "doc_type_page_details.json", queue: 0 });
+      cy.atchUploadPageDetailsJSONForNCO({ fileName: "doc_type_page_details_supira.json", queue: 0 });
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
