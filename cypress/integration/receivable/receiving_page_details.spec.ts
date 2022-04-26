@@ -34,6 +34,9 @@ let downloadUrl;
 let fileId;
 let downloadFile;
 let tmpRegex;
+let CSLDocumentType;
+let createdLotsFormDocument;
+let lotId;
 
 const pages = ["", "", ""];
 const PART_DOCUMENT_TYPE_NAME = "Part";
@@ -451,6 +454,99 @@ context("Receivable test with Page Details", () => {
                   },
                 },
               },
+              {
+                documentTypeName: "Lots test",
+                documentTypeAcronym: "LTT-",
+                group: "LOT",
+                category: "Lot",
+                isQms: true,
+                privateNumberPool: true,
+                needsSignature: true,
+                fieldsConfig: {
+                  D: {
+                    label: "Description",
+                    visible: false,
+                    required: false,
+                  },
+                  E: {
+                    visible: false,
+                    required: true,
+                  },
+                  F: {
+                    visible: false,
+                    required: true,
+                  },
+                  G: {
+                    visible: false,
+                    required: false,
+                  },
+                  I: {
+                    label: "Update",
+                    visible: true,
+                  },
+                  J: {
+                    visible: false,
+                  },
+                  K: {
+                    visible: false,
+                  },
+                  L: {
+                    label: "Correction",
+                    visible: true,
+                  },
+                  O: {
+                    label: "Lot History",
+                    visible: true,
+                  },
+                  R: {
+                    visible: false,
+                  },
+                  A1: {
+                    label: "WIP",
+                    visible: true,
+                  },
+                  A2: {
+                    label: "Rejected",
+                    visible: true,
+                  },
+                  A3: {
+                    visible: false,
+                  },
+                  A4: {
+                    label: "Accepted",
+                    visible: true,
+                  },
+                  A5: {
+                    label: "Quarantine",
+                    visible: true,
+                  },
+                  A6: {
+                    visible: false,
+                  },
+                  P1: {
+                    label: "WIP",
+                    visible: true,
+                  },
+                  P2: {
+                    label: "Rejected",
+                    visible: true,
+                  },
+                  P3: {
+                    visible: false,
+                  },
+                  P4: {
+                    label: "Accepted",
+                    visible: true,
+                  },
+                  P5: {
+                    label: "Quarantine",
+                    visible: true,
+                  },
+                  P6: {
+                    visible: false,
+                  },
+                },
+              },
             ],
             acctCodes: ["code 1"],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
@@ -462,6 +558,7 @@ context("Receivable test with Page Details", () => {
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots test");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           done();
         });
@@ -925,6 +1022,131 @@ context("Receivable test with Page Details", () => {
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
         }).then(() => done() );
+      });
+    });
+
+    it("[API]Create Lots form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Lots Form document</p>",
+          document: {
+            docId: "FM-00008",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Lots form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: CSLDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "lot_quantity",
+                type: "quantity",
+                index: 0,
+                label: "Initial Quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [],
+                validationAttribute: "Initial Quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_usable_quantity",
+                type: "quantity",
+                index: 1,
+                label: "Usable Quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [],
+                validationAttribute: "Usable Quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_expiry_date",
+                type: "datepicker",
+                index: 2,
+                label: "Expiration Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationAttribute: "Expiration Date",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_part",
+                type: "autocomplete",
+                index: 3,
+                label: "Part Selection",
+                optionId: "21",
+                placeholder: "Select the appropriate part for this lot",
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "100-inspection-override",
+                type: "checkboxgroup",
+                index: 4,
+                label: "100% Inspection Override",
+                options: [
+                  {
+                    text: "100% Inspection Override",
+                    value: "100% Inspection Override",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                editorProperties: [],
+                validationAttribute: "100% Inspection Override",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdLotsFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdLotsFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
       });
     });
   });
@@ -1655,10 +1877,44 @@ context("Receivable test with Page Details", () => {
     });
   });
 
-  context("Click on “Receive all” and save changes", () => {
+  context("Click on “Receive all“", () => {
     it("Click on “Receive all”", () => {
       cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Create a Lot' on first line item", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetDocumentType], () => {
+        cy.get("tr>td>button").first().arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select 'Lots test' document type", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
+      });
+    });
+
+    it("Select 'Lots form document' form", () => {
+      cy.get("[data-cy='lotForm']").autocompleteSelect("Lots form");
+    });
+
+    it("Click 'Create Lot' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostReceivable], () => {
+        cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.unClick();
+    });
+
+    it("Extract the lot id created", () => {
+      cy.get("[data-cy=\"lots\"]").then((el) => {
+        lotId = el.text().split(" ");
+        cy.log(lotId[0]);
+        cy.log(lotId[1]);
+      });
     });
   });
 
@@ -1976,7 +2232,7 @@ context("Receivable test with Page Details", () => {
           expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
 
           // eslint-disable-next-line max-len
-          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00`, "gi" );
+          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00\n${lotId[0]}\n${lotId[1]}`, "gi" );
           expect(el).match(tmpRegex);
 
           // eslint-disable-next-line max-len
@@ -2167,7 +2423,7 @@ context("Receivable test with Page Details", () => {
           expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
 
           // eslint-disable-next-line max-len
-          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00`, "gi" );
+          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00\n${lotId[0]}\n${lotId[1]}`, "gi" );
           expect(el).match(tmpRegex);
 
           // eslint-disable-next-line max-len
@@ -2201,7 +2457,6 @@ context("Receivable test with Page Details", () => {
       });
     });
   });
-
 
   context("Verify landing page after releasing receiving", () => {
     it("Navig to receiving", () => {
