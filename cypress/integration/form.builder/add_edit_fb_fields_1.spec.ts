@@ -7,6 +7,7 @@ import path from "path";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -23,12 +24,6 @@ let tmpRegex;
 let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
-
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-
-// Temporary test for add edit FB fields while autosave is not working
 
 context("Add and edit FB fields - Test 1", () => {
   before(() => {
@@ -592,7 +587,7 @@ context("Add and edit FB fields - Test 1", () => {
 
   context("Verify draft form email notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -738,7 +733,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -772,7 +767,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -816,7 +811,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -854,7 +849,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -877,7 +872,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -919,7 +914,7 @@ context("Add and edit FB fields - Test 1", () => {
 
   context("Verify released form email notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -1066,10 +1061,10 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 5/);
@@ -1100,10 +1095,10 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 5/);
@@ -1144,10 +1139,10 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 3 of 5/);
@@ -1182,10 +1177,10 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 4 of 5/);
@@ -1202,15 +1197,15 @@ context("Add and edit FB fields - Test 1", () => {
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 5 of 5/);
