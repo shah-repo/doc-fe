@@ -2,12 +2,11 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
-import moment from "moment-timezone";
 import path from "path";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -638,7 +637,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          const filetime = fileTimeFormat;
           downloadFile  =  `${formId}${filetime}_draft.zip`;
           cy.downloadFile({
             url: downloadUrl,
@@ -965,7 +964,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          const filetime = fileTimeFormat;
           downloadFile  =  `${formId}${filetime}_rel.zip`;
           cy.downloadFile({
             url: downloadUrl,
