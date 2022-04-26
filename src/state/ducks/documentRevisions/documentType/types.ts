@@ -39,6 +39,7 @@ export enum DOC_TYPE_GROUP {
   PI_INSTANCE = "PI_INSTANCE",
   TRAINING_CURRICULUM = "TRAINING_CURRICULUM",
   BULK_CREATE = "BULK_CREATE",
+  LHRT = "LHRT",
 }
 
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
