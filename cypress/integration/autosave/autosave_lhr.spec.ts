@@ -439,58 +439,24 @@ context("Autosave LHR", () => {
 
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
         });
 
         it("Add 'Part document' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
-          });
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
+        });
+
+        it("Add 'Material parameter' to step #1", () => {
+          cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "non parametrized material" });
         });
 
         it("Add 'Equipment one' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-          });
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
         });
       });
 
-      // context("Fill step #2", () => {
-      //   it("Add step #2", () => {
-      //     cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      //       cy.mpiAddStep();
-      //     });
-      //     cy.progressBarShouldNotExist();
-      //     cy.listLoadingElementShouldNotExist();
-      //   });
-
-      //   it("Fill step #2 description", () => {
-      //     cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      //       cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
-      //     });
-      //     cy.progressBarShouldNotExist();
-      //     cy.listLoadingElementShouldNotExist();
-      //   });
-
-      //   it("Add 'Part document' to step #2", () => {
-      //     cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      //       cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
-      //     });
-      //   });
-
-      //   it("Add 'Equipment two' to step #2", () => {
-      //     cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      //       cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
-      //     });
-      //     cy.pause();
-      //   });
-      // });
-
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
-          cy.pause();
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
             cy.drApproveAndReleaseDocumentWithoutSelectingForm();
           });
@@ -536,18 +502,15 @@ context("Autosave LHR", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
-      it("Add Checkbox group", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-        cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-        cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-        cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      it("Add Select field", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectItemFromNewFieldList({ field: "Select" });
+        cy.fbEnterNameValue({ name: "label", value: "Select field" });
+        cy.fbGroupOptions("option1", "option2", "option3");
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.fbSelectCheckboxValue("includeNone", "includeContext");
+        cy.fbAddNewFieldButton();
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
@@ -556,9 +519,13 @@ context("Autosave LHR", () => {
         cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
-        cy.get(`input[name="validators.required_if_in"]`).check();
-        cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-        cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get(`input[name="validators.required_if"]`).check();
+        cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Select field" );
+        cy.get(`[data-cy="Select field"]`).last().arrowClick();
+        cy.get("ul[role=\"listbox\"] > li").autocompleteSelect("None" );
+        //     cy.get(`[data-value="includeNone"]`).check();
+        // cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get("ul[role=listbox] > li").autocompleteSelect("None" );
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
