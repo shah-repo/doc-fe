@@ -559,6 +559,7 @@ context("Add and edit FB fields - Test 1", () => {
         cy.pmUploadAttachment({ fileName: "video.mp4" });
       });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify EB Procedure", () => {
