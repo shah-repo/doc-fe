@@ -3,6 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { LegalRecord } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -38,14 +39,7 @@ context("Record inline Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Legal Record",
-                documentTypeAcronym: "LR-",
-                group: "RECORD",
-                isQms: true,
-                needsSignature: true,
-                category: "Record",
-              },
+              LegalRecord,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
