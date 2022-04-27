@@ -271,6 +271,7 @@ context("Dynamic Form Test", () => {
       cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
       cy.fbAddNewFieldButton();
+      cy.closeAllAlertMessages();
     });
 
     it("Save document", () => {
