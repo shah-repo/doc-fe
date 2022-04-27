@@ -62,7 +62,6 @@ const Header: React.FunctionComponent<Props> = ({
                 style={style}
               />
             )}
-            {/* Autosave disable changes  */}
             <AutosaveToggle/>
           </Box>
         </Grid>
