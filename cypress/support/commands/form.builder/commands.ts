@@ -28,6 +28,8 @@ declare global {
       fbSelectInlineApproval(): Chainable<Subject>;
       fbSelectApprovals(): Chainable<Subject>;
       fbOpenValidation(): Chainable<Subject>;
+      fbFieldRequired(): Chainable<Subject>;
+      fbFieldRequiredIf(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
       fbSelectField(): Chainable<Subject>;
       fbAddLabelName(params: { name: string }): Chainable<Subject>;
@@ -224,6 +226,10 @@ Cypress.Commands.add("fbSelectCustomControl", () => cy.get("[data-cy=\"fb-contro
 Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("button[data-cy=\"form.builder.autocomplete\"]").arrowClick());
 
 Cypress.Commands.add("fbOpenValidation", () =>  cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").arrowClick());
+
+Cypress.Commands.add("fbFieldRequired", () =>  cy.get("span[data-cy=\"fb-control-required\"]").arrowClick());
+
+Cypress.Commands.add("fbFieldRequiredIf", () =>  cy.get("input[name=\"validators.required_if\"]").arrowClick());
 
 Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").arrowClick());
 
