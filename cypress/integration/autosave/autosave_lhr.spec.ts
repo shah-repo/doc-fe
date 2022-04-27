@@ -323,11 +323,10 @@ context("Autosave LHR", () => {
         cy.get("input[value^=\"visibility\"]").check();
         cy.get(`input[name="validators.required_if"]`).check();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Select field" );
-        cy.get(`[data-cy="Select field"]`).last().arrowClick();
-        cy.get("ul[role=\"listbox\"] > li").autocompleteSelect("None" );
-        //     cy.get(`[data-value="includeNone"]`).check();
-        // cy.get(`input[type="checkbox"][value="3"]`).last().check();
-        cy.get("ul[role=listbox] > li").autocompleteSelect("None" );
+        cy.unClick();
+        cy.get(`[id="mui-component-select-validators.required_if.value"]`).arrowClick();
+        cy.get(`[data-value="includeNone"]`).arrowClick();
+        cy.unClick();
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
