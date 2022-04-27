@@ -218,7 +218,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.get(`input[name="validators.required_if"]`).check();
       cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-textfield" );
       cy.get(`[data-cy="validators.required_if.value"]`).arrowType("A" );
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").last().arrowClick({ force: true });
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -454,7 +454,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
