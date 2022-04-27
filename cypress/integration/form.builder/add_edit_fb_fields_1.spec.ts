@@ -87,6 +87,10 @@ context("Add and edit FB fields - Test 1", () => {
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create 'Form' document with output document type 'Test Document Type'", () => {
@@ -637,8 +641,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = fileTimeFormat;
-          downloadFile  =  `${formId}${filetime}_draft.zip`;
+          downloadFile  =  `${formId}${fileTimeFormat}_draft.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -964,8 +967,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = fileTimeFormat;
-          downloadFile  =  `${formId}${filetime}_rel.zip`;
+          downloadFile  =  `${formId}${fileTimeFormat}_rel.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
