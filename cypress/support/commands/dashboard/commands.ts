@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 declare global {
@@ -11,6 +12,7 @@ declare global {
       dashToggleMoreDetailsForListItemNumber(params: {listItemNumb: number}): Chainable<Subject>;
       dashRejectApprovalForListItem(params: {listItem: string}): Chainable<Subject>;
       dashVerifyNoPendingActions(): Chainable<Subject>;
+      dashApproverFirstFromList(): Chainable<Subject>;
     }
   }
 }
@@ -52,6 +54,20 @@ Cypress.Commands.add("dashRejectApprovalForListItem", (params: { listItem: strin
   });
 
   cy.progressBarShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("dashApproverFirstFromList", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostApprovalsApprove], () => {
+      cy.contains("needs your approval for").eq(0).trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+    });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 

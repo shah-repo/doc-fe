@@ -7,6 +7,7 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -46,11 +47,7 @@ context("Export Record doc", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
+                ...RecordDocumentType,
                 fieldsConfig: {
                   D: {
                     visible: false,

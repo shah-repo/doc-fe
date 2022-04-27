@@ -3,8 +3,10 @@
 
 import moment from "moment";
 import "moment-timezone";
+import { DOC_TYPE_GROUP } from "../../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
+import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
@@ -41,16 +43,11 @@ context("Autocomplete 'Approval Roles' test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
               {
                 documentTypeName: "purchaseorder",
                 documentTypeAcronym: "PO-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
               },
             ],

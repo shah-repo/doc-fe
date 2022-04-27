@@ -7,6 +7,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { TestDocumentTypeRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -47,20 +48,7 @@ context("Test fb fields validation in BLC", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
+              TestDocumentTypeRecord,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
