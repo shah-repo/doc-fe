@@ -316,8 +316,8 @@ context("Autosave LHR", () => {
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectTextField();
         cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
@@ -327,13 +327,18 @@ context("Autosave LHR", () => {
         cy.get(`[id="mui-component-select-validators.required_if.value"]`).arrowClick();
         cy.get(`[data-value="includeNone"]`).arrowClick();
         cy.unClick();
-        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.fbAddNewFieldButton();
+      });
+
+      it(`Drag and drop approval block to last`, () => {
+        cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").arrowClick();
+        cy.dragAndDrop({
+          fromSelector: "span[data-cy=\"form.builder.approvals\"]",
+          toSelector: "div[data-cy=\"TEXT FIELD\"]",
+        });
       });
 
       it("Click create document", () => {
-        cy.pause();
         cy.drClickCreateDocumentWithApiCall();
       });
 
@@ -342,7 +347,6 @@ context("Autosave LHR", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
           cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
-        cy.pause();
       });
 
       context("Select created MPI in LHR template", () => {
@@ -353,10 +357,10 @@ context("Autosave LHR", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
             cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           });
-          cy.pause();
         });
 
         it("Verify form Draft status and click on Send To Email", () => {
+          cy.pause();
           cy.drCheckDocumentStatus({ status: "Draft" });
           cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
           cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
