@@ -348,8 +348,9 @@ Cypress.Commands.add("verifyAutocompleteList", { prevSubject: "element" }, (
 Cypress.Commands.add("dragAndDrop", (params: {fromSelector: string; toSelector: string}) => {
   cy.get(params.fromSelector)
     .realMouseDown({ position: "center", button: "left" });
+  cy.wait(2000);
   cy.get(params.toSelector)
-    .realMouseMove(0, 0, { position: "center" })
+    .realMouseMove(0, 100, { position: "center" })
     .realMouseUp();
 });
 

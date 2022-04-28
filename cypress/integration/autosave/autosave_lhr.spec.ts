@@ -8,6 +8,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -35,12 +36,6 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 let arId;
-
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
-
 
 context("Autosave LHR", () => {
   before(() => {
@@ -199,7 +194,96 @@ context("Autosave LHR", () => {
         });
       });
     });
+
+    it("[API]Create material two", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Materials document</p>",
+          document: {
+            docId: "MT-00006",
+            documentType: {
+              id: materialsDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Material two",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        materialsDocument2 = response;
+        cy.drAPIApproveAndRelease({
+          documentId: materialsDocument2.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
+
+    it("[API]Create equipment two", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Equipment document</p>",
+          document: {
+            docId: "ET-00007",
+            documentType: {
+              id: equipmentDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Equipment two",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        equipmentDocument2 = response;
+        cy.drAPIApproveAndRelease({
+          documentId: equipmentDocument2.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
   });
+
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
@@ -254,6 +338,37 @@ context("Autosave LHR", () => {
 
         it("Add 'Equipment one' to step #1", () => {
           cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+      });
+
+      context("Fill step #2", () => {
+        it("Add step #2", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddStep();
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Fill step #2 description", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Add 'Material two' to step #2", () => {
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
+          cy.pause();
+        });
+
+        it("Add 'Equipment two' to step #2", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
@@ -378,7 +493,7 @@ context("Autosave LHR", () => {
 
       context("Verify email for  LHRt notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -519,7 +634,7 @@ context("Autosave LHR", () => {
 
             expect(el).match(/Draft/);
 
-            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
             expect(el).match(tmpRegex);
 
             tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -545,7 +660,7 @@ context("Autosave LHR", () => {
 
             expect(el).match(/Draft/);
 
-            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
 
             expect(el).match(tmpRegex);
 
@@ -571,7 +686,7 @@ context("Autosave LHR", () => {
 
             expect(el).match(/Draft/);
 
-            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
             expect(el).match(tmpRegex);
 
             tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -608,7 +723,7 @@ context("Autosave LHR", () => {
 
       context("Verify email for  LHRt notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -750,10 +865,10 @@ context("Autosave LHR", () => {
 
             expect(el).match(/Released/);
 
-            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
             expect(el).match(tmpRegex);
 
-            tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+            tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
             expect(el).match(tmpRegex);
 
             expect(el).match(/Page 1 of 3/);
@@ -776,10 +891,10 @@ context("Autosave LHR", () => {
 
             expect(el).match(/Released/);
 
-            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
             expect(el).match(tmpRegex);
 
-            tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+            tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
             expect(el).match(tmpRegex);
 
             expect(el).match(/Page 2 of 3/);
@@ -794,7 +909,7 @@ context("Autosave LHR", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-            tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+            tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
             expect(el).match(tmpRegex);
 
             tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -802,10 +917,10 @@ context("Autosave LHR", () => {
 
             expect(el).match(/Released/);
 
-            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
             expect(el).match(tmpRegex);
 
-            tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+            tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
             expect(el).match(tmpRegex);
 
             expect(el).match(/Page 3 of 3/);
