@@ -7,6 +7,7 @@ import path from "path";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -15,7 +16,6 @@ let createdCompany;
 let loginResponse;
 let employeeLoginFirst;
 let formId;
-// let arId;
 let emailsFromInbox;
 const pages = ["", "", "", "", ""];
 let downloadUrl;
@@ -23,10 +23,6 @@ let tmpRegex;
 let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
-
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Dynamic Form Test", () => {
   before(() => {
@@ -85,12 +81,15 @@ context("Dynamic Form Test", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -104,7 +103,6 @@ context("Dynamic Form Test", () => {
     });
 
     it("Selects 'Dynamic Form' document type from dropdown", () => {
-      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Dynamic Form" });
     });
 
@@ -133,21 +131,31 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add section field", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Section" });
       cy.fbEnterLabel({ label: "fb-section" });
       cy.fbAddNewFieldButton();
     });
 
+    it("Add Select field", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ field: "Select" });
+      cy.fbEnterNameValue({ name: "label", value: "Select field" });
+      cy.fbGroupOptions("A", "B", "C");
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.fbAddNewFieldButton();
+    });
+
     it("Add Text Editor", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add TextField", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -156,14 +164,14 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Subsection", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
       cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Autocomplete with Document Revision", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-revision" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
@@ -171,7 +179,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Autocomplete with Parts", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-parts" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Parts");
@@ -179,7 +187,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Autocomplete with Document Approvers", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-approvers" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
@@ -187,7 +195,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Checkbox group", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
@@ -195,14 +203,21 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Date picker", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
+      cy.fbOpenValidation();
+      cy.get("input[value^=\"visibility\"]").check();
+      cy.fbFieldRequiredIf();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Select field");
+      cy.unClick();
+      cy.get(`[id="mui-component-select-validators.required_if.value"]`).arrowClick();
+      cy.get(`ul>li[role="option"]`).contains("A").arrowClick();
       cy.fbAddNewFieldButton();
     });
 
     it("Add File Upload", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -214,7 +229,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Paragraph", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
         .click({ force: true }).clear().arrowType("fb-paragraph");
@@ -222,22 +237,15 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Radio Button group", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
-      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
-      cy.get("input[value^=\"visibility\"]").check();
-      cy.get(`input[name="validators.required_if"]`).check();
-      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-textfield" );
-      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("A" );
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").last().arrowClick({ force: true });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.fbAddNewFieldButton();
     });
 
     it("Add Evidence Media upload", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -245,14 +253,14 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Instructions Media upload", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Blank Template Form", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
@@ -267,15 +275,23 @@ context("Dynamic Form Test", () => {
     });
 
     it("Add Quantity", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
       cy.fbAddNewFieldButton();
-      cy.closeAllAlertMessages();
+    });
+
+    it("upload file in Instructions Media upload", () => {
+      cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
+        cy.pmUploadAttachment({ fileName: "video.mp4" });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -298,7 +314,7 @@ context("Dynamic Form Test", () => {
 
   context("Verify draft form email notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -430,19 +446,17 @@ context("Dynamic Form Test", () => {
 
         expect(el).match(/New Text Field/);
 
-        expect(el).match(/FB-SECTION/);
+        expect(el).match(/fb-quantity/);
 
-        expect(el).match(/fb-text-editor/);
+        expect(el).match(/FB-BLANK-TEMPLATE1/);
 
-        expect(el).match(/fb-textfield/);
+        expect(el).match(/TestTemplate.json/);
 
-        expect(el).match(/FB-SUBSECTION/);
-
-        expect(el).match(/fb-autocomplete-doc-revision/);
+        expect(el).match(/fb-instructions/);
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -481,14 +495,16 @@ context("Dynamic Form Test", () => {
 
         expect(el).match(/fb-instructions/);
 
+        expect(el).match(/video.mp4/);
+
         expect(el).match(/FB-BLANK-TEMPLATE/);
 
-        expect(el).match(/Draft/);
+        expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 4/);
@@ -510,12 +526,12 @@ context("Dynamic Form Test", () => {
 
         expect(el).match(/fb-quantity/);
 
-        expect(el).match(/Draft/);
+        expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 3 of 4/);
@@ -533,12 +549,12 @@ context("Dynamic Form Test", () => {
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
-        expect(el).match(/Draft/);
+        expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 4 of 4/);
@@ -573,7 +589,7 @@ context("Dynamic Form Test", () => {
 
   context("Verify released form email notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -717,10 +733,10 @@ context("Dynamic Form Test", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 4/);
@@ -756,14 +772,16 @@ context("Dynamic Form Test", () => {
 
         expect(el).match(/fb-instructions/);
 
+        expect(el).match(/video.mp4/);
+
         expect(el).match(/FB-BLANK-TEMPLATE/);
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 4/);
@@ -787,10 +805,10 @@ context("Dynamic Form Test", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 3 of 4/);
@@ -810,10 +828,10 @@ context("Dynamic Form Test", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 4 of 4/);
