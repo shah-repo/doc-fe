@@ -17,9 +17,6 @@ interface OwnProps {
 }
 type Props = OwnProps & RouteComponentProps<RouteParamsCreate>;
 
-// eslint-disable-next-line arrow-body-style
-export let ARFormSaveContext = React.createContext<() => void>(() => { return; });
-
 const DocRevActions: React.FunctionComponent<Props> = ({
   changeRequest,
   asyncState,
@@ -49,10 +46,6 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     setFBValue();
     formik.submitForm();
   };
-
-  ARFormSaveContext = React.createContext<() => void>(
-    onFormClick,
-  );
 
   const label = changeRequest ? "common.save" : "navigation.createChangeRequest";
 
