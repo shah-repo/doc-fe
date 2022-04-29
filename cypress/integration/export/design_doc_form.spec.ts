@@ -2,9 +2,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import "moment-timezone";
-import moment from "moment-timezone";
 import { CONFIG } from "../../support/config";
+import { pdfFooterDate } from "../../utils/constants/dateHandler";
+import { DesignDocument } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -15,7 +15,6 @@ const pages = ["", "", "", ""];
 let docId;
 let arId;
 let tmpRegex;
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Export internal doc - Design Document form", () => {
   before(() => {
@@ -44,11 +43,7 @@ context("Export internal doc - Design Document form", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Design Document",
-                documentTypeAcronym: "DD",
-                group: "OTHER",
-              },
+              DesignDocument,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -311,7 +306,7 @@ context("Export internal doc - Design Document form", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -341,7 +336,7 @@ context("Export internal doc - Design Document form", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -364,7 +359,7 @@ context("Export internal doc - Design Document form", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -385,7 +380,7 @@ context("Export internal doc - Design Document form", () => {
 
         expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -459,10 +454,10 @@ context("Export internal doc - Design Document form", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 4/);
@@ -489,10 +484,10 @@ context("Export internal doc - Design Document form", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 4/);
@@ -512,10 +507,10 @@ context("Export internal doc - Design Document form", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 3 of 4/);
@@ -533,10 +528,10 @@ context("Export internal doc - Design Document form", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 4 of 4/);

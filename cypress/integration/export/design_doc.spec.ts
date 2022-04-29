@@ -2,9 +2,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import "moment-timezone";
-import moment from "moment-timezone";
 import { CONFIG } from "../../support/config";
+import { pdfFooterDate } from "../../utils/constants/dateHandler";
+import { DesignDocument } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -15,7 +15,6 @@ const pages = ["", ""];
 let arId;
 let docId;
 let tmpRegex;
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Export internal doc - Design Document", () => {
   before(() => {
@@ -44,11 +43,7 @@ context("Export internal doc - Design Document", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Design Document",
-                documentTypeAcronym: "DD",
-                group: "OTHER",
-              },
+              DesignDocument,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -167,10 +162,10 @@ context("Export internal doc - Design Document", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 2/);
@@ -185,15 +180,15 @@ context("Export internal doc - Design Document", () => {
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfFooterDate}`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Effective Date: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 2/);

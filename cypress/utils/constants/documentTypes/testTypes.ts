@@ -125,3 +125,11 @@ export const NonQMSType: IdocumentTypeDto = {
   group: DOC_TYPE_GROUP.OTHER,
   isQms: false,
 };
+
+export const DesignDocument: IdocumentTypeDto =  {
+  documentTypeName: "Design Document",
+  documentTypeAcronym: "DD-",
+  group: DOC_TYPE_GROUP.OTHER,
+  isQms: true,
+  canRedLine: true,
+};
