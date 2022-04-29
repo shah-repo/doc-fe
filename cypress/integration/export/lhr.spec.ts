@@ -29,7 +29,7 @@ let createdPartDocument;
 let createdMPIDocument;
 let createdLHRtDocument;
 
-context("DAM approvals in LHR", () => {
+context("Export for LHR", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
