@@ -72,6 +72,10 @@ context("Export internal doc - Design Document", () => {
   });
 
   context("Create a DD", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
