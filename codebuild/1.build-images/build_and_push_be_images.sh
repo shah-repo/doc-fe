@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 BE_SERVER_IMAGE=be_server_${BE_GIT_COMMIT_HASH}
 BE_COMMON_IMAGE=be_common_${BE_GIT_COMMIT_HASH}
 BE_WORKER_IMAGE=be_worker_${BE_GIT_COMMIT_HASH}

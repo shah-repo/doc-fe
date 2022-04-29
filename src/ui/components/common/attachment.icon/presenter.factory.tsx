@@ -16,6 +16,7 @@ AttachmentIconFactoryProps
   handleIconClick,
   isNewVersion,
   canDeleteFile = true,
+  documentRevisionData,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
@@ -33,6 +34,7 @@ AttachmentIconFactoryProps
     handleRemove,
     canDeleteFile,
     isNewVersion,
+    documentRevisionData,
     ...other,
   };
   let props: AttachmentIconProps = {

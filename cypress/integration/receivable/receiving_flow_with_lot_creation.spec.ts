@@ -5,6 +5,9 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { LotsTest } from "../../utils/constants/documentTypes/lot";
+import { Part } from "../../utils/constants/documentTypes/part";
+import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -63,282 +66,9 @@ context("Create receivable test with PO, Lot and Supplier", () => {
             importerEmail: IMPORTER_USER.email,
             users: [FIRST_USER, SECOND_USER, THIRD_USER],
             documentTypes: [
-              {
-                documentTypeName: PART_DOCUMENT_TYPE_NAME,
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
-              {
-                documentTypeName: "Purchase Order test",
-                documentTypeAcronym: "POT-",
-                group: "PO",
-                category: "Purchase Order",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    label: "Description",
-                    visible: true,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    label: "Cancel PO",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Correct PO",
-                    visible: true,
-                  },
-                  M: {
-                    label: "Type of Change",
-                    visible: true,
-                    required: true,
-                  },
-                  N: {
-                    label: "Add Approvers",
-                    visible: false,
-                    required: false,
-                  },
-                  O: {
-                    label: "PO History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  S: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  V: {
-                    label: "Create PO",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  A4: {
-                    visible: false,
-                  },
-                  A5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  A6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  P4: {
-                    visible: false,
-                  },
-                  P5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  P6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                },
-                schema: [
-                  {
-                    name: "po-status-built-in",
-                    type: "select",
-                    index: 0,
-                    label: "PO Status",
-                    options: [
-                      {
-                        text: "Open",
-                        value: "Open",
-                      },
-                      {
-                        text: "Closed",
-                        value: "Closed",
-                      },
-                      {
-                        text: "Cancelled",
-                        value: "Cancelled",
-                      },
-                    ],
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "PO Status",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-supplier-built-in",
-                    type: "supplier",
-                    index: 1,
-                    label: "Supplier ",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Supplier",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-items-built-in",
-                    type: "purchaseorder",
-                    index: 2,
-                    label: "Purchase Order",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Purchase Order",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
-              {
-                documentTypeName: "Lots test",
-                documentTypeAcronym: "LTT-",
-                group: "LOT",
-                category: "Lot",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  D: {
-                    label: "Description",
-                    visible: false,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Update",
-                    visible: true,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    visible: false,
-                  },
-                  L: {
-                    label: "Correction",
-                    visible: true,
-                  },
-                  O: {
-                    label: "Lot History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Rejected",
-                    visible: true,
-                  },
-                  A3: {
-                    visible: false,
-                  },
-                  A4: {
-                    label: "Accepted",
-                    visible: true,
-                  },
-                  A5: {
-                    label: "Quarantine",
-                    visible: true,
-                  },
-                  A6: {
-                    visible: false,
-                  },
-                  P1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Rejected",
-                    visible: true,
-                  },
-                  P3: {
-                    visible: false,
-                  },
-                  P4: {
-                    label: "Accepted",
-                    visible: true,
-                  },
-                  P5: {
-                    label: "Quarantine",
-                    visible: true,
-                  },
-                  P6: {
-                    visible: false,
-                  },
-                },
-              },
+              Part,
+              PurchaseOrderTest,
+              LotsTest,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -896,6 +626,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
   context("Create Purchase Order document with two Products", () => {
     it("Click on 'Purchase Order' on sidebar", () => {
       cy.navigToPurchaseOrder();
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click on 'Create PO' button", () => {
@@ -1016,7 +747,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Add new receiving'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.GetSpecificDocumentType], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
         cy.recCreateNew();
       });
       cy.progressBarShouldNotExist();
@@ -1033,7 +764,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Add new receiving'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.GetSpecificDocumentType], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
         cy.recCreateNew();
       });
       cy.progressBarShouldNotExist();

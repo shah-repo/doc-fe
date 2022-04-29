@@ -10,6 +10,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       atchUploadAttachment(params: {fileName: string }): Chainable<Subject>;
+      atchUploadDocAttachment(params: {fileName: string }): Chainable<Subject>;
       atchUploadAttachmentFail(params: {fileName: string }): Chainable<Subject>;
       atchUploadRedlineAttachment(params: {fileName: string }): Chainable<Subject>;
       atchSetPrimaryAttachment(params: {fileName: string }): Chainable<Subject>;
@@ -36,6 +37,7 @@ declare global {
       atchUploadRedlineVerifyCleanCopyStatus(params: {fileName: string}): Chainable<Subject>;
       atchDownloadCleanCopyFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
       atchUploadTemplateForBLC(params: {fileName: string }): Chainable<Subject>;
+      atchOtherUploadAttachment(params: {fileName: string }): Chainable<Subject>;
     }
   }
 }
@@ -186,6 +188,19 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
     cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
       cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
       cy.get("#attachments-button-file-red-line").attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("atchUploadDocAttachment", (params: {fileName: string }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+      cy.get("#attachments-button-file").attachFile({
         fileContent: fileContent.toString(),
         fileName: params.fileName,
         mimeType: "*",
@@ -403,5 +418,19 @@ Cypress.Commands.add("excelDownloadTemplate", (params: {saveFileName: string  })
   cy.wait("@attach").then((res) => {
     const file = Cypress.Blob.arrayBufferToBinaryString(res.response?.body.file);
     cy.writeFile("cypress/downloads/" + params.saveFileName, file, "binary");
+  });
+});
+
+Cypress.Commands.add("atchOtherUploadAttachment", (params: {fileName: string }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
+      cy.get("#attachments-button-file-clean-copy").attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
   });
 });

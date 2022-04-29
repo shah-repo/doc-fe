@@ -11,7 +11,6 @@ import { Document, DocumentRevisionStatus } from "../../../../state/ducks/docume
 import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
-import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.container";
 import { isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../../layout/theme/utils/colors";
 import FileIcon from "./icon";
@@ -32,6 +31,7 @@ AttachmentIconProps
   handleIconClick,
   canDeleteFile,
   isNewVersion,
+  documentRevisionData,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
@@ -57,8 +57,7 @@ AttachmentIconProps
 
     return intl.formatMessage({ id: "file.type" }, { type });
   }, [file.type, intl]);
-  const { documentRevision } = React.useContext(FormHeaderContext) || {};
-  const isPrimary = file.id === documentRevision?.primaryAttachment?.id;
+  const isPrimary = file.id === documentRevisionData?.primaryAttachment?.id;
 
   const isUploadingRenderer = () => (
     <Box>
@@ -67,7 +66,7 @@ AttachmentIconProps
   );
   const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
 
-  const formDocumentId = documentRevision?.document.id || "";
+  const formDocumentId = documentRevisionData?.document.id || "";
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );

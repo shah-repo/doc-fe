@@ -1,8 +1,8 @@
-import { isEmpty, isEqual } from "lodash";
-import moment from "moment";
+import { isEqual } from "lodash";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
+import { areValidCredentials } from "../../common/utils/iot/iotService";
 import Config from "../../config";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { setIotCreds } from "../../state/ducks/auth/actions";
@@ -19,24 +19,30 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const iotCredentials = useSelector(authSelectors.getCredentials);
-  const expirationIotDate = useSelector(authSelectors.getExpirationOfCredentials);
   const getGroupWithGroupOptions = useActionCreator(documentTypeActions.getGroupWithGroupOptions);
 
   useEffect(() => {
-    dispatch(pageDetailsActions.allPageDetails());
-    dispatch(documentTypeActions.loadTabConfiguration());
-    dispatch(documentTypeActions.loadList());
-    dispatch(authActions.getSessionDetails(employeeId));
-    dispatch(authActions.loadUserGroups());
-    dispatch(userManagementActions.loadCompanyGroups());
-    dispatch(changeRequestsActions.loadAvailableApprovers());
-    if (moment().isAfter(moment(expirationIotDate)) || isEmpty(expirationIotDate)) {
-      dispatch(authActions.getIotCreds());
-    } else {
-      setIotCreds(iotCredentials);
+    if (employeeId) {
+      dispatch(pageDetailsActions.allPageDetails());
+      dispatch(documentTypeActions.loadTabConfiguration());
+      dispatch(documentTypeActions.loadList());
+      dispatch(authActions.getSessionDetails(employeeId));
+      dispatch(authActions.loadUserGroups());
+      dispatch(userManagementActions.loadCompanyGroups());
+      dispatch(changeRequestsActions.loadAvailableApprovers());
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, employeeId]);
+
+  useEffect(() => {
+    if (areValidCredentials(iotCredentials, employeeId)) {
+      setIotCreds(iotCredentials);
+      return;
+    }
+    if (employeeId) {
+      dispatch(authActions.getIotCreds());
+    }
+  }, [dispatch, employeeId, iotCredentials]);
 
   const intl = useIntl();
   const async = useAsync({

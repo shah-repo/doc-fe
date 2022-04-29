@@ -414,7 +414,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("Verify training can be deselected", () => {
       SystemRequirement("REQ-0290");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickTrainingRequired();
       });
       cy.drIsTrainingRequired({ shouldBe: false });

@@ -26,7 +26,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
             height: "48px",
           }}
         >
-          {tabs.map((tab, index) => (
+          {tabs?.map((tab, index) => (
             <Tab
               key={`sm-tabpanel-${tab}-${index}`}
               label={<SMText boxProps={{ fontFamily: "button" }} label={tab} />}

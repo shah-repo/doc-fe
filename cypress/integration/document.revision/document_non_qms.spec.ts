@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { NonQMSType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -37,12 +38,7 @@ context("Non-QMS Document Creation Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "NonQMS Document",
-                documentTypeAcronym: "NQ",
-                group: "OTHER",
-                isQms: false,
-              },
+              NonQMSType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

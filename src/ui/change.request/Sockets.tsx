@@ -1,5 +1,4 @@
-import React from "react";
-import { IotService } from "../../common/utils/iot/mqttClient";
+import React, { useCallback, useMemo } from "react";
 import { changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ChangeRequest } from "../../state/ducks/changeRequest/types";
 import useActionCreator from "../hooks/useActionCreator";
@@ -16,19 +15,16 @@ const ChangeRequestSockets: React.FunctionComponent<Props> = ({
     id,
   },
 }) => {
-  const iotService = IotService.getInstance();
-  const subscribe = () => {
-    iotService.subscribeToTopic(`+/change_requests/${crId}/updated`, loadData);
-  };
-  const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(`+/change_requests/${crId}/updated`);
-  };
   const loadAction = useActionCreator(changeRequestsActions.load);
   const async = useAsync();
-  const loadData = (msg: string) => {
+
+  const loadData = useCallback((msg: string) => {
     async.start(loadAction, id);
-  };
-  useMqttSubscription(subscribe, unsubscribe);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const topic = useMemo(() =>  `+/change_requests/${crId}/updated`, [crId]);
+
+  useMqttSubscription(topic, loadData);
 
   return null;
 };

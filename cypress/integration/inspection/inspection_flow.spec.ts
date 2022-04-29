@@ -4,9 +4,11 @@
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { Categories } from "../../utils/constants/categories";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -476,26 +478,26 @@ context("Inspection flow", () => {
               {
                 documentTypeName: "Test Subassembly",
                 documentTypeAcronym: "SA-",
-                group: "PART",
+                group: DOC_TYPE_GROUP.PART,
                 isQms: true,
-                category: "Parts",
+                category: Categories.Parts,
                 schema: subassemblySchema,
               },
               {
                 documentTypeName: "Finished Good Lot",
                 documentTypeAcronym: "FGL-",
-                group: "PART_LOT",
+                group: DOC_TYPE_GROUP.PART_LOT,
                 isQms: true,
-                category: "Parts",
+                category: Categories.Parts,
                 schema: FGLandSLSchema,
                 fieldsConfig: FGLandSLFieldsConfig,
               },
               {
                 documentTypeName: "Subassembly Lot",
                 documentTypeAcronym: "SA-",
-                group: "PART_LOT",
+                group: DOC_TYPE_GROUP.PART_LOT,
                 isQms: true,
-                category: "Record",
+                category: Categories.Record,
                 schema: FGLandSLSchema,
                 fieldsConfig: FGLandSLFieldsConfig,
               },

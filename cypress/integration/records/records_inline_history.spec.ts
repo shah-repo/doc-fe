@@ -3,6 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { HistoryTestRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -38,14 +39,7 @@ context("Record inline history Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "History Test Record",
-                documentTypeAcronym: "HTR-",
-                group: "RECORD",
-                isQms: true,
-                needsSignature: true,
-                category: "Record",
-              },
+              HistoryTestRecord,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
