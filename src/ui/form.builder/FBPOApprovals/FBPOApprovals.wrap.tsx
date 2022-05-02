@@ -39,7 +39,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
-    const { isSubmitting } = useFormikContext();
+    const formik = useFormikContext();
     const { document, changeRequest, id, isOutput } = workspaceState || {};
     const outputId = isOutput ? id : null;
     const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
@@ -308,7 +308,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     formState?.setFieldValue(`${name}`, fieldValue, true);
     documentStatus = document?.status as any;
     // Should be disabled while submitting if group levels changes while adding/editing PO items
-    disabled = disabled || loading || isSubmitting;
+    disabled = disabled || loading || formik?.isSubmitting;
 
     disabledOptions = [];
     if (formState?.inputState.get(name)?.value.length) {
