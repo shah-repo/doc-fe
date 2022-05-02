@@ -32,7 +32,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const intl = useIntl();
     const { formInput } = workspaceState || {};
     const { receivedItems } = name && (formInput?.[name] || { receivedItems: "" });
-    const { submitForm } = useFormikContext();
+    const formik = useFormikContext();
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
@@ -127,7 +127,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       (value) => {
         formState?.setFieldValue(name, { id: value });
         formState?.setFieldAutosave(name);
-        submitForm();
+        formik?.submitForm();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
