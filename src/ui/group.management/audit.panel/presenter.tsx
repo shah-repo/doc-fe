@@ -36,6 +36,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
   const [page, setPage] = useState(GM_AUDIT_HISTORY_INITIAL_OFFSET);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
 
   const closeDrawer = () => {
     setOpenDrawer({ ...openDrawer, right: false });
@@ -74,6 +75,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
          ] as AuditDetailsProps[]);
          setPage((prevPageNumber) => prevPageNumber + limit);
          setIsLoading(false);
+         setShowLoadMoreButton(true);
          setLoadMore(data.page_total > 0);
        })
        .catch((exception) => {
@@ -125,7 +127,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       {isLoading && <LinearProgress />}
       <Box width={300}>{renderAuditRecords()}</Box>
       {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
-      {<LoadMoreButton disable={isLoading || !loadMore} onLoadMore={fetchAuditRecords}  id="historyLoadMore" />}
+      {showLoadMoreButton && <LoadMoreButton disable={isLoading || !loadMore} onLoadMore={fetchAuditRecords}  id="historyLoadMore" />}
     </Drawer>
   );
 };
