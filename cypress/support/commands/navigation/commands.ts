@@ -31,6 +31,7 @@ declare global {
       navigToDocumentListWithUnsavedChanges(params: { confirmPopup: boolean }): Chainable<Subject>;
       navigToTrainingRecords(): Chainable<Subject>;
       navigToTrainingCurriculums(): Chainable<Subject>;
+      navigToAsyncTasks(): Chainable<Subject>;
     }
   }
 }
@@ -265,6 +266,16 @@ Cypress.Commands.add("navigToTrainingCurriculums", () => {
         NavigationItems.TRAINING_CURRICULUMS,
       ],
     });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToAsyncTasks", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.ASYNC_TASKS,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });

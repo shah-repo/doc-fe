@@ -22,4 +22,5 @@ export enum NavigationItems{
   TRAINING_RECORDS= "trainingRecords",
   TRAINING_CURRICULUMS= "trainingCurriculums",
   EB = "engineeringBuilds",
+  ASYNC_TASKS = "asyncTasks",
 }
