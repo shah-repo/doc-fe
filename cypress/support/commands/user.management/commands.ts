@@ -19,6 +19,7 @@ declare global {
       usrClickCloseDialogButton(): Chainable;
       usrCheckIfUserIsCreated(params: {email: string}): Chainable;
       authLoginWithInvalidPassword(params: { email: string; password: string }): Chainable<Subject>;
+      usrAddGroupNewUser(params: {group: string}): Chainable;
     }
   }
 }
@@ -82,6 +83,10 @@ Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
   cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("tr.k-master-row").should("contain.text", params.email);
+});
+
+Cypress.Commands.add("usrAddGroupNewUser", (params: {group: string}) => {
+  cy.get(`tr.k-master-row > td[data-grid-col-index="3"] input`).autocompleteSelect(params.group);
 });
 
 Cypress.Commands.add("authLoginWithInvalidPassword", (params: { email: string; password: string }) => {

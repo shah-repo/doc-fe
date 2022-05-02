@@ -2,10 +2,10 @@
 /// <reference types="Cypress" />
 
 import faker from "faker";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -92,12 +92,15 @@ context("Password expire flow", () => {
 
       context("Fill in user attributes", () => {
         it("Enters e-mail", () => {
-          SystemRequirement("REQ-3940");
           cy.usrEnterEmail({ email: emailOfUserToSignUp });
         });
 
         it("Enters name", () => {
           cy.usrEnterName({ name: nameOfUserToSignUp });
+        });
+
+        it("Add Async group", () => {
+          cy.usrAddGroupNewUser({ group: "Async Tasks" });
         });
       });
 
@@ -105,28 +108,31 @@ context("Password expire flow", () => {
         it("Clicks the save button", () => {
           cy.intercept({ method: "POST", pathname: "/api/v1/employees" }).as("postEmployee");
           cy.usrClickSaveButton();
+          cy.wait("@postEmployee").then((res) => {
+            if (res.response) {
+              const response = res.response.body;
+              newEmployeId = response.id;
+            }
+          });
         });
       });
     });
 
     context("Activate user", () => {
       it("Verify activation email", () => {
-        SystemRequirement("REQ-4110");
         cy.imapGetActivationLink({ userEmail: emailOfUserToSignUp });
+        cy.log(newEmployeId);
       });
 
       it("Enter password", () => {
-        SystemRequirement("REQ-4110");
         cy.authEnterSignUpPassword();
       });
 
       it("Enter password for confirmation", () => {
-        SystemRequirement("REQ-4110");
         cy.authEnterSignUpConfirmPassword();
       });
 
       it("Click 'SIGN IN'", () => {
-        SystemRequirement("REQ-4110");
         cy.authClickSignIn();
       });
 
@@ -166,6 +172,48 @@ context("Password expire flow", () => {
 
       it("Navigate to async tasks", () => {
         cy.navigToAsyncTasks();
+      });
+
+      it("Select task TIME_TRAVEL_USER", () => {
+        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER });
+      });
+
+      it("Select 85 days to back in future", () => {
+        cy.asyncSelectBackToTheFutureTime({ day: 86 });
+      });
+
+      it("Submit async task", () => {
+        cy.asyncTaskClickSubmit();
+      });
+
+      it("Select task SEND_PASSWORD_EXPIRATION_EMAILS", () => {
+        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS });
+      });
+
+      it("Submit async task", () => {
+        cy.asyncTaskClickSubmit();
+      });
+    });
+
+    context("Log out and sign in again", () => {
+      it("Logout", () => {
+        cy.authLogout();
+      });
+
+      it("Log user in", () => {
+        cy.authLogin({
+          email: emailOfUserToSignUp,
+        });
+      });
+
+      it("Verify user is loged in", () => {
+        cy.navigListExistsCheck(
+          NavigationItems.DASHBOARD,
+          NavigationItems.DOCUMENT_CONTROL);
+      });
+
+      it("Verify no password expiration message", () => {
+        cy.checkToastMessage({ exists: true });
       });
     });
   });
