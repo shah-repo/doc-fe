@@ -1,11 +1,14 @@
 import moment from "moment";
 import "moment-timezone";
+import path from "path";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { LotsTest } from "../../utils/constants/documentTypes/lot";
 import { Part } from "../../utils/constants/documentTypes/part";
-import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
+import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -28,10 +31,33 @@ let receivingName;
 let receivePageDetailsId;
 let receivingDocumentType;
 let oldReceivingForm;
+let releasedFormId;
+let dateAfterEmailShouldArrive;
+let emailsFromInbox;
+let downloadUrl;
+let fileId;
+let downloadFile;
+let tmpRegex;
+let CSLDocumentType;
+let createdLotsFormDocument;
+let lotId;
 
-const receivingReleasedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
+const pages = ["", "", ""];
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
+const TEXTFIELD_LABEL = "TEXT FIELD";
+const FIELD_RADIO_BUTTON_GROUP = "Radio Button group";
+const RADIO_BUTTON_GROUP_LABEL = "radioGroup";
+const RBG_REQUIRED_IF_VALUE = "X";
+const FIELD_CHECKBOX_GROUP = "Checkbox group";
+const CHECKBOX_LABEL = "checkboxGroup";
+const CHECKBOX_REQUIRED_IF_VALUE = "Y";
+
+const dateOffset = (5 * 1000);
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
+const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/DD/YYYY");
 
 context("Receivable test with Page Details", () => {
   before(() => {
@@ -61,145 +87,11 @@ context("Receivable test with Page Details", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               Part,
-              {
-                ...PurchaseOrderTest,
-                schema: [
-                  {
-                    name: "po-status-built-in",
-                    type: "select",
-                    index: 0,
-                    label: "PO Status",
-                    options: [
-                      {
-                        text: "Open",
-                        value: "Open",
-                      },
-                      {
-                        text: "Closed",
-                        value: "Closed",
-                      },
-                      {
-                        text: "Cancelled",
-                        value: "Cancelled",
-                      },
-                    ],
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "PO Status",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "general-information-to-be-completed-by-requester-kc3oqlpn",
-                    type: "section",
-                    index: 1,
-                    label: "General Information",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                  },
-                  {
-                    name: "requestor-k740hxlb",
-                    type: "autocomplete",
-                    index: 2,
-                    label: "Requestor",
-                    rules: "",
-                    hidden: false,
-                    deleted: false,
-                    optionId: "3",
-                    optionPath: "/change_requests/available_approvers",
-                    placeholder: "[Select requestor here]",
-                    rulesObject: {},
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    optionLabelKey: "user.email",
-                    optionValueKey: "id",
-                    outputDisabled: false,
-                    validationMode: "default",
-                    formValuesRules: {},
-                    editorProperties: [
-                      "deleteDisabled",
-                    ],
-                    validationAttribute: "Requestor",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-supplier-built-in",
-                    type: "supplier",
-                    index: 3,
-                    label: "Supplier ",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Supplier",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "ordered-k6mlhan7",
-                    type: "datepicker",
-                    index: 4,
-                    label: "Order Date",
-                    rules: "required",
-                    hidden: false,
-                    deleted: false,
-                    validators: {
-                      required: true,
-                    },
-                    rulesObject: {},
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    outputDisabled: false,
-                    validationMode: "default",
-                    formValuesRules: {},
-                    editorProperties: [
-                      "deleteDisabled",
-                    ],
-                    validationAttribute: "Order Date",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-items-built-in",
-                    type: "purchaseorder",
-                    index: 5,
-                    label: "Purchase Order",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Purchase Order",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 6,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
+              PurchaseOrderDocType,
               ReceivableTest,
+              LotsTest,
             ],
+            acctCodes: ["code 1"],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -209,6 +101,7 @@ context("Receivable test with Page Details", () => {
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots test");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           done();
         });
@@ -674,6 +567,131 @@ context("Receivable test with Page Details", () => {
         }).then(() => done() );
       });
     });
+
+    it("[API]Create Lots form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Lots Form document</p>",
+          document: {
+            docId: "FM-00008",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Lots form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: CSLDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "lot_quantity",
+                type: "quantity",
+                index: 0,
+                label: "Initial Quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [],
+                validationAttribute: "Initial Quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_usable_quantity",
+                type: "quantity",
+                index: 1,
+                label: "Usable Quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [],
+                validationAttribute: "Usable Quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_expiry_date",
+                type: "datepicker",
+                index: 2,
+                label: "Expiration Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationAttribute: "Expiration Date",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_part",
+                type: "autocomplete",
+                index: 3,
+                label: "Part Selection",
+                optionId: "21",
+                placeholder: "Select the appropriate part for this lot",
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "100-inspection-override",
+                type: "checkboxgroup",
+                index: 4,
+                label: "100% Inspection Override",
+                options: [
+                  {
+                    text: "100% Inspection Override",
+                    value: "100% Inspection Override",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                editorProperties: [],
+                validationAttribute: "100% Inspection Override",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdLotsFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdLotsFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
   });
 
   context("Login and create PO", () => {
@@ -689,7 +707,7 @@ context("Receivable test with Page Details", () => {
       });
     });
 
-    context("Create Purchase Order document with two Products", () => {
+    context("Create Purchase Order document with three Products", () => {
       it("Click on 'Purchase Order' on sidebar", () => {
         cy.navigToPurchaseOrder();
       });
@@ -748,7 +766,7 @@ context("Receivable test with Page Details", () => {
 
         it("Add Required Date", () => {
           cy.get("[name^=date]").parent().find("button").arrowClick();
-          cy.get("button.MuiPickersDay-current").arrowClick();
+          cy.get("button.MuiPickersDay-daySelected").arrowClick();
         });
 
         it("Click on 'Add' inside PO dialog box", () => {
@@ -780,13 +798,54 @@ context("Receivable test with Page Details", () => {
 
         it("Add Required Date", () => {
           cy.get("[name^=date]").parent().find("button").arrowClick();
-          cy.get("button.MuiPickersDay-current").arrowClick();
+          cy.get("button.MuiPickersDay-daySelected").arrowClick();
         });
 
         it("Click on 'Add' inside PO dialog box", () => {
           cy.poAddPOButtonClick();
         });
+      });
 
+      context("Create third PO for service", () => {
+        it("Click on 'Add item' button", () => {
+          cy.unClick();
+          cy.poAddNewFieldItem();
+        });
+
+        it("Click on service option", () => {
+          cy.poSelectOption({ optionName: "service" });
+        });
+
+        it("Select service id", () => {
+          cy.poEnterServiceID({ serviceId: "SRV123" });
+        });
+
+        it("Enter Description", () => {
+          cy.poEnterDescription({ description: "Description for SRV123" });
+        });
+
+        it("Enter Quantity Ordered", () => {
+          cy.poEnterQuantityOrdered({ quantity: "2" });
+        });
+
+        it("Select Units", () => {
+          cy.poSelectUnits();
+        });
+
+        it("Select GL code", () => {
+          cy.poSelectGLCode();
+        });
+
+        it("Enter Unit Price", () => {
+          cy.poNumberOfUnits({ number: "190" });
+        });
+
+        it("Click on 'Add' inside PO dialog box", () => {
+          cy.poAddPOButtonClick();
+        });
+      });
+
+      context("Approve Purchase Order document", () => {
         it("Add an Approval", () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         });
@@ -839,9 +898,9 @@ context("Receivable test with Page Details", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    context("Add Receivable field to form", () => {
+    context("Add field 'Receive Purchase Order'", () => {
       it("Click add new field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
       });
 
       it("Select Receive Purchase Order from given fields", () => {
@@ -859,7 +918,46 @@ context("Receivable test with Page Details", () => {
       });
     });
 
-    context("Save and release form form", () => {
+    context("Add 'TextField' Radiobutton group and Checkbox group", () => {
+      it("Click add new field and select 'TextField'", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: TEXTFIELD_LABEL });
+        cy.fbOpenValidation();
+        cy.fbFieldRequired();
+        cy.fbAddField();
+        cy.progressBarShouldNotExist();
+      });
+
+      it("Click add new field and select 'Radio Button group'", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ field: FIELD_RADIO_BUTTON_GROUP });
+        cy.fbEnterNameValue({ name: "label", value: RADIO_BUTTON_GROUP_LABEL });
+        cy.fbGroupOptions("1", "2", "3");
+        cy.fbOpenValidation();
+        cy.get("input[value^=\"visibility\"]").check();
+        cy.fbFieldRequiredIf();
+        cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(TEXTFIELD_LABEL);
+        cy.get(`[data-cy="validators.required_if.value"]`).arrowType(RBG_REQUIRED_IF_VALUE);
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Click add new field and select 'Checkbox group'", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ field: FIELD_CHECKBOX_GROUP });
+        cy.fbEnterNameValue({ name: "label", value: CHECKBOX_LABEL });
+        cy.fbGroupOptions("1", "2", "3");
+        cy.fbOpenValidation();
+        cy.get("input[value^=\"visibility\"]").check();
+        cy.fbFieldRequiredIf();
+        cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(TEXTFIELD_LABEL);
+        cy.get(`[name="validators.required_if.value"]`).arrowType(CHECKBOX_REQUIRED_IF_VALUE);
+        cy.fbAddNewFieldButton();
+      });
+    });
+
+
+    context("Save and release form", () => {
       it("Click create document", () => {
         cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }, (req) => {
           req.reply((res) => {
@@ -873,7 +971,7 @@ context("Receivable test with Page Details", () => {
         cy.wait("@response", { requestTimeout: 20000, responseTimeout: 20000 });
       });
 
-      it("Approve and release", () => {
+      it("Approve and release document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
@@ -892,6 +990,19 @@ context("Receivable test with Page Details", () => {
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Receivable test" });
     });
 
+    it("Upload logo picture image.jpg", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Setting Text area value Y", () => {
+      cy.get(`[data-cy^="text-field"]`).arrowType(CHECKBOX_REQUIRED_IF_VALUE);
+      cy.unClick();
+    });
+
+    it(`select value for ${CHECKBOX_LABEL}`, () => {
+      cy.get(`input[type="checkbox"][value="2"]`).check();
+    });
+
     it("Search for API PO document and select it", () => {
       cy.recSelectPo({ poTitle: "New Purchase Order" });
     });
@@ -907,10 +1018,452 @@ context("Receivable test with Page Details", () => {
 
     it("Verify PO table is present on receivable", () => {
       cy.get("div[name=\"po-items-built-in\"]>table").should("exist");
+      cy.unClick();
     });
 
     it("Save receivable", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Verify `Receiving document` status and send email", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "WIP");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify PDF while document is in WIP (step 1)", () => {
+    context("Verify email notification for Receivable document", () => {
+      it("Get emails", () => {
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          wait_time_sec: 5,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          max_wait_time_sec: 50,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${releasedFormId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          if (emails) {
+            emailsFromInbox = emails;
+            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+          }
+          else {
+            assert.fail("No email found");
+          }
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[1].email,
+            contains: [`Hello <b>${USERS[1].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id],
+          }];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify that zip file contains pdf", () => {
+      it("Download zip file containing Approval request form", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+            downloadFile  =  `${releasedFormId}${filetime}_WIP1.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
+      });
+
+      it("unzip and extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+
+        const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+          `${releasedFormId}-A.pdf`);
+        cy.readFile(pdffile).its("length").should("be.gt", 500);
+      });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 10);
+      });
+    });
+
+    context("Verify PDF file content", () => {
+      it("Extract texts from PDF file content for Receivable form", () => {
+        cy.pdfparseFile(
+          {
+            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+            fileName: `${releasedFormId}-A.pdf`,
+          }).then((cdata) => {
+          expect(cdata.numpages).eq(1);
+          expect(cdata.text).match(/Page 1 of 1/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 1")) {
+              pages[0] = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for Receivable form", () => {
+        const el = pages[0];
+        if (el.includes("Page 1 of 1")) {
+          tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Attachments/);
+
+          expect(el).match(/image.jpg/);
+
+          expect(el).match(/APPROVALS\nNone/);
+
+          expect(el).match(/Receivable\nPOT-00001 - rev 1 - New Purchase Order/);
+
+          tmpRegex = new RegExp( `Requestor\n${USERS[1].name}(.*)@(.*)`, "gi" );
+
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Supplier\nSUP-00001 - rev 1 - API Supplier Document/);
+
+          // eslint-disable-next-line max-len
+          expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
+
+          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document2000each${receivingReleasedDate}\\$5.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n1000each${receivingReleasedDate}\\$11.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `3SRV123N/A\nDescription for\nSRV123\n20each\\$190.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `${TEXTFIELD_LABEL}\n${CHECKBOX_REQUIRED_IF_VALUE}` );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/checkboxGroup\n1 2 3/);
+
+          expect(el).match(/WIP/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 1/);
+
+          tmpRegex = new RegExp(`${RADIO_BUTTON_GROUP_LABEL}`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+        }
+      });
+    });
+  });
+
+  context("Update received quantity for all items", () => {
+    it("Update received quantity for first line items", () => {
+      cy.get("td[data-cy=\"poItemIndex\"]").eq(0).arrowClick();
+      cy.poEnterQuantityReceipt({ quantity: "50" });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    });
+
+    it("Update received quantity for second line items", () => {
+      cy.get("td[data-cy=\"poItemIndex\"]").eq(1).arrowClick();
+      cy.poEnterQuantityReceipt({ quantity: "25" });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    });
+
+    it("Update received quantity for third line items", () => {
+      cy.get("td[data-cy=\"poItemIndex\"]").eq(2).arrowClick();
+      cy.poEnterQuantityReceipt({ quantity: "1" });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    });
+  });
+
+  context("Add two approver and then remove one", () => {
+    it("Add approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+
+    it("remove one approver", () => {
+      cy.contains(USERS[2].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+    });
+
+    it("Save receivable with approver", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Verify `Receiving document` status and send email", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "WIP");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify PDF while document is in WIP (step 2)", () => {
+    context("Verify email notification for Receivable form", () => {
+      it("Get emails", () => {
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          wait_time_sec: 5,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          max_wait_time_sec: 50,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${releasedFormId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          if (emails) {
+            emailsFromInbox = emails;
+            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+          }
+          else {
+            assert.fail("No email found");
+          }
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[1].email,
+            contains: [`Hello <b>${USERS[1].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id],
+          }];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify that zip file contains pdf", () => {
+      it("Download zip file containing Approval request form", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+            downloadFile  =  `${releasedFormId}${filetime}_WIP2.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
+      });
+
+      it("unzip and extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+
+        const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+          `${releasedFormId}-A.pdf`);
+        cy.readFile(pdffile).its("length").should("be.gt", 500);
+      });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 10);
+      });
+    });
+
+    context("Verify PDF file content", () => {
+      it("Extract texts from PDF file content for Receivable form", () => {
+        cy.pdfparseFile(
+          {
+            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+            fileName: `${releasedFormId}-A.pdf`,
+          }).then((cdata) => {
+          expect(cdata.numpages).eq(1);
+          expect(cdata.text).match(/Page 1 of 1/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 1")) {
+              pages[0] = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for Receivable form", () => {
+        const el = pages[0];
+        if (el.includes("Page 1 of 1")) {
+          tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Attachments/);
+
+          expect(el).match(/image.jpg/);
+
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Receivable\nPOT-00001 - rev 1 - New Purchase Order/);
+
+          tmpRegex = new RegExp( `Requestor\n${USERS[1].name}(.*)@(.*)`, "gi" );
+
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Supplier\nSUP-00001 - rev 1 - API Supplier Document/);
+
+          // eslint-disable-next-line max-len
+          expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
+
+          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document20050each${receivingReleasedDate}\\$5.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n10025each${receivingReleasedDate}\\$11.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `3SRV123N/A\nDescription for\nSRV123\n21each\\$190.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `${TEXTFIELD_LABEL}\n${CHECKBOX_REQUIRED_IF_VALUE}` );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/checkboxGroup\n1 2 3/);
+
+          expect(el).match(/WIP/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 1/);
+
+          tmpRegex = new RegExp(`${RADIO_BUTTON_GROUP_LABEL}`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+        }
+      });
+    });
+  });
+
+  context("Click on “Receive all“", () => {
+    it("Click on “Receive all”", () => {
+      cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Create a Lot' on first line item", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetDocumentType], () => {
+        cy.get("tr>td>button").first().arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select 'Lots test' document type", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
+      });
+    });
+
+    it("Select 'Lots form document' form", () => {
+      cy.get("[data-cy='lotForm']").autocompleteSelect("Lots form");
+    });
+
+    it("Click 'Create Lot' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostReceivable], () => {
+        cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.unClick();
+    });
+
+    it("Extract the lot id created", () => {
+      cy.get("[data-cy=\"lots\"]").then((el) => {
+        lotId = el.text().split(" ");
+      });
     });
   });
 
@@ -1068,25 +1621,389 @@ context("Receivable test with Page Details", () => {
     });
   });
 
-  context("Release Receiving", () => {
+  context("Submit receiving document for Approval", () => {
     it("Open receiving document", () => {
       cy.dlSelectFirstDocument();
-    });
-
-    it("Add approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-    });
-
-    it("Save receivable", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Submit for Approval", () => {
       cy.pmSubmitForApproval();
     });
+  });
 
-    it("Approve receiving", () => {
+  context("While in “Pending Approval” state, send to email", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Pending Approval");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify PDF while document is in Pending Approval", () => {
+    context("Verify email notification for Receivable form", () => {
+      it("Get emails", () => {
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          wait_time_sec: 5,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          max_wait_time_sec: 50,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${releasedFormId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          if (emails) {
+            emailsFromInbox = emails;
+            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+          }
+          else {
+            assert.fail("No email found");
+          }
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[1].email,
+            contains: [`Hello <b>${USERS[1].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id],
+          }];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify that zip file contains pdf", () => {
+      it("Download zip file containing Approval request form", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+            downloadFile  =  `${releasedFormId}${filetime}_PENDING.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
+      });
+
+      it("unzip and extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+
+        const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+          `${releasedFormId}-A.pdf`);
+        cy.readFile(pdffile).its("length").should("be.gt", 500);
+      });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 10);
+      });
+    });
+
+    context("Verify PDF file content", () => {
+      it("Extract texts from PDF file content for Receivable form", () => {
+        cy.pdfparseFile(
+          {
+            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+            fileName: `${releasedFormId}-A.pdf`,
+          }).then((cdata) => {
+          expect(cdata.numpages).eq(1);
+          expect(cdata.text).match(/Page 1 of 1/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 1")) {
+              pages[0] = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for Receivable form", () => {
+        const el = pages[0];
+        if (el.includes("Page 1 of 1")) {
+          tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Attachments/);
+
+          expect(el).match(/image.jpg/);
+
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| PENDING`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Receivable\nPOT-00001 - rev 1 - New Purchase Order/);
+
+          tmpRegex = new RegExp( `Requestor\n${USERS[1].name}(.*)@(.*)`, "gi" );
+
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Supplier\nSUP-00001 - rev 1 - API Supplier Document/);
+
+          // eslint-disable-next-line max-len
+          expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00\n${lotId[0]}\n${lotId[1]}`, "gi" );
+          expect(el).match(tmpRegex);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n100100each${receivingReleasedDate}\\$11.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `3SRV123N/A\nDescription for\nSRV123\n22each\\$190.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `${TEXTFIELD_LABEL}\n${CHECKBOX_REQUIRED_IF_VALUE}` );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/checkboxGroup\n1 2 3/);
+
+          expect(el).match(/Pending Approval/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 1/);
+
+          tmpRegex = new RegExp(`${RADIO_BUTTON_GROUP_LABEL}`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+        }
+      });
+    });
+  });
+
+  context("Approve receiving", () => {
+    it("Approve", () => {
       cy.ebApprove();
+    });
+  });
+
+  context("After “Released” state, send to email", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify PDF while document is in Released", () => {
+    context("Verify email notification for Receivable form", () => {
+      it("Get emails", () => {
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          wait_time_sec: 5,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          max_wait_time_sec: 50,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${releasedFormId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          if (emails) {
+            emailsFromInbox = emails;
+            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+          }
+          else {
+            assert.fail("No email found");
+          }
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[1].email,
+            contains: [`Hello <b>${USERS[1].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id],
+          }];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify that zip file contains pdf", () => {
+      it("Download zip file containing Approval request form", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+            downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
+      });
+
+      it("unzip and extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+
+        const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+          `${releasedFormId}-A.pdf`);
+        cy.readFile(pdffile).its("length").should("be.gt", 500);
+      });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 10);
+      });
+    });
+
+    context("Verify PDF file content", () => {
+      it("Extract texts from PDF file content for Receivable form", () => {
+        cy.pdfparseFile(
+          {
+            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+            fileName: `${releasedFormId}-A.pdf`,
+          }).then((cdata) => {
+          expect(cdata.numpages).eq(1);
+          expect(cdata.text).match(/Page 1 of 1/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 1")) {
+              pages[0] = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for Receivable form", () => {
+        const el = pages[0];
+        if (el.includes("Page 1 of 1")) {
+          tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Attachments/);
+
+          expect(el).match(/image.jpg/);
+
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Receivable\nPOT-00001 - rev 1 - New Purchase Order/);
+
+          tmpRegex = new RegExp( `Requestor\n${USERS[1].name}(.*)@(.*)`, "gi" );
+
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Supplier\nSUP-00001 - rev 1 - API Supplier Document/);
+
+          // eslint-disable-next-line max-len
+          expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00\n${lotId[0]}\n${lotId[1]}`, "gi" );
+          expect(el).match(tmpRegex);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n100100each${receivingReleasedDate}\\$11.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `3SRV123N/A\nDescription for\nSRV123\n22each\\$190.00`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `${TEXTFIELD_LABEL}\n${CHECKBOX_REQUIRED_IF_VALUE}` );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/checkboxGroup\n1 2 3/);
+
+          expect(el).match(/Released/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 1/);
+
+          tmpRegex = new RegExp(`${RADIO_BUTTON_GROUP_LABEL}`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+        }
+      });
     });
   });
 
@@ -1112,7 +2029,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Verify Released Date", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", receivingReleasedDate);
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", receivingReleasedDateMonth);
     });
 
     it("Verify Supplier", () => {
