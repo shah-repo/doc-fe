@@ -720,12 +720,6 @@ context("LHRs email notifications", () => {
         cy.drClickReviseDocument();
       });
 
-      it("Navigate to revised LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        });
-      });
-
       it(`Select '${BUILD_TYPE.RD}' build type`, () => {
         cy.unClick();
         cy.get(`[value=\"${BUILD_TYPE.RD}\"]`).check();
@@ -765,12 +759,6 @@ context("LHRs email notifications", () => {
 
       it("Revise LHR", () => {
         cy.drClickReviseDocument();
-      });
-
-      it("Navigate to revised LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        });
       });
 
       context("Add approvers to LHR B", () => {
