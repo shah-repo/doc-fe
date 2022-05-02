@@ -83,9 +83,9 @@ const editSelectedEmployee = (
 
 const onLoginSuccessCallback = (data: AuthResponse, dispatch) => {
   dispatch(authUser(data));
-
-  if ((data.employees || []).length === 1) {
-    const employee = data.employees[0];
+  const viableEmployees = (data.employees || []).filter((emp) => emp.active);
+  if (viableEmployees.length === 1) {
+    const employee = viableEmployees[0];
 
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(selectEmployee(employee));
