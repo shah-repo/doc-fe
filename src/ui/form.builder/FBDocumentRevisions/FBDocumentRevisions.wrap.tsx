@@ -124,6 +124,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     };
 
     remove = (index: number) => {
+      docRevState?.setDocumentRevisions(parentFormValue);
       const id: string = getIdBy(index);
       const value = filter(docRevState?.value, (v) => v.proposedDocumentRevision.id !== id);
       parentFormState?.removeFieldRules(`documentRevisions.${value.length}.descriptionOfChange`);
