@@ -14,6 +14,7 @@ let adminLoginResponse;
 let adminSessionId;
 let asyncTasksGroup;
 let newEmployeId;
+const newPassword = "Tester123#!";
 
 const nameOfUserToSignUp = faker.name.findName();
 const emailOfUserToSignUp =
@@ -34,6 +35,7 @@ context("Password expire flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
+            scheduledForDeletion: false,
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -104,21 +106,22 @@ context("Password expire flow", () => {
         });
       });
 
-      context("Create user", () => {
+      context("Create new user", () => {
         it("Clicks the save button", () => {
           cy.intercept({ method: "POST", pathname: "/api/v1/employees" }).as("postEmployee");
-          cy.usrClickSaveButton();
+          cy.get("button>span>svg>path").eq(1).arrowClick();
           cy.wait("@postEmployee").then((res) => {
             if (res.response) {
               const response = res.response.body;
               newEmployeId = response.id;
             }
           });
+          cy.landingPageLoadingElementShouldNotExist();
         });
       });
     });
 
-    context("Activate user", () => {
+    context("Activate new user", () => {
       it("Verify activation email", () => {
         cy.imapGetActivationLink({ userEmail: emailOfUserToSignUp });
         cy.log(newEmployeId);
@@ -165,55 +168,141 @@ context("Password expire flow", () => {
       });
     });
 
-    context("Login admin and use time tool", () => {
-      it("Login user to dashboard", () => {
-        cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
-      });
+    const testDays = ["85", "86", "87", "88", "89"];
+    const startingTestDay = 85;
+    testDays.forEach((dayToTest, i) => {
+      context(`Test UI message for day ${dayToTest}`, () => {
+        context("Use time tool to travel user back to future", () => {
+          it("Navigate to async tasks", () => {
+            cy.navigToAsyncTasks();
+          });
 
-      it("Navigate to async tasks", () => {
-        cy.navigToAsyncTasks();
-      });
+          it("Select task TIME_TRAVEL_USER", () => {
+            cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER });
+          });
 
-      it("Select task TIME_TRAVEL_USER", () => {
-        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER });
-      });
+          const daysToJumpBackInFutre = startingTestDay + i === 85 ? 85 : 1;
+          it(`Select ${daysToJumpBackInFutre.toString()} day to back in future`, () => {
+            cy.asyncSelectBackToTheFutureTime({ day: daysToJumpBackInFutre });
+          });
 
-      it("Select 85 days to back in future", () => {
-        cy.asyncSelectBackToTheFutureTime({ day: 86 });
-      });
+          it("Select next task SEND_PASSWORD_EXPIRATION_EMAILS", () => {
+            cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS });
+          });
 
-      it("Submit async task", () => {
-        cy.asyncTaskClickSubmit();
-      });
+          it("Submit async task", () => {
+            cy.asyncTaskClickSubmit();
+          });
+        });
 
-      it("Select task SEND_PASSWORD_EXPIRATION_EMAILS", () => {
-        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS });
-      });
+        context("Veriy UI notification is present", () => {
+          it("Logout", () => {
+            cy.authLogout();
+          });
 
-      it("Submit async task", () => {
-        cy.asyncTaskClickSubmit();
+          it("Log user in", () => {
+            cy.authLogin({
+              email: emailOfUserToSignUp,
+            });
+          });
+
+          it("Verify user is loged in", () => {
+            cy.navigListExistsCheck(
+              NavigationItems.DASHBOARD,
+              NavigationItems.DOCUMENT_CONTROL);
+          });
+
+          it("Verify password expiration message", () => {
+            // eslint-disable-next-line no-irregular-whitespace
+            cy.checkToastMessageIsEqual({ message: `Your password will expire in ${5 - i} days. Reset it now.` });
+          });
+        });
       });
     });
 
-    context("Log out and sign in again", () => {
-      it("Logout", () => {
-        cy.authLogout();
-      });
+    context("Test user is locked after 90 days", () => {
+      context("Use time tool to travel user back to future", () => {
+        it("Navigate to async tasks", () => {
+          cy.navigToAsyncTasks();
+        });
 
-      it("Log user in", () => {
-        cy.authLogin({
-          email: emailOfUserToSignUp,
+        it("Select task TIME_TRAVEL_USER", () => {
+          cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER });
+        });
+
+        it("Select 1 day to back in future", () => {
+          cy.asyncSelectBackToTheFutureTime({ day: 1 });
+        });
+
+        it("Select next task SEND_PASSWORD_EXPIRATION_EMAILS", () => {
+          cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS });
+        });
+
+        it("Submit async task", () => {
+          cy.asyncTaskClickSubmit();
         });
       });
 
-      it("Verify user is loged in", () => {
-        cy.navigListExistsCheck(
-          NavigationItems.DASHBOARD,
-          NavigationItems.DOCUMENT_CONTROL);
+      context("Veriy UI notification is present", () => {
+        it("Logout", () => {
+          cy.authLogout();
+        });
+
+        it("Log user in", () => {
+          cy.authLogin({
+            email: emailOfUserToSignUp,
+          });
+        });
+
+        it("Verify user is locked page present on screen", () => {
+          cy.get(`div[data-cy="UserLocked-infoLink"]`).should("exist");
+        });
+      });
+    });
+
+    context("Unlock locked user with company admin", () => {
+      it("Log user in", () => {
+        cy.authLogin({
+          email: USERS[1].email,
+        });
       });
 
-      it("Verify no password expiration message", () => {
-        cy.checkToastMessage({ exists: true });
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      });
+
+      it("click reset password for user", () => {
+        cy.usrFilterByEmail({ email: emailOfUserToSignUp });
+        cy.contains("Reset Password").arrowClick();
+        cy.wait(10000);
+      });
+
+      it("Get email to unlock account", () => {
+        cy.imapGetNewPasswordLink({ userEmail: emailOfUserToSignUp });
+      });
+
+      it("Enter password", () => {
+        cy.authEnterSignUpPassword({ password: newPassword });
+      });
+
+      it("Enter password for confirmation", () => {
+        cy.authEnterSignUpConfirmPassword({ password: newPassword });
+      });
+
+      it("Click 'SIGN IN'", () => {
+        cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+      });
+
+      it("Password Reset Successfully should be displayed", () => {
+        cy.contains("Password Reset Successfully!").should("exist");
+      });
+
+      it("Logs user in", () => {
+        cy.authLogin({ email: emailOfUserToSignUp, password: newPassword });
+      });
+
+      it("Verify user is loged in", () => {
+        cy.navigListExistsCheck(NavigationItems.DASHBOARD, NavigationItems.DOCUMENT_CONTROL);
       });
     });
   });

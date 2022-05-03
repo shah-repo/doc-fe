@@ -114,6 +114,7 @@ export interface ICreateCompanyBootstrap {
   addresses?: string[];
   remoteValidatorBundleName: string;
   acctCodes?: string[];
+  scheduledForDeletion?: boolean;
 }
 
 Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {

@@ -8,6 +8,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       asyncTaskSelectTaskType(params: {taskType: SQS_TYPES}): Chainable<Subject>;
+      asyncTaskSelectNextTaskType(params: {taskType: SQS_TYPES}): Chainable<Subject>;
       asyncTaskClickSubmit(): Chainable<Subject>;
       asyncSelectBackToTheFutureTime(params: {
         year?: number;
@@ -23,6 +24,12 @@ declare global {
 Cypress.Commands.add("asyncTaskSelectTaskType", (params: {taskType: SQS_TYPES}) => {
   cy.get("#sqs-messages-type-select-outlined").arrowClick();
   cy.get("ul>li[role=option]").contains(params.taskType).arrowClick();
+});
+
+Cypress.Commands.add("asyncTaskSelectNextTaskType", (params: {taskType: SQS_TYPES}) => {
+  cy.get(`div[data-cy="next.task"]`).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.taskType).arrowClick();
+  cy.get("body").arrowType("{esc}");
 });
 
 Cypress.Commands.add("asyncSelectBackToTheFutureTime", (params: {
