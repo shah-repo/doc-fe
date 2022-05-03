@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ./scripts/cypress_generate_server_info.sh
 
@@ -19,9 +20,13 @@ set -a
   export REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT="false"
 set +a
 
+IMAGE=fe_${FE_GIT_COMMIT_HASH}
+DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+
 docker build \
   -f ./docker/cypress_web.Dockerfile \
   -t enlil_cypress_web:${FE_GIT_COMMIT_HASH} \
+  --build-arg BUILDKIT_INLINE_CACHE=1 \
   --build-arg FE_GIT_COMMIT_HASH \
   --build-arg REACT_APP_API_ENDPOINT \
   --build-arg REACT_APP_WORKER_API_ENDPOINT \
@@ -40,9 +45,6 @@ docker build \
   --build-arg REACT_APP_CONSOLE_TOAST \
   --build-arg REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT \
    .
-
-IMAGE=fe_${FE_GIT_COMMIT_HASH}
-DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
 
 docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH} $DOCKER_IMAGE
 docker push $DOCKER_IMAGE

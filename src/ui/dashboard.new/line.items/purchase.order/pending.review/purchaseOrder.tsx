@@ -9,7 +9,6 @@ import {
   Modal,
   Typography,
 } from "@material-ui/core";
-import { size } from "lodash";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
@@ -32,6 +31,7 @@ import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
+import { DialogHandler } from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
 import { getStatusLabel } from "../../common/DocIcon";
 import DocId from "../../common/DocId/presenter";
@@ -41,7 +41,7 @@ import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import { formatCurrency } from "../../common/Utils";
+import { formatCurrency, getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
 
@@ -89,6 +89,7 @@ interface Props {
   onMouseHoverItem: (id: string) => void;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dialogPDF: DialogHandler;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -117,6 +118,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
   pendingEmailSentAt,
+  dialogPDF,
 }) => {
   const classes = styles();
   const PoItems: any = [
@@ -161,6 +163,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
+  const { count, pending, approved, primaryText, secondaryText } =
+    getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -303,19 +307,15 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text
-                          translation="assigned.users.count"
-                          values={{
-                            count:
-                              size(docRevPendingApprovals) +
-                              size(docRevApprovedApprovals),
-                          }}
+                          translation={primaryText}
+                          values={{ count }}
                         />
                         <br />
                         <Text
-                          translation="approved.and.pending.count"
+                          translation={secondaryText}
                           values={{
-                            approved: size(docRevApprovedApprovals),
-                            pending: size(docRevPendingApprovals),
+                            approved,
+                            pending,
                           }}
                         />
                       </>
@@ -379,7 +379,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 />
               </span>
             )}
-            {downloadPdfHover && (
+            {
               <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
@@ -389,10 +389,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   <DownloadHtmlPreview
                     id={docRevId}
                     data-cy="transition-download-pdf"
+                    downloadPdfHover={downloadPdfHover}
+                    dialogPDF={dialogPDF}
                   />
                 </span>
               </StyleTooltip>
-            )}
+            }
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} />

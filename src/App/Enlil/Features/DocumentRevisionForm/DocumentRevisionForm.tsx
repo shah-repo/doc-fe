@@ -53,15 +53,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const group = documentRevision?.document?.documentType?.group || "OTHER";
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   if (formValues.values?.retrain) {
-    tabConfig = [...tabConfig, {
+    tabConfig = tabConfig && [...tabConfig, {
       labelId: "tabId.training",
       tabId: "training",
       type: "TRAINING",
     } ];
   }
-  const tabLabels: string[] = tabConfig.map((tabInfo) => tabInfo.labelId);
-  const isDynamic = Boolean(tabConfig.find((tabInfo) => tabInfo.type === "DYNAMIC"));
-  const trainingTabIndex = tabLabels.findIndex((tab) => tab === "tabId.training");
+  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
+  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
   return (
     <SMForm

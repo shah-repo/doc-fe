@@ -1,5 +1,4 @@
-import React from "react";
-import { IotService } from "../../../common/utils/iot/mqttClient";
+import React, { useCallback, useMemo } from "react";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -13,27 +12,19 @@ const PDFSocket: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const { id: docRevId } = documentRevision;
-  const iotService = IotService.getInstance();
-
   const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
 
-  const updatePdfLink = (response: { url: string }) => {
+  const callback = useCallback((response: { url: string }) => {
     const { url: pdf } = response;
     setDocumentRevision({
       ...documentRevision,
       pdf,
     });
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const topic = useMemo(() => `+/document_revisions/${docRevId}/pdf`, [docRevId]);
 
-  const subscribe = () => {
-    iotService.subscribeToTopic(`+/document_revisions/${docRevId}/pdf`, updatePdfLink);
-  };
-
-  const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(`+/document_revisions/${docRevId}/pdf`);
-  };
-
-  useMqttSubscription(subscribe, unsubscribe);
+  useMqttSubscription(topic, callback);
 
   return null;
 };

@@ -2,6 +2,8 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -42,19 +44,8 @@ context("Document Creation Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-                canRedLine: true,
-              },
+              ClinicalProtocolNotRedline,
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -339,7 +330,7 @@ context("Document Creation Flow", () => {
 
     context("Check training for next revision", () => {
       it("Save document", () => {
-        cy.drClickCreateSupplierWithApiCallAudit();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and Release document", () => {

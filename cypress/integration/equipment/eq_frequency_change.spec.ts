@@ -871,7 +871,7 @@ context("Equipment due date calculation while changing frequency", () => {
         cy.get("[data-cy=\"maintenance.status\"]")
           .eq(0).then(($el) => {
             const text = $el.text().replace(/\u00a0/g, "");
-            expect(text).to.contain(`PMDone - Due Date: ${PMComplianceDate}`);
+            expect(text).to.contain(`PMDone - Due date: ${PMComplianceDate}`);
           });
       });
 
@@ -882,7 +882,7 @@ context("Equipment due date calculation while changing frequency", () => {
         cy.get("[data-cy=\"maintenance.status\"]")
           .eq(1).then(($el) => {
             const text = $el.text().replace(/\u00a0/g, "");
-            expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+            expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
           });
       });
     });
@@ -1064,7 +1064,7 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.get("[data-cy=\"maintenance.status\"]")
             .eq(0).then(($el) => {
               const text = $el.text().replace(/\u00a0/g, "");
-              expect(text).to.contain(`PMDone - Due Date: ${PMComplianceDate}`);
+              expect(text).to.contain(`PMDone - Due date: ${PMComplianceDate}`);
             });
         });
 
@@ -1075,7 +1075,7 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.get("[data-cy=\"maintenance.status\"]")
             .eq(1).then(($el) => {
               const text = $el.text().replace(/\u00a0/g, "");
-              expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+              expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
             });
         });
       });
@@ -1103,7 +1103,7 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.get("[data-cy=\"maintenance.status\"]")
             .eq(0).then(($el) => {
               const text = $el.text().replace(/\u00a0/g, "");
-              expect(text).to.contain(`PMDone - Due Date: ${PMComplianceDate}`);
+              expect(text).to.contain(`PMDone - Due date: ${PMComplianceDate}`);
             });
         });
 
@@ -1114,7 +1114,7 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.get("[data-cy=\"maintenance.status\"]")
             .eq(1).then(($el) => {
               const text = $el.text().replace(/\u00a0/g, "");
-              expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+              expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
             });
         });
       });
@@ -1296,7 +1296,7 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.get("[data-cy=\"maintenance.status\"]")
               .eq(0).then(($el) => {
                 const text = $el.text().replace(/\u00a0/g, "");
-                expect(text).to.contain(`PMDone - Due Date: ${PMComplianceDate}`);
+                expect(text).to.contain(`PMDone - Due date: ${PMComplianceDate}`);
               });
           });
 
@@ -1307,7 +1307,7 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.get("[data-cy=\"maintenance.status\"]")
               .eq(1).then(($el) => {
                 const text = $el.text().replace(/\u00a0/g, "");
-                expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+                expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
               });
           });
         });

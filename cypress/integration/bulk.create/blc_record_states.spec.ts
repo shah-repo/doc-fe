@@ -4,6 +4,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { AdditionalType, TestDocumentTypeRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -45,34 +46,8 @@ context("Bulk create record headers", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
-              {
-                documentTypeName: "Additional Document Type",
-                documentTypeAcronym: "ADT-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
+              TestDocumentTypeRecord,
+              AdditionalType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -747,23 +722,19 @@ context("Bulk create record headers", () => {
           "Receivable",
           "Approval Request",
           "Test Document Type",
-          "Additional Document Type"];
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul>li[role=option]").should("have.length", 21);
-        cy.get("ul>li[role=option]").each(($document) => {
-          expect($document.text()).to.be.oneOf(documentTypeList);
-        });
-        cy.unClick();
+          "Additional Document Type",
+          "Paper Lot History Record",
+        ];
+
+        cy.get(`[data-cy="fb-output-document-type"]`).verifyAutocompleteList(documentTypeList);
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Revised document for bulk creation").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Revised document for bulk creation");
       });
 
-      it("Select wrong document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Suppliers").arrowClick();
+      it("Select document type to be used for bulk creation", () => {
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Suppliers");
       });
 
       it("Select 'no' to have Document id column", () => {
@@ -804,10 +775,9 @@ context("Bulk create record headers", () => {
 
     context("Add correct type and release bulk create", () => {
       it("Select correct document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick().arrowType("{backspace}");
+        cy.get(`[name="fb-output-document-type"]`).arrowClick().find("button").eq(0).arrowClick();
         cy.unClick();
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Test Document Type").arrowClick();
+        cy.get(`[data-cy="fb-output-document-type"]`).autocompleteSelect("Test Document Type");
       });
 
       it("Save bulk document", () => {

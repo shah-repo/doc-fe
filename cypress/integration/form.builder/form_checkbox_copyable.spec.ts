@@ -3,6 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -44,12 +45,7 @@ context("Copyable Checkbox test", () => {
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolNotRedline,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -393,7 +389,8 @@ context("Copyable Checkbox test", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev,
         CyRoutes.AvailableMaintenanceForms], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm").autocompleteSelect("Engineering Build");
+        cy.get("#MultipleFormTemplate-selectDocForm").arrowClick();
+        cy.get("div[id^=react-select]").contains("Engineering Build").arrowClick();
       });
     });
 
@@ -454,8 +451,8 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select Autocompletes", () => {
-      cy.get("[data-cy^=\"ac-wi-ch-\"]").arrowClick().autocompleteSelect("test title");
-      cy.get("[data-cy^=\"ac-wo-ch-\"]").arrowClick().autocompleteSelect("test title");
+      cy.get("[data-cy^=\"ac-wi-ch-\"]").arrowClick().autocompleteSelect("eb-title");
+      cy.get("[data-cy^=\"ac-wo-ch-\"]").arrowClick().autocompleteSelect("eb-title");
     });
 
     it("Select Procedure", () => {

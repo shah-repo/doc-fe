@@ -18,6 +18,7 @@ declare global {
       poEnterDocumentDescription(params: {description: string }): Chainable<Subject>;
       poSelectPartNumber(params: {partNo: string }): Chainable<Subject>;
       poEnterQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
+      poEnterQuantityReceipt(params: {quantity: string}): Chainable<Subject>;
       poSelectUnits(): Chainable<Subject>;
       poSelectGLCode(): Chainable<Subject>;
       poEnterSupplierPartNumber(params: {partNumber: string}): Chainable<Subject>;
@@ -68,7 +69,7 @@ declare global {
 export interface PurchaseOrderItem {
   index: integer;
   partNumber?: string;
-  descritpion?: string;
+  description?: string;
   ordered: integer;
   received: integer;
   units?: string;
@@ -84,7 +85,7 @@ Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
 Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
 
-  cy.get("[data-cy^=\"fb-po-approvals\"]").arrowClick();
+  cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
@@ -126,6 +127,10 @@ Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
   cy.get("[name=\"order\"]").arrowClick().arrowType(params.quantity);
+});
+
+Cypress.Commands.add("poEnterQuantityReceipt", (params: {quantity: string}) => {
+  cy.get("[name=\"received\"]").arrowClick().arrowType(params.quantity);
 });
 
 Cypress.Commands.add("poSelectUnits", () => {

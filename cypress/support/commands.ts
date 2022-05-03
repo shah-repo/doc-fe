@@ -2,6 +2,7 @@
 // import "../../node_modules/cypress-movie/src/arrow
 import path from "path";
 import { Result } from "pdf-parse";
+import { DOC_TYPE_GROUP } from "../../src/state/ducks/documentRevisions/documentType/types";
 import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
@@ -28,6 +29,7 @@ declare global {
         text: string,
         options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
       autocompleteSelect(text: string, options?: {force?: boolean}): Chainable<Subject>;
+      verifyAutocompleteList(list: string[]): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
       unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
       pdfparseFile(params: { directory: string; fileName: string}): Promise<Result>;
@@ -55,8 +57,10 @@ declare global {
       progressBarShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldNotExist(): Chainable<Subject>;
       landingPageLoadingElementShouldNotExist(): Chainable<Subject>;
+      landingPageLoadingElementShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldExist(): Chainable<Subject>;
       listLoadingElementShouldAppear(): Chainable<Subject>;
+      dragAndDrop(params: {fromSelector: string; toSelector: string});
     }
   }
 }
@@ -65,17 +69,22 @@ export interface IUser {
   name: string;
 }
 
+export enum DEFAUL_REV_STAGE {
+  NUMERIC = "Numeric",
+  ALPHA = "Alpha"
+}
+
 interface IfieldsConfig{
   [key: string]: {
     visible: boolean;
     required?: boolean;
     label?: string;};
 }
-interface IdocumentTypeDto {
+export interface IdocumentTypeDto {
   documentTypeName: string;
   documentTypeAcronym: string;
   isQms?: boolean;
-  group: string;
+  group: DOC_TYPE_GROUP;
   privateNumberPool?: boolean;
   startingNumber?: number;
   needsSignature?: boolean;
@@ -85,7 +94,7 @@ interface IdocumentTypeDto {
   canRedLine?: boolean;
   defaultTraining?: boolean;
   hiddenForCreationForUsersWithoutTags?: any[];
-  defaultRevStage?: string;
+  defaultRevStage?: DEFAUL_REV_STAGE;
   active?: boolean;
 }
 
@@ -136,6 +145,11 @@ Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
 
 Cypress.Commands.add("landingPageLoadingElementShouldNotExist", () => {
   cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("landingPageLoadingElementShouldAppear", () => {
+  cy.get("div.k-loading-mask", { timeout: 40000 }).should("be.visible");
+  cy.get("div.k-loading-mask", { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("listLoadingElementShouldExist", () => {
@@ -312,6 +326,31 @@ Cypress.Commands.add("autocompleteSelect", { prevSubject: "element" }, (
   text: string,
   options?: {force?: boolean} ) => {
   cy.wrap(subject).arrowType(text,  options).wait(1500).arrowType("{downarrow}{enter}",  options);
+});
+
+Cypress.Commands.add("verifyAutocompleteList", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>,
+  list: string[] ) => {
+  cy.wrap(subject).arrowClick();
+  cy.get("ul>li[role=option]").first().scrollIntoView().trigger("mouseover").wait(500);
+
+  list.forEach(() => {
+    cy.get("ul>li[role=option][data-focus=true]").invoke("text").should("be.oneOf", list);
+    cy.wrap(subject).type("{downarrow}");
+  });
+
+  const indexNumberToVerifyLengthOfList = list.length - 1;
+  cy.get("ul>li[role=option]").last().should("have.attr", "data-option-index", indexNumberToVerifyLengthOfList);
+
+  cy.unClick();
+});
+
+Cypress.Commands.add("dragAndDrop", (params: {fromSelector: string; toSelector: string}) => {
+  cy.get(params.fromSelector)
+    .realMouseDown({ position: "center", button: "left" });
+  cy.get(params.toSelector)
+    .realMouseMove(0, 0, { position: "center" })
+    .realMouseUp();
 });
 
 // Cypress.Commands.overwrite("click", (originalFn, element, options) => {

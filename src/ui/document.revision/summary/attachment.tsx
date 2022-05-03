@@ -58,7 +58,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
           containsRedline = {containsRedline}
           docRevStatus = {docRevStatus}/>
       </Box>
-      <AttachmentField name="attachments" disabled={true} />
+      <AttachmentField name="attachments" disabled={true} docRevId={docRevId}/>
       {emptyAttachmentsRenderer}
     </Box>
   ); };

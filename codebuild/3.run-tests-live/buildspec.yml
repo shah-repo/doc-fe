@@ -2,14 +2,13 @@ version: 0.2
 
 env:
   shell: bash
-  variables: 
-    COMPOSE_PROJECT_NAME: "enlil_codebuild"
   exported-variables:
     - AWS_DEFAULT_REGION
     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 phases:
   install:
     commands:
+      - echo $ENLIL_ENV
       - source ./codebuild/3.run-tests-live/export_variables.sh
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - export FE_REPO=$(pwd)
@@ -20,12 +19,12 @@ phases:
   build:
     commands:
       - docker ps
-      - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ./codebuild/3.run-tests-live/start_tests.sh
+      - docker exec -w /opt/app enlil_cypress_test_run_container ./codebuild/3.run-tests-live/start_tests.sh
 
 reports:
   report-name-or-arn:
     files:
-      - '**/*'
+      - "**/*"
     base-directory: test-results/some_ci_build_id/json/junit
     file-format: JunitXml
 artifacts:

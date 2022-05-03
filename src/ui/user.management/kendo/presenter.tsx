@@ -38,6 +38,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
           <KendoPanel<GetEmployeeResponse>
             gridConfiguration={gridConfiguration}
             queryUrl={EMPLOYEES_URL}
+            rerender={!showUserProfile}
             gridData={data}
             tableName={tableName}
             onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem as GetEmployeeResponse)}

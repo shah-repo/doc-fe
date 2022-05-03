@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../../support/config";
+import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
@@ -40,12 +41,7 @@ context("Autocomplete 'Document types' test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -174,26 +170,12 @@ context("Autocomplete 'Document types' test", () => {
               Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").arrowClick();
-
             if (response.body.length > 0 ) {
-              const docTypes = response.body;
-              docTypes.forEach((docType) => {
-                cy.get("ul>li[role=option]").should("contain.text", docType.documentTypeName);
-              });
-              cy.get("ul>li[role=option]")
-                .then(($lis) => {
-                  expect($lis).to.have.length(response.body.length);
-                });
-            } else {
-              cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+              const docTypes = response.body.map((x) => x.documentTypeName);
+
+              cy.get(`div[role=dialog] [data-cy^="test-label-"]`).verifyAutocompleteList(docTypes);
             }
           });
-        });
-
-        it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 24);
         });
       });
     });

@@ -4,7 +4,9 @@ import { flatten, isEmpty } from "lodash";
 import { Observer, observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { SM } from "../../../App";
+import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -32,18 +34,16 @@ import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
 
-type Props =
-& FormikProps<DocumentRevisionFormValues>
-& {
+interface Props
+  extends FormikProps<DocumentRevisionFormValues>
+{
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
   proposedDocId?: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
-  doNotPrompt?: boolean;
   documentTypesById: DocumentTypeByIdState;
-  onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
   type?: DocumentCloneType;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
@@ -54,10 +54,9 @@ type Props =
   redlineActive: boolean;
   lastSavedTimestamp?: string;
   mode: FBWorkspaceMode;
-  isDisabled: boolean;
-  email: string;
-  isOwner: boolean;
-};
+  doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
+}
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
@@ -68,8 +67,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setDocId,
   dirty,
   resetForm,
-  doNotPrompt,
-  onDirtyFlagChange,
   isSubmitting,
   isValidating,
   errors,
@@ -82,18 +79,18 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   pmFormId,
   releasedDocRev,
   redlineActive,
-  isDisabled,
-  isOwner,
+  bannerPortal,
   mode,
+  doNotPrompt,
+  onDirtyFlagChange,
 }) => {
   useScrollIntoView();
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const intl = useIntl();
   const { workspaceState } = FB.useStores();
-
   const { revisionChangeType } = values || {};
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
-  const schema = _documentRevisionFormState?.schema;
+  const { schema = [] } =  workspaceState || {};
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -118,8 +115,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
-
-
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
+  const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
@@ -202,111 +200,114 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [mode]);
 
   return (
-    <FormWrapper
-      dirty={dirty}
-      initialValues={initialValues}
-      resetForm={resetForm}
-    >
-      <ScrollToError
-        isSubmitting={isSubmitting}
-        isValidating={isValidating}
-        errors={errors}
-      />
-      <PromptIfDirty
+    <>
+      <FormWrapper
         dirty={dirty}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-      />
-      <DocumentTypeSelect
-        outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
-        isDisabled={isDisabledInput}
-        {...{
-          type,
-          isDocRevStatusDraft,
-          documentTypeId,
-        }}
-      />
-      <DocIdInput
-        document={values.document}
-        {...{
-          isDisabled,
-          documentTypesById,
-          setDocId,
-          documentTypeId,
-          type,
-        }}
-      />
-      {isEB && <FBEBPart name="childrenParts" />}
-      {isPart && documentRevision?.parentParts && (
-        <BuildsContainer
-          dataProp={flatten([documentRevision?.parentParts])}
-          label="common.part.of"
-          isDraft={isDocRevStatusDraft || isRevised}
+        initialValues={initialValues}
+        resetForm={resetForm}
+      >
+        <ScrollToError
+          isSubmitting={isSubmitting}
+          isValidating={isValidating}
+          errors={errors}
         />
-      )}
-      {isEB && documentRevision?.parent && (
-        <BuildsContainer
-          dataProp={flatten([documentRevision.parent])}
-          label="common.previous.build"
-          docRevId={docRevId}
-          showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
-          isDraft={isDocRevStatusDraft || isRevised}
+        <PromptIfDirty
+          dirty={dirty}
+
+          doNotPrompt={doNotPrompt}
+
+          onDirtyFlagChange={onDirtyFlagChange}
         />
-      )}
-      {isEB && documentRevision?.children && (
-        <BuildsContainer
-          dataProp={documentRevision.children}
-          label="common.next.build"
-          isDraft={isDocRevStatusDraft || isRevised}
-        />
-      )}
-      {/* hack for rerender revision stage */}
-      <Observer>
-        {() => (
-          <>
-            {_documentRevisionFormState?.forceRender &&
-          <RevisionStage {...{
-            isDisabled,
-            isDocRevFirstDraft,
-            shouldShowRevStageForDocType,
+        <DocumentTypeSelect
+          outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
+          isDisabled={isDisabledInput}
+          {...{
+            type,
+            isDocRevStatusDraft,
             documentTypeId,
-            defaultRevisionStage,
-          }}/>}
-            {!_documentRevisionFormState?.forceRender &&
-          <RevisionStage {...{
+          }}
+        />
+        <DocIdInput
+          document={values.document}
+          {...{
             isDisabled,
-            isDocRevFirstDraft,
-            shouldShowRevStageForDocType,
+            documentTypesById,
+            setDocId,
             documentTypeId,
-            defaultRevisionStage,
-          }}/>}
-          </>
+            type,
+          }}
+        />
+        {isEB && <FBEBPart name="childrenParts" />}
+        {isPart && documentRevision?.parentParts && (
+          <BuildsContainer
+            dataProp={flatten([documentRevision?.parentParts])}
+            label="common.part.of"
+            isDraft={isDocRevStatusDraft || isRevised}
+          />
         )}
-      </Observer>
-      {type === "none" && <AvailableReferencesField
-        availableReferences={availableReferences}
-        documentReferences={documentReferences}
-        name="referenceTo"
-        label="documentRevision.form.references"
-        disabled={isDisabledInput}
-        documentGroupOptions={groupOptions}
-      />}
-      <RetrainField
-        revisionChangeType={values.revisionChangeType}
-        isDisabled={isDisabledInput}
-        {...{ documentTypeId, isRecord }}
-      />
-      <AttachmentsField
-        isDisabled={isDisabledInput}
-        isNewVersion={isNewVersion}
-        docRevId = {docRevId}
-        isAttachmentEmpty = {isAttachmentEmpty}
-        containsRedline = {false}
-        docRevStatus = {documentRevision?.status}
-        documentRevision={documentRevision}
-        documentTypeId={documentTypeId || ""}
-      />
-      {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
+        {isEB && documentRevision?.parent && (
+          <BuildsContainer
+            dataProp={flatten([documentRevision.parent])}
+            label="common.previous.build"
+            docRevId={docRevId}
+            showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
+            isDraft={isDocRevStatusDraft || isRevised}
+          />
+        )}
+        {isEB && documentRevision?.children && (
+          <BuildsContainer
+            dataProp={documentRevision.children}
+            label="common.next.build"
+            isDraft={isDocRevStatusDraft || isRevised}
+          />
+        )}
+        {/* hack for rerender revision stage */}
+        <Observer>
+          {() => (
+            <>
+              {_documentRevisionFormState?.forceRender &&
+          <RevisionStage {...{
+            isDisabled,
+            isDocRevFirstDraft,
+            shouldShowRevStageForDocType,
+            documentTypeId,
+            defaultRevisionStage,
+          }}/>}
+              {!_documentRevisionFormState?.forceRender &&
+          <RevisionStage {...{
+            isDisabled,
+            isDocRevFirstDraft,
+            shouldShowRevStageForDocType,
+            documentTypeId,
+            defaultRevisionStage,
+          }}/>}
+            </>
+          )}
+        </Observer>
+        {type === "none" && <AvailableReferencesField
+          availableReferences={availableReferences}
+          documentReferences={documentReferences}
+          name="referenceTo"
+          label="documentRevision.form.references"
+          disabled={isDisabledInput}
+          documentGroupOptions={groupOptions}
+        />}
+        <RetrainField
+          revisionChangeType={values.revisionChangeType}
+          isDisabled={isDisabledInput}
+          {...{ documentTypeId, isRecord }}
+        />
+        <AttachmentsField
+          isDisabled={isDisabledInput}
+          isNewVersion={isNewVersion}
+          docRevId = {docRevId}
+          isAttachmentEmpty = {isAttachmentEmpty}
+          containsRedline = {false}
+          docRevStatus = {documentRevision?.status}
+          documentRevision={documentRevision}
+          documentTypeId={documentTypeId || ""}
+        />
+        {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
         <RevisionTypeChange
           isDisabled={isDisabledInput}
           {...{
@@ -318,12 +319,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isAlphaReleased,
           }}
         />
-      }
-      {
-        (!values.status || type === "newOutput") &&
+        }
+        {
+          (!values.status || type === "newOutput") &&
           <DocumentSecurity documentTypeId={documentTypeId} />
-      }
-      {
+        }
+        {
           _formState?.active && _formState.mode === "design" && hasOutput &&
           <FBActiveNoOutput
             docRevId={initialValues.id}
@@ -332,8 +333,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDisabled={isDisabledInput}
             outputDocs={values.outputDocumentTypes as OptionType[]}
           />
-      }
-      {
+        }
+        {
           _formState?.active &&
           <Box>
             {
@@ -343,9 +344,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </Box>
             }
           </Box>
-      }
-    </FormWrapper>
+        }
+      </FormWrapper>
+    </>
   );
 };
 
-export default (observer(DocumentRevisionFormPresenter));
+export default observer(DocumentRevisionFormPresenter);
