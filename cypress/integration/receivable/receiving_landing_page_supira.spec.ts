@@ -6,6 +6,7 @@ import moment from "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -21,8 +22,10 @@ let initialArDocument;
 let createdPOFormDocument;
 let createdPartDocument;
 let createdPartDocument2;
+let createdPartDocument3;
 let createdPODocument;
 let createdPODocument2;
+let createdPODocument3;
 let createdSupplierFormDocument;
 let createdSupplierDocument;
 let receivableForm;
@@ -298,7 +301,47 @@ context("Test Supplier Landing Page for Supira", () => {
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
             }).then(() => {
-              done();
+              cy.drCreateDocumentRevision({
+                payload: {
+                  attachments: [],
+                  description: "<p>Part third document</p>",
+                  document: {
+                    docId: "PRT-00007",
+                    documentType: {
+                      id: partDocumentType[0].id,
+                    },
+                    securityList: {
+                      operators: [],
+                      securityEmployees: [],
+                      securityGroups: [
+                        {
+                          id: group.body[0].id,
+                        },
+                      ],
+                    },
+                  },
+                  name: "Part third document",
+                  referenceTo: [],
+                  retrain: false,
+                  revisionChangeType: RevisionChangeType.NextRevision,
+                  revisionStage: 1,
+                },
+                employeeId: adminEmployee.id as unknown as string,
+                sessionId: loginResponse.sessionId as unknown as string,
+              }).then((response) => {
+                createdPartDocument3 = response;
+                cy.drAPIApproveAndRelease({
+                  documentId: createdPartDocument3.id,
+                  payload: {
+                    effectiveDate: (new Date()).toISOString(),
+                    documentType: { id: approvalRequestDocumentType[0].id },
+                    formDocument: { id: initialArDocument[0].id },
+                    approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                  },
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                }).then(( ) => { done(); });
+              });
             });
           });
         });
@@ -656,6 +699,92 @@ context("Test Supplier Landing Page for Supira", () => {
       });
     });
 
+    it("[API]Create PO3", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>PO for receiving 3</p>",
+          document: {
+            docId: "POT-00003",
+            documentType: {
+              id: purchaseOrderDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          formDocument: {
+            id: createdPOFormDocument.id,
+          },
+          name: "",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formInput: {
+            "po-items-built-in": {
+              tax: "0.00",
+              taxRate: 9.25,
+              subTotal: "2100.00",
+              totalAmount: "2100.00",
+              shippingCost: "0.00",
+              currency: "USD",
+              exchangeRate: 1,
+              totalInUSD: "2100.00",
+              dateOfExchangeRate: "",
+              items: [
+                {
+                  type: "product",
+                  partNumberTitle: "Part document",
+                  partNumberDocId: "PRT-00007 - 1",
+                  partNumber: createdPartDocument3.id,
+                  order: 200,
+                  units: "each",
+                  unitPrice: 5,
+                  date: todaysDate,
+                  id: "l1or09um",
+                  received: 0,
+                  totalAmount: "1000.00",
+                  formattedDate: todaysDateFormated,
+                  index: 0,
+                },
+              ],
+            },
+            "fb-po-approvals": [
+              adminEmployee.id,
+            ],
+            "po-status-built-in": "Open",
+            "po-requestor-autocomplete": adminEmployee.id,
+            "po-order-date": todaysDate,
+            "po-supplier-built-in": createdSupplierDocument.id,
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPODocument3 = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPODocument3.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
     it("[API] Create receivable form", () => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
@@ -928,7 +1057,7 @@ context("Test Supplier Landing Page for Supira", () => {
             id: receivableForm.id,
           },
           formInput: {
-            "receive-po-kzqkr5yl": { id: createdPODocument2.id },
+            "receive-po-kzqkr5yl": { id: createdPODocument3.id },
             "fb-approvals-fb-approvals-kzqkpxqm": [],
           },
         },
@@ -953,7 +1082,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
   });
 
-  context("Verify Supplier landing page", () => {
+  context("Verify Receiving landing page", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
@@ -1047,32 +1176,187 @@ context("Test Supplier Landing Page for Supira", () => {
     //   });
     // });
 
-    context("Verify sort for each column", () => {
-      COLUMN_HEADERS.forEach( (columnHeader, i) => {
-        context(`Sort '${columnHeader}'`, () => {
-          const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
+    // context("Verify sort for each column", () => {
+    //   COLUMN_HEADERS.forEach( (columnHeader, i) => {
+    //     context(`Sort '${columnHeader}'`, () => {
+    //       const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-          it(`${columnHeader} should be in ascending order`, () => {
-            cy.contains(columnHeaderRegex).eq(0).arrowClick();
-            cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
-              .should("be.exist");
-            cy.wait(200);
-            cy.verifyAscSort({ index: i, colLength: 8 });
-          });
+    //       it(`${columnHeader} should be in ascending order`, () => {
+    //         cy.contains(columnHeaderRegex).eq(0).arrowClick();
+    //         cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+    //           .should("be.exist");
+    //         cy.wait(200);
+    //         cy.verifyAscSort({ index: i, colLength: 8 });
+    //       });
 
-          it(`${columnHeader} should be in descending order`, () => {
-            cy.contains(columnHeaderRegex).eq(0).arrowClick();
-            cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
-              .should("be.exist");
-            cy.wait(200);
-            cy.verifyDesSort({ index: i, colLength: 8 });
-          });
-        });
+    //       it(`${columnHeader} should be in descending order`, () => {
+    //         cy.contains(columnHeaderRegex).eq(0).arrowClick();
+    //         cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+    //           .should("be.exist");
+    //         cy.wait(200);
+    //         cy.verifyDesSort({ index: i, colLength: 8 });
+    //       });
+    //     });
+    //   });
+    // });
+
+    // it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
+    //   cy.get(`button[data-cy="clearFilter"]`).should("exist");
+    //   cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+    // });
+  });
+
+  context("Create receiving document", () => {
+    it("Create new record button click", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.equipClickCreateNew();
       });
     });
 
-    it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
-      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+    it("Search for API PO document and select it", () => {
+      cy.get("[data-cy='porec-receive-po-kzqkr5yl']").arrowClick();
+      cy.get("ul>li[role=option]").contains("PO for receiving").arrowClick();
+    });
+
+    it("Verify requester is present on receivable", () => {
+      cy.get("input[data-cy^=\"po-requestor-autocomplete\"]")
+        .should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
+    });
+
+    it("Verify supplier is present on receivable", () => {
+      cy.get("input[data-cy^=\"po-supplier-built-in\"]")
+        .should("have.attr", "value", "SUP-00001 - rev 1 - API Supplier Document");
+    });
+
+    it("Verify PO table is present on receivable", () => {
+      cy.get("div[name=\"po-items-built-in\"]>table").should("exist");
+    });
+
+    it("Save receivable", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Verify PART NUMBER/REV when RELEASED", () => {
+    it("Navigate to Receivable landing page", () => {
+      cy.navigToReceivableList();
+    });
+
+    it("Filter Receipt ID column", () => {
+      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="7"] input`).arrowType("PRT-00005 - 1");
+    });
+
+    it("Verify value of PART NUMBER/REV value", () => {
+      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+    });
+
+    it("Navigate to created one", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Turn off auto save", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      });
+    });
+
+    it("Save PO", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Verify PART NUMBER/REV when REVISED", () => {
+    it("Navigate to Receivable landing page", () => {
+      cy.navigToReceivableList();
+    });
+
+    it("Verify value of PART NUMBER/REV value", () => {
+      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+    });
+
+    it("Navigate to created one", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Revise RC", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Navigate to Receivable landing page", () => {
+      cy.navigToReceivableList();
+    });
+
+    it("Verify value of PART NUMBER/REV value", () => {
+      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+    });
+
+    it("Verify export button exists", () => {
+      cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+    });
+  });
+
+  context("Verify PART NUMBER/REV when Released new one", () => {
+    it("Navigate to created one", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      });
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Navigate to Receivable landing page", () => {
+      cy.navigToReceivableList();
+    });
+
+    it("Verify value of PART NUMBER/REV value", () => {
+      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+    });
+
+    it("Clear filters & Verify export button exists", () => {
+      cy.dlClearFilters();
       cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
     });
   });
