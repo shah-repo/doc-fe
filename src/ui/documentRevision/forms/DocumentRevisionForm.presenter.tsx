@@ -1,12 +1,12 @@
 import { Box } from "@material-ui/core";
-import { FormikProps, useFormikContext } from "formik";
-import { flatten, isEmpty, isEqual } from "lodash";
+import { FormikProps } from "formik";
+import { flatten, isEmpty } from "lodash";
 import { Observer, observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { SM } from "../../../App";
-import { SessionTimeoutService } from "../../../common/utils/sessionTimeout";
+import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -14,12 +14,9 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
-import SessionTimer from "../../components/forms/SessionTimer";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
-import useDialog from "../../hooks/useDialog";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -38,8 +35,8 @@ import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
 
 interface Props
-  extends FormikProps<DocumentRevisionFormValues>,
-  RouteComponentProps {
+  extends FormikProps<DocumentRevisionFormValues>
+{
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
@@ -57,9 +54,8 @@ interface Props
   redlineActive: boolean;
   lastSavedTimestamp?: string;
   mode: FBWorkspaceMode;
-  isDisabled: boolean;
-  email: string;
-  isOwner: boolean;
+  doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -84,25 +80,17 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   releasedDocRev,
   redlineActive,
   bannerPortal,
-  isDisabled,
-  isOwner,
   mode,
-  history,
+  doNotPrompt,
+  onDirtyFlagChange,
 }) => {
   useScrollIntoView();
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const intl = useIntl();
-  const formik = useFormikContext();
-  const sessionDialog = useDialog();
-  const sessionService = SessionTimeoutService.getInstance();
-  const timeoutCallback = () => {
-    sessionDialog.open();
-  };
-  const { workspaceState, formState } = FB.useStores();
+  const { workspaceState } = FB.useStores();
   const { revisionChangeType } = values || {};
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
   const { schema = [] } =  workspaceState || {};
-  const isFormDirty = !isEqual(workspaceState?.formInput || {}, formState?.getValues()) || formik.dirty;
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,8 +115,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
-
-
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
+  const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
@@ -140,14 +129,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const documentReferences = documentRevision?.referenceTo;
-
-  useEffect(() => {
-    sessionService.setTimeoutCallback(timeoutCallback);
-    return () => {
-      sessionService.stopSessionTimer();
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -220,7 +201,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <SessionTimer {...{ sessionDialog, isFormDirty }}/>
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
@@ -232,21 +212,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           errors={errors}
         />
         <PromptIfDirty
-          when={true}
-          navigate={(path) => {
-            history.push(path);
-          }}
-          shouldBlockNavigation={() => {
-            const isFormInputDirty = !isEqual(workspaceState?.formInput || {}, formState?.getValues());
-            const isSchemaDirty = !isEqual(workspaceState?.schema || [], values?.formTemplate?.schema || []);
-            const isDocCreating = (history.location.pathname) as unknown as string === DOCUMENT_REVISION_CREATE_URL;
+          dirty={dirty}
 
-            if ((formik.dirty || isFormInputDirty || isSchemaDirty) && !isDocCreating) {
-              return true;
-            }
-            return false;
-          }}
-          isAR={false}
+          doNotPrompt={doNotPrompt}
+
+          onDirtyFlagChange={onDirtyFlagChange}
         />
         <DocumentTypeSelect
           outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
@@ -380,4 +350,4 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withRouter(observer(DocumentRevisionFormPresenter));
+export default observer(DocumentRevisionFormPresenter);

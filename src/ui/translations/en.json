@@ -426,7 +426,6 @@
   "common.select.all": "Select All",
   "common.minimize": "Minimize",
   "common.maximize": "Maximize",
-  "common.load.more": "Load More",
   "common.due.by.date": "Due by: {date}",
   "common.items.count": "{count} items",
   "common.leave": "Leave",
@@ -592,11 +591,6 @@
   "document.revision.enter.file.name": "Enter a file name",
   "document.revision.inspection": "Inspection",
   "document.revision.fai": "FAI",
-  "document.revision.unsaved.changes.alert": "Your data won’t be saved if you leave this page. Save your data?",
-  "document.revision.unsaved.changes.title": "You need to save first",
-  "document.revision.session.unsaved.changes.alert": "You haven’t been saving your work in awhile. You’ll be automatically logged off in 2 minutes.Want to extend your session?",
-  "document.revision.session.unsaved.changes.title": "Session ending warning",
-  "document.revision.session.unsaved.save.work": "Save your work?",
   "document.revision.bulkCreate.download.excelTemplate": "Excel Template Successfully Downloaded. Please open downloaded Excel Template and populate data. Then Upload to Import Data",
   "page.title.changeRequest": "Approval Request List",
   "page.title.documentList": "Document List",
@@ -1300,5 +1294,6 @@
   "tabId.documents": "Documents",
   "tabId.changedetails": "Change Details",
   "tabId.general": "General",
-  "tabId.training": "Training"
+  "tabId.training": "Training",
+  "common.load.more": "Load More"
 }
