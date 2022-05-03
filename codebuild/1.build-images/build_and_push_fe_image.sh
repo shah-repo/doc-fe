@@ -25,7 +25,7 @@ DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
 
 CACHE_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:fe_latest
 
-docker pull $CACHE_IMAGE 2>&1
+docker pull $CACHE_IMAGE || true
 
 docker build \
   --cache-from $CACHE_IMAGE \
@@ -51,7 +51,7 @@ docker build \
   --build-arg REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT \
    .
 
-docker rmi $CACHE_IMAGE 2>&1
+docker rmi $CACHE_IMAGE || true
 docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH} $CACHE_IMAGE
 docker push $CACHE_IMAGE
 
