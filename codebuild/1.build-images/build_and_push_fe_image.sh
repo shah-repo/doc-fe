@@ -51,7 +51,6 @@ docker build \
   --build-arg REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT \
    .
 
-
 docker rmi $CACHE_IMAGE || true
 docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH} $CACHE_IMAGE
 docker push $CACHE_IMAGE
