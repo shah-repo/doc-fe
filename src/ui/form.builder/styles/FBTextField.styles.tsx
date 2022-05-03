@@ -3,17 +3,17 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const FBTextFieldStyles = makeStyles(() =>
   createStyles({
-    textfield: {
-      "height": 40,
+    textfield: (rows?) => ({
+      "height": rows && rows.rows > 1 ? (rows.rows * 40) : 40,
       "borderRadius": 3,
-      "background": Colors.red,
       "& .MuiOutlinedInput-root": {
         "height": 40,
         "fontFamily": "Sora",
         "fontWeight": 400,
         "fontSize": 14,
         "&.MuiInputBase-multiline": {
-          height: "122px",
+          height: 122,
+          padding: 0,
         },
         "& fieldset": {
           borderColor: Colors.light_gray_border,
@@ -23,7 +23,7 @@ export const FBTextFieldStyles = makeStyles(() =>
       "& .MuiOutlinedInput-input": {
         padding: "13px",
       },
-    },
+    }),
     error: {
       "& .Mui-error": {
         fontSize: 11,

@@ -25,7 +25,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   ...props
 }) =>
 {
-  const classes = FBTextFieldStyles();
+  const classes = FBTextFieldStyles({ rows });
   className = className ? className : classes.textfield;
   return (
     <FBInput {...props} {...{ error, defaultValue }} type={inputType as FBInputType} labelProps={FBFontStyle.labelProps}>
