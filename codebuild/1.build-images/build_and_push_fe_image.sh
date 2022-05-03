@@ -23,7 +23,12 @@ set +a
 IMAGE=fe_${FE_GIT_COMMIT_HASH}
 DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
 
+CACHE_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:fe_latest
+
+docker pull $CACHE_IMAGE || true
+
 docker build \
+  --cache-from $CACHE_IMAGE
   -f ./docker/cypress_web.Dockerfile \
   -t enlil_cypress_web:${FE_GIT_COMMIT_HASH} \
   --build-arg BUILDKIT_INLINE_CACHE=1 \
@@ -45,6 +50,10 @@ docker build \
   --build-arg REACT_APP_CONSOLE_TOAST \
   --build-arg REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT \
    .
+
+docker rmi $CACHE_IMAGE
+docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH} $CACHE_IMAGE
+docker push $CACHE_IMAGE
 
 docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH} $DOCKER_IMAGE
 docker push $DOCKER_IMAGE
