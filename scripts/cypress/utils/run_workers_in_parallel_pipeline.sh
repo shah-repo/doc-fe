@@ -12,7 +12,7 @@ export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 
 function prepend() { while read line; do echo "Worker ${1} | $(date --iso-8601=seconds) | ${line}"; done; }
 function runNode() { 
-  ./scripts/cypress/utils/run_node_pipeline.sh 2>/dev/null | prepend "${1} | " | tee -a $ENLIL_WORKER_LOG_FILE 2>/dev/null || true
+  ./scripts/cypress/utils/run_node_pipeline.sh 2>/dev/null | prepend "${1}" | tee -a $ENLIL_WORKER_LOG_FILE 2>/dev/null || true
  }
 
 for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
