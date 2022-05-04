@@ -1,8 +1,11 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { Categories } from "../../utils/constants/categories";
+import { FormOperatorsType } from "../../utils/constants/documentTypes/form";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -38,17 +41,12 @@ context("Document Operators Access Test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Form Operators",
-                documentTypeAcronym: "FO-",
-                group: "FORM",
-                isQms: true,
-              },
+              FormOperatorsType,
               {
                 documentTypeName: "Engineering Build Operators",
                 documentTypeAcronym: "EBO-",
-                group: "ENGINEERING_BUILD",
-                category: "Record",
+                group: DOC_TYPE_GROUP.ENGINEERING_BUILD,
+                category: Categories.Record,
                 isQms: true,
                 fieldsConfig:
                   {
@@ -62,10 +60,10 @@ context("Document Operators Access Test", () => {
               {
                 documentTypeName: "Part Operators",
                 documentTypeAcronym: "PRT-",
-                group: "PART",
+                group: DOC_TYPE_GROUP.PART,
                 isQms: true,
                 needsSignature: true,
-                category: "Parts",
+                category: Categories.Parts,
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,

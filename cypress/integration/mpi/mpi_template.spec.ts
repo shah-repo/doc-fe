@@ -5,6 +5,9 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
+import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
+import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -47,78 +50,11 @@ context("Mpi Template", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Lot History Record Test",
-                documentTypeAcronym: "LHR-",
-                group: "LHR",
-                privateNumberPool: false,
-                needsSignature: true,
-                category: "Lhr",
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                  },
-                  D: {
-                    visible: false,
-                  },
-                  E: {
-                    visible: false,
-                  },
-                  U: {
-                    visible: true,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
+                ...LotHistoryRecordTest,
                 schema: [],
               },
-              {
-                documentTypeName: "Manufacturing Process Instructions Test",
-                documentTypeAcronym: "PI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 5,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
-              {
-                documentTypeName: "LHR template",
-                documentTypeAcronym: "LHRT-",
-                group: "FORM",
-              },
+              MPITest,
+              LHRTTest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {

@@ -1,7 +1,6 @@
 import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React, { useEffect } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
@@ -18,8 +17,7 @@ import styles from "./AssessmentForm.styles";
 
 interface Props
   extends WithStyles<typeof styles>,
-  FormikProps<ChangeRequestFormValues>,
-  RouteComponentProps {
+  FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
@@ -40,10 +38,11 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   values,
   FBContainer,
-  history,
+  doNotPrompt,
 }) => {
   const formContext = useFormContext();
   const didMount = useDidMount();
+
   formIdContext = React.createContext<string | undefined>(
     values.formDocument?.id,
   );
@@ -69,17 +68,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           errors={errors}
         />
         <PromptIfDirty
-          when={dirty}
-          navigate={(path) => {
-            history.push(path);
-          }}
-          shouldBlockNavigation={() => {
-            if (dirty && changeRequest) {
-              return true;
-            }
-            return false;
-          }}
-          isAR
+          dirty={dirty}
+          doNotPrompt={doNotPrompt}
         />
         <Box>
           <InputField
@@ -101,4 +91,4 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withRouter(withStyles(styles)(AssessmentFormPresenter));
+export default withStyles(styles)(AssessmentFormPresenter);

@@ -8,6 +8,8 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -63,19 +65,8 @@ context("Document list test", () => {
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-              },
+              ClinicalProtocolNotRedline,
+              RecordDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -769,7 +760,16 @@ context("Document list test", () => {
 
     context("Create new record without inline approval form and check if they are in alpha revision", () => {
       it("Select 'Approval Record' form", () => {
-        cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document", recordForm: "Approval Record" });
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.DocPreview,
+          CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+          cy.get("div[id^=react-select]").contains("Record Document").arrowClick();
+          cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowType("Record");
+          cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").contains("Approval Record").arrowClick();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if revision is in alpha revision stage", () => {
