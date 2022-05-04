@@ -31,12 +31,14 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
           <Box mb={3.75}>
             {isTitleVisible && (
               <CustomLabelTooltip {...{ tooltipConfig }}>
-                <SummaryField label={titleLabel} value={name} labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
+                <SummaryField label={titleLabel} value={name} labelProps={AutoCompleteStyles.labelProps}
+                  labelFont={AutoCompleteStyles.labelFont} />
               </CustomLabelTooltip>
             )}
           </Box>
           {isDescriptionVisible && (
-            <SummaryFieldWithHtml label={descriptionLabel} value={description} labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
+            <SummaryFieldWithHtml label={descriptionLabel} value={description}
+              labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
           )}
         </Box>
       </Collapse>

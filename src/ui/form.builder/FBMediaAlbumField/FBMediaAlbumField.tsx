@@ -22,7 +22,8 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   gutter,
 }) => (
   <FBProvider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
-    <FBInput {...{ name, label, gutter, index, editorConfig, autosave }} type="mediaalbum" labelProps={FBFontStyle.labelProps}>
+    <FBInput {...{ name, label, gutter, index, editorConfig, autosave }}
+      type="mediaalbum" labelProps={FBFontStyle.labelProps}>
       {mode !== "qr" && (
         <FBMediaAlbum {...{
           collection,

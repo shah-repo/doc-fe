@@ -31,7 +31,8 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
 }) => {
   const { submitForm } = useFormContext();
   return (
-    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} labelProps={labelProps} inputLabelProps={{ shrink: true }} >
+    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps}
+      labelProps={labelProps} inputLabelProps={{ shrink: true }} >
       <MuiInput
         required={false}
         inputProps={{ "data-lpignore": lpignore, "data-cy": dataCy }}

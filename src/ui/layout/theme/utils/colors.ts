@@ -29,6 +29,7 @@ enum Colors {
   athens_gray= "#F5F6F8",
   link_water = "#ccd4d9",
   platinum_grey = "#E2E2E2",
+  cultured="#f6f7f7",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",

@@ -16,7 +16,8 @@ type RadioButtonProps = RadioButtonOwnProps;
 
 const RadioButton: React.FunctionComponent<RadioButtonProps> = ({ radioButton, ...formControlLabelProps }) => (
   <FormControlLabel
-    control={<MuiRadio color="primary" icon={<UnCheckedRadioIcon />} checkedIcon={<CheckedRadioIcon />} {...radioButton} />}
+    control={<MuiRadio color="primary" icon={<UnCheckedRadioIcon />}
+      checkedIcon={<CheckedRadioIcon />} {...radioButton} />}
     {...formControlLabelProps}
   />
 );

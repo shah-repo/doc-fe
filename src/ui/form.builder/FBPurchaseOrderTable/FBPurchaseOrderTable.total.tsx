@@ -141,11 +141,13 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       <TableRow>
         <FBTableCell label="form.builder.total" align="right"
           colSpan={3}
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow} ${cellStyle.cellBackground}`}
+          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} 
+            ${cellStyle.cellFontWeightLow} ${cellStyle.cellBackground}`}
         />
         <FBTableCell
           colSpan={2} data-cy="poTotal"
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow} ${cellStyle.cellBackground}`}
+          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} 
+            ${cellStyle.cellFontWeightLow} ${cellStyle.cellBackground}`}
         >
           <FormattedNumber
             value={Number(calculation?.totalAmount)}

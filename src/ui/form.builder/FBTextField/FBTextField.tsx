@@ -28,7 +28,8 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   const classes = FBTextFieldStyles({ rows });
   className = className ? className : classes.textfield;
   return (
-    <FBInput {...props} {...{ error, defaultValue }} type={inputType as FBInputType} labelProps={FBFontStyle.labelProps}>
+    <FBInput {...props} {...{ error, defaultValue }}
+      type={inputType as FBInputType} labelProps={FBFontStyle.labelProps}>
       {mode === "preview" && (
         <Box>{defaultValue}</Box>
       )}
