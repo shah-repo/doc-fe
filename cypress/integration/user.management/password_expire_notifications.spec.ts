@@ -399,8 +399,7 @@ context("Password expire flow", () => {
           },
           {
             sentToUser: emailOfUserToSignUp,
-            contains: [`Password Updated Successfully!`,
-              passExpiresInFiveDays],
+            contains: [`Your password was successfully updated!`],
           },
         ];
 
