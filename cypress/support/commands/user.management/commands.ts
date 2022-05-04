@@ -20,9 +20,34 @@ declare global {
       usrCheckIfUserIsCreated(params: {email: string}): Chainable;
       authLoginWithInvalidPassword(params: { email: string; password: string }): Chainable<Subject>;
       usrAddGroupNewUser(params: {group: string}): Chainable;
+      usrVerifyUserLockedPageIsPresented(): Chainable;
+      usrClickForgotPasswordLoginPage(): Chainable;
+      usrNavigateToLoginPage(): Chainable;
+      usrForgotPageEnterEmail(params: { email: string}): Chainable;
+      usrClickResetMyPasswordButton(): Chainable;
     }
   }
 }
+
+Cypress.Commands.add("usrClickResetMyPasswordButton", () => {
+  cy.get("#ForgotPasswordPage-submitNewPassword").arrowClick();
+});
+
+Cypress.Commands.add("usrForgotPageEnterEmail", (params: { email: string}) => {
+  cy.get("input[name=email]").arrowType(params.email);
+});
+
+Cypress.Commands.add("usrNavigateToLoginPage", () => {
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
+});
+
+Cypress.Commands.add("usrClickForgotPasswordLoginPage", () => {
+  cy.get("#LoginFormPresenter-forgotLink").arrowClick();
+});
+
+Cypress.Commands.add("usrVerifyUserLockedPageIsPresented", () => {
+  cy.get(`div[data-cy="UserLocked-infoLink"]`).should("exist");
+});
 
 Cypress.Commands.add("usrNavigateToUserManagement", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {

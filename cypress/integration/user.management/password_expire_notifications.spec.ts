@@ -3,7 +3,9 @@
 
 import faker from "faker";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
+import { momentInPST } from "../../utils/constants/dateHandler";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -14,11 +16,19 @@ let adminLoginResponse;
 let adminSessionId;
 let asyncTasksGroup;
 let newEmployeId;
+let searchMailFromDate;
+let emailsFromInbox;
 const newPassword = "Tester123#!";
+const passExpiresInOneDay = momentInPST().add({ day: 1 }).format("MMM DD, YYYY");
+const passExpiresInTwoDays = momentInPST().add({ day: 2 }).format("MMM DD, YYYY");
+const passExpiresInThreeDays = momentInPST().add({ day: 3 }).format("MMM DD, YYYY");
+const passExpiresInFourDays = momentInPST().add({ day: 4 }).format("MMM DD, YYYY");
+const passExpiresInFiveDays = momentInPST().add({ day: 5 }).format("MMM DD, YYYY");
 
 const nameOfUserToSignUp = faker.name.findName();
 const emailOfUserToSignUp =
 `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLowerCase();
+const dateAfterEmailShouldArrive = new Date();
 
 context("Password expire flow", () => {
   context("[API]Prepare company", () => {
@@ -146,7 +156,7 @@ context("Password expire flow", () => {
       });
     });
 
-    context("Log out and sign in again", () => {
+    context("Relog to verify new user is able to login normally", () => {
       it("Logout", () => {
         cy.authLogout();
       });
@@ -157,7 +167,7 @@ context("Password expire flow", () => {
         });
       });
 
-      it("Verify user is loged in", () => {
+      it("Verify user is logged in", () => {
         cy.navigListExistsCheck(
           NavigationItems.DASHBOARD,
           NavigationItems.DOCUMENT_CONTROL);
@@ -255,8 +265,31 @@ context("Password expire flow", () => {
         });
 
         it("Verify user is locked page present on screen", () => {
-          cy.get(`div[data-cy="UserLocked-infoLink"]`).should("exist");
+          cy.usrVerifyUserLockedPageIsPresented();
         });
+      });
+    });
+
+    context("Verify locked user is not able to reset password with forgot password option", () => {
+      it("Navigate to login page", () => {
+        cy.usrNavigateToLoginPage();
+      });
+
+      it(`Click "Forgot your password?"`, () => {
+        cy.usrClickForgotPasswordLoginPage();
+      });
+
+      it("Enter locked user email in forgot password window", () => {
+        cy.usrForgotPageEnterEmail({ email: emailOfUserToSignUp });
+      });
+
+      it(`Click "RESET MY PASSWORD" button`, () => {
+        cy.usrClickResetMyPasswordButton();
+        searchMailFromDate =  new Date();
+      });
+
+      it("Verify no password reset email has arrived", () => {
+        cy.imapVerifyNoPasswordResetEmail({ userEmail: emailOfUserToSignUp, fromDate: searchMailFromDate });
       });
     });
 
@@ -271,7 +304,11 @@ context("Password expire flow", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
       });
 
-      it("click reset password for user", () => {
+      it("Navigate to user management", () => {
+        cy.usrNavigateToUserManagement();
+      });
+
+      it("Click reset password for user", () => {
         cy.usrFilterByEmail({ email: emailOfUserToSignUp });
         cy.contains("Reset Password").arrowClick();
         cy.wait(10000);
@@ -303,6 +340,92 @@ context("Password expire flow", () => {
 
       it("Verify user is loged in", () => {
         cy.navigListExistsCheck(NavigationItems.DASHBOARD, NavigationItems.DOCUMENT_CONTROL);
+      });
+    });
+
+    context("Verify emails that should be received", () => {
+      it("Get emails", () => {
+        const getEmailSetting =  {
+          to: emailOfUserToSignUp,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          wait_time_sec: 5,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          max_wait_time_sec: 50,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
+          after: dateAfterEmailShouldArrive,
+        };
+
+        cy.imapGetMails({ userEmail: emailOfUserToSignUp, options: getEmailSetting }).should((emails) => {
+          if (emails) {
+            emailsFromInbox = emails;
+          }
+          else {
+            assert.fail("No email found");
+          }
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: emailOfUserToSignUp,
+            contains: [`Your Password has expired:(`],
+          },
+          {
+            sentToUser: emailOfUserToSignUp,
+            contains: [`Password expiring?`,
+              passExpiresInOneDay],
+          },
+          {
+            sentToUser: emailOfUserToSignUp,
+            contains: [`Password expiring?`,
+              passExpiresInTwoDays],
+          },
+          {
+            sentToUser: emailOfUserToSignUp,
+            contains: [`Password expiring?`,
+              passExpiresInThreeDays],
+          },
+          {
+            sentToUser: emailOfUserToSignUp,
+            contains: [`Password expiring?`,
+              passExpiresInFourDays],
+          },
+          {
+            sentToUser: emailOfUserToSignUp,
+            contains: [`Password expiring?`,
+              passExpiresInFiveDays],
+          },
+          {
+            sentToUser: emailOfUserToSignUp,
+            contains: [`Password Updated Successfully!`,
+              passExpiresInFiveDays],
+          },
+        ];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+
+      it("Verify the emails that should not be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: emailOfUserToSignUp,
+            contains: ["Please click on the button to reset password"],
+          },
+        ];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 0,
+        });
       });
     });
   });
