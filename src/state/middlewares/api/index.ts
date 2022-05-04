@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { first, get, has, isArray, join } from "lodash";
-import { useIntl } from "react-intl";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
+import { intl } from "../../../common/intl";
 import { redirectTo } from "../../../common/redirectHandler";
 import { EXPORTED_FILE_DOWNLOAD, MAINTENANCE, STATUS, USER_LOCKED } from "../../../ui/constants/urls";
 import apiClient from "../../apiClient";
@@ -43,8 +43,6 @@ const apiMiddleware: Middleware = ({
     next(action);
     return;
   }
-
-  const intl = useIntl();
 
   dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Active);
 
