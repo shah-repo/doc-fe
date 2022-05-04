@@ -86,6 +86,7 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "21px",
       letterSpacing: "0.5px",
       color: Colors.font_gray,
+      overflowWrap: "anywhere",
     },
     dateText: {
       fontFamily: "Sora",
