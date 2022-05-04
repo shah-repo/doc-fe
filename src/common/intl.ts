@@ -1,11 +1,14 @@
 import { createIntl, createIntlCache } from "react-intl";
 import messagesEn from "./../ui/translations/en.json";
 
-export const messages = {
+const messages = {
   en: messagesEn,
 };
-export const language = "en";
+
+export const locale = "en";
+
+export const currentLocaleMessages = messages[locale];
 
 const cache = createIntlCache();
 
-export const intl = createIntl({ locale: language, messages: messages[language] }, cache);
+export const intl = createIntl({ locale, messages: currentLocaleMessages }, cache);
