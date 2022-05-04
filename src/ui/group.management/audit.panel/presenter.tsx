@@ -127,7 +127,13 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       {isLoading && <LinearProgress />}
       <Box width={300}>{renderAuditRecords()}</Box>
       {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
-      {showLoadMoreButton && <LoadMoreButton disable={isLoading || !loadMore} onLoadMore={fetchAuditRecords}  id="historyLoadMore" />}
+      {showLoadMoreButton && (
+        <LoadMoreButton
+          disable={isLoading || !loadMore}
+          onLoadMore={fetchAuditRecords}
+          id="historyLoadMore"
+        />
+      )}
     </Drawer>
   );
 };
