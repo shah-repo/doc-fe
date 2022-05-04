@@ -15,7 +15,7 @@ const RenderHtmlField: React.FunctionComponent<Props> = ({ isDisabled = false })
       label="common.renderHTML"
       inputProps={{ id: "RenderHTML", rows: 5, multiline: true, disabled: isDisabled }}
       inputStyleProps={classes.input}
-      labelProps={FBAutoCompleteStyles.labelProps}
+      labelProps={FBAutoCompleteStyles.labelStyle}
     />
   );
 };

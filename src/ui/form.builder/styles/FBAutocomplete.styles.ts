@@ -10,7 +10,13 @@ export const styles = {
     padding: "0 80px 0 6px",
   },
   labelProps: {
-    mb: 1.25,
+    marginBottom: 10,
+    fontFamily: "Sora",
+    fontWeight: 600,
+    fontSize: 12,
+    color: Colors.almost_black,
+  },
+  labelStyle: {
     fontFamily: "Sora",
     fontWeight: 600,
     fontSize: 12,

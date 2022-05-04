@@ -186,7 +186,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         validate={validators}
         includeEmpty={false}
         inputStyleProps={classes.input}
-        labelProps={FBAutoCompleteStyles.labelProps}
+        labelProps={FBAutoCompleteStyles.labelStyle}
       />
     </CustomLabelTooltip>
   );

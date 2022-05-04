@@ -15,8 +15,8 @@ import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
+import { styles as FBAutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useActionCreator from "../../../hooks/useActionCreator";
-import Colors from "../../../layout/theme/utils/colors";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 
@@ -43,12 +43,6 @@ const getReferenceValues = (
 
 const styles = makeStyles(() =>
   createStyles({
-    title: {
-      color: Colors.almost_black,
-      fontSize: "12px",
-      fontFamily: "Sora",
-      fontWeight: 600,
-    },
     component: {
       "& .MuiInputBase-root": {
         padding: 2,
@@ -198,11 +192,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={1.25}>
-        <Typography variant="h5" className={classes.title}>
+      <>
+        <Typography variant="h5" style={FBAutoCompleteStyles.labelProps}>
           <Text message={fieldProps.label} />
         </Typography>
-      </Box>
+      </>
       <Autocomplete
         {...{ onChange, disabled }}
         className={classes.component}
