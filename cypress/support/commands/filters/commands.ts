@@ -78,6 +78,7 @@ Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; e
 Cypress.Commands.add("filterEquipByOwnerAndLocation", (params: { location: string; owner: string }) => {
   cy.get(`th[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
   cy.get(`th[aria-colindex="9"] input`).arrowType(params.location).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
