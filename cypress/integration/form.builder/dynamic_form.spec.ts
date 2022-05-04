@@ -885,6 +885,16 @@ context("Dynamic Form Test", () => {
       cy.get("[data-cy*=\"new-text-field-2\"]").arrowType("Some text for Text field");
     });
 
+    it("Enters text inside 'fb-textfield'", () => {
+      cy.get("input[name*=\"fb-textfield\"]").arrowType("ABCD");
+      cy.unClick();
+    });
+
+    it("Select A in the Select field", () => {
+      cy.get(`[id*="mui-component-select-select-field"]`).arrowClick();
+      cy.get(`ul>li[role="option"]`).contains("B").arrowClick();
+    });
+
     it("Click create document after filling document", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
