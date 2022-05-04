@@ -41,6 +41,9 @@ declare global {
       fbInlineApprovalHisotryCheck(...list: string[]): Chainable<Subject>;
       fbSelectRadioButtonValue(params: { value: string }): Chainable<Subject>;
       fbSelectFieldValue(params: { value: string }): Chainable<Subject>;
+      fbSelectTextFieldRangeFromValue(params: { value: string }): Chainable<Subject>;
+      fbSelectTextFieldRangeToValue(params: { value: string }): Chainable<Subject>;
+      fbEnterTextEditor(params: { value: string }): Chainable<Subject>;
       fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
       fbEnterPlaceholder(params: { placeholder: string }): Chainable<Subject>;
       fbEnterLabel(params: { label: string }): Chainable<Subject>;
@@ -196,6 +199,20 @@ Cypress.Commands.add("fbSelectRadioButtonValue", (params: { value: string }) => 
 Cypress.Commands.add("fbSelectFieldValue", (params: { value: string }) => {
   cy.get("[id*=\"mui-component-select-select-field-for-inline\"]").arrowClick().wait(400);
   cy.get("ul>li[role=option]").contains(params.value).arrowClick();
+});
+
+Cypress.Commands.add("fbSelectTextFieldRangeFromValue", (params: { value: string }) => {
+  cy.get("[name=\"editorConfig.range.from\"]").arrowType(params.value).wait(400);
+});
+
+Cypress.Commands.add("fbSelectTextFieldRangeToValue", (params: { value: string }) => {
+  cy.get("[name=\"editorConfig.range.to\"]").arrowType(params.value).wait(400);
+});
+
+Cypress.Commands.add("fbEnterTextEditor", (params: { value: string }) => {
+  cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
+    .click({ force: true }).arrowType(params.value, { force: true });
+  cy.unClick();
 });
 
 Cypress.Commands.add("fbGroupOptions", (...list: string[]) => {
