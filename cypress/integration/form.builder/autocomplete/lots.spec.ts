@@ -1,7 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
 import "moment-timezone";
 import path from "path";
 import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
@@ -14,7 +13,6 @@ import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/
 import { Part } from "../../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
-
 
 let createdCompany;
 let loginResponse;
@@ -34,7 +32,8 @@ let tmpRegex;
 let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
-const lotsTitle = `Lots-${moment().format("X")}`;
+
+const lotsTitle = "Lots title";
 const PART_DOCUMENT_TYPE_NAME = "Part";
 
 context("Autocomplete 'Lots' test", () => {
@@ -166,8 +165,8 @@ context("Autocomplete 'Lots' test", () => {
         cy.cmpClickCreateNewDocument();
       });
 
-      it("Enter document title 'Lots title'", () => {
-        cy.drEnterDocumentTitle({ name: "Lots title" });
+      it(`Enter document title as ${lotsTitle}`, () => {
+        cy.drEnterDocumentTitle({ name: lotsTitle });
       });
 
       it("Enter document description 'Lots document description'", () => {
@@ -187,7 +186,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add Text field with range", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
         cy.fbEnterNameValue({ name: "label", value: "fb-range" });
         cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
@@ -199,7 +198,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add Radio Button group", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
         cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
         cy.fbGroupOptions("X", "Y", "Z");
@@ -209,7 +208,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add Text Editor", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
         cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
         cy.fbOpenValidation();
@@ -221,7 +220,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add Text Field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "fb-text-field" });
         cy.fbOpenValidation();
@@ -248,7 +247,7 @@ context("Autocomplete 'Lots' test", () => {
     context("Verify `Lots document` status and send email", () => {
       it("Verify form Draft status and click on Send To Email", () => {
         cy.drCheckDocumentStatus({ status: "Draft" });
-        cy.arCheckTitleInEditableAndMatches({ name: "Lots title" });
+        cy.arCheckTitleInEditableAndMatches({ name: lotsTitle });
         cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
           formId = $formIdElement.text();
         });
@@ -388,26 +387,30 @@ context("Autocomplete 'Lots' test", () => {
           expect(el).match(/Output Document Type\nComponent Specification Lot/);
 
           expect(el).match(/Attachments/);
-
           expect(el).match(/image.jpg/);
 
           expect(el).match(/Initial Quantity/);
-
-          expect(el).match(/fb-text-editor/);
-
-          expect(el).match(/fb-text-field/);
-
-          expect(el).match(/fb-radiobutton-group/);
-
-          expect(el).match(/fb-range\nAllowed Range: 0 - 10/);
-
-          expect(el).match(/Critical to quality/);
 
           expect(el).match(/Usable Quantity/);
 
           expect(el).match(/Expiration Date/);
 
           expect(el).match(/Part Selection/);
+
+          expect(el).match(/100% Inspection Override/);
+
+          expect(el).match(/fb-range\nAllowed Range: 0 - 10/);
+
+          expect(el).match(/Critical to quality/);
+
+          tmpRegex = new RegExp(`fb-radiobutton-group\n(.*)X(.*)Y(.*)Z`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/fb-text-editor/);
+
+          expect(el).match(/fb-text-field/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           expect(el).match(/Draft/);
 
@@ -429,10 +432,6 @@ context("Autocomplete 'Lots' test", () => {
         if (el.includes("Page 2 of 3")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
-
-          expect(el).match(/100% Inspection Override/);
-
-          expect(el).match(/APPROVALS\nApprovers/);
 
           expect(el).match(/Draft/);
 
@@ -487,7 +486,7 @@ context("Autocomplete 'Lots' test", () => {
     context("Verify `Lots document` status and send email", () => {
       it("Verify form Draft status and click on Send To Email", () => {
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.arCheckTitleInEditableAndMatches({ name: "Lots title" });
+        cy.arCheckTitleInEditableAndMatches({ name: lotsTitle });
         cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
           formId = $formIdElement.text();
         });
@@ -623,33 +622,38 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/AR ID\nAR-00002/);
+          tmpRegex = new RegExp( `AR ID\n${arId}`, "gi" );
+          expect(el).match(tmpRegex);
 
           expect(el).match(/Description\nLots document description/);
 
           expect(el).match(/Output Document Type\nComponent Specification Lot/);
 
           expect(el).match(/Attachments/);
-
           expect(el).match(/image.jpg/);
 
           expect(el).match(/Initial Quantity/);
-
-          expect(el).match(/fb-text-editor/);
-
-          expect(el).match(/fb-text-field/);
-
-          expect(el).match(/fb-radiobutton-group/);
-
-          expect(el).match(/fb-range\nAllowed Range: 0 - 10/);
-
-          expect(el).match(/Critical to quality/);
 
           expect(el).match(/Usable Quantity/);
 
           expect(el).match(/Expiration Date/);
 
           expect(el).match(/Part Selection/);
+
+          expect(el).match(/100% Inspection Override/);
+
+          expect(el).match(/fb-range\nAllowed Range: 0 - 10/);
+
+          expect(el).match(/Critical to quality/);
+
+          tmpRegex = new RegExp(`fb-radiobutton-group\n(.*)X(.*)Y(.*)Z`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/fb-text-editor/);
+
+          expect(el).match(/fb-text-field/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           expect(el).match(/Released/);
 
@@ -671,10 +675,6 @@ context("Autocomplete 'Lots' test", () => {
         if (el.includes("Page 2 of 3")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
-
-          expect(el).match(/100% Inspection Override/);
-
-          expect(el).match(/APPROVALS\nApprovers/);
 
           expect(el).match(/Released/);
 
@@ -741,15 +741,11 @@ context("Autocomplete 'Lots' test", () => {
         cy.drEnterDocumentTitle({ name: lotsTitle });
       });
 
-      it("Select 'Lots title' in references", () => {
-        cy.drSelectReferences( "Lots title" );
-      });
-
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
-      it("Enter Initial quantity", () => {
+      it("Enter quantity received", () => {
         cy.get("[name=\"lot_quantity\"]").arrowType("12");
       });
 
@@ -759,7 +755,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Enter Expiration date", () => {
         cy.get("input[name^=\"lot_expiry_date\"]").parent().find("button").arrowClick({ force: true });
-        cy.get(".MuiPickersDay-current").arrowClick();
+        cy.get(".MuiPickersDay-daySelected").arrowClick();
       });
 
       it("Select Part", () => {
@@ -778,7 +774,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.fbEnterTextEditor({ value: "Some text for Text editor" });
       });
 
-      it("Create 'Preventative maintenance document'", () => {
+      it("Create document", () => {
         cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
       });
 
@@ -796,7 +792,7 @@ context("Autocomplete 'Lots' test", () => {
       });
     });
 
-    context("Log out and login as Approver", () => {
+    context("Log out from the current user", () => {
       it("Log out", () => {
         cy.authLogout();
       });
@@ -824,7 +820,7 @@ context("Autocomplete 'Lots' test", () => {
       });
     });
 
-    context("Log out and login as Part_lot Owner", () => {
+    context("Log out from Approver", () => {
       it("Log out", () => {
         cy.authLogout();
       });
@@ -835,14 +831,12 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Selects company", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-        cy.pause();
       });
     });
 
     context("Open Lots document after rejection", () => {
       it("Navigate to Lots", () => {
         cy.navigToLots();
-        cy.pause();
       });
 
       it("Select lot document", () => {
@@ -942,7 +936,7 @@ context("Autocomplete 'Lots' test", () => {
             fileName: downloadFile,
           });
         const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-          `${formId.replace(" #", "-")}-A-${lotsTitle}.pdf`);
+          `${formId.replace(" #", "-")}-A-Lots-title.pdf`);
         cy.readFile(pdffile).its("length").should("be.gt", 500);
       });
 
@@ -958,7 +952,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.pdfparseFile(
           {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-            fileName: `${formId.replace(" #", "-")}-A-${lotsTitle}.pdf`,
+            fileName: `${formId.replace(" #", "-")}-A-Lots-title.pdf`,
           }).then((cdata) => {
           expect(cdata.numpages).eq(1);
           expect(cdata.text).match(/Page 1 of 1/);
@@ -979,29 +973,29 @@ context("Autocomplete 'Lots' test", () => {
           expect(el).match(tmpRegex);
 
           expect(el).match(/Attachments/);
-
           expect(el).match(/image.jpg/);
 
           expect(el).match(/Initial Quantity\n12/);
 
-          expect(el).match(/fb-text-editor\nSome text for Text editor/);
-
-          expect(el).match(/fb-radiobutton-group/);
-
-          expect(el).match(/fb-range\nNone\nAllowed Range: 0 - 10/);
-
-          expect(el).match(/Critical to quality/);
-
           expect(el).match(/Usable Quantity\n12/);
 
-          expect(el).match(/Expiration Date/);
+          tmpRegex = new RegExp(`Expiration Date\n${pdfFooterDate}`, "gi");
+          expect(el).match(tmpRegex);
 
           expect(el).match(/Part Selection\nPRT-00005 - 1 Part document/);
 
           expect(el).match(/100% Inspection Override/);
 
-          tmpRegex = new RegExp(`Text field`, "gi");
-          expect(el).not.match(tmpRegex);
+          expect(el).match(/fb-range\nNone\nAllowed Range: 0 - 10/);
+
+          expect(el).match(/Critical to quality/);
+
+          tmpRegex = new RegExp(`fb-radiobutton-group\n(.*)X(.*)Y(.*)Z`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/fb-text-editor\nSome text for Text editor/);
+
+          expect(el).not.match(/fb-text-field/);
 
           tmpRegex = new RegExp(`APPROVALS\n${USERS[2].name} - ${USERS[2].email} | DRAFT`, "gi");
           expect(el).match(tmpRegex);
@@ -1178,7 +1172,7 @@ context("Autocomplete 'Lots' test", () => {
             fileName: downloadFile,
           });
         const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-          `${formId.replace(" #", "-")}-A-${lotsTitle}.pdf`);
+          `${formId.replace(" #", "-")}-A-Lots-title.pdf`);
         cy.readFile(pdffile).its("length").should("be.gt", 500);
       });
 
@@ -1194,7 +1188,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.pdfparseFile(
           {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-            fileName: `${formId.replace(" #", "-")}-A-${lotsTitle}.pdf`,
+            fileName: `${formId.replace(" #", "-")}-A-Lots-title.pdf`,
           }).then((cdata) => {
           expect(cdata.numpages).eq(1);
           expect(cdata.text).match(/Page 1 of 1/);
@@ -1215,27 +1209,29 @@ context("Autocomplete 'Lots' test", () => {
           expect(el).match(tmpRegex);
 
           expect(el).match(/Attachments/);
-
           expect(el).match(/image.jpg/);
 
           expect(el).match(/Initial Quantity\n12/);
 
-          expect(el).match(/fb-text-editor\nSome text for Text editor/);
-
-          expect(el).match(/fb-radiobutton-group/);
-
-          expect(el).match(/fb-range\nNone\nAllowed Range: 0 - 10/);
-
-          expect(el).match(/Critical to quality/);
-
           expect(el).match(/Usable Quantity\n12/);
 
-          tmpRegex = new RegExp(`Expiration Date\n${pdfDocRelDate}`, "gi");
+          tmpRegex = new RegExp(`Expiration Date\n${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Part Selection\nPRT-00005 - 1 Part document/);
 
           expect(el).match(/100% Inspection Override/);
+
+          expect(el).match(/fb-range\nNone\nAllowed Range: 0 - 10/);
+
+          expect(el).match(/Critical to quality/);
+
+          tmpRegex = new RegExp(`fb-radiobutton-group\n(.*)X(.*)Y(.*)Z`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/fb-text-editor\nSome text for Text editor/);
+
+          expect(el).not.match(/fb-text-field/);
 
           tmpRegex = new RegExp(`APPROVALS\n${USERS[2].name} - ${USERS[2].email} | APPROVED | ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
