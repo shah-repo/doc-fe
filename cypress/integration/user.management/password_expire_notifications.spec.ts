@@ -88,7 +88,7 @@ context("Password expire flow", () => {
     });
   });
 
-  context("Login company admin", () => {
+  context("Test notifications for password expire", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
