@@ -23,6 +23,7 @@ declare global {
       filterEquipmentTitle(params: {name: string}): Chainable<Subject>;
       filterEquip(params: {docId: string; revision: string; eqState: string;
         title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }): Chainable<Subject>;
+      filterEquipByOwnerAndLocation(params: { location: string; owner: string }): Chainable<Subject>;
       filterRecordState(params: {state: string}): Chainable<Subject>;
       filterRecordVerifyRevisionFilter(params: {revision: string}): Chainable<Subject>;
     }
@@ -72,6 +73,12 @@ Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; e
   cy.get(`th[aria-colindex="6"] input`).arrowType(params.calDueDate).wait(500);
   cy.get(`th[aria-colindex="7"] input`).arrowType(params.pmDueDate).wait(500);
   cy.get(`th[aria-colindex="8"] input`).arrowType(params.eqStatus).wait(500);
+});
+
+Cypress.Commands.add("filterEquipByOwnerAndLocation", (params: { location: string; owner: string }) => {
+  cy.get(`th[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
+  cy.get(`th[aria-colindex="9"] input`).arrowType(params.location).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
