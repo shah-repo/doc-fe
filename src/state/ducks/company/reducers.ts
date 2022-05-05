@@ -28,9 +28,8 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   scheduledForDeletion: false,
 };
 
-// Autosave disable changes
 const AUTOSAVE_DEFAULT_STATE = {
-  autosaveEnabled: false,
+  autosaveEnabled: true,
 };
 
 const REDLINE_DEFAULT_STATE = {
@@ -111,9 +110,7 @@ const autosaveConfig = (
   switch (action.type) {
     case AUTOSAVE_CONFIG:
       return {
-        // Autosave disable changes
-        /* autosaveEnabled: !state.autosaveEnabled, */
-        autosaveEnabled: false,
+        autosaveEnabled: !state.autosaveEnabled,
       };
     case LOGOUT_USER:
       return AUTOSAVE_DEFAULT_STATE;

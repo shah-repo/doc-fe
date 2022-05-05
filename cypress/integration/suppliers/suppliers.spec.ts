@@ -102,7 +102,7 @@ context("Create company via API and create Suppliers document", () => {
     });
   });
 
-  it("[API]Creates suplier document", (done: any) => {
+  it("[API]Creates supplier document", (done: any) => {
     cy.grpGetGroupByName({
       sessionId: loginResponse.sessionId,
       employeeId: adminEmployee.id,

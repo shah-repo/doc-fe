@@ -56,7 +56,6 @@ context.skip("Autosave on add and edit FB fields", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 

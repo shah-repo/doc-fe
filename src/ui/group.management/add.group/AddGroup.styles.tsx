@@ -18,6 +18,21 @@ const AddGroupStyles = makeStyles((theme: Theme) => ({
       background: Colors.navy,
     },
   },
+  historyButton: {
+    "margin": "0 10px",
+    "height": "36px",
+    "borderRadius": 100,
+    "background": Colors.light_blue,
+    "color": Colors.navy,
+    "fontFamily": "Sora",
+    "fontSize": "12px",
+    "justifyContent": "center",
+    "alignItems": "center",
+    "textTransform": "none",
+    "&:hover": {
+      background: Colors.light_blue,
+    },
+  },
 }));
 
 export default AddGroupStyles;
