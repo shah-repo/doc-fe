@@ -2,9 +2,14 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import moment from "moment-timezone";
 import path from "path";
+import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
+import { CyRoutes } from "../../../support/routes";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -12,21 +17,30 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let secondEmployee;
-let formId;
+let adminEmployee;
+let equipmentDocumentType;
+let formDocumentType;
+let maintenanceRecordDocumentType;
+let approvalRequestDocumentType;
+let initialArDocument;
+let createdEquipmentFormDocument;
+let createdPMForm;
+let createdCalibrationForm;
+let group;
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
-let equipmentTitle;
+let formId;
 let emailsFromInbox;
-let emailDateOffset;
-let fileTimeFormat;
-let pages;
-let pdfFooterDate;
+let arId;
 
+const pages = ["", "", "", ""];
+const eqPMSchemaName = "pm-equipment-1-l2ssoqdo.44758///9654";
+const ADMIN_USER = USERS[1];
 const equipmentTitle = `Equipment`;
-const equipmentTitleForm = `Equipment Form`;
+const equipmentTitleForm = `Equipment-Form`;
 
 context("Autocomplete 'Equipment' test", () => {
   before(() => {
@@ -62,6 +76,11 @@ context("Autocomplete 'Equipment' test", () => {
         }).then((response) => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
+          maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });
@@ -75,89 +94,413 @@ context("Autocomplete 'Equipment' test", () => {
         done();
       });
     });
+
+    it("[API]Create Equipment form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Maintenance and Calibration form</p>",
+              document: {
+                docId: "FM-00003",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Maintenance and calibration form document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: equipmentDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "fb-default-eq-status",
+                    type: "radiogroup",
+                    index: 0,
+                    label: "EQ Status",
+                    rules: "required",
+                    options: [
+                      {
+                        text: "Active",
+                        value: "Active",
+                      },
+                      {
+                        text: "Inactive",
+                        value: "Inactive",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-primary-owner-eq",
+                    type: "autocomplete",
+                    index: 1,
+                    label: "Primary Owner",
+                    optionId: "13",
+                    placeholder: "Select employee as primary owner",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Primary Owner",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-coordinator-eq",
+                    type: "autocomplete",
+                    index: 2,
+                    label: "Coordinator",
+                    optionId: "13",
+                    placeholder: "Select employee as coordinator",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Coordinator",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    index: 3,
+                    type: "eqmaintenance",
+                    name: "pm-ki5wtk5l",
+                    editorConfig: {
+                      type: "preventativeMaintenance",
+                    },
+                    editorProperties: [],
+                    label: "Preventative Maintenance",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "PM",
+                  },
+                  {
+                    index: 4,
+                    type: "eqmaintenance",
+                    name: "calibration-ki5wtyj0",
+                    editorConfig: {
+                      type: "calibration",
+                    },
+                    editorProperties: [],
+                    label: "Calibration",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "Calibration",
+                  },
+                ],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdEquipmentFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdEquipmentFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]Create PM form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>PM form</p>",
+          document: {
+            docId: "FM-00004",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Preventative Maintenance form",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: maintenanceRecordDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "fb-maintenance-details-section",
+                type: "section",
+                index: 0,
+                label: "Maintenance Details",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_id",
+                type: "autocomplete",
+                index: 1,
+                label: "Equipment",
+                rules: "required",
+                optionId: "20",
+                placeholder: "[Select revision here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_maintainer",
+                type: "autocomplete",
+                index: 2,
+                label: "Maintainer",
+                rules: "required",
+                optionId: "13",
+                placeholder: "[Select name here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-equipment_due_date",
+                type: "datepicker",
+                index: 3,
+                label: "Completion Date",
+                rules: "required",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-requipment-maintenance-section",
+                type: "textfield",
+                index: 4,
+                label: "Equipment Maintenance Section",
+                rules: "required",
+                hidden: true,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-kybkhbpt",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPMForm = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPMForm.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Calibration form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Calibration form</p>",
+          document: {
+            docId: "FM-00005",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Calibration form",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: maintenanceRecordDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "fb-maintenance-details-section",
+                type: "section",
+                index: 0,
+                label: "Maintenance Details",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_id",
+                type: "autocomplete",
+                index: 1,
+                label: "Equipment",
+                rules: "required",
+                optionId: "20",
+                placeholder: "[Select revision here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_maintainer",
+                type: "autocomplete",
+                index: 2,
+                label: "Maintainer",
+                rules: "required",
+                optionId: "13",
+                placeholder: "[Select name here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-equipment_due_date",
+                type: "datepicker",
+                index: 3,
+                label: "Completion Date",
+                rules: "required",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-requipment-maintenance-section",
+                type: "textfield",
+                index: 4,
+                label: "Equipment Maintenance Section",
+                rules: "required",
+                hidden: true,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-kybkhbpt",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdCalibrationForm = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdCalibrationForm.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
   });
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
-    });
-  });
-
-  context("Create form for Preventative maintenance", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Click on 'create a document' button", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it("Enter title 'Preventative Maintenance form'", () => {
-      cy.drEnterDocumentTitle({ name: "Preventative Maintenance form" });
-    });
-
-    it("Enter description 'Preventative Maintenance form description'", () => {
-      cy.drEnterDocumentDescription({ description: "Preventative Maintenance form description" });
-    });
-
-    it("Select 'Form' document type from dropdown", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Select output document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Maintenance Record" });
-      cy.unClick();
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-    });
-  });
-
-  context("Create form for Calibration", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Click on 'create a document' button", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it("Enter title 'Calibration form'", () => {
-      cy.drEnterDocumentTitle({ name: "Calibration form" });
-    });
-
-    it("Enter description 'Calibration form description'", () => {
-      cy.drEnterDocumentDescription({ description: "Calibration form description" });
-    });
-
-    it("Select 'Form' document type from dropdown", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Select output document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Maintenance Record" });
-      cy.unClick();
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -232,30 +575,34 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select references", () => {
-        cy.drSelectReferences( "FM-00002" );
-        cy.drSelectReferences( "FM-00003" );
+        cy.drSelectReferences( "FM-00004" );
+        cy.drSelectReferences( "FM-00005" );
+        cy.unClick();
       });
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
+    });
+  });
 
-      it("Verify form Draft status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
-        cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
-        cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
-          formId = $formIdElement.text();
-        });
-        cy.sendToEmail();
+  context("Verify form Draft status and click on Send To Email", () => {
+    it("Verify form Draft status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
+      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+        formId = $formIdElement.text();
       });
+      cy.sendToEmail();
+    });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-        cy.checkToastMessageContains({
-          message: "File will be sent to your email shortly.",
-        });
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
       });
     });
   });
@@ -337,38 +684,40 @@ context("Autocomplete 'Equipment' test", () => {
         `${formId}-1-${equipmentTitleForm}.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
-    it("Extract texts from PDF file content", () => {
+    it("Extract texts from PDF file content for form", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${formId}-1-${equipmentTitleForm}.pdf`,
         }).then((cdata) => {
-        expect(cdata.numpages).eq(5);
-        expect(cdata.text).match(/Page 1 of 5/);
-        expect(cdata.text).match(/Page 2 of 5/);
-        expect(cdata.text).match(/Page 3 of 5/);
-        expect(cdata.text).match(/Page 4 of 5/);
-        expect(cdata.text).match(/Page 5 of 5/);
+        expect(cdata.numpages).eq(4);
+        expect(cdata.text).match(/Page 1 of 4/);
+        expect(cdata.text).match(/Page 2 of 4/);
+        expect(cdata.text).match(/Page 3 of 4/);
+        expect(cdata.text).match(/Page 4 of 4/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
         arr.forEach((element) => {
-          if (element.includes("Page 1 of 5")) {
+          if (element.includes("Page 1 of 4")) {
             pages[0] = element;
           }
-          if (element.includes("Page 2 of 5")) {
+          if (element.includes("Page 2 of 4")) {
             pages[1] = element;
           }
-          if (element.includes("Page 3 of 5")) {
+          if (element.includes("Page 3 of 4")) {
             pages[2] = element;
           }
-          if (element.includes("Page 4 of 5")) {
+          if (element.includes("Page 4 of 4")) {
             pages[3] = element;
-          }
-          if (element.includes("Page 5 of 5")) {
-            pages[4] = element;
           }
         });
       });
@@ -376,27 +725,23 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify page 1 in document", () => {
       const el = pages[0];
-      if (el.includes("Page 1 of 5")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
+      if (el.includes("Page 1 of 4")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/AR ID\nNone/);
 
-        expect(el).match(/Description\nNew Document Revision description/);
+        expect(el).match(/Description\nEquipment Form document description/);
 
-        expect(el).match(/Output Document Type\nTest Document Type/);
+        expect(el).match(/Output Document Type\nEquipment/);
 
         expect(el).match(/Attachments/);
-
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/fb-textfield1/);
+        tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
+        expect(el).match(tmpRegex);
 
-        expect(el).match(/STEP #1\nDescription/);
-
-        expect(el).match(/Attachments\nMaterials\nEquipment/);
-
-        expect(el).match(/fb-instructions1/);
+        expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
 
         expect(el).match(/Draft/);
 
@@ -406,7 +751,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 5/);
+        expect(el).match(/Page 1 of 4/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -415,22 +760,34 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify page 2 in document", () => {
       const el = pages[1];
-      if (el.includes("Page 2 of 5")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
+      if (el.includes("Page 2 of 4")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/video.mp4/);
+        expect(el).match(/EQUIPMENT 1/);
 
-        expect(el).match(/FB-PO-APPROVAL-MATRIX1/);
+        tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
+        expect(el).match(tmpRegex);
 
-        expect(el).match(/LEVEL NAMELIMITSIGNATURE 1SIGNATURE 2SIGNATURE 3/);
-
-        expect(el).match(/APPROVAL ROLES/);
-
-        expect(el).match(/APPROVAL MATRIX/);
+        expect(el).match(/The Preventative Maintenance required\? is a required field/);
 
         // eslint-disable-next-line max-len
-        expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);
+        expect(el).match(/Justifications\nThe justifications field is required when Preventative Maintenance required\? is No/);
+
+        expect(el).match(/Preventative Maintenance Form/);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`The Preventative Maintenance Form field is required when Preventative Maintenance\nrequired\\?.*is.*Yes`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Preventative Maintenance Frequency \(Days\)/);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`The Preventative Maintenance Frequency \\(Days\\) field is required when Preventative\nMaintenance required\\?.*is.*Yes`);
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/Instructions\nThe Instructions field is required when Preventative Maintenance required\? is Yes/);
 
         expect(el).match(/Draft/);
 
@@ -440,7 +797,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 5/);
+        expect(el).match(/Page 2 of 4/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -449,32 +806,30 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify page 3 in document", () => {
       const el = pages[2];
-      if (el.includes("Page 3 of 5")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
+      if (el.includes("Page 3 of 4")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Purchase Orders/);
+        expect(el).match(/EQUIPMENT 2/);
 
-        expect(el).match(/ITEMPART NUMBERSUPPLIER PART NUMBERDESCRIPTIONORDEREDRECEIPT QTYUNITSTAXSUM/);
-
-        expect(el).match(/fb-quantity1/);
-
-        expect(el).match(/FB-BLANK-TEMPLATE1/);
-
-        expect(el).match(/TestTemplate.json/);
-
-        expect(el).match(/fb-fileupload1/);
-
-        expect(el).match(/fb-paragraph1/);
-
-        tmpRegex = new RegExp( `fb-radiobutton-group1\n(.*)option1(.*)option2`, "gi" );
+        tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
         expect(el).match(tmpRegex);
 
-        expect(el).match(/fb-select-field1\nfb-hyperlink1/);
+        expect(el).match(/The Calibration required\? is a required field/);
 
-        expect(el).match(/fb-datepicker1/);
+        expect(el).match(/Justifications\nThe justifications field is required when Calibration required\? is No/);
 
-        expect(el).match(/fb-text-editor1/);
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Calibration Form\nThe Calibration Form field is required when Calibration required\\?.*is.*Yes`);
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\nThe Calibration Frequency \\(Days\\) field is required when Calibration required?.*is.*Yes`);
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Instructions\nThe Instructions field is required when Calibration required\\?.*is.*Yes.`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Draft/);
 
@@ -484,7 +839,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 5/);
+        expect(el).match(/Page 3 of 4/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -493,46 +848,8 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify page 4 in document", () => {
       const el = pages[3];
-      if (el.includes("Page 4 of 5")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
-        expect(el).match(tmpRegex);
-
-        expect(el).match(/fb-autocomplete-doc-approvers1/);
-
-        expect(el).match(/fb-autocomplete-parts1/);
-
-        expect(el).match(/fb-autocomplete-doc-revision1/);
-
-        tmpRegex = new RegExp( `fb-checkbox-group1\n(.*)\n(.*)\n(.*)\n(.*)\noption1 option2`, "gi" );
-        expect(el).match(tmpRegex);
-
-        expect(el).match(/FB-SUBSECTION1/);
-
-        expect(el).match(/FB-SECTION1/);
-
-        expect(el).match(/FB-STEP #1/);
-
-        expect(el).match(/fb-evidence/);
-
-        expect(el).match(/Draft/);
-
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-        expect(el).match(tmpRegex);
-
-        expect(el).match(/Page 4 of 5/);
-
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
-
-    it("Verify page 5 in document", () => {
-      const el = pages[4];
-      if (el.includes("Page 5 of 5")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
+      if (el.includes("Page 4 of 4")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -545,7 +862,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 5 of 5/);
+        expect(el).match(/Page 4 of 4/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -553,11 +870,297 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Create New Equipment", () => {
-    it("Approve and release document", () => {
+  context("Approve and release form", () => {
+    it("Approve and release form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
+    it("Verify form Released status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
+      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+        formId = $formIdElement.text();
+      });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for equipment notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${formId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${formId}${fileTimeFormat}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${formId}-1-${equipmentTitleForm}.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content for form", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${formId}-1-${equipmentTitleForm}.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(4);
+        expect(cdata.text).match(/Page 1 of 4/);
+        expect(cdata.text).match(/Page 2 of 4/);
+        expect(cdata.text).match(/Page 3 of 4/);
+        expect(cdata.text).match(/Page 4 of 4/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 4")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 4")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 4")) {
+            pages[2] = element;
+          }
+          if (element.includes("Page 4 of 4")) {
+            pages[3] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 in document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 4")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nEquipment Form document description/);
+
+        expect(el).match(/Output Document Type\nEquipment/);
+
+        expect(el).match(/Attachments/);
+        expect(el).match(/image.jpg/);
+
+        tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 4/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 2 in document", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 4")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/EQUIPMENT 1/);
+
+        tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/The Preventative Maintenance required\? is a required field/);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/Justifications\nThe justifications field is required when Preventative Maintenance required\? is No/);
+
+        expect(el).match(/Preventative Maintenance Form/);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`The Preventative Maintenance Form field is required when Preventative Maintenance\nrequired\\?.*is.*Yes`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Preventative Maintenance Frequency \(Days\)/);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`The Preventative Maintenance Frequency \\(Days\\) field is required when Preventative\nMaintenance required\\?.*is.*Yes`);
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/Instructions\nThe Instructions field is required when Preventative Maintenance required\? is Yes/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 4/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 3 in document", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 4")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/EQUIPMENT 2/);
+
+        tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/The Calibration required\? is a required field/);
+
+        expect(el).match(/Justifications\nThe justifications field is required when Calibration required\? is No/);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Calibration Form\nThe Calibration Form field is required when Calibration required\\?.*is.*Yes`);
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\nThe Calibration Frequency \\(Days\\) field is required when Calibration required?.*is.*Yes`);
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp(`Instructions\nThe Instructions field is required when Calibration required\\?.*is.*Yes.`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 4/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 4 in document", () => {
+      const el = pages[3];
+      if (el.includes("Page 4 of 4")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 4 of 4/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+  });
+
+  context("Create New", () => {
     it("Click create document", () => {
       cy.drCreateNewDocumentFromForm();
     });
@@ -575,12 +1178,14 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select references", () => {
-      cy.drSelectReferences( "FM-00002" );
-      cy.drSelectReferences( "FM-00003" );
+      cy.drSelectReferences( "FM-00004" );
+      cy.drSelectReferences( "FM-00005" );
+      cy.unClick();
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Active' as EQ status", () => {
@@ -592,18 +1197,13 @@ context("Autocomplete 'Equipment' test", () => {
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
     });
 
-    it(`Select '${USERS[1].name}' for Coordinator`, () => {
+    it(`Select '${USERS[2].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
-    });
-
-    it(`Select '${USERS[2].name}' for Autocomplete-Approvers`, () => {
-      cy.get(`input[data-cy=data-cy=\"autocomplete-approvers-l2r2phee\"]`).arrowClick();
-      cy.get("ul>li[role=\"combobox\"]").contains(USERS[2].name).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
     });
 
     it("Autocomplete-Approvers", () => {
-      cy.get(`input[data-cy="autocomplete-approvers-l2r2phee"]`).autocompleteSelect(`${USERS[2].email }`);
+      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].email }`);
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -624,8 +1224,8 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Type preventative maintenance instruction", () => {
-      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy,\"preventative\")]/../div[2]")
-        .type("Instructions for calibration").wait(500);
+      // eslint-disable-next-line max-len
+      cy.get("[data-cy^=\"equipment-1\"]>div>div>div>div>div[contenteditable]").click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
       cy.unClick();
     });
 
@@ -646,18 +1246,589 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Type calibration maintenance instruction", () => {
-      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy,\"calibration\")]/../div[2]")
-        .type("Instructions for calibration").wait(500);
+      // eslint-disable-next-line max-len
+      cy.get("[data-cy^=\"equipment-2\"]>div>div>div>div>div[contenteditable]").click({ force: true }).clear().arrowType("Instructions for calibration");
       cy.unClick();
-
     });
 
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
+
+    it("Verify form Released status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
+      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+        formId = $formIdElement.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
   });
 
-  context("", () => {
+  context("Verify email for Draft document notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${formId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${formId}${fileTimeFormat}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${formId}-1-Equipment-document.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${formId}-1-Equipment-document.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 in document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nEquipment description/);
+
+        expect(el).match(/Attachments/);
+        expect(el).match(/image.jpg/);
+
+        tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select field/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 2 in document", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/EQUIPMENT 1/);
+
+        tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
+
+        expect(el).match(/Preventative Maintenance Frequency \(Days\)\n365/);
+
+        expect(el).match(/Instructions\nInstructions for preventative maintenance/);
+
+        expect(el).match(/EQUIPMENT 2/);
+
+        tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
+
+        expect(el).match(/Calibration Frequency \(Days\)\n365/);
+
+        expect(el).match(/Instructions\nInstructions for calibration/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 3 in document", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+  });
+
+  context("Approve and release document", () => {
+    it("Approve and release form", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Verify form Released status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
+      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+        formId = $formIdElement.text();
+      });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for Released document notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${formId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${formId}${fileTimeFormat}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${formId}-1-Equipment-document.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${formId}-1-Equipment-document.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 in document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nEquipment description/);
+
+        expect(el).match(/Attachments/);
+        expect(el).match(/image.jpg/);
+
+        tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select field/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 2 in document", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/EQUIPMENT 1/);
+
+        tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
+
+        expect(el).match(/Preventative Maintenance Frequency \(Days\)\n365/);
+
+        expect(el).match(/Instructions\nInstructions for preventative maintenance/);
+
+        expect(el).match(/EQUIPMENT 2/);
+
+        tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
+
+        expect(el).match(/Calibration Frequency \(Days\)\n365/);
+
+        expect(el).match(/Instructions\nInstructions for calibration/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 3 in document", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+  });
+
+  context("Navig to released 'Equipment maintenance document'", () => {
+    it("Navig to equipment", () => {
+      cy.navigToEquipment();
+      cy.pause();
+    });
+
+    it("Open EQ-00001", () => {
+      cy.dlSelectFirstDocument();
+      cy.url().then((url: any) => {
+        eqLowerFrequencyURL = url;
+      });
+    });
+  });
+
+  xcontext("Revise document", () => {
+    it("Revise document", () => {
+      cy.pause();
+      cy.drClickReviseDocument();
+    });
+
+    it("Add New PM", () => {
+      // cy.get("[data-cy=\"form.builder.new.pm\"]").arrowClick();
+      cy.url().then((url: any) => {
+        eqLowerFrequencyURL = url;
+        cy.pause();
+
+      });
+    });
+  });
+
+  context("Add 1 NEW PM", () => {
+    it("Click 'NEW PM' on preventative maintenace section", () => {
+      cy.url().then((url: any) => {
+        const docIdFromUrl = url.split("/").pop();
+        // eslint-disable-next-line max-len
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${eqPMSchemaName}`;
+        cy.log(newPMUrl);
+        // http://localhost:5602/document_revision/8ff00c65-6ebd-460b-8f79-b09a27a2214e/create_maintenance/128b5bd5-46a4-47af-9085-a5c7901ceda6/equipment-1-l2sw5mzl
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+          CyRoutes.GetAvailableApprovers,
+          CyRoutes.GetAutocompleteOptions], () => {
+          cy.visit(newPMUrl);
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+
+    it("Turn off autosave", () => {
+      cy.pause();
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Enter title 'Preventative maintenance document'", () => {
+      cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
+    });
+
+    it("Select document type 'Maintenance Record'", () => {
+      cy.pause();
+      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+    });
+
+    it("Select revision stage 'Numeric'", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
+    });
+
+    it("Fill 'Completion Date'", () => {
+      cy.pause();
+      const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).arrowClick();
+          }
+        });
+    });
+  });
+
+  xcontext("", () => {
     it("Verify form Draft status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Draft" });
       cy.arCheckTitleInEditableAndMatches({ name: "New Document Revision" });
@@ -1083,4 +2254,5 @@ context("Autocomplete 'Equipment' test", () => {
       });
     });
   });
+
 });
