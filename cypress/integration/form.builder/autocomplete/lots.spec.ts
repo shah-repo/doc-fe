@@ -35,6 +35,7 @@ let fileId;
 
 const lotsTitle = "Lots title";
 const PART_DOCUMENT_TYPE_NAME = "Part";
+const multipleCompanies = true;
 
 context("Autocomplete 'Lots' test", () => {
   before(() => {
@@ -766,11 +767,15 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("[value=\"100% Inspection Override\"]").check();
       });
 
+      it("Enter FB range", () => {
+        cy.get("[name*=\"fb-range-\"]").arrowType("2");
+      });
+
       it("select option for radio group", () => {
         cy.fbSelectRadioButtonValue({ value: "X" });
       });
 
-      it("Fill text editor field and check for autosave", () => {
+      it("Fill text editor field", () => {
         cy.fbEnterTextEditor({ value: "Some text for Text editor" });
       });
 
@@ -802,7 +807,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
 
@@ -830,7 +835,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
 
@@ -986,7 +991,7 @@ context("Autocomplete 'Lots' test", () => {
 
           expect(el).match(/100% Inspection Override/);
 
-          expect(el).match(/fb-range\nNone\nAllowed Range: 0 - 10/);
+          expect(el).match(/fb-range\n2\nAllowed Range: 0 - 10/);
 
           expect(el).match(/Critical to quality/);
 
@@ -1035,7 +1040,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
 
@@ -1066,7 +1071,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
 
@@ -1222,7 +1227,7 @@ context("Autocomplete 'Lots' test", () => {
 
           expect(el).match(/100% Inspection Override/);
 
-          expect(el).match(/fb-range\nNone\nAllowed Range: 0 - 10/);
+          expect(el).match(/fb-range\n2\nAllowed Range: 0 - 10/);
 
           expect(el).match(/Critical to quality/);
 
