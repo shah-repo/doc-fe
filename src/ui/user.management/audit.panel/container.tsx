@@ -210,14 +210,11 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           auditRecord.nextValue === "true"
         ) {
           actionInfo = {
-            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, {
+            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ReactivateUser, {
               employeeName: employeeDetails?.user?.name || "",
             }),
-            secondaryText:
-              auditRecord.nextValue === "true"
-                ? intl.formatMessage({ id: "common.active" })
-                : intl.formatMessage({ id: "common.inactive" }),
-            auditType: ACTION_TITLE_MAPPING.ActivateUser,
+            secondaryText: auditRecord.employeeName,
+            auditType: ACTION_TITLE_MAPPING.ReactivateUser,
             sortedIndex: 0,
           };
         }

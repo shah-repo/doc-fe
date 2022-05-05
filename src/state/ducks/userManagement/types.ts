@@ -105,6 +105,7 @@ export enum ACTION_TITLE_MAPPING {
   CreatedNewUser = "CreatedNewUser",
   CreatedNewUserEmail = "CreatedNewUserEmail",
   DeactivateUser = "DeactivateUser",
+  ReactivateUser = "ReactivateUser",
   ActivateUser = "ActivateUser",
   Unknown = "Unknown",
   EmployeeNameUpdated = "EmployeeNameUpdated",
