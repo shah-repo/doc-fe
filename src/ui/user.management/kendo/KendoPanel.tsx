@@ -15,7 +15,7 @@ import {
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, get, isEmpty, map, set, sortBy, startCase } from "lodash";
+import { find, flatMap, get, isEmpty, map, set, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -543,7 +543,8 @@ export function KendoPanel<T>({
             <GridTitle translation="navigation.user.management" />
           </Grid>
           <Grid item>
-            <UMExport gridData={gridData} columns={columnDefinitions} />
+            <UMExport gridData={dataState.group?.length ? flatMap(map(result, "items")) : result}
+              columns={columnDefinitions} />
           </Grid>
           <Grid item>
             <AddEmployeeContainer addGroup={addNew} />
