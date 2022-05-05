@@ -56,7 +56,14 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     }
     if (auditTypes.includes(ACTION_TITLE_MAPPING.ResetPassword)) {
       sameGroup.unshift({
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPasswordFor, {}),
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ForUser, {}),
+        secondaryText: employeeDetails.user.name,
+        sortedIndex: 2,
+      });
+    }
+    if (auditTypes.includes(ACTION_TITLE_MAPPING.ResentPassword)) {
+      sameGroup.unshift({
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ForUser, {}),
         secondaryText: employeeDetails.user.name,
         sortedIndex: 2,
       });
@@ -102,10 +109,20 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         };
       }
     } else if (
-      [
-        "resetPasswordEmailTimestamp",
-        "resendConfirmationEmailTimestamp",
-      ].includes(auditRecord.fieldPath) &&
+      auditRecord.fieldPath === "resendConfirmationEmailTimestamp" &&
+      auditRecord.type === "OBJECT_EDITED"
+    ) {
+      actionInfo = {
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResentPassword, {}),
+        secondaryText: getTranslatedText(
+          ACTION_TITLE_MAPPING.ResentPasswordDescription,
+          {}
+        ),
+        auditType: ACTION_TITLE_MAPPING.ResentPassword,
+        sortedIndex: 0,
+      };
+    } else if (
+      auditRecord.fieldPath === "resetPasswordEmailTimestamp" &&
       auditRecord.type === "OBJECT_EDITED"
     ) {
       actionInfo = {
