@@ -1,12 +1,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment-timezone";
 import path from "path";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -27,10 +27,6 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 let arId;
-
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Record inline Flow", () => {
   before(() => {
@@ -282,6 +278,8 @@ context("Record inline Flow", () => {
 
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Drag and drop approval block to last`, () => {
@@ -316,7 +314,7 @@ context("Record inline Flow", () => {
 
     context("Verify email for  record form notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           // eslint-disable-next-line @typescript-eslint/camelcase
@@ -366,8 +364,7 @@ context("Record inline Flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recFormId}${filetime}_draft.zip`;
+            downloadFile  =  `${recFormId}${fileTimeFormat}_draft.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -440,8 +437,9 @@ context("Record inline Flow", () => {
           expect(el).match(/Output Document Type\nRecord one/);
 
           expect(el).match(/Attachments/);
-
           expect(el).match(/image.jpg/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           expect(el).match(/Textfield for inline/);
 
@@ -449,14 +447,14 @@ context("Record inline Flow", () => {
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
+          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`);
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Effective Date: N/A`);
@@ -473,18 +471,18 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/Second textfield for inline/);
+
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
-
-          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`);
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Effective Date: N/A`);
@@ -509,7 +507,7 @@ context("Record inline Flow", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`);
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Effective Date: N/A`);
@@ -546,7 +544,7 @@ context("Record inline Flow", () => {
 
     context("Verify email for record form notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           // eslint-disable-next-line @typescript-eslint/camelcase
@@ -596,8 +594,7 @@ context("Record inline Flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recFormId}${filetime}_rel.zip`;
+            downloadFile  =  `${recFormId}${fileTimeFormat}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -671,8 +668,9 @@ context("Record inline Flow", () => {
           expect(el).match(/Output Document Type\nRecord one/);
 
           expect(el).match(/Attachments/);
-
           expect(el).match(/image.jpg/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           expect(el).match(/Textfield for inline/);
 
@@ -680,17 +678,17 @@ context("Record inline Flow", () => {
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
+          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 3/);
@@ -704,21 +702,21 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/Second textfield for inline/);
+
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
-
-          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 2 of 3/);
@@ -733,7 +731,7 @@ context("Record inline Flow", () => {
           expect(el).match(tmpRegex);
 
           expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -741,10 +739,10 @@ context("Record inline Flow", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 3 of 3/);
@@ -774,6 +772,7 @@ context("Record inline Flow", () => {
         cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
         cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click();
         cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Checkbox option 1 checked", () => {
@@ -872,7 +871,7 @@ context("Record inline Flow", () => {
 
     context("Verify email notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           // eslint-disable-next-line @typescript-eslint/camelcase
@@ -925,8 +924,7 @@ context("Record inline Flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recDocId}${filetime}_WIP.zip`;
+            downloadFile  =  `${recDocId}${fileTimeFormat}_WIP.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -982,17 +980,13 @@ context("Record inline Flow", () => {
           expect(el).match(tmpRegex);
 
           expect(el).match(/Attachments/);
-
           expect(el).match(/image.jpg/);
 
           expect(el).match(/Textfield for inline\nFirst entry/);
 
           expect(el).match(/Second textfield for inline\nFirst entry/);
 
-          tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| DRAFT`);
-          expect(el).match(tmpRegex);
-
-          tmpRegex = new RegExp(`Checkbox\\n1 2 3`);
+          tmpRegex = new RegExp(`Checkbox`);
           expect(el).match(tmpRegex);
 
           tmpRegex = RegExp( `${USERS[3].name}`, "gi" );
@@ -1000,12 +994,12 @@ context("Record inline Flow", () => {
 
           expect(el).not.match(/TEXT FIELD/);
 
-          expect(el).match(/WIP/);
+          expect(el).match(/1 2 3\nWIP/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
@@ -1184,7 +1178,7 @@ context("Record inline Flow", () => {
 
       context("Verify email notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -1237,8 +1231,7 @@ context("Record inline Flow", () => {
           cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
             if (res.body !== "") {
               downloadUrl = res.body.url;
-              const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-              downloadFile  =  `${recDocId}${filetime}_rel.zip`;
+              downloadFile  =  `${recDocId}${fileTimeFormat}_rel.zip`;
               cy.downloadFile({
                 url: downloadUrl,
                 directory: CONFIG.DOWNLOADS_DIR,
@@ -1294,24 +1287,23 @@ context("Record inline Flow", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Attachments/);
-
             expect(el).match(/image.jpg/);
 
             expect(el).match(/Textfield for inline\nFirst entry, Second entry, Third entry/);
 
-            tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${docRelDate}`);
+            tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`);
             expect(el).match(tmpRegex);
 
             expect(el).match(/Second textfield for inline\nFirst entry/);
 
-            tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${docRelDate}`);
+            tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`);
             expect(el).match(tmpRegex);
 
-            tmpRegex = new RegExp(`Release Details\\nReleased by: ${USERS[2].name}\\nReleased Date: ${docRelDate}`);
+            tmpRegex = new RegExp(`Release Details\\nReleased by: ${USERS[2].name}\\nReleased Date: ${pdfDocRelDate}`);
             expect(el).match(tmpRegex);
 
             // eslint-disable-next-line max-len
-            tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n${USERS[2].name} \\| Approved \\| ${docRelDate}`, "gi" );
+            tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`, "gi" );
             expect(el).match(tmpRegex);
 
             tmpRegex = RegExp( `${USERS[3].name}`, "gi" );
@@ -1321,10 +1313,10 @@ context("Record inline Flow", () => {
 
             expect(el).match(/Released/);
 
-            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
             expect(el).match(tmpRegex);
 
-            tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+            tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
             expect(el).match(tmpRegex);
 
             expect(el).match(/Page 1 of 1/);
