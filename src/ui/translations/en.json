@@ -1055,6 +1055,7 @@
   "user.management.audit.history.RemovedUserEmail": "Removed User Email",
   "user.management.audit.history.CreatedNewUserEmail": "Added Email Address",
   "user.management.audit.history.DeactivateUser": "Deactivated User",
+  "user.management.audit.history.ReactivateUser": "Reactivated User",
   "user.management.audit.history.ActivateUser": "Updated status for {employeeName}",
   "user.management.audit.history.DeletedFromGroup": "Removed from Group",
   "user.management.audit.history.DeletedFromGroups": "Removed from Groups",
