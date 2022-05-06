@@ -230,6 +230,19 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontFamily: "Open Sans, sans-serif;",
     },
   },
+
+  MuiTab: {
+    root: {
+      "fontFamily": "Sora, sans-serif;",
+      "lineHeight": "15px",
+      "fontStyle": "normal",
+      "fontWeight": 600,
+      "&.Mui-selected": {
+        color: "#011FBB",
+      },
+    },
+  },
+
 });
 
 export default ThemeOverrides;
