@@ -36,6 +36,8 @@ let formId;
 let emailsFromInbox;
 let arId;
 let eqLowerFrequencyURL;
+let equipmentURL;
+let calDocId;
 
 const pages = ["", "", "", ""];
 const eqPMSchemaName = "pm-equipment-1-l2ssoqdo.44758///9654";
@@ -558,7 +560,7 @@ context("Autocomplete 'Equipment' test", () => {
         cy.fbAddField();
       });
 
-      it("EQUIPMENT SECTIONS", () => {
+      it("EQUIPMENT SECTIONS FOR PM", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Equipment 1" });
@@ -566,7 +568,7 @@ context("Autocomplete 'Equipment' test", () => {
         cy.fbAddField();
       });
 
-      it("EQUIPMENT SECTIONS", () => {
+      it("EQUIPMENT SECTIONS FOR CAL", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Equipment 2" });
@@ -1161,7 +1163,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Create New", () => {
+  context("Create Equipment document", () => {
     it("Click create document", () => {
       cy.drCreateNewDocumentFromForm();
     });
@@ -1495,8 +1497,11 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Approve and release document", () => {
-    it("Approve and release form", () => {
+    it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.url().then((url: any) => {
+        equipmentURL = url;
+      });
     });
 
     it("Verify form Released status and click on Send To Email", () => {
@@ -1742,64 +1747,40 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Navig to released 'Equipment maintenance document'", () => {
-    it("Navig to equipment", () => {
-      cy.navigToEquipment();
-    });
-
-    it("Open EQ-00001", () => {
-      cy.dlSelectFirstDocument();
-      cy.url().then((url: any) => {
-        eqLowerFrequencyURL = url;
+  context("Fill new calbration form", () => {
+    it("Navigate to EQ document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
+        cy.visit(equipmentURL);
       });
     });
-  });
 
-  context("Revise document", () => {
-    it("Revise document", () => {
-      cy.drClickReviseDocument();
-      cy.pause();
-    });
-
-    it("Add New PM", () => {
-      // cy.get("[data-cy=\"form.builder.new.pm\"]").arrowClick();
-      cy.dlSelectFirstDocument();
-      cy.url().then((url: any) => {
-        eqLowerFrequencyURL = url;
-        cy.pause();
-      });
-    });
-  });
-
-  xcontext("Add 1 NEW PM", () => {
-    it("Click 'NEW PM' on preventative maintenace section", () => {
+    it("Click 'NEW PM' on calibration section", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${eqPMSchemaName}`;
-        cy.log(newPMUrl);
-        // http://localhost:5602/document_revision/8ff00c65-6ebd-460b-8f79-b09a27a2214e/create_maintenance/128b5bd5-46a4-47af-9085-a5c7901ceda6/equipment-1-l2sw5mzl
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/calibration-ki5wtyj0`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
           CyRoutes.GetAvailableApprovers,
           CyRoutes.GetAutocompleteOptions], () => {
           cy.visit(newPMUrl);
         });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
     });
 
     it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
       cy.pause();
+    });
+
+    it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
     });
 
-    it("Enter title 'Preventative maintenance document'", () => {
-      cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
+    it("Enter title 'Calibration document'", () => {
+      cy.drEnterDocumentTitle({ name: "Calibration document" });
     });
 
     it("Select document type 'Maintenance Record'", () => {
-      cy.pause();
       cy.drSelectDocumentType({ documentType: "Maintenance Record" });
     });
 
@@ -1814,17 +1795,96 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Fill 'Completion Date'", () => {
-      cy.pause();
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+
       cy.get("button.MuiPickersDay-day")
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
           const dayNumber = $el.text();
+          cy.log(dayNumber);
           if (dayOfTheMonth.toString() === dayNumber) {
             cy.wrap($el).arrowClick();
           }
         });
+    });
+
+    it("Create 'Calibration document'", () => {
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+    });
+
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Checkbox option 1 checked", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    });
+
+    it("Add first Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Extract document Id", () => {
+      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
+      cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        calDocId = $docIdElement.text();
+      });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as first Approver", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    });
+
+    it("Rejecting request", () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+    });
+
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Login as admin user", () => {
+      cy.authLogin({
+        email: ADMIN_USER.email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    });
+
+    it(`Verify reject notification`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .should("contain", USERS[1].name)
+        .and("contain", "REJECTED")
+        .and("contain", calDocId);
+    });
+
+    it("Open doc to check WIP state", () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
+        .contains(calDocId).last().arrowClick();
     });
   });
 
