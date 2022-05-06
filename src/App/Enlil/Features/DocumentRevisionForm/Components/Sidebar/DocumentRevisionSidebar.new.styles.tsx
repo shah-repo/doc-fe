@@ -3,8 +3,8 @@ import Colors from "../../../../../../ui/layout/theme/utils/colors";
 
 export const styles = makeStyles(() =>
   createStyles({
-    sidebar: ({ _documentRevisionSidebarState }) => ({
-      transition: _documentRevisionSidebarState?.open
+    sidebar: (drawerOpen: boolean) => ({
+      transition: drawerOpen
         ? "all .2s ease-in-out"
         : " all .2s ease-in-out",
       background: Colors.white,

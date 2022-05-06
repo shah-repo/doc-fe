@@ -9,14 +9,14 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import { AsyncState } from "../../../state/types";
+import Sidebar from "../../common/components/Sidebar";
+import styles from "../../common/style/styles";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
-import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
-import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { Sidebar } from "../../documentRevision/Sidebar/types";
+import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
+import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
 import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
-import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
 
 
@@ -80,7 +80,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
 
   );
 
-  const sidebarList: Sidebar[] = [
+  const sidebarList: SidebarTypes[] = [
     {
       icon: <TimelineIcon />,
       type: "history",
@@ -120,7 +120,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
             {render}
           </Formik>
         </div>
-        {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />}
+        {changeRequest && <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />}
       </div>
     </FBProvider>
   );

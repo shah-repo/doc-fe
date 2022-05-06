@@ -1,11 +1,13 @@
-import { Box, List } from "@material-ui/core";
+import { Box, List, Typography } from "@material-ui/core";
 import { orderBy } from "lodash";
 import React from "react";
+import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { Approval, ApprovalStatus } from "../../../state/ducks/common/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
+import UserAvatarListItem from "../../documentRevision/Sidebar/common/UserAvatarListItem";
 import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
@@ -24,13 +26,22 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
+      const { owner, ownerUser, ownerThirdParty } = change;
+      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
       return (
         <Box key={groupId} className={classes.changeContainer}>
-          <div className={classes.dateContainer} data-cy={`audit-${key}`}>
-            <div data-cy={`audit-owner-${key}`} className={classes.owner}>{change.owner?.user.name}</div>
-            <DateTime data-cy={`audit-time-${key}`} value={change.timestamp} />
-          </div>
-
+          <UserAvatarListItem
+            data-cy={`audit-${key}`}
+            name={name}
+            owner={owner}
+            secondaryComponent={
+              <DateTime
+                data-cy={`audit-time-${key}`}
+                value={change.timestamp}
+                format={MomentFormats.BriefDateTime}
+              />
+            }
+          />
           {renderChanges(audit[groupId])}
         </Box>
       );
@@ -41,7 +52,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
 
-    orderBy(audits, ["field"]).forEach((change, index) => {
+    orderBy(audits, ["field"]).forEach((change, index, array) => {
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
@@ -66,8 +77,19 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           }
         }
         singleFields.push(
-          <Box mb={1} key={`${change.groupId}-${index}`}>
-            <Box>
+          <Box
+            mb={1}
+            key={`${change.groupId}-${index}`}
+            className={
+              index === array.length - 1
+                ? classes.noPaddingMargin
+                : classes.auditListItem
+            }
+          >
+            <Typography
+              variant="subtitle1"
+              className={classes.auditKey}
+            >
               <Text
                 message={
                   isRemovingApproverAction
@@ -76,7 +98,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                     : `changeRequest.audit.${change.field}.${change.type}`
                 }
               />
-            </Box>
+            </Typography>
             <div className={classes.auditValue}>
               <AuditFactory audit={change} />
             </div>
@@ -116,9 +138,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <List>{audit && renderAuditGroup()}</List>
-    </div>
+    <List disablePadding>{audit && renderAuditGroup()}</List>
   );
 };
 

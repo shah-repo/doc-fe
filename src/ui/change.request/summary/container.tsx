@@ -11,10 +11,11 @@ import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
+import Sidebar from "../../common/components/Sidebar";
+import styles from "../../common/style/styles";
 import { FormContext } from "../../components/forms/FormContext";
-import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
-import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { Sidebar } from "../../documentRevision/Sidebar/types";
+import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
+import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
 import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -26,7 +27,6 @@ import { ChangeRequestFormValues } from "../form/types";
 import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import Presenter from "./presenter";
-import styles from "./styles";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
@@ -131,7 +131,7 @@ const Container: React.FunctionComponent<Props> = ({
     </FormContext.Provider>
   );
 
-  const sidebarList: Sidebar[] = [
+  const sidebarList: SidebarTypes[] = [
     {
       icon: <TimelineIcon />,
       type: "history",
@@ -164,7 +164,7 @@ const Container: React.FunctionComponent<Props> = ({
         <div className={classes.appFrame}>
           {summaryFormikRenderer()}
         </div>
-        <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
+        <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />
       </div>
     </FBProvider>
   );
