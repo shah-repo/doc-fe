@@ -1,7 +1,5 @@
-import { Collapse, Grid } from "@material-ui/core";
-import { Observer } from "mobx-react";
+import { Grid } from "@material-ui/core";
 import React from "react";
-import { SM } from "../../../App";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
@@ -22,9 +20,6 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
-  const { _documentRevisionFormState } = SM.useStores();
-  const isNewLayout = SM.isNewLayout;
-
   const headerRenderer = () => <Header
     displayStatus={documentRevision.displayStatus}
     status={documentRevision.status}
@@ -64,15 +59,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   </Header>;
 
   return (<>
-    {isNewLayout ?
-      <Observer>
-        {() => (
-          <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-            {headerRenderer()}
-          </Collapse>
-        )}
-      </Observer> :
-      headerRenderer()}
+    { headerRenderer()}
   </>
   );
 };

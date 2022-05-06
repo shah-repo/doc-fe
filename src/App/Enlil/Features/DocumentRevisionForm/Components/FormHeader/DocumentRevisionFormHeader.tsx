@@ -1,4 +1,4 @@
-import { Box, Collapse } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionFormHeaderProps } from "../../../../..";
@@ -12,20 +12,19 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
 }) =>  (
   <Observer>
     {() => (
-      <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-        <Box py={1} px={8}>
-          <Title
-            name="name"
-            documentTypeId={_documentRevisionFormState?.documentTypeId}
-            disabled={isDisabledInput}
-          />
-          <Description
-            isQms={_documentRevisionFormState?.docInfo.isQms || false}
-            documentTypeId={_documentRevisionFormState?.documentTypeId}
-            isDisabled={isDisabledInput}
-          />
-        </Box>
-      </Collapse>
+
+      <Box py={1} px={8}>
+        <Title
+          name="name"
+          documentTypeId={_documentRevisionFormState?.documentTypeId}
+          disabled={isDisabledInput}
+        />
+        <Description
+          isQms={_documentRevisionFormState?.docInfo.isQms || false}
+          documentTypeId={_documentRevisionFormState?.documentTypeId}
+          isDisabled={isDisabledInput}
+        />
+      </Box>
 
     )}
   </Observer>
