@@ -93,7 +93,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           templateBoxProps={{ stretchY: "100%" }}
           headerBoxProps={{ maxHeight: "80%" }}
           contentBoxProps={{ minHeight: "20%", height: "100%" }}
-          header={<DocumentRevisionFormHeader />}
+          header={<DocumentRevisionFormHeader type={type}/>}
         >
           <Observer>
             {() => (
@@ -106,7 +106,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
-                  return <SMBox height="calc(60vh - 10px)" overflow={"auto"} {...{ onScroll }}>
+                  return <SMBox height="calc(60vh - 25px)" overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} px={8} stretchY="calc(100% - 40px)">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}
