@@ -27,6 +27,7 @@ const FBTrainingInfoContainer: React.FunctionComponent<
       method: "post",
       url: TRAINING_RECORDS_SEARCH_URL,
       data: {
+        isCompleted: "true",
         filters: [
           {
             field: "documentRevision.id",

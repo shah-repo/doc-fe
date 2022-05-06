@@ -36,6 +36,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   const { leftPanelState } = FB.useStores();
   index = leftPanelState?.getIndex || 0;
   const [open, setOpen] = React.useState<any>({});
+  const [searchString, setSearchText] = React.useState<any>({});
   const [filteredData, setFilteredData] = React.useState<any>(pickers);
   useEffect(() => {
     setFilteredData(pickers);
@@ -52,6 +53,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     controlPickerState?.removeFavourite(id);
   };
 
+  const openSectionOnSearch = () => searchString.length > 0;
   const createList = () => (
     <FBMapWrapper<FBControlPickerDataProps> collection={filteredData}>
       {(editors, section) => (
@@ -69,10 +71,10 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                 <Text message={`form.builder.${section}`} />
               </Typography>
             </ListItemText>
-            {open[section] ? <ExpandMore /> : <ChevronRight />}
+            {open[section] || openSectionOnSearch() ? <ExpandMore /> : <ChevronRight />}
           </ListItem>
           <Collapse
-            in={open[section]}
+            in={open[section] || openSectionOnSearch()}
             timeout="auto"
             unmountOnExit
             className={classes.collapseRoot}
@@ -150,6 +152,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   const search = (event) => {
     const filteredData = {};
     const searchString = event?.target?.value;
+    setSearchText(searchString);
     if (!searchString) {
       setOpen({});
       setFilteredData(pickers);

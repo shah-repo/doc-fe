@@ -167,16 +167,6 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
               >
                 <Grid item={true} className={classes.minWidthSpace}>
                   {titleRenderer(classes.breadcrumbId)}
-                  {isTitleVisible && (
-                    <Typography
-                      variant="h6"
-                      id="HeaderInfo-name"
-                      component="span"
-                      className={classes.breadcrumbId}
-                    >  &nbsp;
-                      {name}
-                   &nbsp;
-                    </Typography>)}
                   {subtitle && (
                     <Typography
                       variant="subtitle1"
