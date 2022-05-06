@@ -144,7 +144,8 @@ export enum ACTION_TITLE_MAPPING {
   RemovedParentGroups="RemovedParentGroups",
   RemovedParentGroup="RemovedParentGroup",
   UpdatedGroups="UpdatedGroups",
-  UpdatedGroup="UpdatedGroup"
+  UpdatedGroup="UpdatedGroup",
+  Removed="Removed"
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
