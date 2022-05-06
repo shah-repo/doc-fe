@@ -17,7 +17,7 @@ let asyncTasksGroup;
 let newEmployeId;
 let searchMailFromDate;
 let emailsFromInbox;
-const newPasswords = ["Tester1#!", "Tester2#!", "Tester3#!", "Tester4#!", "Tester5#!"];
+const newPasswords = [ CONFIG.DEFAULT_ENLIL_USER_PASSWORD, "Tester1#!", "Tester2#!", "Tester3#!", "Tester4#!", "Tester5#!"];
 const passExpiresInOneDay = momentInPST().add({ day: 1 }).format("MMM DD, YYYY");
 const passExpiresInTwoDays = momentInPST().add({ day: 2 }).format("MMM DD, YYYY");
 const passExpiresInThreeDays = momentInPST().add({ day: 3 }).format("MMM DD, YYYY");
@@ -178,67 +178,181 @@ context("Password expire reset flow", () => {
     });
   });
 
-  context("Test password reset from notification", () => {
-    context("Use time tool to travel back in future", () => {
-      it("Navigate to async tasks", () => {
-        cy.navigToAsyncTasks();
-      });
+  const daysToTest = ["85", "86", "87", "88", "89"];
+  daysToTest.forEach((dayToTest, i) => {
+    context.skip(`Test password reset from notification day ${dayToTest}`, () => {
+      context("Use time tool to travel back in future", () => {
+        it("Navigate to async tasks", () => {
+          cy.navigToAsyncTasks();
+        });
 
-      it("Select task TIME_TRAVEL_USER", () => {
-        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER });
-      });
+        it("Select task TIME_TRAVEL_USER", () => {
+          cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER });
+        });
 
-      it(`Select 85 days to back in future`, () => {
-        cy.asyncSelectBackToTheFutureTime({ day: 85 });
-      });
+        it(`Select ${dayToTest} days to back in future`, () => {
+          cy.asyncSelectBackToTheFutureTime({ day: parseInt(dayToTest, 10) });
+        });
 
-      it("Select next task SEND_PASSWORD_EXPIRATION_EMAILS", () => {
-        cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS });
-      });
+        it("Select next task SEND_PASSWORD_EXPIRATION_EMAILS", () => {
+          cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS });
+        });
 
-      it("Submit async task", () => {
-        cy.asyncTaskClickSubmit();
-      });
-    });
-
-    context("Veriy UI notification is present", () => {
-      it("Logout", () => {
-        cy.authLogout();
-      });
-
-      it("Log user in", () => {
-        cy.authLogin({
-          email: emailOfUserToSignUp,
+        it("Submit async task", () => {
+          cy.asyncTaskClickSubmit({ password: newPasswords[i] });
         });
       });
 
-      it("Verify user is loged in", () => {
-        cy.navigListExistsCheck(
-          NavigationItems.DASHBOARD,
-          NavigationItems.DOCUMENT_CONTROL);
+      context("Veriy UI notification is present", () => {
+        it("Logout", () => {
+          cy.authLogout();
+        });
+
+        it("Log user in", () => {
+          cy.authLogin({
+            email: emailOfUserToSignUp,
+            password: newPasswords[i],
+          });
+        });
+
+        it("Verify user is loged in", () => {
+          cy.navigListExistsCheck(
+            NavigationItems.DASHBOARD,
+            NavigationItems.DOCUMENT_CONTROL);
+        });
       });
 
-      it("Verify password expiration message", () => {
-        // eslint-disable-next-line no-irregular-whitespace
-        cy.checkToastMessageIsEqual({ message: `Your password will expire in 6 days. Reset it now.` });
+      context("Reset password through UI notification", () => {
+        it("Click on reset password on notificaion", () => {
+          cy.get("div.Toastify__toast-body>div>a").arrowClick();
+        });
+
+        it("Enter password", () => {
+          cy.get(`[name="newPassword"]`).arrowType(newPasswords[i + 1]);
+        });
+
+        it("Enter password for confirmation", () => {
+          cy.get(`[name="newPasswordConfirmation"]`).arrowType(newPasswords[i + 1]);
+        });
+
+        it(`Click "RESET PASSWORD"`, () => {
+          cy.get("#ResetPassword-resetPassword").arrowClick();
+        });
+
+        it("Verify password change notification", () => {
+          cy.get(`[data-cy="ResetPasswordSuccessful-title"]`)
+            .should("have.text", "Password Reset Successfully!");
+        });
+      });
+
+      context("Sign in with new password", () => {
+        it("Log user in", () => {
+          cy.authLogin({
+            email: emailOfUserToSignUp,
+            password: newPasswords[i + 1],
+          });
+        });
+
+        it("Verify user is logged in", () => {
+          cy.navigListExistsCheck(
+            NavigationItems.DASHBOARD,
+            NavigationItems.DOCUMENT_CONTROL);
+        });
+
+        it("Verify no password expiration message", () => {
+          cy.checkToastMessage({ exists: false });
+        });
       });
     });
+  });
 
-    context("Reset password through UI notification", () => {
-      it("Click on reset password on notificaion", () => {
-        cy.get("div.Toastify__toast-body>div>a").arrowClick();
+  daysToTest.forEach((dayToTest, i) => {
+    context(`Test password reset from email day ${dayToTest}`, () => {
+      context("Use time tool to travel back in future", () => {
+        it("Navigate to async tasks", () => {
+          cy.navigToAsyncTasks();
+        });
+
+        it("Select task TIME_TRAVEL_USER", () => {
+          cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER });
+        });
+
+        it(`Select ${dayToTest} days to back in future`, () => {
+          cy.asyncSelectBackToTheFutureTime({ day: parseInt(dayToTest, 10) });
+        });
+
+        it("Select next task SEND_PASSWORD_EXPIRATION_EMAILS", () => {
+          cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS });
+        });
+
+        it("Submit async task", () => {
+          cy.asyncTaskClickSubmit({ password: newPasswords[i - 1] });
+        });
       });
 
-      it("Enter password", () => {
-        cy.get(`[name="newPassword"]`).arrowType(newPasswords[0]);
+      context("Veriy UI notification is present", () => {
+        it("Logout", () => {
+          cy.authLogout();
+        });
+
+        it("Log user in", () => {
+          cy.authLogin({
+            email: emailOfUserToSignUp,
+            password: newPasswords[i - 1],
+          });
+        });
+
+        it("Verify user is loged in", () => {
+          cy.navigListExistsCheck(
+            NavigationItems.DASHBOARD,
+            NavigationItems.DOCUMENT_CONTROL);
+        });
+
+        it("Verify password expiration message", () => {
+          // eslint-disable-next-line no-irregular-whitespace
+          cy.checkToastMessageIsEqual({ message: `Your password will expire in ${5 - i} days. Reset it now.` });
+        });
       });
 
-      it("Enter password for confirmation", () => {
-        cy.get(`[name="newPasswordConfirmation"]`).arrowType(newPasswords[0]);
+      context("Reset password through email notification", () => {
+        it("Get email to unlock account", () => {
+          cy.imapNavigToPasswordResetLink({ userEmail: emailOfUserToSignUp });
+        });
+
+        it("Enter password", () => {
+          cy.authEnterSignUpPassword({ password: newPasswords[i + 2] });
+        });
+
+        it("Enter password for confirmation", () => {
+          cy.authEnterSignUpConfirmPassword({ password: newPasswords[i + 2] });
+        });
+
+        it("Click 'SIGN IN'", () => {
+          cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+        });
+
+        it("Password Reset Successfully should be displayed", () => {
+          cy.contains("Password Reset Successfully!").should("exist");
+        });
       });
 
-      it("Verify password change notification", () => {
-        cy.get(`[name="newPasswordConfirmation"]`).arrowType(newPasswords[0]);
+      context("Sign in with new password", () => {
+        it("Log user in", () => {
+          cy.authLogin({
+            email: emailOfUserToSignUp,
+            password: newPasswords[i + 2],
+          });
+        });
+
+        it("Verify user is logged in", () => {
+          cy.navigListExistsCheck(
+            NavigationItems.DASHBOARD,
+            NavigationItems.DOCUMENT_CONTROL);
+        });
+
+        it("Verify no password expiration message", () => {
+          cy.checkToastMessage({ exists: false });
+        });
       });
     });
   });
