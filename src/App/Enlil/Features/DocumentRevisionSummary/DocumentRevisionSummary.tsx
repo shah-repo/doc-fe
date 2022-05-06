@@ -89,7 +89,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                         canChangeOwnerShip={canChangeOwnerShip}
                         canShowCreateVersionButton={true}
                       />}
-                      {isFB && showFBLabels && (
+                      {tabType !== "TRAINING" && isFB && showFBLabels && (
                         <FBWorkspace
                           document={documentRevision}
                           initialValues={documentRevision.formInput}
