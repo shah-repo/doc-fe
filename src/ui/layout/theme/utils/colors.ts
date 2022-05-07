@@ -22,7 +22,7 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
-  gray_goose ="##CCD4D9",
+  gray_goose ="#CCD4D9",
   raven = "#767B87",
   whitest_grey="#EBEDF2",
   lightest_grey1="#CCD4D9",

@@ -10,7 +10,7 @@ export const styles = makeStyles(() =>
       background: Colors.white,
       filter: `drop-shadow(0px 4px 24px rgba(22, 34, 41, 0.06))`,
       borderRadius: "7px",
-      marginRight: "10px",
+      marginRight: "13px",
     }),
     iconBox: {
       minWidth: "48px",

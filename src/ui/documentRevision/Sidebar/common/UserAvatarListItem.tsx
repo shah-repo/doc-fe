@@ -9,7 +9,8 @@ const styles = makeStyles((theme: Theme) =>
     auditListItem: {
       margin: "0px",
       padding: "0px",
-      marginBottom: "15px",
+      marginBottom: "12px",
+      marginTop: "14px",
     },
     primaryText: {
       fontFamily: "Sora",

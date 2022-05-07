@@ -9,7 +9,7 @@ export const styles = makeStyles(() =>
       fontFamily: "Sora",
       fontWeight: 600,
       lineHeight: "15px",
-      marginBottom: "10px",
+      marginBottom: "8px",
     },
     root: {
       "& .MuiAutocomplete-inputRoot": {
