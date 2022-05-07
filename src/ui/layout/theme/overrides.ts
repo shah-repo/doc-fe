@@ -238,7 +238,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       "fontStyle": "normal",
       "fontWeight": 600,
       "&.Mui-selected": {
-        color: "#011FBB",
+        color: Colors.navy,
       },
     },
   },
