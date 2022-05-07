@@ -62,6 +62,7 @@ export default makeStyles((theme: Theme) =>
     titleText: {
       fontFamily: "Sora",
       fontSize: "12px",
+      lineHeight: "15px",
       margin: "0 10px",
       textTransform: "uppercase",
       color: Colors.almost_black,
