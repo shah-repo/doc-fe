@@ -4,19 +4,34 @@ import Colors from "../../../../../../../ui/layout/theme/utils/colors";
 export default makeStyles((theme: Theme) =>
   createStyles({
     searchBox: {
+      "display": "flex",
       "height": "36px",
+      "alignItems": "center",
       "width": 270,
       "borderRadius": "100px",
       "border": `1px solid ${Colors.lightest_grey1}`,
-      "paddingTop": "2px",
       "& .MuiInputBase-root": {
         width: "220px",
       },
     },
     searchIcon: {
-      color: Colors.navy,
-      margin: "2px 0px 0px 8px",
-      fontSize: "20px",
+      marginLeft: "11px",
+      marginBottom: "0px",
+      marginRight: "2px",
+    },
+    searchInput: {
+      position: "static",
+      height: "15px",
+      left: "32px",
+      top: "10.5px",
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "12px",
+      lineHeight: "15px",
+      textAlign: "right",
+      textTransform: "capitalize",
+      color: Colors.font_gray,
     },
   })
 );
