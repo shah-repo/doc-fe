@@ -10,7 +10,6 @@ import { DocumentRevision } from "../../../../state/ducks/documentRevisions/type
 import { ApplicationState } from "../../../../state/reducers";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { FBWorkspace } from "../../../../ui/form.builder";
-import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
@@ -78,7 +77,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       }
     >
       <SMTemplate
-        templateBoxProps={{ stretchY: "100%", borderTop: 1, borderColor: Colors.medium_gray }}
+        templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
         {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
