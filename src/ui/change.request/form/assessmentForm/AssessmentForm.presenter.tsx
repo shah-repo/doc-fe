@@ -11,7 +11,6 @@ import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
 import useDidMount from "../../../hooks/useDidMount";
-import FormHeader from "../../form/assessmentForm/FormHeader";
 import { ChangeRequestFormValues } from "../types";
 import styles from "./AssessmentForm.styles";
 
@@ -56,7 +55,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <div className={classes.container}>
-      <FormHeader {...{ changeRequest, asyncState }}/>
       <FormWrapper
         dirty={dirty}
         resetForm={resetForm}

@@ -39,7 +39,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
   const headerBackgroundClasses = headerBackgroundStyles();
   const { _documentRevisionFormState } = SM.useStores();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
-  if (SM.isNewLayout && !isCreateUrl) {
+  if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
       <Observer>
         {() => (
@@ -48,7 +48,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
               <Box
                 minHeight={60}
                 borderColor={Colors.medium_gray}
-                bgcolor={Colors.white}
+                bgcolor={Colors.light_gray}
                 py={1}
                 px={2}
                 alignContent="center"

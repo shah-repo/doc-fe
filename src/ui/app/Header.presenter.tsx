@@ -39,7 +39,7 @@ const Header: React.FunctionComponent<Props> = ({
     setSelectedDocRevDisplayStatus,
   });
 
-  if (SM.isNewLayout) {
+  if (SM.isNewLayout || SM.isNewCRLayout) {
     return (
       <Observer>
         {() => (

@@ -3,6 +3,9 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      visibility: "hidden",
+    },
     details: {
       overflowY: "auto",
       maxHeight: "50vw",

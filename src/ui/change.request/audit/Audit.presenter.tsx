@@ -13,6 +13,7 @@ import { styles } from "./Audit.presenter.styles";
 interface OwnProps {
   audit: AuditGroupType;
   approvals: Approval[];
+  isDrawerOpen: boolean;
 }
 
 type AuditPresenterProps = OwnProps;
@@ -20,6 +21,7 @@ type AuditPresenterProps = OwnProps;
 const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
   approvals,
+  isDrawerOpen,
 }) => {
   const classes = styles();
 
@@ -29,7 +31,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       const { owner, ownerUser, ownerThirdParty } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
       return (
-        <Box key={groupId} className={classes.changeContainer}>
+        <Box key={groupId} className={isDrawerOpen ? classes.changeContainer : classes.container}>
           <UserAvatarListItem
             data-cy={`audit-${key}`}
             name={name}

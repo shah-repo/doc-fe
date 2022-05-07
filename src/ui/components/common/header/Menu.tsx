@@ -29,7 +29,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
 
   return (
     <>
-      {SM.isNewLayout ? (
+      {SM.isNewLayout || SM.isNewCRLayout ? (
         <IconButton
           onClick={handleClick}
           data-cy="HeaderMenuButton"

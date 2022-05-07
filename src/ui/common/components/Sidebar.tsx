@@ -32,10 +32,11 @@ const Sidebar: React.FunctionComponent<Props> = ({
       height="100%"
       bgcolor="white"
       width={isDrawerOpen ? 281 : 48}
+      marginTop={0.25}
       borderColor={Colors.medium_gray}
       className={crClasses.sidebar}
     >
-      <Box display="flex" height={48} alignItems="center" marginTop="10px">
+      <Box display="flex" height={48} alignItems="center">
         <Box width={48} textAlign="center" className={crClasses.iconBox}>
           <StyledTooltip
             title={

@@ -1,5 +1,7 @@
 import Button, { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
+import { SM } from "../../../../App";
+import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../../state/ducks/changeRequest/types";
 import { AsyncStatus } from "../../../../state/types";
@@ -25,7 +27,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
 }) => {
   const applyTransition = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync<ChangeRequestTransitionResponse>();
-
+  const isNewLayout = SM.isNewCRLayout;
   const { formState } = FB.useStores();
   const onClick = () => {
     formState?.validate((valid) => {
@@ -45,17 +47,31 @@ const TransitionButton: React.FunctionComponent<Props> = ({
     <React.Fragment>
       <FormMessage asyncState={async.asyncState} />
       <FormProgress asyncState={async.asyncState} />
-      <Button
-        id="transitionButton"
-        data-cy="transitionButton"
-        color="secondary"
-        variant="outlined"
-        onClick={onClick}
-        disabled={async.asyncState.status === AsyncStatus.Active}
-        {...buttonProps}
-      >
-        <Text message={label} />
-      </Button>
+      {isNewLayout ? (
+        <StyledButton
+          id="transitionButton"
+          data-cy="transitionButton"
+          color="secondary"
+          variant="outlined"
+          onClick={onClick}
+          disabled={async.asyncState.status === AsyncStatus.Active}
+          {...buttonProps}
+        >
+          <Text message={label} />
+        </StyledButton>
+      ) : (
+        <Button
+          id="transitionButton"
+          data-cy="transitionButton"
+          color="secondary"
+          variant="outlined"
+          onClick={onClick}
+          disabled={async.asyncState.status === AsyncStatus.Active}
+          {...buttonProps}
+        >
+          <Text message={label} />
+        </Button>
+      )}
     </React.Fragment>
   );
 };
