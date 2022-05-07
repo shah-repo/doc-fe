@@ -138,6 +138,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                           documentId,
                           docId,
                           documentRevisionId,
+                          _documentRevisionSidebarState,
                         }}
                       />
                     ),

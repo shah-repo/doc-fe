@@ -2,6 +2,7 @@ import { Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import DocumentRevisionSidebarState from "../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state";
 import { Nullable } from "../../state/ducks/common/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import SummaryInfo from "../common/summary/SummaryInfo";
@@ -25,6 +26,7 @@ interface Props {
   isDocumentPO: boolean;
   isInlineApproval: boolean;
   isRecord: boolean;
+  _documentRevisionSidebarState?: DocumentRevisionSidebarState;
 }
 
 const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -36,6 +38,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   isDocumentPO,
   isInlineApproval,
   isRecord,
+  _documentRevisionSidebarState,
 }) => {
   const classes = styles();
   const link = documentVersionPath(
@@ -100,9 +103,9 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   return (
     <div
       key={documentRevision.id}
-      className={classNames(classes.linkContainer, {
+      className={_documentRevisionSidebarState?.open ? classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
-      })}
+      }) : classes.container}
       data-cy={"DocumentRevisionList-item"}
     >
       <NavLink

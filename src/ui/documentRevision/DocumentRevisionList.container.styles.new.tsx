@@ -4,10 +4,10 @@ import Colors from "../layout/theme/utils/colors";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-
+      visibility: "hidden",
     },
     linkContainer: {
-      boxShadow: `0px 1px 0px ${Colors.gray_goose}`,
+      boxShadow: `0px 1px 0px ${Colors.gray_goose}, 0px -1px 0px ${Colors.gray_goose}`,
       padding: theme.spacing(1.875),
       width: theme.spacing(29.125),
       flexGrow: 1,
