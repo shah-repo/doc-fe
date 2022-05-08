@@ -10,7 +10,6 @@ import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspace } from "../../../../ui/form.builder";
-import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
@@ -54,7 +53,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       }
     >
       <SMTemplate
-        templateBoxProps={{ stretchY: "100%", borderTop: 1, borderColor: Colors.medium_gray }}
+        templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
         {..._documentRevisionFormState?.documentRevision && {

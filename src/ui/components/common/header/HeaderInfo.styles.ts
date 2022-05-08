@@ -119,7 +119,6 @@ export const styles = makeStyles((theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
       cursor: "pointer",
-      width: "59px",
     },
     GREEN_STATUS: {
       color: Colors.green_blue,
