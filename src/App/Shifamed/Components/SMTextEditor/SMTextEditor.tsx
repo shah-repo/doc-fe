@@ -1,14 +1,16 @@
 
-import { Box, CircularProgress, Fade } from "@material-ui/core";
-import { hasIn, isString, isUndefined } from "lodash";
+import { Box, Fade } from "@material-ui/core";
+import { isUndefined, truncate } from "lodash";
 import { Observer } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { FormattedMessage } from "react-intl";
-import { SMTextEditorProps, SMTextLocaleProps } from "../../..";
+import { useIntl } from "react-intl";
+import { SMTextEditorProps } from "../../..";
+import { convertHtmlEntities } from "../../../../common/utils/helpers";
 import { FBConditionalWrapper } from "../../../../ui/form.builder";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTextEditor } from "./SMTextEditor.wrap";
+
 
 const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   onEditorStateChange,
@@ -26,105 +28,148 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   toolbar,
   disabled,
   placeholder,
-}) => (
-  <Box
-    {...boxProps}
-    data-cy={dataCy || name || label}
-    flexDirection="row"
-  >
-    <Box display="flex">
-      {isString(label) && (
-        <FormattedMessage id={label} />
-      )}
-      {hasIn(label, "locale") && (
-        <FormattedMessage
-          id={(label as SMTextLocaleProps).locale}
-          values={(label as SMTextLocaleProps).values}
-        />
-      )}
-      {loading && (
-        <Box ml={1} mt={0.3}>
-          <CircularProgress color="inherit" size={16} />
-        </Box>
-      )}
-    </Box>
+}) => {
+  const [btnText, setBtnText] = useState("view more");
+  const [editor, setEditor] = useState<string>();
+  const [flag, setFlag] = useState(true);
+  const intl = useIntl();
+  const descriptionPlaceholder: string = intl.formatMessage({ id: "form.builder.enter.description" });
+  const toggleBtn = () => {
+    setFlag(!flag);
+    if (flag) {
+      setBtnText("view more");
+    } else {
+      setBtnText("view less");
+    }
+  };
+  return  (
     <Box
-      bgcolor={isPreview ? "transparent" : "white"}
-      border={isPreview ? 0 : 1}
-      borderColor={Colors.hint_gray}
-      borderRadius={4}
-      style={{ display: "grid" }}
-      minHeight={isPreview ? "auto" : 80}
+      {...boxProps}
+      data-cy={dataCy || name || label}
+      flexDirection="row"
+      fontFamily="Sora"
+      fontWeight={600}
+      color={Colors.almost_black}
+      fontSize= "12px"
     >
-      <Box
-        display="flex"
-        style={{ gridArea: "1/1" }}
-        borderRadius={4}
-        data-cy={name}
-      >
-        <Observer>
-          {() => (
-            <Editor
-              onBlur={(ev) => onBlur?.(ev)}
-              {...{ editorRef, onEditorStateChange, toolbar, placeholder }}
-              editorState={_textEditorState?.editorState}
-              readOnly={disabled}
-              toolbarHidden={isPreview}
-              toolbarStyle={{
-                border: "none",
-                borderBottom: `1px solid ${Colors.hint_gray}`,
-              }}
-              editorStyle={{
-                height: "auto",
-                padding: "0 13px",
-                overflow: "hidden",
-                visibility: isPreview ? "hidden" : "visible",
-              }}
-              // fix for extra lines when pasting multiline content
-              stripPastedStyles={true}
-            />
-          )}
-        </Observer>
-      </Box>
       <Observer>
         {() => (
-          <FBConditionalWrapper
-            condition={!isUndefined(_textEditorState?.masked)}
-            wrapper={(wrapperChildren) => (
-              <Fade in={_textEditorState?.masked} mountOnEnter>
-                {wrapperChildren}
-              </Fade>
-            )}
+          <Box
+            bgcolor={isPreview ? "transparent" : "white"}
+            border={isPreview ? 0 : 1}
+            borderColor={Colors.hint_gray}
+            borderRadius={4}
+            style={{ display: "grid" }}
+            minHeight= {_textEditorState?.masked ? 30 : 80}
+            maxHeight= {150}
+            overflow= "auto"
           >
             <Box
-              {...!disabled && { onClick: () => handleMask?.(false) }}
-              bgcolor={isPreview ? "transparent" : "white"}
-              borderRadius={4}
-              zIndex={1000}
               display="flex"
-              style={{
-                gridArea: "1/1",
-                cursor: !disabled ? "text" : "inherit",
-              }}
-              p={isPreview ? 0 : 1.5}
+              style={{ gridArea: "1/1" }}
+              borderRadius={4}
+              data-cy={name}
             >
               <Observer>
                 {() => (
-                  <div
-                    style={{ width: "100%", height: "100%" }}
-                    dangerouslySetInnerHTML={{
-                      __html: _formState?.getValue(name)?.replace(/<[^/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" ) || "",
+                  <Editor
+                    onBlur={(ev) => onBlur?.(ev)}
+                    {...{ editorRef, onEditorStateChange, toolbar }}
+                    editorState={_textEditorState?.editorState}
+                    readOnly={disabled}
+                    toolbarHidden={_textEditorState?.masked}
+                    toolbarStyle={{
+                      border: "none",
+                      borderBottom: `1px solid ${Colors.hint_gray}`,
                     }}
+                    editorStyle={{
+                      height: "auto",
+                      padding: "0 13px",
+                      overflow: "hidden",
+                      visibility: _textEditorState?.masked ? "hidden" : "visible",
+                    }}
+                    // fix for extra lines when pasting multiline content
+                    stripPastedStyles={true}
                   />
                 )}
               </Observer>
-
             </Box>
-          </FBConditionalWrapper>
-        )}
-      </Observer>
+            <Observer>
+              {() => (
+                <FBConditionalWrapper
+                  condition={!isUndefined(_textEditorState?.masked)}
+                  wrapper={(wrapperChildren) => (
+                    <Fade in={_textEditorState?.masked} mountOnEnter>
+                      {wrapperChildren}
+                    </Fade>
+                  )}
+                >
+                  <Box
+                    bgcolor={isPreview ? "transparent" : "white"}
+                    borderRadius={4}
+                    zIndex={1000}
+                    display="flex"
+                    style={{
+                      gridArea: "1/1",
+                      cursor: !disabled ? "text" : "inherit",
+                    }}
+                    p={isPreview ? 0 : 1.5}
+                  >
+                    <Observer>
+                      {() => {
+                        const editedValue = _formState?.getValue(name) ?
+                          convertHtmlEntities(_formState?.getValue(name).replace(/(<([^>]+)>|\/n)/g, "")) :
+                          descriptionPlaceholder;
+
+                        const completeText = () => {
+                          setEditor(editedValue);
+                        };
+                        const getTruncatText = () => {
+                          const truncatedText = truncate(editedValue, {
+                            length: 150,
+                            separator: " ",
+                          });
+                          setEditor(truncatedText);
+                        };
+                        if (flag) {
+                          getTruncatText();
+                          setBtnText("view more");
+                        } else {
+                          completeText();
+                          setBtnText("view less");
+                        }
+                        return (
+                          <Box>
+                            <>
+                              <span {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}>
+                                {editor}
+                              </span>
+                              {_formState?.getValue(name) && <span
+                                style={{
+                                  color: Colors.navy,
+                                  padding: "0 2px",
+                                  fontFamily: "Sora",
+                                  fontSize: "14px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => toggleBtn()}>
+                                {btnText}
+                              </span>
+                              }
+                            </>
+                          </Box>
+                        );
+                      }
+                      }
+                    </Observer>
+                  </Box>
+                </FBConditionalWrapper>
+              )}
+            </Observer>
+          </Box>
+        )}</Observer>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default withSMTextEditor(SMTextEditor);
