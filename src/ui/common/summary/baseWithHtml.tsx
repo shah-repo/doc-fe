@@ -61,7 +61,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
             <tr>
               <td>
                 <span
-                >{editor}
+                  style = { { fontSize: "14px" }}
+                >{editor?.trim()}
                 </span>
                 <span className={classes.btnStyle}
                   style={{ marginTop: "-3px", paddingLeft: "5px", cursor: "pointer" }}

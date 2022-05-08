@@ -141,8 +141,12 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         return (
                           <Box>
                             <>
-                              <span {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}>
-                                {editor}
+                              <span style={{
+                                fontWeight: 400,
+                                fontSize: "14px",
+                                lineHeight: "25px",
+                              }} {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}>
+                                {editor?.trim()}
                               </span>
                               {_formState?.getValue(name) && <span
                                 style={{
