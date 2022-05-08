@@ -57,14 +57,21 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
       )}
       <Grid item={true} xs={12} id="BaseWithhtml-editor" data-cy="BaseWithhtml-editor">
         <Box className={classes.descriptionContainer} >
-          <span
-          >{editor}
-            <span className={classes.btnStyle}
-              style={{ marginTop: "-3px" }}
-              onClick={() => toggleBtn()}>
-              {btnText}
-            </span>
-          </span>
+          <table>
+            <tr>
+              <td>
+                <span
+                >{editor}
+                </span>
+                <span className={classes.btnStyle}
+                  style={{ marginTop: "-3px", paddingLeft: "5px", cursor: "pointer" }}
+                  onClick={() => toggleBtn()}>
+                  {btnText}
+                </span>
+              </td>
+            </tr>
+          </table>
+
         </Box>
       </Grid>
     </Grid>
