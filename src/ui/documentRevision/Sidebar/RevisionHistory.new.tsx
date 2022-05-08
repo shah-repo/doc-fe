@@ -45,92 +45,80 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
             return null;
           }
           return (
-            <Box display="flex" key={`${changeRequest.id}-${index}`} fontFamily="Sora">
-              <Box
-                flexGrow={1}
-                borderBottom="1px solid lightgray"
-                pl={1.875}
-                pr={1.875}
+            <Box key={`${changeRequest.id}-${index}`} className={classes.changeContainer}>
+              <ListItem
+                alignItems="flex-start"
+                className={classes.listItem}
               >
-                <Box display="grid">
-                  <ListItem
-                    alignItems="flex-start"
-                    disableGutters
-                    className={classes.listItem}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        className={classes.avatar}
-                        alt={changeRequest.owner.user.name}
-                        src={changeRequest.owner.user.avatar}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography className={classes.generalInfo}>
-                          {changeRequest.owner.user.name}
-                        </Typography>
-                      }
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary"
-                            className={classes.secondaryText}
-                          >
-                            <DateTime
-                              value={changeRequest.createdAt as string}
-                            />
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  </ListItem>
-                  {/* <div className={classes.titleOfRevision}>{changeRequest.owner.user.name}</div>
-                  <DateTime value={changeRequest.createdAt as string} /> */}
+                <ListItemAvatar>
+                  <Avatar
+                    className={classes.avatar}
+                    alt={changeRequest.owner.user.name}
+                    src={changeRequest.owner.user.avatar}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    <Typography className={classes.generalInfo}>
+                      {changeRequest.owner.user.name}
+                    </Typography>
+                  }
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        color="textPrimary"
+                        className={classes.secondaryText}
+                      >
+                        <DateTime
+                          value={changeRequest.createdAt as string}
+                        />
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+              <Box mt={1.875}>
+                <Box color={Colors.font_gray} fontSize={12}>
+                  <Text translation="cr.title" />
                 </Box>
-                <Box mt={1.875}>
-                  <Box color={Colors.font_gray} fontSize={12}>
-                    <Text translation="common.crid" />
-                  </Box>
-                  <Link
-                    to={changeRequestEditPath(changeRequest.id)}
-                    target="_blank"
-                    id="ChangeRequestLink-docRev-linkButton"
-                    className={classes.linkButton}
-                  >
-                    <span>{changeRequest.crId}</span>
-                  </Link>
+                <Box color={Colors.almost_black} fontSize={14}>
+                  {changeRequest.title}
                 </Box>
-                <Box mt={1.875}>
-                  <Box color={Colors.font_gray} fontSize={12}>
-                    <Text translation="cr.title" />
-                  </Box>
-                  <Box color={Colors.almost_black} fontSize={14}>
-                    {changeRequest.title}
-                  </Box>
+              </Box>
+              <Box mt={1.875}>
+                <Box color={Colors.font_gray} fontSize={12}>
+                  <Text translation="form.builder.description.of.change" />
                 </Box>
-                <Box mt={1.875}>
-                  <Box color={Colors.font_gray} fontSize={12}>
-                    <Text translation="form.builder.description.of.change" />
-                  </Box>
-                  <Box color={Colors.almost_black} fontSize={14}>
-                    {changeRequest.formInput.documentRevisions.map(
-                      (e) => e.descriptionOfChange
-                    )}
-                  </Box>
+                <Box color={Colors.almost_black} fontSize={14}>
+                  {changeRequest.formInput.documentRevisions.map(
+                    (e) => e.descriptionOfChange
+                  )}
                 </Box>
-                <Box mt={1.875} mb={2}>
-                  <Box color={Colors.font_gray} fontSize={12}>
-                    <Text translation="form.builder.justification.of.change" />
-                  </Box>
-                  <Box color={Colors.almost_black} fontSize={14}>
-                    {changeRequest.formInput?.documentRevisions.map(
+              </Box>
+              <Box mt={1.875}>
+                <Box color={Colors.font_gray} fontSize={12}>
+                  <Text translation="form.builder.justification.of.change" />
+                </Box>
+                <Box color={Colors.almost_black} fontSize={14}>
+                  {changeRequest.formInput?.documentRevisions.map(
                       (e) => e.justificationOfChange
                     )}
-                  </Box>
                 </Box>
+              </Box>
+              <Box mt={1.875}>
+                <Box color={Colors.font_gray} fontSize={12}>
+                  <Text translation="common.crid" />
+                </Box>
+                <Link
+                  to={changeRequestEditPath(changeRequest.id)}
+                  target="_blank"
+                  id="ChangeRequestLink-docRev-linkButton"
+                  className={classes.linkButton}
+                >
+                  <span>{changeRequest.crId}</span>
+                </Link>
               </Box>
             </Box>
           );
