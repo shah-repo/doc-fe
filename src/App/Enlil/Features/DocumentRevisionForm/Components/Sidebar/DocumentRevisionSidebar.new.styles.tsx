@@ -5,8 +5,8 @@ export const styles = makeStyles(() =>
   createStyles({
     sidebar: (drawerOpen: boolean) => ({
       transition: drawerOpen
-        ? "all .2s ease-in-out"
-        : " all .2s ease-in-out",
+        ? "all .2s ease-in"
+        : " all .2s ease-out",
       background: Colors.white,
       filter: `drop-shadow(0px 4px 24px rgba(22, 34, 41, 0.06))`,
       borderRadius: "7px",

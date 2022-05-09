@@ -38,7 +38,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             owner={owner}
             secondaryComponent={
               <DateTime
-                data-cy={`audit-time-${key}`}
+                data-cy={`audit-${key}`}
                 value={change.timestamp}
                 format={MomentFormats.BriefDateTime}
               />
@@ -54,7 +54,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
 
-    orderBy(audits, ["field"]).forEach((change, index, array) => {
+    orderBy(audits, ["field"]).forEach((change, index) => {
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
@@ -83,7 +83,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             mb={1}
             key={`${change.groupId}-${index}`}
             className={
-              index === array.length - 1
+              index === audits.length - 1
                 ? classes.noPaddingMargin
                 : classes.auditListItem
             }
