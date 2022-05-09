@@ -66,10 +66,9 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
           >
             <Box
               display="flex"
-              style={{ gridArea: "1/1", display: _textEditorState?.masked  ? "none"  : "" }}
+              style={{ gridArea: "1/1" }}
               borderRadius={4}
               data-cy={name}
-
             >
               <Observer>
                 {() => (
@@ -87,7 +86,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                       height: "auto",
                       padding: "0 13px",
                       overflow: "hidden",
-                      visibility: _textEditorState?.masked ? "hidden" : "visible",
+                      display: _textEditorState?.masked ? "none" : "",
                     }}
                     // fix for extra lines when pasting multiline content
                     stripPastedStyles={true}
