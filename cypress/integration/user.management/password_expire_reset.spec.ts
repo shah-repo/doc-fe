@@ -4,7 +4,6 @@
 import faker from "faker";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
-import { momentInPST } from "../../utils/constants/dateHandler";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -16,20 +15,39 @@ let adminSessionId;
 let asyncTasksGroup;
 let newEmployeId;
 let searchMailFromDate;
-let emailsFromInbox;
-const newPasswords = [ CONFIG.DEFAULT_ENLIL_USER_PASSWORD, "Tester1#!", "Tester2#!", "Tester3#!", "Tester4#!", "Tester5#!"];
-const passExpiresInOneDay = momentInPST().add({ day: 1 }).format("MMM DD, YYYY");
-const passExpiresInTwoDays = momentInPST().add({ day: 2 }).format("MMM DD, YYYY");
-const passExpiresInThreeDays = momentInPST().add({ day: 3 }).format("MMM DD, YYYY");
-const passExpiresInFourDays = momentInPST().add({ day: 4 }).format("MMM DD, YYYY");
-const passExpiresInFiveDays = momentInPST().add({ day: 5 }).format("MMM DD, YYYY");
+
+const newPasswordsUI = [
+  "Tester1#!",
+  "Tester2#!",
+  "Tester3#!",
+  "Tester4#!",
+  "Tester5#!",
+];
+
+const newPasswordsEmail = [
+  "@Tester1#!",
+  "@Tester2#!",
+  "@Tester3#!",
+  "@Tester4#!",
+  "@Tester5#!"];
 
 const nameOfUserToSignUp = faker.name.findName();
 const emailOfUserToSignUp =
 `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLowerCase();
-const dateAfterEmailShouldArrive = new Date();
 
 context("Password expire reset flow", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -127,6 +145,10 @@ context("Password expire reset flow", () => {
           });
           cy.landingPageLoadingElementShouldNotExist();
         });
+
+        it("Logout", () => {
+          cy.authLogout();
+        });
       });
     });
 
@@ -180,7 +202,10 @@ context("Password expire reset flow", () => {
 
   const daysToTest = ["85", "86", "87", "88", "89"];
   daysToTest.forEach((dayToTest, i) => {
-    context.skip(`Test password reset from notification day ${dayToTest}`, () => {
+    const previousPassword = i === 0 ? CONFIG.DEFAULT_ENLIL_USER_PASSWORD : newPasswordsUI[i - 1];
+    const newPassword = newPasswordsUI[i];
+
+    context(`Test password reset from UI notification day ${dayToTest}`, () => {
       context("Use time tool to travel back in future", () => {
         it("Navigate to async tasks", () => {
           cy.navigToAsyncTasks();
@@ -199,7 +224,7 @@ context("Password expire reset flow", () => {
         });
 
         it("Submit async task", () => {
-          cy.asyncTaskClickSubmit({ password: newPasswords[i] });
+          cy.asyncTaskClickSubmit({ password: previousPassword });
         });
       });
 
@@ -211,7 +236,7 @@ context("Password expire reset flow", () => {
         it("Log user in", () => {
           cy.authLogin({
             email: emailOfUserToSignUp,
-            password: newPasswords[i],
+            password: previousPassword,
           });
         });
 
@@ -228,11 +253,11 @@ context("Password expire reset flow", () => {
         });
 
         it("Enter password", () => {
-          cy.get(`[name="newPassword"]`).arrowType(newPasswords[i + 1]);
+          cy.get(`[name="newPassword"]`).arrowType(newPassword);
         });
 
         it("Enter password for confirmation", () => {
-          cy.get(`[name="newPasswordConfirmation"]`).arrowType(newPasswords[i + 1]);
+          cy.get(`[name="newPasswordConfirmation"]`).arrowType(newPassword);
         });
 
         it(`Click "RESET PASSWORD"`, () => {
@@ -249,7 +274,7 @@ context("Password expire reset flow", () => {
         it("Log user in", () => {
           cy.authLogin({
             email: emailOfUserToSignUp,
-            password: newPasswords[i + 1],
+            password: newPassword,
           });
         });
 
@@ -267,6 +292,9 @@ context("Password expire reset flow", () => {
   });
 
   daysToTest.forEach((dayToTest, i) => {
+    const previousPassword = i === 0 ? newPasswordsUI[newPasswordsUI.length - 1] : newPasswordsEmail[i - 1];
+    const newPassword = newPasswordsEmail[i];
+
     context(`Test password reset from email day ${dayToTest}`, () => {
       context("Use time tool to travel back in future", () => {
         it("Navigate to async tasks", () => {
@@ -286,7 +314,8 @@ context("Password expire reset flow", () => {
         });
 
         it("Submit async task", () => {
-          cy.asyncTaskClickSubmit({ password: newPasswords[i - 1] });
+          cy.asyncTaskClickSubmit({ password: previousPassword });
+          searchMailFromDate = new Date();
         });
       });
 
@@ -298,7 +327,7 @@ context("Password expire reset flow", () => {
         it("Log user in", () => {
           cy.authLogin({
             email: emailOfUserToSignUp,
-            password: newPasswords[i - 1],
+            password: previousPassword,
           });
         });
 
@@ -316,19 +345,19 @@ context("Password expire reset flow", () => {
 
       context("Reset password through email notification", () => {
         it("Get email to unlock account", () => {
-          cy.imapNavigToPasswordResetLink({ userEmail: emailOfUserToSignUp });
+          cy.imapNavigToPasswordResetLink({ userEmail: emailOfUserToSignUp, fromDate: searchMailFromDate });
         });
 
         it("Enter password", () => {
-          cy.authEnterSignUpPassword({ password: newPasswords[i + 2] });
+          cy.get(`input[name="newPassword"]`).arrowType( newPassword );
         });
 
         it("Enter password for confirmation", () => {
-          cy.authEnterSignUpConfirmPassword({ password: newPasswords[i + 2] });
+          cy.get(`input[name="newPasswordConfirmation"]`).arrowType( newPassword );
         });
 
         it("Click 'SIGN IN'", () => {
-          cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+          cy.get(`button[id="ResetPassword-resetPassword"]`).arrowClick();
         });
 
         it("Password Reset Successfully should be displayed", () => {
@@ -340,7 +369,7 @@ context("Password expire reset flow", () => {
         it("Log user in", () => {
           cy.authLogin({
             email: emailOfUserToSignUp,
-            password: newPasswords[i + 2],
+            password: newPassword,
           });
         });
 

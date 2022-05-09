@@ -34,7 +34,7 @@ declare global {
       imapGetNewPasswordLink(params: {userEmail: string}): Chainable;
       imapVerifyNoPasswordResetEmail(params: {userEmail: string; fromDate: Date}): Chainable;
       imapGetMailSince(params: {userEmail: string; fromDate: Date }): Chainable;
-      imapNavigToPasswordResetLink(params: {userEmail: string}): Chainable;
+      imapNavigToPasswordResetLink(params: {userEmail: string; fromDate: Date}): Chainable;
     }
   }
 }
@@ -164,9 +164,9 @@ Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) =>
   });
 });
 
-Cypress.Commands.add("imapNavigToPasswordResetLink", (params: { userEmail: string}) => {
-  cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
-    if (emailText.contains("reset_password")) {
+Cypress.Commands.add("imapNavigToPasswordResetLink", (params: { userEmail: string; fromDate: Date}) => {
+  cy.imapGetMailSince({ userEmail: params.userEmail, fromDate: params.fromDate }).should((emailText) => {
+    if (emailText.includes("reset_password")) {
       cy.visit(CONFIG.FE_URL + "/reset_password");
     }
     else {
