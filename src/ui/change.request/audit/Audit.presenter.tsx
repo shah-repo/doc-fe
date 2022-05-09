@@ -34,7 +34,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         <Box key={groupId} className={isDrawerOpen ? classes.changeContainer : classes.container}>
           <UserAvatarListItem
             data-cy={`audit-${key}`}
-            name={name}
+            name={<div data-cy={`audit-owner-${key}`}>{name}</div>}
             owner={owner}
             secondaryComponent={
               <DateTime
