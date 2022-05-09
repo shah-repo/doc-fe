@@ -468,6 +468,8 @@
   "document.action.withdraw": "Withdraw",
   "document.revision.no.qms.message": "Optional: Title will be used if description not provided.",
   "document.revision.stage": "Revision Stage",
+  "document.revision.view.more": "View more",
+  "document.revision.view.less": "View less",
   "document.revision.type.of.update": "Type of Update",
   "document.revision.cr.history": "Revision History",
   "document.revision.tpl.invalid": "Approval request has additional fields to fill in. Click on Confirm to Create Approval Request for the document.",

@@ -25,20 +25,5 @@ export default () =>
       fontSize: "14px",
       color: Colors.navy,
     },
-    spanStyleNoWrap: {
-      whiteSpace: "nowrap",
-      textOverflow: "ellipsis",
-      wordWrap: "normal",
-      overflow: "hidden",
-      fontFamily: "Sora",
-      fontSize: "14px",
-      width: "89%",
-    },
-    spanStylePreWrap: {
-      whiteSpace: "pre-wrap",
-      wordWrap: "normal",
-      fontFamily: "Sora",
-      fontSize: "14px",
-      width: "89%",
-    },
+
   });

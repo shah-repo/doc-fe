@@ -1,6 +1,7 @@
 import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { truncate } from "lodash";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { convertHtmlEntities } from "../../../common/utils/helpers";
 import Text from "../../components/Text";
 import styles from "./styles";
@@ -15,8 +16,11 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   labelProps,
   labelFont,
 }) => {
+  const intl = useIntl();
+  const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
+  const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
   const [editor, setEditor] = useState<string>("");
-  const [btnText, setBtnText] = useState("view more");
+  const [btnText, setBtnText] = useState(viewMore);
   const [flag, setFlag] = useState(false);
   const editedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n)/g, "")) : "";
   useEffect(() => {
@@ -39,10 +43,10 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
     setFlag(!flag);
     if (flag) {
       getTruncatText();
-      setBtnText("view more");
+      setBtnText(viewMore);
     } else {
       completeText();
-      setBtnText("view less");
+      setBtnText(viewLess);
     }
   };
 

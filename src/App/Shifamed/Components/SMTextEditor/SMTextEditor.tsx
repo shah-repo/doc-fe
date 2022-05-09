@@ -29,18 +29,20 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   disabled,
   placeholder,
 }) => {
-  const [btnText, setBtnText] = useState("view more");
+  const [btnText, setBtnText] = useState("document.revision.view.more");
   const [editor, setEditor] = useState<string>("");
   const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
   const intl = useIntl();
   const descriptionPlaceholder: string = intl.formatMessage({ id: "form.builder.enter.description" });
+  const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
+  const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
   const toggleBtn = () => {
     setFlag(!flag);
     if (flag) {
-      setBtnText("view more");
+      setBtnText(viewMore);
     } else {
-      setBtnText("view less");
+      setBtnText(viewLess);
     }
   };
   return  (
@@ -82,6 +84,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     toolbarStyle={{
                       border: "none",
                       borderBottom: `1px solid ${Colors.hint_gray}`,
+                      position: "fixed",
+                      zIndex: 8,
                     }}
                     editorStyle={{
                       height: "auto",
@@ -137,10 +141,10 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         };
                         if (flag) {
                           getTruncatText();
-                          setBtnText("view more");
+                          setBtnText(viewMore);
                         } else {
                           completeText();
-                          setBtnText("view less");
+                          setBtnText(viewLess);
                         }
                         return (
                           <Box>
@@ -149,6 +153,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                                 fontWeight: 400,
                                 fontSize: "14px",
                                 lineHeight: "25px",
+                                cursor: "pointer",
                               }} {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}>
                                 {editor?.trim()}
                               </span>
