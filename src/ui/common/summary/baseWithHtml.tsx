@@ -65,7 +65,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
                 marginTop: "-3px",
                 paddingLeft: "5px",
                 cursor: "pointer",
-                display: editor?.length < 100 ? "none" : "",
+                display: editedValue?.length < 100 ? "none" : "",
               }}
               onClick={() => toggleBtn()}>
               {btnText}
