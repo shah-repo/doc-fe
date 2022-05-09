@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton, LinearProgress } from "@material-ui/core";
+import { Box, CircularProgress, Drawer, IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { isEmpty, map, values } from "lodash";
@@ -112,6 +112,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           </div>
         </div>
       </div>
+      {isLoading && <Box position="absolute" top="50%" left="40%"><CircularProgress /></Box> }
       <Box className={classes.listItemContainer}>
         {map(Items, (auditDetails, groupKey) => (
           <Box key={groupKey} style={{ padding: 0 }}>
@@ -124,7 +125,6 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   );
   return (
     <Drawer anchor="right" open={openDrawer.right} onClose={() => closeDrawer()}>
-      {isLoading && <LinearProgress />}
       <Box width={300}>{renderAuditRecords()}</Box>
       {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
       {showLoadMoreButton && (

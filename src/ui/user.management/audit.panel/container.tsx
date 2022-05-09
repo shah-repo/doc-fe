@@ -271,6 +271,11 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.DeleteFromGroup);
         primaryTextHtml = (
           <>
+            {getTranslatedText(ACTION_TITLE_MAPPING.Removed, {})} <span style={{
+              color: Colors.almost_black,
+              padding: "0 2px",
+              fontWeight: 700,
+            }}> {secondaryTextHtml}</span>
             <span>{items[0]}</span>
             <span
               style={{
@@ -283,6 +288,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
             </span>
           </>
         );
+        secondaryTextHtml = (<></>);
       } else if (
         auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups ||
         auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup
@@ -290,10 +296,16 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.AddToGroup);
         primaryTextHtml = (
           <>
+            {getTranslatedText(ACTION_TITLE_MAPPING.Added, {})} <span style={{
+              color: Colors.almost_black,
+              padding: "0 2px",
+              fontWeight: 700,
+            }}> {secondaryTextHtml}</span>
             <span>{items[0]}</span>
             <span style={{ color: Colors.almost_black, padding: "0 2px", fontWeight: 700 }} > {items[1]} </span>
           </>
         );
+        secondaryTextHtml = (<></>);
       }
       return { primaryText: primaryTextHtml, secondaryText: secondaryTextHtml, sortedIndex, auditType };
     });

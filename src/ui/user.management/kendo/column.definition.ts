@@ -44,7 +44,7 @@ const columns: KendoColumn[] = [
     width: 500,
   },
   {
-    field: "active",
+    field: "activeStatus",
     title: "common.active",
     show: true,
     filter: "text",
