@@ -49,7 +49,7 @@ services:
     environment:
     - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
     - SLACK_TOKEN=${SLACK_TOKEN}
-    shm_size: 512M
+    shm_size: 2GB
   enlil_fe_server:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:fe_${FE_GIT_COMMIT_HASH}
     depends_on:
