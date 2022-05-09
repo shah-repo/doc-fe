@@ -63,6 +63,19 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
+  // let height = "calc(60vh - 40px)";
+
+  // useObserver(() => {
+  //   console.log("_documentRevisionFormState ::", _documentRevisionFormState?.viewMore);
+  //   setTimeout(() => {
+  //     const headerTmpl = document.getElementById("SMHeaderTmpl");
+  //     const bodyTmpl = document.getElementById("SMBodyTmpl");
+  //     const restHeight = headerTmpl?.clientHeight ? 150 + (+(headerTmpl?.clientHeight)) : 200;
+  //     bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
+  //     height = `calc(100vh - ${restHeight}px)`;
+  //   }, 100);
+  // });
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
@@ -106,7 +119,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
-                  return <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
+                  return <SMBox id="SMBodyTmpl" height="100%" overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} px={8} stretchY="100%">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}

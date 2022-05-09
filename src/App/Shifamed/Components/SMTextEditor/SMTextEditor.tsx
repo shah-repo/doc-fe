@@ -5,7 +5,7 @@ import { Observer } from "mobx-react";
 import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
-import { SMTextEditorProps } from "../../..";
+import { SM, SMTextEditorProps } from "../../..";
 import { convertHtmlEntities } from "../../../../common/utils/helpers";
 import { FBConditionalWrapper } from "../../../../ui/form.builder";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -34,11 +34,14 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
   const intl = useIntl();
+  const { _documentRevisionFormState } = SM.useStores();
   const descriptionPlaceholder: string = intl.formatMessage({ id: "form.builder.enter.description" });
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
+
   const toggleBtn = () => {
     setFlag(!flag);
+    _documentRevisionFormState?.setViewMore(!flag);
     if (flag) {
       setBtnText(viewMore);
     } else {

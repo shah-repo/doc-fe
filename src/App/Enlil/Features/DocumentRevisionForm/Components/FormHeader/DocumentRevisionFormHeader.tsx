@@ -13,7 +13,7 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
   <Observer>
     {() => (
       <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-        <Box py={1} px={8}>
+        <Box py={1} px={8} id="SMHeaderTmpl">
           <Title
             name="name"
             documentTypeId={_documentRevisionFormState?.documentTypeId}

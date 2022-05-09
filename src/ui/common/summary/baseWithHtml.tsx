@@ -33,7 +33,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
 
   const getTruncatText = () => {
     const truncatedText = truncate(editedValue, {
-      length: 50,
+      length: 100,
       separator: " ",
     });
     setEditor(truncatedText);
