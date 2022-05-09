@@ -4,11 +4,9 @@ import Colors from "../../../../../ui/layout/theme/utils/colors";
 
 const styles = () => ({
   root: {
-    "margin": "0px",
-    "border": "0px",
+    "margin": 0,
     "&:hover": {
-      border: 0,
-      backgroundColor: Colors.dodger_blue,
+      backgroundColor: "unset",
     },
   },
   label: {

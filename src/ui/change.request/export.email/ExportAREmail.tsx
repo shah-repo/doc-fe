@@ -35,8 +35,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   if (isNewLayout) {
     return (
       <StyledButton
-        variant="outlined"
-        color="secondary"
+        color="primary"
         style={{ margin: 0 }}
         onClick={() => handleAREmail()}
       >

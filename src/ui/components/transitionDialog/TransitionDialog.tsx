@@ -55,8 +55,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
       <div className={classes.container}>
         {isNewLayout ? (
           <StyledButton
-            color= "secondary"
-            variant= "outlined"
+            color="primary"
             aria-label={transition}
             onClick={openDialog}
             data-cy={`transition-${transition}`}

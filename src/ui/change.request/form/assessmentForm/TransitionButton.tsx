@@ -51,8 +51,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
         <StyledButton
           id="transitionButton"
           data-cy="transitionButton"
-          color="secondary"
-          variant="outlined"
+          color="primary"
           onClick={onClick}
           disabled={async.asyncState.status === AsyncStatus.Active}
           {...buttonProps}
