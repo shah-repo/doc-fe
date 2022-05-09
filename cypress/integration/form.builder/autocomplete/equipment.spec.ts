@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -18,12 +19,10 @@ let createdCompany;
 let loginResponse;
 let secondEmployee;
 let adminEmployee;
-let equipmentDocumentType;
 let formDocumentType;
 let maintenanceRecordDocumentType;
 let approvalRequestDocumentType;
 let initialArDocument;
-let createdEquipmentFormDocument;
 let createdPMForm;
 let createdCalibrationForm;
 let group;
@@ -36,6 +35,8 @@ let formId;
 let emailsFromInbox;
 let arId;
 let equipmentURL;
+let pmSchemaFieldName;
+let calibrationSchemaFieldName;
 
 const pages = ["", "", "", ""];
 const ADMIN_USER = USERS[1];
@@ -78,7 +79,6 @@ context("Autocomplete 'Equipment' test", () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
@@ -95,7 +95,7 @@ context("Autocomplete 'Equipment' test", () => {
       });
     });
 
-    it("[API]Create Equipment form", (done: any) => {
+    it("[API]Create PM form", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
@@ -111,9 +111,9 @@ context("Autocomplete 'Equipment' test", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Maintenance and Calibration form</p>",
+              description: "<p>PM form</p>",
               document: {
-                docId: "FM-00003",
+                docId: "FM-00004",
                 documentType: {
                   id: formDocumentType[0].id,
                 },
@@ -127,32 +127,21 @@ context("Autocomplete 'Equipment' test", () => {
                   ],
                 },
               },
-              name: "Maintenance and calibration form document",
+              name: "Preventative Maintenance form",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
               revisionStage: 1,
               formTemplate: {
                 outputDocumentTypes: [{
-                  id: equipmentDocumentType[0].id,
+                  id: maintenanceRecordDocumentType[0].id,
                 }],
                 schema: [
                   {
-                    name: "fb-default-eq-status",
-                    type: "radiogroup",
+                    name: "fb-maintenance-details-section",
+                    type: "section",
                     index: 0,
-                    label: "EQ Status",
-                    rules: "required",
-                    options: [
-                      {
-                        text: "Active",
-                        value: "Active",
-                      },
-                      {
-                        text: "Inactive",
-                        value: "Inactive",
-                      },
-                    ],
+                    label: "Maintenance Details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -160,64 +149,69 @@ context("Autocomplete 'Equipment' test", () => {
                     deleteInFormDisabled: true,
                   },
                   {
-                    name: "fb-primary-owner-eq",
+                    name: "equipment_id",
                     type: "autocomplete",
                     index: 1,
-                    label: "Primary Owner",
-                    optionId: "13",
-                    placeholder: "Select employee as primary owner",
+                    label: "Equipment",
+                    rules: "required",
+                    optionId: "20",
+                    placeholder: "[Select revision here]",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
-                    validationAttribute: "Primary Owner",
+                    validationMode: "default",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
                   },
                   {
-                    name: "fb-coordinator-eq",
+                    name: "equipment_maintainer",
                     type: "autocomplete",
                     index: 2,
-                    label: "Coordinator",
+                    label: "Maintainer",
+                    rules: "required",
                     optionId: "13",
-                    placeholder: "Select employee as coordinator",
+                    placeholder: "[Select name here]",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
-                    validationAttribute: "Coordinator",
+                    validationMode: "default",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
                   },
                   {
+                    name: "fb-equipment_due_date",
+                    type: "datepicker",
                     index: 3,
-                    type: "eqmaintenance",
-                    name: "pm-ki5wtk5l",
-                    editorConfig: {
-                      type: "preventativeMaintenance",
-                    },
-                    editorProperties: [],
-                    label: "Preventative Maintenance",
+                    label: "Completion Date",
+                    rules: "required",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
-                    applicableValidationSchema: true,
-                    validationAttribute: "PM",
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    deleteInFormDisabled: true,
                   },
                   {
+                    name: "fb-requipment-maintenance-section",
+                    type: "textfield",
                     index: 4,
-                    type: "eqmaintenance",
-                    name: "calibration-ki5wtyj0",
-                    editorConfig: {
-                      type: "calibration",
-                    },
-                    editorProperties: [],
-                    label: "Calibration",
+                    label: "Equipment Maintenance Section",
+                    rules: "required",
+                    hidden: true,
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
-                    applicableValidationSchema: true,
-                    validationAttribute: "Calibration",
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-kybkhbpt",
+                    uniqueSchemaItem: true,
+                    index: 5,
                   },
                 ],
               },
@@ -225,9 +219,9 @@ context("Autocomplete 'Equipment' test", () => {
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
           }).then((response) => {
-            createdEquipmentFormDocument = response;
+            createdPMForm = response;
             cy.drAPIApproveAndRelease({
-              documentId: createdEquipmentFormDocument.id,
+              documentId: createdPMForm.id,
               payload: {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
@@ -239,133 +233,6 @@ context("Autocomplete 'Equipment' test", () => {
             }).then(() => done());
           });
         });
-      });
-    });
-
-    it("[API]Create PM form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>PM form</p>",
-          document: {
-            docId: "FM-00004",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Preventative Maintenance form",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: maintenanceRecordDocumentType[0].id,
-            }],
-            schema: [
-              {
-                name: "fb-maintenance-details-section",
-                type: "section",
-                index: 0,
-                label: "Maintenance Details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "equipment_id",
-                type: "autocomplete",
-                index: 1,
-                label: "Equipment",
-                rules: "required",
-                optionId: "20",
-                placeholder: "[Select revision here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "equipment_maintainer",
-                type: "autocomplete",
-                index: 2,
-                label: "Maintainer",
-                rules: "required",
-                optionId: "13",
-                placeholder: "[Select name here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-equipment_due_date",
-                type: "datepicker",
-                index: 3,
-                label: "Completion Date",
-                rules: "required",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-requipment-maintenance-section",
-                type: "textfield",
-                index: 4,
-                label: "Equipment Maintenance Section",
-                rules: "required",
-                hidden: true,
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                label: "form.builder.approvals",
-                type: "approvals",
-                deleteDisabled: true,
-                name: "fb-approvals-kybkhbpt",
-                uniqueSchemaItem: true,
-                index: 5,
-              },
-            ],
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdPMForm = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdPMForm.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
       });
     });
 
@@ -584,7 +451,18 @@ context("Autocomplete 'Equipment' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.wait("@response").then((res) => {
+          if (res.response) {
+            const response = res.response.body;
+            pmSchemaFieldName = response.formTemplate.schema[5].name;
+            calibrationSchemaFieldName = response.formTemplate.schema[6].name;
+          }
+        });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -1204,7 +1082,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Autocomplete-Approvers", () => {
-      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].email }`);
+      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1766,7 +1644,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/calibration-ki5wtyj0`;
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaFieldName}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
           CyRoutes.GetAvailableApprovers,
           CyRoutes.GetAutocompleteOptions], () => {
@@ -1842,7 +1720,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
           CyRoutes.GetAvailableApprovers,
           CyRoutes.GetAutocompleteOptions], () => {
@@ -1913,7 +1791,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
           CyRoutes.GetAvailableApprovers,
           CyRoutes.GetAutocompleteOptions], () => {
@@ -2174,6 +2052,16 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
+        expect(el).match(/History/);
+        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocRelDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${pdfDocRelDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
         expect(el).match(/CALIBRATION/);
 
         tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
@@ -2184,6 +2072,15 @@ context("Autocomplete 'Equipment' test", () => {
         expect(el).match(/Calibration Frequency \(Days\)\n365/);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
+
+        expect(el).match(/History/);
+        tmpRegex = new RegExp( `MR-00001 Calibration document \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Calibration Done - Due Date: ${pdfDocRelDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select field/);
 
         expect(el).match(/Released/);
 
@@ -2212,6 +2109,8 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Released/);
 
+        expect(el).not.match(/Select field/);
+
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
@@ -2223,24 +2122,6 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
-    });
-  });
-
-  context("Create 'Equipment'", () => {
-    it("Click create new document from form", () => {
-      cy.drCreateNewDocumentFromForm();
-    });
-
-    it("Enter document title " + equipmentTitle, () => {
-      cy.drEnterDocumentTitle({ name: equipmentTitle });
-    });
-
-    it("Enter document description 'Equipment document description'", () => {
-      cy.drEnterDocumentDescription({ description: "Equipment document description" });
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
