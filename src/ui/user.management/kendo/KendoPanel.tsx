@@ -15,7 +15,7 @@ import {
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, get, isEmpty, map, set, sortBy, startCase } from "lodash";
+import { find, flatten, get, isEmpty, map, set, sortBy, startCase, values } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -54,6 +54,7 @@ import { NameCell } from "./cell.template/NameCell";
 import { SignedCell } from "./cell.template/SignedCell";
 import KendoGridStyles from "./styles";
 import { AddUserManage, UserManage, UserManagementProps } from "./types";
+import UMExport from "./UMExport";
 
 let call: CancelTokenSource;
 
@@ -278,7 +279,7 @@ export function KendoPanel<T>({
               : el?.user?.locked
                 ? getTranslatedText("reset.password")
                 : getTranslatedText("user.management.resend.signup.email"),
-          active: el?.active
+          activeStatus: el?.active
             ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
             : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
         }));
@@ -405,7 +406,7 @@ export function KendoPanel<T>({
 
   const filterCellMapping = {
     groups: GroupDropdown,
-    active: ActiveFilterCell,
+    activeStatus: ActiveFilterCell,
     status: SignUpFilterCell,
   };
   const userGroups = (props: GridCellProps) =>
@@ -415,7 +416,7 @@ export function KendoPanel<T>({
     "user.name": NameCell,
     "user.email": EmailCell,
     "groups": userGroups,
-    "active": ActiveDropdown,
+    "activeStatus": ActiveDropdown,
     "status": SignedCell,
     "": commandCell,
   };
@@ -533,12 +534,24 @@ export function KendoPanel<T>({
       {isLoading && <Loader/>}
     </>
   );
+  const getExportData = (data) => {
+    if (data.length && data[0].items) {
+      return getExportData(flatten(map(values(data), "items")));
+    }
+    return data;
+  };
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
   return (
     <Box>
       <Box mb={2}>
         <Grid container justify="space-between" alignItems="center">
-          <GridTitle translation="navigation.user.management" />
+          <Grid item xs >
+            <GridTitle translation="navigation.user.management" />
+          </Grid>
+          <Grid item>
+            <UMExport gridData={dataState.group?.length ? getExportData(result) : result}
+              columns={columnDefinitions} />
+          </Grid>
           <Grid item>
             <AddEmployeeContainer addGroup={addNew} />
           </Grid>
