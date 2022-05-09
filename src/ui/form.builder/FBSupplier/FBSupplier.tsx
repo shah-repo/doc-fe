@@ -40,7 +40,8 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
               {...{ disabled }}
               className={classes.button}
               style={{
-                margin: "5px",
+                marginBottom: "0px",
+                height: "40px",
               }}
             />
           </Box>}
