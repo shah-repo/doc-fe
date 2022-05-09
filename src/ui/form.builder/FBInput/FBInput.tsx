@@ -31,7 +31,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
 }) => (
   <>
     {!hidden && (
-      <Box mb={gutter ? 5 : 0} {...boxProps}>
+      <Box mb={gutter ? 1.875 : 0} {...boxProps}>
         <Observer>
           {() => (
             <>{inputState?.includeNotes && <FBNotes {...{ name }} />}</>
