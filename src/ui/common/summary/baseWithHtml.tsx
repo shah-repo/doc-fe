@@ -15,7 +15,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   labelProps,
   labelFont,
 }) => {
-  const [editor, setEditor] = useState<string>();
+  const [editor, setEditor] = useState<string>("");
   const [btnText, setBtnText] = useState("view more");
   const [flag, setFlag] = useState(false);
   const editedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n)/g, "")) : "";
@@ -61,7 +61,12 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
             style = { { fontSize: "14px" }}
           >{editor?.trim()}
             <span className={classes.btnStyle}
-              style={{ marginTop: "-3px", paddingLeft: "5px", cursor: "pointer" }}
+              style={{
+                marginTop: "-3px",
+                paddingLeft: "5px",
+                cursor: "pointer",
+                display: editor?.length < 100 ? "none" : "",
+              }}
               onClick={() => toggleBtn()}>
               {btnText}
             </span>

@@ -30,7 +30,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   placeholder,
 }) => {
   const [btnText, setBtnText] = useState("view more");
-  const [editor, setEditor] = useState<string>();
+  const [editor, setEditor] = useState<string>("");
   const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
   const intl = useIntl();
@@ -159,6 +159,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                                   fontFamily: "Sora",
                                   fontSize: "14px",
                                   cursor: "pointer",
+                                  display: editor?.length < 100 ? "none" : "",
                                 }}
                                 onClick={() => toggleBtn()}>
                                 {btnText}
