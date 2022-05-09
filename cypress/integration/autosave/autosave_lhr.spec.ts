@@ -1,25 +1,28 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import "moment-timezone";
 import path from "path";
+import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, lotDateSuffix, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
-import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
+import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
-import { MPITest } from "../../utils/constants/documentTypes/mpi";
+import { MPITestProcedureDeletable } from "../../utils/constants/documentTypes/mpi";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let secondEmployee;
 let thirdEmployee;
 let adminEmployee;
+let developersGroup;
 let materialsDocument2;
 let equipmentDocument3;
 let materialsDocument3;
@@ -47,11 +50,11 @@ let arId;
 let lhrDocId;
 let emailsFromInbox;
 let createdLotsFormDocument;
+let lhrs1DocUrl;
 
 const pages = ["", "", "", ""];
 
-
-context("Autosave LHR", () => {
+context("LHR flow", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -79,8 +82,8 @@ context("Autosave LHR", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               LotHistoryRecordTest,
-              MPITest,
-              LHRTTest,
+              MPITestProcedureDeletable,
+              LHRT,
               Part,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -109,6 +112,7 @@ context("Autosave LHR", () => {
         done();
       });
     });
+
 
     it("[API]Create equipment one", () => {
       cy.grpGetGroupByName({
@@ -209,6 +213,85 @@ context("Autosave LHR", () => {
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
         });
+      });
+    });
+
+    it("[API]Create part document", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Part document</p>",
+          document: {
+            docId: "CS-00005",
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Part document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPartDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPartDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Create unreleased part document", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>unreleased part document</p>",
+          document: {
+            docId: "CS-00010",
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Unreleased part document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then(() => {
+        done();
       });
     });
 
@@ -388,185 +471,6 @@ context("Autosave LHR", () => {
       });
     });
 
-    it("[API]Create part document", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Part document</p>",
-          document: {
-            docId: "PRT-00005",
-            documentType: {
-              id: partDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Part document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdPartDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdPartDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => {
-          done();
-        });
-      });
-    });
-
-    it("[API]Create Lots form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Lots Form document</p>",
-          document: {
-            docId: "FM-00008",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Lots form document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: CSLDocumentType[0].id,
-            }],
-            schema: [
-              {
-                name: "lot_quantity",
-                type: "quantity",
-                index: 0,
-                label: "Initial Quantity",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [],
-                validationAttribute: "Initial Quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_usable_quantity",
-                type: "quantity",
-                index: 1,
-                label: "Usable Quantity",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [],
-                validationAttribute: "Usable Quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_expiry_date",
-                type: "datepicker",
-                index: 2,
-                label: "Expiration Date",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationAttribute: "Expiration Date",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_part",
-                type: "autocomplete",
-                index: 3,
-                label: "Part Selection",
-                optionId: "21",
-                placeholder: "Select the appropriate part for this lot",
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "100-inspection-override",
-                type: "checkboxgroup",
-                index: 4,
-                label: "100% Inspection Override",
-                options: [
-                  {
-                    text: "100% Inspection Override",
-                    value: "100% Inspection Override",
-                  },
-                ],
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                editorProperties: [],
-                validationAttribute: "100% Inspection Override",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                label: "form.builder.approvals",
-                type: "approvals",
-                deleteDisabled: true,
-                name: "fb-approvals-ksherq6d",
-                uniqueSchemaItem: true,
-                index: 5,
-              },
-            ],
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdLotsFormDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdLotsFormDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => {
-          done();
-        });
-      });
-    });
-
     it("[API]Create MPI document", () => {
       cy.drCreateDocumentRevision({
         payload: {
@@ -727,6 +631,325 @@ context("Autosave LHR", () => {
         });
       });
     });
+
+    it("[API]Create Lots form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Lots Form document</p>",
+          document: {
+            docId: "FM-00008",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Lots form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: CSLDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "lot_quantity",
+                type: "quantity",
+                index: 0,
+                label: "Initial Quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [],
+                validationAttribute: "Initial Quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_usable_quantity",
+                type: "quantity",
+                index: 1,
+                label: "Usable Quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [],
+                validationAttribute: "Usable Quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_expiry_date",
+                type: "datepicker",
+                index: 2,
+                label: "Expiration Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationAttribute: "Expiration Date",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_part",
+                type: "autocomplete",
+                index: 3,
+                label: "Part Selection",
+                optionId: "21",
+                placeholder: "Select the appropriate part for this lot",
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "100-inspection-override",
+                type: "checkboxgroup",
+                index: 4,
+                label: "100% Inspection Override",
+                options: [
+                  {
+                    text: "100% Inspection Override",
+                    value: "100% Inspection Override",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                editorProperties: [],
+                validationAttribute: "100% Inspection Override",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-ksherq6d",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdLotsFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdLotsFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: secondEmployee.id }],
+          tags: [...developersGroup.body[0].tags,
+            GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+            GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
+          ],
+        },
+      });
+    });
+
+    it("[API]API request for updating company navigation", (done: any) => {
+      cy.cmpUpdateCompany({
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId as unknown as string,
+        payload: {
+          navigation: [
+            {
+              icon: "/navigation_icons/dashboard.svg",
+              path: "/",
+              type: "LINK",
+              label: "Dashboard",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/document.svg",
+                  path: "/document_revision",
+                  type: "LINK",
+                  label: "Document List",
+                },
+                {
+                  icon: "/navigation_icons/cr.svg",
+                  path: "/change_request",
+                  type: "LINK",
+                  label: "Approval Requests",
+                },
+                {
+                  icon: "/navigation_icons/text-paper.svg",
+                  type: "CATEGORY",
+                  label: "Records",
+                  category: "Record",
+                },
+              ],
+              type: "MENU",
+              label: "Document Control",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              type: "CATEGORY",
+              label: "Equipment",
+              category: "Equipment",
+            },
+            {
+              icon: "/navigation_icons/supplier-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/supplier-list.svg",
+                  type: "CATEGORY",
+                  label: "Supplier List",
+                  category: "Supplier",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Supplier Management",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/receipt_list.svg",
+              type: "CATEGORY",
+              label: "Purchase Orders",
+              category: "Purchase Order",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/cart-simple-in.svg",
+              type: "CATEGORY",
+              label: "Receiving",
+              category: "Receive",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/tools.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/icon_parts.svg",
+                  type: "CATEGORY",
+                  label: "Parts",
+                  category: "Parts",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/todo.svg",
+                  type: "CATEGORY",
+                  label: "Work Orders",
+                  category: "Work Order",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/tag-check.svg",
+                  type: "CATEGORY",
+                  label: "Lots",
+                  category: "Lot",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/lhr_icon.svg",
+                  type: "CATEGORY",
+                  label: "LHR",
+                  category: "Lhr",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Manufacturing",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/group-management.svg",
+              path: "/group_management",
+              type: "LINK",
+              label: "Group Management",
+              restrictedToUsersWithTags: [
+                GroupTag.GROUP_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/user-management.svg",
+              path: "/user_management",
+              type: "LINK",
+              label: "User Management",
+              restrictedToUsersWithTags: [
+                GroupTag.USER_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              path: "/document_type_management",
+              type: "LINK",
+              label: "Document Type Management",
+              restrictedToUsersWithTags: [
+                GroupTag.DOCUMENT_TYPE_MANAGEMENT,
+              ],
+            },
+          ],
+        },
+      }).then(() => {
+        done();
+      });
+    });
   });
 
   context("Login user", () => {
@@ -857,10 +1080,6 @@ context("Autosave LHR", () => {
             cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment one" });
           });
         });
-
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
       });
 
       context("Release MPI", () => {
@@ -946,561 +1165,560 @@ context("Autosave LHR", () => {
           cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
       });
+    });
 
-      context("Select created MPI in LHR template", () => {
-        it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
-          });
+    context("Select created MPI in LHR template", () => {
+      it("Select MPI document for step #1 in LHRt", () => {
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+          $el.trigger("click");
+        });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
         });
       });
+    });
 
-      context("Add another step with different MPI on document ", () => {
-        it("Add LHR step", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-4).arrowClick({ force: true });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
-          });
+    context("Add another step with different MPI on document ", () => {
+      it("Add LHR step", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-4).arrowClick({ force: true });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
+        });
+        cy.listLoadingElementShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
+          cy.fbAddNewFieldButton();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select MPI document created with API for step #2 in LHRt", () => {
+        cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
+          $el.trigger("click");
+        });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
+          CyRoutes.GetAutocompleteOptions,
+          CyRoutes.PatchDocRev], () => {
           cy.listLoadingElementShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.fbAddNewFieldButton();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
         });
-
-        it("Select MPI document created with API for step #2 in LHRt", () => {
-          cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
-            CyRoutes.GetAutocompleteOptions,
-            CyRoutes.PatchDocRev], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Verify indicator for parametrized Material", () => {
-          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]")
-            .should("have.text", "A: Material parameter | Qty: None ");
-          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]").parent().parent()
-            .should("have.css", "background-color", "rgb(252, 222, 222)");
-        });
-
-        it("Verify indicator for parametrized Equipment", () => {
-          cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]")
-            .should("have.text", "B: Equipment one ");
-          cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]").parent().parent()
-            .should("have.css", "background-color", "rgb(252, 222, 222)");
-        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      context("Save and send email notification", () => {
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-          // cy.pause();
-        });
-
-        it("Verify form Draft status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Draft" });
-          cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
-          cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
-            lhrDocId = $docIdElement.text();
-          });
-          cy.sendToEmail();
-        });
-
-        it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-          cy.checkToastMessageContains({
-            message: "File will be sent to your email shortly.",
-          });
-        });
+      it("Verify indicator for parametrized Material", () => {
+        cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]")
+          .should("have.text", "A: Material parameter | Qty: None ");
+        cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]").parent().parent()
+          .should("have.css", "background-color", "rgb(252, 222, 222)");
       });
 
-      xcontext("Verify email for LHRt notification", () => {
-        it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-          const getEmailSetting =  {
-            to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
-            after: dateAfterEmailShouldArrive,
-            subject: `Export for document ${lhrDocId}`,
-          };
-
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
-              emailsFromInbox = emails;
-              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-              downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
-        });
-
-        it("Verify the emails that should be received", () => {
-          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-            {
-              sentToUser: USERS[1].email,
-              contains: [`Hello <b>${USERS[1].name},</b>`,
-                "Your documents are ready for download.",
-                "<button type=\"button\">DOWNLOAD</button>",
-                createdCompany.id],
-            }];
-          cy.imapVerifyEmailsInList({
-            receivedEmails: emailsFromInbox,
-            emailsToTest: emailsThatShouldBeReceived,
-            getEmailsSincedate: dateAfterEmailShouldArrive,
-            assertNumberOfEmailsFoundInList: 1,
-          });
-        });
+      it("Verify indicator for parametrized Equipment", () => {
+        cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]")
+          .should("have.text", "B: Equipment one ");
+        cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]").parent().parent()
+          .should("have.css", "background-color", "rgb(252, 222, 222)");
       });
+    });
+  });
 
-      xcontext("Verify that zip file containing pdf downloaded", () => {
-        it("Download zip file", () => {
-          expect(downloadUrl).contains("exported_file_download");
-          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-            if (res.body !== "") {
-              downloadUrl = res.body.url;
-              downloadFile  =  `${lhrDocId}${fileTimeFormat}_draft.zip`;
-              cy.downloadFile({
-                url: downloadUrl,
-                directory: CONFIG.DOWNLOADS_DIR,
-                fileName: downloadFile,
-              });
-            }
-          });
-        });
+  context("Save and send email notification", () => {
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
 
-        it("Verify file size of the downloaded zip file", () => {
-          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-          cy.readFile(zipfile).its("length").should("be.gt", 500);
-        });
-
-        it("unzip and extract pdf file from zip file", () => {
-          cy.unzipFile(
-            {
-              directory: CONFIG.DOWNLOADS_DIR,
-              fileName: downloadFile,
-            });
-          const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-            `${lhrDocId}-1-LHRt-document.pdf`);
-          cy.readFile(pdffile).its("length").should("be.gt", 500);
-        });
+    it("Verify form Draft status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        lhrDocId = $docIdElement.text();
       });
+      cy.sendToEmail();
+    });
 
-      xcontext("Verify PDF file content", () => {
-        it("Extract texts from PDF file content", () => {
-          cy.pdfparseFile(
-            {
-              directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-              fileName: `${lhrDocId}-1-LHRt-document.pdf`,
-            }).then((cdata) => {
-            expect(cdata.numpages).eq(3);
-            expect(cdata.text).match(/Page 1 of 3/);
-            expect(cdata.text).match(/Page 2 of 3/);
-            expect(cdata.text).match(/Page 3 of 3/);
-            tmpRegex = new RegExp( "\\n\\n");
-            const arr = cdata.text.split(tmpRegex);
-            arr.forEach((element) => {
-              if (element.includes("Page 1 of 3")) {
-                pages[0] = element;
-              }
-              if (element.includes("Page 2 of 3")) {
-                pages[1] = element;
-              }
-              if (element.includes("Page 3 of 3")) {
-                pages[2] = element;
-              }
-            });
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  xcontext("Verify email for LHRt notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${lhrDocId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  xcontext("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${lhrDocId}${fileTimeFormat}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
           });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
         });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${lhrDocId}-1-LHRt-document.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+  });
 
-        it("Verify page 1 for LHRt", () => {
-          const el = pages[0];
-          if (el.includes("Page 1 of 3")) {
-            tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/AR ID\nNone/);
-
-            expect(el).match(/Description\nLHRt document description/);
-
-            expect(el).match(/Output Document Type\nLot History Record Test/);
-
-            expect(el).match(/Attachments/);
-            expect(el).match(/image.jpg/);
-
-            expect(el).match(/Part to be Manufactured\nPRT-00005 - Part document/);
-
-            expect(el).match(/Initial Quantity/);
-
-            expect(el).match(/End Quantity/);
-
-            tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Due Date/);
-
-            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-            expect(el).not.match(tmpRegex);
-
-            expect(el).match(/Draft/);
-
-            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-            expect(el).match(tmpRegex);
-
-            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Page 1 of 3/);
+  xcontext("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${lhrDocId}-1-LHRt-document.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
           }
-        });
-
-        it("Verify page 2 of LHRt", () => {
-          const el = pages[1];
-          if (el.includes("Page 2 of 3")) {
-
-            tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
-
-            expect(el).match(/Materials\nA: Material parameter/);
-
-            expect(el).match(/Equipment\nB: Equipment one/);
-
-            expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
-
-            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
-
-            expect(el).match(/MT-00006 - Material two \| Qty: 2 boxes/);
-
-            expect(el).match(/Equipment\nET-00003 - Equipment one/);
-
-            expect(el).match(/ET-00007 - Equipment two/);
-
-            expect(el).match(/Select field\nTEXT FIELD/);
-
-            expect(el).match(/APPROVALS\nApprovers/);
-
-            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-            expect(el).not.match(tmpRegex);
-
-            expect(el).match(/Draft/);
-
-            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-
-            expect(el).match(tmpRegex);
-
-            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Page 2 of 3/);
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
           }
-        });
-
-        it("Verify page 3 of LHRt", () => {
-          const el = pages[2];
-          if (el.includes("Page 3 of 3")) {
-
-            tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-
-            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-            expect(el).not.match(tmpRegex);
-
-            expect(el).match(/Draft/);
-
-            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-            expect(el).match(tmpRegex);
-
-            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Page 3 of 3/);
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
           }
         });
       });
+    });
 
-      context("Add parameter materials and equipment", () => {
-        it("Add material parameter", () => {
-          cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
-            .eq(0).arrowClick();
-          cy.listLoadingElementShouldNotExist();
-          cy.get("[data-cy=\"title\"]").arrowClick();
-          cy.get("ul>li[role=option]").contains("Material three").arrowClick();
-          cy.get("[name=\"quantity\"]").arrowType("3");
-          cy.get("[data-cy=\"unit\"]").arrowClick();
-          cy.get("ul>li[role=option]").contains("Day(s)").arrowClick();
-          cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-        });
+    it("Verify page 1 for LHRt", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
 
-        it("Add equipment parameter", () => {
-          cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
-            .eq(1).arrowClick();
-          cy.listLoadingElementShouldNotExist();
-          cy.get("[data-cy=\"title\"]").arrowClick();
-          cy.get("ul>li[role=option]").contains("Equipment three").arrowClick();
-          cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-        });
+        expect(el).match(/AR ID\nNone/);
+
+        expect(el).match(/Description\nLHRt document description/);
+
+        expect(el).match(/Output Document Type\nLot History Record Test/);
+
+        expect(el).match(/Attachments/);
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/Part to be Manufactured\nPRT-00005 - Part document/);
+
+        expect(el).match(/Initial Quantity/);
+
+        expect(el).match(/End Quantity/);
+
+        tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Due Date/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 of LHRt", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+
+        tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
+
+        expect(el).match(/Materials\nA: Material parameter/);
+
+        expect(el).match(/Equipment\nB: Equipment one/);
+
+        expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
+
+        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
+
+        expect(el).match(/MT-00006 - Material two \| Qty: 2 boxes/);
+
+        expect(el).match(/Equipment\nET-00003 - Equipment one/);
+
+        expect(el).match(/ET-00007 - Equipment two/);
+
+        expect(el).match(/Select field\nTEXT FIELD/);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 of LHRt", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+
+        tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
+    });
+  });
+
+  context("Add parameter materials and equipment", () => {
+    it("Add material parameter", () => {
+      cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
+        .eq(0).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains("Material three").arrowClick();
+      cy.get("[name=\"quantity\"]").arrowType("3");
+      cy.get("[data-cy=\"unit\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains("Day(s)").arrowClick();
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    });
+
+    it("Add equipment parameter", () => {
+      cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
+        .eq(1).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains("Equipment three").arrowClick();
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    });
+  });
+
+  context("Release LHRt", () => {
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release LHRt document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Verify form Released status and click on Send To Email", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
+      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+        lhrDocId = $docIdElement.text();
       });
-
-      context("Release LHRt", () => {
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
-        it("Approve and release LHRt document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
-
-        it("Verify form Released status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
-          cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
-          cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
-            lhrDocId = $docIdElement.text();
-          });
-          cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
-            arId = $lnEl.text();
-          });
-          cy.sendToEmail();
-        });
-
-        it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-          cy.checkToastMessageContains({
-            message: "File will be sent to your email shortly.",
-          });
-        });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+        arId = $lnEl.text();
       });
+      cy.sendToEmail();
+    });
 
-      xcontext("Verify email for  LHRt notification", () => {
-        it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-          const getEmailSetting =  {
-            to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
-            after: dateAfterEmailShouldArrive,
-            subject: `Export for document ${lhrDocId}`,
-          };
-
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
-              emailsFromInbox = emails;
-              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-              downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
-        });
-
-        it("Verify the emails that should be received", () => {
-          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-            {
-              sentToUser: USERS[1].email,
-              contains: [`Hello <b>${USERS[1].name},</b>`,
-                "Your documents are ready for download.",
-                "<button type=\"button\">DOWNLOAD</button>",
-                createdCompany.id],
-            }];
-          cy.imapVerifyEmailsInList({
-            receivedEmails: emailsFromInbox,
-            emailsToTest: emailsThatShouldBeReceived,
-            getEmailsSincedate: dateAfterEmailShouldArrive,
-            assertNumberOfEmailsFoundInList: 1,
-          });
-        });
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
       });
+    });
+  });
 
-      xcontext("Verify that zip file containing pdf downloaded", () => {
-        it("Download zip file", () => {
-          expect(downloadUrl).contains("exported_file_download");
-          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-            if (res.body !== "") {
-              downloadUrl = res.body.url;
-              downloadFile  =  `${lhrDocId}${fileTimeFormat}_rel.zip`;
-              cy.downloadFile({
-                url: downloadUrl,
-                directory: CONFIG.DOWNLOADS_DIR,
-                fileName: downloadFile,
-              });
-            }
-          });
-        });
+  xcontext("Verify email for  LHRt notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${lhrDocId}`,
+      };
 
-        it("Verify file size of the downloaded zip file", () => {
-          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-          cy.readFile(zipfile).its("length").should("be.gt", 500);
-        });
-
-        it("unzip and extract pdf file from zip file", () => {
-          cy.unzipFile(
-            {
-              directory: CONFIG.DOWNLOADS_DIR,
-              fileName: downloadFile,
-            });
-          const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-            `${lhrDocId}-1-LHRt-document.pdf`);
-          cy.readFile(pdffile).its("length").should("be.gt", 500);
-        });
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
       });
+    });
 
-      xcontext("Verify PDF file content", () => {
-        it("Extract texts from PDF file content", () => {
-          cy.pdfparseFile(
-            {
-              directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-              fileName: `${lhrDocId}-1-LHRt-document.pdf`,
-            }).then((cdata) => {
-            expect(cdata.numpages).eq(3);
-            expect(cdata.text).match(/Page 1 of 3/);
-            expect(cdata.text).match(/Page 2 of 3/);
-            expect(cdata.text).match(/Page 3 of 3/);
-            tmpRegex = new RegExp( "\\n\\n");
-            const arr = cdata.text.split(tmpRegex);
-            arr.forEach((element) => {
-              if (element.includes("Page 1 of 3")) {
-                pages[0] = element;
-              }
-              if (element.includes("Page 2 of 3")) {
-                pages[1] = element;
-              }
-              if (element.includes("Page 3 of 3")) {
-                pages[2] = element;
-              }
-            });
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  xcontext("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${lhrDocId}${fileTimeFormat}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
           });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
         });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${lhrDocId}-1-LHRt-document.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+  });
 
-        it("Verify page 1 for LHRt", () => {
-          const el = pages[0];
-          if (el.includes("Page 1 of 3")) {
-            tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
-            expect(el).match(tmpRegex);
-
-            tmpRegex = new RegExp( `AR ID\n${arId}`, "gi" );
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Description\nLHRt document description/);
-
-            expect(el).match(/Output Document Type\nLot History Record Test/);
-
-            expect(el).match(/Attachments/);
-            expect(el).match(/image.jpg/);
-
-            expect(el).match(/Part to be Manufactured\nPRT-00005 - Part document/);
-
-            expect(el).match(/Initial Quantity/);
-
-            expect(el).match(/End Quantity/);
-
-            tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Due Date/);
-
-            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-            expect(el).not.match(tmpRegex);
-
-            expect(el).match(/Released/);
-
-            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-            expect(el).match(tmpRegex);
-
-            tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Page 1 of 3/);
+  xcontext("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${lhrDocId}-1-LHRt-document.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
           }
         });
-
-        it("Verify page 2 of LHRt", () => {
-          const el = pages[1];
-          if (el.includes("Page 2 of 3")) {
-            expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
-
-            expect(el).match(/Materials\nA: Material parameter/);
-
-            expect(el).match(/Equipment\nB: Equipment one/);
-
-            expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
-
-            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
-
-            expect(el).match(/MT-00006 - Material two \| Qty: 2 boxes/);
-
-            expect(el).match(/Equipment\nET-00003 - Equipment one/);
-
-            expect(el).match(/ET-00007 - Equipment two/);
-
-            expect(el).match(/Select field\nTEXT FIELD/);
-
-            expect(el).match(/APPROVALS\nApprovers/);
-
-            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-            expect(el).not.match(tmpRegex);
-
-            expect(el).match(/Released/);
-
-            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-            expect(el).match(tmpRegex);
-
-            tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Page 2 of 3/);
-          }
-        });
-
-        it("Verify page 3 of LHRt", () => {
-          const el = pages[2];
-          if (el.includes("Page 3 of 3")) {
-            tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-            tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
-            expect(el).match(tmpRegex);
-
-            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-            expect(el).not.match(tmpRegex);
-
-            expect(el).match(/Released/);
-
-            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-            expect(el).match(tmpRegex);
-
-            tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
-            expect(el).match(tmpRegex);
-
-            expect(el).match(/Page 3 of 3/);
-          }
-        });
       });
+    });
+
+    it("Verify page 1 for LHRt", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nLHRt document description/);
+
+        expect(el).match(/Output Document Type\nLot History Record Test/);
+
+        expect(el).match(/Attachments/);
+        expect(el).match(/image.jpg/);
+
+        expect(el).match(/Part to be Manufactured\nPRT-00005 - Part document/);
+
+        expect(el).match(/Initial Quantity/);
+
+        expect(el).match(/End Quantity/);
+
+        tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Due Date/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 of LHRt", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
+
+        expect(el).match(/Materials\nA: Material parameter/);
+
+        expect(el).match(/Equipment\nB: Equipment one/);
+
+        expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
+
+        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
+
+        expect(el).match(/MT-00006 - Material two \| Qty: 2 boxes/);
+
+        expect(el).match(/Equipment\nET-00003 - Equipment one/);
+
+        expect(el).match(/ET-00007 - Equipment two/);
+
+        expect(el).match(/Select field\nTEXT FIELD/);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 of LHRt", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
     });
   });
 
@@ -1513,17 +1731,18 @@ context("Autosave LHR", () => {
       });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
+    it("Verify LHR title", () => {
+      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
+      cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
+    });
+
+    it("Verify current released part is 'rev 1'", () => {
+      cy.get("[data-cy=\"lhr-selected-part\"]")
+        .should("have.attr", "value", "CS-00005 - rev 1 - Part document");
     });
 
     it("Check lot number", () => {
       cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
-    });
-
-    it("Upload attachment 'image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter initial quantity", () => {
@@ -1539,110 +1758,245 @@ context("Autosave LHR", () => {
       cy.poAddDateRequired();
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Upload attachment 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
     it("Select option1 checked", () => {
       cy.get("[id^=\"mui-component-select-select-field\"]").arrowClick({ force: true });
       cy.get("[data-value=\"option1\"]").arrowClick();
       cy.unClick();
     });
 
-    it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+    it("Check lot number", () => {
+      cy.url().then((url: any) => {
+        lhrDocUrl = url;
+      });
+      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02RD");
       cy.pause();
     });
   });
 
-  context("Start LHRs #1", () => {
-    it("Click 'START MPI'", () => {
-      cy.mpiStartStep({ stepNumber: 1 });
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
-    it("Verify LHRs title", () => {
-      cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
-        .should("have.text", "LOT #" + lotDateSuffix + "02RD | LHR-00004 | PRT-00005.1 Part document");
-    });
-
-    it("Upload attachment 'test_image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-    });
-
-    it("Click 'SELECT' for 'Material One' ", () => {
-      cy.get("[data-cy=\"form.builder.select\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("input[data-cy=usedOverride]").arrowClick();
-      cy.get("ul>li[role=option]").contains(`LOT #${lotDateSuffix}01`).arrowClick();
-    });
-
-    it("Select quantity in lot dialog", () => {
-      cy.get("input[name=\"quantity\"]").arrowType("5");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
-        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
-          .eq(0)
-          .click();
+  context("Complete first step in LHR", () => {
+    context("Add operator and login it for work on LHRs", () => {
+      it("Click on sidebar permission icon to add Operators", () => {
+        cy.get("[data-cy='permission-icon']").arrowClick();
       });
-      cy.pause();
+
+      it(`Assign operator '${USERS[2].name}'`, () => {
+        SystemRequirement("REQ-3200");
+        cy.drAssignDocumentTo({ username: USERS[2].name });
+      });
+
+      it(`Logout user '${USERS[1].name}'`, () => {
+        cy.authLogout();
+      });
+
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      });
+
+      it("Navigate to LHR landing page", () => {
+        SystemRequirement("REQ-3350");
+        cy.navigToLHR();
+      });
+
+      it("Select created LHR record", () => {
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.DocPreview,
+          CyRoutes.DocRevPreview,
+          CyRoutes.GetAutocompleteOptions], () => {
+          cy.dlSelectFirstDocument();
+        });
+      });
     });
 
-    it("Click 'SELECT' for 'Equipment one' ", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+    context("Start LHRs #1", () => {
+      it("Click 'START MPI'", () => {
+        SystemRequirement("REQ-3210");
+        cy.mpiStartStep({ stepNumber: 1 });
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Verify LHRs title", () => {
+        SystemRequirement("REQ-3320");
+        cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
+          .should("have.text", "LOT #" + lotDateSuffix + "02RD | LHR-00004 | CS-00005.1 Part document");
+      });
+
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
+      });
+
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
+      });
+
+      it("Enter 'Rejected quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+      });
+
+      it("Click 'SELECT' for 'Material One' ", () => {
         cy.get("[data-cy=\"form.builder.select\"]")
-          .eq(2)
+          .eq(0)
           .click({ force: true });
       });
-    });
 
-    it("Select 'Equipment one'", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"usedOverride\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains("Equipment one").arrowClick();
-    });
+      it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
+        cy.pause();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[data-cy=usedOverride]").arrowClick();
+        cy.get("ul>li[role=option]").contains(`LOT #${lotDateSuffix}01`).arrowClick();
+      });
 
-    it("Click 'SAVE' on select equipment dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
-        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
-          .eq(0)
-          .click();
+      it("Select quantity in lot dialog", () => {
+        cy.get("input[name=\"quantity\"]").arrowType("5");
+      });
+
+      it("Click 'SAVE' on select lot dialog", () => {
+        cy.pause();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
+          cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+            .eq(0)
+            .click();
+        });
+      });
+
+      it("Click 'SELECT' for 'Equipment one' ", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.get("[data-cy=\"form.builder.select\"]")
+            .eq(2)
+            .click({ force: true });
+        });
+      });
+
+      it("Select 'Equipment one'", () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"usedOverride\"]").arrowClick();
+        cy.get("ul>li[role=option]").contains("Equipment one").arrowClick();
+      });
+
+      it("Click 'SAVE' on select equipment dialog", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
+          cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+            .eq(0)
+            .click();
+        });
+      });
+
+      it("Verify LOT is selected for 'Material One'", () => {
+        SystemRequirement("REQ-3340", "REQ-3660");
+        cy.get("div[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").eq(0).parent()
+          .should("contain.text", `LOT #${lotDateSuffix}01`);
+      });
+
+      it("Verify Equipment is selected for 'Equipment one'", () => {
+        SystemRequirement("REQ-3660");
+        cy.get("div[data-cy=\"form.builder.mpi.part.selection.equipment\"]")
+          .should("have.text", "ET-00003");
+      });
+
+      it("Add an Approval", () => {
+        SystemRequirement("REQ-3220");
+        cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        });
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Complete step", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve step", () => {
+        SystemRequirement("REQ-3230");
+        cy.ebApprove();
+      });
+
+      context("Check equipment and materials from MPI are present", () => {
+        it("Check description step #1", () => {
+          cy.xpath("//div[@data-cy=\"mpi-procedure-built-in.description\"]/../div[2]")
+            .should("have.text", "Description of step one");
+        });
+
+        it("Check materials step #1", () => {
+          cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
+            .eq(0)
+            .should("have.text", "MT-00004 - Material one - rev 1 | Qty: 30 each");
+          cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
+            .eq(1)
+            .should("have.text", "MT-00007 - Material three - rev 1 | Qty: 30 days");
+        });
+
+        it("Check equipment step #1", () => {
+          cy.get("[data-cy$=\"equipment.title\"]")
+            .eq(0)
+            .should("have.text", "ET-00003 - Equipment one");
+          cy.get("[data-cy$=\"equipment.title\"]")
+            .eq(1)
+            .should("have.text", "ET-00008 - Equipment three");
+        });
+
+        it("Check description step #2", () => {
+          cy.xpath("//div[contains(@data-cy, 'description')]/../div[2]")
+            .eq(1)
+            .should("have.text", "Description of step two");
+        });
+
+        it("Check materials step #2", () => {
+          cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
+            .eq(2)
+            .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 50 days");
+        });
+
+        it("Check equipment step #2", () => {
+          cy.get("[data-cy$=\"equipment.title\"]")
+            .eq(2)
+            .should("have.text", "ET-00007 - Equipment two - rev 1");
+        });
+
+        it("Verify status is completed", () => {
+          cy.url().then((url: any) => {
+            lhrs1DocUrl = url;
+          });
+          cy.drCheckDocumentStatus({ status: "Completed" });
+        });
+
+        it("Verify user who completed LHRs", () => {
+          SystemRequirement("REQ-3240");
+          cy.get("div[id=Presenter-FBWorkspace]>div").eq(-2).find("div>div:nth-child(5)")
+            .should("contain.text", USERS[2].name);
+        });
       });
     });
-
-    it("Enter 'Start quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
-    });
-
-    it("Enter 'Accepted quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
-    });
-
-    it("Enter 'Rejected quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
-    });
   });
+
 
   context("Add/remove approver and check autosave", () => {
     it("Add first Approver'", () => {
+      cy.pause();
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      cy.unClick();
     });
 
     it("Add second Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
-      cy.unClick();
     });
 
     it("Remove second Approver'", () => {
       cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
-      cy.unClick();
     });
 
     it("check approvers after reload page", () => {
@@ -1663,7 +2017,6 @@ context("Autosave LHR", () => {
 
     it("check due date", () => {
       cy.get("[name=\"lhr-due-date\"]").invoke("val").should("be.exist");
-      cy.pause();
     });
   });
 
@@ -1677,7 +2030,6 @@ context("Autosave LHR", () => {
 
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
-        cy.pause();
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
@@ -1703,10 +2055,6 @@ context("Autosave LHR", () => {
         cy.unClick();
       });
 
-      it("Upload attachment 'test_image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-      });
-
       it("While autosaving, enter 'Rejected quntity' for LHRs #1", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
           req.reply((res) => {
@@ -1729,7 +2077,7 @@ context("Autosave LHR", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
-      it("Remove first Approver'", () => {
+      it("Remove second Approver'", () => {
         cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
       });
 
@@ -1756,7 +2104,7 @@ context("Autosave LHR", () => {
         cy.drCheckDocumentStatus({ status: "WIP" });
         cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01");
         cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
-        cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
+        cy.drGetDocIdElementFromUI().should("contain.text", "CS-").then(($docIdElement: JQuery<HTMLElement>) => {
           lhrDocId = $docIdElement.text();
         });
         cy.sendToEmail();
@@ -1772,4 +2120,3 @@ context("Autosave LHR", () => {
 });
 
 export { };
-
