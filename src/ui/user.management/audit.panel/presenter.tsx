@@ -38,7 +38,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
   const [page, setPage] = useState(UM_AUDIT_HISTORY_INITIAL_OFFSET);
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
-
+  const [overallLimit, setOverallLimit] = React.useState(UM_AUDIT_HISTORY_LIMIT);
+  const [dataTotal, setDataTotal] = React.useState(0);
   const closeDrawer = () => {
     setOpenDrawer({ ...openDrawer, right: false });
     closeHistoryPanel(openDrawer.right);
@@ -55,6 +56,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      setIsLoading(true);
      setLoadMore(true);
      setErrorMessage("");
+     setOverallLimit(overallLimit + UM_AUDIT_HISTORY_LIMIT);
      const requestConfig: AxiosRequestConfig = {
        method: "get",
        url: UM_AUDIT_URL,
@@ -78,6 +80,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
          setIsLoading(false);
          setShowLoadMoreButton(true);
          setLoadMore(data.page_total > 0);
+         setDataTotal(data.total);
        })
        .catch((exception) => {
          setIsLoading(false);
@@ -130,7 +133,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
       {showLoadMoreButton && (
         <LoadMoreButton
-          disable={isLoading || !loadMore}
+          disable={isLoading || !loadMore || overallLimit >= dataTotal}
           onLoadMore={fetchAuditRecords}
           id="historyLoadMore"
         />
