@@ -32,6 +32,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const [btnText, setBtnText] = useState("view more");
   const [editor, setEditor] = useState<string>();
   const [flag, setFlag] = useState(true);
+  const [hover, setHover] = useState(false);
   const intl = useIntl();
   const descriptionPlaceholder: string = intl.formatMessage({ id: "form.builder.enter.description" });
   const toggleBtn = () => {
@@ -112,8 +113,11 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     style={{
                       gridArea: "1/1",
                       cursor: !disabled ? "text" : "inherit",
+                      backgroundColor: hover ? Colors.platinum : Colors.white,
                     }}
                     p={isPreview ? 0 : 1.5}
+                    onMouseOver={() => setHover(true)}
+                    onMouseOut={() => setHover(false)}
                   >
                     <Observer>
                       {() => {
