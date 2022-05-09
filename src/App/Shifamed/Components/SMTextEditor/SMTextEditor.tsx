@@ -66,9 +66,10 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
           >
             <Box
               display="flex"
-              style={{ gridArea: "1/1" }}
+              style={{ gridArea: "1/1", display: _textEditorState?.masked  ? "none"  : "" }}
               borderRadius={4}
               data-cy={name}
+
             >
               <Observer>
                 {() => (
