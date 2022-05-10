@@ -24,7 +24,7 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
   <Observer>
     {() => (
       <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-        <Box py={3} px={6}>
+        <Box py={3} px={3.75} pl={3.75}>
           <Box mb={3.75}>
             {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
           </Box>

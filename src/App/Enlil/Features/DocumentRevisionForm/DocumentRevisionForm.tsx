@@ -99,14 +99,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               <SMTabs
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
                 tabs={tabLabels}
-                boxProps={{ stretchY: "100%" }}
+                boxProps={{ stretchY: "100%", style: { paddingLeft: "30px" } }}
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
-                  return <SMBox key={index} height="100%" overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} px={8} stretchY="100%">
+                  return <SMBox key={index}  height="100%" overflow={"auto"} {...{ onScroll }}>
+                    <SMBox mt={8} px={3.75} pl={0}  stretchY="100%">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}
                         releasedDocRev={_documentRevisionFormState?.releasedDocRev}

@@ -228,6 +228,14 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontFamily: "Open Sans, sans-serif;",
     },
   },
+  MuiTab: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+      lineHeight: "15px",
+      paddingLeft: "0px",
+      paddingTop: "5px",
+    },
+  },
   MuiFormHelperText: {
     root: {
       fontFamily: "Open Sans, sans-serif;",

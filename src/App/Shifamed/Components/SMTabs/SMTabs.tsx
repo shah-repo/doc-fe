@@ -14,7 +14,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
 }) =>  (
   <Observer>
     {() => (
-      <SMBox {...boxProps}>
+      <SMBox {...boxProps} pl={3.75}>
         <Tabs
           {...{ onChange }}
           value={_tabsState?.value}
@@ -29,7 +29,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           {tabs?.map((tab, index) => (
             <Tab
               key={`sm-tabpanel-${tab}-${index}`}
-              label={<SMText boxProps={{ fontFamily: "button" }} label={tab} />}
+              label={<SMText  boxProps={{ fontFamily: "button" }} label={tab} />}
             />
           ))}
         </Tabs>
