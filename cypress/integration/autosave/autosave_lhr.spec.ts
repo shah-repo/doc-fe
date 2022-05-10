@@ -1472,7 +1472,7 @@ context("LHR flow", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"title\"]").arrowClick();
       cy.get("ul>li[role=option]").contains("Material one").arrowClick();
-      cy.get("[name=\"quantity\"]").arrowType("3");
+      cy.get("input[name=\"quantity\"]").arrowType("3");
       cy.get("[data-cy=\"unit\"]").arrowClick();
       cy.get("ul>li[role=option]").contains("Day(s)").arrowClick();
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -1834,9 +1834,7 @@ context("LHR flow", () => {
       });
 
       it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy=usedOverride]").arrowClick();
-        cy.get("ul>li[role=option]").contains(`LOT #${lotDateSuffix}01`).arrowClick();
+        cy.get("input[data-cy=usedOverride]").autocompleteSelect(`LOT #${lotDateSuffix}01`);
       });
 
       it("Select quantity in lot dialog", () => {
@@ -1862,7 +1860,7 @@ context("LHR flow", () => {
       it("Select 'Equipment one'", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("input[data-cy=\"usedOverride\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Equipment one").arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains("Equipment one").arrowClick();
       });
 
       it("Click 'SAVE' on select equipment dialog", () => {
@@ -1906,13 +1904,13 @@ context("LHR flow", () => {
       });
     });
 
-    xcontext("Verify LHR header and sent email", () => {
+    context("Verify LHR header and sent email", () => {
       it("Check doc status for WIP and click on Send To Email", () => {
         cy.pause();
         cy.drCheckDocumentStatus({ status: "WIP" });
         cy.get("#HeaderInfo-subtitle").should("contain.text", "LOT #" + lotDateSuffix + "02RD");
         cy.get("#HeaderInfo-docId").should("contain.text", "LHR-00004");
-        cy.drGetDocIdElementFromUI().should("contain.text", "LHR-").then(($docIdElement: JQuery<HTMLElement>) => {
+        cy.get("#HeaderInfo-docId").should("contain.text", "LHR").then(($docIdElement) => {
           lhrDocId = $docIdElement.text();
         });
         cy.sendToEmail();
@@ -1925,7 +1923,7 @@ context("LHR flow", () => {
       });
     });
 
-    xcontext("Verify email for LHR notification", () => {
+    context("Verify email for LHR notification", () => {
       it("Get emails", () => {
         dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         const getEmailSetting =  {
@@ -1970,7 +1968,7 @@ context("LHR flow", () => {
       });
     });
 
-    xcontext("Verify that zip file containing pdf downloaded", () => {
+    context("Verify that zip file containing pdf downloaded", () => {
       it("Download zip file", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -2016,7 +2014,7 @@ context("LHR flow", () => {
       });
     });
 
-    xcontext("Verify PDF file content", () => {
+    context("Verify PDF file content", () => {
       it("Extract texts from PDF file content", () => {
         cy.pdfparseFile(
           {
@@ -2043,105 +2041,111 @@ context("LHR flow", () => {
         });
       });
 
-      it("Verify page 1 for LHRt", () => {
+      it("Verify page 1 for LHR", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 3")) {
-          tmpRegex = new RegExp( `Lot History Record Test\n${lhrDocId}, Revision 1\nPART DOCUMENT`, "gi" );
-          expect(el).match(tmpRegex);
-
-          tmpRegex = new RegExp( `AR ID\n${arId}`, "gi" );
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Description\nLHRt document description/);
-
-          expect(el).match(/Output Document Type\nLot History Record Test/);
+          // tmpRegex = new RegExp( `Lot History Record Test\n${lhrDocId}, Revision 1\nPART DOCUMENT`, "gi" );
+          // expect(el).match(tmpRegex);
 
           expect(el).match(/Attachments/);
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/Part to be Manufactured\nCS-00005 - Part document/);
+          expect(el).match(/Part to be Manufactured\nCS-00005 - 1 Part document/);
 
-          expect(el).match(/Initial Quantity/);
+          expect(el).match(/Initial Quantity\n10/);
 
           expect(el).match(/End Quantity/);
 
           tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Due Date/);
+          // tmpRegex = new RegExp( `Due Date\n${pdfDocRelDate}`);
+          // expect(el).match(tmpRegex);
+
+          expect(el).match(/LHR STEP #1\nLHR-00004, Step #1 \(PI-00002, MPI document, Rev 1\)/);
+
+          tmpRegex = new RegExp( `Step started \\| ${pdfDocRelDate}`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Attachments/);
+
+          expect(el).match(/WIP/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
-          expect(el).match(/Released/);
-
           tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: LHRT-00003, Revision 1, ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 3/);
         }
       });
 
-      it("Verify page 2 of LHRt", () => {
+      it("Verify page 2 of LHR", () => {
         const el = pages[1];
         if (el.includes("Page 2 of 3")) {
-          expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
+          // tmpRegex = new RegExp( `Lot History Record Test\n${lhrDocId}, Revision 1\nPART DOCUMENT`, "gi" );
+          // expect(el).match(tmpRegex);
 
-          expect(el).match(/Materials\nA: Material one/);
+          expect(el).match(/test_image.jpg/);
 
-          expect(el).match(/Equipment\nB: Equipment one/);
+          expect(el).match(/PI PROCEDURE\nMaterials/);
 
-          expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
+          expect(el).match(/MT-00004 - Material one - rev 1 | Qty: 30 days/);
 
-          expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
+          tmpRegex = new RegExp(`LOT #22051001 | MT-00004.1 \\| 5 days`);
+          expect(el).match(tmpRegex);
 
-          expect(el).match(/MT-00006 - Material two \| Qty: 2 boxes/);
+          expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
 
-          expect(el).match(/Equipment\nET-00003 - Equipment one/);
+          expect(el).match(/Start quantity\n10/);
 
-          expect(el).match(/ET-00007 - Equipment two/);
+          expect(el).match(/Accepted quantity\n8/);
 
-          expect(el).match(/Select field\nTEXT FIELD/);
+          expect(el).match(/Rejected quantity\n2/);
 
-          expect(el).match(/APPROVALS\nApprovers/);
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[2].name} \\- .*@.* \\| DRAFT`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/WIP/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
-          expect(el).match(/Released/);
-
           tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: LHRT-00003, Revision 1, ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 2 of 3/);
         }
       });
 
-      it("Verify page 3 of LHRt", () => {
+      it("Verify page 3 of LHR", () => {
         const el = pages[2];
         if (el.includes("Page 3 of 3")) {
-          tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
-          expect(el).match(tmpRegex);
+          // tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+          // expect(el).match(tmpRegex);
 
-          expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
-          expect(el).match(tmpRegex);
+          expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
+
+          expect(el).match(/Select field\noption1/);
+
+          expect(el).match(/APPROVALS\nNone/);
+
+          expect(el).match(/WIP/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
-          expect(el).match(/Released/);
-
           tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: LHRT-00003, Revision 1, ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 3 of 3/);
@@ -2151,6 +2155,7 @@ context("LHR flow", () => {
 
     context("Start LHRs #1", () => {
       it("Navigate to LHR #1", () => {
+        cy.pause();
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhrDocUrl);
         });
