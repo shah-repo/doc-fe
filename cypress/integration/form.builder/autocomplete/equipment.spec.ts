@@ -417,9 +417,7 @@ context("Autocomplete 'Equipment' test", () => {
         cy.fbGroupOptions("option1", "option2");
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf();
-        cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Autocomplete-Approvers");
-        cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(`${USERS[1].email }`);
+        cy.fbFieldRequiredIf({ name: "Autocomplete-Approvers", value: USERS[1].email });
         cy.fbAddField();
       });
 
@@ -2060,7 +2058,7 @@ context("Autocomplete 'Equipment' test", () => {
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
         expect(el).match(/History/);
-        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocRelDateMonthFirst}`, "gi" );
+        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| `, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
