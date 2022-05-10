@@ -48,7 +48,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     setTimeout(() => {
       const headerTmpl = document.getElementById("SMHeaderTmpl");
       const bodyTmpl = document.getElementById("SMBodyTmpl");
-      const restHeight = headerTmpl?.clientHeight ? 170 + (+(headerTmpl?.clientHeight)) : 200;
+      const restHeight = headerTmpl?.clientHeight ? 150 + (+(headerTmpl?.clientHeight)) : 200;
       bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
     }, 100);
   };
