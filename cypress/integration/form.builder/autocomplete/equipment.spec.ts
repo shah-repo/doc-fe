@@ -748,8 +748,8 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Approve and release form", () => {
-    it("Approve and release form", () => {
+  context("Approve and release document", () => {
+    it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
@@ -1041,8 +1041,8 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Create Equipment document", () => {
-    it("Click create document", () => {
+  context("Create 'Equipment'", () => {
+    it("Click create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
     });
 
