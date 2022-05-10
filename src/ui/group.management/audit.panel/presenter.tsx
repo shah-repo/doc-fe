@@ -37,7 +37,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
   const [page, setPage] = useState(GM_AUDIT_HISTORY_INITIAL_OFFSET);
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
-  const [overallLimit, setOverallLimit] = React.useState(GM_AUDIT_HISTORY_LIMIT);
+  const [overallLimit, setOverallLimit] = React.useState(0);
   const [dataTotal, setDataTotal] = React.useState(0);
   const closeDrawer = () => {
     setOpenDrawer({ ...openDrawer, right: false });
