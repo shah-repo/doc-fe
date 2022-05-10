@@ -16,6 +16,7 @@ const StyledTableCell = withStyles((theme) => ({
     textTransform: "uppercase",
     fontFamily: "Sora",
     fontSize: "12px",
+    lineHeight: "15px",
   },
   body: {
     fontSize: 14,

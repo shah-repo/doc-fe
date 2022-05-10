@@ -19,8 +19,12 @@ export const FBButtonStyles = makeStyles(() =>
       "&:hover": {
         backgroundColor: Colors.navy,
       },
+      "padding": "12px 25px",
     },
     margin: {
       margin: 0,
+    },
+    btnMargin: {
+      margin: "7px 10px 0 10px",
     },
   }));

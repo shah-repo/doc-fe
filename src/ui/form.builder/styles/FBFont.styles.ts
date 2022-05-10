@@ -17,5 +17,6 @@ export const FBFontStyle =  {
     fontWeight: 600,
     fontSize: 12,
     color: Colors.almost_black,
+    lineHeight: "15px",
   },
 };

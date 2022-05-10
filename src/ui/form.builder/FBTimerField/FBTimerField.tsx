@@ -19,7 +19,7 @@ const FBTimerField: React.FunctionComponent<FBTimerProps> = ({
           size="medium"
           variant="text"
           fullWidth={true}
-          className={classes.button}
+          className={`${classes.button} ${classes.btnMargin}`}
           disabled={props.disabled}
         />
       </Box>

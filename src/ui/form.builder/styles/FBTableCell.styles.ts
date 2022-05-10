@@ -23,7 +23,7 @@ export const FBTableCellStyles = makeStyles(() =>
     cellBackground: {
       fontWeight: 600,
       background: Colors.whitest_grey,
-      border: `{1px solid ${Colors.whitest_grey}}`,
+      border: `1px solid ${Colors.whitest_grey}`,
       borderRadius: "3px",
     },
   }));

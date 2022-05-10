@@ -14,6 +14,7 @@ const FBPurchaseOrderClasses = makeStyles({
     },
     "& .FBTotal-root": {
       padding: "10px 8px",
+      borderBottom: 0,
     },
     "& .FBIcon-root": {
       "color": "#c1c1c1",
