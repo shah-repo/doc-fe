@@ -1,4 +1,4 @@
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, isEmpty } from "lodash";
 import React, { useEffect, useMemo } from "react";
@@ -17,7 +17,6 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { DRAWER_WIDTH } from "../../app/Navigation.styles";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
@@ -262,12 +261,6 @@ DocumentRevisionFormContainerProps
         style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }}
       />
       <Grid style={{ background: Colors.light_gray }} >
-        {
-          type !== "newOutput" &&
-          <Box ml={3}>
-            <ChangeRequestLink dataProp={documentRevision} />
-          </Box>
-        }
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }

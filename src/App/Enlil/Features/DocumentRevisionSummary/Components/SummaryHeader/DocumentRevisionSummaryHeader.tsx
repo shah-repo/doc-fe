@@ -1,4 +1,4 @@
-import { Box, Collapse } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionSummaryHeaderProps } from "../../../../..";
@@ -22,19 +22,17 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
 }) => (
   <Observer>
     {() => (
-      <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-        <Box py={3} px={6}>
-          {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
-          {isTitleVisible && (
-            <CustomLabelTooltip {...{ tooltipConfig }}>
-              <SummaryField label={titleLabel} value={name} />
-            </CustomLabelTooltip>
-          )}
-          {isDescriptionVisible && (
-            <SummaryFieldWithHtml label={descriptionLabel} value={description} />
-          )}
-        </Box>
-      </Collapse>
+      <Box py={3} px={6}>
+        {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
+        {isTitleVisible && (
+          <CustomLabelTooltip {...{ tooltipConfig }}>
+            <SummaryField label={titleLabel} value={name} />
+          </CustomLabelTooltip>
+        )}
+        {isDescriptionVisible && (
+          <SummaryFieldWithHtml label={descriptionLabel} value={description} />
+        )}
+      </Box>
     )}
   </Observer>
 );

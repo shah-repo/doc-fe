@@ -1,5 +1,10 @@
 import Button, { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
+import { SM } from "../../../App";
+import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { ReactComponent as ChangeOwnerIcon } from "../../../assets/images/change_owner_avatar.svg";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest/types";
 import AlertDialog from "../../app/alert.dialog/AlertDialog";
@@ -21,6 +26,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   changeRequestId,
   transition,
 }) => {
+  const isNewLayout = SM.isNewCRLayout;
   const dialog = useDialog();
   const applyTransition = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync<ChangeRequestTransitionResponse>();
@@ -35,15 +41,29 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   };
   return (
     <>
-      <Button
-        color="secondary"
-        variant="outlined"
-        onClick={dialog.open}
-        data-cy="change.request.withdraw.alert"
-        {...buttonProps}
-      >
-        <Text message={label} />
-      </Button>
+      {isNewLayout ? (
+        <StyledMenuListItem button alignItems="flex-start">
+          <StyledMenuListIcon>
+            <ChangeOwnerIcon />
+          </StyledMenuListIcon>
+          <StyledMenuListItemText
+            id="OwnerChangerPresenter-changeOwner"
+            data-cy="change.request.withdraw.alert"
+            primary={<Text message={label} />}
+            onClick={dialog.open}
+          />
+        </StyledMenuListItem>
+      ) : (
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={dialog.open}
+          data-cy="change.request.withdraw.alert"
+          {...buttonProps}
+        >
+          <Text message={label} />
+        </Button>
+      )}
       <AlertDialog
         confirmAction={withdrawAction}
         message={"change.request.withdraw.alert"}

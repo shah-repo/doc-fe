@@ -40,7 +40,7 @@ const styles = makeStyles((theme: Theme) =>
 interface Props {
   owner: Owner;
   secondaryComponent: JSX.Element;
-  name: string;
+  name: string | JSX.Element;
 }
 
 const UserAvatarListItem: React.FunctionComponent<Props> = ({

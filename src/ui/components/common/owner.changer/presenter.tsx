@@ -39,7 +39,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   openDialog,
   renderAsButton,
 }) => {
-  const isNewLayout = SM.isNewLayout;
+  const isNewLayout = SM.isNewLayout || SM.isNewCRLayout;
   const classes = styles();
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
