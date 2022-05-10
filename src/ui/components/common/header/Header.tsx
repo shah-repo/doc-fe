@@ -45,7 +45,6 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
         bgcolor={Colors.alabaster}
         py={1.25}
         px={1.25}
-        pb={0.5}
         alignContent="center"
       >
         <Grid

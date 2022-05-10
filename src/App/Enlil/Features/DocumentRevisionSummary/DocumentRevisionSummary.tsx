@@ -10,6 +10,7 @@ import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspace } from "../../../../ui/form.builder";
+import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
@@ -43,7 +44,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
       headerBoxProps={{ maxHeight: "30%" }}
-      contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
+      contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%", bgcolor: Colors.alabaster }}
       values={documentRevision}
       header= {
         <SummaryHeader
