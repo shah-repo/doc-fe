@@ -76,7 +76,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
         }}
         validate={validators}
         inputStyleProps={classes.input}
-        labelProps={AutoCompleteStyles.labelProps}
+        labelProps={AutoCompleteStyles.labelStyle}
       />
     </CustomLabelTooltip>
   );

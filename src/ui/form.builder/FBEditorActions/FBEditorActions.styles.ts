@@ -3,7 +3,6 @@ import Colors from "../../layout/theme/utils/colors";
 type TextTransform = "none" | "capitalize" | "uppercase" | "lowercase" | "initial" | "inherit";
 
 const commonStyles = {
-  padding: "20px",
   height: "36px",
   textTransform: "capitalize" as TextTransform,
   fontFamily: "Sora",

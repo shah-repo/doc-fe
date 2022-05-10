@@ -47,6 +47,9 @@ export const styles = makeStyles((theme: Theme) =>
     },
     noHeader: {
       fontSize: "14px",
+      fontWeight: 400,
+      fontStyle: "normal",
+      lineHeight: "20px",
       color: Colors.almost_black,
       fontFamily: "Sora",
     },

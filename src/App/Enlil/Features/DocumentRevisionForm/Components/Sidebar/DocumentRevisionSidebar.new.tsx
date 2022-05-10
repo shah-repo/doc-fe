@@ -60,7 +60,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
           borderColor={Colors.medium_gray}
           className={classes.sidebar}
         >
-          <Box display="flex" height={48} alignItems="center" marginTop="10px">
+          <Box display="flex" height={48} alignItems="center">
             <Box width={48} textAlign="center" className={classes.iconBox}>
               <StyledTooltip
                 title={
@@ -85,7 +85,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                   className={classes.tabTitle}
                 >
                   <SMText
-                    boxProps={{ flexGrow: 1, ml: 2 }}
+                    boxProps={{ flexGrow: 1, ml: 1.875 }}
                     label={title || _documentRevisionSidebarState.title}
                   />
                 </Typography>
@@ -138,6 +138,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                           documentId,
                           docId,
                           documentRevisionId,
+                          _documentRevisionSidebarState,
                         }}
                       />
                     ),

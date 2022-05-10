@@ -4,12 +4,12 @@ import Colors from "../layout/theme/utils/colors";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-
+      visibility: "hidden",
     },
     linkContainer: {
-      borderBottom: `1px solid ${theme.palette.text.hint}`,
-      padding: theme.spacing(2),
-      width: theme.spacing(31.5),
+      boxShadow: `inset 0px 1px 1px -1px ${Colors.gray_goose}, inset 0px -1px 1px 0px ${Colors.gray_goose}`,
+      padding: theme.spacing(1.875),
+      width: theme.spacing(29.125),
       flexGrow: 1,
     },
     linkTitle: {

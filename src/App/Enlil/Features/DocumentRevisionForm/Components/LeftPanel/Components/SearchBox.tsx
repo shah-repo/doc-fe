@@ -1,7 +1,7 @@
 import { Box, IconButton } from "@material-ui/core";
 import InputBase from "@material-ui/core/InputBase";
-import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
+import { ReactComponent as SearchIcon } from "../../../../../../../assets/images/leftPanel/searchIcon.svg";
 import styles from "./SearchBox.styles";
 
 interface Props {
@@ -14,7 +14,7 @@ const SearchBox: React.FunctionComponent<Props> = ({ onSearch }) => {
       <IconButton type="submit" size="small" disableRipple>
         <SearchIcon className={classes.searchIcon} />
       </IconButton>
-      <InputBase placeholder="Search" onChange={onSearch} />
+      <InputBase placeholder="Search" onChange={onSearch} className={classes.searchInput} />
     </Box>
   );
 };

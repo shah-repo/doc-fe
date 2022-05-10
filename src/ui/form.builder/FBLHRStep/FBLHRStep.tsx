@@ -79,7 +79,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           {...{ loading }}
           className={classes.button}
           style={{
-            marginTop: "1px",
+            marginTop: "0px",
+            height: "40px",
           }}
         />
       </Box>

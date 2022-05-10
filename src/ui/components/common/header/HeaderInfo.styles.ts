@@ -30,7 +30,7 @@ export const styles = makeStyles((theme: Theme) =>
     breadcrumbId: {
       fontFamily: "Sora",
       fontStyle: "normal",
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: "14px",
       lineHeight: "18px",
       color: Colors.white,
@@ -54,8 +54,8 @@ export const styles = makeStyles((theme: Theme) =>
     },
     itemIcon: {
       color: "inherit",
-      minWidth: "30px",
-      marginLeft: "20px",
+      marginLeft: "17px",
+      marginRight: "11px",
     },
     icon: ({ iconLink }) => ({
       "width": 18,
@@ -134,9 +134,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     GRAY_STATUS: {
       color: Colors.mandy,
-    },
-    WIP_STATUS: {
-      color: Colors.raven,
     },
     undefined: {
       color: Colors.dodger_blue,

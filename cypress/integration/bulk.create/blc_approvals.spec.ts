@@ -4,6 +4,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ApprovalsDocType, ApprovalsInlineType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -44,34 +45,8 @@ context("Bulk create approvals block/inline test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Approvals Document Type",
-                documentTypeAcronym: "ADT-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
-              {
-                documentTypeName: "Approvals Inline Type",
-                documentTypeAcronym: "AIT-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
+              ApprovalsDocType,
+              ApprovalsInlineType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -385,13 +360,11 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Document with approvals for BLC").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document with approvals for BLC");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Approvals Document Type").arrowClick();
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Approvals Document Type");
       });
 
       it("Select 'no' to have Document id column", () => {
@@ -454,13 +427,12 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Document with inline approvals for BLC").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]")
+          .autocompleteSelect("Document with inline approvals for BLC");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Approvals Inline Type").arrowClick();
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Approvals Inline Type");
       });
 
       it("Select 'no' to have Document id column", () => {

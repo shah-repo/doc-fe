@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -51,7 +52,7 @@ context("PO approval test", () => {
               {
                 documentTypeName: "PO Part",
                 documentTypeAcronym: "PRT-",
-                group: "PART",
+                group: DOC_TYPE_GROUP.PART,
                 isQms: true,
               },
             ],
@@ -330,11 +331,12 @@ context("PO approval test", () => {
       cy.unClick();
     });
 
-    it("Add an Approval and save", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-      });
+    it(`Select '${USERS[2].name}' for Requestor`, () => {
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+    });
+
+    it("Save PO", () => {
       cy.poSaveDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

@@ -28,6 +28,8 @@ declare global {
       fbSelectInlineApproval(): Chainable<Subject>;
       fbSelectApprovals(): Chainable<Subject>;
       fbOpenValidation(): Chainable<Subject>;
+      fbFieldRequired(): Chainable<Subject>;
+      fbFieldRequiredIf(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
       fbSelectField(): Chainable<Subject>;
       fbAddLabelName(params: { name: string }): Chainable<Subject>;
@@ -71,6 +73,7 @@ declare global {
       fbClickLabelEditHiddenBtn(params: { label: string }): Chainable<Subject>;
       fbAutocompleteType(params: { autocompleteOption: string }): Chainable<Subject>;
       dtSelectDefaultRevisionStage(params: { defaultRevisionStage: string}): Chainable<Subject>;
+      fbClickRemoveBtn(params: { label: string }): Chainable<Subject>;
     }
   }
 }
@@ -224,6 +227,10 @@ Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("button[data-cy=\"form
 
 Cypress.Commands.add("fbOpenValidation", () =>  cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").arrowClick());
 
+Cypress.Commands.add("fbFieldRequired", () =>  cy.get("span[data-cy=\"fb-control-required\"]").arrowClick());
+
+Cypress.Commands.add("fbFieldRequiredIf", () =>  cy.get("input[name=\"validators.required_if\"]").arrowClick());
+
 Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").arrowClick());
 
 Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }));
@@ -343,9 +350,29 @@ Cypress.Commands.add("fbVerifyAutocompleteElementLength", (params: { el: string;
     .find(`[data-cy^="${params.el}-"]`)
     .click();
 
-  cy.get(".MuiAutocomplete-popper ul li").should("have.length", params.length);
+  if (params.length > 0) {
+    cy.get("ul>li[role=option]").first().scrollIntoView().trigger("mouseover").wait(500);
+
+    const indexNumberToVerifyLengthOfList = params.length - 1;
+    let i = 0;
+    while (i < indexNumberToVerifyLengthOfList)
+    {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find(`[data-cy^="${params.el}-"]`).type("{downarrow}");
+      i++;
+    }
+
+    cy.get("ul>li[role=option]").last().should("have.attr", "data-option-index", indexNumberToVerifyLengthOfList);
+  }
+  else {
+    cy.get("ul>li[role=option]").should("not.exist");
+  }
 });
 
 Cypress.Commands.add("fbClickLabelEditHiddenBtn", (params: { label: string }) => {
   cy.contains(params.label).parentsUntil("li").find("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true });
+});
+
+Cypress.Commands.add("fbClickRemoveBtn", (params: { label: string }) => {
+  cy.contains(params.label).parentsUntil("li").find("[data-cy=\"remove-schema-item\"]").first().arrowClick({ force: true });
 });

@@ -18,12 +18,12 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: "12px",
       lineHeight: "15px",
       color: Colors.almost_black,
-      marginTop: "4px",
     },
     released: {
       fontFamily: "Sora",
       fontStyle: "normal",
       fontSize: "14px",
+      fontWeight: 400,
       lineHeight: "20px",
       color: Colors.almost_black,
       marginTop: "10px",

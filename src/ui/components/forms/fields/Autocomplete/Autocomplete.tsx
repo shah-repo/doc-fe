@@ -1,4 +1,4 @@
-import { Box, createStyles, makeStyles, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import Select, { components, createFilter } from "react-select";
@@ -7,6 +7,7 @@ import { ValueType } from "react-select/src/types";
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
+import { styles as FBAutoCompleteStyles } from "../../../../form.builder/styles/FBAutocomplete.styles";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
@@ -50,17 +51,6 @@ export const selectStyles = {
   }),
 };
 
-const styles = makeStyles(() =>
-  createStyles({
-    title: {
-      color: Colors.almost_black,
-      fontSize: "12px",
-      fontFamily: "Sora",
-      fontWeight: 600,
-    },
-  }),
-);
-
 export const MultiValueRemove = (props) => (
   <components.MultiValueRemove {...props}>
     <DeleteIcon style={{ width: 12, height: 12 }} />
@@ -78,7 +68,6 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   isDisabled = false,
   ...fieldProps
 }) => {
-  const classes = styles();
   const { submitForm } = useFormContext();
   const onChange = (value: ValueType<OptionType>) => {
     fieldProps.onChange?.(value);
@@ -103,11 +92,11 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
 
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={1.25}>
-        <Typography variant="h5" className={classes.title}>
+      <>
+        <Typography variant="h5" style={FBAutoCompleteStyles.labelProps}>
           <Text message={fieldProps.label} />
         </Typography>
-      </Box>
+      </>
       <Select
         {...fieldProps.field}
         {...autocompleteProps}

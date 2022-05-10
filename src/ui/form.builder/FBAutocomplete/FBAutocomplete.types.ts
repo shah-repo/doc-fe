@@ -13,6 +13,7 @@ export type FBAutocompleteProps =
  | "freeSolo"
  | "filterSelectedOptions"
  | "groupBy"
+ | "disableClearable"
  > & {
    onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any;
    refresh?: () => any;
@@ -23,4 +24,9 @@ export type FBAutocompleteProps =
    debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void;
    inputPropStyle?: React.CSSProperties;
    inputPropStyleSize?: any;
+   /**
+    * @cfg {Boolean} Option to disable deletion of rendered chips using Backspace key.
+    */
+   disableBackspace?: boolean;
+   disableChipDelete?: boolean;
  };

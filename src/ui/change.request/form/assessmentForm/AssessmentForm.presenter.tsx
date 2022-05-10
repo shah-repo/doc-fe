@@ -23,6 +23,7 @@ interface Props
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
+
 export let formIdContext = React.createContext<string | undefined>(undefined);
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
@@ -30,19 +31,18 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   changeRequest,
   dirty,
-  setFieldValue,
-  doNotPrompt,
   isSubmitting,
   isValidating,
   initialValues,
   resetForm,
   errors,
   values,
-  submitForm,
   FBContainer,
+  doNotPrompt,
 }) => {
   const formContext = useFormContext();
   const didMount = useDidMount();
+
   formIdContext = React.createContext<string | undefined>(
     values.formDocument?.id,
   );

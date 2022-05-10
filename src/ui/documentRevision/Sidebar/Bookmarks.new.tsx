@@ -26,7 +26,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
     bookmarks = bookmarkState?.bookmarks;
   });
   return (
-    <Box p={1.875}>
+    <Box m={1.875}>
       <FBMapWrapper<FBBookmarkItem[]> collection={bookmarks || []}>
         {(bookmark: FBBookmarkItem, index, arr) => {
           const { name: hash, label = "" } = bookmark;
@@ -34,7 +34,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
           return (
             <Box
               display="flex"
-              pb={1.875}
+              mb={1.875}
               alignItems="center"
               key={`fb-bookmark-${hash}-${index}`}
             >

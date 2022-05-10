@@ -323,7 +323,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
         expect(el).match(/Output Document Type\nDocument Approval Matrix/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/APPROVAL ROLES/);
 
@@ -518,7 +520,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
         expect(el).match(/Output Document Type\nDocument Approval Matrix/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/APPROVAL ROLES/);
 
@@ -596,7 +600,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.drAddAnotherRoleBtn();
       });
-
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -902,7 +905,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         RegExp( `Description\n${DAMDocument}`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/Draft/);
 
@@ -1164,7 +1169,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         RegExp( `Description\n${DAMDocument}`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/Released/);
 

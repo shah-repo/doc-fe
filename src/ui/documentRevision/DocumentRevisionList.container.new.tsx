@@ -1,6 +1,7 @@
 import { LinearProgress, List } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DocumentRevisionSidebarState from "../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state";
 import { Nullable } from "../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
@@ -19,6 +20,7 @@ interface OwnProps {
   documentTypeId?: string;
   isInlineApproval: boolean;
   isRecord: boolean;
+  _documentRevisionSidebarState?: DocumentRevisionSidebarState;
 }
 
 type DocumentRevisionListContainerProps = OwnProps;
@@ -34,6 +36,7 @@ DocumentRevisionListContainerProps
   documentTypeId,
   isInlineApproval,
   isRecord,
+  _documentRevisionSidebarState,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -67,6 +70,7 @@ DocumentRevisionListContainerProps
                 documentTypeId,
                 isDocumentPO,
                 isRecord,
+                _documentRevisionSidebarState,
               }}
             />
           )

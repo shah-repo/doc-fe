@@ -8,7 +8,7 @@ enum Colors {
   water="#EEF3FF",
   // black
   black = "#000",
-  almost_black = "#080B11",
+  almost_black = "#080B11", // font_black
   // gray
   hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
@@ -22,11 +22,14 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
-  gray_goose ="##CCD4D9",
+  gray_goose ="#CCD4D9",
   raven = "#767B87",
   whitest_grey="#EBEDF2",
   lightest_grey1="#CCD4D9",
   athens_gray= "#F5F6F8",
+  link_water = "#ccd4d9",
+  platinum_grey = "#E2E2E2",
+  cultured="#f6f7f7",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -44,6 +47,7 @@ enum Colors {
   dodger_blue="#4D88FF",
   ultramarine_blue="#4C69FF",
   mild_wind_blue="#CCD4D9",
+  topaz="#03C0C1",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -92,6 +96,7 @@ enum Colors {
   chinese_silver="#C8CACF",
   spanish_gray="#999999",
   gains_boro="#DDDDDD",
+  white_smoke="#F9F9F9"
 }
 
 export default Colors;

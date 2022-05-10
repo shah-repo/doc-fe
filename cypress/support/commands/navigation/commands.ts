@@ -14,6 +14,7 @@ declare global {
       navigClickOnItem(params: { navigItem: NavigationItems }): Chainable<Subject>;
       navigToNestedItem(params: {navigItems: NavigationItems[]}): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
+      navigToDocumentTypeManagement(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
@@ -26,6 +27,7 @@ declare global {
       navigToParts(): Chainable<Subject>;
       navigToLots(): Chainable<Subject>;
       navigToLHR(): Chainable<Subject>;
+      navigToEB(): Chainable<Subject>;
       navigToDocumentListWithUnsavedChanges(params: { confirmPopup: boolean }): Chainable<Subject>;
       navigToTrainingRecords(): Chainable<Subject>;
       navigToTrainingCurriculums(): Chainable<Subject>;
@@ -115,6 +117,19 @@ Cypress.Commands.add("navigToLHR", () => {
   cy.landingPageLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("navigToEB", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.MANUFACTURING,
+        NavigationItems.EB,
+      ],
+    });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("navigToReceivableList", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
@@ -140,6 +155,16 @@ Cypress.Commands.add("navigToDocumentList", () => {
         NavigationItems.DOCUMENT_LIST,
       ],
     });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToDocumentTypeManagement", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_TYPE_MANAGEMENT,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
@@ -228,6 +253,7 @@ Cypress.Commands.add("navigToTrainingRecords", () => {
       NavigationItems.TRAINING_RECORDS,
     ],
   });
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToTrainingCurriculums", () => {
@@ -240,4 +266,5 @@ Cypress.Commands.add("navigToTrainingCurriculums", () => {
       ],
     });
   });
+  cy.landingPageLoadingElementShouldNotExist();
 });

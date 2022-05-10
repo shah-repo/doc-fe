@@ -3,6 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -38,12 +39,7 @@ context("Autosave on leaving page while data is still not saved", () => {
             importerEmail: USERS[5].email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-              },
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -126,6 +122,7 @@ context("Autosave on leaving page while data is still not saved", () => {
     });
 
     it("Type 'Test' inside title field", () => {
+      cy.cmpTurnOffAutosave();
       cy.drEnterDocumentTitle({ name: "Test" });
     });
 
@@ -164,6 +161,7 @@ context("Autosave on leaving page while data is still not saved", () => {
 
     it("Click on created 'Draft' document and check if data is saved", () => {
       cy.drFilterDocListByNameAndStatus({ title: "Test", status: "Draft" });
+      cy.cmpTurnOnAutosave();
       cy.get("[id=Title-field]").contains("Test");
       cy.get("[data-cy=\"RichTextEditor.description\"]>div>div:nth-child(2)>div>div>div>div>div>div>span>span")
         .contains("Test description");

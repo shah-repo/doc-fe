@@ -21,6 +21,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupBy,
   refresh,
   filterSelectedOptions = false,
+  disableClearable = false,
   freeSolo = false,
   multiple = false,
   options,
@@ -36,6 +37,9 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   inputStyle = {},
   inputPropStyle = {},
   inputPropStyleSize = "",
+  disabledOptions = [],
+  disableBackspace = false,
+  disableChipDelete = false,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -68,6 +72,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             defaultValue,
             freeSolo,
             filterOptions,
+            disableClearable,
           }}
           PopperComponent={CustomPopper}
           options={modifiedOptions}
@@ -80,6 +85,12 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   {...params}
                   {...!params.InputProps.startAdornment && { placeholder }}
                   onChange={onInputChange}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    const key = event.keyCode || event.charCode;
+                    if (key === 8 && disableBackspace) {
+                      event.stopPropagation();
+                    }
+                  }}
                   fullWidth
                   variant="outlined"
                   InputProps={{
@@ -88,7 +99,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   }}
                   inputProps={{
                     ...params.inputProps,
-                    "style": { padding: "10.5px 0", ...inputStyle, fontFamily: "Sora" },
+                    "style": { padding: "10.5px 0", ...inputStyle, marginRight: disabled ? "28px" : "0px" },
                     "data-cy": props.name,
                   }}
                   size={inputPropStyleSize}
@@ -108,13 +119,14 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               {(option, index) => {
                 const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
                   (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
+                const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
                 return (
                   <StyledChip
                     key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto", fontFamily: "Sora" }}
                     {...getTagProps({ index })}
-                    disabled={props.name === "approvers" ? isAlreadyApproved : disabled}
+                    disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
                   />
                 ); }}
             </FBMapWrapper>

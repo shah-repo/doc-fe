@@ -9,6 +9,9 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
+import { MPITest } from "../../utils/constants/documentTypes/mpi";
+import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -67,102 +70,9 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Manufacturing Process Instructions Test",
-                documentTypeAcronym: "PI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-start-quantity",
-                    type: "quantity",
-                    index: 2,
-                    label: "Start quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Start quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-accepted-quantity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Accepted quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Accepted quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-rejected-quantity",
-                    type: "quantity",
-                    index: 4,
-                    label: "Rejected quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Rejected quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 5,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
-              {
-                documentTypeName: "LHR template",
-                documentTypeAcronym: "LHRT-",
-                group: "FORM",
-              },
-              {
-                documentTypeName: "Part",
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
+              MPITest,
+              LHRTTest,
+              Part,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -1714,7 +1624,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Select expired equipment", () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick().wait(500);
         cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
       });
 
@@ -1762,13 +1672,11 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-          cy.listLoadingElementShouldAppear();
-        });
+        cy.drClickReviseDocument();
       });
 
       it("Update step #1 description", () => {
+        cy.cmpTurnOffAutosave();
         cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
         cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
       });
@@ -1940,7 +1848,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Select expired equipment", () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick().wait(500);
         cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
       });
 
@@ -1988,13 +1896,11 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-          cy.listLoadingElementShouldAppear();
-        });
+        cy.drClickReviseDocument();
       });
 
       it("Update step #1 description", () => {
+        cy.cmpTurnOffAutosave();
         cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
         cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
       });

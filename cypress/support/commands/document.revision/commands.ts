@@ -32,12 +32,15 @@ declare global {
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
+      drGetDocIdElementFromUI(): Chainable<JQuery<HTMLElement>>;
+      drGetChangeRequestLinkElementFromUI(): Chainable<JQuery<HTMLElement>>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
       drFilterDocListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       drFilterDocListByDocIdAndStatus(params: { docId: string; status: string }): Chainable<Subject>;
       drChangeOwner(params: { employee: string }): Chainable<Subject>;
       drChangeOwnerFromMenu(params: { employee: string }): Chainable<Subject>;
+      drCancelDraftFromMenu(): Chainable<Subject>;
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
@@ -436,6 +439,14 @@ Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
 
+Cypress.Commands.add("drGetDocIdElementFromUI", () => {
+  cy.get(`[id="HeaderInfo-docId"]`);
+});
+
+Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {
+  cy.get(`[id="ChangeRequestLink-linkButton"]`);
+});
+
 Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
   cy.get("[id=\"document.docId\"]").invoke("val").should("not.be.empty");
 });
@@ -474,6 +485,14 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
   cy.get("#HeaderMenuButton").arrowClick();
   cy.drChangeOwner({ employee: params.employee });
+});
+
+Cypress.Commands.add("drCancelDraftFromMenu", () => {
+  cy.get("#HeaderMenuButton").arrowClick();
+  cy.get("[data-cy=\"cancelDraftButton\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.CancelDraft], () => {
+    cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+  });
 });
 
 Cypress.Commands.add("drClickUpgradeForm", () => {
@@ -606,8 +625,7 @@ Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
 Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
   cy.listLoadingElementShouldNotExist();
   employees.forEach((employee) => {
-    cy.get("[data-cy=\"employees\"]").arrowClick();
-    cy.get(".MuiAutocomplete-popper").contains(employee).arrowClick();
+    cy.get("[data-cy=\"employees\"]").autocompleteSelect(employee);
   });
 });
 
@@ -720,7 +738,8 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 
 Cypress.Commands.add("drSelectUser", (...users: string[]) => {
   users.forEach((user) => {
-    cy.get(`[data-cy="field-securityEmployees"]`).autocompleteSelect(`${user}`);
+    cy.get(`[data-cy="field-securityEmployees"]`).arrowType(`${user}`).wait(500);
+    cy.get(`div[id^=react-select]`).contains(user).arrowClick();
   });
   cy.unClick();
 });
@@ -792,6 +811,18 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
   cy.listLoadingElementShouldNotExist();
 });
 
+function compareStringsEmptyStringLast(a: string, b: string) {
+  if (a.length === 0) {
+    return 1;
+  }
+
+  if (b.length === 0) {
+    return -1;
+  }
+
+  return (a <= b) ? -1 : 1;
+}
+
 Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number}) => {
   const cellContents: string[] = [];
   cy.get("tr.k-master-row")
@@ -803,7 +834,7 @@ Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number
     })
     .then(() => {
       const actual = cellContents.slice();
-      cy.wrap(actual).should("deep.eq", cellContents);
+      cy.wrap(actual).should("deep.eq", cellContents.sort(compareStringsEmptyStringLast).reverse());
     });
 });
 
@@ -818,7 +849,7 @@ Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number
     })
     .then(() => {
       const actual = cellContents.slice();
-      cy.wrap(actual).should("deep.eq", cellContents.sort());
+      cy.wrap(actual).should("deep.eq", cellContents.sort(compareStringsEmptyStringLast));
     });
 });
 

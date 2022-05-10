@@ -93,6 +93,10 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+### Enable debug logs
+Project is using `debug` package https://github.com/debug-js/debug
+set `debug` variable in localstorage to `enlil:*`
+More info: https://github.com/debug-js/debug#browser-support
 
 ## Cypress
 
@@ -157,6 +161,7 @@ Optional environment variables:
 
 *NUMBER_OF_WORKERS* - number of workers :grin: , defaults to 4. Go as high as you can without having (too many?) specs failing due to timeouts or you system becomes unbearably slow.
 *CYPRESS_BROWSER* - browser to use. Defaults to 'chrome'. Options are 'chrome', 'chromium', 'firefox', 'electron'
+*CYPRESS_NO_COMMAND_LOG* - show empty command log. Defaults to false. It can increase speed of tests by ~20%
 
 Example
 ```
