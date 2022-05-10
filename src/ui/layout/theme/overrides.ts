@@ -200,7 +200,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       [`& .${FBClasses.inputPreview}`]: {
         [`& .Mui-disabled`]: {
           color: `${appTheme.palette.text.primary} !important`,
-          backgroundColor: Colors.light_gray,
+          backgroundColor: "unset",
           paddingLeft: "2px",
           fontSize: "1rem",
           fontWeight: 400,
