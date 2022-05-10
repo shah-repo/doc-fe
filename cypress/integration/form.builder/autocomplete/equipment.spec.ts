@@ -10,7 +10,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -657,7 +657,8 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`The Preventative Maintenance Form field is required when Preventative Maintenance\nrequired\\?.*is.*Yes`);
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Preventative Maintenance Frequency \(Days\)/);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)`);
+        expect(el).match(tmpRegex);
 
         // eslint-disable-next-line max-len
         tmpRegex = new RegExp(`The Preventative Maintenance Frequency \\(Days\\) field is required when Preventative\nMaintenance required\\?.*is.*Yes`);
@@ -947,7 +948,8 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`The Preventative Maintenance Form field is required when Preventative Maintenance\nrequired\\?.*is.*Yes`);
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Preventative Maintenance Frequency \(Days\)/);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)`);
+        expect(el).match(tmpRegex);
 
         // eslint-disable-next-line max-len
         tmpRegex = new RegExp(`The Preventative Maintenance Frequency \\(Days\\) field is required when Preventative\nMaintenance required\\?.*is.*Yes`);
@@ -1098,7 +1100,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).arrowType("365");
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType(`${equimentDueDays}`);
       cy.unClick();
     });
 
@@ -1121,7 +1123,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).arrowType("365");
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType(`${equimentDueDays}`);
     });
 
     it("Type calibration maintenance instruction", () => {
@@ -1318,7 +1320,8 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        expect(el).match(/Preventative Maintenance Frequency \(Days\)\n365/);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
@@ -1329,7 +1332,8 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        expect(el).match(/Calibration Frequency \(Days\)\n365/);
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
 
@@ -1569,7 +1573,8 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        expect(el).match(/Preventative Maintenance Frequency \(Days\)\n365/);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
@@ -1580,7 +1585,8 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        expect(el).match(/Calibration Frequency \(Days\)\n365/);
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
 
@@ -2048,18 +2054,19 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        expect(el).match(/Preventative Maintenance Frequency \(Days\)\n365/);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
         expect(el).match(/History/);
-        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocRelDate}`, "gi" );
+        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocRelDateMonthFirst}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDate}`, "gi" );
+        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${pdfDocRelDate}`, "gi" );
+        tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/CALIBRATION/);
@@ -2069,15 +2076,16 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        expect(el).match(/Calibration Frequency \(Days\)\n365/);
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
 
         expect(el).match(/History/);
-        tmpRegex = new RegExp( `MR-00001 Calibration document \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDate}`, "gi" );
+        tmpRegex = new RegExp( `MR-00001 Calibration document \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `Calibration Done - Due Date: ${pdfDocRelDate}`, "gi" );
+        tmpRegex = new RegExp( `Calibration Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).not.match(/Select field/);
