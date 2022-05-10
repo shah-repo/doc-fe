@@ -34,14 +34,12 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
   const intl = useIntl();
-  // const { _documentRevisionFormState } = SM.useStores();
   const descriptionPlaceholder: string = intl.formatMessage({ id: "form.builder.enter.description" });
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
 
   const toggleBtn = () => {
     setFlag(!flag);
-    // _documentRevisionFormState?.setViewMore(!flag);
     if (flag) {
       setBtnText(viewMore);
     } else {
@@ -87,7 +85,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     toolbarStyle={{
                       border: "none",
                       borderBottom: `1px solid ${Colors.hint_gray}`,
-                      // position: editor?.length < 100 ? "fixed" : "static",
+                      position: editor?.length > 100 ? "fixed" : "static",
                       zIndex: 8,
                     }}
                     editorStyle={{
@@ -152,7 +150,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         }
                         return (
                           <Box>
-                            <div onClick= { () => { handleMask?.(false); setFlag(!flag); }}>
+                            <>
                               <span style={{
                                 fontWeight: 400,
                                 fontSize: "14px",
@@ -170,11 +168,11 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                                   cursor: "pointer",
                                   display: editor?.length < 100 ? "none" : "",
                                 }}
-                                onClick={() => toggleBtn()}>
+                                onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}>
                                 {btnText}
                               </span>
                               }
-                            </div>
+                            </>
                           </Box>
                         );
                       }
