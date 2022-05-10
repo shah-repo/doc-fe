@@ -20,7 +20,6 @@ export const InputField = withStyles((theme: Theme) =>
       padding: theme.spacing(2),
       flex: 1,
       border: `1px solid ${theme.palette.text.hint}`,
-      fontFamily: "Open Sans, sans-serif;",
     },
   }),
 )(InputBase);

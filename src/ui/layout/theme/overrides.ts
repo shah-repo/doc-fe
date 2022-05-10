@@ -30,7 +30,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     subtitle1: {
       color: appTheme.palette.text.primary,
       fontSize: "0.885rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     subtitle2: {
       color: appTheme.palette.text.primary,
@@ -40,18 +40,21 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     h5: {
       color: appTheme.palette.text.primary,
       fontSize: "1rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     h4: {
       color: appTheme.palette.text.primary,
       fontSize: "1.4rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     h6: {
       color: Colors.dark_gray,
       fontSize: "1rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
       fontWeight: "bold",
+    },
+    h3: {
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiButton: {
@@ -60,7 +63,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       borderRadius: 3,
       margin: appTheme.spacing(1),
       fontWeight: "bold",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     contained: {
       boxShadow: "none",
@@ -79,7 +82,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       color: appTheme.palette.primary.main,
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiTableCell: {
@@ -92,7 +95,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontSize: "0.81rem",
       background: appTheme.palette.background.default,
       color: appTheme.palette.common.white,
-      fontFamily: "Open Sans",
+      fontFamily: "Sora, sans-serif;",
       fontWeight: "bold",
       lineHeight: "0.9rem",
     },
@@ -100,11 +103,12 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiInputBase: {
     root: {
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     input: {
       "fontSize": "0.8rem",
       "borderRadius": "4px",
+      "fontFamily": "Sora, sans-serif;",
       "&.Mui-disabled": {
         backgroundColor: Colors.white,
       },
@@ -144,9 +148,14 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     primary: {
       fontSize: "0.9rem",
       color: appTheme.palette.text.primary,
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
   },
+  // MuiBox: {
+  //   root: {
+  //     fontFamily: "Sora, sans-serif;",
+  //   },
+  // },
   MuiExpansionPanel: {
     root: {
       boxShadow: "none",

@@ -7,7 +7,6 @@ export const styles = makeStyles((theme) => ({
     height: "100%",
   },
   table: {
-    fontFamily: theme.typography.fontFamily,
     innerHeight: "100%",
     fontSize: theme.typography.fontSize,
   },
@@ -22,7 +21,7 @@ export const styles = makeStyles((theme) => ({
   },
   emptyMsg: {
     padding: theme.spacing(2),
-    fontFamily: "Open Sans, sans-serif;",
+    fontFamily: "Sora, sans-serif;", // MuiBox-root is not getting added in override.ts
   },
   row: (props: TableStyleProps) => ({
     "paddingRight": "0!important",
