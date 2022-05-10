@@ -105,6 +105,7 @@ export enum ACTION_TITLE_MAPPING {
   CreatedNewUser = "CreatedNewUser",
   CreatedNewUserEmail = "CreatedNewUserEmail",
   DeactivateUser = "DeactivateUser",
+  ReactivateUser = "ReactivateUser",
   ActivateUser = "ActivateUser",
   Unknown = "Unknown",
   EmployeeNameUpdated = "EmployeeNameUpdated",
@@ -143,7 +144,9 @@ export enum ACTION_TITLE_MAPPING {
   RemovedParentGroups="RemovedParentGroups",
   RemovedParentGroup="RemovedParentGroup",
   UpdatedGroups="UpdatedGroups",
-  UpdatedGroup="UpdatedGroup"
+  UpdatedGroup="UpdatedGroup",
+  Removed="Removed",
+  Added="Added"
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
