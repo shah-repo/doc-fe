@@ -22,6 +22,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     caption: {
       fontFamily: "Sora, sans-serif;",
     },
+    body1: {
+      fontFamily: "Sora, sans-serif;",
+    },
     body2: {
       color: "#8A9DAD",
       fontSize: "0.8rem",
@@ -50,7 +53,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     h6: {
       color: Colors.dark_gray,
       fontSize: "1rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
       fontWeight: "bold",
     },
   },
@@ -178,7 +181,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiFormControl: {
     root: {
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
       [`& .${FBClasses.hoverVisibility}`]: {
         "&:hover": {
           "& .MuiButton-root": {
