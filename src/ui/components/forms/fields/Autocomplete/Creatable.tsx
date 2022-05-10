@@ -1,3 +1,4 @@
+import { Box, ClickAwayListener } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import { useState } from "react";
@@ -35,6 +36,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [inputValue, setInputValue] = useState(formikValue);
+  const [showOnlyText, setShowOnlyText] = useState(true);
   const { submitForm } = useFormContext();
   const {
     form: { setFieldValue, setFieldTouched, touched },
@@ -48,6 +50,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       setInputValue((value as any)?.value);
     }
     setFieldValue(name, (value as any)?.value);
+    setShowOnlyText(false);
     // submitForm();
   };
   const onInputChange = (value) => {
@@ -67,49 +70,65 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       // eslint-disable-next-line @typescript-eslint/await-thenable
       await setFieldValue(name, inputValue);
     }
+    setShowOnlyText(false);
     submitForm();
   };
 
   const stringify = (option: OptionType) => option.label;
   const filterOption = createFilter({ ignoreAccents: false, stringify });
 
+  const onAway = () => {
+    setShowOnlyText(true);
+  };
+
+
   return (
     <Field {...fieldProps} label={undefined}>
-      {/* <Box mb={1}>
-        <Typography variant="h6">
-          <Text message={fieldProps.label} />
-        </Typography>
-      </Box> */}
-      <CreatableSelect
-        inputValue={inputValue}
-        value={value}
-        styles={{
-          ...selectStyles,
-          input: (base) => ({
-            ...base,
-            input: { opacity: inputValue ? "1 !important" : 0, backgroundColor: "red" },
-          }),
-          control: (base) => ({
-            ...base,
-            backgroundColor: Colors.white,
-            borderColor: Colors.hint_gray,
-            minHeight: "52px",
-            padding: "5px 3px",
-          }),
+      <ClickAwayListener onClickAway={onAway}>
+        <div>
+          {showOnlyText &&
+        <Box style={{
+          fontFamily: "Sora",
+          fontStyle: "normal",
+          fontWeight: 600,
+          fontSize: "19px",
+          lineHeight: "24px",
         }}
-        isClearable={Boolean(formikValue)}
-        components={{ DropdownIndicator: null }}
-        placeholder={null}
-        openMenuOnClick={false}
-        openMenuOnFocus={false}
-        createOptionPosition="first"
-        isValidNewOption={() => true}
-        blurInputOnSelect={false}
-        controlShouldRenderValue={false}
-        {...{ isDisabled, filterOption, onChange, onInputChange, onBlur }}
-        {...creatableProps}
-        options={options}
-      />
+        onClick={() => { setShowOnlyText(false); }}
+        >{inputValue}
+        </Box>}
+          {!showOnlyText && <CreatableSelect
+            inputValue={inputValue}
+            value={value}
+            styles={{
+              ...selectStyles,
+              input: (base) => ({
+                ...base,
+                input: { opacity: inputValue ? "1 !important" : 0, backgroundColor: "red" },
+              }),
+              control: (base) => ({
+                ...base,
+                backgroundColor: Colors.white,
+                borderColor: Colors.hint_gray,
+                minHeight: "52px",
+                padding: "5px 3px",
+              }),
+            }}
+            isClearable={Boolean(formikValue)}
+            components={{ DropdownIndicator: null }}
+            placeholder={null}
+            openMenuOnClick={false}
+            openMenuOnFocus={false}
+            createOptionPosition="first"
+            isValidNewOption={() => true}
+            blurInputOnSelect={false}
+            controlShouldRenderValue={false}
+            {...{ isDisabled, filterOption, onChange, onInputChange, onBlur }}
+            {...creatableProps}
+            options={options}
+          />}
+        </div>
+      </ClickAwayListener>
     </Field>
   );
 };

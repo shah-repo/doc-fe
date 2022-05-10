@@ -60,7 +60,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
         {() => (
           <Box
             bgcolor={isPreview ? "transparent" : "white"}
-            border={isPreview ? 0 : 1}
+            border={isPreview || _textEditorState?.masked ? 0 : `1px solid ${Colors.clear_blue}`}
+            boxShadow={isPreview || _textEditorState?.masked ? 0 : `0 0 0 1px ${Colors.clear_blue}`}
             borderColor={Colors.hint_gray}
             borderRadius={4}
             style={{ display: "grid" }}
@@ -113,16 +114,15 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                   <Box
                     bgcolor={isPreview ? "transparent" : "white"}
                     borderRadius={4}
-                    zIndex={1000}
                     display="flex"
                     style={{
                       gridArea: "1/1",
                       cursor: !disabled ? "pointer" : "inherit",
-                      backgroundColor: hover ? Colors.platinum : Colors.white,
+                      backgroundColor: hover || _textEditorState?.masked ? Colors.light_gray : Colors.white,
                     }}
                     maxHeight= {150}
                     overflow= "auto"
-                    p={isPreview ? 0 : 1.5}
+                    p={isPreview  || _textEditorState?.masked ? 0 : 1.5}
                     {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}
                     onMouseOver={() => setHover(true)}
                     onMouseOut={() => setHover(false)}
