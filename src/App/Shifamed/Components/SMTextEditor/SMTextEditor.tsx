@@ -128,7 +128,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     <Observer>
                       {() => {
                         const editedValue = _formState?.getValue(name) ?
-                          convertHtmlEntities(_formState?.getValue(name).replace(/(<([^>]+)>|\/n)/g, "")) :
+                          convertHtmlEntities(_formState?.getValue(name).replace(/(<([^>]+)>|\/n)/g, " ")) :
                           descriptionPlaceholder;
 
                         const completeText = () => {
