@@ -10,6 +10,7 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
+import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useDidMount from "../../../hooks/useDidMount";
 import { ChangeRequestFormValues } from "../types";
 import styles from "./AssessmentForm.styles";
@@ -75,12 +76,14 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             label="common.title"
             inputProps={{ id: "title", multiline: true, rows: "2" }}
             validate={validator(required)}
+            labelProps={AutoCompleteStyles.labelStyle}
           />
           <TextEditorField
             data-testid="description"
             name="description"
             label="common.description"
             validate={validator(required)}
+            labelProps={AutoCompleteStyles.labelStyle}
           />
           <div ref={FBContainer} />
         </Box>
