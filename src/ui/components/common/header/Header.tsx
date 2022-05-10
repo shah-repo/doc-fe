@@ -37,7 +37,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
   const classes = styles();
   const headerBackgroundClasses = headerBackgroundStyles();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
-  if (SM.isNewLayout && !isCreateUrl) {
+  if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
       <Box
         minHeight={60}

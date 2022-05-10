@@ -22,7 +22,7 @@ const Header: React.FunctionComponent<Props> = ({
   canToggleCustomLabels,
 }) => {
 
-  if (SM.isNewLayout) {
+  if (SM.isNewLayout || SM.isNewCRLayout) {
     return (
       <Box
         height={48}

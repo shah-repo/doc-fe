@@ -8,6 +8,7 @@ interface SidebarContainerProps {
   sidebarList: Sidebar[];
   isDrawerOpen?: boolean;
   setOpen?: (value: boolean) => void;
+  setTab?: (value: number) => void;
 }
 
 const SidebarContainer: React.FunctionComponent<
@@ -16,6 +17,7 @@ const SidebarContainer: React.FunctionComponent<
   sidebarList,
   isDrawerOpen = true,
   setOpen,
+  setTab,
 }) => {
   const [indexNumber, setIndex] = useState(0);
   useEffect(() => {
@@ -42,6 +44,7 @@ const SidebarContainer: React.FunctionComponent<
       return;
     }
     setIndex(index);
+    setTab?.(index);
   };
 
   return (
@@ -51,7 +54,6 @@ const SidebarContainer: React.FunctionComponent<
         indexNumber,
         sidebarList,
         inputRef,
-        setIndex,
         handleMenuIconClick,
         onDrawerToggle,
       }}

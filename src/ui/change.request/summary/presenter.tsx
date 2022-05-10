@@ -12,7 +12,6 @@ import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/Docum
 import { FB } from "../../form.builder";
 import { ChangeRequestFormValues } from "../form/types";
 import Approvers from "./approvers";
-import SummaryHeader from "./SummaryHeader";
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,7 +54,6 @@ const Presenter: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      <SummaryHeader {...{ dataProp, canChangeOwnerShip, asyncState, errors, canEdit }}/>
       <Grid container={true} spacing={4} direction="column" className={classes.container}>
         {canEdit && <FormProgress asyncState={asyncState} />}
         {canEdit && <FormMessage asyncState={asyncState} />}

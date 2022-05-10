@@ -4,7 +4,10 @@ import Colors from "../../../../../ui/layout/theme/utils/colors";
 
 const styles = () => ({
   root: {
-    margin: "0px",
+    "margin": 0,
+    "&:hover": {
+      backgroundColor: "unset",
+    },
   },
   label: {
     padding: "10.5px 20px",

@@ -116,7 +116,8 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
         {canSendToReview && <AssessmentFormVoidContainer changeRequest={changeRequest} />}
         {
           canChangeOwnerShip &&
-           <OwnerChangerContainer requestId={changeRequest.id} requestType={RequestType.ChangeRequest} renderAsButton/>
+           <OwnerChangerContainer requestId={changeRequest.id} requestType={RequestType.ChangeRequest}
+             renderAsButton={false} />
         }
         {renderAlertDialogButton(canWithdraw, "withdrawn")}
       </HeaderMenu>

@@ -7,7 +7,7 @@ export default makeStyles((theme: Theme) =>
     root: {
       background: Colors.light_gray,
       display: "flex",
-      marginTop: theme.spacing(5),
+      height: "100%",
     },
     appFrame: ({ isDrawerOpen }) => ( {
       flexGrow: 1,
