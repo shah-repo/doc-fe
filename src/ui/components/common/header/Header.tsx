@@ -1,7 +1,6 @@
-import { Box, Collapse, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
+import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import { Observer } from "mobx-react";
 import React from "react";
 import { SM } from "../../../../App";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
@@ -37,40 +36,31 @@ interface Props{
 const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
   const classes = styles();
   const headerBackgroundClasses = headerBackgroundStyles();
-  const { _documentRevisionFormState } = SM.useStores();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
-      <Observer>
-        {() => (
-          <>
-            <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-              <Box
-                minHeight={60}
-                borderColor={Colors.medium_gray}
-                bgcolor={Colors.light_gray}
-                py={1}
-                px={2}
-                alignContent="center"
-              >
-                <Grid
-                  container={true}
-                  className={`${classes.headerSection} ${
-                    headerBackgroundClasses[
-                      FormHeaderStatusClassMapping[
-                        displayStatus || status || ""
-                      ]
-                    ]
-                  }`}
-                  alignItems="center"
-                >
-                  {children}
-                </Grid>
-              </Box>
-            </Collapse>
-          </>
-        )}
-      </Observer>
+      <Box
+        minHeight={60}
+        borderColor={Colors.medium_gray}
+        bgcolor={Colors.white}
+        py={1}
+        px={2}
+        alignContent="center"
+      >
+        <Grid
+          container={true}
+          className={`${classes.headerSection} ${
+            headerBackgroundClasses[
+              FormHeaderStatusClassMapping[
+                displayStatus || status || ""
+              ]
+            ]
+          }`}
+          alignItems="center"
+        >
+          {children}
+        </Grid>
+      </Box>
     );
   }
 
