@@ -20,5 +20,8 @@ export type FBButtonProps =
   >
   & {
     dataCy?: string;
+    isHover?: boolean;
+    showNewButton?: boolean;
     className? : string;
   };
+

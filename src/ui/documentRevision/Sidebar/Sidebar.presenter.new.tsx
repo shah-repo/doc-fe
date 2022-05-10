@@ -16,7 +16,6 @@ interface Props {
   indexNumber: number;
   sidebarList: Sidebar[];
   inputRef: React.MutableRefObject<null>;
-  setIndex: (index: number) => void;
   handleMenuIconClick: (index: number) => void;
   onDrawerToggle: () => void;
   loading?: boolean;
@@ -46,7 +45,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
     loading = bookmarkState?.loading;
   });
 
-  if (SM.isNewLayout) {
+  if (SM.isNewLayout || SM.isNewCRLayout) {
     return (
       <Box display="flex" height="100%">
         <Box width={48} textAlign="center" style={{ borderRight: "1px solid rgb(212, 219, 225)" }}>

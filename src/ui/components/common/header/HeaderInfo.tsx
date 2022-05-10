@@ -10,7 +10,7 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
-import { DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
+import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
 import { checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
@@ -61,12 +61,25 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       documentType?.pageDetails?.category || ""
     )
   );
-  const title = navigationDetails?.label || intl.formatMessage({ id: "navigation.document.list" });
+  const getRoute = () => {
+    let title;
+    if (SM.isNewCRLayout) {
+      title = intl.formatMessage({ id: "page.table.title.changeRequest" });
+    } else if (SM.isNewLayout) {
+      title = intl.formatMessage({ id: "navigation.document.list" });
+    }
+    return title;
+  };
+  const title = navigationDetails?.label || getRoute();
   let url = `${DOCUMENT_REVISION_LIST_URL}`;
   let iconLink = "/navigation_icons/document.svg";
   if (navigationDetails.type === "CATEGORY") {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
     iconLink = navigationDetails?.icon || "";
+  }
+  if (SM.isNewCRLayout) {
+    url = `${CHANGE_REQUEST_LIST_URL}`;
+    iconLink = "/navigation_icons/cr.svg";
   }
   const classes = styles({ iconLink });
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
@@ -167,16 +180,6 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
               >
                 <Grid item={true} className={classes.minWidthSpace}>
                   {titleRenderer(classes.breadcrumbId)}
-                  {isTitleVisible && (
-                    <Typography
-                      variant="h6"
-                      id="HeaderInfo-name"
-                      component="span"
-                      className={classes.breadcrumbId}
-                    >  &nbsp;
-                      {name}
-                   &nbsp;
-                    </Typography>)}
                   {subtitle && (
                     <Typography
                       variant="subtitle1"
@@ -219,7 +222,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 
   );
   return (
-    <>{SM.isNewLayout ? newHeaderRenderer() : oldHeaderRenderer()}</>
+    <>{(SM.isNewCRLayout || SM.isNewLayout) ? newHeaderRenderer() : oldHeaderRenderer()}</>
   );
 };
 

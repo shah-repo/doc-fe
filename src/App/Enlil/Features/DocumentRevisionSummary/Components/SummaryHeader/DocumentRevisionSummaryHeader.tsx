@@ -1,11 +1,10 @@
-import { Box, Collapse } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionSummaryHeaderProps } from "../../../../..";
 import SummaryField from "../../../../../../ui/common/summary/base";
 import SummaryFieldWithHtml from "../../../../../../ui/common/summary/baseWithHtml";
 import ChangeRequestLink from "../../../../../../ui/document.revision/summary/changeRequestLink";
-import { styles as AutoCompleteStyles } from "../../../../../../ui/form.builder/styles/FBAutocomplete.styles";
 import CustomLabelTooltip from "../../../../../../ui/hooks/docCustomization/CustomLabelTooltip";
 import { withDocumentRevisionSummaryHeader } from "./DocumentRevisionSummaryHeader.wrap";
 
@@ -23,25 +22,17 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
 }) => (
   <Observer>
     {() => (
-      <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-        <Box py={3} px={3.75} pl={3.75}>
-          <Box mb={3.75}>
-            {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
-          </Box>
-          <Box mb={3.75}>
-            {isTitleVisible && (
-              <CustomLabelTooltip {...{ tooltipConfig }}>
-                <SummaryField label={titleLabel} value={name} labelProps={AutoCompleteStyles.labelProps}
-                  labelFont={AutoCompleteStyles.labelFont} />
-              </CustomLabelTooltip>
-            )}
-          </Box>
-          {isDescriptionVisible && (
-            <SummaryFieldWithHtml label={descriptionLabel} value={description}
-              labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
-          )}
-        </Box>
-      </Collapse>
+      <Box py={3} px={6}>
+        {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
+        {isTitleVisible && (
+          <CustomLabelTooltip {...{ tooltipConfig }}>
+            <SummaryField label={titleLabel} value={name} />
+          </CustomLabelTooltip>
+        )}
+        {isDescriptionVisible && (
+          <SummaryFieldWithHtml label={descriptionLabel} value={description} />
+        )}
+      </Box>
     )}
   </Observer>
 );

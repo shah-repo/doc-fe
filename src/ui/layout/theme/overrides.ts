@@ -230,10 +230,15 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiTab: {
     root: {
-      fontFamily: "Sora, sans-serif;",
-      lineHeight: "15px",
-      paddingLeft: "0px",
-      paddingTop: "5px",
+      "fontFamily": "Sora, sans-serif;",
+      "lineHeight": "15px",
+      "paddingLeft": "0px",
+      "paddingTop": "5px",
+      "fontStyle": "normal",
+      "fontWeight": 600,
+      "&.Mui-selected": {
+        color: Colors.navy,
+      },
     },
   },
   MuiFormHelperText: {

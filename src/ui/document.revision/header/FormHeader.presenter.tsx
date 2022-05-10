@@ -68,7 +68,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
         displayRevision={documentRevision.displayRevision}
       />
       }
-      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center">
+      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center" container>
         <Grid container={true} alignItems="center" justify="flex-end">
           {lastSavedTimestamp && !isNewLayout && renderLastSavedContnet()}
           {lastSavedTimestamp && isNewLayout && newRenderLastSavedContnet()}

@@ -24,7 +24,9 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
             backgroundColor: Colors.alabaster,
             width: "100%",
             height: "48px",
+            fontSize: "12px",
           }}
+          TabIndicatorProps={{ style: { background: Colors.cerulean } }}
         >
           {tabs?.map((tab, index) => (
             <Tab

@@ -52,4 +52,8 @@ export default class SM {
   public static get isNewLayout(): boolean {
     return SM.pathname.includes("document_revision/");
   }
+
+  public static get isNewCRLayout(): boolean {
+    return SM.pathname.includes("change_request/");
+  }
 }

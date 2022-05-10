@@ -49,7 +49,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   intl,
   edit,
 }) => {
-  const classes = styles({ _documentRevisionSidebarState });
+  const classes = styles(_documentRevisionSidebarState?.open);
   return (
     <Observer>
       {() => (
