@@ -12,6 +12,7 @@ export const withFBStarter = <T extends FBStarterProps>(
 
     const { dialogState, leftPanelState } = FB.useStores();
     const { _documentRevisionFormState } = SM.useStores();
+    const isNewLayout = SM.isNewLayout;
 
     onClick = (index?: number) => {
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
@@ -34,6 +35,7 @@ export const withFBStarter = <T extends FBStarterProps>(
 
     return Component({
       ...(props as T),
+      isNewLayout,
       onClick,
     });
 
