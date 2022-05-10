@@ -48,7 +48,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
               <Box
                 minHeight={60}
                 borderColor={Colors.medium_gray}
-                bgcolor={Colors.light_gray}
+                bgcolor={Colors.alabaster}
                 py={1.25}
                 px={1.25}
                 alignContent="center"

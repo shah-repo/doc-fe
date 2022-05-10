@@ -261,7 +261,7 @@ DocumentRevisionFormContainerProps
       <div ref={bannerPortal}
         style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }}
       />
-      <Grid style={{ background: Colors.light_gray }} >
+      <Grid style={{ background: Colors.alabaster }} >
         {
           type !== "newOutput" &&
           <Box ml={3}>

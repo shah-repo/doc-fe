@@ -21,7 +21,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           style={{
             position: "fixed",
             zIndex: 1,
-            backgroundColor: Colors.light_gray,
+            backgroundColor: Colors.alabaster,
             width: "100%",
             height: "48px",
           }}
