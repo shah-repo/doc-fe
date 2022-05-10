@@ -5,7 +5,7 @@ import { Observer } from "mobx-react";
 import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
-import { SM, SMTextEditorProps } from "../../..";
+import { SMTextEditorProps } from "../../..";
 import { convertHtmlEntities } from "../../../../common/utils/helpers";
 import { FBConditionalWrapper } from "../../../../ui/form.builder";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -34,14 +34,14 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
   const intl = useIntl();
-  const { _documentRevisionFormState } = SM.useStores();
+  // const { _documentRevisionFormState } = SM.useStores();
   const descriptionPlaceholder: string = intl.formatMessage({ id: "form.builder.enter.description" });
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
 
   const toggleBtn = () => {
     setFlag(!flag);
-    _documentRevisionFormState?.setViewMore(!flag);
+    // _documentRevisionFormState?.setViewMore(!flag);
     if (flag) {
       setBtnText(viewMore);
     } else {
@@ -87,7 +87,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     toolbarStyle={{
                       border: "none",
                       borderBottom: `1px solid ${Colors.hint_gray}`,
-                      position: "fixed",
+                      // position: editor?.length < 100 ? "fixed" : "static",
                       zIndex: 8,
                     }}
                     editorStyle={{
@@ -119,10 +119,11 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     display="flex"
                     style={{
                       gridArea: "1/1",
-                      cursor: !disabled ? "text" : "inherit",
+                      cursor: !disabled ? "pointer" : "inherit",
                       backgroundColor: hover ? Colors.platinum : Colors.white,
                     }}
                     p={isPreview ? 0 : 1.5}
+                    {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}
                     onMouseOver={() => setHover(true)}
                     onMouseOut={() => setHover(false)}
                   >
@@ -151,13 +152,13 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         }
                         return (
                           <Box>
-                            <>
+                            <div onClick= { () => { handleMask?.(false); setFlag(!flag); }}>
                               <span style={{
                                 fontWeight: 400,
                                 fontSize: "14px",
                                 lineHeight: "25px",
                                 cursor: "pointer",
-                              }} {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}>
+                              }} >
                                 {editor?.trim()}
                               </span>
                               {_formState?.getValue(name) && <span
@@ -173,7 +174,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                                 {btnText}
                               </span>
                               }
-                            </>
+                            </div>
                           </Box>
                         );
                       }
