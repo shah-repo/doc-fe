@@ -21,9 +21,6 @@ export default makeStyles(() =>
       "text-transform": "capitalize",
       "white-space": "nowrap",
       "color": isHover ? Colors.white : Colors.navy,
-      "&:hover": {
-        color: Colors.white,
-      },
     }),
   })
 );
