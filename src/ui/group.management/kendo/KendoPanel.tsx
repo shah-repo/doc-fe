@@ -20,7 +20,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, set, sortBy, startCase } from "lodash";
+import { find, flatMap, isEmpty, map, set, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -64,6 +64,7 @@ import { NameCell } from "./cell.template/NameCell";
 import { ParentsCell } from "./cell.template/ParentsCell";
 import { PermissionsCell } from "./cell.template/PermissionsCell";
 import { TagsCell } from "./cell.template/TagsCell";
+import GMExport from "./GMExport";
 import KendoGridStyles from "./styles";
 
 interface GroupManagementProps {
@@ -585,6 +586,10 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         <Grid container={true} alignItems="center">
           <Grid item xs>
             <GridTitle translation="navigation.group.management" />
+          </Grid>
+          <Grid item>
+            <GMExport gridData={dataState.group?.length ? flatMap(map(result, "items")) : result}
+              columns={columnDefinitions} />
           </Grid>
           <Grid item>
             {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
