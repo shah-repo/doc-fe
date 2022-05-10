@@ -1,4 +1,3 @@
-import { Box, Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import { useState } from "react";
@@ -7,7 +6,6 @@ import { SelectComponentsProps } from "react-select/base";
 import CreatableSelect, { CreatableProps } from "react-select/creatable";
 import { ActionMeta, ValueType } from "react-select/src/types";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
-import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
@@ -77,11 +75,11 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
 
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={1}>
+      {/* <Box mb={1}>
         <Typography variant="h6">
           <Text message={fieldProps.label} />
         </Typography>
-      </Box>
+      </Box> */}
       <CreatableSelect
         inputValue={inputValue}
         value={value}
