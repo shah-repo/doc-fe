@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { map } from "lodash";
-import { Observer } from "mobx-react";
+import { Observer, useObserver } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
@@ -63,18 +63,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
-  // let height = "calc(60vh - 40px)";
-
-  // useObserver(() => {
-  //   console.log("_documentRevisionFormState ::", _documentRevisionFormState?.viewMore);
-  //   setTimeout(() => {
-  //     const headerTmpl = document.getElementById("SMHeaderTmpl");
-  //     const bodyTmpl = document.getElementById("SMBodyTmpl");
-  //     const restHeight = headerTmpl?.clientHeight ? 150 + (+(headerTmpl?.clientHeight)) : 200;
-  //     bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
-  //     height = `calc(100vh - ${restHeight}px)`;
-  //   }, 100);
-  // });
+  useObserver(() => {
+    console.log("_documentRevisionFormState ::", _documentRevisionFormState?.viewMore);
+    setTimeout(() => {
+      const headerTmpl = document.getElementById("SMHeaderTmpl");
+      const bodyTmpl = document.getElementById("SMBodyTmpl");
+      const restHeight = headerTmpl?.clientHeight ? 170 + (+(headerTmpl?.clientHeight)) : 200;
+      bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
+    }, 100);
+  });
 
   return (
     <SMForm
@@ -119,7 +116,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
-                  return <SMBox height="calc(60vh - 25px)" key={index} overflow={"auto"} {...{ onScroll }}>
+                  return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} px={8} stretchY="calc(100% - 40px)">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}

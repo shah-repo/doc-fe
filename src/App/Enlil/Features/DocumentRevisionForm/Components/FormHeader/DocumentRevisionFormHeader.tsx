@@ -14,7 +14,7 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
 }) =>  (
   <Observer>
     {() => (
-      <Box py={1} px={8}>
+      <Box py={1} px={8} id="SMHeaderTmpl">
         {
           type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
             <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />

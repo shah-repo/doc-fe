@@ -45,6 +45,12 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     } else {
       setBtnText(viewLess);
     }
+    setTimeout(() => {
+      const headerTmpl = document.getElementById("SMHeaderTmpl");
+      const bodyTmpl = document.getElementById("SMBodyTmpl");
+      const restHeight = headerTmpl?.clientHeight ? 170 + (+(headerTmpl?.clientHeight)) : 200;
+      bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
+    }, 100);
   };
   return  (
     <Box
