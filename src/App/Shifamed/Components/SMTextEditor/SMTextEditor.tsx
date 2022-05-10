@@ -65,14 +65,15 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
             borderRadius={4}
             style={{ display: "grid" }}
             minHeight= {_textEditorState?.masked ? 30 : 80}
-            maxHeight= {150}
-            overflow= "auto"
+
           >
             <Box
               display="flex"
               style={{ gridArea: "1/1" }}
               borderRadius={4}
               data-cy={name}
+              maxHeight= {150}
+              overflow= "auto"
             >
               <Observer>
                 {() => (
@@ -85,14 +86,13 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     toolbarStyle={{
                       border: "none",
                       borderBottom: `1px solid ${Colors.hint_gray}`,
-                      position: editor?.length > 100 ? "fixed" : "static",
-                      zIndex: 8,
                     }}
                     editorStyle={{
-                      height: "auto",
                       padding: "0 13px",
-                      overflow: "hidden",
+                      overflow: "auto",
                       display: _textEditorState?.masked ? "none" : "",
+                      width: "100%",
+                      height: "150px",
                     }}
                     // fix for extra lines when pasting multiline content
                     stripPastedStyles={true}
@@ -120,6 +120,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                       cursor: !disabled ? "pointer" : "inherit",
                       backgroundColor: hover ? Colors.platinum : Colors.white,
                     }}
+                    maxHeight= {150}
+                    overflow= "auto"
                     p={isPreview ? 0 : 1.5}
                     {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}
                     onMouseOver={() => setHover(true)}
