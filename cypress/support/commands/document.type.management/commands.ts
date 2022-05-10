@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
 
@@ -22,7 +23,7 @@ declare global {
       dtmAddDocType(params: { docType: string }): Chainable;
       dtmAddAcronym(params: { acronym: string }): Chainable;
       dtmAddStartingNumber(params: { startingNumber: string }): Chainable;
-      dtmAddCategory(params: {category: string}): Chainable;
+      dtmAddCategory(params: { category: string }): Chainable;
       filterDocTypeManagement(params: {status: string; documentType: string; acronym: string;
         privateNumber: string; redline: string; qms: string; needsSignature: string; training: string;
         startingNumber: string; revisionStage: string; usersWithoutTags?: string; group: string;
