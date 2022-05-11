@@ -148,7 +148,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         };
                         const getTruncatText = () => {
                           const truncatedText = truncate(editedValue, {
-                            length: 150,
+                            length: 100,
                             separator: " ",
                           });
                           setEditor(truncatedText);
@@ -178,7 +178,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                                   fontFamily: "Sora",
                                   fontSize: "14px",
                                   cursor: "pointer",
-                                  display: editor?.length < 100 ? "none" : "",
+                                  display: editedValue?.length < 100 ? "none" : "",
                                 }}
                                 onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}>
                                 {btnText}
