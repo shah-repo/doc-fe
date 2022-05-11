@@ -1,7 +1,7 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
 import { rename, rmdirSync, writeFileSync } from "fs";
 import path from "path";
-import { getEmail, getEmails, getEmailWithLongerOffset } from "../support/commands/imap/imap";
+import { getEmails, GmailTesterOptions } from "../support/commands/imap/imap";
 import { pdfparser } from "../support/commands/pdfparser/pdfparser";
 import { unzip } from "../support/commands/unzip/unzip";
 import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
@@ -37,13 +37,7 @@ export default (on, config) => {
       if (value != null) { shouldSkip = value; }
       return shouldSkip;
     },
-    gmailGetLastMail(email) {
-      return getEmail(email);
-    },
-    getAllEmailWithLongerOffset(email) {
-      return getEmailWithLongerOffset(email);
-    },
-    gmailGetMails(params: {userEmail; options}) {
+    gmailGetMails(params: {userEmail: string; options: GmailTesterOptions}) {
       return getEmails(params.userEmail, params.options);
     },
     downloadFile,
