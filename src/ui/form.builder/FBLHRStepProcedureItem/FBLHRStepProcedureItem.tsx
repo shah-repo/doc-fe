@@ -7,7 +7,7 @@ import {
   FBMapWrapper,
   FBProcedureItemConfig,
   FBProcedureItemLocale,
-  FBText
+  FBText,
 } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { FBClasses } from "../defaults/layout";

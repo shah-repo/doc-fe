@@ -159,7 +159,16 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                           setBtnText(viewLess);
                         }
                         return (
-                          <Box style={{  backgroundColor: hover ? Colors.platinum : Colors.alabaster,  width: "100%",  minHeight: "32px" }} justifyContent="center" >
+                          <Box
+                            style={{
+                              backgroundColor: hover
+                                ? Colors.platinum
+                                : Colors.alabaster,
+                              width: "100%",
+                              minHeight: "32px",
+                            }}
+                            justifyContent="center"
+                          >
                             <>
                               <span style={{
                                 fontWeight: 400,
