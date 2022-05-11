@@ -5,9 +5,8 @@ import { Observer } from "mobx-react";
 import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
-import { SM, SMTextEditorProps } from "../../..";
+import { SMTextEditorProps } from "../../..";
 import { convertHtmlEntities } from "../../../../common/utils/helpers";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../../../ui/constants/urls";
 import { FBConditionalWrapper } from "../../../../ui/form.builder";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTextEditor } from "./SMTextEditor.wrap";
@@ -53,8 +52,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
       bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
     }, 100);
   };
-  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
-  const isCreateForm = isCreateUrl && !_formState?.getValue(name);
+  // const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
+  // const isCreateForm = isCreateUrl && !_formState?.getValue(name);
   return  (
     <Box
       {...boxProps}
@@ -69,12 +68,12 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
         {() => (
           <Box
             bgcolor={isPreview ? "transparent" : "white"}
-            border={(isPreview || _textEditorState?.masked) && !isCreateForm ? 0 : `1px solid ${Colors.clear_blue}`}
-            boxShadow={(isPreview || _textEditorState?.masked) && !isCreateForm ? 0 : `0 0 0 1px ${Colors.clear_blue}`}
+            border={(isPreview || _textEditorState?.masked) ? 0 : `1px solid ${Colors.clear_blue}`}
+            boxShadow={(isPreview || _textEditorState?.masked) ? 0 : `0 0 0 1px ${Colors.clear_blue}`}
             borderColor={Colors.hint_gray}
             borderRadius={4}
             style={{ display: "grid" }}
-            minHeight= {_textEditorState?.masked && !isCreateForm ? 30 : 80}
+            minHeight= {_textEditorState?.masked ? 30 : 80}
 
           >
             <Box
@@ -127,12 +126,11 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     style={{
                       gridArea: "1/1",
                       cursor: !disabled ? "pointer" : "inherit",
-                      backgroundColor: ((hover || _textEditorState?.masked) &&
-                        !isCreateForm ? Colors.alabaster : Colors.white),
+                      backgroundColor: ((hover || _textEditorState?.masked) ? Colors.alabaster : Colors.white),
                     }}
                     maxHeight= {150}
                     overflow= "auto"
-                    p={(isPreview || _textEditorState?.masked) && !isCreateForm ? 0 : 1.5}
+                    p={(isPreview || _textEditorState?.masked) ? 0 : 1.5}
                     {...!disabled && { onClick: () => { handleMask?.(false); setFlag(!flag); } }}
                     onMouseOver={() => setHover(true)}
                     onMouseOut={() => setHover(false)}
@@ -161,11 +159,12 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                           setBtnText(viewLess);
                         }
                         return (
-                          <Box>
+                          <Box style={{  backgroundColor: hover ? Colors.platinum : Colors.alabaster,  width: "100%",  minHeight: "32px" }} justifyContent="center" >
                             <>
                               <span style={{
                                 fontWeight: 400,
                                 fontSize: "14px",
+                                color: _formState?.getValue(name) ? Colors.almost_black : Colors.hint_gray,
                                 lineHeight: "25px",
                                 cursor: "pointer",
                               }} >

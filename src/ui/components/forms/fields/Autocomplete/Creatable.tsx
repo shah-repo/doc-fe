@@ -42,7 +42,9 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [inputValue, setInputValue] = useState(formikValue);
-  const [showOnlyText, setShowOnlyText] = useState(!isEmpty(inputValue));
+  const [hover, setHover] = useState(false);
+  // const [clicked, setClicked] = useState(false);
+  const [showOnlyText, setShowOnlyText] = useState(isEmpty(inputValue));
   const { submitForm } = useFormContext();
   const {
     form: { setFieldValue, setFieldTouched, touched },
@@ -56,7 +58,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       setInputValue((value as any)?.value);
     }
     setFieldValue(name, (value as any)?.value);
-    setShowOnlyText(false);
+    setShowOnlyText(true);
     // submitForm();
   };
   const onInputChange = (value) => {
@@ -72,6 +74,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   };
 
   const onBlur = async () => {
+    // setClicked(true);
     if (formikValue !== inputValue) {
       // eslint-disable-next-line @typescript-eslint/await-thenable
       await setFieldValue(name, inputValue);
@@ -84,9 +87,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const filterOption = createFilter({ ignoreAccents: false, stringify });
 
   const onAway = () => {
-    if (inputValue) {
-      setShowOnlyText(true);
-    }
+    setHover(false);
+    setShowOnlyText(true);
   };
 
   const intl = useIntl();
@@ -101,9 +103,14 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           fontWeight: 600,
           fontSize: "19px",
           lineHeight: "24px",
+          minHeight: "32px",
+          backgroundColor: hover ? Colors.platinum : Colors.alabaster,
         }}
+        justifyContent="center"
+        onMouseEnter={() => { setHover(true); }}
+        onMouseLeave={() => { setHover(false); }}
         onClick={() => { setShowOnlyText(false); }}
-        >{inputValue}
+        >{inputValue || titlePlaceholder}
         </Box>}
           {!showOnlyText && <CreatableSelect
             inputValue={inputValue}
@@ -114,20 +121,14 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                 ...base,
                 input: {
                   opacity: "1 !important",
-                  backgroundColor: "red",
                 },
               }),
-              control: (base) => ({
+              control: (base, state) => ({
                 ...base,
-                backgroundColor: Colors.white,
-                border: `1px solid ${Colors.clear_blue}`,
-                boxShadow: `0 0 0 1px ${Colors.clear_blue}`,
                 fontSize: "19px",
                 fontWeight: 600,
                 lineHeight: "24px",
-                // borderColor: Colors.hint_gray,
                 minHeight: "32px",
-                padding: "5px 3px",
               }),
             }}
             isClearable={Boolean(formikValue)}
