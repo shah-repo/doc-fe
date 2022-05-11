@@ -156,7 +156,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           mode,
                         }}
                       />}
-                      {_formState?.mode !== "none" && showFBLabels &&  (
+                      {tabType !== "TRAINING" && _formState?.mode !== "none" && showFBLabels &&  (
                         <FBWorkspace
                           isPortal={false}
                           document={{
