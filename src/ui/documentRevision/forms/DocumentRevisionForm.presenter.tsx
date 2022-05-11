@@ -336,7 +336,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         }
         {
           _formState?.active &&
-          <Box mt={5}>
+          <Box>
             {
               values.id &&
               <Box textAlign="right">

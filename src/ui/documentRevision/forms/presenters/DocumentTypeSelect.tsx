@@ -11,6 +11,7 @@ import { userManagementSelectors } from "../../../../state/ducks/userManagement"
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
 import { FBEditorPropertiesType, FBSchemaProps } from "../../../form.builder";
+import { styles as FBAutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
@@ -20,6 +21,7 @@ import { DocumentCloneType } from "../../Clone.container";
 import { checkIsDocumentEditableSchema, checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from "../../helpers/checkDocumentGroup";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
+import { styles } from "./styles/DocIdInput.styles";
 
 interface Props extends RouteComponentProps {
   isDocRevStatusDraft: boolean;
@@ -40,7 +42,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const { isVisible, label, tooltipConfig, validation: validators } = useDocumentTypeSelect(documentTypeId);
   const { _formState, _documentRevisionFormState } = SM.useStores() || {};
   const formik = useFormikContext();
-
+  const classes = styles();
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const asyncDocumentProposedId = useAsync({
     onSuccess: () => {
@@ -183,6 +185,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         options={options}
         validate={validators}
         includeEmpty={false}
+        inputStyleProps={classes.input}
+        labelProps={FBAutoCompleteStyles.labelStyle}
       />
     </CustomLabelTooltip>
   );

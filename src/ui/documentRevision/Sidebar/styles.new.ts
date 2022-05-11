@@ -5,8 +5,12 @@ const SIDEBAR_WIDTH = 300;
 
 export default makeStyles((theme: Theme) =>
   createStyles({
+    changeContainer: {
+      boxShadow: `inset 0px 1px 1px -1px ${Colors.gray_goose}, inset 0px -1px 1px 0px ${Colors.gray_goose}`,
+      padding: theme.spacing(1.875),
+    },
     listItem: {
-      "padding": "13px 0px 0px 0px",
+      "padding": "0px 0px 0px 0px",
       "& .MuiListItemAvatar-root": {
         maxWidth: "35px",
         minWidth: "35px",
@@ -102,17 +106,14 @@ export default makeStyles((theme: Theme) =>
       fontSize: "12px",
       fontWeight: 600,
       color: Colors.white,
-      fontFamily: "Sora",
       textTransform: "uppercase",
     },
     secondaryText: {
-      fontFamily: "Sora",
       fontStyle: "normal",
       fontSize: "12px",
       color: Colors.font_gray,
     },
     generalInfo: {
-      fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",

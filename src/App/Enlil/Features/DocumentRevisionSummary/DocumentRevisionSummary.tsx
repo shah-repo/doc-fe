@@ -44,7 +44,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
       headerBoxProps={{ maxHeight: "30%" }}
-      contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
+      contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%", bgcolor: Colors.alabaster }}
       values={documentRevision}
       header= {
         <SummaryHeader
@@ -54,7 +54,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       }
     >
       <SMTemplate
-        templateBoxProps={{ stretchY: "100%", borderTop: 1, borderColor: Colors.medium_gray }}
+        templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
         {..._documentRevisionFormState?.documentRevision && {
@@ -76,14 +76,14 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
               <SMTabs
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
                 tabs={tabLabels}
-                boxProps={{ stretchY: "100%" }}
+                boxProps={{ stretchY: "100%", px: 4.25 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
-                  return <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} px={8} stretchY="100%">
+                  return <SMBox height="100%"  overflow={"auto"} {...{ onScroll }}>
+                    <SMBox mt={8} stretchY="100%">
                       {tabType === "MIXED" &&  <SummaryPresenter
                         dataProp={documentRevision}
                         canChangeOwnerShip={canChangeOwnerShip}

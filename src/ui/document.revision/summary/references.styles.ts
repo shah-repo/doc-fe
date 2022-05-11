@@ -20,8 +20,6 @@ export const styles = makeStyles((theme: Theme) =>
       },
     },
     label: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "18px",
@@ -31,7 +29,6 @@ export const styles = makeStyles((theme: Theme) =>
     link: {
       textDecoration: "none",
       color: Colors.navy,
-      fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: 400,
       fontSize: "14px",
@@ -40,15 +37,15 @@ export const styles = makeStyles((theme: Theme) =>
     header: {
       fontSize: "12px",
       color: Colors.almost_black,
-      fontFamily: "Sora",
       fontWeight: 600,
       lineHeight: "15.12px",
       marginBottom: "10px",
     },
     noHeader: {
       fontSize: "14px",
+      fontWeight: 400,
+      lineHeight: "20px",
       color: Colors.almost_black,
-      fontFamily: "Sora",
     },
     avatarSection: {
       display: "flex",

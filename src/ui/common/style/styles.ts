@@ -5,7 +5,7 @@ import Colors from "../../layout/theme/utils/colors";
 export default makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      background: Colors.light_gray,
+      background: Colors.alabaster,
       display: "flex",
       height: "100%",
     },

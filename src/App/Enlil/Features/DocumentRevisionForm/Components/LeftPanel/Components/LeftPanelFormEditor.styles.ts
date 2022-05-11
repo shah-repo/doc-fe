@@ -14,9 +14,12 @@ export default makeStyles((theme: Theme) =>
       padding: "15px 0px",
     },
     grid: {
-      height: "calc(100vh - 320px)",
-      overflow: "auto",
-      padding: "15px",
+      "height": "calc(100vh - 320px)",
+      "overflow": "auto",
+      "padding": "15px",
+      "& .MuiFormHelperText-root": {
+        lineHeight: "20px",
+      },
     },
     gridItem: {
       width: "100%",

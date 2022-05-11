@@ -8,7 +8,6 @@ export default makeStyles(() =>
       "font-weight": "600",
       "font-size": "12px",
       "color": Colors.dark_jungle_green,
-      "margin": "0 5px",
     },
   })
 );

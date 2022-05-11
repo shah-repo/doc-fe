@@ -80,7 +80,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Box mt={4}>
+    <Box>
       <AutocompleteField
         name="outputDocumentTypes"
         label="document.output.type"

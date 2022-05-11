@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
+import { Box, Chip, CircularProgress, createStyles, makeStyles, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { debounce, map, some } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../../App";
 import { TypographyProps } from "../../../../state/ducks/common/types";
@@ -15,6 +16,7 @@ import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
+import { styles as FBAutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useActionCreator from "../../../hooks/useActionCreator";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
@@ -40,6 +42,16 @@ const getReferenceValues = (
   return { highestRev, isReferencePart, canReferenceCreateInspection };
 };
 
+const styles = makeStyles(() =>
+  createStyles({
+    component: {
+      "& .MuiInputBase-root": {
+        padding: 2,
+      },
+    },
+  }),
+);
+
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
   availableReferences,
   disabled = false,
@@ -47,12 +59,13 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const intl = useIntl();
   const { submitForm } = useFormContext();
   const { _documentRevisionFormState } = SM.useStores();
   const [value, setValue] = useState<any[]>([]);
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
-
+  const classes = styles();
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
@@ -181,13 +194,14 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={0.3}>
-        <Typography variant="h5">
+      <>
+        <Typography variant="h5" style={FBAutoCompleteStyles.labelProps}>
           <Text message={fieldProps.label} />
         </Typography>
-      </Box>
+      </>
       <Autocomplete
         {...{ onChange, disabled }}
+        className={classes.component}
         value={value}
         options={ModifiedOptions}
         // disable filtering on client
@@ -199,6 +213,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
+                placeholder={intl.formatMessage({ id: "common.select.placeholder" })}
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
@@ -212,7 +227,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 }}
                 inputProps={{
                   ...params.inputProps,
-                  style: { padding: "10.5px 0" },
+                  style: { padding: "10.5px 10px" },
                 }}
               />
             </Box>
@@ -225,7 +240,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
               {...getTagProps({ index })}
               key={option.value}
               label={option.label}
-              style={{ minHeight: "32px", height: "auto" }}
+              style={{ minHeight: "32px" }}
               disabled={option.deleteDisabled}
             />
           ))

@@ -370,3 +370,7 @@ td#kendo-expandable-column[role="gridcell"] {
 .k-list-container .k-popup .k-list .k-item {
   white-space: nowrap;
 }
+
+.MuiMenuItem-root span, .MuiAutocomplete-listbox {
+  font-family: "Sora"
+}

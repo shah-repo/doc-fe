@@ -19,6 +19,7 @@ import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from ".
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
+import { styles as AutoCompleteStyles } from "../../form.builder/styles/FBAutocomplete.styles";
 import { useTraining } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -156,25 +157,34 @@ const Presenter: React.FunctionComponent<Props> = ({
           <SummaryField
             label="document.revision.trainingRequired"
             value={<Text translation={`common.${retrain}` as Translation} />}
+            labelProps={AutoCompleteStyles.labelProps}
+            labelFont={AutoCompleteStyles.labelFont}
           />
         }
         {formTemplate && (
           <SummaryField
             label="document.output.type"
             value={outputDocumentTypeName}
+            labelProps={{ ...AutoCompleteStyles.labelProps }}
+            labelFont={{ ...AutoCompleteStyles.labelFont, marginBottom: 14 }}
           />
         )}
         {isEB && parent && (
-          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" docRevId={dataProp.id} />
+          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build"
+            labelProps={AutoCompleteStyles.labelProps}
+            labelFont={AutoCompleteStyles.labelFont} docRevId={dataProp.id} />
         )}
         {isEB && children && (
-          <BuildsContainer dataProp={children} label="common.next.build" />
+          <BuildsContainer dataProp={children} label="common.next.build"
+            labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
         {isPart && parentParts && (
-          <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of" />
+          <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of"
+            labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
         {isEB && displayChildrenParts && (
-          <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part" />
+          <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part"
+            labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
         {attachments && <Attachment
           isAttachmentEmpty={attachments.length < 1}

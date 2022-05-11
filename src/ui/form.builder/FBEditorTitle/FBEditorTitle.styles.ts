@@ -50,9 +50,9 @@ export default makeStyles((theme: Theme) =>
       background: Colors.white,
       boxShadow: `0 1px 0 ${Colors.chinese_silver}`,
       width: "299px",
+      marginTop: "20px",
     },
     staticTitleText: {
-      fontFamily: "Sora",
       fontSize: "16px",
       margin: "0 10px",
       fontWeight: 700,
@@ -60,9 +60,9 @@ export default makeStyles((theme: Theme) =>
       color: Colors.almost_black,
     },
     titleText: {
-      fontFamily: "Sora",
       fontSize: "12px",
-      margin: "0 10px",
+      fontWeight: 500,
+      lineHeight: "15px",
       textTransform: "uppercase",
       color: Colors.almost_black,
       cursor: "pointer",

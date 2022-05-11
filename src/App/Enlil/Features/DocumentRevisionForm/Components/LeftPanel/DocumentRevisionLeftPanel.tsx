@@ -1,8 +1,8 @@
 import { Box, IconButton, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 import { Observer } from "mobx-react";
 import React from "react";
 import { SM, SMBox } from "../../../../..";
+import { ReactComponent as CloseIcon } from "../../../../../../assets/images/leftPanel/close.svg";
 import Text from "../../../../../../ui/components/Text";
 import { FB } from "../../../../../../ui/form.builder";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
@@ -25,9 +25,10 @@ const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
                 bgcolor={Colors.white}
                 width={300}
                 boxShadow= {`inset -1px 0px 0px ${Colors.lightest_grey1}`}
+                zIndex={1202}
               >
                 <Box
-                  pl={1}
+                  ml={1.75}
                   display="flex"
                   height={45}
                   alignItems="center"
@@ -49,7 +50,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
                   justifyContent="center"
                   stretchY="calc(100vh - 86px)"
                   borderTop={1}
-                  borderColor={Colors.medium_gray}
+                  borderColor={Colors.gray_goose}
                 >
                   <Observer>
                     {() => (<>

@@ -11,7 +11,6 @@ import { DocumentRevision } from "../../../../state/ducks/documentRevisions/type
 import { ApplicationState } from "../../../../state/reducers";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { FBWorkspace } from "../../../../ui/form.builder";
-import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
@@ -98,7 +97,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       }
     >
       <SMTemplate
-        templateBoxProps={{ stretchY: "100%", borderTop: 1, borderColor: Colors.medium_gray }}
+        templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
         {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
@@ -120,14 +119,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               <SMTabs
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
                 tabs={tabLabels}
-                boxProps={{ stretchY: "100%" }}
+                boxProps={{ stretchY: "100%", px: 3.75 }}
               >
-                {map(tabConfig, (tabInfo: TabInfo, index) => {
+                {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} px={8} stretchY="calc(100% - 40px)">
+                    <SMBox mt={8} stretchY="calc(100% - 40px)">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}
                         releasedDocRev={_documentRevisionFormState?.releasedDocRev}

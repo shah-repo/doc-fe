@@ -65,6 +65,7 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
         color="primary"
         size="medium"
         variant="text"
+        className={classes.button}
         fullWidth={true}
         onClick={() => onClick && onClick(0)}
       />

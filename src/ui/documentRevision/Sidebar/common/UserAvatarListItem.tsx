@@ -9,18 +9,16 @@ const styles = makeStyles((theme: Theme) =>
     auditListItem: {
       margin: "0px",
       padding: "0px",
-      marginBottom: "15px",
+      marginBottom: "12px",
     },
     primaryText: {
-      fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "21px",
-      color: Colors.almost_black,
+      color: Colors.dark_jungle_green,
     },
     secondaryText: {
-      fontFamily: "Sora",
       fontStyle: "normal",
       fontSize: "12px",
       color: Colors.font_gray,
@@ -30,7 +28,6 @@ const styles = makeStyles((theme: Theme) =>
       height: "35px",
       fontWeight: 600,
       color: Colors.white,
-      fontFamily: "Sora",
       borderRadius: "50%",
       fontSize: "12px",
       background: `${initialColor}`,

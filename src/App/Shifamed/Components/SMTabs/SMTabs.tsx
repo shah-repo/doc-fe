@@ -21,9 +21,9 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           style={{
             position: "fixed",
             zIndex: 1,
-            backgroundColor: Colors.light_gray,
-            width: "100%",
+            backgroundColor: Colors.alabaster,
             height: "48px",
+            width: `calc(100% - 570px)`,
             fontSize: "12px",
           }}
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}
@@ -31,7 +31,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           {tabs?.map((tab, index) => (
             <Tab
               key={`sm-tabpanel-${tab}-${index}`}
-              label={<SMText boxProps={{ fontFamily: "button" }} label={tab} />}
+              label={<SMText label={tab} />}
             />
           ))}
         </Tabs>

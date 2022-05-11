@@ -42,9 +42,9 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
       <Box
         minHeight={60}
         borderColor={Colors.medium_gray}
-        bgcolor={Colors.white}
-        py={1}
-        px={2}
+        bgcolor={Colors.alabaster}
+        py={1.25}
+        px={1.25}
         alignContent="center"
       >
         <Grid

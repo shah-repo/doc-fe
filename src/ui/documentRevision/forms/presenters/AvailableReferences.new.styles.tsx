@@ -6,10 +6,9 @@ export const styles = makeStyles(() =>
     label: {
       color: Colors.almost_black,
       fontSize: "12px",
-      fontFamily: "Sora",
       fontWeight: 600,
       lineHeight: "15px",
-      marginBottom: "10px",
+      marginBottom: "8px",
     },
     root: {
       "& .MuiAutocomplete-inputRoot": {
@@ -19,7 +18,6 @@ export const styles = makeStyles(() =>
     chip: {
       whiteSpace: "normal",
       fontSize: "12px",
-      fontFamily: "sora",
     },
     option: {
       fontSize: "14px",
