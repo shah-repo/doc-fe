@@ -24,7 +24,6 @@ export default makeStyles((theme: Theme) =>
       height: "15px",
       left: "32px",
       top: "10.5px",
-      fontFamily: "Sora",
       fontWeight: 400,
       fontSize: "12px",
       lineHeight: "15px",

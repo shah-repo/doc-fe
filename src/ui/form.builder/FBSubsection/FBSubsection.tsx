@@ -18,8 +18,6 @@ const FBSubsection: React.FunctionComponent<FBSectionProps> = ({
       bgcolor={Colors.whitest_grey}
       borderRadius={4}
       fontSize={14}
-      fontStyle="normal"
-      fontFamily="Sora"
       lineHeight="24px"
       fontWeight={600}
     >

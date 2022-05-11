@@ -9,7 +9,7 @@ const FBParagraph: React.FunctionComponent<FBParagraphProps> = ({
   gutter = true,
 }) => (
   <Box  mb={gutter ? 4 : 1} fontSize={12} fontWeight= {400} fontFamily= "Sora"
-    fontStyle= "normal" lineHeight="20px" color={Colors.almost_black}>
+    lineHeight="20px" color={Colors.almost_black}>
     {parse(paragraph)}
   </Box>
 );

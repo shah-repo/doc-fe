@@ -16,20 +16,21 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
     {() => (
       <Box
         id="SMHeaderTmpl"
-        paddingTop={_documentRevisionFormState?.documentRevision?.id ? 2 : 8}
-        paddingBottom={3}
-        paddingLeft={7.5}
-        paddingRight={7.5}
+        paddingTop={_documentRevisionFormState?.documentRevision?.id ? 0.75 : 9.125}
+        paddingBottom={2.5}
+        px={4.25}
       >
         {
           type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
             <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
         }
-        <Title
-          name="name"
-          documentTypeId={_documentRevisionFormState?.documentTypeId}
-          disabled={isDisabledInput}
-        />
+        <Box paddingBottom={2}>
+          <Title
+            name="name"
+            documentTypeId={_documentRevisionFormState?.documentTypeId}
+            disabled={isDisabledInput}
+          />
+        </Box>
         <Description
           isQms={_documentRevisionFormState?.docInfo.isQms || false}
           documentTypeId={_documentRevisionFormState?.documentTypeId}

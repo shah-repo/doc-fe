@@ -22,7 +22,7 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
 }) => (
   <Observer>
     {() => (
-      <Box py={3} px={6} pt={2}>
+      <Box px={4.25} pt={0.75}>
         {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
         {isTitleVisible && (
           <CustomLabelTooltip {...{ tooltipConfig }}>

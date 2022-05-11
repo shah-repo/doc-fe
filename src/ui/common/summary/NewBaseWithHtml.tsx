@@ -51,7 +51,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Grid item={true} xs={12} style={{ marginBottom: "-24px" }} >
+    <Grid item={true} xs={12}>
       <Grid item={true} xs={12} id="BaseWithhtml-editor" data-cy="BaseWithhtml-editor">
         <Box
           bgcolor={ "transparent"}
@@ -59,7 +59,6 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
           display="flex"
           style={{
             gridArea: "1/1",
-            padding: "4px",
           }}
           overflow= "auto"
           className={classes.descriptionContainer}
@@ -79,7 +78,6 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
                 display: editedValue?.length < 100 ? "none" : "",
                 color: Colors.navy,
                 padding: "0 2px",
-                fontFamily: "Sora",
                 fontSize: "14px",
               }}
               onClick={() => toggleBtn()}>

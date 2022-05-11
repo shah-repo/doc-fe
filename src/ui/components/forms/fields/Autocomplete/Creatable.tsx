@@ -1,5 +1,6 @@
-import { Box, ClickAwayListener } from "@material-ui/core";
+import { Box, BoxProps, ClickAwayListener } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
+import { isEmpty } from "lodash";
 import * as React from "react";
 import { useState } from "react";
 import { useIntl } from "react-intl";
@@ -7,9 +8,7 @@ import { createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import CreatableSelect, { CreatableProps } from "react-select/creatable";
 import { ActionMeta, ValueType } from "react-select/src/types";
-import { SM } from "../../../../../App";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../../../constants/urls";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
@@ -21,6 +20,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   options: OptionType[];
   isDisabled?: boolean;
   placeholder?: string;
+  labelProps?: BoxProps;
 }
 
 type CreatablePropsWithFormik = AutocompleteOwnProps &
@@ -32,6 +32,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   options,
   isDisabled = false,
   placeholder,
+  labelProps,
   ...fieldProps
 }) => {
   const formikValue = fieldProps.field.value;
@@ -41,8 +42,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [inputValue, setInputValue] = useState(formikValue);
-  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
-  const [showOnlyText, setShowOnlyText] = useState(!(isCreateUrl && !inputValue));
+  const [showOnlyText, setShowOnlyText] = useState(!isEmpty(inputValue));
   const { submitForm } = useFormContext();
   const {
     form: { setFieldValue, setFieldTouched, touched },
@@ -93,13 +93,11 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const titlePlaceholder = intl.formatMessage({ id: "form.builder.enter.title" });
 
   return (
-    <Field {...fieldProps} label={undefined}>
+    <Field {...fieldProps} label={undefined} labelProps={labelProps}>
       <ClickAwayListener onClickAway={onAway}>
         <div>
           {showOnlyText &&
         <Box style={{
-          fontFamily: "Sora",
-          fontStyle: "normal",
           fontWeight: 600,
           fontSize: "19px",
           lineHeight: "24px",
@@ -115,7 +113,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
               input: (base) => ({
                 ...base,
                 input: {
-                  opacity: inputValue || (isCreateUrl && !inputValue) ? "1 !important" : 0,
+                  opacity: "1 !important",
                   backgroundColor: "red",
                 },
               }),
@@ -124,7 +122,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                 backgroundColor: Colors.white,
                 border: `1px solid ${Colors.clear_blue}`,
                 boxShadow: `0 0 0 1px ${Colors.clear_blue}`,
-                fontFamily: "Sora",
                 fontSize: "19px",
                 fontWeight: 600,
                 lineHeight: "24px",
@@ -135,7 +132,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
             }}
             isClearable={Boolean(formikValue)}
             components={{ DropdownIndicator: null }}
-            placeholder={isCreateUrl && !inputValue ?
+            placeholder={!inputValue ?
               <div style={{ color: Colors.almost_black }}>{titlePlaceholder}</div> : null}
             openMenuOnClick={false}
             openMenuOnFocus={false}

@@ -12,8 +12,7 @@ const FBHyperlink: React.FunctionComponent<FBHyperlinkProps> = ({
 }) => (
   <FBInput {...props} type="hyperlink">
     <Link rel="noopener" {...{ onClick }} underline="always" style={{ textDecorationColor: `${Colors.almost_black}` }}>
-      <Box fontSize={12} fontWeight= {600} fontFamily= "Sora"
-        fontStyle= "normal" lineHeight="15px" color={Colors.almost_black}>{label}</Box>
+      <Box fontSize={12} fontWeight= {600} lineHeight="15px" color={Colors.almost_black}>{label}</Box>
     </Link>
   </FBInput>
 );

@@ -19,10 +19,8 @@ const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-
           fontWeight: 600,
           fontSize: "19px",
           lineHeight: "24px",
-          margin: "8px 10px",
           left: "4px",
           top: "40px",
-          padding: "4px",
         }}>
           {/* {value && <Typography
             id="SummaryBaseProps-values"

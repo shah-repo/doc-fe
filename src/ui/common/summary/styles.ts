@@ -14,16 +14,13 @@ export default () =>
         "border": 0,
         "& .ql-editor": {
           padding: 0,
-          fontFamily: "Sora",
           color: "#474747 !important",
         },
       },
       "whiteSpace": "pre-line",
     },
     btnStyle: {
-      fontFamily: "Sora",
       fontSize: "14px",
       color: Colors.navy,
     },
-
   });

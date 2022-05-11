@@ -43,6 +43,7 @@ const Title: React.FunctionComponent<Props> = ({
         creatableProps={{ id: "Title-field" }}
         isDisabled={props.disabled}
         placeholder={intl.formatMessage({ id: "form.builder.enter.title" })}
+        labelProps={{ margin: 0 }}
         {...{ options, label }}
       />
     </CustomLabelTooltip>

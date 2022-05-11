@@ -12,7 +12,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     itemCount: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 400,
       fontSize: "12px",
       lineHeight: "15px",
@@ -21,7 +20,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     itemHeader: {
       "fontFamily": "Sora",
-      "fontStyle": "normal",
       "fontWeight": 600,
       "fontSize": "16px",
       "lineHeight": "20px",
@@ -42,7 +40,6 @@ export const styles = makeStyles((theme: Theme) =>
     stateListItem: { height: "45px", cursor: "pointer" },
     header: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "12px",
       lineHeight: "15px",
@@ -62,7 +59,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     stateText: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "21px",
@@ -71,7 +67,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     nameText: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "21px",
@@ -80,7 +75,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     emailText: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "14px",
       lineHeight: "21px",
@@ -90,7 +84,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     dateText: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "21px",
@@ -105,8 +98,6 @@ export const styles = makeStyles((theme: Theme) =>
       position: "relative",
     },
     noTrainingMessage: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "18px",
