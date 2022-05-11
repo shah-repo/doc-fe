@@ -67,7 +67,8 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   const bodyDefaults = {
     name: `${companyName}`,
     companyAcronym: `TC${acronym}${companyNumber}`,
-    scheduledForDeletion: true,
+    scheduledForDeletion: false,
+    testAutomationCompany: true,
     numOfRevStages: 3,
     numOfDocDigits: 5,
     helloSignIntegrationEnabled: false,
