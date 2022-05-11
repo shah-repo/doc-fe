@@ -23,7 +23,7 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
   <Observer>
     {() => (
       <Box px={4.25} paddingTop={0.75} paddingBottom={2.5}>
-        <Box p={4}>
+        <Box py={2}>
           {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
         </Box>
         <Box paddingBottom={2}>
