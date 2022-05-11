@@ -120,7 +120,7 @@ context("Password expire flow", () => {
         it("Clicks the save button", () => {
           cy.intercept({ method: "POST", pathname: "/api/v1/employees" }).as("postEmployee");
           cy.get("button>span>svg>path").eq(1).arrowClick();
-          cy.wait("@postEmployee").then((res) => {
+          cy.wait("@postEmployee", { requestTimeout: 40000, responseTimeout: 40000 }).then((res) => {
             if (res.response) {
               const response = res.response.body;
               newEmployeId = response.id;
