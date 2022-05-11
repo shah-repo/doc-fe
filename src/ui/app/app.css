@@ -34,6 +34,10 @@ body {
   right: 10px;
 }
 
+.MuiBox-root {
+  font-family: "Sora";
+}
+
 .x-hellosign-embedded {
   z-index: 9999;
 }

@@ -19,6 +19,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     },
   },
   MuiTypography: {
+    button: {
+      fontFamily: "Sora, sans-serif;",
+    },
     caption: {
       fontFamily: "Open Sans, sans-serif;",
     },
@@ -126,7 +129,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       lineHeight: "1.2rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     icon: {
       right: "10px",
@@ -149,7 +152,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiMenuItem: {
     root: {
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiListItemText: {
@@ -244,7 +247,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiFormHelperText: {
     root: {
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
   },
 });

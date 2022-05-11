@@ -21,7 +21,6 @@ export const styles = makeStyles((theme) => ({
   },
   emptyMsg: {
     padding: theme.spacing(2),
-    fontFamily: "Sora, sans-serif;", // MuiBox-root is not getting added in override.ts
   },
   row: (props: TableStyleProps) => ({
     "paddingRight": "0!important",

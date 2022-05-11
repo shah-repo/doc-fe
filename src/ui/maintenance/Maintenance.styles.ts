@@ -6,7 +6,7 @@ export const styles = makeStyles((theme: Theme) =>
       width: "100%",
       height: "100%",
       alignItems: "center",
-      fontFamily: "Open Sans",
+      fontFamily: "Sora", // TODO:Validate Maintenance Mode
     },
     base: {
       width: "fit-content",
