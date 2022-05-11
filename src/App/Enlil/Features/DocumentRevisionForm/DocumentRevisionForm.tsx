@@ -99,14 +99,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               <SMTabs
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
                 tabs={tabLabels}
-                boxProps={{ stretchY: "100%", style: { paddingLeft: "30px" } }}
+                boxProps={{ stretchY: "100%", px: 4.25 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
                   return <SMBox height="calc(60vh - 25px)" key={index} overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} px={8} stretchY="calc(100% - 40px)">
+                    <SMBox mt={8} stretchY="calc(100% - 40px)">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}
                         releasedDocRev={_documentRevisionFormState?.releasedDocRev}
@@ -135,7 +135,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           mode,
                         }}
                       />}
-                      {_formState?.mode !== "none" && showFBLabels &&  (
+                      {tabType !== "TRAINING" && _formState?.mode !== "none" && showFBLabels &&  (
                         <FBWorkspace
                           isPortal={false}
                           document={{

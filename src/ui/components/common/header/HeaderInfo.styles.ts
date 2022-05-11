@@ -29,7 +29,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     breadcrumbId: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 700,
       fontSize: "14px",
       lineHeight: "18px",

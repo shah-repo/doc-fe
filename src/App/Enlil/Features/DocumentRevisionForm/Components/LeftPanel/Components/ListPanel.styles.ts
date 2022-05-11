@@ -37,7 +37,6 @@ export default makeStyles(() =>
     },
     listItemText: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 500,
       fontSize: "12px",
       lineHeight: "15px",
@@ -47,7 +46,6 @@ export default makeStyles(() =>
     },
     listSubItem: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 500,
       fontSize: "14px",
       lineHeight: "18px",

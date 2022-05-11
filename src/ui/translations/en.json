@@ -267,6 +267,7 @@
   "common.close.task": "Close task",
   "common.document": "Document",
   "common.select": "Select",
+  "common.select.placeholder": "Select...",
   "common.select.item": "Select Item",
   "common.select.state": "Select State",
   "common.select.type": "Select Type",

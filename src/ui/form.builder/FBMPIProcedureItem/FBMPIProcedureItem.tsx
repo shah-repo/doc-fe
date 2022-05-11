@@ -139,7 +139,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                     color: Colors.raven,
                     flexGrow: 1,
                     fontFamily: "Sora",
-                    fontStyle: "normal",
                     fontWeight: 400,
                     fontSize: "14px",
                     lineHeight: "18px",

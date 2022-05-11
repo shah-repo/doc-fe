@@ -5,7 +5,6 @@ export const styles = makeStyles((theme: Theme) =>
   createStyles({
     generalInfo: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "21px",
@@ -13,7 +12,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     releaseDate: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "12px",
       lineHeight: "15px",
@@ -21,7 +19,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     released: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontSize: "14px",
       fontWeight: 400,
       lineHeight: "20px",

@@ -18,6 +18,9 @@ export const headerBackgroundStyles = makeStyles(() =>
     GRAY_STATUS: {
       background: Colors.mandy,
     },
+    WIP_STATUS: {
+      background: Colors.raven,
+    },
     undefined: {
       background: Colors.dodger_blue,
     },

@@ -76,14 +76,14 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
               <SMTabs
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
                 tabs={tabLabels}
-                boxProps={{ stretchY: "100%" }}
+                boxProps={{ stretchY: "100%", px: 4.25 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
                   return <SMBox height="100%"  overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} px={8} pl={0} stretchY="100%">
+                    <SMBox mt={8} stretchY="100%">
                       {tabType === "MIXED" &&  <SummaryPresenter
                         dataProp={documentRevision}
                         canChangeOwnerShip={canChangeOwnerShip}

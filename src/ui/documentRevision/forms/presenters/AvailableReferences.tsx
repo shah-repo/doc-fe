@@ -5,6 +5,7 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import { debounce, map, some } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../../App";
 import { TypographyProps } from "../../../../state/ducks/common/types";
@@ -58,6 +59,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const intl = useIntl();
   const { submitForm } = useFormContext();
   const { _documentRevisionFormState } = SM.useStores();
   const [value, setValue] = useState<any[]>([]);
@@ -211,7 +213,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                placeholder="Select..."
+                placeholder={intl.formatMessage({ id: "common.select.placeholder" })}
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
@@ -225,7 +227,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 }}
                 inputProps={{
                   ...params.inputProps,
-                  style: { padding: "10.5px 10px", fontFamily: "Sora" },
+                  style: { padding: "10.5px 10px" },
                 }}
               />
             </Box>
@@ -238,7 +240,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
               {...getTagProps({ index })}
               key={option.value}
               label={option.label}
-              style={{ minHeight: "32px", height: "auto", fontFamily: "Sora" }}
+              style={{ minHeight: "32px" }}
               disabled={option.deleteDisabled}
             />
           ))

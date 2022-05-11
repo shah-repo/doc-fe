@@ -7,6 +7,7 @@ export enum FormHeaderStatusClassMapping {
   "Released"="GREEN_STATUS",
   "APPROVED" = "GREEN_STATUS",
   "Obsolete"="GRAY_STATUS",
+  "WIP" = "WIP_STATUS",
   "Voided"="RED_STATUS",
   "CLOSED" = "CLOSED_STATUS",
   "VOIDED" = "RED_STATUS",

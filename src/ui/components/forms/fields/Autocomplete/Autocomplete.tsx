@@ -92,11 +92,9 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
 
   return (
     <Field {...fieldProps} label={undefined}>
-      <>
-        <Typography variant="h5" style={FBAutoCompleteStyles.labelProps}>
-          <Text message={fieldProps.label} />
-        </Typography>
-      </>
+      <Typography variant="h5" style={FBAutoCompleteStyles.labelProps}>
+        <Text message={fieldProps.label} />
+      </Typography>
       <Select
         {...fieldProps.field}
         {...autocompleteProps}

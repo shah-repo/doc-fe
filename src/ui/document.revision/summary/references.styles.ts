@@ -21,7 +21,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     label: {
       fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "18px",

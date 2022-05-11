@@ -7,7 +7,6 @@ export const FBTableCellStyles = makeStyles(() =>
     cellFont: {
       color: Colors.almost_black,
       fontFamily: "Sora",
-      fontStyle: "normal",
     },
     cellFontWeightLow: {
       fontWeight: 600,

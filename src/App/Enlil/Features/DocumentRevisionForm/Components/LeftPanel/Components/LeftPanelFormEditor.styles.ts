@@ -18,7 +18,6 @@ export default makeStyles((theme: Theme) =>
       "overflow": "auto",
       "padding": "15px",
       "& .MuiFormHelperText-root": {
-        fontFamily: "Sora",
         lineHeight: "20px",
       },
     },
