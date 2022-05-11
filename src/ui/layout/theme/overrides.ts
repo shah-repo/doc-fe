@@ -169,7 +169,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontFamily: "Sora, sans-serif;",
       backgroundColor: Colors.white,
-      fontFamily: "Sora, sans-serif;",
     },
     notchedOutline: {
       borderRadius: 4,
