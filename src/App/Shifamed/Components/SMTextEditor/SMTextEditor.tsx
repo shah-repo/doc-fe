@@ -127,7 +127,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                     style={{
                       gridArea: "1/1",
                       cursor: !disabled ? "pointer" : "inherit",
-                      backgroundColor: (hover || _textEditorState?.masked) && !isCreateForm ? Colors.light_gray : Colors.white,
+                      backgroundColor: ((hover || _textEditorState?.masked) &&
+                        !isCreateForm ? Colors.light_gray : Colors.white),
                     }}
                     maxHeight= {150}
                     overflow= "auto"
