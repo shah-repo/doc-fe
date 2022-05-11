@@ -14,7 +14,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
 }) =>  (
   <Observer>
     {() => (
-      <SMBox {...boxProps}>
+      <SMBox {...boxProps} id="SMBodyTmpl">
         <Tabs
           {...{ onChange }}
           value={_tabsState?.value}

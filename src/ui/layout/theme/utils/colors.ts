@@ -48,6 +48,7 @@ enum Colors {
   ultramarine_blue="#4C69FF",
   mild_wind_blue="#CCD4D9",
   topaz="#03C0C1",
+  clear_blue="#2684FF",
   // red
   red = "#c40000",
   dark_red = "#a10808",

@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-key */
 import { map } from "lodash";
+import { reaction } from "mobx";
 import { Observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -62,6 +63,25 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
+  const changeLayoutHeight = () => {
+    setTimeout(() => {
+      const headerTmpl = document.getElementById("SMHeaderTmpl");
+      const bodyTmpl = document.getElementById("SMBodyTmpl");
+      const restHeight = headerTmpl?.clientHeight ? 150 + (+(headerTmpl?.clientHeight)) : 200;
+      bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
+    }, 100);
+  };
+  useEffect(() => reaction(
+    () => _documentRevisionFormState?.viewMore,
+    () => {
+      changeLayoutHeight();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }), []);
+
+  useEffect(() => {
+    changeLayoutHeight();
+  }, []);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
@@ -105,7 +125,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   const tabType = tabInfo.type;
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
 
-                  return <SMBox height="calc(60vh - 25px)" key={index} overflow={"auto"} {...{ onScroll }}>
+                  return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="calc(100% - 40px)">
                       {tabType === "MIXED" && <DocumentRevisionFormPresenter
                         {...formValues}

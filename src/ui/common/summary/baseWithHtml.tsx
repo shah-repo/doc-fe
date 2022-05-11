@@ -1,7 +1,8 @@
-import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
+import { truncate } from "lodash";
 import React, { useEffect, useState } from "react";
-import { Editor } from "react-draft-wysiwyg";
-import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
+import { useIntl } from "react-intl";
+import { convertHtmlEntities } from "../../../common/utils/helpers";
 import Text from "../../components/Text";
 import styles from "./styles";
 import { SummaryBaseProps } from "./types";
@@ -15,13 +16,42 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   labelProps,
   labelFont,
 }) => {
-  const [editor, setEditor] = useState();
+  const intl = useIntl();
+  const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
+  const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
+  const [editor, setEditor] = useState<string>("");
+  const [btnText, setBtnText] = useState(viewMore);
+  const [flag, setFlag] = useState(false);
+  const editedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n)/g, "")) : "";
   useEffect(() => {
-    setEditor(convertHtmlToDraft(value));
-  }, [value]);
+    getTruncatText();
+  }, []);
+
+  const completeText = () => {
+    setEditor(editedValue);
+  };
+
+  const getTruncatText = () => {
+    const truncatedText = truncate(editedValue, {
+      length: 100,
+      separator: " ",
+    });
+    setEditor(truncatedText);
+  };
+
+  const toggleBtn = () => {
+    setFlag(!flag);
+    if (flag) {
+      getTruncatText();
+      setBtnText(viewMore);
+    } else {
+      completeText();
+      setBtnText(viewLess);
+    }
+  };
 
   return (
-    <Grid item={true} xs={12} style={{ marginBottom: "-24px" }}>
+    <Grid item={true} xs={12} style={{ marginBottom: "-24px" }} >
       {label && (
         <Grid item={true} xs={12} id="BaseWithhtml-label">
           <Typography style={labelProps}>
@@ -30,13 +60,22 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
         </Grid>
       )}
       <Grid item={true} xs={12} id="BaseWithhtml-editor" data-cy="BaseWithhtml-editor">
-        <Editor
-          readOnly={true}
-          editorState={editor}
-          toolbarHidden={true}
-          editorClassName={classes.descriptionContainer}
-          editorStyle={labelFont}
-        />
+        <Box className={classes.descriptionContainer} >
+          <span
+            style = { { fontSize: "14px" }}
+          >{editor?.trim()}
+            <span className={classes.btnStyle}
+              style={{
+                marginTop: "-3px",
+                paddingLeft: "5px",
+                cursor: "pointer",
+                display: editedValue?.length < 100 ? "none" : "",
+              }}
+              onClick={() => toggleBtn()}>
+              {btnText}
+            </span>
+          </span>
+        </Box>
       </Grid>
     </Grid>
   );
