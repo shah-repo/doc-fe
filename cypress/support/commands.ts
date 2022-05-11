@@ -110,6 +110,8 @@ export interface ICreateCompanyBootstrap {
   numOfDocDigits: number;
   users: IUser[];
   documentTypes: IdocumentTypeDto[];
+  scheduledForDeletion: boolean;
+  testAutomationCompany: boolean;
   whiteLabeling?: any;
   addresses?: string[];
   remoteValidatorBundleName: string;
