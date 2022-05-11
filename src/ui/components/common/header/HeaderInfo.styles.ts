@@ -134,6 +134,9 @@ export const styles = makeStyles((theme: Theme) =>
     GRAY_STATUS: {
       color: Colors.mandy,
     },
+    WIP_STATUS: {
+      color: Colors.raven,
+    },
     undefined: {
       color: Colors.dodger_blue,
     },
