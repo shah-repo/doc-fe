@@ -146,13 +146,15 @@ export enum ACTION_TITLE_MAPPING {
   UpdatedGroups="UpdatedGroups",
   UpdatedGroup="UpdatedGroup",
   Removed="Removed",
-  Added="Added"
+  Added="Added",
+  UpdatedAvatar="UpdatedAvatar"
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
   NameSeparator = "-NAME-UPDATED-TO-",
   DeleteFromGroup = "-DELETED-FROM-GROUP-",
-  AddToGroup = "-ADDED-TO-GROUP-"
+  AddToGroup = "-ADDED-TO-GROUP-",
+  AvatarUpdated="-AVATAR-UPDATED-FOR-"
 }
 
 export interface UMAuditProps {
