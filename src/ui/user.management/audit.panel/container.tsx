@@ -155,6 +155,17 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           sortedIndex: 1,
         };
       }
+    }  else if (auditRecord.fieldPath === "avatar") {
+      if (auditRecord.type === "STRING_EDITED") {
+        actionInfo = {
+          primaryText: "",
+          secondaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.UpdatedAvatar, {
+            employeeName: "",
+          })}${UM_AUDIT_CONCAT_KEYS.AvatarUpdated}${auditRecord.employeeName}`,
+          auditType: ACTION_TITLE_MAPPING.UpdatedAvatar,
+          sortedIndex: 4,
+        };
+      }
     } else if (auditRecord.fieldPath === "groups") {
       if (auditRecord.type === "ARRAY_NEW") {
         if (auditRecord.previousValue === "undefined") {
@@ -262,6 +273,19 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
               to
             </span>
             <span>{items[1]}</span>
+          </>
+        );
+      } else if (auditType === ACTION_TITLE_MAPPING.UpdatedAvatar) {
+        const items = secondaryText[0].split(UM_AUDIT_CONCAT_KEYS.AvatarUpdated);
+        secondaryTextHtml = (
+          <>
+            <span>{items[0]}</span>
+
+            <span style={{
+              color: Colors.almost_black,
+              padding: "0 2px",
+              fontWeight: 700,
+            }}>{items[1]}</span>
           </>
         );
       } else if (

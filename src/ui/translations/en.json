@@ -1073,6 +1073,7 @@
   "user.management.audit.history.Added": "Added",
   "user.management.audit.history.EmployeesAddedToGroup": " to group {groupName}",
   "user.management.audit.history.RemovedGroupName": "Employees removed from group",
+  "user.management.audit.history.UpdatedAvatar": "Updated Avatar for {employeeName}",
   "user.management.audit": "History",
   "api.token.title": "API Token",
   "api.token.key": "Key",
