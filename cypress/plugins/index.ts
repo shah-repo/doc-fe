@@ -107,7 +107,7 @@ export default (on, config) => {
         launchOptions.args.push(`--height=${height}`);
       }
     }
-
+    launchOptions.args = launchOptions.args.filter((x) => x !== "--disable-dev-shm-usage");
     return launchOptions;
   });
 };
