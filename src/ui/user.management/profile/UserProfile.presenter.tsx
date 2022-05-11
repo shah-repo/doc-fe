@@ -3,10 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
+import { companyActions } from "../../../state/ducks/company";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import AvatarContainer from "../../components/icons/avatar/avatar.container";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import DialogContent from "./dialog/DialogContent";
 import DialogTitle from "./dialog/DialogTitle";
 
@@ -72,7 +75,9 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   const [isUsernameEmpty, setUsernameError] = useState<boolean>(false);
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isCurrentUser = userId === currentUserId;
-
+  const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const async = useAsync();
   const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({
     name,
     avatar,
@@ -87,6 +92,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
     closeEdit();
     setPreviewAvatar("");
     setUsernameError(false);
+    async.start(getCompanyMine, currentEmployeeId, async);
   };
   const handleCloseDialog = () => {
     close();
