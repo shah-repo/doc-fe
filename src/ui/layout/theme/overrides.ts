@@ -22,6 +22,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     caption: {
       fontFamily: "Open Sans, sans-serif;",
     },
+    body1: {
+      fontFamily: "Sora, sans-serif;",
+    },
     body2: {
       color: "#8A9DAD",
       fontSize: "0.8rem",
@@ -88,7 +91,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiTableCell: {
     root: {
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
       padding: 0,
     },
     head: {
@@ -98,6 +101,11 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontFamily: "Sora, sans-serif;",
       fontWeight: "bold",
       lineHeight: "0.9rem",
+    },
+  },
+  MuiInputLabel: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiInputBase: {
@@ -151,11 +159,11 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontFamily: "Sora, sans-serif;",
     },
   },
-  // MuiBox: {
-  //   root: {
-  //     fontFamily: "Sora, sans-serif;",
-  //   },
-  // },
+  MuiList: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+    },
+  },
   MuiExpansionPanel: {
     root: {
       boxShadow: "none",
@@ -187,7 +195,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiFormControl: {
     root: {
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
       [`& .${FBClasses.hoverVisibility}`]: {
         "&:hover": {
           "& .MuiButton-root": {
@@ -226,12 +234,12 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiChip: {
     root: {
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiGrid: {
     root: {
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiFormHelperText: {
