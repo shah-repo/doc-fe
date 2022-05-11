@@ -18,6 +18,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       imapGetMails(params: {userEmail: string; options?: GmailTesterOptions}): Chainable;
+      imapGetMailsNoValidation(params: {userEmail: string; options?: GmailTesterOptions}): Chainable;
       imapVerifyLastEmailDoesNotContain(params: {userEmail: string; content: string}): Chainable;
       imapVerifyNumberOfEmailsReceivedSince(params: {userEmail: string; emailCount: integer; date: Date}): Chainable;
       imapGetActivationLink(params: {userEmail: string}): Chainable;
@@ -30,9 +31,17 @@ declare global {
         getEmailsSincedate: Date;
         assertNumberOfEmailsFoundInList: integer;}): Chainable;
       imapGetNewPasswordLink(params: {userEmail: string}): Chainable;
+      imapVerifyNoPasswordResetEmail(params: {userEmail: string; fromDate: Date}): Chainable;
     }
   }
 }
+
+Cypress.Commands.add("imapGetMailsNoValidation", (params: {userEmail: string; options?: GmailTesterOptions}) => {
+  cy.task("gmailGetMails", {
+    email: params.userEmail,
+    options: params.options || {},
+  });
+});
 
 Cypress.Commands.add("imapGetMails", (params: {userEmail: string; options?: GmailTesterOptions}) => {
   cy.task("gmailGetMails", {
@@ -142,6 +151,13 @@ Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) =>
     const activationLink = emailText.substring(startingPosition, endingPosition);
     cy.visit(CONFIG.FE_URL + "/" + decodeHTMLEntities(activationLink));
   });
+});
+
+Cypress.Commands.add("imapVerifyNoPasswordResetEmail", (params: { userEmail: string; fromDate: Date}) => {
+  cy.imapGetMailsNoValidation({ userEmail: params.userEmail, options: { after: params.fromDate, max_wait_time_sec: 30 } })
+    .then((emails) => {
+      if (emails) { assert.fail("Password reset found"); }
+    });
 });
 
 function getEmailsThatAreInReceivedList(receivedEmails, emailToTest) {
