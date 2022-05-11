@@ -23,7 +23,7 @@ services:
     - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
     - ENLIL_ENV=${ENLIL_ENV}
     - SLACK_TOKEN=${SLACK_TOKEN}
-    shm_size: 512M
+    shm_size: 2GB
 networks:
   cypress_network:
     name: cypress_network
