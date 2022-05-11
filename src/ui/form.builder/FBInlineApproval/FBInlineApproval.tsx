@@ -45,12 +45,10 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
         {!isApproved && (
           <>
             <FBText boxProps={{
-              flexGrow: 1, fontSize: "14px", fontFamily: "Sora",
-              fontWeight: "600", color: Colors.latest_red_varient, lineHeight: "15px",
+              flexGrow: 1, fontSize: "14px", fontWeight: "600", color: Colors.latest_red_varient, lineHeight: "15px",
             }} locale="form.builder.approval.pending" />
             <FBText boxProps={{
-              fontSize: "12px", fontFamily: "Sora",
-              fontWeight: "400", color: Colors.almost_black, lineHeight: "15px",
+              fontSize: "12px", fontWeight: "400", color: Colors.almost_black, lineHeight: "15px",
             }} locale="form.builder.approval.instruction" />
           </>
         )}

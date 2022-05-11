@@ -30,7 +30,6 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
             pl: 0.5,
             color: Colors.error_red,
             fontWeight: "bold",
-            fontFamily: "Sora",
           }}
         />
       </Box>
@@ -45,7 +44,7 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
       }}
       withState
     />
-    <Box mt={1} style={{ color: "gray", fontFamily: "Sora" }} display="flex">
+    <Box mt={1} style={{ color: "gray" }} display="flex">
       {range && <FBText
         locale="form.builder.allowed.range"
         values={{

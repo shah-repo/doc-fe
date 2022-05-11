@@ -5,7 +5,6 @@ type TextTransform = "none" | "capitalize" | "uppercase" | "lowercase" | "initia
 const commonStyles = {
   height: "36px",
   textTransform: "capitalize" as TextTransform,
-  fontFamily: "Sora",
   borderRadius: "100px",
 };
 const styles = {

@@ -28,7 +28,6 @@ export const styles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
     },
     breadcrumbId: {
-      fontFamily: "Sora",
       fontWeight: 700,
       fontSize: "14px",
       lineHeight: "18px",
@@ -43,8 +42,6 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
     },
     groupSection: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "24px",
@@ -71,8 +68,6 @@ export const styles = makeStyles((theme: Theme) =>
       textDecoration: "none",
     },
     title: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "24px",
@@ -82,7 +77,6 @@ export const styles = makeStyles((theme: Theme) =>
       minWidth: "50px",
     },
     subTitleLink: {
-      "fontFamily": "Sora",
       "fontWeight": 600,
       "fontSize": "12px",
       "color": Colors.white,
@@ -109,8 +103,6 @@ export const styles = makeStyles((theme: Theme) =>
       borderRadius: 3,
       marginLeft: "12px",
       background: Colors.white,
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 700,
       fontSize: "10px",
       lineHeight: "13px",

@@ -40,7 +40,6 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
             style={{
               backgroundColor: Colors.navy,
               borderRadius: "100px",
-              fontFamily: "Sora",
               fontSize: 12,
               fontWeight: 600,
               color: Colors.white,

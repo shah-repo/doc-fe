@@ -12,7 +12,6 @@ const styles = makeStyles((theme: Theme) =>
       marginBottom: "12px",
     },
     primaryText: {
-      fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
@@ -20,7 +19,6 @@ const styles = makeStyles((theme: Theme) =>
       color: Colors.dark_jungle_green,
     },
     secondaryText: {
-      fontFamily: "Sora",
       fontStyle: "normal",
       fontSize: "12px",
       color: Colors.font_gray,
@@ -30,7 +28,6 @@ const styles = makeStyles((theme: Theme) =>
       height: "35px",
       fontWeight: 600,
       color: Colors.white,
-      fontFamily: "Sora",
       borderRadius: "50%",
       fontSize: "12px",
       background: `${initialColor}`,

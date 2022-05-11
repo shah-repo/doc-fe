@@ -29,7 +29,6 @@ const classes = {
     justifyContent: "flex-start",
     fontSize: "12px",
     fontWeight: 600,
-    fontFamily: "Sora",
     color: Colors.almost_black,
   },
 };

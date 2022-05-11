@@ -9,7 +9,7 @@ export const styles = makeStyles(() =>
       },
       "& .MuiInputBase-input": {
         padding: 10,
-        fontFamily: "Sora",
+        fontSize: 14,
       },
     },
   }),

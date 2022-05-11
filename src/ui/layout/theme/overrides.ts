@@ -28,7 +28,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     body2: {
       color: "#8A9DAD",
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     subtitle1: {
       color: appTheme.palette.text.primary,
@@ -63,7 +63,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       borderRadius: 3,
       margin: appTheme.spacing(1),
       fontWeight: "bold",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     contained: {
       boxShadow: "none",
@@ -168,6 +168,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiOutlinedInput: {
     root: {
       backgroundColor: Colors.white,
+      fontFamily: "Sora, sans-serif;",
     },
     notchedOutline: {
       borderRadius: 4,
@@ -247,6 +248,16 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     },
   },
   MuiFormLabel: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+    },
+  },
+  MuiAvatar: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+    },
+  },
+  MuiButtonBase: {
     root: {
       fontFamily: "Sora, sans-serif;",
     },

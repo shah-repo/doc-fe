@@ -53,7 +53,6 @@ export default makeStyles((theme: Theme) =>
       marginTop: "20px",
     },
     staticTitleText: {
-      fontFamily: "Sora",
       fontSize: "16px",
       margin: "0 10px",
       fontWeight: 700,
@@ -61,7 +60,6 @@ export default makeStyles((theme: Theme) =>
       color: Colors.almost_black,
     },
     titleText: {
-      fontFamily: "Sora",
       fontSize: "12px",
       fontWeight: 500,
       lineHeight: "15px",

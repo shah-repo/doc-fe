@@ -13,7 +13,6 @@ const styles = makeStyles(() =>
       },
       "& .MuiTypography-root": {
         fontSize: "14px",
-        fontFamily: "Sora",
         fontWeight: 400,
       },
     },

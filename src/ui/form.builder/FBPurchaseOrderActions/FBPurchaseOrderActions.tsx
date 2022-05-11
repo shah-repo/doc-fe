@@ -16,7 +16,7 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
   const classes = FBFontStyles();
   return (
     <>
-      <Box display="flex" flexDirection="row-reverse" fontSize="12" fontFamily="Sora" mx={3} mb={1}>
+      <Box display="flex" flexDirection="row-reverse" fontSize="12" mx={3} mb={1}>
         <Text translation="form.builder.total" />
         <Observer>
           {() => (

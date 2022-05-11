@@ -77,7 +77,6 @@ const TrainingDialog: React.FunctionComponent<Props> =
           aria-label={transition}
           onClick={openDialog}
           data-cy={`training-${transition}`}
-          style={{ fontFamily: "Sora" }}
           {...buttonProps}
         >
           <Text message={label} />

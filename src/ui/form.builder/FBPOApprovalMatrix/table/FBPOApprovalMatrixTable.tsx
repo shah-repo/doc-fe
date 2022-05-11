@@ -14,7 +14,6 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: Colors.light_gray,
     color: Colors.almost_black,
     textTransform: "uppercase",
-    fontFamily: "Sora",
     fontSize: "12px",
     lineHeight: "15px",
   },
@@ -30,7 +29,6 @@ const StyledTableCell = withStyles((theme) => ({
 const useStyles = makeStyles({
   root: {
     maxWidth: "100%",
-    fontFamily: "Sora",
   },
   editable: {
     cursor: "pointer",

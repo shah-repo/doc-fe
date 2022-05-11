@@ -60,7 +60,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
           {children}
         </FormControl>
         {!isEmpty(helperText) && showErrorMsg && (
-          <FormHelperText {...{ error }} style={{ fontFamily: "Sora" }}>
+          <FormHelperText {...{ error }}>
             <Text message={helperText as string} />
           </FormHelperText>
         )}

@@ -78,7 +78,7 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
         <FBSelect
           style={{ height: 47 }}
           boxProps={{ mt: 3.125, mb: 3.125 }}
-          labelProps={{ fontFamily: "Sora", fontWeight: 600, fontSize: 14, marginBottom: 1.25 }}
+          labelProps={{ fontWeight: 600, fontSize: 14, marginBottom: 1.25 }}
           label="form.builder.aql"
           name="editorConfig.aql"
           options={FBData.aqlOptions}

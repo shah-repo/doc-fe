@@ -28,7 +28,7 @@ const FBRequestApprovalField: React.FunctionComponent<FBRequestApprovalProps> = 
       fullWidth={true}
       label="form.builder.add.approvers"
       variant="outlined"
-      style={{ margin: 0, fontFamily: "Sora" }}
+      style={{ margin: 0 }}
       onClick={handleAddEdit}
       {...{ disabled }}
     />

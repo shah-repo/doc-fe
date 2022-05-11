@@ -32,7 +32,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
       <Box
         bgcolor={Colors.gray}
         color="white"
-        style={{ borderTopLeftRadius: "4px", borderTopRightRadius: "4px", fontFamily: "Sora, sans-serif" }}
+        style={{ borderTopLeftRadius: "4px", borderTopRightRadius: "4px" }}
         fontWeight="fontWeightBold"
         display="flex"
       >
@@ -57,7 +57,6 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
               borderTop={0}
               borderColor={item.type ? Colors.medium_red : Colors.hint_gray}
               key={`fb-procedure-item-${type}-${index}`}
-              style={{ fontFamily: "Sora, sans-serif" }}
               className={FBClasses.hoverVisibility}
             >
               <Box
