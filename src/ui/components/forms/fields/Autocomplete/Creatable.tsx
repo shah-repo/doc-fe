@@ -1,13 +1,15 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, ClickAwayListener } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 import { createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import CreatableSelect, { CreatableProps } from "react-select/creatable";
 import { ActionMeta, ValueType } from "react-select/src/types";
+import { SM } from "../../../../../App";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
-import Text from "../../../../components/Text";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../../constants/urls";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
@@ -37,6 +39,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [inputValue, setInputValue] = useState(formikValue);
+  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
+  const [showOnlyText, setShowOnlyText] = useState(!(isCreateUrl && !inputValue));
   const { submitForm } = useFormContext();
   const {
     form: { setFieldValue, setFieldTouched, touched },
@@ -50,6 +54,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       setInputValue((value as any)?.value);
     }
     setFieldValue(name, (value as any)?.value);
+    setShowOnlyText(false);
     // submitForm();
   };
   const onInputChange = (value) => {
@@ -69,49 +74,78 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       // eslint-disable-next-line @typescript-eslint/await-thenable
       await setFieldValue(name, inputValue);
     }
+    setShowOnlyText(false);
     submitForm();
   };
 
   const stringify = (option: OptionType) => option.label;
   const filterOption = createFilter({ ignoreAccents: false, stringify });
 
+  const onAway = () => {
+    if (inputValue) {
+      setShowOnlyText(true);
+    }
+  };
+
+  const intl = useIntl();
+  const titlePlaceholder = intl.formatMessage({ id: "form.builder.enter.title" });
+
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={1}>
-        <Typography variant="h6">
-          <Text message={fieldProps.label} />
-        </Typography>
-      </Box>
-      <CreatableSelect
-        inputValue={inputValue}
-        value={value}
-        styles={{
-          ...selectStyles,
-          input: (base) => ({
-            ...base,
-            input: { opacity: inputValue ? "1 !important" : 0, backgroundColor: "red" },
-          }),
-          control: (base) => ({
-            ...base,
-            backgroundColor: Colors.white,
-            borderColor: Colors.hint_gray,
-            minHeight: "52px",
-            padding: "5px 3px",
-          }),
+      <ClickAwayListener onClickAway={onAway}>
+        <div>
+          {showOnlyText &&
+        <Box style={{
+          fontFamily: "Sora",
+          fontStyle: "normal",
+          fontWeight: 600,
+          fontSize: "19px",
+          lineHeight: "24px",
         }}
-        isClearable={Boolean(formikValue)}
-        components={{ DropdownIndicator: null }}
-        placeholder={null}
-        openMenuOnClick={false}
-        openMenuOnFocus={false}
-        createOptionPosition="first"
-        isValidNewOption={() => true}
-        blurInputOnSelect={false}
-        controlShouldRenderValue={false}
-        {...{ isDisabled, filterOption, onChange, onInputChange, onBlur }}
-        {...creatableProps}
-        options={options}
-      />
+        onClick={() => { setShowOnlyText(false); }}
+        >{inputValue}
+        </Box>}
+          {!showOnlyText && <CreatableSelect
+            inputValue={inputValue}
+            value={value}
+            styles={{
+              ...selectStyles,
+              input: (base) => ({
+                ...base,
+                input: {
+                  opacity: inputValue || (isCreateUrl && !inputValue) ? "1 !important" : 0,
+                  backgroundColor: "red",
+                },
+              }),
+              control: (base) => ({
+                ...base,
+                backgroundColor: Colors.white,
+                border: `1px solid ${Colors.clear_blue}`,
+                boxShadow: `0 0 0 1px ${Colors.clear_blue}`,
+                fontFamily: "Sora",
+                fontSize: "19px",
+                fontWeight: 600,
+                lineHeight: "24px",
+                // borderColor: Colors.hint_gray,
+                minHeight: "52px",
+                padding: "5px 3px",
+              }),
+            }}
+            isClearable={Boolean(formikValue)}
+            components={{ DropdownIndicator: null }}
+            placeholder={isCreateUrl && !inputValue ? titlePlaceholder : null}
+            openMenuOnClick={false}
+            openMenuOnFocus={false}
+            createOptionPosition="first"
+            isValidNewOption={() => true}
+            blurInputOnSelect={false}
+            controlShouldRenderValue={false}
+            {...{ isDisabled, filterOption, onChange, onInputChange, onBlur }}
+            {...creatableProps}
+            options={options}
+          />}
+        </div>
+      </ClickAwayListener>
     </Field>
   );
 };

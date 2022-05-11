@@ -14,8 +14,13 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
 }) =>  (
   <Observer>
     {() => (
-
-      <Box py={1} px={8}>
+      <Box
+        id="SMHeaderTmpl"
+        paddingTop={_documentRevisionFormState?.documentRevision?.id ? 2 : 8}
+        paddingBottom={3}
+        paddingLeft={7.5}
+        paddingRight={7.5}
+      >
         {
           type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
             <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
@@ -31,7 +36,6 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
           isDisabled={isDisabledInput}
         />
       </Box>
-
     )}
   </Observer>
 );

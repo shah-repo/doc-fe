@@ -42,6 +42,8 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
    */
   @observable public leftPanelOpen = false;
 
+  @observable public viewMore = false;
+
   // MARK: @api
 
   // MARK: @constructor
@@ -82,6 +84,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // MARK: @actions
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
     set(this, "revisionChangeType", revisionChangeType);
+  };
+
+  @action public setViewMore = (flag: boolean) => {
+    set(this, "viewMore", !flag);
   };
 
   @action public setCreateDocumentDisabled = (disabled?: boolean) => {
