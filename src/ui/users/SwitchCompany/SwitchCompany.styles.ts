@@ -14,7 +14,6 @@ export const styles = makeStyles((theme: Theme) =>
       width: "auto",
       height: "max-content",
       backgroundColor: theme.palette.common.white,
-      fontFamily: "Sora",
     },
     container: {
       width: "500px",
