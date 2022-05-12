@@ -18,6 +18,7 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let secondEmployee;
+let thirdEmployee;
 let adminEmployee;
 let developersGroup;
 let materialsDocument2;
