@@ -21,7 +21,6 @@ const styles = makeStyles((theme: Theme) =>
       borderRadius: theme.spacing(0.5),
       borderColor: Colors.hint_gray,
       color: Colors.dark_gray,
-      fontFamily: "Sora, sans-serif",
     },
     label: {
       margin: theme.spacing(3, 0, 3, 0),
