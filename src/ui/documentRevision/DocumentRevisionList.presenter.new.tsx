@@ -124,7 +124,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           &nbsp;
           {versionNumber}
           {isStatusVisible && (
-            <Typography component="span" className={classes.displayStatus}>
+            <Typography variant="h6" component="span" className={classes.displayStatus}>
               <CustomLabelTooltip {...{ tooltipConfig }}>
                 <>
                   &nbsp; - <Text message={displayStatus} />

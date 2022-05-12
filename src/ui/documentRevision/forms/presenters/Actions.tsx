@@ -18,7 +18,6 @@ import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
-import { FBFontStyles } from "../../../form.builder/styles/FBFont.styles";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
@@ -74,7 +73,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const [isInlineApproval, setInlineApproval] = React.useState(false);
   const [isApproved, setIsApproved] = React.useState(false);
-  const classes = FBFontStyles();
+
 
   React.useEffect(() => {
     _formState?.validate((_valid) => {
@@ -214,7 +213,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               id="DocumentRevisionForm-submit"
               data-cy={"DocumentRevisionForm-submit"}
               disabled={isCreateDocumentDisabled || _documentRevisionFormState?.disabledAction}
-              className={classes.font}
             />}
           </>
         )}

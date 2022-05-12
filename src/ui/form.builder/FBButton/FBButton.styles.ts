@@ -14,7 +14,6 @@ export default makeStyles(() =>
     }),
     label: ({ isHover }) => ({
       "padding": "2px",
-      "fontFamily": "Sora",
       "fontWeight": 700,
       "fontSize": "12px",
       "lineHeight": "15px",

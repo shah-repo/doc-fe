@@ -7,7 +7,6 @@ export const editorOptionStyles = makeStyles(() =>
       "width": 270,
       "borderRadius": 3,
       "& .MuiOutlinedInput-root": {
-        "fontFamily": "Sora",
         "fontWeight": 400,
         "fontSize": 14,
         "&.MuiInputBase-multiline": {

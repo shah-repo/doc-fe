@@ -152,6 +152,7 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
                           secondary={
                             <Typography
                               align="right"
+                              variant="h6"
                               className={classes.dateText}
                             >
                               {state === TrainingStates.PENDING

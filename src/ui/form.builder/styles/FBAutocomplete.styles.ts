@@ -10,19 +10,16 @@ export const styles = {
   },
   labelProps: {
     marginBottom: 10,
-    fontFamily: "Sora",
     fontWeight: 600,
     fontSize: 12,
     color: Colors.almost_black,
   },
   labelStyle: {
-    fontFamily: "Sora",
     fontWeight: 600,
     fontSize: 12,
     color: Colors.almost_black,
   },
   labelFont: {
-    fontFamily: "Sora",
     fontSize: 14,
   },
 };
@@ -36,7 +33,6 @@ export const FBAutoCompleteStyle = makeStyles(() =>
       },
       "& input": {
         fontSize: "12px",
-        fontFamily: "Sora",
         color: Colors.almost_black,
       },
     },

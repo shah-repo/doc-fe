@@ -10,7 +10,6 @@ export const styles = makeStyles(() =>
       "background": Colors.red,
       "& .MuiOutlinedInput-root": {
         "height": 40,
-        "fontFamily": "Sora",
         "fontWeight": 400,
         "fontSize": 14,
         "&.MuiInputBase-multiline": {
