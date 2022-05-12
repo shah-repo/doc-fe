@@ -12,14 +12,12 @@ const styles = makeStyles((theme: Theme) =>
       marginBottom: "12px",
     },
     primaryText: {
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "21px",
       color: Colors.dark_jungle_green,
     },
     secondaryText: {
-      fontStyle: "normal",
       fontSize: "12px",
       color: Colors.font_gray,
     },

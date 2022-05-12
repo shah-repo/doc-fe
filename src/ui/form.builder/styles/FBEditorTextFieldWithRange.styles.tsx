@@ -26,7 +26,6 @@ export const styles = makeStyles(() =>
       "borderRadius": 3,
       "& .MuiOutlinedInput-root": {
         "height": 40,
-        "fontFamily": "Sora",
         "fontWeight": 400,
         "fontSize": 14,
         "&.MuiInputBase-multiline": {
