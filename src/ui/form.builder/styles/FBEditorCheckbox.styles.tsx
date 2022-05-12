@@ -6,7 +6,6 @@ export const styles = makeStyles(() =>
     checkbox: {
       "& .MuiFormControlLabel-root": {
         "& .MuiTypography-root": {
-          fontFamily: "Sora",
           fontWeight: 400,
           fontSize: 14,
           color: Colors.almost_black,
