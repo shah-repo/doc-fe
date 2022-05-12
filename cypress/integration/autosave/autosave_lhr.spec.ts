@@ -9,7 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, fileTimeFormat, lotDateSuffix, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, lotDocumentIdRef, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -18,7 +18,6 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let secondEmployee;
-let thirdEmployee;
 let adminEmployee;
 let developersGroup;
 let materialsDocument2;
@@ -987,7 +986,7 @@ context("Autosave LHR", () => {
     });
 
     it("Enter Usable Quantity", () => {
-      cy.get("[name=\"lot_usable_quantity\"]").arrowType("12");
+      cy.get("[name=\"lot_usable_quantity\"]").arrowType("13");
     });
 
     it("Select 'Material one' for Part lot", () => {
@@ -1475,10 +1474,9 @@ context("Autosave LHR", () => {
       cy.get("[data-cy=\"title\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains("Material one").arrowClick();
       cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"quantity\"]").arrowType("3");
-      cy.get("[data-cy=\"unit\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains("Day(s)").arrowClick();
-      cy.pause();
+      cy.get("input[name=\"quantity\"]").arrowType("0.6");
+      cy.unClick();
+      cy.get("[data-cy=\"unit\"]").autocompleteSelect("Day(s)");
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
     });
 
@@ -1679,9 +1677,7 @@ context("Autosave LHR", () => {
       if (el.includes("Page 2 of 3")) {
         expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
 
-        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 days/);
-
-        expect(el).match(/Materials\nMT-00004 - Material one | Qty: 3 days/);
+        expect(el).match(/Materials\nMT-00004 - Material one | Qty: 0.6 days/);
 
         expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
 
@@ -1748,7 +1744,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify LHR title", () => {
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
+      cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02");
       cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
     });
 
@@ -1764,11 +1760,11 @@ context("Autosave LHR", () => {
     });
 
     it("Check lot number", () => {
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
+      cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02");
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("50.1");
     });
 
     it("Select 'R&D' build type", () => {
@@ -1795,7 +1791,7 @@ context("Autosave LHR", () => {
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02RD");
     });
   });
 
@@ -1812,19 +1808,19 @@ context("Autosave LHR", () => {
 
     it("Verify LHRs title", () => {
       cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
-        .should("have.text", "LOT #" + lotDateSuffix + "02RD | LHR-00004 | CS-00005.1 Part document");
+        .should("have.text", lotDocumentIdRef + "02RD | LHR-00004 | CS-00005.1 Part document");
     });
 
     it("Enter 'Start quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8.1");
     });
 
     it("Enter 'Accepted quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("10.8");
     });
 
     it("Enter 'Rejected quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("3.2");
     });
 
     it("Click 'SELECT' for 'Material One' ", () => {
@@ -1833,12 +1829,12 @@ context("Autosave LHR", () => {
         .click({ force: true });
     });
 
-    it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
-      cy.get("input[data-cy=usedOverride]").autocompleteSelect(`LOT #${lotDateSuffix}01`);
+    it(`Select lot ${lotDocumentIdRef}01`, () => {
+      cy.get("input[data-cy=usedOverride]").autocompleteSelect(lotDocumentIdRef + "01");
     });
 
     it("Select quantity in lot dialog", () => {
-      cy.get("input[name=\"quantity\"]").arrowType("5");
+      cy.get("input[name=\"quantity\"]").arrowType("0.5");
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
@@ -1873,7 +1869,7 @@ context("Autosave LHR", () => {
 
     it("Verify LOT is selected for 'Material One'", () => {
       cy.get("div[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").eq(0).parent()
-        .should("contain.text", `LOT #${lotDateSuffix}01`);
+        .should("contain.text", lotDocumentIdRef + "01");
     });
 
     it("Verify Equipment is selected for 'Equipment one'", () => {
@@ -1902,12 +1898,12 @@ context("Autosave LHR", () => {
     });
 
     it("Click open LHR", () => {
-      cy.get(`tr.k-master-row`).first().contains(`LOT #${lotDateSuffix}02RD`).arrowClick();
+      cy.get(`tr.k-master-row`).first().contains(lotDocumentIdRef + "02RD").arrowClick();
     });
 
     it("Check doc status for WIP and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "WIP" });
-      cy.get("#HeaderInfo-subtitle").should("contain.text", "LOT #" + lotDateSuffix + "02RD");
+      cy.get("#HeaderInfo-subtitle").should("contain.text",  lotDocumentIdRef + "02RD");
       cy.get("#HeaderInfo-docId").should("contain.text", "LHR-00004");
       cy.get("#HeaderInfo-docId").should("contain.text", "LHR").then(($docIdElement) => {
         lhrDocId = $docIdElement.text();
@@ -2054,7 +2050,7 @@ context("Autosave LHR", () => {
 
           expect(el).match(/Part to be Manufactured\nCS-00005 - 1 Part document/);
 
-          expect(el).match(/Initial Quantity\n10/);
+          expect(el).match(/Initial Quantity\n50.1/);
 
           expect(el).match(/End Quantity/);
 
@@ -2096,18 +2092,18 @@ context("Autosave LHR", () => {
 
           expect(el).match(/PI PROCEDURE\nMaterials/);
 
-          expect(el).match(/MT-00004 - Material one - rev 1 | Qty: 30 days/);
+          expect(el).match(/MT-00004 - Material one - rev 1 | Qty: 0.6 days/);
 
-          tmpRegex = new RegExp(`LOT #22051001 | MT-00004.1 \\| 5 days`);
+          tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 0.5 days`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
 
-          expect(el).match(/Start quantity\n10/);
+          expect(el).match(/Start quantity\n8.1/);
 
-          expect(el).match(/Accepted quantity\n8/);
+          expect(el).match(/Accepted quantity\n10.8/);
 
-          expect(el).match(/Rejected quantity\n2/);
+          expect(el).match(/Rejected quantity\n3.2/);
 
           tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT`);
           expect(el).match(tmpRegex);
@@ -2175,40 +2171,45 @@ context("Autosave LHR", () => {
   context("Start LHRs #2 'Save and Complete it'", () => {
     it("Navig to LHR", () => {
       cy.navigToLHR();
-    });
-
-    it("Click open LHR", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get(`[data-grid-row-index="0"]`).eq(0).contains(`LOT #${lotDateSuffix}02RD`).arrowClick();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
+    });
+
+    it("Select created LHR record", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocPreview,
+        CyRoutes.DocRevPreview,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.dlSelectFirstDocument();
+      });
     });
 
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
 
-    it("Upload attachment 'test_image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-    });
-
     it("Verify LHRs title", () => {
       cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
-        .should("have.text", "LOT #" + lotDateSuffix + "02RD | LHR-00004 | CS-00005.1 Part document");
+        .should("have.text", lotDocumentIdRef + "02RD | LHR-00004 | CS-00005.1 Part document");
+    });
+
+    it("Upload attachment 'test_image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "test.docx" });
     });
 
     it("Enter 'Start quntity' for LHRs #2", () => {
-      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("100");
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("80.1");
     });
 
     it("Enter 'Accepted quntity' for LHRs #2", () => {
-      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("80");
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("10.8");
     });
 
     it("Enter 'Rejected quntity' for LHRs #2", () => {
-      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("20");
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("80.1");
     });
 
     it("Click 'SELECT' for 'Material One' ", () => {
@@ -2217,12 +2218,12 @@ context("Autosave LHR", () => {
         .click({ force: true });
     });
 
-    it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
-      cy.get("input[data-cy=usedOverride]").autocompleteSelect(`LOT #${lotDateSuffix}01`);
+    it(`Select lot ${lotDocumentIdRef}01`, () => {
+      cy.get("input[data-cy=usedOverride]").autocompleteSelect(lotDocumentIdRef + "01");
     });
 
     it("Select quantity in lot dialog", () => {
-      cy.get("input[name=\"quantity\"]").arrowType("50");
+      cy.get("input[name=\"quantity\"]").arrowType("10.5");
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
@@ -2257,7 +2258,7 @@ context("Autosave LHR", () => {
 
     it("Verify LOT is selected for 'Material One'", () => {
       cy.get("div[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").eq(0).parent()
-        .should("contain.text", `LOT #${lotDateSuffix}01`);
+        .should("contain.text", lotDocumentIdRef + "01");
     });
 
     it("Verify Equipment is selected for 'Equipment one'", () => {
@@ -2296,17 +2297,17 @@ context("Autosave LHR", () => {
     });
 
     it("Click open LHR", () => {
-      cy.get(`[data-grid-row-index="0"]`).eq(0).contains(`LOT #${lotDateSuffix}02RD`).arrowClick();
+      cy.get(`[data-grid-row-index="0"]`).eq(0).contains(lotDocumentIdRef + "02RD").arrowClick();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
 
     it("check Initial quntity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").should("have.value", "10");
+      cy.get("[name=\"lhr_initial_quantity\"]").should("have.value", "50.1");
     });
 
     it("check End quntity", () => {
-      cy.get("[name=\"lhr-end-quantity\"]").should("have.value", "80");
+      cy.get("[name=\"lhr-end-quantity\"]").should("have.value", "10.8");
     });
 
     it("check build type", () => {
@@ -2353,7 +2354,7 @@ context("Autosave LHR", () => {
 
     it("Check doc status for Released and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02RD");
       cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
 
       cy.sendToEmail();
@@ -2449,6 +2450,18 @@ context("Autosave LHR", () => {
         downloadFile.replace(".zip", ""), "image.jpg");
       cy.readFile(attachedFile).its("length").should("be.gt", 500);
     });
+
+    it("Verify attached file length for test_image.jpg is more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "LHR Step 1", "test_image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length for test_image.jpg is more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "LHR Step 2", "test.docx");
+      cy.readFile(attachedFile).its("length").should("be.gt", 10);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -2485,39 +2498,40 @@ context("Autosave LHR", () => {
     it("Verify page 1 for LHR", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
-        tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}.*\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp( `AR ID\n${arId}`, "gi" );
-        expect(el).match(tmpRegex);
-
-        expect(el).match(/Description\nLHRt document description/);
-
-        expect(el).match(/Output Document Type\nLot History Record Test/);
 
         expect(el).match(/Attachments/);
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/Part to be Manufactured\nCS-00005 - Part document/);
+        expect(el).match(/Part to be Manufactured\nCS-00005 - 1 Part document/);
 
-        expect(el).match(/Initial Quantity/);
+        expect(el).match(/Initial Quantity\n50.1/);
 
-        expect(el).match(/End Quantity/);
+        expect(el).match(/End Quantity\n10.8/);
 
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Due Date/);
+        tmpRegex = new RegExp( `Due Date\n${pdfDocRelDate}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/LHR STEP #1\nLHR-00004, Step #1 \(PI-00002, MPI document, Rev 1\)/);
+
+        tmpRegex = new RegExp( `Step completed \\| ${pdfDocRelDate}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
 
-        expect(el).match(/Released/);
-
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: LHRT-00003, Revision 1, ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 4/);
@@ -2527,35 +2541,38 @@ context("Autosave LHR", () => {
     it("Verify page 2 of LHR", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 4")) {
-        expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
+        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}.*\nCS-00005, REV 1, PART DOCUMENT`);
+        expect(el).match(tmpRegex);
 
-        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 days/);
+        expect(el).match(/test_image.jpg/);
 
-        expect(el).match(/Materials\nMT-00004 - Material one | Qty: 3 days/);
+        expect(el).match(/PI PROCEDURE\nMaterials/);
 
-        expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
+        expect(el).match(/MT-00004 - Material one - rev 1 | Qty: 0.6 days/);
 
-        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
+        tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 0.5 days`);
+        expect(el).match(tmpRegex);
 
-        expect(el).match(/MT-00006 - Material two \| Qty: 2 boxes/);
+        expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
 
-        expect(el).match(/Equipment\nET-00003 - Equipment one/);
+        expect(el).match(/Start quantity\n8.1/);
 
-        expect(el).match(/ET-00007 - Equipment two/);
+        expect(el).match(/Accepted quantity\n10.8/);
 
-        expect(el).match(/Select field\nTEXT FIELD/);
+        expect(el).match(/Rejected quantity\n3.2/);
 
-        expect(el).match(/APPROVALS\nApprovers/);
+        tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
 
-        expect(el).match(/Released/);
-
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: LHRT-00003, Revision 1, ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 4/);
@@ -2565,22 +2582,46 @@ context("Autosave LHR", () => {
     it("Verify page 3 of LHR", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 4")) {
-        tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}.*\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
+        tmpRegex = new RegExp( `${lhrDocId}, Step #2 \\(PI-00008, MPI created with API, Rev 1\\)`);
         expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Step completed \\| ${pdfDocRelDate}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments/);
+        expect(el).match(/test.docx/);
+
+        expect(el).match(/PI PROCEDURE\nMaterials/);
+
+        expect(el).match(/MT-00004 - Material one - rev 1 | Qty: 80.1 sets/);
+
+        tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 10.5 sets`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`MT-00006 - Material two - rev 1 | Qty: 160.2 boxes`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
+        expect(el).match(/ET-00007 - Equipment two - rev 1/);
+
+        expect(el).match(/Start quantity\n80.1/);
+
+        expect(el).match(/Accepted quantity\n10.8/);
+
+        expect(el).match(/Rejected quantity\n80.1/);
+
+        expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
 
-        expect(el).match(/Released/);
-
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: LHRT-00003, Revision 1, ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 3 of 4/);
@@ -2590,12 +2631,14 @@ context("Autosave LHR", () => {
     it("Verify page 4 of LHR", () => {
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
-        tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
+        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}.*\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
-        expect(el).match(tmpRegex);
+        expect(el).match(/Select field\noption1/);
+
+        expect(el).not.match(/TEXT FIELD/);
+
+        tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${pdfDocRelDate}`);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -2605,7 +2648,7 @@ context("Autosave LHR", () => {
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: LHRT-00003, Revision 1, ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 4 of 4/);
