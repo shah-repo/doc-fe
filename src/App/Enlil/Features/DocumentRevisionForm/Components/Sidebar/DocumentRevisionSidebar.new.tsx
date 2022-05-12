@@ -82,6 +82,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
             <Box width={233}>
               {_documentRevisionSidebarState?.open && (
                 <Typography
+                  variant="h5"
                   className={classes.tabTitle}
                 >
                   <SMText

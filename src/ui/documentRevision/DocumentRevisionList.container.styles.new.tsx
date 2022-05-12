@@ -12,14 +12,6 @@ export const styles = makeStyles((theme: Theme) =>
       width: theme.spacing(29.125),
       flexGrow: 1,
     },
-    linkTitle: {
-      color: Colors.navy,
-      textDecoration: "none",
-      fontWeight: 600,
-      fontFamily: "Sora",
-      fontSize: "14px",
-      lineHeight: "24px",
-    },
     activeLinkBox: {
       color: Colors.navy,
       textDecoration: "none",
@@ -39,13 +31,6 @@ export const styles = makeStyles((theme: Theme) =>
     activeLinkTitle: {
       color: theme.palette.primary.main,
       fontWeight: theme.typography.fontWeightBold,
-    },
-    linkBody: {
-      textDecoration: "none",
-      color: theme.palette.text.primary,
-      fontFamily: "Sora",
-      fontSize: "14px",
-      lineHeight: "24px",
     },
     activeLinkBody: {
       textDecoration: "none",
@@ -70,8 +55,6 @@ export const styles = makeStyles((theme: Theme) =>
       },
     },
     displayStatus: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontSize: "14px",
       fontWeight: "normal",
     },

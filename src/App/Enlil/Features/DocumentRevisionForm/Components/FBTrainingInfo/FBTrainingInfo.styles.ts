@@ -38,14 +38,6 @@ export const styles = makeStyles((theme: Theme) =>
       height: "68px",
     },
     stateListItem: { height: "45px", cursor: "pointer" },
-    header: {
-      fontFamily: "Sora",
-      fontWeight: 600,
-      fontSize: "12px",
-      lineHeight: "15px",
-      color: Colors.almost_black,
-      padding: "0px 0px 7px",
-    },
     avatar: {
       width: "45px",
       height: "45px",
@@ -55,10 +47,8 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.white,
       background: Colors.aqua_blue,
       fontWeight: 600,
-      fontFamily: "Sora",
     },
     stateText: {
-      fontFamily: "Sora",
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "21px",
@@ -66,7 +56,6 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.almost_black,
     },
     nameText: {
-      fontFamily: "Sora",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "21px",
@@ -74,7 +63,6 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.almost_black,
     },
     emailText: {
-      fontFamily: "Sora",
       fontWeight: "normal",
       fontSize: "14px",
       lineHeight: "21px",
@@ -83,7 +71,6 @@ export const styles = makeStyles((theme: Theme) =>
       overflowWrap: "anywhere",
     },
     dateText: {
-      fontFamily: "Sora",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "21px",
