@@ -41,7 +41,6 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
         />
       </Box>
     </>
-  )
-;
+  );
 
 export default withFBPurchaseOrderActions(FBPurchaseOrderActions);
