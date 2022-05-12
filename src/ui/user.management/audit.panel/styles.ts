@@ -10,7 +10,6 @@ export default makeStyles(() =>
       alignSelf: "stretch",
     },
     titleContainer: {
-      fontFamily: "Sora",
       fontWeight: 600,
       fontSize: "12px",
       color: Colors.almost_black,
