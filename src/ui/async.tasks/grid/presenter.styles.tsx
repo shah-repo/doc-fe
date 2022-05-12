@@ -29,17 +29,14 @@ export const styles = makeStyles((theme) =>
     },
     chip: {
       margin: theme.spacing(0.25),
-      fontFamily: "Sora",
       fontSize: 14,
     },
     formControl: {
       margin: theme.spacing(1),
       minWidth: 400,
-      fontFamily: "Sora",
       fontSize: 14,
     },
     optionSelect: {
-      fontFamily: "Sora",
       fontSize: 14,
     },
     groupCell: {
