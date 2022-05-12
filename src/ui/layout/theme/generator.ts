@@ -16,5 +16,8 @@ export default (customColors: WhiteLabelingColors = {} as WhiteLabelingColors) =
   return createMuiTheme({
     ...appTheme,
     overrides: ThemeOverrides(appTheme, customColors),
+    typography: {
+      fontFamily: "Sora, sans-serif;",
+    },
   });
 };
