@@ -214,7 +214,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf();
+        cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
         cy.fbSelectCheckboxValue("X");
         cy.fbAddNewFieldButton();
@@ -226,7 +226,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.fbEnterNameValue({ name: "label", value: "fb-text-field" });
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf();
+        cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
         cy.fbSelectCheckboxValue("Y");
         cy.fbAddNewFieldButton();
@@ -789,7 +789,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("remove one approver", () => {
-        cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick();
+        cy.pmDeleteApproverFromApproverList({ approver: `${USERS[1].name} - ${USERS[1].email}` });
       });
 
       it("Submit for approval", () => {
@@ -1046,18 +1046,7 @@ context("Autocomplete 'Lots' test", () => {
 
     context("Approve record", () => {
       it("Approve record", () => {
-        cy.progressBarShouldNotExist();
-        cy.get("[data-cy=dashboardFeedList]>div").contains(`${USERS[1].name}needs your approval for`)
-          .parent()
-          .parent()
-          .parent().trigger("mouseover")
-          .find(`[data-cy="transition-approve"]`).first()
-          .arrowClick();
-        cy.get("input[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
-        cy.unClick();
-        cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.dashApproverFirstFromList();
       });
     });
 
