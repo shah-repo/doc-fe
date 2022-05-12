@@ -202,11 +202,11 @@ Cypress.Commands.add("fbSelectFieldValue", (params: { value: string }) => {
 });
 
 Cypress.Commands.add("fbSelectTextFieldRangeFromValue", (params: { value: string }) => {
-  cy.get("[name=\"editorConfig.range.from\"]").arrowType(params.value).wait(400);
+  cy.get("[name=\"editorConfig.range.from\"]").arrowType(params.value);
 });
 
 Cypress.Commands.add("fbSelectTextFieldRangeToValue", (params: { value: string }) => {
-  cy.get("[name=\"editorConfig.range.to\"]").arrowType(params.value).wait(400);
+  cy.get("[name=\"editorConfig.range.to\"]").arrowType(params.value);
 });
 
 Cypress.Commands.add("fbEnterTextEditor", (params: { value: string }) => {
