@@ -26,6 +26,10 @@ declare global {
         employeeId: string;
         sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
+      cmpGetCompanyMine(params: {
+        employeeId: string;
+        sessionId: string;
+      }): Chainable<Subject>;
       cmpUpdatePageDetails(params: {
         id: string;
         employeeId: string;
@@ -63,7 +67,8 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   const bodyDefaults = {
     name: `${companyName}`,
     companyAcronym: `TC${acronym}${companyNumber}`,
-    scheduledForDeletion: true,
+    scheduledForDeletion: false,
+    testAutomationCompany: true,
     numOfRevStages: 3,
     numOfDocDigits: 5,
     helloSignIntegrationEnabled: false,
@@ -140,6 +145,20 @@ Cypress.Commands.add("cmpUpdateCompany", (
     method: "PATCH",
     url: `${CONFIG.BE_URL}/api/v1/company/mine`,
     body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("cmpGetCompanyMine", (
+  params: {
+    employeeId: string;
+    sessionId: string;
+  }) => {
+  cy.request({
+    method: "GET",
+    url: `${CONFIG.BE_URL}/api/v1/company/mine`,
     headers: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },

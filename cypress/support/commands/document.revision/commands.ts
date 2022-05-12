@@ -13,6 +13,7 @@ declare global {
     interface Chainable<Subject> {
       drCreateDocumentRevision(params: { payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       drGetDocumentType(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
+      drGetDocRevs(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
@@ -137,6 +138,16 @@ Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; session
   cy.request({
     method: "GET",
     url: `${CONFIG.BE_URL}/api/v1/document_type`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response ? response.body : []);
+});
+
+Cypress.Commands.add("drGetDocRevs", (params: { employeeId: string; sessionId: string }) => {
+  cy.request({
+    method: "GET",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
     headers: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
@@ -457,6 +468,18 @@ Cypress.Commands.add("drCheckIfDocumentIdMatches", (params: { docId: string }) =
 
 Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
   cy.get("[id=\"document.docId\"]").arrowType("{backspace}{backspace}{backspace}{backspace}{backspace}" + params.docId);
+});
+
+Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
+  cy.dlClearFilters();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.dlSelectFirstDocument();
 });
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {

@@ -29,7 +29,6 @@ declare global {
       fbSelectApprovals(): Chainable<Subject>;
       fbOpenValidation(): Chainable<Subject>;
       fbFieldRequired(): Chainable<Subject>;
-      fbFieldRequiredIf(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
       fbSelectField(): Chainable<Subject>;
       fbAddLabelName(params: { name: string }): Chainable<Subject>;
@@ -51,6 +50,7 @@ declare global {
       fbCheckFieldsDoesntExist(...list: string[]): Chainable<Subject>;
       fbEditHiddenBtn(): Chainable<Subject>;
       fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
+      fbFieldRequiredIf(params: { name: string; value: string | number }): Chainable<Subject>;
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string; value: string }): Chainable<Subject>;
@@ -246,14 +246,18 @@ Cypress.Commands.add("fbOpenValidation", () =>  cy.get("button[data-cy^=\"fb-edi
 
 Cypress.Commands.add("fbFieldRequired", () =>  cy.get("span[data-cy=\"fb-control-required\"]").arrowClick());
 
-Cypress.Commands.add("fbFieldRequiredIf", () =>  cy.get("input[name=\"validators.required_if\"]").arrowClick());
-
 Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").arrowClick());
 
 Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }));
 
 Cypress.Commands.add("fbEnterNameValue", (params: { name: string; value: string }) => {
   cy.get(`input[name="${params.name}"]`).clear().arrowType(params.value).arrowClick();
+});
+
+Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string }) => {
+  cy.get("input[name=\"validators.required_if\"]").arrowClick();
+  cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
+  cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(params.value);
 });
 
 Cypress.Commands.add("fbVerifyCheckboxValue", (...list: string[]) => {

@@ -105,6 +105,7 @@ export enum ACTION_TITLE_MAPPING {
   CreatedNewUser = "CreatedNewUser",
   CreatedNewUserEmail = "CreatedNewUserEmail",
   DeactivateUser = "DeactivateUser",
+  ReactivateUser = "ReactivateUser",
   ActivateUser = "ActivateUser",
   Unknown = "Unknown",
   EmployeeNameUpdated = "EmployeeNameUpdated",
@@ -113,8 +114,10 @@ export enum ACTION_TITLE_MAPPING {
   AddedUserName = "AddedUserName",
   AddedUserEmail = "AddedUserEmail",
   ResetPassword = "ResetPassword",
+  ResentPassword = "ResentPassword",
   ResetPasswordDescription = "ResetPasswordDescription",
-  ResetPasswordFor = "ResetPasswordFor",
+  ResentPasswordDescription = "ResentPasswordDescription",
+  ForUser = "ForUser",
   EmployeesDeleteFromGroup = "EmployeesDeleteFromGroup",
   EmployeesAddedToGroup= "EmployeesAddedToGroup",
   EmployeesDeleteFromGroups = "EmployeesDeleteFromGroups",
@@ -141,13 +144,17 @@ export enum ACTION_TITLE_MAPPING {
   RemovedParentGroups="RemovedParentGroups",
   RemovedParentGroup="RemovedParentGroup",
   UpdatedGroups="UpdatedGroups",
-  UpdatedGroup="UpdatedGroup"
+  UpdatedGroup="UpdatedGroup",
+  Removed="Removed",
+  Added="Added",
+  UpdatedAvatar="UpdatedAvatar"
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
   NameSeparator = "-NAME-UPDATED-TO-",
   DeleteFromGroup = "-DELETED-FROM-GROUP-",
-  AddToGroup = "-ADDED-TO-GROUP-"
+  AddToGroup = "-ADDED-TO-GROUP-",
+  AvatarUpdated="-AVATAR-UPDATED-FOR-"
 }
 
 export interface UMAuditProps {

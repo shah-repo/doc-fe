@@ -56,7 +56,14 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     }
     if (auditTypes.includes(ACTION_TITLE_MAPPING.ResetPassword)) {
       sameGroup.unshift({
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPasswordFor, {}),
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ForUser, {}),
+        secondaryText: employeeDetails.user.name,
+        sortedIndex: 2,
+      });
+    }
+    if (auditTypes.includes(ACTION_TITLE_MAPPING.ResentPassword)) {
+      sameGroup.unshift({
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ForUser, {}),
         secondaryText: employeeDetails.user.name,
         sortedIndex: 2,
       });
@@ -102,10 +109,20 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         };
       }
     } else if (
-      [
-        "resetPasswordEmailTimestamp",
-        "resendConfirmationEmailTimestamp",
-      ].includes(auditRecord.fieldPath) &&
+      auditRecord.fieldPath === "resendConfirmationEmailTimestamp" &&
+      auditRecord.type === "OBJECT_EDITED"
+    ) {
+      actionInfo = {
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResentPassword, {}),
+        secondaryText: getTranslatedText(
+          ACTION_TITLE_MAPPING.ResentPasswordDescription,
+          {}
+        ),
+        auditType: ACTION_TITLE_MAPPING.ResentPassword,
+        sortedIndex: 0,
+      };
+    } else if (
+      auditRecord.fieldPath === "resetPasswordEmailTimestamp" &&
       auditRecord.type === "OBJECT_EDITED"
     ) {
       actionInfo = {
@@ -136,6 +153,17 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           secondaryText: intl.formatMessage({ id: "common.active" }),
           auditType: ACTION_TITLE_MAPPING.ActivateUser,
           sortedIndex: 1,
+        };
+      }
+    }  else if (auditRecord.fieldPath === "avatar") {
+      if (auditRecord.type === "STRING_EDITED") {
+        actionInfo = {
+          primaryText: "",
+          secondaryText: `${getTranslatedText(ACTION_TITLE_MAPPING.UpdatedAvatar, {
+            employeeName: "",
+          })}${UM_AUDIT_CONCAT_KEYS.AvatarUpdated}${auditRecord.employeeName}`,
+          auditType: ACTION_TITLE_MAPPING.UpdatedAvatar,
+          sortedIndex: 4,
         };
       }
     } else if (auditRecord.fieldPath === "groups") {
@@ -193,14 +221,11 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           auditRecord.nextValue === "true"
         ) {
           actionInfo = {
-            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ActivateUser, {
+            primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ReactivateUser, {
               employeeName: employeeDetails?.user?.name || "",
             }),
-            secondaryText:
-              auditRecord.nextValue === "true"
-                ? intl.formatMessage({ id: "common.active" })
-                : intl.formatMessage({ id: "common.inactive" }),
-            auditType: ACTION_TITLE_MAPPING.ActivateUser,
+            secondaryText: auditRecord.employeeName,
+            auditType: ACTION_TITLE_MAPPING.ReactivateUser,
             sortedIndex: 0,
           };
         }
@@ -250,6 +275,19 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
             <span>{items[1]}</span>
           </>
         );
+      } else if (auditType === ACTION_TITLE_MAPPING.UpdatedAvatar) {
+        const items = secondaryText[0].split(UM_AUDIT_CONCAT_KEYS.AvatarUpdated);
+        secondaryTextHtml = (
+          <>
+            <span>{items[0]}</span>
+
+            <span style={{
+              color: Colors.almost_black,
+              padding: "0 2px",
+              fontWeight: 700,
+            }}>{items[1]}</span>
+          </>
+        );
       } else if (
         auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups ||
         auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup
@@ -257,6 +295,11 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.DeleteFromGroup);
         primaryTextHtml = (
           <>
+            {getTranslatedText(ACTION_TITLE_MAPPING.Removed, {})} <span style={{
+              color: Colors.almost_black,
+              padding: "0 2px",
+              fontWeight: 700,
+            }}> {secondaryTextHtml}</span>
             <span>{items[0]}</span>
             <span
               style={{
@@ -269,6 +312,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
             </span>
           </>
         );
+        secondaryTextHtml = (<></>);
       } else if (
         auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups ||
         auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup
@@ -276,10 +320,16 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.AddToGroup);
         primaryTextHtml = (
           <>
+            {getTranslatedText(ACTION_TITLE_MAPPING.Added, {})} <span style={{
+              color: Colors.almost_black,
+              padding: "0 2px",
+              fontWeight: 700,
+            }}> {secondaryTextHtml}</span>
             <span>{items[0]}</span>
             <span style={{ color: Colors.almost_black, padding: "0 2px", fontWeight: 700 }} > {items[1]} </span>
           </>
         );
+        secondaryTextHtml = (<></>);
       }
       return { primaryText: primaryTextHtml, secondaryText: secondaryTextHtml, sortedIndex, auditType };
     });

@@ -7,6 +7,7 @@ export enum NavigationItems{
   USER_MANAGEMENT = "userManagement",
   GROUP_MANAGEMENT = "groupManagement",
   EQUIPMENT = "equipment",
+  EQUIPMENT_LIST = "equipmentList",
   TESTING_NAVIG_ITEM = "testingNavigationItem",
   PURCHASE_ORDERS = "purchaseOrders",
   SUPPLIER_LIST = "supplierList",
@@ -22,4 +23,5 @@ export enum NavigationItems{
   TRAINING_RECORDS= "trainingRecords",
   TRAINING_CURRICULUMS= "trainingCurriculums",
   EB = "engineeringBuilds",
+  ASYNC_TASKS = "asyncTasks",
 }

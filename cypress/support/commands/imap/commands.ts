@@ -32,12 +32,21 @@ declare global {
         getEmailsSincedate: Date;
         assertNumberOfEmailsFoundInList: integer;}): Chainable;
       imapGetNewPasswordLink(params: {userEmail: string}): Chainable;
+      imapVerifyNoPasswordResetEmail(params: {userEmail: string; fromDate: Date}): Chainable;
+      imapGetMailSince(params: {userEmail: string; fromDate: Date }): Chainable;
+      imapNavigToPasswordResetLink(params: {userEmail: string; fromDate: Date}): Chainable;
     }
   }
 }
 
 Cypress.Commands.add("imapGetTextFromLastEmail",
   (params: {userEmail: string}) => cy.task("gmailGetLastMail", params.userEmail));
+
+Cypress.Commands.add("imapGetMailSince",
+  (params: {userEmail: string; fromDate: Date}) => cy.task("gmailGetMailSince", {
+    userEmail: params.userEmail,
+    fromDate: params.fromDate,
+  }));
 
 Cypress.Commands.add("imapGetEmailWithLongerOffset",
   (params: {userEmail: string}) => cy.task("getAllEmailWithLongerOffset", params.userEmail));
@@ -152,6 +161,23 @@ Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) =>
     const startingPosition = emailText.search("sign_up");
     const activationLink = emailText.substring(startingPosition, endingPosition);
     cy.visit(CONFIG.FE_URL + "/" + decodeHTMLEntities(activationLink));
+  });
+});
+
+Cypress.Commands.add("imapNavigToPasswordResetLink", (params: { userEmail: string; fromDate: Date}) => {
+  cy.imapGetMailSince({ userEmail: params.userEmail, fromDate: params.fromDate }).should((emailText) => {
+    if (emailText.includes("reset_password")) {
+      cy.visit(CONFIG.FE_URL + "/reset_password");
+    }
+    else {
+      assert.fail("No reset link found");
+    }
+  });
+});
+
+Cypress.Commands.add("imapVerifyNoPasswordResetEmail", (params: { userEmail: string; fromDate: Date}) => {
+  cy.imapGetMailSince({ userEmail: params.userEmail, fromDate: params.fromDate }).should((receivedEmail) => {
+    if (receivedEmail) { assert.fail("Password reset found"); }
   });
 });
 
