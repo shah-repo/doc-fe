@@ -1678,7 +1678,7 @@ context("Autosave LHR", () => {
       if (el.includes("Page 2 of 3")) {
         expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
 
-        expect(el).match(/Materials\nMT-00004 - Material one | Qty: 0.6 days/);
+        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 0.6 days/);
 
         expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
 
@@ -2093,7 +2093,7 @@ context("Autosave LHR", () => {
 
           expect(el).match(/PI PROCEDURE\nMaterials/);
 
-          expect(el).match(/MT-00004 - Material one - rev 1 | Qty: 0.6 days/);
+          expect(el).match(/MT-00004 - Material one - rev 1 \| Qty: 0.6 days/);
 
           tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 0.5 days`);
           expect(el).match(tmpRegex);
@@ -2503,13 +2503,13 @@ context("Autosave LHR", () => {
         expect(el).match(tmpRegex);
 
         expect(el).match(/Attachments/);
-        expect(el).match(/image.jpg/);
+        expect(el).match(/image\.jpg/);
 
         expect(el).match(/Part to be Manufactured\nCS-00005 - 1 Part document/);
 
-        expect(el).match(/Initial Quantity\n50.1/);
+        expect(el).match(/Initial Quantity\n50\.1/);
 
-        expect(el).match(/End Quantity\n10.8/);
+        expect(el).match(/End Quantity\n10\.8/);
 
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
         expect(el).match(tmpRegex);
@@ -2549,18 +2549,18 @@ context("Autosave LHR", () => {
 
         expect(el).match(/PI PROCEDURE\nMaterials/);
 
-        expect(el).match(/MT-00004 - Material one - rev 1 | Qty: 0.6 days/);
+        expect(el).match(/MT-00004 - Material one - rev 1 \| Qty: 0\.6 days/);
 
-        tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 0.5 days`);
+        tmpRegex = new RegExp(`${lotDocumentIdRef} \\| MT-00004.1 \\| 0\\.5 days`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
 
-        expect(el).match(/Start quantity\n8.1/);
+        expect(el).match(/Start quantity\n8\.1/);
 
-        expect(el).match(/Accepted quantity\n10.8/);
+        expect(el).match(/Accepted quantity\n10\.8/);
 
-        expect(el).match(/Rejected quantity\n3.2/);
+        expect(el).match(/Rejected quantity\n3\.2/);
 
         tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}`);
         expect(el).match(tmpRegex);
@@ -2597,22 +2597,22 @@ context("Autosave LHR", () => {
 
         expect(el).match(/PI PROCEDURE\nMaterials/);
 
-        expect(el).match(/MT-00004 - Material one - rev 1 | Qty: 80.1 sets/);
+        expect(el).match(/MT-00004 - Material one - rev 1 \| Qty: 80\.1 sets/);
 
-        tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 10.5 sets`);
+        tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 10\\.5 sets`);
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`MT-00006 - Material two - rev 1 | Qty: 160.2 boxes`);
+        tmpRegex = new RegExp(`MT-00006 - Material two - rev 1 \\| Qty: 160\\.2 boxes`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
         expect(el).match(/ET-00007 - Equipment two - rev 1/);
 
-        expect(el).match(/Start quantity\n80.1/);
+        expect(el).match(/Start quantity\n80\.1/);
 
-        expect(el).match(/Accepted quantity\n10.8/);
+        expect(el).match(/Accepted quantity\n10\.8/);
 
-        expect(el).match(/Rejected quantity\n80.1/);
+        expect(el).match(/Rejected quantity\n80\.1/);
 
         expect(el).match(/Released/);
 
