@@ -10,7 +10,7 @@ export const InputField = withStyles((theme: Theme) =>
         marginTop: theme.spacing(4),
         padding: "2px 0 0 0",
       },
-      "fontFamily": "Open Sans, sans-serif;",
+      "fontFamily": "Sora, sans-serif;",
     },
     input: {
       position: "relative",
@@ -28,7 +28,7 @@ export const LabelField = withStyles((theme: Theme) =>
   createStyles({
     root: {
       transform: "translate(0, 1px) scale(0.97)",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
   }),
 )(InputLabel);

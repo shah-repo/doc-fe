@@ -12,7 +12,7 @@ export default makeStyles((theme: Theme) =>
       margin: theme.spacing(3, 0, 4, 0),
       fontWeight: "bold",
       color: Colors.dark_gray,
-      fontFamily: "Open Sans, sans-serif",
+      fontFamily: "Sora, sans-serif",
     },
     gridWrapper: {
       display: "flex",
