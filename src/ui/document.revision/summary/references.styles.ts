@@ -29,7 +29,6 @@ export const styles = makeStyles((theme: Theme) =>
     link: {
       textDecoration: "none",
       color: Colors.navy,
-      fontStyle: "normal",
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "17.64px",

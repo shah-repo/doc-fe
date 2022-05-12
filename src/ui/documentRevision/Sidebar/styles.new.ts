@@ -109,12 +109,10 @@ export default makeStyles((theme: Theme) =>
       textTransform: "uppercase",
     },
     secondaryText: {
-      fontStyle: "normal",
       fontSize: "12px",
       color: Colors.font_gray,
     },
     generalInfo: {
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "21px",

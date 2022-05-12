@@ -58,6 +58,7 @@ const Sidebar: React.FunctionComponent<Props> = ({
         <Box width={233}>
           {isDrawerOpen && (
             <Typography
+              variant="h5"
               className={crClasses.tabTitle}
             >
               <SMText

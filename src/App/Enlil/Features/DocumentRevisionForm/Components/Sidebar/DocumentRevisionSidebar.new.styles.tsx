@@ -39,8 +39,6 @@ export const styles = makeStyles(() =>
       },
     },
     tabTitle: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "18px",
@@ -53,7 +51,6 @@ export const tooltipStyles = makeStyles(() => ({
   tooltip: {
     backgroundColor: Colors.almost_black,
     fontSize: "12px",
-    fontFamily: "Sora",
     fontWeight: 400,
   },
   arrow: {

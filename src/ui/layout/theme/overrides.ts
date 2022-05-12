@@ -33,7 +33,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     subtitle1: {
       color: appTheme.palette.text.primary,
       fontSize: "0.885rem",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
     subtitle2: {
       color: appTheme.palette.text.primary,
@@ -134,7 +134,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       overflowWrap: "break-word",
       wordWrap: "break-word",
       hyphens: "auto",
-      fontFamily: "Open Sans, sans-serif;",
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiMenuItem: {

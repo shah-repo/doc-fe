@@ -34,7 +34,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <Typography className={classes.titleText}>
+                  <Typography variant="h6" className={classes.titleText}>
                     <Text translation="form.builder.library" />
                   </Typography>
                   <IconButton

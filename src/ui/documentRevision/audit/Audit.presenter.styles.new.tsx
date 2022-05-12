@@ -28,7 +28,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     auditKey: {
       fontSize: "12px",
-      fontFamily: "Sora",
       color: Colors.font_gray,
     },
     owner: {

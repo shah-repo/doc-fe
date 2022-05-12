@@ -15,7 +15,6 @@ const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-
       <Grid item={true} xs={12}>
         <Box style={{
           fontFamily: "Sora",
-          fontStyle: "normal",
           fontWeight: 600,
           fontSize: "19px",
           lineHeight: "24px",
