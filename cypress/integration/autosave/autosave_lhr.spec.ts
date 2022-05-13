@@ -1163,7 +1163,7 @@ context("Autosave LHR", () => {
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
           cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
       });
@@ -2337,6 +2337,22 @@ context("Autosave LHR", () => {
         .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
         .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
+    });
+
+    it("check Initial quntity", () => {
+      cy.get("[name=\"lhr_initial_quantity\"]").should("have.value", "50.1");
+    });
+
+    it("check End quntity", () => {
+      cy.get("[name=\"lhr-end-quantity\"]").should("have.value", "10.8");
+    });
+
+    it("check build type", () => {
+      cy.get("[name=\"lhr-build-type\"]").should("be.checked");
+    });
+
+    it("check due date", () => {
+      cy.get("[name=\"lhr-due-date\"]").invoke("val").should("be.exist");
     });
 
     it("Clicks on 'Save' button", () => {
