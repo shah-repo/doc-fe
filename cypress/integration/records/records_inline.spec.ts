@@ -241,7 +241,7 @@ context("Record inline Flow", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+      it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
         cy.fbClickAddNewHiddenBtn();
         cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
         cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
@@ -269,9 +269,6 @@ context("Record inline Flow", () => {
         cy.get("[name=\"label\"]").arrowType("Second inline field");
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
-      });
-
-      it("Choose group to Everyone", () => {
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddField();
       });
@@ -795,6 +792,7 @@ context("Record inline Flow", () => {
           () => {
             cy.listLoadingElementShouldNotExist();
             cy.get("[name*=\"fb-ia-inline-field\"] input")
+            //    .autocompleteSelect("enlil.testmail+cy2");
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -810,13 +808,14 @@ context("Record inline Flow", () => {
       });
 
       it("Remove second approver for first inline", () => {
-        cy.contains(`${USERS[3].name} - ${USERS[3].email}`).parent().next().arrowClick();
+        cy.pmDeleteApproverFromApproverList({ approver: `${USERS[3].name} - ${USERS[3].email}` });
       });
 
       it("Select approver for second inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+            //     .autocompleteSelect("enlil.testmail+cy2");
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -825,7 +824,7 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-              .autocompleteSelect(`${USERS[3].name}`, { force: true });
+              .autocompleteSelect("enlil.testmail+cy3");
           });
       });
 
@@ -1040,9 +1039,14 @@ context("Record inline Flow", () => {
 
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
-          cy.unClick();
-          cy.progressBarShouldNotExist();
+          SystemRequirement("REQ-1080", "REQ-1100");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
+            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
+            cy.unClick();
+            cy.progressBarShouldNotExist();
+          });
         });
 
         it("Save record", () => {
@@ -1089,9 +1093,14 @@ context("Record inline Flow", () => {
 
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
-          cy.unClick();
-          cy.progressBarShouldNotExist();
+          SystemRequirement("REQ-1080");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
+            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
+            cy.unClick();
+            cy.progressBarShouldNotExist();
+          });
         });
 
         it("Save record", () => {

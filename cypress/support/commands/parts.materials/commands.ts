@@ -23,6 +23,7 @@ declare global {
       pmAddFreeTextEquipment(params: {equipment: string}): Chainable<Subject>;
       pmUploadAttachment(params: {fileName: string }): Chainable<Subject>;
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      pmDeleteApproverFromApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
       ptClickCreateNewPart(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
@@ -132,6 +133,13 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
     cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
 
+  cy.listLoadingElementShouldNotExist();
+});
+
+// eslint-disable-next-line max-len
+Cypress.Commands.add("pmDeleteApproverFromApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.contains(`${params.approver}`).parent().next().arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
