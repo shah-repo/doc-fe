@@ -48,7 +48,7 @@ Cypress.Commands.add("asyncSelectBackToTheFutureTime", (params: {
 });
 
 Cypress.Commands.add("asyncTaskClickSubmit", (params: {password?: string}) => {
-  const password = params.password ? params.password : CONFIG.DEFAULT_ENLIL_USER_PASSWORD;
+  const password = params?.password ? params.password : CONFIG.DEFAULT_ENLIL_USER_PASSWORD;
 
   cy.get(`button[type="submit"]`).arrowClick();
   cy.get(`input[name="password"]`).arrowType(password);
