@@ -2328,7 +2328,7 @@ context("Autosave LHR", () => {
     });
 
     it("Remove second Approver'", () => {
-      cy.pmDeleteApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmDeleteApproverFromApproverList({ approver: `${USERS[2].name} - ${USERS[2].email}` });
       cy.unClick();
     });
 
