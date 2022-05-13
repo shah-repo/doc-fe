@@ -43,6 +43,15 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: Colors.white,
       color: Colors.navy,
     },
+    exportRecordsListbutton: {
+      ...commonButtonStyles,
+      paddingRight: theme.spacing(2.5),
+      paddingLeft: theme.spacing(2.5),
+      marginRight: theme.spacing(1.875),
+      border: `1px solid ${Colors.navy}`,
+      backgroundColor: Colors.white,
+      color: Colors.navy,
+    },
     iconSvg: {
       fill: Colors.navy,
       marginRight: theme.spacing(0.625),
