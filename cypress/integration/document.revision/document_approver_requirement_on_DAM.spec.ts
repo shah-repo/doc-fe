@@ -934,15 +934,15 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         expect(el).match(/APPROVAL ROLES/);
 
         tmpRegex = new
-        RegExp( `Approval Role\nRole One\nApproval Groups\nApproving Users\n${FIRST_USER.name}`, "gi" );
+        RegExp( `Approval Role\nRole One\nApproving Users\n${FIRST_USER.name}\nApproving Groups`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new
-        RegExp( `Approval Role\nRole Two\nApproval Groups\nApproving Users\n${SECOND_USER.name}`, "gi" );
+        RegExp( `Approval Role\nRole Two\nApproving Users\n${SECOND_USER.name}\nApproving Groups`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new
-        RegExp( `Approval Role\nRole Three\nApproval Groups\nApproving Users\n${THIRD_USER.name}`, "gi" );
+        RegExp( `Approval Role\nRole Three\nApproving Users\n${THIRD_USER.name}\nApproving Groups`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).not.match(/TEXT FIELD/);
@@ -1198,15 +1198,15 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         expect(el).match(/APPROVAL ROLES/);
 
         tmpRegex = new
-        RegExp( `Approval Role\nRole One\nApproval Groups\nApproving Users\n${FIRST_USER.name}`, "gi" );
+        RegExp( `Approval Role\nRole One\nApproving Users\n${FIRST_USER.name}\nApproving Groups`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new
-        RegExp( `Approval Role\nRole Two\nApproval Groups\nApproving Users\n${SECOND_USER.name}`, "gi" );
+        RegExp( `Approval Role\nRole Two\nApproving Users\n${SECOND_USER.name}\nApproving Groups`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new
-        RegExp( `Approval Role\nRole Three\nApproval Groups\nApproving Users\n${THIRD_USER.name}`, "gi" );
+        RegExp( `Approval Role\nRole Three\nApproving Users\n${THIRD_USER.name}\nApproving Groups`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).not.match(/TEXT FIELD/);
