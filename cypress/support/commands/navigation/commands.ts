@@ -24,6 +24,7 @@ declare global {
       navigToRecords(): Chainable<Subject>;
       navigToDocTypeManagement(): Chainable<Subject>;
       navigToEquipment(): Chainable<Subject>;
+      navigToEquipmentList(): Chainable<Subject>;
       navigToParts(): Chainable<Subject>;
       navigToLots(): Chainable<Subject>;
       navigToLHR(): Chainable<Subject>;
@@ -31,6 +32,7 @@ declare global {
       navigToDocumentListWithUnsavedChanges(params: { confirmPopup: boolean }): Chainable<Subject>;
       navigToTrainingRecords(): Chainable<Subject>;
       navigToTrainingCurriculums(): Chainable<Subject>;
+      navigToAsyncTasks(): Chainable<Subject>;
     }
   }
 }
@@ -140,6 +142,21 @@ Cypress.Commands.add("navigToReceivableList", () => {
 Cypress.Commands.add("navigToEquipment", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToEquipmentList", () => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetDocRevStatusesCategory],
+  () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.EQUIPMENT,
+        NavigationItems.EQUIPMENT_LIST,
+      ],
+    });
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
@@ -265,6 +282,16 @@ Cypress.Commands.add("navigToTrainingCurriculums", () => {
         NavigationItems.TRAINING_CURRICULUMS,
       ],
     });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToAsyncTasks", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.ASYNC_TASKS,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });

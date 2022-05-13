@@ -26,9 +26,11 @@ x-const:
 
 services:
   director:
-    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.1.1
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-n-retries-v1.1.1
     ports:
       - 1234:1234
+    environment:
+    - NUMBER_OF_SPEC_RETRIES=${NUMBER_OF_SPEC_RETRIES}
     networks:
       cypress_network:
         aliases: 
@@ -47,7 +49,7 @@ services:
     environment:
     - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
     - SLACK_TOKEN=${SLACK_TOKEN}
-
+    shm_size: 2GB
   enlil_fe_server:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:fe_${FE_GIT_COMMIT_HASH}
     depends_on:
