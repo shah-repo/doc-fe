@@ -1084,12 +1084,15 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.get("[aria-label='Open']").eq(1).arrowClick();
         cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
+        cy.get("[name='fb-primary-owner-eq']>div>div>button>span>svg").arrowClick();
+        cy.wait(1500);
         cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
         cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
       });
 
       it("Save document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wait(15000);
       });
 
       it("Click on Equipment list", () => {
@@ -1129,7 +1132,7 @@ context("NCO document type management", () => {
     });
 
     context("Release EQ", () => {
-      it("[API] Release EQ'", (done: any) => {
+      it("[API] Release EQ", (done: any) => {
         cy.drGetDocRevs({ employeeId: loggedInEmployee.id, sessionId: loginResponse.sessionId })
           .then((documentRevisionsRes) => {
             const manualDocRev = (documentRevisionsRes || []).find((x: any) => x.name === "Manual Equipment") as any;
@@ -1160,6 +1163,8 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.get("[aria-label='Open']").eq(1).arrowClick();
         cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
+        cy.get("[name='fb-primary-owner-eq']>div>div>button>span>svg").arrowClick();
+        cy.wait(1500);
         cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
         cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
       });
@@ -1452,6 +1457,8 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.get("[aria-label='Open']").eq(1).arrowClick();
         cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
+        cy.get("[name='fb-primary-owner-eq']>div>div>button>span>svg").arrowClick();
+        cy.wait(1500);
         cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
         cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
       });
@@ -1524,6 +1531,8 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.get("[aria-label='Open']").eq(1).arrowClick();
         cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
+        cy.get("[name='fb-primary-owner-eq']>div>div>button>span>svg").arrowClick();
+        cy.wait(1500);
         cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
         cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
       });

@@ -936,9 +936,7 @@ context("Receivable test with Page Details", () => {
         cy.fbGroupOptions("1", "2", "3");
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf();
-        cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(TEXTFIELD_LABEL);
-        cy.get(`[data-cy="validators.required_if.value"]`).arrowType(RBG_REQUIRED_IF_VALUE);
+        cy.fbFieldRequiredIf({ name: TEXTFIELD_LABEL, value: RBG_REQUIRED_IF_VALUE });
         cy.fbAddNewFieldButton();
       });
 
@@ -949,9 +947,7 @@ context("Receivable test with Page Details", () => {
         cy.fbGroupOptions("1", "2", "3");
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf();
-        cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(TEXTFIELD_LABEL);
-        cy.get(`[name="validators.required_if.value"]`).arrowType(CHECKBOX_REQUIRED_IF_VALUE);
+        cy.fbFieldRequiredIf({ name: TEXTFIELD_LABEL, value: CHECKBOX_REQUIRED_IF_VALUE });
         cy.fbAddNewFieldButton();
       });
     });

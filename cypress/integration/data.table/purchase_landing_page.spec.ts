@@ -628,7 +628,7 @@ context("Purchase Order Landing Page", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
-        cy.verifyAscSort({ index: 4, colLength: 8 });
+        cy.verifyDesSort({ index: 4, colLength: 8 });
       });
 
       it("Part Number should be in descending order", () => {
@@ -636,7 +636,7 @@ context("Purchase Order Landing Page", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
-        cy.verifyDesSort({ index: 4, colLength: 8 });
+        cy.verifyAscSort({ index: 4, colLength: 8 });
       });
     });
 
