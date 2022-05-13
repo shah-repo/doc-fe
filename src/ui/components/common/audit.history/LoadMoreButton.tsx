@@ -7,7 +7,6 @@ import Colors from "../../../layout/theme/utils/colors";
 const styles = makeStyles(() =>
   createStyles({
     loadMoreButton: {
-      "font-family": "Sora",
       "fontSize": "10px",
       "font-weight": 600,
       "letter-spacing": "0.5px",
