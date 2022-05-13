@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton, LinearProgress } from "@material-ui/core";
+import { Box, CircularProgress, Drawer, IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { isEmpty, map, values } from "lodash";
@@ -37,7 +37,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
   const [page, setPage] = useState(UM_AUDIT_HISTORY_INITIAL_OFFSET);
-
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
+  const [overallLimit, setOverallLimit] = React.useState(0);
+  const [dataTotal, setDataTotal] = React.useState(0);
   const closeDrawer = () => {
     setOpenDrawer({ ...openDrawer, right: false });
     closeHistoryPanel(openDrawer.right);
@@ -54,6 +56,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      setIsLoading(true);
      setLoadMore(true);
      setErrorMessage("");
+     setOverallLimit(overallLimit + UM_AUDIT_HISTORY_LIMIT);
      const requestConfig: AxiosRequestConfig = {
        method: "get",
        url: UM_AUDIT_URL,
@@ -75,7 +78,9 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
          ] as AuditDetailsProps[]);
          setPage((prevPageNumber) => prevPageNumber + limit);
          setIsLoading(false);
+         setShowLoadMoreButton(true);
          setLoadMore(data.page_total > 0);
+         setDataTotal(data.total);
        })
        .catch((exception) => {
          setIsLoading(false);
@@ -111,6 +116,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           </div>
         </div>
       </div>
+      {isLoading && <Box position="absolute" top="50%" left="40%"><CircularProgress /></Box> }
       <Box className={classes.listItemContainer}>
         {map(Items, (auditDetails, groupKey) => (
           <Box key={groupKey} style={{ padding: 0 }}>
@@ -123,10 +129,15 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   );
   return (
     <Drawer anchor="right" open={openDrawer.right} onClose={() => closeDrawer()}>
-      {isLoading && <LinearProgress />}
       <Box width={300}>{renderAuditRecords()}</Box>
       {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
-      {<LoadMoreButton disable={isLoading || !loadMore} onLoadMore={fetchAuditRecords}  id="historyLoadMore" />}
+      {showLoadMoreButton && (
+        <LoadMoreButton
+          disable={isLoading || !loadMore || overallLimit >= dataTotal}
+          onLoadMore={fetchAuditRecords}
+          id="historyLoadMore"
+        />
+      )}
     </Drawer>
   );
 };

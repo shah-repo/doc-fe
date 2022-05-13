@@ -111,10 +111,13 @@ export interface ICreateCompanyBootstrap {
   numOfDocDigits: number;
   users: IUser[];
   documentTypes: IdocumentTypeDto[];
+  scheduledForDeletion: boolean;
+  testAutomationCompany: boolean;
   whiteLabeling?: any;
   addresses?: string[];
   remoteValidatorBundleName: string;
   acctCodes?: string[];
+  scheduledForDeletion?: boolean;
 }
 
 Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
