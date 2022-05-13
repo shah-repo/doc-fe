@@ -24,7 +24,6 @@ export const styles = makeStyles(() =>
     },
     linkText: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 400,
       color: Colors.navy,
     },
@@ -68,28 +67,22 @@ export const styles = makeStyles(() =>
     },
     typography: {
       "fontSize": "14px",
-      "fontFamily": "Sora",
       "fontWeight": 400,
       "& > p": { margin: "0px" },
       "letterSpacing": 0,
     },
     typographyBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 600,
       letterSpacing: 0,
     },
     typographyStatus: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "15px",
       letterSpacing: 0,
     },
     timestampContainer: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "22px",
@@ -109,7 +102,6 @@ export const styles = makeStyles(() =>
     },
     typographyChildrenBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 700,
     },
     gridContainer: {
