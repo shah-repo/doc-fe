@@ -114,6 +114,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         item.type === "service" || (item.type === "product" && item.partNumberDocId)
       );
       if (updateApprovers && requester && proceedToNewReq && !approvers?.includes(requester)) {
+        console.log("117 ::", requester );
+        if (poApprovalsState.getDidMountPhase) { return; }
         addApprover([requester]);
       } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
         removeApprover([deletedRequestor]);
@@ -135,6 +137,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         // eslint-disable-next-line react-hooks/exhaustive-deps
         deletedRequestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
         if (poItems && poItems.items.length) {
+          console.log("139 ::", deletedRequestor);
           checkLineItems(
             poItems,
             workspaceState?.revisionChangeType ===
@@ -147,18 +150,22 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
             const prevApprovers = workspaceState?.formInputSync?.get(name);
             const diffIds = difference(Object.values(prevApprovers), approvers);
             if (diffIds.length) {
+              console.log("150 ::", difference(approvers, [deletedRequestor]));
               addApprover(difference(approvers, [deletedRequestor]));
               if (approvers.length === 0) {
+                console.log("154 ::", difference([deletedRequestor], approvers) );
                 addApprover(difference([deletedRequestor], approvers));
               }
             }
             if (approvers.length === 0) {
+              console.log("157 ::", difference(Object.values(prevApprovers), [deletedRequestor]));
               addApprover(difference(Object.values(prevApprovers), [deletedRequestor]));
             }
             poApprovalsState.setDidMount(false);
           }
         } else if (approvers?.includes(deletedRequestor)) {
           if (poApprovalsState.getDidMountPhase) { return; }
+          console.log("167 ::", "");
           checkLineItems(poItems, "");
         }
       }
@@ -190,6 +197,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         const employeesToBeAdded = difference(fieldValue, formValue);
+        console.log("196 ::", employeesToBeAdded);
         employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded);
         const employeesToBeRemoved = difference(formValue, fieldValue);
         employeesToBeRemoved.length > 0 && removeApprover(employeesToBeRemoved);
@@ -203,6 +211,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (requestor) => {
         const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
         if (!requestor) {
+          console.log("213 ::", requestor);
           checkLineItems(poItems, requestor);
           formState?.getInputState(name)?.setRender();
         }
@@ -215,6 +224,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       if (didMount) {
         const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
         if (requestor) {
+          console.log("226 ::", requestor);
           checkLineItems(poItems, requestor);
           formState?.getInputState(name)?.setRender();
         }
@@ -248,6 +258,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     };
 
     function addApprover(ids?: string[]) {
+      console.log("ADD Approvers IDS :::", ids);
+      console.log("APPROVALS ::",  map(poApprovalsState?.getApprovals, "approver.id"));
       if (!id) { return; }
       if (!ids) { return; }
       const groupName = checkGroups(ids[0]);
