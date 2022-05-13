@@ -7,7 +7,7 @@ export default makeStyles((theme: Theme) =>
       width: "-webkit-fill-available",
       borderRadius: theme.spacing(0.5),
       borderColor: Colors.hint_gray,
-      fontFamily: "Sora, sans-serif",
+      fontFamily: "inherit",
     },
     label: {
       margin: theme.spacing(3, 0, 4, 0),
