@@ -32,6 +32,7 @@ declare global {
         assertNumberOfEmailsFoundInList: integer;}): Chainable;
       imapGetNewPasswordLink(params: {userEmail: string}): Chainable;
       imapVerifyNoPasswordResetEmail(params: {userEmail: string; fromDate: Date}): Chainable;
+      imapNavigToPasswordResetLink(params: {userEmail: string; fromDate: Date}): Chainable;
     }
   }
 }
@@ -150,6 +151,18 @@ Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) =>
     const startingPosition = emailText.search("sign_up");
     const activationLink = emailText.substring(startingPosition, endingPosition);
     cy.visit(CONFIG.FE_URL + "/" + decodeHTMLEntities(activationLink));
+  });
+});
+
+Cypress.Commands.add("imapNavigToPasswordResetLink", (params: { userEmail: string; fromDate: Date}) => {
+  cy.imapGetMails({ userEmail: params.userEmail, options: { after: params.fromDate } }).then((emails) => {
+    const emailText = emails[0].body.html;
+    if (emailText.includes("reset_password")) {
+      cy.visit(CONFIG.FE_URL + "/reset_password");
+    }
+    else {
+      assert.fail("No reset link found");
+    }
   });
 });
 
