@@ -59,8 +59,6 @@ export const styles = makeStyles(() =>
       paddingLeft: "10px",
     },
     viewTooltipText: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",

@@ -21,8 +21,6 @@ export const styles = makeStyles((theme: Theme) =>
       paddingLeft: "1px",
     },
     viewTooltipText: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",

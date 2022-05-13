@@ -7,7 +7,6 @@ const styles = () => ({
   },
   tooltip: {
     backgroundColor: Colors.black,
-    fontFamily: "Sora",
     fontSize: "12px",
   },
   tooltipPlacementTop: {
