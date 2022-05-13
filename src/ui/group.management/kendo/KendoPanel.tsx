@@ -20,7 +20,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, set, sortBy, startCase } from "lodash";
+import { find, flatMap, isEmpty, map, set, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -588,7 +588,8 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
             <GridTitle translation="navigation.group.management" />
           </Grid>
           <Grid item>
-            <GMExport gridData={gridData} columns={columnDefinitions} />
+            <GMExport gridData={dataState.group?.length ? flatMap(map(result, "items")) : result}
+              columns={columnDefinitions} />
           </Grid>
           <Grid item>
             {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}

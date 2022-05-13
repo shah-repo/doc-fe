@@ -24,6 +24,7 @@ import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
 import "./commands/approval.request/commands";
 import "./commands/approver.request.list/commands";
+import "./commands/async.tasks/commands";
 import "./commands/attachments/commands";
 import "./commands/auth/commands";
 import "./commands/company.replica/commands";
