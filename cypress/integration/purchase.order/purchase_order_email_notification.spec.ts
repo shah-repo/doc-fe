@@ -314,11 +314,7 @@ context("Send PO Owner an email notification when a PO is approved", () => {
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                   emailsFromInbox = emails;
-          }
-          else {
-            assert.fail("No email found");
-          }
+          emailsFromInbox = emails;
         });
       });
 
