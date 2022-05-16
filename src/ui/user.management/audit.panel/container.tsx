@@ -152,7 +152,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           }),
           secondaryText: intl.formatMessage({ id: "common.active" }),
           auditType: ACTION_TITLE_MAPPING.ActivateUser,
-          sortedIndex: 1,
+          sortedIndex: 4,
         };
       }
     }  else if (auditRecord.fieldPath === "avatar") {
@@ -241,7 +241,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       let sortedIndex = 0;
       let primaryText = key;
       const secondaryText = map(items, "secondaryText");
-      if (auditType === ACTION_TITLE_MAPPING.AddedToGroups || auditType === ACTION_TITLE_MAPPING.DeletedFromGroups) {
+      if (auditType === ACTION_TITLE_MAPPING.ActivateUser || auditType === ACTION_TITLE_MAPPING.AddedToGroups
+        || auditType === ACTION_TITLE_MAPPING.DeletedFromGroups) {
         sortedIndex = items[0].sortedIndex;
       }
       if (auditType === ACTION_TITLE_MAPPING.AddedToGroups && secondaryText.length <= 1) {
@@ -343,7 +344,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
       return {
         ...auditRecord,
-        groupKey: `${groupId}-${timestamp}-${ownerId}`,
+        groupKey: `${groupId}-${ownerId}`,
         ownerDetails,
         employeeDetails,
         timestamp: `${getFormattedDateString(timestamp, MomentFormats.BriefDateTime)}`,
