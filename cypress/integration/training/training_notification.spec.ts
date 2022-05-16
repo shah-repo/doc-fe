@@ -1,13 +1,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -26,10 +26,6 @@ let tmpRegex;
 let downloadFile;
 let fileId;
 let dateAfterEmailShouldArrive;
-
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Training notification test", () => {
   before(() => {
@@ -418,8 +414,16 @@ context("Training notification test", () => {
       cy.get("#training-details-section").should("have.text", "Trainees Details");
     });
 
-    it("Select User to train", () => {
+    it("Select First User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+    });
+
+    it("Select Second User to train", () => {
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+    });
+
+    it("Select Third User to train", () => {
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
     });
 
     it("Select Approver", () => {
@@ -443,6 +447,32 @@ context("Training notification test", () => {
     });
   });
 
+
+  context("Navigate to Training Records and check separate training record for each user", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
+    });
+
+    it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
+    });
+
+    it(`${USERS[3].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[3].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
+    });
+  });
+
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
@@ -461,9 +491,49 @@ context("Training notification test", () => {
     it("Button 'Complete training' should be visible", () => {
       cy.contains("Complete training").should("be.visible");
     });
+  });
 
-    it("click complete training button", () => {
-      cy.trCompleteTraining();
+  context("Check for training text inside dialog box and complete training", () => {
+    it("Check for training complete and check training ID, Title", () => {
+      cy.get("[data-cy=training-complete]").click();
+      cy.get("form>div").should("contain.text", "TRN ID");
+      cy.get("form>div>div:nth-child(1)").should("contain.text", "TRN-00001");
+      cy.get("form>div>div:nth-child(1)").should("be.visible");
+      cy.get("form>div").should("contain.text", "Title");
+    });
+
+    it("Check if 'I completed training on' message is displayed", () => {
+      cy.get("form>div>div:nth-child(2)>div>").contains("I acknowledge I am trained on");
+    });
+
+    it("Check if 'FM-00003 Rev 1' revision is displayed", () => {
+      cy.get("form>div").should("contain.text", "Doc ID Rev");
+      cy.get("[role='dialog']").then(($el) => {
+        const text = $el.text();
+        expect(text.replace(/\u00a0/g, " ")).to.contain("FM-00003  Rev  1");
+      });
+    });
+
+    it("Check if trainee name is correct", () => {
+      cy.get("[role='dialog']").should("contain.text", USERS[1].name);
+      cy.get("[role='dialog']").contains(USERS[1].name).should("be.visible");
+    });
+
+    it("Check if 'Send To Email' button is displayed", () => {
+      cy.get("button>span").should("contain.text", "Send To Email");
+      cy.get("[role='dialog']>button").arrowClick();
+    });
+
+    it("Click on acknowladge", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCompleteTraining], () => {
+          cy.get("[data-cy=training-complete]").click();
+          cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+          cy.progressBarShouldAppear();
+        });
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
     });
   });
 
@@ -521,6 +591,7 @@ context("Training notification test", () => {
 
   context("Check pending training notification", () => {
     it(`Verify training notification`, () => {
+
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
     });
 
@@ -567,7 +638,7 @@ context("Training notification test", () => {
 
   context("Verify email for pending training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -617,8 +688,7 @@ context("Training notification test", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${trnId}${filetime}.zip`;
+          downloadFile  =  `${trnId}${fileTimeFormat}.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -668,7 +738,7 @@ context("Training notification test", () => {
 
         expect(cdata.text).match(/Page 1 of 1/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -727,7 +797,7 @@ context("Training notification test", () => {
 
   context("Verify email for completed training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -777,8 +847,7 @@ context("Training notification test", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${trnId}${filetime}.zip`;
+          downloadFile  =  `${trnId}${fileTimeFormat}.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -823,12 +892,12 @@ context("Training notification test", () => {
         expect(cdata.text).match(tmpRegex);
 
         tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1]
-          .name} \\| Trainee \\| ${docRelDate}`, "gi");
+          .name} \\| Trainee \\| ${pdfDocRelDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         expect(cdata.text).match(/Page 1 of 1/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
