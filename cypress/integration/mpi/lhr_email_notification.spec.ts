@@ -561,7 +561,7 @@ context("LHRs email notifications", () => {
 
       cy.wait(10000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-               emailsFromInbox = emails;
+        emailsFromInbox = emails;
       });
     });
 
@@ -795,11 +795,7 @@ context("LHRs email notifications", () => {
 
         cy.wait(10000);
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                   emailsFromInbox = emails;
-          }
-          else {
-            assert.fail("No email found");
-          }
+          emailsFromInbox = emails;
         });
       });
 

@@ -356,13 +356,8 @@ context("Password expire flow", () => {
           after: dateAfterEmailShouldArrive,
         };
 
-        cy.imapGetMails({ userEmail: emailOfUserToSignUp, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-          }
-          else {
-            assert.fail("No email found");
-          }
+        cy.imapGetMails({ userEmail: emailOfUserToSignUp, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
         });
       });
 
