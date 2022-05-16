@@ -46,7 +46,11 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
         header={<HeaderContainer />}
         templateBoxProps={{ stretchY: "100%", bgcolor: Colors.light_gray }}
         headerBoxProps={{ maxHeight: "20%" }}
-        contentBoxProps={{ minHeight: "80%", height: "100%", marginTop: SM.isNewLayout ? "0px" : "40px" }}
+        contentBoxProps={{
+          minHeight: "80%",
+          height: "100%",
+          marginTop: SM.isNewLayout || SM.isNewCRLayout ? "0px" : "40px",
+        }}
       >
         <SMTemplate
           footer={SM.isNewLayout ? <WatermarkFooterContainer /> : null}
