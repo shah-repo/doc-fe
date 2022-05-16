@@ -1175,6 +1175,7 @@ context("Repeat Training with Training Curriculum", () => {
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
+      cy.wait(1000);
       cy.listLoadingElementShouldNotExist();
     });
   });
