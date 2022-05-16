@@ -307,7 +307,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               <Button
                 variant="outlined"
                 color="primary"
-                className={classes.exportRecordsListbutton}
+                className={classes.exportListbutton}
                 id="ListPresenter-export-list"
                 data-cy="document.revision.export.list"
                 onClick={exportDialog.open}
