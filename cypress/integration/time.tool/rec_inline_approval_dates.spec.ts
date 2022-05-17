@@ -4,8 +4,10 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { momentInPST } from "../../utils/constants/dateHandler";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -20,8 +22,12 @@ let formDocumentType;
 let legalRecordDocumentType;
 let adminEmployee;
 let asyncTasksGroup;
+let emailsFromInbox;
+let dateAfterEmailShouldArrive;
+const approvalNotificationToday = momentInPST().format("MMM DD, YYYY");
+const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM DD, YYYY");
 
-context("Record inline Flow", () => {
+context("Record inline approval dates flow", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -34,7 +40,7 @@ context("Record inline Flow", () => {
     cy.saveLocalStorage();
   });
 
-  context("[API]Record inline approval dates", () => {
+  context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -354,6 +360,7 @@ context("Record inline Flow", () => {
         });
 
         it("Click on 'EMAIL ALL'", () => {
+          dateAfterEmailShouldArrive = new Date(new Date().getTime());
           cy.get("button").contains("EMAIL ALL").arrowClick();
         });
 
@@ -460,6 +467,40 @@ context("Record inline Flow", () => {
   });
 
   context("Verify received emails", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+      };
+      cy.wait(10000);
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify 'in review' emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [approvalNotificationToday, "LR-00003"],
+        },
+        {
+          sentToUser: USERS[2].email,
+          contains: [approvalNotificationToday, "LR-00003"],
+        },
+        {
+          sentToUser: USERS[1].email,
+          contains: [approvalNotificationYesterday, "LR-00003"],
+        },
+      ];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
   });
 });
 
