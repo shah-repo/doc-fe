@@ -508,7 +508,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Click 'Clone EB' button", () => {
-      cy.fbClickButton({ el: "CloneEBButton" });
+      cy.ebClickClone();
     });
   });
 
