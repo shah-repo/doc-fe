@@ -136,12 +136,13 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
-// eslint-disable-next-line max-len
-Cypress.Commands.add("pmDeleteApproverFromApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
-  cy.listLoadingElementShouldNotExist();
-  cy.contains(`${params.approver}`).parent().next().arrowClick();
-  cy.listLoadingElementShouldNotExist();
-});
+Cypress.Commands.add("pmDeleteApproverFromApproverList",
+  (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+    cy.listLoadingElementShouldNotExist();
+    cy.contains(`${params.approver}`).parent().next().arrowClick();
+    cy.listLoadingElementShouldNotExist();
+  });
+
 
 Cypress.Commands.add("ptClickCreateNewPart", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
