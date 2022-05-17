@@ -77,12 +77,6 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         );
       }
       // Added Permission
-      // if (auditType === ACTION_TITLE_MAPPING.AddedPermissions && secondaryText.length <= 1) {
-      //   primaryText = primaryText.replace(
-      //     getTranslatedText(ACTION_TITLE_MAPPING.AddedPermissions, { groupName: "" }),
-      //     getTranslatedText(ACTION_TITLE_MAPPING.AddedPermission, { groupName: "" })
-      //   );
-      // }
       // Removed Permission
       if (auditType === ACTION_TITLE_MAPPING.RemovedPermissions && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
@@ -98,12 +92,6 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         );
       }
       // Added tags
-      // if (auditType === ACTION_TITLE_MAPPING.AddedTags && secondaryText.length <= 1) {
-      //   primaryText = primaryText.replace(
-      //     getTranslatedText(ACTION_TITLE_MAPPING.AddedTags, { groupName: "" }),
-      //     getTranslatedText(ACTION_TITLE_MAPPING.AddedTag, { groupName: "" })
-      //   );
-      // }
       // Remove tags
       if (auditType === ACTION_TITLE_MAPPING.RemovedTags && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
@@ -112,12 +100,6 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         );
       }
       // Added ParentGroups
-      // if (auditType === ACTION_TITLE_MAPPING.AddedParentGroups && secondaryText.length <= 1) {
-      //   primaryText = primaryText.replace(
-      //     getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroups, { groupName: "" }),
-      //     getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroup, { groupName: "" })
-      //   );
-      // }
       // Remove Parent Group
       if (auditType === ACTION_TITLE_MAPPING.RemovedParentGroups && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
