@@ -272,6 +272,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const removeApprover = (ids?: string[]) => {
       if (!ids) { return; }
       if (formState?.workspaceMode === "preview") { return; }
+      availableApprovers = difference(availableApprovers, ids);
       map(ids, (approver) => {
         const approval = find(poApprovalsState?.getApprovals, (a) => a.approver?.id === approver);
         poApprovalsState?.removeCheckedGroups(approval?.signatureGroupName);
