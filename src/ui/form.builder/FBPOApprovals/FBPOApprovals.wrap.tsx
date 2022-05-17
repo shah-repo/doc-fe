@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { useFormikContext } from "formik";
-import { compact, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
+import { compact, concat, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
@@ -54,6 +54,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
     );
     const didMount = useDidMount();
+    let availableApprovers: string[] = [];
     const hasPOItems = useRef(false);
 
     isIncluded = (group: FBRequiredApprover): boolean =>
@@ -66,6 +67,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         window.location.reload();
       } else {
         const stateApprovals = filter(poApprovalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
+        availableApprovers = getApprovals(unionBy(stateApprovals, [approval], "id"));
         poApprovalsState?.setApprovals(getApprovals(unionBy(stateApprovals, [approval], "id")));
       }
     }
@@ -247,10 +249,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
     };
 
-    function addApprover(ids?: string[]) {
+    const addApprover = (ids?: string[]) => {
       if (!id) { return; }
       if (!ids) { return; }
       const groupName = checkGroups(ids[0]);
+      if (
+        poApprovalsState.getDidMountPhase &&
+        difference(ids, availableApprovers).length === 0
+      ) {
+        return;
+      }
+      ids.length && (availableApprovers = concat(availableApprovers, ids));
       map(ids, (approver) => poApprovalsState?.addApproval({
         assigned: { id: approver },
         type: "MASTER",
@@ -258,9 +267,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         partOf: { id },
         signatureGroupName: groupName,
       }));
-    }
+    };
 
-    function removeApprover(ids?: string[]) {
+    const removeApprover = (ids?: string[]) => {
       if (!ids) { return; }
       if (formState?.workspaceMode === "preview") { return; }
       map(ids, (approver) => {
@@ -268,7 +277,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         poApprovalsState?.removeCheckedGroups(approval?.signatureGroupName);
         poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id);
       });
-    }
+    };
 
     approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
       if (!approvalId) { return; }
