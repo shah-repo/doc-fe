@@ -45,7 +45,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     mode = _formState?.mode;
     autosave = _formState?.autosave || false;
     const isParentWorkspaceExists = !isEmpty(workspaceState);
-    workspaceState = workspaceState ? workspaceState : FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,
       mode,
       autosave,

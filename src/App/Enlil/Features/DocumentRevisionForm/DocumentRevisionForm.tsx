@@ -123,38 +123,52 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
+                  const { tabId } = tabInfo || {};
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
+                  const tabSchema = schema.filter((schemaItem) => schemaItem.tabId === tabId);
 
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="calc(100% - 40px)">
-                      {tabType === "MIXED" && <DocumentRevisionFormPresenter
-                        {...formValues}
-                        releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                        {...{
-                          documentRevisions,
-                          documentRevision,
-                          availableReferences,
-                          showRevisionTypeChange,
-                          proposedDocId,
-                          setDocId,
-                          doNotPrompt,
-                          onDirtyFlagChange,
-                          documentTypesById,
-                          canChangeOwnerShip,
-                          type,
-                          isNewVersion,
-                          bannerPortal,
-                          showAdministrativeAndVoidChange,
-                          pmFormId,
-                          redlineActive,
-                          isOutput,
-                          lastSavedTimestamp,
-                          isDisabled,
-                          email,
-                          isOwner,
-                          mode,
-                        }}
-                      />}
+                      {tabType === "MIXED" && <>
+                        <DocumentRevisionFormPresenter
+                          {...formValues}
+                          releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                          {...{
+                            documentRevisions,
+                            documentRevision,
+                            availableReferences,
+                            showRevisionTypeChange,
+                            proposedDocId,
+                            setDocId,
+                            doNotPrompt,
+                            onDirtyFlagChange,
+                            documentTypesById,
+                            canChangeOwnerShip,
+                            type,
+                            isNewVersion,
+                            bannerPortal,
+                            showAdministrativeAndVoidChange,
+                            pmFormId,
+                            redlineActive,
+                            isOutput,
+                            lastSavedTimestamp,
+                            isDisabled,
+                            email,
+                            isOwner,
+                            mode,
+                          }}
+                        />
+                        {tabSchema && <FBWorkspace
+                          isPortal={false}
+                          document={{
+                            ...formValues.values as unknown as DocumentRevision,
+                            ...documentRevision as unknown as DocumentRevision,
+                          }}
+                          {... { autosaveEnabled, tabId, workspaceState }}
+                          initialValues={formInput}
+                          schema={tabSchema}
+                        />}
+                      </>}
                       {tabType !== "TRAINING" && _formState?.mode !== "none" && showFBLabels &&  (
                         <FBWorkspace
                           isPortal={false}
@@ -162,9 +176,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             ...formValues.values as unknown as DocumentRevision,
                             ...documentRevision as unknown as DocumentRevision,
                           }}
-                          {... { autosaveEnabled, workspaceState }}
+                          {... { autosaveEnabled, tabId, workspaceState }}
                           initialValues={formInput}
-                          schema={schema}
+                          schema={tabSchema}
                         />
                       )}
                       {tabType === "TRAINING" &&
