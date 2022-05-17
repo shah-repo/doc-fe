@@ -31,33 +31,22 @@ Cypress.Commands.add("exportVerifyEmail", (params: { status: string; filename: s
   cy.get("#HeaderInfo-status").should("have.text", params.status);
   cy.get("#HeaderInfo-docId").then(($x) => {
     recordId = $x.text();
+    dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
     cy.sendToEmail();
     cy.checkToastMessageContains({
       message: "File will be sent to your email shortly.",
     });
-    dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
 
     const getEmailSetting =  {
       to: CONFIG.TEST_EMAIL,
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      wait_time_sec: 5,
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      max_wait_time_sec: 50,
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      include_body: true,
       after: dateAfterEmailShouldArrive,
       subject: `Export for ${params.type ? params.type : "document"} ${recordId}`,
     };
 
-    cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-      if (emails) {
-        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-      }
-      else {
-        assert.fail("No email found");
-      }
-    }).then((response) => {
+    cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+      downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+    }).then(() => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -72,8 +61,7 @@ Cypress.Commands.add("exportVerifyEmail", (params: { status: string; filename: s
             fileName: downloadFile,
           });
         }
-      }).then((response) => {
-
+      }).then(() => {
         cy.unzipFile({
           directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
@@ -121,33 +109,22 @@ Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename:
   cy.get("#HeaderInfo-status").should("have.text", params.status);
   cy.get("#HeaderInfo-docId").then(($x) => {
     recordId = $x.text();
+    dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
     cy.sendToEmail();
     cy.checkToastMessageContains({
       message: "File will be sent to your email shortly.",
     });
-    dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
 
     const getEmailSetting =  {
       to: CONFIG.TEST_EMAIL,
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      wait_time_sec: 5,
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      max_wait_time_sec: 50,
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      include_body: true,
       after: dateAfterEmailShouldArrive,
       subject: `Export for ${params.type ? params.type : "document"} ${recordId}`,
     };
 
-    cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-      if (emails) {
-        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-      }
-      else {
-        assert.fail("No email found");
-      }
-    }).then((response) => {
+    cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+      downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+    }).then(() => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -162,8 +139,7 @@ Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename:
             fileName: downloadFile,
           });
         }
-      }).then((response) => {
-
+      }).then(() => {
         cy.unzipFile({
           directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
