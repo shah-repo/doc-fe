@@ -50,6 +50,7 @@ declare global {
       cmpVerifyPrimaryColor(params: { color: string}): Chainable<Subject>;
       cmpTurnOffAutosave(): Chainable<Subject>;
       cmpTurnOnAutosave(): Chainable<Subject>;
+      cmpExitDropdown(): Chainable<Subject>;
     }
   }
 }
@@ -276,6 +277,10 @@ Cypress.Commands.add("cmpVerifyPrimaryContrastText", (params:  {color: string}) 
 
 Cypress.Commands.add("cmpVerifyPrimaryColor", (params:  {color: string}) => {
   cy.get(`[data-cy="UserName"]`).should("have.css", "color", HEX2RGB(params.color));
+});
+
+Cypress.Commands.add("cmpExitDropdown", () => {
+  cy.get("body").type("{esc}");
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {
