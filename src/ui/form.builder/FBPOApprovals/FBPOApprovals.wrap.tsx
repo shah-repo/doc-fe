@@ -253,7 +253,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       if (!id) { return; }
       if (!ids) { return; }
       const groupName = checkGroups(ids[0]);
-      if (poApprovalsState.getDidMountPhase && difference(ids, availableApprovers).length === 0) {
+      if (
+        poApprovalsState.getDidMountPhase &&
+        difference(ids, availableApprovers).length === 0
+      ) {
         return;
       }
       ids.length && (availableApprovers = concat(availableApprovers, ids));
