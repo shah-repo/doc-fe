@@ -1146,7 +1146,7 @@
   "group.management.audit.history.RemovedParentGroup": "Removed parent group",
   "group.management.audit.history.UpdatedGroups": "Updated groups",
   "group.management.audit.history.UpdatedGroup": "Updated group",
-  "group.management.audit.history.GroupNameUpdated": "Group Name Updated",
+  "group.management.audit.history.GroupNameUpdated": "Group name updated",
   "change.owner": "Change Owner",
   "change.owner.update": "Update Owner",
   "DRAFT": "Draft",
