@@ -31,7 +31,7 @@ export async function getEmails(email: string, options: GmailTesterOptions = {})
   const settings: GmailTesterOptions = {
     to: email,
     wait_time_sec: 5,
-    max_wait_time_sec: 120,
+    max_wait_time_sec: 60,
     include_body: true,
     after: new Date(Date.now() - 25 * 1000),
     ...options,
