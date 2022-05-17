@@ -2091,9 +2091,10 @@ context("Autosave LHR", () => {
 
           expect(el).match(/PI PROCEDURE\nMaterials/);
 
-          expect(el).match(/MT-00004 - Material one - rev 1 \| Qty: 0.6 days/);
+          tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.85.* days`);
+          expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 0.5 days`);
+          tmpRegex = new RegExp(`${lotDocumentIdRef}01 \\| MT-00004.1 \\| 0.5 days`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
@@ -2563,9 +2564,10 @@ context("Autosave LHR", () => {
 
         expect(el).match(/PI PROCEDURE\nMaterials/);
 
-        expect(el).match(/MT-00004 - Material one - rev 1 \| Qty: 0\.6 days/);
+        tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.85.* days`);
+        expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`${lotDocumentIdRef} \\| MT-00004.1 \\| 0\\.5 days`);
+        tmpRegex = new RegExp(`${lotDocumentIdRef}01 \\| MT-00004.1 \\| 0.5 days`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
@@ -2613,7 +2615,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/MT-00004 - Material one - rev 1 \| Qty: 80\.1 sets/);
 
-        tmpRegex = new RegExp(`${lotDocumentIdRef} | MT-00004.1 \\| 10\\.5 sets`);
+        tmpRegex = new RegExp(`${lotDocumentIdRef}01 \\| MT-00004.1 \\| 10.5 sets`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`MT-00006 - Material two - rev 1 \\| Qty: 160\\.2 boxes`);
