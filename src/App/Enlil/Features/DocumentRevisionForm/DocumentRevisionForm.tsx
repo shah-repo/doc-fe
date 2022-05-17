@@ -164,7 +164,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             ...formValues.values as unknown as DocumentRevision,
                             ...documentRevision as unknown as DocumentRevision,
                           }}
-                          {... { autosaveEnabled, tabId, workspaceState }}
+                          {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
                           schema={tabSchema}
                         />}
@@ -176,7 +176,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             ...formValues.values as unknown as DocumentRevision,
                             ...documentRevision as unknown as DocumentRevision,
                           }}
-                          {... { autosaveEnabled, tabId, workspaceState }}
+                          {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
                           schema={tabSchema}
                         />
