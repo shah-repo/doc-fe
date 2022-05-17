@@ -188,7 +188,7 @@ context("Dynamic Form Test", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbOpenValidation();
       cy.get("input[value^=\"visibility\"]").check();
-      cy.fbFieldRequiredIf();
+      cy.get("input[name=\"validators.required_if\"]").arrowClick();
       cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Select field");
       cy.unClick();
       cy.get(`[id="mui-component-select-validators.required_if.value"]`).arrowClick();

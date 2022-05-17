@@ -272,9 +272,9 @@ context("Send PO Owner an email notification when a PO is approved", () => {
 
   context("Submit PO for Approval", () => {
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
+      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[2].name);
       });
     });
 
