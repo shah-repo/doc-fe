@@ -54,6 +54,7 @@ Cypress.Commands.add("ebClickClone", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
+    cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
