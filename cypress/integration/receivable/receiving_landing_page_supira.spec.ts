@@ -28,6 +28,8 @@ let createdPODocument2;
 let createdPODocument3;
 let createdSupplierFormDocument;
 let createdSupplierDocument;
+let createdSupplierDocument2;
+let createdSupplierDocument3;
 let receivableForm;
 let releasedRec;
 let adminEmployee;
@@ -112,7 +114,7 @@ context("Test Supplier Landing Page for Supira", () => {
       });
     });
 
-    it("[API]Create SupplierForm & Supplier", (done: any) => {
+    it("[API]Create SupplierForm & Suppliers", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
@@ -211,7 +213,89 @@ context("Test Supplier Landing Page for Supira", () => {
                   employeeId: adminEmployee.id,
                   sessionId: loginResponse.sessionId,
                 }).then(() => {
-                  done();
+                  cy.poAPICreatePO({
+                    payload: {
+                      name: "API Supplier Document 2",
+                      attachments: [],
+                      referenceTo: [],
+                      formDocument: { id: createdSupplierFormDocument.id },
+                      description: "API Supplier document 2",
+                      revisionChangeType: RevisionChangeType.NextRevision,
+                      document: {
+                        docId: "SUP-00002",
+                        documentType: {
+                          id: supplierDocumentType[0].id,
+                        },
+                        securityList: {
+                          operators: [],
+                          securityEmployees: [],
+                          securityGroups: [
+                            {
+                              id: group.body[0].id,
+                            },
+                          ],
+                        },
+                      },
+                    },
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                  }).then((response) => {
+                    createdSupplierDocument2 = response;
+                    cy.drAPIApproveAndRelease({
+                      documentId: createdSupplierDocument2.id,
+                      payload: {
+                        effectiveDate: (new Date()).toISOString(),
+                        documentType: { id: approvalRequestDocumentType[0].id },
+                        formDocument: { id: initialArDocument[0].id },
+                        approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                      },
+                      employeeId: adminEmployee.id,
+                      sessionId: loginResponse.sessionId,
+                    }).then(() => {
+                      cy.poAPICreatePO({
+                        payload: {
+                          name: "API Supplier Document 3",
+                          attachments: [],
+                          referenceTo: [],
+                          formDocument: { id: createdSupplierFormDocument.id },
+                          description: "API Supplier document 3",
+                          revisionChangeType: RevisionChangeType.NextRevision,
+                          document: {
+                            docId: "SUP-00003",
+                            documentType: {
+                              id: supplierDocumentType[0].id,
+                            },
+                            securityList: {
+                              operators: [],
+                              securityEmployees: [],
+                              securityGroups: [
+                                {
+                                  id: group.body[0].id,
+                                },
+                              ],
+                            },
+                          },
+                        },
+                        employeeId: adminEmployee.id,
+                        sessionId: loginResponse.sessionId,
+                      }).then((response) => {
+                        createdSupplierDocument3 = response;
+                        cy.drAPIApproveAndRelease({
+                          documentId: createdSupplierDocument3.id,
+                          payload: {
+                            effectiveDate: (new Date()).toISOString(),
+                            documentType: { id: approvalRequestDocumentType[0].id },
+                            formDocument: { id: initialArDocument[0].id },
+                            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                          },
+                          employeeId: adminEmployee.id,
+                          sessionId: loginResponse.sessionId,
+                        }).then(() => {
+                          done();
+                        });
+                      });
+                    });
+                  });
                 });
               });
             });
@@ -590,7 +674,7 @@ context("Test Supplier Landing Page for Supira", () => {
             "po-status-built-in": "Open",
             "po-requestor-autocomplete": adminEmployee.id,
             "po-order-date": todaysDate,
-            "po-supplier-built-in": createdSupplierDocument.id,
+            "po-supplier-built-in": createdSupplierDocument2.id,
           },
         },
         employeeId: adminEmployee.id as unknown as string,
@@ -673,10 +757,10 @@ context("Test Supplier Landing Page for Supira", () => {
             "fb-po-approvals": [
               adminEmployee.id,
             ],
-            "po-status-built-in": "Open",
+            "po-status-built-in": "Closed",
             "po-requestor-autocomplete": adminEmployee.id,
             "po-order-date": todaysDate,
-            "po-supplier-built-in": createdSupplierDocument.id,
+            "po-supplier-built-in": createdSupplierDocument2.id,
           },
         },
         employeeId: adminEmployee.id as unknown as string,
@@ -759,7 +843,7 @@ context("Test Supplier Landing Page for Supira", () => {
             "fb-po-approvals": [
               adminEmployee.id,
             ],
-            "po-status-built-in": "Open",
+            "po-status-built-in": "Closed",
             "po-requestor-autocomplete": adminEmployee.id,
             "po-order-date": todaysDate,
             "po-supplier-built-in": createdSupplierDocument.id,
@@ -924,7 +1008,10 @@ context("Test Supplier Landing Page for Supira", () => {
                 label: "PO #",
                 fieldName: "irrelevant",
                 showOnWeb: true,
-                valuePath: "formInput.purchase-order-number-khf4czb2",
+                valuePath: "precalc.po-number",
+                sourcePath: [
+                  "formInput.receive-po-kzqkr5yl",
+                ],
                 showOnAndroid: true,
               },
               {
@@ -1103,107 +1190,116 @@ context("Test Supplier Landing Page for Supira", () => {
       });
     });
 
-    // context("Verify filter on each column", () => {
-    //   [
-    //     {
-    //       header: COLUMN_HEADERS[0],
-    //       index: 1,
-    //       searchTerm: "SUP-00001",
-    //       expectedDocId: "SUP-00001",
-    //     },
-    //     {
-    //       header: COLUMN_HEADERS[1],
-    //       index: 2,
-    //       searchTerm: "Released",
-    //       expectedDocId: "SUP-00002",
-    //     },
-    //     {
-    //       header: COLUMN_HEADERS[2],
-    //       index: 3,
-    //       searchTerm: "Major",
-    //       expectedDocId: "SUP-00001",
-    //     },
-    //     {
-    //       header: COLUMN_HEADERS[3],
-    //       index: 4,
-    //       searchTerm: "Approved",
-    //       expectedDocId: "SUP-00002",
-    //     },
-    //     // State uses dropdown, it's tested separately
-    //     {
-    //       header: COLUMN_HEADERS[5],
-    //       index: 6,
-    //       searchTerm: USERS[2].name,
-    //       expectedDocId: "SUP-00002",
-    //     },
-    //     {
-    //       header: COLUMN_HEADERS[6],
-    //       index: 7,
-    //       searchTerm: "AR",
-    //       expectedDocId: "SUP-00002",
-    //     },
-    //     {
-    //       header: COLUMN_HEADERS[7],
-    //       index: 8,
-    //       searchTerm: "Production",
-    //       expectedDocId: "SUP-00001",
-    //     },
-    //   ].forEach((params) => {
-    //     it(`Verify filter for ${params.header}`, () => {
-    //       cy.dlClearFilters();
-    //       cy.get(`th[aria-colindex="${params.index}"] input`).should("have.attr", "value", "");
-    //       cy.get(`th[aria-colindex="${params.index}"] input`).arrowType(params.searchTerm);
-    //       cy.get(`th[aria-colindex="${params.index}"] input`).should("have.attr", "value", params.searchTerm);
-    //       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-    //       cy.get("tr.k-master-row").first().find("td").eq(0).should( (cell) => {
-    //         expect(cell).to.contain(params.expectedDocId);
-    //       } );
-    //     });
-    //   });
+    context("Verify filter on each column", () => {
+      [
+        {
+          header: COLUMN_HEADERS[0],
+          index: 1,
+          searchTerm: "RC-00006",
+          expectedDocId: "RC-00006",
+        },
+        // State uses dropdown, it's tested separately
+        {
+          header: COLUMN_HEADERS[2],
+          index: 3,
+          searchTerm: USERS[2].name,
+          expectedDocId: "RC-00006",
+        },
+        {
+          header: COLUMN_HEADERS[3],
+          index: 4,
+          searchTerm: "POT-00003",
+          expectedDocId: "RC-00006",
+        },
+        // Released date uses dropdown, it's tested separately
+        {
+          header: COLUMN_HEADERS[5],
+          index: 6,
+          searchTerm: "API Supplier document 2",
+          expectedDocId: "RC-00005",
+        },
+        {
+          header: COLUMN_HEADERS[6],
+          index: 7,
+          searchTerm: "PRT-00007 - 1",
+          expectedDocId: "RC-00006",
+        },
+        {
+          header: COLUMN_HEADERS[7],
+          index: 8,
+          searchTerm: "Closed",
+          expectedDocId: "RC-00006",
+        },
+      ].forEach((params) => {
+        it(`Verify filter for ${params.header}`, () => {
+          cy.dlClearFilters();
+          cy.get(`th[aria-colindex="${params.index}"] input`).should("have.attr", "value", "");
+          cy.get(`th[aria-colindex="${params.index}"] input`).arrowType(params.searchTerm);
+          cy.get(`th[aria-colindex="${params.index}"] input`).should("have.attr", "value", params.searchTerm);
+          cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+          cy.get("tr.k-master-row").first().find("td").eq(0).should( (cell) => {
+            expect(cell).to.contain(params.expectedDocId);
+          } );
+        });
+      });
 
-    //   // State uses dropdown, so different commands are used
-    //   it("Verify filter for State", () => {
-    //     cy.dlClearFilters();
-    //     cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
-    //     cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
-    //     cy.get("ul>li[role=option]").contains("Draft").arrowClick();
-    //     cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Draft");
-    //     cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-    //     cy.get("tr.k-master-row").first().find("td").eq(0).should( (cell) => {
-    //       expect(cell).to.contain("SUP-00001");
-    //     } );
-    //     cy.dlClearFilters();
-    //   });
-    // });
+      // State uses dropdown, so different commands are used
+      it("Verify filter for State", () => {
+        cy.dlClearFilters();
+        cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "All");
+        cy.get(`th[aria-colindex="2"] span.k-input`).arrowClick();
+        cy.get("ul>li[role=option]").contains("WIP").arrowClick();
+        cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "WIP");
+        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+        cy.get("tr.k-master-row").first().find("td").eq(0).should( (cell) => {
+          expect(cell).to.contain("RC-00005");
+        } );
+        cy.dlClearFilters();
+      });
 
-    // context("Verify sort for each column", () => {
-    //   COLUMN_HEADERS.forEach( (columnHeader, i) => {
-    //     context(`Sort '${columnHeader}'`, () => {
-    //       const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
+      // Released at uses dropdown, so different commands are used
+      it("Verify filter for Released At", () => {
+        cy.dlClearFilters();
+        cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
+        cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
+        cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
+        cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Last 7 days");
+        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+        cy.get("tr.k-master-row").first().find("td").eq(0).should( (cell) => {
+          expect(cell).to.contain("RC-00006");
+        } );
+        cy.dlClearFilters();
+      });
+    });
 
-    //       it(`${columnHeader} should be in ascending order`, () => {
-    //         cy.contains(columnHeaderRegex).eq(0).arrowClick();
-    //         cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
-    //           .should("be.exist");
-    //         cy.wait(200);
-    //         cy.verifyAscSort({ index: i, colLength: 8 });
-    //       });
+    context("Verify sort for each column", () => {
+      COLUMN_HEADERS.forEach( (columnHeader, i) => {
+        context(`Sort '${columnHeader}'`, () => {
+          const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-    //       it(`${columnHeader} should be in descending order`, () => {
-    //         cy.contains(columnHeaderRegex).eq(0).arrowClick();
-    //         cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
-    //           .should("be.exist");
-    //         cy.wait(200);
-    //         cy.verifyDesSort({ index: i, colLength: 8 });
-    //       });
-    //     });
-    //   });
-    // });
+          it(`${columnHeader} should be in ascending order`, () => {
+            cy.contains(columnHeaderRegex).eq(0).arrowClick();
+            cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+              .should("be.exist");
+            cy.wait(200);
+            cy.verifyAscSort({ index: i, colLength: 8 });
+          });
 
-    // it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
-    //   cy.get(`button[data-cy="clearFilter"]`).should("exist");
-    //   cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
-    // });
+          it(`${columnHeader} should be in descending order`, () => {
+            cy.contains(columnHeaderRegex).eq(0).arrowClick();
+            cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+              .should("be.exist");
+            cy.wait(200);
+            cy.verifyDesSort({ index: i, colLength: 8 });
+          });
+        });
+      });
+    });
+
+    it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
+      cy.get(`button[data-cy="clearFilter"]`).should("exist");
+      cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
+    });
   });
 
   context("Create receiving document", () => {
@@ -1214,8 +1310,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Search for API PO document and select it", () => {
-      cy.get("[data-cy='porec-receive-po-kzqkr5yl']").arrowClick();
-      cy.get("ul>li[role=option]").contains("PO for receiving").arrowClick();
+      cy.get("[data-cy='porec-receive-po-kzqkr5yl']").autocompleteSelect("PO for receiving" );
     });
 
     it("Verify requester is present on receivable", () => {
@@ -1225,7 +1320,7 @@ context("Test Supplier Landing Page for Supira", () => {
 
     it("Verify supplier is present on receivable", () => {
       cy.get("input[data-cy^=\"po-supplier-built-in\"]")
-        .should("have.attr", "value", "SUP-00001 - rev 1 - API Supplier Document");
+        .should("have.attr", "value", "SUP-00002 - rev 1 - API Supplier Document 2");
     });
 
     it("Verify PO table is present on receivable", () => {
@@ -1260,10 +1355,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Save PO", () => {
@@ -1271,20 +1363,11 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.pmSubmitForApproval();
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
-      cy.listLoadingElementShouldNotExist();
+      cy.ebApprove();
     });
   });
 
@@ -1319,7 +1402,12 @@ context("Test Supplier Landing Page for Supira", () => {
   });
 
   context("Verify PART NUMBER/REV when Released new one", () => {
-    it("Navigate to created one", () => {
+
+    it("Filter RC-00001", () => {
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RC-00001");
+    });
+
+    it("Open first one in the list", () => {
       cy.dlSelectFirstDocument();
     });
 
@@ -1352,6 +1440,8 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
+      cy.get(`th[aria-colindex="2"] span.k-input`).arrowClick();
+      cy.get("ul>li[role=option]").contains("Current").arrowClick();
       cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
     });
 
