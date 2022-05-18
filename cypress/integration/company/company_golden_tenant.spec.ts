@@ -661,6 +661,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Click on 'All Users' group and check default values", () => {
+      SystemRequirement("REQ-2520");
       cy.grpSelectGroupWithoutClosingDialog({ name: "All Users" });
       cy.get("[id=\"Group-permissions\"]").should("contain.text", "CR_OWNER_AS_APPROVER")
         .and("contain.text", "CR_ON_APPROVER_LIST")
@@ -671,6 +672,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Click on 'User Management' group and check default values", () => {
+      SystemRequirement("REQ-2520");
       cy.grpSelectGroupWithoutClosingDialog({ name: "User Management" });
       cy.get("[id=\"Group-permissions\"]").should("contain.text", "EMPLOYEE_CREATE")
         .and("contain.text", "EMPLOYEE_DELETE")
@@ -682,6 +684,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Click on 'Group Management' group and check default values", () => {
+      SystemRequirement("REQ-2520");
       cy.grpSelectGroupWithoutClosingDialog({ name: "Group Management" });
       cy.get("[id=\"Group-permissions\"]").should("contain.text", "GROUP_CREATE")
         .and("contain.text", "GROUP_UPDATE")
@@ -693,6 +696,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Click on 'Company Admin' group and check default values", () => {
+      SystemRequirement("REQ-2520");
       cy.grpSelectGroupWithoutClosingDialog({ name: "Company Admin" });
       cy.get("[id=\"Group-permissions\"]").should("contain.text", "EMPLOYEE_CREATE")
         .and("contain.text", "EMPLOYEE_DELETE")
@@ -715,6 +719,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Click on 'Enlil Super User' group and check default values", () => {
+      SystemRequirement("REQ-2520");
       cy.grpSelectGroupWithoutClosingDialog({ name: "Enlil Super User" });
       cy.get("[id=\"Group-permissions\"]").should("contain.text", "DEVELOPERS")
         .and("contain.text", "FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED")
