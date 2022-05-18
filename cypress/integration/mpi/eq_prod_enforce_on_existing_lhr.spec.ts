@@ -13,6 +13,7 @@ import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1745,6 +1746,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
   context("Verify equipment select dialog on LHRs", () => {
     it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
+      SystemRequirement("REQ-4910");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[data-cy=\"form.builder.select\"]")
           .eq(1)
@@ -1757,6 +1759,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Verify list item should have cal and pm ", () => {
+      SystemRequirement("REQ-4910");
       cy.get(`ul>li[role=option]`).contains("EQ-00001").parents("li")
         .should("have.text", `EQ-00001 ▪rev 1 - Equipment document Cal Due: ${calDueDate} ▪ PM Due: ${pmDueDate} `);
     });
@@ -1766,6 +1769,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Verify selected EQ information is displayed", () => {
+      SystemRequirement("REQ-4910");
       cy.get("div[role=dialog]")
         .should("have.text",
           `SelectEquipment\u200bStatus:ActiveCalibration:Next: ${calDueDate}Preventative Maintenance:Next: ` +

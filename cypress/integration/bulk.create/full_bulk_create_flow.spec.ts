@@ -815,6 +815,7 @@ context("Bulk create flow", () => {
 
     context("Test downloaded excel", () => {
       it("Download excel template file", () => {
+        SystemRequirement("REQ-4720");
         cy.excelDownloadTemplate({ saveFileName: excelTemplateSaveName });
       });
 
@@ -845,6 +846,7 @@ context("Bulk create flow", () => {
       });
 
       it("Verify csv is not supported", () => {
+        SystemRequirement("REQ-4750");
         cy.checkToastMessageIsEqual({ message: "The file attachment is not a xlsx type." });
         cy.closeAllAlertMessages();
       });
@@ -875,6 +877,7 @@ context("Bulk create flow", () => {
       });
 
       it("Approve document", () => {
+        SystemRequirement("REQ-4740");
         cy.ebApprove();
       });
     });

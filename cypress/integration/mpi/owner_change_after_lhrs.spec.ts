@@ -956,6 +956,7 @@ context("Change owner after starting LHRs", () => {
     });
 
     it("Verify emails that should not be received", () => {
+      SystemRequirement("REQ-4700");
       const emailsThatShouldNotBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[4].email,

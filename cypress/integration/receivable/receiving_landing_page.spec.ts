@@ -11,6 +11,7 @@ import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -1117,6 +1118,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Verify all columns are present", () => {
+      SystemRequirement("REQ-1680");
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Receipt ID");
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Receipt Record State");
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Owner");

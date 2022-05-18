@@ -618,6 +618,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Navigate to Supplier", () => {
+        SystemRequirement("REQ-4800");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.SessionDetails], () => {
           cy.visit(supplierDocument);
         });
@@ -626,6 +627,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Approve supplier document", () => {
+        SystemRequirement("REQ-4800");
         cy.ebApprove();
         dateOfApproval2 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval2MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
@@ -643,6 +645,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Navigate to Supplier", () => {
+        SystemRequirement("REQ-4800");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.SessionDetails], () => {
           cy.visit(supplierDocument);
         });
@@ -651,6 +654,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Approve supplier document", () => {
+        SystemRequirement("REQ-4800");
         cy.ebApprove();
         dateOfApproval3 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval3MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
