@@ -613,7 +613,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Create new Training Curriculum", () => {
-      SystemRequirement("REQ-2810");
+      SystemRequirement("REQ-2810", "REQ-4440");
       cy.recCreateRecordFromLandingPage();
     });
 
@@ -864,6 +864,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Click Approve", () => {
+      SystemRequirement("REQ-4450");
       cy.trApproveTraining();
     });
 

@@ -344,7 +344,6 @@ context("Group Permissions Flow", () => {
     });
 
     it("Check if 'Change Owner' button exists on AR", () => {
-      SystemRequirement("REQ-2520");
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
