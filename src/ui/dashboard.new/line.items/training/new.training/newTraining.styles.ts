@@ -36,15 +36,11 @@ export const styles = makeStyles((theme: Theme) =>
       // background: Colors.sky_blue,
     },
     typographyDueInfewDays: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
       color: Colors.latest_yellow_varient,
     },
     typographyOverdue: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
       color: Colors.latest_red_varient,
@@ -52,19 +48,15 @@ export const styles = makeStyles((theme: Theme) =>
     },
     typography: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 400,
       letterSpacing: 0,
     },
     typographyBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 600,
       letterSpacing: 0,
     },
     typographyStatus: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "15px",
@@ -74,8 +66,6 @@ export const styles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2.25),
     },
     timestampContainer: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "22px",

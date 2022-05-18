@@ -15,7 +15,6 @@ export const styles = makeStyles(() =>
     },
     typography: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 400,
       letterSpacing: 0,
     },
