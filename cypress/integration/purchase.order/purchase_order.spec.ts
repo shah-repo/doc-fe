@@ -455,6 +455,7 @@ context("PO test", () => {
 
     context("Add Supplier to PO", () => {
       it("Click 'Create A New Supplier'", () => {
+        SystemRequirement("REQ-4900");
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.supplier\"]").arrowClick();
         });

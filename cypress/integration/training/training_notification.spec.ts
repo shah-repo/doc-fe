@@ -11,6 +11,7 @@ import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -749,6 +750,7 @@ context("Training notification test", () => {
     });
 
     it("Download zip file containing completed training notification", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -780,6 +782,7 @@ context("Training notification test", () => {
     });
 
     it("Verify PDF file for completed training notification", () => {
+      SystemRequirement("REQ-4880", "REQ-4850");
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),

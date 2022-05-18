@@ -11,6 +11,7 @@ import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -612,6 +613,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Create new Training Curriculum", () => {
+      SystemRequirement("REQ-2810");
       cy.recCreateRecordFromLandingPage();
     });
 
