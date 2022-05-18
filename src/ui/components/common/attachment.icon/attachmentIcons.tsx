@@ -61,7 +61,7 @@ export const renderPrimaryAttachment = (color, name) => (
     <g id="file-vvt" transform="translate(-1 2)">
       <path id="Path_2246" data-name="Path 2246" d="M5,43v3a1,1,0,0,0,1,1H42a1,1,0,0,0,1-1V43Z" fill="#d4dbe1"/>
       <path id="Path_2249" data-name="Path 2249" d="M46,23H2a1,1,0,0,0-1,1V40a1,1,0,0,0,1,1H46a1,1,0,0,0,1-1V24A1,1,0,0,0,46,23Z" fill={color}/>
-      <text id={"ppp" + name} transform="translate(24 36)" fill="#fff" fontSize="11" fontFamily="Sora, sans-serif" fontWeight="800" letterSpacing="-0.02em"><tspan x="-15.636" y="0">{name}</tspan></text>
+      <text id={name} transform="translate(24 36)" fill="#fff" fontSize="11" fontFamily="Sora, sans-serif" fontWeight="800" letterSpacing="-0.02em"><tspan x="-15.636" y="0">{name}</tspan></text>
       <path id="Rectangle_2668" data-name="Rectangle 2668" d="M1,0H38a0,0,0,0,1,0,0V20a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V1A1,1,0,0,1,1,0Z" transform="translate(5 1)" fill="#d4dbe1"/>
       <g id="Group_3904" data-name="Group 3904" transform="translate(-279 -1008)">
         <circle id="Ellipse_252" data-name="Ellipse 252" cx="10" cy="10" r="10" transform="translate(309 1006)" fill="#f4f5f7"/>
