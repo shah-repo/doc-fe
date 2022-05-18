@@ -38,7 +38,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     subtitle2: {
       color: appTheme.palette.text.primary,
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     h5: {
       color: appTheme.palette.text.primary,
@@ -48,7 +47,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     h4: {
       color: appTheme.palette.text.primary,
       fontSize: "1.4rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     h6: {
       color: Colors.dark_gray,
@@ -72,7 +70,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiFab: {
     root: {
       fontSize: "0.75rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     label: {
       lineHeight: "1rem",
@@ -147,7 +144,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     primary: {
       fontSize: "0.9rem",
       color: appTheme.palette.text.primary,
-      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiExpansionPanel: {
