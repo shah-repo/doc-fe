@@ -227,33 +227,24 @@ context("Record inline Flow", () => {
       });
 
       it("Add Checkbox group", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-        cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-        cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-        cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
-        cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
-        cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("1", "2", "3");
+        cy.fbOpenValidation();
+        cy.fbFieldRequired();
+        cy.fbAddNewFieldButton();
       });
 
       it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
-        cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: "TEXT FIELD" });
+        cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
-        cy.get(`input[name="validators.required_if_in"]`).check();
-        cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-        cy.get(`input[type="checkbox"][value="3"]`).last().check();
-        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.fbFieldRequiredIfIn({ name: "Checkbox" });
+        cy.fbSelectCheckboxValue("3");
+        cy.fbAddNewFieldButton();
       });
 
       it("Add second textfield", () => {
@@ -299,6 +290,7 @@ context("Record inline Flow", () => {
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
         });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         cy.sendToEmail();
       });
 
@@ -311,15 +303,8 @@ context("Record inline Flow", () => {
 
     context("Verify email for  record form notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recFormId}`,
         };
@@ -529,6 +514,7 @@ context("Record inline Flow", () => {
         cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
           arId = $lnEl.text();
         });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         cy.sendToEmail();
       });
 
@@ -541,15 +527,8 @@ context("Record inline Flow", () => {
 
     context("Verify email for record form notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recFormId}`,
         };
@@ -792,7 +771,6 @@ context("Record inline Flow", () => {
           () => {
             cy.listLoadingElementShouldNotExist();
             cy.get("[name*=\"fb-ia-inline-field\"] input")
-            //    .autocompleteSelect("enlil.testmail+cy2");
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -815,7 +793,6 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-            //     .autocompleteSelect("enlil.testmail+cy2");
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -858,6 +835,7 @@ context("Record inline Flow", () => {
         cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
           recDocId = $docIdElement.text();
         });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         cy.sendToEmail();
       });
 
@@ -870,15 +848,8 @@ context("Record inline Flow", () => {
 
     context("Verify email notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recDocId}`,
         };
@@ -1175,6 +1146,7 @@ context("Record inline Flow", () => {
           cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
             recDocId = $docIdElement.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
           cy.sendToEmail();
         });
 
@@ -1187,28 +1159,16 @@ context("Record inline Flow", () => {
 
       context("Verify email notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${recDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
-              emailsFromInbox = emails;
-              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-              downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+            emailsFromInbox = emails;
+            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
           });
         });
 
