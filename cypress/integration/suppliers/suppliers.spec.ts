@@ -102,7 +102,7 @@ context("Create company via API and create Suppliers document", () => {
     });
   });
 
-  it("[API]Creates suplier document", (done: any) => {
+  it("[API]Creates supplier document", (done: any) => {
     cy.grpGetGroupByName({
       sessionId: loginResponse.sessionId,
       employeeId: adminEmployee.id,
@@ -221,6 +221,7 @@ context("Create company via API and create Suppliers document", () => {
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         supFormId = $docIdElement.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -233,28 +234,16 @@ context("Create company via API and create Suppliers document", () => {
 
   context("Verify email for Supplier form notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${supFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
@@ -408,6 +397,7 @@ context("Create company via API and create Suppliers document", () => {
       cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
         arId = $lnEl.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -420,29 +410,18 @@ context("Create company via API and create Suppliers document", () => {
 
   context("Verify email for Supplier form notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${supFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+        .then((emails) => {
           emailsFromInbox = emails;
           expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
+        });
     });
 
     it("Verify the emails that should be received", () => {
@@ -976,6 +955,7 @@ context("Create company via API and create Suppliers document", () => {
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           supDocId = $docIdElement.text();
         });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
       });
 
@@ -988,29 +968,18 @@ context("Create company via API and create Suppliers document", () => {
 
       context("Verify email for Supplier document notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${supDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+            .then((emails) => {
               emailsFromInbox = emails;
               expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
               downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
+            });
         });
 
         it("Verify the emails that should be received", () => {
@@ -1153,6 +1122,7 @@ context("Create company via API and create Suppliers document", () => {
           cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
             supDocId = $docIdElement.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
 
@@ -1168,26 +1138,16 @@ context("Create company via API and create Suppliers document", () => {
           dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${supDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+            .then((emails) => {
               emailsFromInbox = emails;
               expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
               downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
+            });
         });
 
         it("Verify the emails that should be received", () => {
