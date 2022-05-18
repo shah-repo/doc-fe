@@ -326,7 +326,7 @@ context("NCO document type management", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
         cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
@@ -365,7 +365,7 @@ context("NCO document type management", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
         cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
