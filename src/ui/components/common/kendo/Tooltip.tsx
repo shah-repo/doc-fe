@@ -24,7 +24,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const renderContent = <span>
-    {!childrenElement && <span style={{ fontFamily: "Sora" }} className={customClass}>{data}</span>}
+    {!childrenElement && <span  className={customClass}>{data}</span>}
     {childrenElement && childrenElement}
   </span>;
   return (
