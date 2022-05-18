@@ -10,6 +10,8 @@ export enum FormHeaderStatusClassMapping {
   "WIP" = "WIP_STATUS",
   "Voided"="RED_STATUS",
   "CLOSED" = "CLOSED_STATUS",
+  "CANCELED" = "CLOSED_STATUS",
+  "Canceled" = "CLOSED_STATUS",
   "VOIDED" = "RED_STATUS",
   "Superseded"="GRAY_STATUS",
   "Void"="GRAY_STATUS",
