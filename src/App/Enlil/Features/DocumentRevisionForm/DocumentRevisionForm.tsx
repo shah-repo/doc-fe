@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { map } from "lodash";
+import { isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
@@ -23,7 +23,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   _formState,
   _tabsState,
   _documentRevisionFormState,
-  workspaceState,
   documentRevision,
   bannerPortal,
   shouldShowUpgrade,
@@ -126,6 +125,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   const { tabId } = tabInfo || {};
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
                   const tabSchema = schema.filter((schemaItem) => schemaItem.tabId === tabId);
+                  const availableSchema = schema.filter((schemaItem) => schemaItem.tabId === tabId && !schemaItem.deleted);
 
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="calc(100% - 40px)">
@@ -158,13 +158,13 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             mode,
                           }}
                         />
-                        {tabSchema && <FBWorkspace
+                        {!isEmpty(availableSchema) && <FBWorkspace
                           isPortal={false}
                           document={{
                             ...formValues.values as unknown as DocumentRevision,
                             ...documentRevision as unknown as DocumentRevision,
                           }}
-                          {... { autosaveEnabled, workspaceState }}
+                          {... { autosaveEnabled }}
                           initialValues={formInput}
                           schema={tabSchema}
                         />}
@@ -176,7 +176,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             ...formValues.values as unknown as DocumentRevision,
                             ...documentRevision as unknown as DocumentRevision,
                           }}
-                          {... { autosaveEnabled, workspaceState }}
+                          {... { autosaveEnabled }}
                           initialValues={formInput}
                           schema={tabSchema}
                         />

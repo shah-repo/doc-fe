@@ -1,4 +1,4 @@
-import { map } from "lodash";
+import { isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -80,20 +80,33 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;
-                  const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
+                  const { tabId } = tabInfo || {};
+                  const tabSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId);
+                  const availableSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId && !schemaItem.deleted);
 
+                  const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
                   return <SMBox height="100%"  overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="100%">
-                      {tabType === "MIXED" &&  <SummaryPresenter
-                        dataProp={documentRevision}
-                        canChangeOwnerShip={canChangeOwnerShip}
-                        canShowCreateVersionButton={true}
-                      />}
+                      {tabType === "MIXED" &&  <>
+                        <SummaryPresenter
+                          dataProp={documentRevision}
+                          canChangeOwnerShip={canChangeOwnerShip}
+                          canShowCreateVersionButton={true}
+                        />
+                        {!isEmpty(availableSchema) && <FBWorkspace
+                          document={documentRevision}
+                          initialValues={documentRevision.formInput}
+                          schema={tabSchema}
+                          mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                            "formPreview" : "preview"}
+                        />
+                        }
+                      </>}
                       {tabType !== "TRAINING" && isFB && showFBLabels && (
                         <FBWorkspace
                           document={documentRevision}
                           initialValues={documentRevision.formInput}
-                          schema={schema}
+                          schema={tabSchema}
                           mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
                             "formPreview" : "preview"}
                         />
