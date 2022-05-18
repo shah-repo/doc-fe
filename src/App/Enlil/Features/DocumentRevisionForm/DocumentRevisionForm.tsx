@@ -125,7 +125,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   const { tabId } = tabInfo || {};
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
                   const tabSchema = schema.filter((schemaItem) => schemaItem.tabId === tabId);
-                  const availableSchema = schema.filter((schemaItem) => schemaItem.tabId === tabId && !schemaItem.deleted);
+                  const availableSchema = schema.filter((schemaItem) =>
+                    schemaItem.tabId === tabId && !schemaItem.deleted);
 
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="calc(100% - 40px)">

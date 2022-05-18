@@ -82,7 +82,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                   const tabType = tabInfo.type;
                   const { tabId } = tabInfo || {};
                   const tabSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId);
-                  const availableSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId && !schemaItem.deleted);
+                  const availableSchema = schema?.filter((schemaItem) =>
+                    schemaItem.tabId === tabId && !schemaItem.deleted);
 
                   const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
                   return <SMBox height="100%"  overflow={"auto"} {...{ onScroll }}>
