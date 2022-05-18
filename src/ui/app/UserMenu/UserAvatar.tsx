@@ -15,7 +15,6 @@ const styles = makeStyles((theme: Theme) =>
       color: Colors.white,
       background: `${initialColor}`,
       fontWeight: 600,
-      fontFamily: "Sora",
     }),
   }));
 

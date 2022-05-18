@@ -20,7 +20,6 @@ const styles = () => ({
   labelSmall: {
     "fontSize": "12px",
     "fontWeight": 700,
-    "fontFamily": "Sora",
     "text-transform": "uppercase",
   },
 });

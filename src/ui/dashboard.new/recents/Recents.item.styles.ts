@@ -21,19 +21,15 @@ export const styles = makeStyles(() =>
     },
     typography: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 400,
       letterSpacing: 0,
     },
     typographyBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 600,
       letterSpacing: 0,
     },
     timestampContainer: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "22px",
