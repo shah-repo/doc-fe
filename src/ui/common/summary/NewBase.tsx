@@ -1,40 +1,20 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, Typography, WithStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 import React from "react";
+import styles from "./newStyles";
 import { SummaryBaseProps } from "./types";
 
-type Props = SummaryBaseProps;
+type Props = SummaryBaseProps & WithStyles<typeof styles>;
 
-const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-" }) => (
+const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-", classes }) => (
   <Grid item={true} xs={12}>
-    <Grid container={true} spacing={1}>
-      {/* <Grid item={true} xs={12}>
-        <Typography variant="h6" id="SummaryBaseProps-label">
-          {label && <Text message={label} />}
-        </Typography>
-      </Grid> */}
-      <Grid item={true} xs={12}>
-        <Box style={{
-          fontFamily: "Sora",
-          fontWeight: 600,
-          fontSize: "19px",
-          lineHeight: "24px",
-          left: "4px",
-          top: "40px",
-        }}>
-          {/* {value && <Typography
-            id="SummaryBaseProps-values"
-            data-cy="SummaryBaseProps-values"
-            variant="h5">
-            {value}
-          </Typography>} */}
-          <Box>
-            {value ?  value :  noValueOption }
-          </Box>
-          {/* {!value && <Typography id="SummaryBaseProps-noValues" variant="h5">{noValueOption}</Typography>} */}
-        </Box>
-      </Grid>
-    </Grid>
+    <Box>
+      <Typography id="SummaryBaseProps-values" data-cy="SummaryBaseProps-values" className={classes.title}
+        variant="h5">
+        {value ? value : noValueOption}
+      </Typography>
+    </Box>
   </Grid>
 );
 
-export default Base;
+export default withStyles(styles)(Base);

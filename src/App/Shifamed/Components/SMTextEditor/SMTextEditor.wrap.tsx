@@ -1,5 +1,6 @@
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import { useFormikContext } from "formik";
 import htmlToDraft from "html-to-draftjs";
 import { map } from "lodash";
 import React, { useMemo } from "react";
@@ -25,6 +26,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
   }: T) => {
     // MARK: @config
     const intl = useIntl();
+    const formik = useFormikContext();
     const { _formState, _documentRevisionFormState } = SM.useStores();
     formValue = _formState?.getValue(name);
     _textEditorState = SM.useRef(SMTextEditorState, htmlToEditorState(formValue));
@@ -92,6 +94,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       let htmlContent = draftToHtml(convertToRaw(editorState.getCurrentContent())).trim();
       (htmlContent === emptyHtmlContent) && (htmlContent = "");
       if (_formState?.getValue(name) === htmlContent) { return; }
+      formik.setFieldValue(name, htmlContent);
       _formState?.setValue(name, htmlContent);
       _documentRevisionFormState?.save(name, htmlContent);
     };
