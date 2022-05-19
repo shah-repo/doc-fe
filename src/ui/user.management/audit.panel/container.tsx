@@ -280,7 +280,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         const items = secondaryText[0].split(UM_AUDIT_CONCAT_KEYS.AvatarUpdated);
         secondaryTextHtml = (
           <>
-            <span style={{ fontSize: "12px" }}>{items[0]}</span>
+            <span style={{ fontSize: "12px",  color: Colors.font_gray }}>{items[0]}</span>
             <span style={{
               color: Colors.almost_black,
               padding: "0 2px",
