@@ -5,7 +5,6 @@ import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { KendoPresenterProps } from "../../components/KendoGrid/interfaces";
 import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import Colors from "../../layout/theme/utils/colors";
 import { documentRevisionQueryStatus } from "../utils/helpers";
 import CreateButton from "./CreateButton/presenter";
 import ExportButton from "./ExportButton/presenter";
@@ -24,7 +23,7 @@ export function DocumentListPresenter({
     setDataToBeExported(dataToBeExported);
   };
   return (
-    <Box p={2} style={{ background: Colors.background_white }}>
+    <Box p={2}>
       <Grid container={true}>
         <Grid item xs>
           <Box mb={2}>

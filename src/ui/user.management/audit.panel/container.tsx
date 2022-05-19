@@ -280,12 +280,11 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         const items = secondaryText[0].split(UM_AUDIT_CONCAT_KEYS.AvatarUpdated);
         secondaryTextHtml = (
           <>
-            <span>{items[0]}</span>
-
+            <span style={{ fontSize: "12px",  color: Colors.font_gray }}>{items[0]}</span>
             <span style={{
               color: Colors.almost_black,
               padding: "0 2px",
-              fontWeight: 700,
+              fontSize: "14px",
             }}>{items[1]}</span>
           </>
         );
@@ -299,14 +298,14 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
             {getTranslatedText(ACTION_TITLE_MAPPING.Removed, {})} <span style={{
               color: Colors.almost_black,
               padding: "0 2px",
-              fontWeight: 700,
+              fontSize: "14px",
             }}> {secondaryTextHtml}</span>
             <span>{items[0]}</span>
             <span
               style={{
                 color: Colors.almost_black,
                 padding: "0 2px",
-                fontWeight: 700,
+                fontSize: "14px",
               }}
             >
               {items[1]}
@@ -324,10 +323,10 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
             {getTranslatedText(ACTION_TITLE_MAPPING.Added, {})} <span style={{
               color: Colors.almost_black,
               padding: "0 2px",
-              fontWeight: 700,
+              fontSize: "14px",
             }}> {secondaryTextHtml}</span>
             <span>{items[0]}</span>
-            <span style={{ color: Colors.almost_black, padding: "0 2px", fontWeight: 700 }} > {items[1]} </span>
+            <span style={{ color: Colors.almost_black, padding: "0 2px", fontSize: "14px" }} > {items[1]} </span>
           </>
         );
         secondaryTextHtml = (<></>);
