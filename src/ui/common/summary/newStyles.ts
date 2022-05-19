@@ -23,7 +23,6 @@ export default () =>
       color: Colors.navy,
     },
     title: {
-      fontFamily: "Sora",
       fontWeight: 600,
       fontSize: "19px",
       lineHeight: "24px",
