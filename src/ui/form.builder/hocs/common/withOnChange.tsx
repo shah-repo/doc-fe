@@ -1,7 +1,9 @@
 import { filter, get, isArray, isEmpty, isEqual, isString as lodashIsString, isUndefined, map, omit, pick, toInteger, toString, union } from "lodash";
 import React from "react";
-import { FB, FBButton } from "../..";
+import { FB } from "../..";
 import FBTextField from "../../components/inputs/FBTextField";
+import { StyledCancelFBButton } from "../../FBButton/StyledCancelFBButton";
+import { StyledFBButton } from "../../FBButton/StyledFBButton";
 import { FBFieldName } from "../../helpers/FBFieldName";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
@@ -100,11 +102,11 @@ export const withOnChange = <T extends FBInputProps>(
         ),
         actions: (
           <>
-            <FBButton label="common.cancel" onClick={() => {
+            <StyledCancelFBButton label="common.cancel" onClick={() => {
               name && storeValue(name, oldValue);
               dialogState.closeDialog();
             }} />
-            <FBButton label="common.save" onClick={() => {
+            <StyledFBButton label="common.save" onClick={() => {
               if (!FBStore.getValue(reasonName)) {
                 name && storeValue(name, oldValue);
               }
