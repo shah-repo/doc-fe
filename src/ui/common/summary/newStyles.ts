@@ -22,4 +22,11 @@ export default () =>
       fontSize: "14px",
       color: Colors.navy,
     },
+    title: {
+      fontWeight: 600,
+      fontSize: "19px",
+      lineHeight: "24px",
+      left: "4px",
+      top: "40px",
+    },
   });
