@@ -310,14 +310,9 @@ context("Record inline Flow", () => {
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         });
       });
 
@@ -421,15 +416,13 @@ context("Record inline Flow", () => {
           expect(el).match(/Attachments/);
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/APPROVALS\nApprovers/);
-
           expect(el).match(/Textfield for inline/);
 
           expect(el).match(/Inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -453,11 +446,11 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Second textfield for inline/);
-
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -534,14 +527,9 @@ context("Record inline Flow", () => {
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         });
       });
 
@@ -646,15 +634,13 @@ context("Record inline Flow", () => {
           expect(el).match(/Attachments/);
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/APPROVALS\nApprovers/);
-
           expect(el).match(/Textfield for inline/);
 
           expect(el).match(/Inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -678,11 +664,11 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Second textfield for inline/);
-
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -825,7 +811,7 @@ context("Record inline Flow", () => {
 
       it("Click on Save", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
       });
 
@@ -855,14 +841,9 @@ context("Record inline Flow", () => {
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         });
       });
 
