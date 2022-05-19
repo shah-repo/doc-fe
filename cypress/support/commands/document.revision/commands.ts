@@ -232,7 +232,6 @@ Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
-  cy.get("[data-cy=\"field-name\"]").arrowClick();
   cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
 });
 
