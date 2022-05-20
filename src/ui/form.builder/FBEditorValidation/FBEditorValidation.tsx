@@ -1,7 +1,9 @@
-import { Box, Icon } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBDialog, FBEditorValidationProps, FBProvider, FBRadioGroup, FBSchema } from "..";
+import { FBDialog, FBEditorValidationProps, FBProvider, FBRadioGroup, FBSchema } from "..";
+import { ReactComponent as ARIcon } from "../../../assets/images/cr_blue.svg";
 import Colors from "../../layout/theme/utils/colors";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBEditorValidation } from "./FBEditorValidation.wrap";
 
@@ -38,10 +40,10 @@ const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
     </Box>
     {customValidationEnabled && (
       <Box display="flex" justifyContent="flex-end">
-        <FBButton
+        <StyledCancelFBButton
           variant="outlined"
           color="primary"
-          endIcon={<Icon>send</Icon>}
+          startIcon={<ARIcon />}
           label="Custom Validation"
           onClick={handleCustomValidation}
         />

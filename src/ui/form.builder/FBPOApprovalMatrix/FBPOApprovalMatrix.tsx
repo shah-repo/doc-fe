@@ -2,7 +2,8 @@ import { Box, IconButton } from "@material-ui/core";
 import ReplayIcon from "@material-ui/icons/Replay";
 import { Provider } from "mobx-react";
 import React from "react";
-import { FBButton, FBDialog, FBInput, FBSection, FBTooltip } from "..";
+import { FBDialog, FBInput, FBSection, FBTooltip } from "..";
+import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { FBPOApprovalMatrixFieldProps, FBPOApprovalMatrixTableProps } from "./FBPOApprovalMatrix.types";
 import { withFBPOApprovalMatrix } from "./FBPOApprovalMatrix.wrap";
 import FBPOApprovalMatrixTable from "./table/FBPOApprovalMatrixTable";
@@ -30,7 +31,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
           </Box>
         </FBSection>
         <FBPOApprovalMatrixTable {...{ name }} {...props as FBPOApprovalMatrixTableProps} />
-        <FBButton
+        <StyledFBButton
           fullWidth={true}
           disabled={props.disabled}
           label="form.builder.add.item"

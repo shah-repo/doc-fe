@@ -6,6 +6,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
 import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
+import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { withFBApprovals } from "./FBApprovals.wrap";
 
 const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
@@ -125,7 +126,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                       style={{ fontSize: "11px" }}
                       onClick={() => approvalTransition("reject", approval.id)}
                     />
-                    <FBButton
+                    <StyledFBButton
                       {...{ disabled }}
                       label="form.builder.request.approve"
                       size="small"

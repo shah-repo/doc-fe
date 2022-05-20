@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 
@@ -25,7 +26,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
         {mode === "form" && <FBSection name={`fb-po-section-${name}`} {...{ label }}  />}
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode }} />
         {isReceivable && (
-          <FBButton
+          <StyledFBButton
             variant="outlined"
             color="primary"
             label="form.builder.receive"

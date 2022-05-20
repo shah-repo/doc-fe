@@ -8,9 +8,7 @@ import moment from "moment";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
-  FB,
-  FBButton,
-  FBDialog,
+  FB, FBDialog,
   FBFilesPresenter,
   FBFormMode,
   FBMapWrapper,
@@ -80,7 +78,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
         locale={FBProcedureItemLocale[type]}
       />
       {!isPreview && !FBProcedureItemOmitAction.includes(type) && (
-        <FBButton
+        <StyledFBButton
           variant="text"
           color="inherit"
           dataCy= {`${FBProcedureItemLocale[type]}.btn`}
