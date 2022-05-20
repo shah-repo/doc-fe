@@ -52,6 +52,7 @@ import { GroupDropdown } from "./cell.template/GroupDropdown";
 import { GroupsCell } from "./cell.template/GroupsCell";
 import { NameCell } from "./cell.template/NameCell";
 import { SignedCell } from "./cell.template/SignedCell";
+import { enterUserInfo } from "./column.definition";
 import KendoGridStyles from "./styles";
 import { AddUserManage, UserManage, UserManagementProps } from "./types";
 
@@ -118,6 +119,8 @@ export function KendoPanel<T>({
   const [updatedGridData, setUpdatedGridData] = useState<AddUserManage>();
   const async = useAsync({
     onSuccess: () => {
+      enterUserInfo.name = "";
+      enterUserInfo.email = "";
       queryApi();
     },
     onError: (error) => {
