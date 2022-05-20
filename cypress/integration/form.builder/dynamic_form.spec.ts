@@ -285,7 +285,6 @@ context("Dynamic Form Test", () => {
     });
 
     it("upload file in Instructions Media upload", () => {
-      cy.fbNavToTableDetails();
       cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
         cy.pmUploadAttachment({ fileName: "video.mp4" });

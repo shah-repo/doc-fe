@@ -10,8 +10,8 @@ declare global {
       fbAddNewFieldOption(): Chainable<Subject>;
       fbRemoveLastAddedItem(): Chainable<Subject>;
       fbSelectNavField(params: { field: string }): Chainable<Subject>;
-      fbNavToTableOverview(): Chainable<Subject>;
-      fbNavToTableDetails(): Chainable<Subject>;
+      // fbNavToTableOverview(): Chainable<Subject>;
+      // fbNavToTableDetails(): Chainable<Subject>;
       fbSelectItemFromNewFieldList(params: { field: string }): Chainable<Subject>;
       fbEnterPOLabelName(params: { name: string }): Chainable<Subject>;
       fbAddNewFieldButton(): Chainable<Subject>;
@@ -126,13 +126,13 @@ Cypress.Commands.add("fbSelectNavField", (params: { field: string }) => {
   cy.get(".MuiButtonBase-root.MuiListItem-root.MuiListItem-button").contains(new RegExp(params.field, "g")).arrowClick();
 });
 
-Cypress.Commands.add("fbNavToTableDetails", () => {
-  cy.get("[data-cy=\"tabId.details\"]").contains("Details").arrowClick();
-});
+// Cypress.Commands.add("fbNavToTableDetails", () => {
+//   cy.get("[data-cy=\"tabId.details\"]").contains("Details").arrowClick();
+// });
 
-Cypress.Commands.add("fbNavToTableOverview", () => {
-  cy.get("[data-cy=\"tabId.overview\"]").contains("Overview").arrowClick();
-});
+// Cypress.Commands.add("fbNavToTableOverview", () => {
+//   cy.get("[data-cy=\"tabId.overview\"]").contains("Overview").arrowClick();
+// });
 
 Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { field: string }) => {
   cy.get(`[data-cy="${params.field}"]`).contains(new RegExp(params.field, "g")).arrowClick();
@@ -264,11 +264,6 @@ Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string
   cy.get("input[name=\"validators.required_if\"]").arrowClick();
   cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
   cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(params.value);
-});
-
-Cypress.Commands.add("fbInputsBtn", (params: { name: string }) => {
-  cy.get("[role=\"button\"]").contains(params.name).arrowClick();
-  cy.unClick();
 });
 
 Cypress.Commands.add("fbVerifyCheckboxValue", (...list: string[]) => {
