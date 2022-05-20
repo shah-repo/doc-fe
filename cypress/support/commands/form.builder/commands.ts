@@ -1,7 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable max-classes-per-file */
-
-import { CyRoutes } from "../../routes";
 
 
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -12,6 +9,9 @@ declare global {
     interface Chainable<Subject> {
       fbAddNewFieldOption(): Chainable<Subject>;
       fbRemoveLastAddedItem(): Chainable<Subject>;
+      fbSelectNavField(params: { field: string }): Chainable<Subject>;
+      fbNavToTableOverview(): Chainable<Subject>;
+      fbNavToTableDetails(): Chainable<Subject>;
       fbSelectItemFromNewFieldList(params: { field: string }): Chainable<Subject>;
       fbEnterPOLabelName(params: { name: string }): Chainable<Subject>;
       fbAddNewFieldButton(): Chainable<Subject>;
@@ -51,7 +51,6 @@ declare global {
       fbEditHiddenBtn(): Chainable<Subject>;
       fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIf(params: { name: string; value: string | number }): Chainable<Subject>;
-      fbFieldRequiredIfIn(params: { name: string }): Chainable<Subject>;
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string; value: string }): Chainable<Subject>;
@@ -106,21 +105,15 @@ Cypress.Commands.add("fbAddNewField", () => {
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-    cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
-  });
+  cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-    cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
-  });
+  cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-    cy.get("button[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
-  });
+  cy.get("button[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
@@ -129,8 +122,20 @@ Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: str
   cy.get("[role=dialog]>div>h2").arrowClick();
 });
 
+Cypress.Commands.add("fbSelectNavField", (params: { field: string }) => {
+  cy.get(".MuiButtonBase-root.MuiListItem-root.MuiListItem-button").contains(new RegExp(params.field, "g")).arrowClick();
+});
+
+Cypress.Commands.add("fbNavToTableDetails", () => {
+  cy.get("[data-cy=\"tabId.details\"]").contains("Details").arrowClick();
+});
+
+Cypress.Commands.add("fbNavToTableOverview", () => {
+  cy.get("[data-cy=\"tabId.overview\"]").contains("Overview").arrowClick();
+});
+
 Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { field: string }) => {
-  cy.get("[class=\"MuiButton-label\"]").contains(new RegExp(params.field, "g")).arrowClick();
+  cy.get(`[data-cy="${params.field}"]`).contains(new RegExp(params.field, "g")).arrowClick();
 });
 
 Cypress.Commands.add("fbEnterPOLabelName", (params: { name: string }) => {
@@ -261,9 +266,9 @@ Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string
   cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(params.value);
 });
 
-Cypress.Commands.add("fbFieldRequiredIfIn", (params: { name: string}) => {
-  cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").arrowClick();
-  cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect(params.name);
+Cypress.Commands.add("fbInputsBtn", (params: { name: string }) => {
+  cy.get("[role=\"button\"]").contains(params.name).arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("fbVerifyCheckboxValue", (...list: string[]) => {
