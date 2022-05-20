@@ -10,6 +10,7 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1392,6 +1393,11 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
           expect($document.text()).to.be.oneOf(documetsWhichShouldBeOnList);
         });
+      });
+
+      it("Verify first item on list is in DRAFT", () => {
+        SystemRequirement("REQ-4730");
+        cy.dlVerifyFilterByStatus({ status: "Draft" });
       });
     });
   });

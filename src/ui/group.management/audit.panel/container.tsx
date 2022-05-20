@@ -76,53 +76,11 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: "" })
         );
       }
-      // Added Permission
-      if (auditType === ACTION_TITLE_MAPPING.AddedPermissions && secondaryText.length <= 1) {
-        primaryText = primaryText.replace(
-          getTranslatedText(ACTION_TITLE_MAPPING.AddedPermissions, { groupName: "" }),
-          getTranslatedText(ACTION_TITLE_MAPPING.AddedPermission, { groupName: "" })
-        );
-      }
-      // Removed Permission
-      if (auditType === ACTION_TITLE_MAPPING.RemovedPermissions && secondaryText.length <= 1) {
-        primaryText = primaryText.replace(
-          getTranslatedText(ACTION_TITLE_MAPPING.RemovedPermissions, { groupName: "" }),
-          getTranslatedText(ACTION_TITLE_MAPPING.RemovedPermission, { groupName: "" })
-        );
-      }
       // UpdatedGroup
       if (auditType === ACTION_TITLE_MAPPING.UpdatedGroups && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroups, { groupName: "" }),
           getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroup, { groupName: "" })
-        );
-      }
-      // Added tags
-      if (auditType === ACTION_TITLE_MAPPING.AddedTags && secondaryText.length <= 1) {
-        primaryText = primaryText.replace(
-          getTranslatedText(ACTION_TITLE_MAPPING.AddedTags, { groupName: "" }),
-          getTranslatedText(ACTION_TITLE_MAPPING.AddedTag, { groupName: "" })
-        );
-      }
-      // Remove tags
-      if (auditType === ACTION_TITLE_MAPPING.RemovedTags && secondaryText.length <= 1) {
-        primaryText = primaryText.replace(
-          getTranslatedText(ACTION_TITLE_MAPPING.RemovedTags, { groupName: "" }),
-          getTranslatedText(ACTION_TITLE_MAPPING.RemovedTag, { groupName: "" })
-        );
-      }
-      // Added ParentGroups
-      if (auditType === ACTION_TITLE_MAPPING.AddedParentGroups && secondaryText.length <= 1) {
-        primaryText = primaryText.replace(
-          getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroups, { groupName: "" }),
-          getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroup, { groupName: "" })
-        );
-      }
-      // Remove Parent Group
-      if (auditType === ACTION_TITLE_MAPPING.RemovedParentGroups && secondaryText.length <= 1) {
-        primaryText = primaryText.replace(
-          getTranslatedText(ACTION_TITLE_MAPPING.RemovedParentGroups, { groupName: "" }),
-          getTranslatedText(ACTION_TITLE_MAPPING.RemovedParentGroup, { groupName: "" })
         );
       }
       // Added Members
@@ -194,7 +152,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
   const parseStringArray = (value: string) => {
     let addedPermissions = "";
     try {
-      addedPermissions = (JSON.parse(value) as string[]).join(",");
+      addedPermissions = (JSON.parse(value) as string[]).join(", ");
     } catch (error) {
       addedPermissions = value;
     }

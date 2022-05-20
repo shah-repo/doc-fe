@@ -5,7 +5,6 @@ import { useIntl } from "react-intl";
 import { CHANGE_REQUEST_ROOT_URL_SEARCH } from "../../../state/ducks/changeRequest/constants";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
-import Colors from "../../layout/theme/utils/colors";
 import FromListContainer from "../form.list/FormList.container";
 import { KendoPresenterProps } from "./interfaces";
 
@@ -29,7 +28,7 @@ export function DocumentListPresenter({
     key: column.field,
   }));
   return (
-    <Box p={2} style={{ background: Colors.background_white }}>
+    <Box p={2}>
       <Grid container={true}>
         <FromListContainer {...{ headers, tableData: dataToBeExported }} />
         <Grid item={true} xs={12}>
