@@ -26,6 +26,21 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
 }) => {
+
+  // schema?.push({
+  //   name: "po-items-built-in",
+  //   type: "purchaseordersummary",
+  //   index: 10,
+  //   label: "Purchase Order",
+  //   tabId: "lineitems",
+  //   applicableOn: [
+  //     "ON_STATE_TO_IN_REVIEW",
+  //   ],
+  //   deleteDisabled: true,
+  //   validationAttribute: "Purchase Order",
+  //   deleteInFormDisabled: true,
+  //   applicableValidationSchema: true,
+  // });
   const group = documentRevision?.document?.documentType?.group || "OTHER";
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));

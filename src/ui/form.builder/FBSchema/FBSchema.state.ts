@@ -40,6 +40,7 @@ import FBPOReceive from "../FBPOReceive/FBPOReceive";
 import FBProcedure from "../FBProcedure/FBProcedure";
 import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
 import FBPurchaseOrder from "../FBPurchaseOrder/FBPurchaseOrder";
+import FBPurchaseOrderSummary from "../FBPurchaseOrder/FBPurchaseOrderSummary";
 import FBQuantityField from "../FBQuantityField/FBQuantityField";
 import FBQuantityUnitField from "../FBQuantityUnitField/FBQuantityUnitField";
 import FBRadio from "../FBRadio/FBRadio";
@@ -97,6 +98,7 @@ class FBSchemaState {
     quantity: FBQuantityField,
     timer: FBTimerField,
     purchaseorder: FBPurchaseOrder,
+    purchaseordersummary: FBPurchaseOrderSummary,
     poreceive: FBPOReceive,
     documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,
