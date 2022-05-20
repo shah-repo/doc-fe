@@ -5,6 +5,7 @@ import { observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 import { FB, FBInputProps } from "../..";
+import { styles } from "../../../../../src/ui/form.builder/styles/FBEditorTextFieldWithRange.styles";
 import FBCheckbox from "../../components/inputs/FBCheckbox";
 import { FBEditorSectionConfig } from "../../defaults/editor";
 import { FBValidatorTreeProps } from "../../types/validation/validatorTree";
@@ -14,6 +15,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({ expanded, dynamicValidatorStore, ...props }: T) => {
+    const classes = styles();
     const truncateValue = 44;
     let state: Pick<FBValidatorTreeProps, "expanded"> = {};
 
@@ -55,6 +57,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
         return (
           <FBCheckbox
+            className={classes.checkbox}
             gutter={false}
             name={optionName}
             {...{ key, tooltip, label, afterChange }}
@@ -77,6 +80,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       }
       return (
         <FBCheckbox
+          className={classes.checkbox}
           gutter={false}
           name={`input-context-${name}`}
           label={contextLabel}
@@ -91,6 +95,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
         size(nodeLabel) >= truncateValue ? (label as string) : "";
       return (
         <FBCheckbox
+          className={classes.checkbox}
           label={nodeLabel}
           gutter={false}
           {...{ name, tooltip, afterChange }}
@@ -104,6 +109,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
         size(regularLabel) >= truncateValue ? (label as string) : "";
       return (
         <FBCheckbox
+          className={classes.checkbox}
           key={`tree-node-${name}`}
           label={regularLabel}
           gutter={false}

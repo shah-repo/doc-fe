@@ -9,7 +9,7 @@ import DatePickerField from "../../forms/fields/DatePickerField";
 import { required, validator } from "../../forms/fields/validators/index";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
-import { StyledSubmitButton } from "../../forms/StyledSubmitButton";
+import StyledSubmitButton from "../../forms/StyledSubmitButton";
 import styles from "./EffectiveDateForm.styles";
 
 interface EffectiveDateFormProps extends WithStyles<typeof styles> {
@@ -43,8 +43,6 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ ca
       onClick={cancel}
       label="transition.action.cancel"
     />
-    {/* <Text translation="transition.action.cancel" />
-    </Button> */}
   </Form>
 );
 

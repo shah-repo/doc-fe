@@ -12,6 +12,7 @@ const styles = () => ({
     "boxShadow": "none",
     "&:hover": {
       background: Colors.sky_blue,
+      border: `1px solid ${Colors.sky_blue}`,
     },
   },
 });

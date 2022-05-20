@@ -30,6 +30,7 @@ export default makeStyles(() =>
       "boxShadow": "none",
       "&:hover": {
         background: Colors.navy,
+        border: `1px solid ${Colors.navy}`,
       },
       "&.Mui-disabled": {
         border: "none",

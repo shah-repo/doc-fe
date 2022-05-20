@@ -14,7 +14,7 @@ import SelectField, { SelectOption } from "../../forms/fields/Select";
 import { FormContext } from "../../forms/FormContext";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
-import { StyledSubmitButton } from "../../forms/StyledSubmitButton";
+import StyledSubmitButton from "../../forms/StyledSubmitButton";
 import Text from "../../Text";
 import { styles } from "./styles";
 
