@@ -115,7 +115,7 @@
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
-    "lint_cypress": "eslint -c cypress/.eslintrc.js --ext .ts --ext .tsx cypress/integration",
+    "lint_cypress": "eslint -c cypress/.eslintrc.js --rulesdir cypress/eslint.rules --ext .ts --ext .tsx cypress/integration",
     "lint:fix": "yarn lint --fix",
     "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=0",
     "postinstall": "patch-package"
@@ -176,6 +176,7 @@
     "enzyme-adapter-react-16": "1.15.2",
     "enzyme-to-json": "3.4.3",
     "eslint": "^6.8.0",
+    "eslint-plugin-eslint.rules": "file:./cypress/eslint.rules",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.4.0",
