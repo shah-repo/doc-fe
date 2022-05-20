@@ -27,4 +27,12 @@ export const FBButtonStyles = makeStyles(() =>
     btnMargin: {
       margin: "7px 10px 0 10px",
     },
+    expansionPanelHedding: {
+      Colors: Colors.navy,
+    },
+    panelSummary: { flexDirection: "row-reverse", padding: 0, margin: 0 },
+    panelBorder: {
+      border: `1px solid ${Colors.gray_goose}`,
+      borderRadius: "4px",
+    },
   }));
