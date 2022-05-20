@@ -1,6 +1,5 @@
 import React from "react";
-import { FBActionFieldProps, FBActionOptionProps, FBDialog, FBMapWrapper, FBProvider } from "..";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
+import { FBActionFieldProps, FBActionOptionProps, FBButton, FBDialog, FBMapWrapper, FBProvider } from "..";
 import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBActionField } from "./FBActionField.wrap";
 
@@ -15,7 +14,7 @@ const FBActionField: React.FunctionComponent<FBActionFieldProps> = ({
     <FBMapWrapper<FBActionOptionProps[]> collection={options}>
       {(action: FBActionOptionProps, index) => (
         <>
-          {action && <StyledFBButton
+          {action && <FBButton
             key={`fb-action-option-${action?.name}-${index}`}
             label={action?.actionLabel}
             onClick={() => handleAction && handleAction(action)}

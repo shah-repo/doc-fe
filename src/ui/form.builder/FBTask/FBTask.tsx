@@ -1,8 +1,7 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
-import { FBDialog, FBMapWrapper, FBProvider, FBSection, FBTaskField, FBTaskItem, FBTaskProps, FBText } from "..";
+import { FBButton, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTaskField, FBTaskItem, FBTaskProps, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { withFBTask } from "./FBTask.wrap";
 
 
@@ -26,7 +25,7 @@ const FBTask: React.FunctionComponent<FBTaskProps> = ({
           <FBTaskField key={`fb-task-${task.id}-${index}`} {...{ task, onClick }} />
         )}
       </FBMapWrapper>
-      <StyledFBButton
+      <FBButton
         fullWidth={true}
         label="form.builder.add.implementation.task"
         onClick={() => onClick?.()}

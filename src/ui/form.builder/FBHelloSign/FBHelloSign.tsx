@@ -1,7 +1,6 @@
 import { Backdrop, Box, CircularProgress } from "@material-ui/core";
 import React from "react";
-import { FBHelloSignProps, FBInput } from "..";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
+import { FBButton, FBHelloSignProps, FBInput } from "..";
 import { withFBHelloSign } from "./FBHelloSign.wrap";
 
 const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
@@ -25,7 +24,7 @@ const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
 
     <FBInput {...props}>
       <>
-        <StyledFBButton
+        <FBButton
           label={buttonLabel}
           style={{ marginLeft: 0 }}
           {...{ onClick }}

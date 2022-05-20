@@ -2,9 +2,8 @@ import { Box, Grid } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
-import { FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider, FBUnzipStatus } from "..";
+import { FBButton, FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider, FBUnzipStatus } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
 import FBZIPFileSocket from "./FBZIPFile.socket";
 import { withFBZIPUpload } from "./FBZIPUpload.wrap";
 
@@ -58,7 +57,7 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                 </Box>}
                 </Grid>
                 <Grid item xs={12}>
-                  <StyledFBButton
+                  <FBButton
                     key={`fb-zip-attachment-button-${name}`}
                     label={"form.builder.unzip.files"}
                     onClick={() => { startUnzip(); }}

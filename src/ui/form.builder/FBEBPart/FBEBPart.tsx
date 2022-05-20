@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup, PartType } from "..";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup, PartType } from "..";
 import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
@@ -69,7 +68,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
           />
         </Box>
         <Box>
-          <StyledFBButton
+          <FBButton
             variant="contained"
             label="form.builder.create.new.part"
             onClick={handleAdd}

@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from "..";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from "..";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
 
 const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
@@ -27,7 +26,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       name={`${name}-section`}
     >
       <Box display="flex" flexDirection="row-reverse">
-        <StyledFBButton
+        <FBButton
           variant="text"
           endIcon={<AddCircleIcon />}
           label={isTypePM ? "form.builder.new.pm" : "form.builder.new.calibration"}

@@ -2,10 +2,9 @@ import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
-import { FBApprovalAudit, FBAutocomplete, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
+import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
 import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 import FBInlinePendingApprovalSocket from "./FBInlinePendingApproval.socket";
@@ -98,7 +97,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   {currentUser === approval.approver?.user.id
                   && (
                     <Box flexGrow={1} textAlign="right">
-                      <StyledFBButton
+                      <FBButton
                         disabled={disabled || approval.status === "APPROVED"}
                         label="form.builder.request.approve"
                         size="small"
@@ -113,7 +112,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                 </Box>
                 {shouldShowRequestAllApprovals &&
                   <Box flexGrow={1} textAlign="right">
-                    <StyledFBButton
+                    <FBButton
                       style={{ margin: 0 }}
                       label="form.builder.request.approval"
                       variant="text"

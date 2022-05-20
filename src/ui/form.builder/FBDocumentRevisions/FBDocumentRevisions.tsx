@@ -1,6 +1,5 @@
 import React from "react";
-import { FBDialog, FBDocumentRevisionsItem, FBDocumentRevisionsProps, FBDocumentRevisionsValue, FBInput, FBMapWrapper, FBProvider } from "..";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
+import { FBButton, FBDialog, FBDocumentRevisionsItem, FBDocumentRevisionsProps, FBDocumentRevisionsValue, FBInput, FBMapWrapper, FBProvider } from "..";
 import { withFBDocumentRevisions } from "./FBDocumentRevisions.wrap";
 
 const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = ({
@@ -26,7 +25,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
           />
         )}
       </FBMapWrapper>
-      <StyledFBButton
+      <FBButton
         {...{ disabled }}
         fullWidth={true}
         label="form.builder.add.document"

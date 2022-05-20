@@ -1,13 +1,13 @@
 import React from "react";
 import { FBButtonProps } from "..";
-import { StyledSubmitFBButton } from "../FBButton/StyledSubmitFBButton";
+import FBButton from "../FBButton/FBButton";
 import { withFBSubmitButton } from "./FBSubmitButton.wrap";
 
 const FBSubmitButton: React.FunctionComponent<FBButtonProps> = ({
   onClick,
   ...props
 }) => (
-  <StyledSubmitFBButton {...props} {...{ onClick }} />
+  <FBButton {...props} {...{ onClick }} />
 );
 
 export default withFBSubmitButton(FBSubmitButton);

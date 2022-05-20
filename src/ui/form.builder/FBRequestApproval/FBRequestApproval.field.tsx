@@ -1,6 +1,5 @@
 import React from "react";
-import { FBApproval, FBFieldName, FBLabel, FBRequestApprovalProps } from "..";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
+import { FBApproval, FBButton, FBFieldName, FBLabel, FBRequestApprovalProps } from "..";
 import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBRequestApproval } from "./FBRequestApproval.wrap";
 
@@ -25,7 +24,7 @@ const FBRequestApprovalField: React.FunctionComponent<FBRequestApprovalProps> = 
         name={`${FBFieldName.RequestApproval}${name}`}
       />
     )}
-    <StyledFBButton
+    <FBButton
       fullWidth={true}
       label="form.builder.add.approvers"
       variant="outlined"

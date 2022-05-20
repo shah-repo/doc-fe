@@ -1,12 +1,11 @@
 import { get, includes, isEmpty, map } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
-import { FB, FBDialogState, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from "..";
+import { FB, FBButton, FBDialogState, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from "..";
 import { getHasPermission } from "../../../common/utils/selectors";
 import { Permission } from "../../../state/ducks/auth/types";
 import FBValidatorCustom from "../components/validation/FBValidatorCustom";
 import predefinedValidators from "../data/predefinedValidators.json";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 
 export const withFBEditorValidation = <T extends FBEditorValidationProps>(
@@ -63,7 +62,7 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       content: <FBValidatorCustom/>,
       actions: (
         <>
-          <StyledFBButton label="Commit" onClick={commitCustomValidation} />
+          <FBButton label="Commit" onClick={commitCustomValidation} />
         </>
       ),
     });

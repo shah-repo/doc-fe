@@ -1,12 +1,11 @@
 import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
 import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { FBPOApprovalsProps } from "./FBPOApprovals.types";
 import { withFBPOApprovals } from "./FBPOApprovals.wrap";
 
@@ -87,13 +86,13 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                 && currentUser === approval.approver?.user.id
                 && (
                   <Box flexGrow={1} textAlign="right">
-                    <StyledFBButton
+                    <FBButton
                       label="common.reject"
                       size="small"
                       style={{ fontSize: "11px" }}
                       onClick={() => approvalTransition("reject", approval.id)}
                     />
-                    <StyledFBButton
+                    <FBButton
                       label="form.builder.request.approve"
                       size="small"
                       style={{ fontSize: "11px" }}

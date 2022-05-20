@@ -103,7 +103,7 @@ class FBSchemaState {
     evidencemediaupload: FBMediaAlbumField,
     instructionsdocument: FBInstructionsDocument,
     selectdocument: FBSelectDocument,
-    checkpoint: FBButton,
+    checkpoint: FBButton, // submit // cancel // update style btn
     createlabel: FBButton,
     approval: FBApproval,
     inlineapproval: FBInlineApproval,

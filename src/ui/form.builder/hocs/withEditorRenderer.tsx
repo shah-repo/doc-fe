@@ -3,11 +3,10 @@ import { FormikProps } from "formik";
 import { Dictionary, get, has, includes, isEmpty, isObject, isUndefined, kebabCase, keys, omit, pick, set, truncate, union } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FB, FBData } from "..";
+import { FB, FBButton, FBData } from "..";
 import { isTranslation } from "../../translations/types";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
-import { StyledFBButton } from "../FBButton/StyledFBButton";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
@@ -139,7 +138,7 @@ export const withEditorRenderer =
           {...{ index, type }}
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
-          <StyledFBButton label={buttonLabel} onClick={onClick} />
+          <FBButton label={buttonLabel} onClick={onClick} />
           <StyledCancelFBButton label="common.cancel" onClick={editorStore.reset} />
         </Box>
       </Box>
