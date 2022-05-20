@@ -5,9 +5,9 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBData } from "..";
 import { isTranslation } from "../../translations/types";
-import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
+import { StyledFBButton } from "../FBButton/StyledFBButton";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
@@ -139,7 +139,7 @@ export const withEditorRenderer =
           {...{ index, type }}
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
-          <FBButton label={buttonLabel} onClick={onClick} />
+          <StyledFBButton label={buttonLabel} onClick={onClick} />
           <StyledCancelFBButton label="common.cancel" onClick={editorStore.reset} />
         </Box>
       </Box>

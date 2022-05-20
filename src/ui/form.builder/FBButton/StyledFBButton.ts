@@ -1,7 +1,7 @@
 
 import { withStyles } from "@material-ui/core/styles";
-import { FBButton } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import FBButton from "./FBButton";
 
 const styles = () => ({
   root: {

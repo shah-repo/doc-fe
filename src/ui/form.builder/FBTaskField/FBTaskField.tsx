@@ -3,9 +3,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import { get, isEmpty } from "lodash";
 import React from "react";
-import { FB, FBButton, FBFileUpload, FBMapWrapper, FBSchemaProps, FBTaskFieldProps, FBText } from "..";
+import { FB, FBFileUpload, FBMapWrapper, FBSchemaProps, FBTaskFieldProps, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
+import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { withFBTaskField } from "./FBTaskField.wrap";
 
 const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
@@ -107,7 +108,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
     </Box>
     {canBeDone && (
       <Box mt={2.5}>
-        <FBButton
+        <StyledFBButton
           label="Done"
           onClick={handleClosingNote}
           variant="outlined"

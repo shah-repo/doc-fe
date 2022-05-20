@@ -30,6 +30,7 @@ import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warni
 import { MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { FBClasses } from "../defaults/layout";
+import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
@@ -259,7 +260,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                       (selection)  =>
                         selection.materialId === item.title || selection.equipmentId === item.title);
                     return (
-                      <FBButton
+                      <StyledFBButton
                         label={hasSelected ? "form.builder.change" : "form.builder.select"}
                         style={{ margin: 0, padding: "4px" }}
                         onClick={() => handleSelect?.({

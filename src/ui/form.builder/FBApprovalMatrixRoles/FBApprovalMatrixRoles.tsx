@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBApprovalMatrixRolesProps, FBApprovalRole, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTextField } from "..";
+import { FBApprovalMatrixRolesProps, FBApprovalRole, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTextField } from "..";
+import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { withFBApprovalMatrixRoles } from "./FBApprovalMatrixRoles.wrap";
 
 const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps> = ({
@@ -54,7 +55,7 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
           )}
         </FBMapWrapper>
       )}
-      <FBButton
+      <StyledFBButton
         fullWidth={true}
         label="form.builder.add.another.role"
         dataCy="form.builder.add.another.role"

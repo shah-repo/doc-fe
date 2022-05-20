@@ -1,8 +1,9 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor } from "..";
+import { FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import { StyledFBButton } from "../FBButton/StyledFBButton";
 import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBProcedure } from "./FBProcedure.wrap";
 
@@ -40,14 +41,14 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
         <FBProvider {...{ procedureState }}>
           {!isPreview && (
             <Box display="flex" flexDirection="row-reverse" mb={1} mt={2.5}>
-              <FBButton
+              <StyledFBButton
                 label="form.builder.clone.step"
                 style={{ textTransform: "none", margin: 0 }}
                 size="small"
                 onClick={() => handleAdd?.(true)}
                 {...{ disabled }}
               />
-              <FBButton
+              <StyledFBButton
                 label="form.builder.add.step"
                 style={{ textTransform: "none", margin: 0, marginRight: 4 }}
                 size="small"
