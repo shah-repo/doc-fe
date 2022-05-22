@@ -2,8 +2,8 @@ module.exports = {
   "parserOptions": {
     "project": "cypress/tsconfig.json"
   },
-  "plugins": ["eslint.rules"],
+  "plugins": ["cypress.eslint.rules"],
   "rules": {
-    "eslint.rules/cy.pause": "error"
+    "cypress.eslint.rules/cy.pause": "error"
   }
 }
