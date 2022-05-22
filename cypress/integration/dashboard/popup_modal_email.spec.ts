@@ -30,7 +30,6 @@ const approvalRequestTitle = "Approval request from newly created form";
 
 const dateOffset = (5 * 1000);
 const dateAfterEmailShouldArrive = new Date();
-console.log("tes");
 
 dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
@@ -307,7 +306,6 @@ context("Approval request email popup modal", () => {
 
     it("Get emails and visit AR approval url", () => {
       cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email });
-      cy.pause();
     });
 
     it("Approve AR", () => {
