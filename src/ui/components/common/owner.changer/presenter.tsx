@@ -14,7 +14,7 @@ import SelectField, { SelectOption } from "../../forms/fields/Select";
 import { FormContext } from "../../forms/FormContext";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
-import SubmitButton from "../../forms/SubmitButton";
+import StyledSubmitButton from "../../forms/StyledSubmitButton";
 import Text from "../../Text";
 import { styles } from "./styles";
 
@@ -63,7 +63,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
           justifyContent="flex-end"
           alignItems="flex-end"
         >
-          <SubmitButton asyncState={asyncState}
+          <StyledSubmitButton asyncState={asyncState}
             label="change.owner.update"
             id="OwnerChangerPresenter-submitButton"
             data-cy="changeOwner-submit" />
