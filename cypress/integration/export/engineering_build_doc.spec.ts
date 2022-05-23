@@ -786,6 +786,10 @@ context("Export Engineering Build doc", () => {
       cy.get("[name^=fb-approvals-fb-approvals-]").find(".MuiChip-deleteIcon").eq(1).arrowClick();
     });
 
+    it("Upload video.mp4 as attachment", () => {
+      cy.atchUploadAttachment({ fileName: "video.mp4" });
+    });
+
     it("Fill fields", () => {
       cy.get("[data-cy^=fb-textfield-] input").arrowType("textfield");
       cy.fixture("test.docx").then((fileContent) => {
@@ -945,41 +949,45 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Extract texts from PDF file content", () => {
-      expect(pdfContent.numpages).eq(3);
-      expect(pdfContent.text).match(/Page 1 of 3/);
-      expect(pdfContent.text).match(/Page 2 of 3/);
-      expect(pdfContent.text).match(/Page 3 of 3/);
+      expect(pdfContent.numpages).eq(4);
+      expect(pdfContent.text).match(/Page 1 of 4/);
+      expect(pdfContent.text).match(/Page 2 of 4/);
+      expect(pdfContent.text).match(/Page 3 of 4/);
+      expect(pdfContent.text).match(/Page 4 of 4/);
       tmpRegex = new RegExp( "\\n\\n");
       const arr = pdfContent.text.split(tmpRegex);
       arr.forEach((element) => {
-        if (element.includes("Page 1 of 3")) {
+        if (element.includes("Page 1 of 4")) {
           pages[0] = element;
         }
-        if (element.includes("Page 2 of 3")) {
+        if (element.includes("Page 2 of 4")) {
           pages[1] = element;
         }
-        if (element.includes("Page 3 of 3")) {
+        if (element.includes("Page 3 of 4")) {
           pages[2] = element;
+        }
+        if (element.includes("Page 4 of 4")) {
+          pages[3] = element;
         }
       });
     });
 
     it("Verify page 1 of EB form", () => {
       const el = pages[0];
-      if (el.includes("Page 1 of 3")) {
+      if (el.includes("Page 1 of 4")) {
         tmpRegex = new
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Description\nEB doc description/);
         expect(el).match(/Part\nPRT-00005 Part document/);
-        expect(el).match(/Attachments\nNone/);
+        expect(el).match(/Attachments/);
+        expect(el).match(/video.mp4/);
 
         tmpRegex = new RegExp(`APPROVALS\n${USERS[2].name} - ${USERS[2].email} | DRAFT`);
         expect(el).match(/fb-fileupload/);
         expect(el).match(/test.docx/);
         expect(el).match(/fb-textfield\ntextfield/);
-        expect(el).match(/MATERIALS/);
 
         expect(el).match(/WIP/);
 
@@ -989,7 +997,7 @@ context("Export Engineering Build doc", () => {
         tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 3/);
+        expect(el).match(/Page 1 of 4/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -998,11 +1006,12 @@ context("Export Engineering Build doc", () => {
 
     it("Verify page 2 of EB form", () => {
       const el = pages[1];
-      if (el.includes("Page 2 of 3")) {
+      if (el.includes("Page 2 of 4")) {
         tmpRegex = new
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/MATERIALS/);
         expect(el).match(/MT-00004 - Materials document | ? | Qty: 2 each/);
         expect(el).match(/PRT-00005 - Part document | ? | Qty: 3 each/);
         expect(el).match(/EQUIPMENT\nET-00003 - Equipment document/);
@@ -1011,7 +1020,6 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Attachments/);
         expect(el).match(/test_image.jpg/);
         expect(el).match(/Materials\nMT-00004 - Materials document | ? | Qty: 2 each/);
-        expect(el).match(/Equipment\nET-00003 - Equipment document/);
 
         expect(el).match(/WIP/);
 
@@ -1021,7 +1029,7 @@ context("Export Engineering Build doc", () => {
         tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 3/);
+        expect(el).match(/Page 2 of 4/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1030,11 +1038,12 @@ context("Export Engineering Build doc", () => {
 
     it("Verify page 3 of EB form", () => {
       const el = pages[2];
-      if (el.includes("Page 3 of 3")) {
+      if (el.includes("Page 3 of 4")) {
         tmpRegex = new
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/Equipment\nET-00003 - Equipment document/);
         expect(el).match(/EB PROCEDURE\nSTEP #2/);
         expect(el).match(/Step #2 description/);
         expect(el).match(/Attachments/);
@@ -1042,7 +1051,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Materials\nPRT-00005 - Part document | ? | Qty: 3 each/);
         expect(el).match(/Equipment\nET-00003 - Equipment document/);
         expect(el).match(/STEP #3/);
-        expect(el).match(/Attachments\nNone\nMaterials\nNone\nEquipment\nNone/);
+        expect(el).match(/Attachments\nNone\nMaterials\nNone/);
 
         expect(el).match(/WIP/);
 
@@ -1052,7 +1061,31 @@ context("Export Engineering Build doc", () => {
         tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 3/);
+        expect(el).match(/Page 3 of 4/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 4 of EB form", () => {
+      const el = pages[3];
+      if (el.includes("Page 4 of 4")) {
+        tmpRegex = new
+        RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment\nNone/);
+
+        expect(el).match(/WIP/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 4 of 4/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1202,13 +1235,12 @@ context("Export Engineering Build doc", () => {
 
         expect(el).match(/Description\nEB doc description/);
         expect(el).match(/Part\nPRT-00005 Part document/);
-        expect(el).match(/Attachments\nNone/);
+        expect(el).match(/Attachments/);
+        expect(el).match(/video.mp4/);
 
         tmpRegex = new RegExp(`APPROVALS\n${USERS[2].name} - ${USERS[2].email} | APPROVED`);
         expect(el).match(/fb-fileupload/);
         expect(el).match(/test.docx/);
-        expect(el).match(/fb-textfield\ntextfield/);
-        expect(el).match(/MATERIALS/);
 
         expect(el).match(/Released/);
 
@@ -1232,6 +1264,8 @@ context("Export Engineering Build doc", () => {
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/fb-textfield\ntextfield/);
+        expect(el).match(/MATERIALS/);
         expect(el).match(/MT-00004 - Materials document | ? | Qty: 2 each/);
         expect(el).match(/PRT-00005 - Part document | ? | Qty: 3 each/);
         expect(el).match(/EQUIPMENT\nET-00003 - Equipment document/);
@@ -1240,7 +1274,6 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Attachments/);
         expect(el).match(/test_image.jpg/);
         expect(el).match(/Materials\nMT-00004 - Materials document | ? | Qty: 2 each/);
-        expect(el).match(/Equipment\nET-00003 - Equipment document/);
 
         expect(el).match(/Released/);
 
@@ -1264,6 +1297,7 @@ context("Export Engineering Build doc", () => {
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/Equipment\nET-00003 - Equipment document/);
         expect(el).match(/EB PROCEDURE\nSTEP #2/);
         expect(el).match(/Step #2 description/);
         expect(el).match(/Attachments/);
@@ -1273,7 +1307,6 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/STEP #3/);
         expect(el).match(/Step #3 description/);
         expect(el).match(/Attachments/);
-        expect(el).match(/dummy.pdf/);
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
@@ -1296,6 +1329,7 @@ context("Export Engineering Build doc", () => {
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/dummy.pdf/);
         expect(el).match(/Materials\nMT-00005 - Part document | ? | Qty: 4 each/);
         expect(el).match(/Equipment\nET-00003 - Equipment document/);
         expect(el).match(/Released/);
