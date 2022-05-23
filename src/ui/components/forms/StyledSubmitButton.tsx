@@ -8,7 +8,7 @@ import { AsyncState, AsyncStatus } from "../../../state/types";
 import FBButtonStyles from "../../form.builder/FBButton/FBButton.styles";
 import Text from "../Text";
 
-export interface SubmitButtonProps extends ButtonProps {
+interface SubmitButtonProps extends ButtonProps {
   asyncState: AsyncState;
   label: string;
   errors?: FormikErrors<any>;
