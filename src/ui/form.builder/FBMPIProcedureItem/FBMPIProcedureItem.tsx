@@ -8,7 +8,9 @@ import moment from "moment";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
-  FB, FBButton, FBDialog,
+  FB,
+  FBButton,
+  FBDialog,
   FBFilesPresenter,
   FBFormMode,
   FBMapWrapper,

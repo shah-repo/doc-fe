@@ -2,8 +2,9 @@ import { Box, Grid } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
-import { FBButton, FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider, FBUnzipStatus } from "..";
+import { FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider, FBUnzipStatus } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import FBButton from "../components/inputs/FBButton";
 import FBZIPFileSocket from "./FBZIPFile.socket";
 import { withFBZIPUpload } from "./FBZIPUpload.wrap";
 

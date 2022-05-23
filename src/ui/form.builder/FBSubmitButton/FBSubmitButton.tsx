@@ -1,6 +1,5 @@
 import React from "react";
-import { FBButtonProps } from "..";
-import FBButton from "../FBButton/FBButton";
+import { FBButton, FBButtonProps } from "..";
 import { withFBSubmitButton } from "./FBSubmitButton.wrap";
 
 const FBSubmitButton: React.FunctionComponent<FBButtonProps> = ({
