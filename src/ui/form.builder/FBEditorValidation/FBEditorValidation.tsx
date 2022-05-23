@@ -45,6 +45,7 @@ const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
           color="primary"
           startIcon={<ARIcon />}
           label="Custom Validation"
+          style={{ width: "270px" }}
           onClick={handleCustomValidation}
         />
       </Box>
