@@ -69,6 +69,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       formState?.setFieldValue(name, { ...purchaseOrderState?.value }, true);
       loading = purchaseOrderState?.loading || workspaceState?.loadDocumentRevApi.loading;
+      workspaceState?.setPoCountChanged();
     });
 
     useEffect(() => reaction(

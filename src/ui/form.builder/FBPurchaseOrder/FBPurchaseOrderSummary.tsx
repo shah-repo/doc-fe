@@ -1,13 +1,29 @@
 import { Box, Grid } from "@material-ui/core";
 import { map, pick } from "lodash";
-import React from "react";
+import { reaction } from "mobx";
+import React, { useEffect } from "react";
 import { FormattedNumber } from "react-intl";
 import { FB, FBPurchaseOrderProps, FBText } from "..";
 
 const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({ defaultValue, name, ...props }) => {
   const { formState } = FB.useStores();
   const formValue = formState?.getFieldValue(name, defaultValue);
-  const poSummary = pick(formValue, ["subTotal", "tax"]);
+  let poSummary = pick(formValue, ["subTotal", "tax"]);
+
+  const { workspaceState } = FB.useStores();
+
+  useEffect(() => reaction(
+    () => workspaceState?.poCountChanged,
+    (val) => {
+      // TODO check and change here
+      console.log("PO CHANGED ", val);
+      const formValue = formState?.getFieldValue(name, defaultValue);
+      poSummary = pick(formValue, ["subTotal", "tax"]);
+    },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), []);
+
+
   const labelMap = {
     subTotal: "SubTotal",
     tax: "TaxTotal",
