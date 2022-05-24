@@ -6998,7 +6998,7 @@ eslint-module-utils@^2.4.0:
     debug "^2.6.8"
     pkg-dir "^2.0.0"
 
-"eslint-plugin-cypress.eslint.rules@file:./cypress/cypress.eslint.rules":
+"eslint-plugin-cypress.eslint.rules@file:./eslint/cypress.eslint.rules":
   version "1.0.0"
 
 eslint-plugin-flowtype@3.13.0:
