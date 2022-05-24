@@ -2107,7 +2107,7 @@ context("Autosave LHR", () => {
 
           expect(el).match(/WIP/);
 
-          tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.85 days`);
+          tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.859999999999999 days`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -2580,7 +2580,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.85 days`);
+        tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.859999999999999 days`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
