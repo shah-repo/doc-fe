@@ -1900,6 +1900,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
+          SystemRequirement("REQ-4770");
           cy.drClickCreateDocumentWithApiCallForForms();
         });
       });

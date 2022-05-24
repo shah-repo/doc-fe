@@ -7,6 +7,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[33];
 const FIRST_USER = USERS[34];
@@ -243,6 +244,7 @@ context("Records email popup modal", () => {
       });
 
       it("Click on 'EMAIL ALL'", () => {
+        SystemRequirement("REQ-5080");
         cy.get("button").contains("EMAIL ALL").arrowClick();
       });
 
