@@ -338,9 +338,14 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
 
   const getCardGroups = (auditData: UMAuditProps[]) => {
     const auditRecords = map(auditData, (auditRecord: UMAuditProps) => {
-      const { employeeId, employeeName, ownerId, ownerName, ownerEmail, groupId, timestamp } = auditRecord;
+      const { employeeId, employeeName, ownerId, ownerEmail, groupId, timestamp } = auditRecord;
       const employeeDetails = getUserDetails(employeeId) || { user: { name: employeeName, email: "" } };
-      const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
+      const ownerDetails = getUserDetails(ownerId) || {
+        user: {
+          name: intl.formatMessage({ id: "common.server.automation" }),
+          email: ownerEmail,
+        },
+      };
       return {
         ...auditRecord,
         groupKey: `${groupId}-${ownerId}`,
