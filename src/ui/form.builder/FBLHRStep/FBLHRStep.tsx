@@ -2,7 +2,7 @@ import { Avatar, Box, Grid, List, ListItem, ListItemAvatar, ListItemText, Typogr
 import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
-import { CheckCircle, PlayCircleFilled } from "@material-ui/icons";
+import { CheckCircle, PlayCircleFilled, RemoveCircleOutline } from "@material-ui/icons";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { isEmpty, map } from "lodash";
 import React from "react";
@@ -10,12 +10,13 @@ import { useSelector } from "react-redux";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
-import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { FBButtonStyles } from "../styles/FBButton.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
+
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -48,6 +49,22 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const operatorList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"].map((e) => getUserDetails(e)?.user);
   const classes = FBButtonStyles();
   const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision}`;
+  const stepButtonStyle = {
+    marginTop: 0,
+    height: 36,
+    minWidth: 180,
+    borderRadius: 100,
+  };
+  const getStatusColor = () => {
+    const status = stepLHRs?.status;
+    let statusColor = ""; // latest_yellow_varient
+    if (isDocumentRevisionReleased(status)) {
+      statusColor = Colors.green_blue;
+    } else if (isDocumentRevisionInReview(status)) {
+      statusColor = Colors.latest_yellow_varient;
+    }
+    return statusColor;
+  };
 
   return (
     <FBProvider {...{ lhrStepState }}>
@@ -64,12 +81,22 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Box>
             <Box display="flex"
               alignItems="flex-start" style={{ fontSize: 12 }} >
-              <Box mr={1} display="flex" alignItems="center">< CheckCircle className="fontSizeSmall" /></Box>
-              <Box component={"span"} mr={2} mt={0.3} >{stepLHRs?.status}</Box>
+              <Box mr={1} display="flex" alignItems="center">
+                <CheckCircle style={{
+                  color:
+                  getStatusColor(), fontSize: 14, marginTop: 4,
+                }} className="fontSizeSmall" />
+                {isDocumentRevisionInReview(stepLHRs?.status) && <RemoveCircleOutline style={{
+                  color:
+                  getStatusColor(), fontSize: 14, marginTop: 4,
+                }} className="fontSizeSmall"></RemoveCircleOutline>}
+              </Box>
+              <Box style={{ fontWeight: 700 }} component={"span"} mr={2} mt={0.4} >{stepLHRs?.status}</Box>
               <Box component={"span"} mt={0.3}>
                 {getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime)}
               </Box>
             </Box>
+
           </Box>
         </AccordionSummary>
         <AccordionDetails style={{ padding: "2.1rem", display: "block" }}>
@@ -84,6 +111,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                   openLHRs();
                 }
               }}
+              style={{ background: Colors.alabaster, borderRadius: 4 }}
             >
               <FBAutocompleteAsync
                 boxProps={{ flexGrow: 1 }}
@@ -101,7 +129,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                   background: Colors.light_red,
                   border: `1px solid ${Colors.error_red}`,
                   paddingLeft: "5px",
-                } : {}}
+                } : { background: Colors.alabaster, borderRadius: 4 }}
               />
             </Box>
             <FBButton
@@ -110,9 +138,14 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi}
               {...{ loading }}
               className={classes.button}
-              style={{
-                marginTop: "0px",
-                height: "40px",
+              style={stepLHRs ? {
+                ...stepButtonStyle,
+                background: "#EDF4FF",
+                color: Colors.navy,
+              } : {
+                ...stepButtonStyle,
+                background: Colors.navy,
+                color: Colors.white,
               }}
             />
           </Box>
