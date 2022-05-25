@@ -82,7 +82,6 @@ export const withFBInput = <T extends FBInputProps>(
 
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
     const { _documentRevisionFormState } = SM.useStores();
-    // console.log("debug documentRevisionFormState", _documentRevisionFormState?.documentType?.group);
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();

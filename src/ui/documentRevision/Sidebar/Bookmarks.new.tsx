@@ -80,41 +80,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
           );
         }}
       </FBMapWrapper>
-      {/* <>
-        <Box
-          display="flex"
-          pb={1.875}
-          alignItems="center"
-        >
-          <IconButton size="small">
-            <PlusIcon />
-          </IconButton>
-          <Box pl={0.5}>
-            <Typography className={`${classes.label} add_section`}>
-              <Text translation="form.builder.add.section" />
-            </Typography>
-          </Box>
-        </Box>
-        <Box
-          display="flex"
-          pb={1.875}
-          pl={1.875}
-          alignItems="center"
-        >
-          <Box component="span">
-            <IconButton size="small">
-              <PlusIcon />
-            </IconButton>
-          </Box>
-          <Box component="span" pl={0.5}>
-            <Typography className={`${classes.label} add_section`}>
-              <Text translation="form.builder.add.subsection" />
-            </Typography>
-          </Box>
-        </Box>
-      </> */}
     </Box>
   );
 };
-// ToDo: It will be implemented after completing the left side panel.
 export default Bookmarks;
