@@ -8,6 +8,7 @@ import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[29];
 const FIRST_USER = USERS[30];
@@ -29,6 +30,7 @@ const approvalRequestTitle = "Approval request from newly created form";
 
 const dateOffset = (5 * 1000);
 const dateAfterEmailShouldArrive = new Date();
+
 dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
 context("Approval request email popup modal", () => {
@@ -272,22 +274,11 @@ context("Approval request email popup modal", () => {
     it("Verify emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 
@@ -315,7 +306,6 @@ context("Approval request email popup modal", () => {
 
     it("Get emails and visit AR approval url", () => {
       cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email });
-      cy.pause();
     });
 
     it("Approve AR", () => {
@@ -342,6 +332,7 @@ context("Approval request email popup modal", () => {
       });
 
       it("Check if pop-up modal has pending with all the approvers", () => {
+        SystemRequirement("REQ-2150", "REQ-5020");
         cy.get("h2").should("contain.text", "PENDING (2)");
         cy.get("[class*='MuiListItem-dense MuiListItem-gutters MuiListItem-button']>svg").eq(4).arrowClick();
         cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", FIRST_USER.name)
@@ -351,6 +342,7 @@ context("Approval request email popup modal", () => {
       });
 
       it("Click on 'EMAIL ALL'", () => {
+        SystemRequirement("REQ-5090");
         cy.get("button").contains("EMAIL ALL").arrowClick();
         doateOfSendToAll = new Date();
       });
@@ -375,22 +367,11 @@ context("Approval request email popup modal", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: doateOfSendToAll,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 

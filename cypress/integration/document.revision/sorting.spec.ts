@@ -10,6 +10,7 @@ import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { Supplier } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -2641,6 +2642,7 @@ context("Sorting test", () => {
       });
 
       it("Form ID should be in descending order", () => {
+        SystemRequirement("REQ-4820"); // Requirement covered by successfull test
         cy.contains("Form ID").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
         cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-desc-sm")

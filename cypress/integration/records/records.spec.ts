@@ -300,6 +300,7 @@ context("Records flow", () => {
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
         });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
       });
 
@@ -312,28 +313,16 @@ context("Records flow", () => {
 
     context("Verify email for recordform notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recFormId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         });
       });
 
@@ -495,6 +484,7 @@ context("Records flow", () => {
         cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
           arId = $lnEl.text();
         });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
       });
 
@@ -507,28 +497,16 @@ context("Records flow", () => {
 
     context("Verify email for record form notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recFormId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         });
       });
 
@@ -867,6 +845,7 @@ context("Records flow", () => {
       cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -879,28 +858,20 @@ context("Records flow", () => {
 
   context("Verify email for WIP Approval Record notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
         wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
+        // eslint-disable-next-line @typescript-eslint/camelcase,
+
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${recDocId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
@@ -1036,6 +1007,7 @@ context("Records flow", () => {
       cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -1047,29 +1019,18 @@ context("Records flow", () => {
 
     context("Verify email for Released Approval Record notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recDocId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+          .then((emails) => {
             emailsFromInbox = emails;
             expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
             downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
+          });
       });
 
       it("Verify the emails that should be received", () => {

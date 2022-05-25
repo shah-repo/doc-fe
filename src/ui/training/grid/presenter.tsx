@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { TrainingListData } from "../../../state/ducks/training/types";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
-import Colors from "../../layout/theme/utils/colors";
 import ExportButton from "./ExportButton";
 import { KendoPresenterProps } from "./interfaces";
 
@@ -23,7 +22,7 @@ export function TrainingListPresenter({
   };
 
   return (
-    <Box p={2} style={{ background: Colors.background_white }}>
+    <Box p={2}>
       <Grid container={true}>
         <Grid item xs>
           <Box mb={2}>

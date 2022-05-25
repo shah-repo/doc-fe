@@ -1,15 +1,32 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import path from "path";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { LegalRecord } from "../../utils/constants/documentTypes/record";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let secondEmployee;
+let recFormId;
+let adminEmployee;
+let RDdocumentType;
+
+let recDocId;
+let emailsFromInbox;
+const pages = ["", "", "", ""];
+let downloadUrl;
+let tmpRegex;
+let downloadFile;
+let dateAfterEmailShouldArrive;
+let fileId;
+let arId;
 
 context("Record inline Flow", () => {
   before(() => {
@@ -39,14 +56,110 @@ context("Record inline Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              LegalRecord,
+              RecordOne,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          RDdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record one");
           done();
         });
+      });
+    });
+
+    it("[API]Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+  });
+
+  context("[API]Update record document type", () => {
+    it("Change fields config in record document type", () => {
+      cy.drUpdateDocumentTypeName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        id: RDdocumentType[0].id,
+        payload: {
+          fieldsConfig: {
+            D: {
+              visible: false,
+              required: false,
+            },
+            E: {
+              label: "Record Type",
+              visible: true,
+              required: true,
+            },
+            F: {
+              label: "Record ID",
+              visible: false,
+              required: true,
+            },
+            G: {
+              visible: false,
+              required: false,
+            },
+            I: {
+              visible: false,
+            },
+            J: {
+              visible: false,
+            },
+            K: {
+              label: "Void",
+              visible: true,
+            },
+            L: {
+              label: "Correction",
+              visible: true,
+            },
+            N: {
+              label: "Finalize and Release",
+              visible: true,
+            },
+            O: {
+              label: "Record History",
+              visible: true,
+            },
+            R: {
+              visible: false,
+            },
+            S: {
+              label: "Update Record",
+              visible: true,
+            },
+            A1: {
+              label: "WIP",
+              visible: true,
+            },
+            A2: {
+              label: "Voided",
+              visible: true,
+            },
+            A3: {
+              label: "Archive",
+              visible: true,
+            },
+            P1: {
+              label: "WIP",
+              visible: true,
+            },
+            P2: {
+              label: "Voided",
+              visible: true,
+            },
+            P3: {
+              label: "Archive",
+              visible: true,
+            },
+          },
+        },
       });
     });
   });
@@ -82,7 +195,7 @@ context("Record inline Flow", () => {
       });
 
       it("Select 'Record Document' output document type from dropdown", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Legal Record" });
+        cy.drSelectOutputDocumentType({ documentType: "Record one" });
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -108,12 +221,34 @@ context("Record inline Flow", () => {
         });
         cy.get("[name=\"label\"]").arrowType("Inline field");
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddField();
+      });
+
+      it("Add Checkbox group", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("1", "2", "3");
+        cy.fbOpenValidation();
+        cy.fbFieldRequired();
+        cy.fbAddNewFieldButton();
+      });
+
+      it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: "TEXT FIELD" });
+        cy.fbOpenValidation();
+        cy.get("input[value^=\"visibility\"]").check();
+        cy.fbFieldRequiredIfIn({ name: "Checkbox" });
+        cy.fbSelectCheckboxValue("3");
+        cy.fbAddNewFieldButton();
       });
 
       it("Add second textfield", () => {
         cy.fbClickAddNewHiddenBtn();
-
         cy.fbSelectTextField();
         cy.fbAddLabelName({ name: "Second textfield for inline" });
         cy.fbAddField();
@@ -125,17 +260,455 @@ context("Record inline Flow", () => {
         cy.get("[name=\"label\"]").arrowType("Second inline field");
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddField();
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it(`Drag and drop approval block to last`, () => {
+        cy.get("[data-cy=\"form.builder.approvals\"]").first().contains("Approvals").arrowClick();
+        cy.dragAndDropTopDown({
+          fromSelector: ".MuiBox-root>div>ul>li:eq(0)",
+          toSelector: ".MuiBox-root>div>ul>li:eq(-1)",
+        });
       });
     });
 
-    context("Create document and release it", () => {
+    context("Create document", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Verify form Draft status and click on Send To Email", () => {
+        cy.drCheckDocumentStatus({ status: "Draft" });
+        cy.arCheckTitleInEditableAndMatches({ name: "Inline Form Document Revision" });
+        cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+          recFormId = $docIdElement.text();
+        });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        cy.sendToEmail();
+      });
+
+      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+      });
+    });
+
+    context("Verify email for  record form notification", () => {
+      it("Get emails", () => {
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${recFormId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[2].email,
+            contains: [`Hello <b>${USERS[2].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id],
+          }];
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify that zip file containing pdf downloaded", () => {
+      it("Download zip file containing record form", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            downloadFile  =  `${recFormId}${fileTimeFormat}_draft.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
+      });
+
+      it("unzip and extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+          `${recFormId}-1-Inline-Form-Document-Revision.pdf`);
+        cy.readFile(pdffile).its("length").should("be.gt", 500);
+      });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 500);
+      });
+    });
+
+    context("Verify PDF file content", () => {
+      it("Extract texts from PDF file content for record form", () => {
+        cy.pdfparseFile(
+          {
+            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+            fileName: `${recFormId}-1-Inline-Form-Document-Revision.pdf`,
+          }).then((cdata) => {
+          expect(cdata.numpages).eq(3);
+          expect(cdata.text).match(/Page 1 of 3/);
+          expect(cdata.text).match(/Page 2 of 3/);
+          expect(cdata.text).match(/Page 3 of 3/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 3")) {
+              pages[0] = element;
+            }
+            if (element.includes("Page 2 of 3")) {
+              pages[1] = element;
+            }
+            if (element.includes("Page 3 of 3")) {
+              pages[2] = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for record form", () => {
+        const el = pages[0];
+        if (el.includes("Page 1 of 3")) {
+          tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/AR ID\nNone/);
+
+          expect(el).match(/Description\nInline Form Document Revision description/);
+
+          expect(el).match(/Output Document Type\nRecord one/);
+
+          expect(el).match(/Attachments/);
+          expect(el).match(/image.jpg/);
+
+          expect(el).match(/Textfield for inline/);
+
+          expect(el).match(/Inline field\nInline approval pending/);
+
+          expect(el).match(/At least one approval required/);
+
+          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          expect(el).match(/Draft/);
+
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`);
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Effective Date: N/A`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 3/);
+        }
+      });
+
+      it("Verify page 2 of record form", () => {
+        const el = pages[1];
+        if (el.includes("Page 2 of 3")) {
+
+          tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Second inline field\nInline approval pending/);
+
+          expect(el).match(/At least one approval required/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          expect(el).match(/Draft/);
+
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`);
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Effective Date: N/A`);
+
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 2 of 3/);
+        }
+      });
+
+      it("Verify page 3 of record form", () => {
+        const el = pages[2];
+        if (el.includes("Page 3 of 3")) {
+
+          tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          expect(el).match(/Draft/);
+
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`);
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Effective Date: N/A`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 3 of 3/);
+        }
+      });
+    });
+
+    context("Release document", () => {
       it("Approve and release document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+
+      it("Verify form Released status and click on Send To Email", () => {
+        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.arCheckTitleInEditableAndMatches({ name: "Inline Form Document Revision" });
+        cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
+          recFormId = $docIdElement.text();
+        });
+        cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+          arId = $lnEl.text();
+        });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        cy.sendToEmail();
+      });
+
+      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+      });
+    });
+
+    context("Verify email for record form notification", () => {
+      it("Get emails", () => {
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${recFormId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[2].email,
+            contains: [`Hello <b>${USERS[2].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id],
+          }];
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify that zip file containing pdf downloaded", () => {
+      it("Download zip file containing record form", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            downloadFile  =  `${recFormId}${fileTimeFormat}_rel.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
+      });
+
+      it("unzip and extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+          `${recFormId}-1-Inline-Form-Document-Revision.pdf`);
+        cy.readFile(pdffile).its("length").should("be.gt", 500);
+      });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 500);
+      });
+    });
+
+    context("Verify PDF file content", () => {
+      it("Extract texts from PDF file content for record form", () => {
+        cy.pdfparseFile(
+          {
+            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+            fileName: `${recFormId}-1-Inline-Form-Document-Revision.pdf`,
+          }).then((cdata) => {
+          expect(cdata.numpages).eq(3);
+          expect(cdata.text).match(/Page 1 of 3/);
+          expect(cdata.text).match(/Page 2 of 3/);
+          expect(cdata.text).match(/Page 3 of 3/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 3")) {
+              pages[0] = element;
+            }
+            if (element.includes("Page 2 of 3")) {
+              pages[1] = element;
+            }
+            if (element.includes("Page 3 of 3")) {
+              pages[2] = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for record form", () => {
+        const el = pages[0];
+        if (el.includes("Page 1 of 3")) {
+          tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Description\nInline Form Document Revision description/);
+
+          expect(el).match(/Output Document Type\nRecord one/);
+
+          expect(el).match(/Attachments/);
+          expect(el).match(/image.jpg/);
+
+          expect(el).match(/Textfield for inline/);
+
+          expect(el).match(/Inline field\nInline approval pending/);
+
+          expect(el).match(/At least one approval required/);
+
+          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          expect(el).match(/Released/);
+
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 3/);
+        }
+      });
+
+      it("Verify page 2 of record form", () => {
+        const el = pages[1];
+        if (el.includes("Page 2 of 3")) {
+
+          tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Second inline field\nInline approval pending/);
+
+          expect(el).match(/At least one approval required/);
+
+          expect(el).match(/APPROVALS\nApprovers/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          expect(el).match(/Released/);
+
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 2 of 3/);
+        }
+      });
+
+      it("Verify page 3 of record form", () => {
+        const el = pages[2];
+        if (el.includes("Page 3 of 3")) {
+
+          tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          expect(el).match(/Released/);
+
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 3 of 3/);
+        }
       });
     });
   });
@@ -145,36 +718,38 @@ context("Record inline Flow", () => {
       cy.navigToRecords();
     });
 
-    it("Click on create new and chose 'Legal Record'", () => {
+    it("Click on create new and chose 'Record one'", () => {
       SystemRequirement("REQ-2760");
       cy.recCreateRecordFromLandingPage();
-      cy.recSelectRecordFormFromMultiSelect({ recordType: "Legal Record" });
+      cy.recSelectRecordFormFromMultiSelect({ recordType: "Record one" });
     });
 
     context("Fill in document attributes", () => {
       it("Enter title 'Record Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Record Document Revision" });
+        cy.unClick();
       });
 
-      it("Enter description 'Record Document Revision description'", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "Record Document Revision description" });
+      it("Upload attachment 'image.jpg'", () => {
+        cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
+        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click();
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Checkbox option 1 checked", () => {
+        cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        SystemRequirement("REQ-1080");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
-          cy.unClick();
-        });
+        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
+        cy.unClick();
       });
 
       it("Enter text 'First entry' in second textfield for inline", () => {
-        SystemRequirement("REQ-1080");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
-            .type("First entry");
-          cy.unClick();
-        });
+        cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
+          .type("First entry");
+        cy.unClick();
       });
 
       it("Select approver for first inline", () => {
@@ -182,16 +757,46 @@ context("Record inline Flow", () => {
           () => {
             cy.listLoadingElementShouldNotExist();
             cy.get("[name*=\"fb-ia-inline-field\"] input")
-              .autocompleteSelect("enlil.testmail+cy2");
+              .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
+      });
+
+      it("Select second approver for first inline", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+          () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("[name^=\"fb-ia-inline-field\"] input").arrowClick();
+            cy.get("[name^=\"fb-ia-inline-field\"] input")
+              .autocompleteSelect(`${USERS[3].name}`, { force: true });
+          });
+      });
+
+      it("Remove second approver for first inline", () => {
+        cy.pmDeleteApproverFromApproverList({ approver: `${USERS[3].name} - ${USERS[3].email}` });
       });
 
       it("Select approver for second inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-              .autocompleteSelect("enlil.testmail+cy2");
+              .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
+      });
+
+      it("Select second approver for second inline", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+          () => {
+            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+              .autocompleteSelect("enlil.testmail+cy3");
+          });
+      });
+
+      it("Remove second approver for second inline", () => {
+        cy.contains(`${USERS[3].name} - ${USERS[3].email}`).parent().next().arrowClick();
+      });
+
+      it("Send request for approval", () => {
+        cy.get("[data-cy=\"form.builder.request.approval\"]").first().arrowClick();
       });
 
       it("Check inline record creation default to numeric revision", () => {
@@ -202,7 +807,163 @@ context("Record inline Flow", () => {
 
       it("Check approve button is not disabled", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
+      });
 
+      it("Click on Save", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      it("Check doc status for WIP and click on Send To Email", () => {
+        cy.drCheckDocumentStatus({ status: "WIP" });
+        cy.arCheckTitleInEditableAndMatches({ name: "Record Document Revision" });
+        cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
+          recDocId = $docIdElement.text();
+        });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        cy.sendToEmail();
+      });
+
+      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+      });
+    });
+
+    context("Verify email notification", () => {
+      it("Get emails", () => {
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${recDocId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[2].email,
+            contains: [`Hello <b>${USERS[2].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id,
+            ],
+          }];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify zip file downloaded", () => {
+      it("Download zip file containing inline record notification", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            downloadFile  =  `${recDocId}${fileTimeFormat}_WIP.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
+      });
+
+      it("extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+      });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 500);
+      });
+    });
+
+    context("Verify PDF file content for WIP document", () => {
+      it("Extract texts from PDF file content for WIP document", () => {
+        cy.pdfparseFile({
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${recDocId}-1-Record-Document-Revision.pdf`,
+        }).then((cdata) => {
+          expect(cdata.numpages).eq(1);
+          expect(cdata.text).match(/Page 1 of 1/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 1")) {
+              pages[0] = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for WIP document", () => {
+        const el = pages[0];
+        if (el.includes("Page 1 of 1")) {
+          tmpRegex = new
+          RegExp( `Record one\n${recDocId}, Revision 1\nRECORD DOCUMENT REVISION`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Attachments/);
+          expect(el).match(/image.jpg/);
+
+          expect(el).match(/Textfield for inline\nFirst entry/);
+
+          expect(el).match(/Second textfield for inline\nFirst entry/);
+
+          tmpRegex = new RegExp(`Checkbox`);
+          expect(el).match(tmpRegex);
+
+          tmpRegex = RegExp( `${USERS[3].name}`, "gi" );
+          expect(el).not.match(tmpRegex);
+
+          expect(el).not.match(/TEXT FIELD/);
+
+          expect(el).match(/1 2 3\nWIP/);
+
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 1/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+
+          tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| PENDING`);
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| DRAFT`);
+          expect(el).match(tmpRegex);
+        }
       });
     });
 
@@ -358,6 +1119,161 @@ context("Record inline Flow", () => {
           SystemRequirement("REQ-1060");
           cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
             .contains("Revision A");
+        });
+
+        it("Check doc status for Released and click on Send To Email", () => {
+          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.arCheckTitleInEditableAndMatches({ name: "Record Document Revision" });
+          cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
+            recDocId = $docIdElement.text();
+          });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+          cy.sendToEmail();
+        });
+
+        it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+          cy.checkToastMessageContains({
+            message: "File will be sent to your email shortly.",
+          });
+        });
+      });
+
+      context("Verify email notification", () => {
+        it("Get emails", () => {
+          const getEmailSetting =  {
+            to: CONFIG.TEST_EMAIL,
+            after: dateAfterEmailShouldArrive,
+            subject: `Export for document ${recDocId}`,
+          };
+
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+            emailsFromInbox = emails;
+            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+          });
+        });
+
+        it("Verify the emails that should be received", () => {
+          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+            {
+              sentToUser: USERS[2].email,
+              contains: [`Hello <b>${USERS[2].name},</b>`,
+                "Your documents are ready for download.",
+                "<button type=\"button\">DOWNLOAD</button>",
+                createdCompany.id,
+              ],
+            }];
+
+          cy.imapVerifyEmailsInList({
+            receivedEmails: emailsFromInbox,
+            emailsToTest: emailsThatShouldBeReceived,
+            getEmailsSincedate: dateAfterEmailShouldArrive,
+            assertNumberOfEmailsFoundInList: 1,
+          });
+        });
+      });
+
+      context("Verify zip file downloaded", () => {
+        it("Download zip file containing inline record notification", () => {
+          expect(downloadUrl).contains("exported_file_download");
+          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+            if (res.body !== "") {
+              downloadUrl = res.body.url;
+              downloadFile  =  `${recDocId}${fileTimeFormat}_rel.zip`;
+              cy.downloadFile({
+                url: downloadUrl,
+                directory: CONFIG.DOWNLOADS_DIR,
+                fileName: downloadFile,
+              });
+            }
+          });
+        });
+
+        it("Verify file size of the downloaded zip file", () => {
+          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+          cy.readFile(zipfile).its("length").should("be.gt", 500);
+        });
+
+        it("extract pdf file from zip file", () => {
+          cy.unzipFile(
+            {
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+        });
+
+        it("Verify attached file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
+      });
+
+      context("Verify PDF file content for Released document", () => {
+        it("Extract texts from PDF file content for Released document", () => {
+          cy.pdfparseFile({
+            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+            fileName: `${recDocId}-A-Record-Document-Revision.pdf`,
+          }).then((cdata) => {
+            expect(cdata.numpages).eq(1);
+            expect(cdata.text).match(/Page 1 of 1/);
+            tmpRegex = new RegExp( "\\n\\n");
+            const arr = cdata.text.split(tmpRegex);
+            arr.forEach((element) => {
+              if (element.includes("Page 1 of 1")) {
+                pages[0] = element;
+              }
+            });
+          });
+        });
+
+        it("Verify page 1 for Released document", () => {
+          const el = pages[0];
+          if (el.includes("Page 1 of 1")) {
+            tmpRegex = new
+            RegExp( `Record one\n${recDocId}, Revision A\nRECORD DOCUMENT REVISION`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Attachments/);
+            expect(el).match(/image.jpg/);
+
+            expect(el).match(/Textfield for inline\nFirst entry, Second entry, Third entry/);
+
+            tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`);
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Second textfield for inline\nFirst entry/);
+
+            tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`);
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Release Details\\nReleased by: ${USERS[2].name}\\nReleased Date: ${pdfDocRelDate}`);
+            expect(el).match(tmpRegex);
+
+            // eslint-disable-next-line max-len
+            tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`, "gi" );
+            expect(el).match(tmpRegex);
+
+            tmpRegex = RegExp( `${USERS[3].name}`, "gi" );
+            expect(el).not.match(tmpRegex);
+
+            expect(el).not.match(/TEXT FIELD/);
+
+            expect(el).match(/Released/);
+
+            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 1 of 1/);
+
+            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+            expect(el).not.match(tmpRegex);
+          }
         });
       });
     });
