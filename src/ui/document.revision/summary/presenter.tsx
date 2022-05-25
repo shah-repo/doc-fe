@@ -186,7 +186,7 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {attachments && <Attachment
+        {attachments && false && <Attachment
           isAttachmentEmpty={attachments.length < 1}
           docRevId = {id}
           containsRedline = {containsRedline()}
