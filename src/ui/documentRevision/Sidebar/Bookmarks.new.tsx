@@ -29,7 +29,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
   useObserver(() => {
     bookmarks = bookmarkState?.bookmarks;
   });
-  const bookmarkClick = (hash: string | undefined, index, tabIndex: number | undefined) => {
+  const bookmarkClick = (hash, index, tabIndex) => {
     setSelectedIndex(index);
     if (isUndefined(tabIndex) || tabIndex < 0) {
       return;
