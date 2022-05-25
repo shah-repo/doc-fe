@@ -3,6 +3,7 @@ import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { CheckCircle, PlayCircleFilled, RemoveCircleOutline } from "@material-ui/icons";
+import BorderColorIcon from "@material-ui/icons/BorderColor";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { isEmpty, map } from "lodash";
 import React from "react";
@@ -49,6 +50,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const operatorList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"].map((e) => getUserDetails(e)?.user);
   const classes = FBButtonStyles();
   const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision}`;
+  const [expand, setExpand] = React.useState(false);
   const stepButtonStyle = {
     marginTop: 0,
     height: 36,
@@ -66,16 +68,22 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     return statusColor;
   };
 
+  const getIcon = () => <ExpandMoreIcon style={{ color: expand ? Colors.navy : "" }}
+  />;
+  // !expand ? <ArrowForwardIosIcon></ArrowForwardIosIcon> :
+
   return (
     <FBProvider {...{ lhrStepState }}>
-      <Accordion className={classes.panelBorder} >
-        <AccordionSummary className={classes.panelSummary} expandIcon={
-          <ExpandMoreIcon style={{ color: Colors.navy }}
-          />}>
+      {expand}
+      <Accordion className={classes.panelBorder} expanded={expand}>
+        <AccordionSummary onClick={() => setExpand(!expand)} className={classes.panelSummary} expandIcon={
+          getIcon()
+        }>
           <Box display="flex"
             alignItems="flex-start">
-            <Box mr={2} ml={1}>
-              <Typography variant="h6" style={{ color: Colors.navy }} className={classes.expansionPanelHedding}>
+            <Box mr={2} ml={1} >
+              <Typography variant="h6"
+                style={{ color: expand ? Colors.navy : Colors.font_gray } } className={classes.expansionPanelHedding}>
                 <FBText locale={stepLabel} />
               </Typography>
             </Box>
@@ -96,8 +104,11 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 {getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime)}
               </Box>
             </Box>
-
           </Box>
+          {stepLHRs?.redline && <Box style={{ position: "relative", left: "64%" }}>
+            <BorderColorIcon style={{ color: Colors.red }}></BorderColorIcon>
+          </Box>
+          }
         </AccordionSummary>
         <AccordionDetails style={{ padding: "2.1rem", display: "block" }}>
           <Box
