@@ -455,6 +455,7 @@ context("PO test", () => {
 
     context("Add Supplier to PO", () => {
       it("Click 'Create A New Supplier'", () => {
+        SystemRequirement("REQ-4900");
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.supplier\"]").arrowClick();
         });
@@ -566,6 +567,7 @@ context("PO test", () => {
       });
 
       it("Add an Approval", () => {
+        cy.wait(5000);
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
@@ -633,15 +635,6 @@ context("PO test", () => {
         cy.checkToastMessage({ exists: false });
       });
 
-    });
-
-    it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Submit for Approval' button", () => {
@@ -873,10 +866,6 @@ context("PO test", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Add an Approval", () => {
-      cy.poAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click 'Void' button", () => {

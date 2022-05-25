@@ -5,6 +5,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM Do YYYY");
 let createdCompany;
@@ -1093,6 +1094,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("[API]Get html document and verify supplier", () => {
+        SystemRequirement("REQ -1450");
         cy.url().then((url: any) => {
           poHTMLDocRevId = url.split("/").pop();
           cy.request({
@@ -1186,6 +1188,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("[API]Get html document and verify supplier", () => {
+        SystemRequirement("REQ -1450");
         cy.url().then((url: any) => {
           poHTMLDocRevId = url.split("/").pop();
           cy.request({

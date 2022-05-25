@@ -469,6 +469,7 @@ context("All regular users on new dashboard", () => {
 
   context("Verify content of each line item", () => {
     it(`For ${USERS[2].name}, verify each line contain icon, doc detail & datetime`, () => {
+      SystemRequirement("REQ-5000", "REQ-5010");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiAvatar-root").eq(0)
         .should("have.text", "GR");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
@@ -502,6 +503,7 @@ context("All regular users on new dashboard", () => {
     });
 
     it(`For ${USERS[1].name}, verify each line contain icon, doc detail & datetime`, () => {
+      SystemRequirement("REQ-5000", "REQ-5010");
       cy.contains("CLOSED").parent().parent().parent().parent().parent().find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
         .and("contain.text", "Releasing FM-00004, Purchase Order form")

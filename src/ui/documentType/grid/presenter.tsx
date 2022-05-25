@@ -7,7 +7,6 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
 import { TableDataProps } from "../../components/table/types";
 import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
-import Colors from "../../layout/theme/utils/colors";
 import { isTranslation } from "../../translations/types";
 import CreateDocumentByType from "../list/CreateDocumentByType";
 import { KendoPresenterProps } from "./interfaces";
@@ -80,7 +79,7 @@ export function DocumentTypePresenter({
     setDataToBeExported(copyDate);
   };
   return (
-    <Box p={2} style={{ background: Colors.background_white }}>
+    <Box p={2}>
       <Grid container={true}>
         <CreateDocumentByType
           {...createDocumentProps}

@@ -277,7 +277,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
       return {
         ...auditRecord,
-        groupKey: `${groupId}-${timestamp}-${ownerId}`,
+        groupKey: `${groupId}-${ownerId}`,
         ownerDetails,
         employeeDetails,
         companyId,
