@@ -88,6 +88,19 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => reaction(
+      () => formState?.lhrApprovals,
+      (value) => {
+        if (value) {
+          console.log("lhrApprovals: value", JSON.parse(JSON.stringify(value)));
+          value = { ...lhrStepState.stepLHRs, ...value };
+          console.log("lhrApprovals: debug", value);
+          // lhrStepState.setLHRs(value);
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // on LHRS create
     React.useEffect(() => reaction(
       () => lhrStepState.startMpiApi.data,

@@ -72,6 +72,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   />;
   // !expand ? <ArrowForwardIosIcon></ArrowForwardIosIcon> :
 
+  console.log("stepLHRs", stepLHRs);
+
   return (
     <FBProvider {...{ lhrStepState }}>
       {expand}
