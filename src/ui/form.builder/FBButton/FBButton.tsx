@@ -57,7 +57,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
         ...style,
         ...hidden && { display: "none" },
       }}
-      className={className}
+      className={(props.startIcon || props.endIcon) ? className : `${classes.fbBtn} ${className}`}
     >
       {isString(label) && (
         <FBText locale={label} />

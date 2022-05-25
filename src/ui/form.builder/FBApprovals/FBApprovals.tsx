@@ -6,6 +6,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
 import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { withFBApprovals } from "./FBApprovals.wrap";
 
 const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
@@ -118,7 +119,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                 && currentUser === approval.approver?.user.id
                 && (
                   <Box flexGrow={1} textAlign="right">
-                    <FBButton
+                    <StyledCancelFBButton
                       {...{ disabled }}
                       label="common.reject"
                       size="small"

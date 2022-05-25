@@ -2,8 +2,9 @@ import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { FormattedNumber } from "react-intl";
-import { FBButton, FBPurchaseOrderActionsProps, FBSubmitButton } from "..";
+import { FBPurchaseOrderActionsProps, FBSubmitButton } from "..";
 import Text from "../../components/Text";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { withFBPurchaseOrderActions } from "./FBPurchaseOrderActions.wrap";
 
 
@@ -34,7 +35,7 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
           onClick={onAddClick}
           autoFocus
         />
-        <FBButton
+        <StyledCancelFBButton
           variant="outlined"
           label="common.cancel"
           onClick={onCancelClick}

@@ -15,7 +15,7 @@ import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import CopyEBButton from "../../../components/forms/CopyEBButton";
-import SubmitButton from "../../../components/forms/SubmitButton";
+import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
@@ -202,7 +202,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <Observer>
         {() => (
           <>
-            {<SubmitButton
+            {<StyledSubmitButton
               showNewButton={isNewLayout && !isCreateUrl}
               asyncState={asyncState}
               label={isDisabled ?
