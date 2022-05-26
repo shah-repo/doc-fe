@@ -551,6 +551,9 @@ context("Training notifications for documents with approved and released revisio
 
     it("Verify training notification", () => {
       cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
     });
@@ -750,6 +753,7 @@ context("Training notifications for documents with approved and released revisio
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
