@@ -1158,7 +1158,7 @@ context("Approval dates for AR and approval block", () => {
     });
 
     it(`Select 1 day to back in future`, () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 1 });
+      cy.asyncSelectBackToTheFutureTime({ day: 5 });
     });
 
     it("Submit async task", () => {
@@ -1202,7 +1202,7 @@ context("Approval dates for AR and approval block", () => {
 
     context("Send email to all approval for Approval Request", () => {
       it("Click on AR 'In Review'", () => {
-        cy.get("[data-cy='AR-00004InReview']> div:nth-child(4)")
+        cy.get("[data-cy='AR-00004InReview']> div:nth-child(3)")
           .arrowClick();
       });
 
