@@ -6,9 +6,10 @@ import { CheckCircle, PlayCircleFilled, RemoveCircleOutline } from "@material-ui
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { isEmpty, map } from "lodash";
+import { reaction } from "mobx";
 import React from "react";
 import { useSelector } from "react-redux";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
+import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
 import { isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
@@ -45,26 +46,34 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   lhrBuildTypeExist,
   ...props
 }) => {
+  let approvers = {};
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
+  // const [approvers, setApprovers] = React.useState<any>({});
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
-  const operatorList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"].map((e) => getUserDetails(e)?.user);
+  // const getStatusInfo = (approverList, operatorId: string) => approverList?.map((o) => o.approverId === operatorId);
+  const operatorList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"].map((e) => ({
+    stepId: e,
+    user: getUserDetails(e)?.user,
+  }));
   const classes = FBButtonStyles();
   const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision}`;
   const [expand, setExpand] = React.useState(false);
-  // const { formState } = FB.useStores();
-  // let approvalMap = {};
-  // const [approval, setApproval] = React.useState<any>({});
-  // console.log("mmm", stepLHRs?.id, approvalMap);
-  // React.useEffect(() => reaction(
-  //   () => formState?.approvalMap,
-  //   (value) => {
-  //     if (value) {
-  //       // approval.setApproval(JSON.parse(JSON.stringify(value)));
-  //       approvalMap = JSON.parse(JSON.stringify(value));
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // ), []);
+  const { formState } = FB.useStores();
+  React.useEffect(() => {
+    // const index = stepLHRs?.id;
+    // setOperator(aap[index]);
+  }, [approvers]);
+  React.useEffect(() => reaction(
+    () => formState?.approvalMap,
+    (value) => {
+      if (value) {
+        // setApprovers(JSON.parse(JSON.stringify(value)));
+        approvers = JSON.parse(JSON.stringify(value));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), []);
+
   const stepButtonStyle = {
     marginTop: 0,
     height: 36,
@@ -85,8 +94,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const getIcon = () => <ExpandMoreIcon style={{ color: expand ? Colors.navy : "" }}
   />;
   // !expand ? <ArrowForwardIosIcon></ArrowForwardIosIcon> :
-
-  console.log("stepLHRs", stepLHRs);
 
   return (
     <FBProvider {...{ lhrStepState }}>
@@ -244,10 +251,10 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             <List>
               {map(operatorList, (e) => <ListItem alignItems="flex-start">
                 <ListItemAvatar>
-                  <Avatar alt={e.name} src={e.avatar} />
+                  <Avatar alt={e.user.name} src={e.user.avatar} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={e.name}
+                  primary={e.user.name}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -255,6 +262,10 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                         variant="body2"
                         color="textPrimary"
                       >
+                        {
+                          // console.log("rrrt",  approvers, getStatusInfo(approvers[stepLHRs?.id || ""], e.stepId))
+                        // getStatusInfo(approvers[stepLHRs?.id || ""], e.stepId)
+                        }
                         Approved .
                       </Typography>
                       {getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime)}
