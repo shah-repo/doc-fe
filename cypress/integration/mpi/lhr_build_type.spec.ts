@@ -11,6 +11,7 @@ import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1014,6 +1015,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Verify notes and redline button should not be present", () => {
+      SystemRequirement("REQ-4770");
       cy.get("#Redline").should("not.exist");
       cy.get("#fb-notes").should("not.exist");
     });
@@ -1060,6 +1062,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Verify notes and redline button should present", () => {
+      SystemRequirement("REQ-4770");
       cy.get("#Redline").should("be.exist");
       cy.get("#fb-notes").should("be.exist");
     });

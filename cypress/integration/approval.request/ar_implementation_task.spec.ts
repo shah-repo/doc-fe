@@ -245,6 +245,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Verify export", () => {
+      SystemRequirement("REQ-3800");
       cy.exportVerifyEmail({
         status: "Implementation", filename: "-Approval-request-from-newly-created-form",
         pdfStatus: "IMPLEMENTATION", type: "approval request",

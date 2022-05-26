@@ -10,6 +10,7 @@ import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -555,6 +556,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click training notification and check doc with Approved status", () => {
+      SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
     });
@@ -568,6 +570,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click training notification and check doc with Released status", () => {
+      SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
     });

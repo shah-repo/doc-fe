@@ -7,6 +7,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ncoFormName = "NCO Form";
 const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
@@ -1850,6 +1851,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add approver and verify checkmark should be ticked", () => {
+        SystemRequirement("REQ-4710");
         cy.unClick();
         cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");

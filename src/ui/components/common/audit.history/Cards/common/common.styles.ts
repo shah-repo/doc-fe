@@ -20,7 +20,7 @@ export default makeStyles(() =>
       "lineHeight": "21px",
       "fontFamily": "Sora",
       "fontSize": 14,
-      "word-break": "break-word",
+      "word-break": "break-all",
       "letterSpacing": 0,
     },
   })

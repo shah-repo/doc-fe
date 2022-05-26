@@ -877,6 +877,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Verify emails that should be received", () => {
+      SystemRequirement("REQ-4700");
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[1].email,

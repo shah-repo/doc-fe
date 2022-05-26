@@ -6,6 +6,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ApprovalsDocType, ApprovalsInlineType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -480,6 +481,7 @@ context("Bulk create approvals block/inline test", () => {
         });
 
         it("Filter approvals block records in WIP state", () => {
+          SystemRequirement("REQ-4730");
           cy.filterRecordState({ state: "WIP" });
         });
 

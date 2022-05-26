@@ -9,6 +9,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -970,14 +971,17 @@ context("NCO document type management", () => {
     });
 
     it("Verify Owner title column", () => {
+      SystemRequirement("REQ-2840");
       cy.get("[class='k-column-title']").eq(4).should("have.text", "Owner");
     });
 
     it("Verify Owner title column", () => {
+      SystemRequirement("REQ-2840");
       cy.get("[class='k-column-title']").eq(8).should("have.text", "Location");
     });
 
     it("Filter by Owner & Location", () => {
+      SystemRequirement("REQ-2840");
       cy.filterEquipByOwnerAndLocation({ owner: USERS[1].name, location: "IQC" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
