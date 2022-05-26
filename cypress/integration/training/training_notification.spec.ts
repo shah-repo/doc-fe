@@ -4,10 +4,11 @@
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, momentInPST, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -27,6 +28,9 @@ let tmpRegex;
 let downloadFile;
 let fileId;
 let dateAfterEmailShouldArrive;
+let asyncTasksGroup;
+
+const approvalRequestName = "Releasing FM-00003, released form";
 
 context("Training notification test", () => {
   before(() => {
@@ -101,6 +105,28 @@ context("Training notification test", () => {
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
             GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
           ],
+        },
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
         },
       });
     });
@@ -637,7 +663,7 @@ context("Training notification test", () => {
     });
   });
 
-  context("Verify email for pending training notification", () => {
+  xcontext("Verify email for pending training notification", () => {
     it("Get emails", () => {
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
@@ -786,7 +812,7 @@ context("Training notification test", () => {
     });
   });
 
-  context("Verify email for completed training notification", () => {
+  xcontext("Verify email for completed training notification", () => {
     it("Get emails", () => {
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
@@ -884,6 +910,114 @@ context("Training notification test", () => {
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
+      });
+    });
+  });
+
+  context("Navigate to approval request list and advance effective date", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter list by status", () => {
+      cy.alFilterByStatus({ status: "APPROVED" });
+    });
+
+    it("Verify filter by TITLE", () => {
+      cy.alVerifyFilterByTitle({ title: approvalRequestName });
+    });
+
+    it(`Open AR filtered request`, () => {
+      cy.get("#root").contains(approvalRequestName).arrowClick();
+    });
+
+    it("Click Close button", () => {
+      cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+    });
+
+    it("Select option No", () => {
+      cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+    });
+
+    it("Advance Effective Date to 23 days from now", () => {
+      const effectiveDate = momentInPST().add(23, "days");
+      const month = effectiveDate.format("MMM");
+      const day = effectiveDate.format("D");
+
+      cy.get("[aria-label=\"change date\"]").arrowClick();
+
+      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+        const monthYearText = $el.text();
+        if (!monthYearText.includes(month)) {
+          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
+        }
+
+        cy.wait(500);
+
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            if (day === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+          cy.get("#confirmEffectiveDate").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 23 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 23 });
+    });
+
+    it("Select next task Select All", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Close the AR", () => {
+    // it("Close the AR", () => {
+    //   cy.wrapWithWaitOnApiCalls(
+    //     [CyRoutes.PostCloseAR], () => {
+    //       cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+    //     });
+    //   // eslint-disable-next-line cypress.eslint.rules/cy.pause
+    //   cy.pause();
+    //   cy.progressBarShouldNotExist();
+    //   cy.listLoadingElementShouldNotExist();
+    //   cy.checkToastMessage({ exists: false });
+    // });
+
+    it("Verify export", () => {
+      cy.exportVerifyEmail({
+        status: "Closed", filename: "-AR-title", pdfStatus: "CLOSED", type: "approval request",
       });
     });
   });
