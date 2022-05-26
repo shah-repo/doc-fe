@@ -13,6 +13,7 @@ import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1632,6 +1633,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Verify Equipment Enforce Prod is checked", () => {
+      SystemRequirement("REQ-4950");
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains(/^Lot History Record$/)
         .parents("tr").find(`td[data-grid-col-index="12"] input`).should("be.checked");
@@ -1806,6 +1808,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Verify selected equipment and its information", () => {
+        SystemRequirement("REQ-4940");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).should("have.text", "EQ-00001");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent().then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
@@ -1814,6 +1817,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Verify background color is gray because it due is not expired", () => {
+        SystemRequirement("REQ-4930");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
           .should("have.css", "background-color", "rgb(212, 219, 225)");
       });
@@ -1830,6 +1834,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Verify user can not select overdue equipment", () => {
+        SystemRequirement("REQ-4920");
         cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
         cy.get(`ul>li[role=option]`).contains("EQ-00002").parents("li")
           .should("have.attr", "aria-disabled", "true");
@@ -1994,6 +1999,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Verify user can select only active equipment", () => {
+        SystemRequirement("REQ-5100");
         cy.get(`ul>li[role=option]`).contains("EQ-00001").parents("li")
           .should("have.attr", "aria-disabled", "false");
         cy.get(`ul>li[role=option]`).contains("EQ-00002").parents("li")
@@ -2022,6 +2028,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Verify selected equipment and its information", () => {
+        SystemRequirement("REQ-4940");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).should("have.text", "EQ-00001");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent().then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
@@ -2030,6 +2037,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Verify background color is gray because it due is not expired", () => {
+        SystemRequirement("REQ-4930");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
           .should("have.css", "background-color", "rgb(212, 219, 225)");
       });
@@ -2046,6 +2054,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Verify user can not select overdue equipment", () => {
+        SystemRequirement("REQ-4920");
         cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
         cy.get(`ul>li[role=option]`).contains("EQ-00002").parents("li")
           .should("have.attr", "aria-disabled", "true");

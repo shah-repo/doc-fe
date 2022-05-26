@@ -556,20 +556,12 @@ context("LHRs email notifications", () => {
     it("Verify emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        wait_time_sec: 5,
-        max_wait_time_sec: 50,
-        include_body: true,
         after: dateAfterEmailShouldArrive,
       };
 
       cy.wait(10000);
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 
@@ -720,12 +712,6 @@ context("LHRs email notifications", () => {
         cy.drClickReviseDocument();
       });
 
-      it("Navigate to revised LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        });
-      });
-
       it(`Select '${BUILD_TYPE.RD}' build type`, () => {
         cy.unClick();
         cy.get(`[value=\"${BUILD_TYPE.RD}\"]`).check();
@@ -767,12 +753,6 @@ context("LHRs email notifications", () => {
         cy.drClickReviseDocument();
       });
 
-      it("Navigate to revised LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        });
-      });
-
       context("Add approvers to LHR B", () => {
         it("Add a first Approval", () => {
           cy.get(dataCyFbApprovals).arrowClick();
@@ -798,20 +778,12 @@ context("LHRs email notifications", () => {
       it("Verify emails", () => {
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          wait_time_sec: 5,
-          max_wait_time_sec: 50,
-          include_body: true,
           after: dateAfterEmailShouldArrive,
         };
 
         cy.wait(10000);
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-          }
-          else {
-            assert.fail("No email found");
-          }
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
         });
       });
 

@@ -5,6 +5,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -174,6 +175,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Upload Users List JSON", () => {
+      SystemRequirement("REQ-5140", "REQ-5150");
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
     });
 
@@ -281,6 +283,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
+      SystemRequirement("REQ-5120");
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
         cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
@@ -457,7 +460,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
         cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();

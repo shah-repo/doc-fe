@@ -40,6 +40,9 @@ declare global {
       fbInlineApprovalHisotryCheck(...list: string[]): Chainable<Subject>;
       fbSelectRadioButtonValue(params: { value: string }): Chainable<Subject>;
       fbSelectFieldValue(params: { value: string }): Chainable<Subject>;
+      fbSelectTextFieldRangeFromValue(params: { value: string }): Chainable<Subject>;
+      fbSelectTextFieldRangeToValue(params: { value: string }): Chainable<Subject>;
+      fbEnterTextEditor(params: { value: string }): Chainable<Subject>;
       fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
       fbEnterPlaceholder(params: { placeholder: string }): Chainable<Subject>;
       fbEnterLabel(params: { label: string }): Chainable<Subject>;
@@ -48,6 +51,7 @@ declare global {
       fbEditHiddenBtn(): Chainable<Subject>;
       fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIf(params: { name: string; value: string | number }): Chainable<Subject>;
+      fbFieldRequiredIfIn(params: { name: string }): Chainable<Subject>;
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string; value: string }): Chainable<Subject>;
@@ -198,6 +202,20 @@ Cypress.Commands.add("fbSelectFieldValue", (params: { value: string }) => {
   cy.get("ul>li[role=option]").contains(params.value).arrowClick();
 });
 
+Cypress.Commands.add("fbSelectTextFieldRangeFromValue", (params: { value: string }) => {
+  cy.get("[name=\"editorConfig.range.from\"]").arrowType(params.value);
+});
+
+Cypress.Commands.add("fbSelectTextFieldRangeToValue", (params: { value: string }) => {
+  cy.get("[name=\"editorConfig.range.to\"]").arrowType(params.value);
+});
+
+Cypress.Commands.add("fbEnterTextEditor", (params: { value: string }) => {
+  cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
+    .click({ force: true }).arrowType(params.value, { force: true });
+  cy.unClick();
+});
+
 Cypress.Commands.add("fbGroupOptions", (...list: string[]) => {
   list.forEach(function(item, i) {
     cy.get("[data-cy=\"options\"]").arrowType((i === list.length - 1) ? item : item + "{enter}" );
@@ -241,6 +259,11 @@ Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string
   cy.get("input[name=\"validators.required_if\"]").arrowClick();
   cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
   cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(params.value);
+});
+
+Cypress.Commands.add("fbFieldRequiredIfIn", (params: { name: string}) => {
+  cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").arrowClick();
+  cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect(params.name);
 });
 
 Cypress.Commands.add("fbVerifyCheckboxValue", (...list: string[]) => {

@@ -8,6 +8,7 @@ import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -335,6 +336,7 @@ context("Self training test", () => {
     });
 
     it("Select training record", () => {
+      SystemRequirement("REQ-4830");
       cy.trFilterDocListByNameAndSelect({ title: "released form" });
     });
 

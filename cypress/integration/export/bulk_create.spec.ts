@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { BulkImport } from "../../utils/constants/documentTypes/bulkImport";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -553,6 +554,7 @@ context("Export Bulk", () => {
 
   context("Bulk Import with WIP status", () => {
     it("Verify export", () => {
+      SystemRequirement("REQ-3800");
       cy.exportVerifyEmail({ status: "WIP", filename: "-1-Bulk-Creation-document" });
     });
   });
