@@ -83,20 +83,20 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const posummaryItem = schema.filter((data) => data.type === "purchaseordersummary");
   if (!posummaryItem.length) {
     // TODO :: remove once backend is ready
-  schema?.push({
-    name: "po-items-built-in",
-    type: "purchaseordersummary",
-    index: 10,
-    label: "Purchase Order",
-    tabId: "lineitems",
-    applicableOn: [
-      "ON_STATE_TO_IN_REVIEW",
-    ],
-    deleteDisabled: true,
-    validationAttribute: "Purchase Order",
-    deleteInFormDisabled: true,
-    applicableValidationSchema: true,
-  });
+  // schema?.push({
+  //   name: "po-items-built-in",
+  //   type: "purchaseordersummary",
+  //   index: 10,
+  //   label: "Purchase Order",
+  //   tabId: "lineitems",
+  //   applicableOn: [
+  //     "ON_STATE_TO_IN_REVIEW",
+  //   ],
+  //   deleteDisabled: true,
+  //   validationAttribute: "Purchase Order",
+  //   deleteInFormDisabled: true,
+  //   applicableValidationSchema: true,
+  // });
   }
 
   return (
