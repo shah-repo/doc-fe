@@ -1,14 +1,15 @@
 /* eslint-disable react/jsx-key */
-import { isEmpty, map } from "lodash";
+import { get, isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupType, TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { FBWorkspace } from "../../../../ui/form.builder";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -49,8 +50,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   autosaveEnabled,
   mode,
 }) => {
-  const group = documentRevision?.document?.documentType?.group || "OTHER";
+  let group: DocumentGroupType = DocTypeGroups.OTHER;
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
+  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+
   if (formValues.values?.retrain) {
     tabConfig = tabConfig && [...tabConfig, {
       labelId: "tabId.training",
@@ -58,9 +63,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       type: "TRAINING",
     } ];
   }
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
   const changeLayoutHeight = () => {
     setTimeout(() => {
@@ -70,6 +72,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
     }, 100);
   };
+
+  useEffect(() => {
+    if (group === DocTypeGroups.FORM) {
+      return group = get(documentRevision.formTemplate?.outputDocumentTypes[0], "group");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return group = get(documentRevision?.document?.documentType, "group", "OTHER");
+  }, []);
+
   useEffect(() => reaction(
     () => _documentRevisionFormState?.viewMore,
     () => {

@@ -1,11 +1,14 @@
-/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, find, findIndex, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
+import { SM } from "../../../App";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { ApplicationState } from "../../../state/reducers";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -78,6 +81,7 @@ export const withFBInput = <T extends FBInputProps>(
   }: T) => {
 
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
@@ -260,11 +264,18 @@ export const withFBInput = <T extends FBInputProps>(
         }
       );
     }, []);
-
+    const group = _documentRevisionFormState?.documentType?.group || "OTHER";
+    const tabConfig = useSelector((state: ApplicationState) =>
+      documentTypeSelectors.getTabConfiguration(state, group));
     useEffect(() => {
       if (!bookmarked) { return; }
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
-      bookmarkState?.addBookmark({ name, label });
+      const schemaItm = find(
+        workspaceState?.schema,
+        (schemaItem) => !!(schemaItem.name && name?.includes(schemaItem.name))
+      );
+      const tabIndex = findIndex(tabConfig, (tab) => tab.tabId === schemaItm?.tabId);
+      bookmarkState?.addBookmark({ name, label, tabIndex });
     }, [bookmarked]);
 
     useEffect(() => {

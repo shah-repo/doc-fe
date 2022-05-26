@@ -23,6 +23,7 @@ ARG REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT
 COPY package*.json ./
 COPY yarn*.lock ./
 COPY patches /opt/app/patches
+COPY eslint /opt/app/eslint
 RUN NODE_ENV="development" yarn install --frozen-lockfile && yarn cache clean
 
 COPY src /opt/app/src
