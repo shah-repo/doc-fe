@@ -10,22 +10,22 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
   const { formState } = FB.useStores();
   const formInputName = props?.lineItems ? props?.lineItems[0] : "po-items-built-in";
   const formValue = formState?.getFieldValue(formInputName, defaultValue);
-  let poSummary = pick(formValue, ["subTotal", "tax"]);
+  const [poSummary, setPoSummary] = React.useState(pick(formValue, ["subTotal", "tax"]));
 
   const { workspaceState } = FB.useStores();
   const lableStyle = { fontSize: 12, fontWeight: 400 };
   const amountStyle = { fontSize: 12, fontWeight: 600 };
 
+
   useEffect(() => reaction(
     () => workspaceState?.poCountChanged,
     (val) => {
-      // TODO check and change here
       const formValue = formState?.getFieldValue(name, defaultValue);
-      poSummary = pick(formValue, ["subTotal", "tax"]);
+      const poSummaryObj = pick(formValue, ["subTotal", "tax"]);
+      setPoSummary(poSummaryObj);
     },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), []);
-
+  ), [workspaceState?.poCountChanged]);
 
   const labelMap = {
     subTotal: "SubTotal",
