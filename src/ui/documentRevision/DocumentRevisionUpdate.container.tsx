@@ -85,6 +85,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       documentRevision.id,
       data,
       async,
+      helpers,
     );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => {
@@ -96,7 +97,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
           method: "get",
         });
       }
-      helpers.resetForm();
     });
   };
 
