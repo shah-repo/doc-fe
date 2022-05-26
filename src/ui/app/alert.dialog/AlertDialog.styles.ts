@@ -4,9 +4,9 @@ import Colors from "../../layout/theme/utils/colors";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     submitButton: {
-      "width": "100px",
+      "width": "117px",
       "height": "36px",
-      "borderRadius": "200px",
+      "borderRadius": "100px",
       "backgroundColor": Colors.navy,
       "color": Colors.white,
       "&:hover": {
@@ -14,9 +14,9 @@ export const styles = makeStyles((theme: Theme) =>
       },
     },
     cancelButton: {
-      "width": "100px",
+      "width": "117px",
       "height": "36px",
-      "borderRadius": "200px",
+      "borderRadius": "100px",
       "backgroundColor": Colors.white,
       "color": Colors.navy,
       "&:hover": {
