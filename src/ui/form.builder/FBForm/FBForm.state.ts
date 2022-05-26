@@ -58,6 +58,10 @@ class FBFormState extends FBSchemaState {
     return this.lhrApprovals;
   }
 
+  @computed public get getApprovalMap() {
+    return this.approvalMap;
+  }
+
   @computed public get Validator(): any {
     return lodashGet(window, "EnlilRemoteValidators.validator");
   }
@@ -157,7 +161,6 @@ class FBFormState extends FBSchemaState {
     set(this.rules, rules);
 
   @action public getRules = () => this.rules;
-  @action public getApprovalMap = () => this.approvalMap;
 
   @action public setErrors = (errors: Dictionary<string>) =>
     set(this, "errors", errors);

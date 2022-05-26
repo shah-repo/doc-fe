@@ -32,6 +32,7 @@ enum Colors {
   cultured="#f6f7f7",
   // blue
   light_blue = "#edf4ff",
+  step_blue = "#EDF4FF",
   blue = "#0066FF",
   medium_blue = "#5C9DFC",
   background_blue = "#DBE9FF",

@@ -7,6 +7,7 @@ import BorderColorIcon from "@material-ui/icons/BorderColor";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { isEmpty, map } from "lodash";
 import { reaction } from "mobx";
+import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
@@ -46,29 +47,28 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   lhrBuildTypeExist,
   ...props
 }) => {
-  let approvers = {};
+  const { formState } = FB.useStores();
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
-  // const [approvers, setApprovers] = React.useState<any>({});
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
-  // const getStatusInfo = (approverList, operatorId: string) => approverList?.map((o) => o.approverId === operatorId);
+  const getStatusInfo = (opert, operatorId: string) => {
+    const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];
+    return approvers?.filter((o) =>
+      o.approverId === operatorId && o.status !== "ABANDONED"
+    )[0];
+  };
   const operatorList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"].map((e) => ({
     stepId: e,
     user: getUserDetails(e)?.user,
   }));
   const classes = FBButtonStyles();
-  const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision}`;
+  const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || "" }`;
   const [expand, setExpand] = React.useState(false);
-  const { formState } = FB.useStores();
-  React.useEffect(() => {
-    // const index = stepLHRs?.id;
-    // setOperator(aap[index]);
-  }, [approvers]);
+
   React.useEffect(() => reaction(
     () => formState?.approvalMap,
     (value) => {
       if (value) {
-        // setApprovers(JSON.parse(JSON.stringify(value)));
-        approvers = JSON.parse(JSON.stringify(value));
+        lhrStepState?.setApproval(value);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +93,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   const getIcon = () => <ExpandMoreIcon style={{ color: expand ? Colors.navy : "" }}
   />;
-  // !expand ? <ArrowForwardIosIcon></ArrowForwardIosIcon> :
 
   return (
     <FBProvider {...{ lhrStepState }}>
@@ -174,7 +173,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               className={classes.button}
               style={stepLHRs ? {
                 ...stepButtonStyle,
-                background: "#EDF4FF",
+                background: Colors.step_blue,
                 color: Colors.navy,
               } : {
                 ...stepButtonStyle,
@@ -251,24 +250,31 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             <List>
               {map(operatorList, (e) => <ListItem alignItems="flex-start">
                 <ListItemAvatar>
-                  <Avatar alt={e.user.name} src={e.user.avatar} />
+                  <Avatar alt={e.user?.name} src={e.user?.avatar} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={e.user.name}
+                  primary={e.user?.name}
                   secondary={
                     <React.Fragment>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        color="textPrimary"
-                      >
-                        {
-                          // console.log("rrrt",  approvers, getStatusInfo(approvers[stepLHRs?.id || ""], e.stepId))
-                        // getStatusInfo(approvers[stepLHRs?.id || ""], e.stepId)
-                        }
-                        Approved .
-                      </Typography>
-                      {getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime)}
+
+                      <Observer>
+                        {() => (
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="textPrimary"
+                            style={{ marginRight: 2 }}
+                          >
+                            {
+                              getStatusInfo(lhrStepState?.approvals, e.stepId)?.status
+                            }
+                          </Typography>
+                        )}
+                      </Observer>
+                      { getStatusInfo(lhrStepState?.approvals, e.stepId)?.reviewedAt &&
+                      getFormattedDateString(getStatusInfo(lhrStepState?.approvals, e.stepId)?.reviewedAt,
+                        MomentFormats.DateTime)
+                      }
                     </React.Fragment>
                   }
                 />
