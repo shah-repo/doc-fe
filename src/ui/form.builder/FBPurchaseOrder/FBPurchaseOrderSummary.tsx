@@ -8,7 +8,8 @@ import { FB, FBPurchaseOrderProps, FBText } from "..";
 
 const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({ defaultValue, name, ...props }) => {
   const { formState } = FB.useStores();
-  const formValue = formState?.getFieldValue(name, defaultValue);
+  const formInputName = props?.lineItems ? props?.lineItems[0] : "po-items-built-in";
+  const formValue = formState?.getFieldValue(formInputName, defaultValue);
   let poSummary = pick(formValue, ["subTotal", "tax"]);
 
   const { workspaceState } = FB.useStores();

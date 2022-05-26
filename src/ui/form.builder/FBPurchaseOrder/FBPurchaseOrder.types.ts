@@ -13,6 +13,7 @@ export type FBPurchaseOrderProps =
   mode?: FBPurchaseOrderMode;
   isReceivable?: boolean;
   receivableName?: string;
+  lineItems?: string [];
 };
 
 type FBPurchaseOrderItemType = "product" | "service";

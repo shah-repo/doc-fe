@@ -32,8 +32,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   if (!posummaryItem.length) {
     // TODO :: remove once backend is ready
     // schema?.push({
-    //   name: "po-items-built-in",
+    //   name: "po-items-built-in-summary",
     //   type: "purchaseordersummary",
+    //   lineItems: ["po-items-built-in"],
     //   index: 10,
     //   label: "Purchase Order",
     //   tabId: "lineitems",
