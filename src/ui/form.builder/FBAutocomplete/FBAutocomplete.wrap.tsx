@@ -45,39 +45,19 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
 
     const intl = useIntl();
-    console.log("defaultValue", { ...defaultValue });
-    console.log("name", name);
     const [modifiedOptions, setModifiedOptions] = useState(options);
     // TO DO: Find another way with BE to chechk if doc is LHRT
     // isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
+    // {[defaultValue?.id]: defaultValue?.approvals}
 
-
-    if (name === "lhr-selected-part" && !isEmpty(defaultValue?.approvals)) {
-      console.log("LHRT", name );
-
-      console.log("LHRT approvals", JSON.stringify(defaultValue?.approvals) );
+    const isDocumentLHR = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHR-";
+    if (isDocumentLHR && !isEmpty(defaultValue?.approvals)) {
       const formObj = JSON.parse(JSON.stringify(defaultValue?.approvals));
-
-      console.log("formObj", formObj);
-
       const exitObj = formState?.getApprovals as any;
-
       if (exitObj) {
-        formState?.setApprovals({
-          approvals: formObj,
-        });
-      } else if (exitObj) {
-        exitObj[defaultValue?.id] = formObj;
-        formState?.setApprovals(exitObj);
+        formState?.setApprovalMap({ [defaultValue?.id]: formObj });
       }
-
-      // formState?.setApprovals(formObj);
-      // formState?.setApprovals({
-      //   [defaultValue?.id]: {
-      //     name,
-      //     approvals: defaultValue?.approvals,
-      //   },
-      // });
+      console.log("ddddd", formState?.getApprovalMap);
     }
 
     useEffect(() => {

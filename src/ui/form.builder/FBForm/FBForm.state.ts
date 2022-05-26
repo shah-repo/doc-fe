@@ -17,6 +17,8 @@ class FBFormState extends FBSchemaState {
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
   public includeLocking = false;
   public expireLocks: Record<string, string> = {};
+  // public approvalMap: Dictionary<any> = {};
+
 
   // This will be used for reaction on value change
   // so that we can omit Input state
@@ -33,6 +35,7 @@ class FBFormState extends FBSchemaState {
   @observable public inputState = new Map<string, FBInputState>();
   @observable public locked = new Map<string, FBLockValue>();
   @observable public lhrApprovals = {};
+  @observable public approvalMap = {};
 
   public constructor({
     schema,
@@ -146,10 +149,15 @@ class FBFormState extends FBSchemaState {
     set(this, "lhrApprovals", { ...this.lhrApprovals, ...approvals });
   };
 
+  @action public setApprovalMap = (approvals) => {
+    set(this, "approvalMap", approvals);
+  };
+
   @action public setRules = (rules: Dictionary<string>) =>
     set(this.rules, rules);
 
   @action public getRules = () => this.rules;
+  @action public getApprovalMap = () => this.approvalMap;
 
   @action public setErrors = (errors: Dictionary<string>) =>
     set(this, "errors", errors);

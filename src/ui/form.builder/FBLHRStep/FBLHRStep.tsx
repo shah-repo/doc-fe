@@ -51,6 +51,20 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const classes = FBButtonStyles();
   const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision}`;
   const [expand, setExpand] = React.useState(false);
+  // const { formState } = FB.useStores();
+  // let approvalMap = {};
+  // const [approval, setApproval] = React.useState<any>({});
+  // console.log("mmm", stepLHRs?.id, approvalMap);
+  // React.useEffect(() => reaction(
+  //   () => formState?.approvalMap,
+  //   (value) => {
+  //     if (value) {
+  //       // approval.setApproval(JSON.parse(JSON.stringify(value)));
+  //       approvalMap = JSON.parse(JSON.stringify(value));
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // ), []);
   const stepButtonStyle = {
     marginTop: 0,
     height: 36,

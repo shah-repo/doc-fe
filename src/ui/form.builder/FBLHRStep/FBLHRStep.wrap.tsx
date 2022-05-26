@@ -89,13 +89,13 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     ), []);
 
     React.useEffect(() => reaction(
-      () => formState?.lhrApprovals,
+      () => formState?.approvalMap,
       (value) => {
         if (value) {
-          console.log("lhrApprovals: value", JSON.parse(JSON.stringify(value)));
-          value = { ...lhrStepState.stepLHRs, ...value };
-          console.log("lhrApprovals: debug", value);
+          const formattedObj = JSON.parse(JSON.stringify(value));
+          value = { ...lhrStepState.stepLHRs, ...formattedObj };
           // lhrStepState.setLHRs(value);
+          // console.log("lhrApprovals: after debug", value, lhrStepState.setLHRs);
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
