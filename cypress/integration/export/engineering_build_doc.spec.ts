@@ -507,7 +507,6 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/STEP #1/);
         expect(el).match(/Description/);
         expect(el).match(/Attachments/);
-        expect(el).match(/Materials/);
 
         expect(el).match(/Draft/);
 
@@ -528,13 +527,13 @@ context("Export Engineering Build doc", () => {
         RegExp( `Form\n${docId}, Revision 1\nEB FORM`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/Materials/);
         expect(el).match(/Equipment/);
         expect(el).match(/EB PROCEDURE/);
         expect(el).match(/STEP #2/);
         expect(el).match(/Description/);
         expect(el).match(/Attachments/);
         expect(el).match(/Materials/);
-        expect(el).match(/Equipment/);
 
         expect(el).match(/Draft/);
 
@@ -554,6 +553,8 @@ context("Export Engineering Build doc", () => {
         tmpRegex = new
         RegExp( `Form\n${docId}, Revision 1\nEB FORM`, "gi" );
         expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment/);
 
         expect(el).match(/Draft/);
 
@@ -678,7 +679,6 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/STEP #1/);
         expect(el).match(/Description/);
         expect(el).match(/Attachments/);
-        expect(el).match(/Materials/);
 
         expect(el).match(/Released/);
 
@@ -699,13 +699,13 @@ context("Export Engineering Build doc", () => {
         RegExp( `Form\n${docId}, Revision 1\nEB FORM`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/Materials/);
         expect(el).match(/Equipment/);
         expect(el).match(/EB PROCEDURE/);
         expect(el).match(/STEP #2/);
         expect(el).match(/Description/);
         expect(el).match(/Attachments/);
         expect(el).match(/Materials/);
-        expect(el).match(/Equipment/);
 
         expect(el).match(/Released/);
 
@@ -726,6 +726,7 @@ context("Export Engineering Build doc", () => {
         RegExp( `Form\n${docId}, Revision 1\nEB FORM`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/Equipment/);
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
@@ -1051,7 +1052,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Materials\nPRT-00005 - Part document | ? | Qty: 3 each/);
         expect(el).match(/Equipment\nET-00003 - Equipment document/);
         expect(el).match(/STEP #3/);
-        expect(el).match(/Attachments\nNone\nMaterials\nNone/);
+        expect(el).match(/Attachments\nNone\nMaterials\nNone\nEquipment\nNone/);
 
         expect(el).match(/WIP/);
 
@@ -1074,8 +1075,6 @@ context("Export Engineering Build doc", () => {
         tmpRegex = new
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Equipment\nNone/);
 
         expect(el).match(/WIP/);
 
@@ -1241,6 +1240,7 @@ context("Export Engineering Build doc", () => {
         tmpRegex = new RegExp(`APPROVALS\n${USERS[2].name} - ${USERS[2].email} | APPROVED`);
         expect(el).match(/fb-fileupload/);
         expect(el).match(/test.docx/);
+        expect(el).match(/fb-textfield\ntextfield/);
 
         expect(el).match(/Released/);
 
@@ -1264,7 +1264,6 @@ context("Export Engineering Build doc", () => {
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/fb-textfield\ntextfield/);
         expect(el).match(/MATERIALS/);
         expect(el).match(/MT-00004 - Materials document | ? | Qty: 2 each/);
         expect(el).match(/PRT-00005 - Part document | ? | Qty: 3 each/);
