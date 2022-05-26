@@ -81,6 +81,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     changeLayoutHeight();
   }, []);
 
+  useEffect(() => {
+    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
@@ -116,7 +121,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           <Observer>
             {() => (
               <SMTabs
-                onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
+                onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
                 boxProps={{ stretchY: "100%", px: 3.75 }}
               >

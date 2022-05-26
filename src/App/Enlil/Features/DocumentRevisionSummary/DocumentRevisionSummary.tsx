@@ -1,6 +1,6 @@
 import { isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -40,6 +40,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
+  useEffect(() => {
+    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
@@ -74,7 +79,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           <Observer>
             {() => (
               <SMTabs
-                onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
+                onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
                 boxProps={{ stretchY: "100%", px: 4.25 }}
               >
