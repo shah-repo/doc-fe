@@ -4,7 +4,6 @@ import Colors from "../../layout/theme/utils/colors";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     submitButton: {
-      "width": "117px",
       "height": "36px",
       "borderRadius": "100px",
       "backgroundColor": Colors.navy,
@@ -14,14 +13,23 @@ export const styles = makeStyles((theme: Theme) =>
       },
     },
     cancelButton: {
-      "width": "117px",
       "height": "36px",
       "borderRadius": "100px",
       "backgroundColor": Colors.white,
       "color": Colors.navy,
       "&:hover": {
         background: Colors.white,
+        boxShadow:
+          "0px 2px 4px -1px rgb(0 0 0 / 5%), 0px 4px 5px 0px rgb(0 0 0 / 5%), 0px 1px 10px 0px rgb(0 0 0 / 5%)",
       },
+    },
+    buttonLabel: {
+      fontWeight: 700,
+      fontSize: "12px",
+      lineHeight: "15px",
+      textTransform: "capitalize",
+      whiteSpace: "nowrap",
+      padding: "10.5px 20px",
     },
     dialogAction: {
       "display": "flex",
@@ -31,12 +39,13 @@ export const styles = makeStyles((theme: Theme) =>
       "height": "76px",
       "background": Colors.white_smoke,
     },
-    buttonLabel: {
-      fontWeight: 700,
-      fontSize: "12px",
-      lineHeight: "15px",
-      textTransform: "capitalize",
-      whiteSpace: "nowrap",
+    contentContainer: {
+      flexWrap: "nowrap",
+      padding: "20px",
+    },
+    alertIcon: {
+      marginTop: "2px",
+      paddingRight: "20px",
     },
     alertTitle: {
       fontWeight: 600,

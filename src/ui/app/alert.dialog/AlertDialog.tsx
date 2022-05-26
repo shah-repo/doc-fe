@@ -44,21 +44,19 @@ const AlertDialog: React.FunctionComponent<Props> = ({
         >
           <DialogContent>
             <DialogContentText>
-              <Box padding="30px 20px">
-                <Grid container>
-                  <Grid item xs={1}>
-                    <AlertIcon />
-                  </Grid>
-                  <Grid item xs={11}>
-                    <Typography className={classes.alertTitle}>
-                      <Text translation="common.alert" />!
-                    </Typography>
-                    <Typography className={classes.contentText}>
-                      <Text translation={message} />
-                    </Typography>
-                  </Grid>
+              <Grid container className={classes.contentContainer}>
+                <Grid item className={classes.alertIcon}>
+                  <AlertIcon />
                 </Grid>
-              </Box>
+                <Grid item >
+                  <Typography className={classes.alertTitle}>
+                    <Text translation="common.alert" />!
+                  </Typography>
+                  <Typography className={classes.contentText}>
+                    <Text translation={message} />
+                  </Typography>
+                </Grid>
+              </Grid>
             </DialogContentText>
           </DialogContent>
           <Box className={classes.dialogAction}>
@@ -67,8 +65,6 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               className={`${classes.cancelButton} ${classes.buttonLabel}`}
               onClick={cancelAction}
               id="AlertDialog-cancelButton"
-              disableFocusRipple
-              disableRipple
             >
               <Text translation={cancelLabel} />
             </Button>
