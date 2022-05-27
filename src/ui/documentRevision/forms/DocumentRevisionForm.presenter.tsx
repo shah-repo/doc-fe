@@ -119,7 +119,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
-  // const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
 
@@ -128,6 +127,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const documentReferences = documentRevision?.referenceTo;
+
   useEffect(() => {
     if (!redlineActive) {
       return;
