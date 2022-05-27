@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
-import { isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentRevisionApproved, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
@@ -83,7 +83,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const getStatusColor = () => {
     const status = stepLHRs?.status;
     let statusColor = ""; // latest_yellow_varient
-    if (isDocumentRevisionReleased(status)) {
+    if (isDocumentRevisionReleased(status) && isDocumentRevisionApproved(status)) {
       statusColor = Colors.green_blue;
     } else if (isDocumentRevisionInReview(status)) {
       statusColor = Colors.latest_yellow_varient;
@@ -93,11 +93,13 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   const getLHRStatus = () => {
     const status = stepLHRs?.status;
-    let lhrstatus = ""; // latest_yellow_varient
-    if (isDocumentRevisionReleased(status)) {
+    let lhrstatus = "";
+    if (isDocumentRevisionReleased(status) && isDocumentRevisionApproved(status)) {
       lhrstatus = "Completed";
-    } else if (isDocumentRevisionInReview(status)) {
+    } else if (isDocumentRevisionInReview(status) || stepLHRs) {
       lhrstatus = "In-Progress";
+    } else if (!stepLHRs) {
+      lhrstatus = "Not Started";
     }
     return lhrstatus || status;
   };
