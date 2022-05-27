@@ -17,8 +17,6 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
   const formValue = formState?.getFieldValue(formInputName, defaultValue);
   const [poSummary, setPoSummary] = React.useState(pick(formValue, ["subTotal", "tax", "currency", "totalAmount"]));
 
-  const lableStyle = { fontSize: 12, fontWeight: 400 };
-  const amountStyle = { fontSize: 12, fontWeight: 600 };
 
   useEffect(() => reaction(
     () => _tabsState?.value,
@@ -37,39 +35,44 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
     <>
       <Observer>
         {() => (
-          <Box color={Colors.almost_black} width={242}>
+          <Box color={Colors.almost_black} width={242} fontSize={12}>
             <Box mb={1.25} fontWeight={600} fontSize={12}>
               <FBText locale="common.summary.total" />
             </Box>
             <Box pl={2.75} pr={3.125} pt={3.5} pb={4.75} bgcolor={Colors.white}>
               <Box>
-                {map(pick(poSummary, ["subTotal", "tax"]), (value, key) => (<Grid container spacing={3} alignItems="center" justify="space-between"
-                  style={{ marginBottom: key === "subTotal" ? 8 : 0 }}>
-                  <Grid style={{ ...lableStyle }} item xs="auto">
-                    <FBText locale={labelMap[key]}></FBText>
-                  </Grid>
-                  <Grid item xs="auto" style={{ ...amountStyle }}>
-                    <FormattedNumber
-                      value={Number(value)}
-                      // eslint-disable-next-line react/style-prop-object
-                      style="currency"
-                      currency={poSummary?.currency} />
-                  </Grid>
-                </Grid>))}
+                {map(pick(poSummary, ["subTotal", "tax"]), (value, key) => (
+                  <Grid container spacing={3} alignItems="center" justify="space-between"
+                    style={{ marginBottom: key === "subTotal" ? 8 : 0 }}>
+                    <Grid item xs="auto">
+                      <FBText locale={labelMap[key]}></FBText>
+                    </Grid>
+                    <Grid item xs="auto">
+                      <Box fontWeight={600}>
+                        <FormattedNumber
+                          value={Number(value)}
+                          // eslint-disable-next-line react/style-prop-object
+                          style="currency"
+                          currency={poSummary?.currency} />
+                      </Box>
+                    </Grid>
+                  </Grid>))}
               </Box>
               <Divider style={{ marginTop: 8, marginBottom: 20 }}></Divider>
               <Box>
                 <Grid container spacing={3} alignItems="center" justify="space-between">
-                  <Grid item xs="auto" style={{ ...lableStyle }}>
+                  <Grid item xs="auto">
                     <FBText locale="form.builder.grand.total"></FBText>
                   </Grid>
-                  <Grid item xs="auto" style={{ ...amountStyle }}>
-                    <FormattedNumber
-                      value={Number(poSummary?.totalAmount)}
-                      // eslint-disable-next-line react/style-prop-object
-                      style="currency"
-                      currency={poSummary?.currency}
-                    />
+                  <Grid item xs="auto">
+                    <Box fontWeight={600}>
+                      <FormattedNumber
+                        value={Number(poSummary?.totalAmount)}
+                        // eslint-disable-next-line react/style-prop-object
+                        style="currency"
+                        currency={poSummary?.currency}
+                      />
+                    </Box>
                   </Grid>
                 </Grid>
               </Box>
