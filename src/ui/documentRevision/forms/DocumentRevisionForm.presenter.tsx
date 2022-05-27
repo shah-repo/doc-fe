@@ -128,7 +128,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const documentReferences = documentRevision?.referenceTo;
-
   useEffect(() => {
     if (!redlineActive) {
       return;
@@ -296,16 +295,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
           {...{ documentTypeId, isRecord }}
         />
-        {/* <AttachmentsField
-          isDisabled={isDisabledInput}
-          isNewVersion={isNewVersion}
-          docRevId = {docRevId}
-          isAttachmentEmpty = {isAttachmentEmpty}
-          containsRedline = {false}
-          docRevStatus = {documentRevision?.status}
-          documentRevision={documentRevision}
-          documentTypeId={documentTypeId || ""}
-        /> */}
         {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
         <RevisionTypeChange
           isDisabled={isDisabledInput}
