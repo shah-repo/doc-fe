@@ -1158,12 +1158,12 @@ context("Approval dates for AR and approval block", () => {
     });
 
     it(`Select 1 day to back in future`, () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 5 });
+      cy.asyncSelectBackToTheFutureTime({ day: 1 });
     });
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
-      cy.wait(15000);
+      cy.wait(5000);
     });
   });
 
@@ -1250,7 +1250,7 @@ context("Approval dates for AR and approval block", () => {
 
     context("Send email to all approval for TC", () => {
       it("Click on TC 'In Review'", () => {
-        cy.get("[data-cy='POT-00001InReview']> div:nth-child(4)")
+        cy.get("[data-cy='TCT-00001InReview']> div:nth-child(4)")
           .arrowClick();
       });
 
@@ -1279,7 +1279,7 @@ context("Approval dates for AR and approval block", () => {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
       };
-      cy.wait(10000);
+      cy.wait(20000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
