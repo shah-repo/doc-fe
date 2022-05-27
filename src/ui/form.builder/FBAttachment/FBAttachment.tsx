@@ -7,7 +7,7 @@ import { authSelectors } from "../../../state/ducks/auth";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import AttachmentsField from "../../document.revision/form/attachments";
-import { Attachment } from "../../document.revision/summary/attachment";
+import Attachment from "../../document.revision/summary/attachment";
 import { isOperator } from "../../documentRevision/DocumentRevisionDisplay.container";
 import { FBAttachmentProps } from "./FBAttachment.types";
 
