@@ -91,13 +91,24 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     return statusColor;
   };
 
+  const getLHRStatus = () => {
+    const status = stepLHRs?.status;
+    let lhrstatus = ""; // latest_yellow_varient
+    if (isDocumentRevisionReleased(status)) {
+      lhrstatus = "Completed";
+    } else if (isDocumentRevisionInReview(status)) {
+      lhrstatus = "In-Progress";
+    }
+    return lhrstatus || status;
+  };
+
   const getIcon = () => <ExpandMoreIcon style={{ color: expand ? Colors.navy : "" }}
   />;
 
   return (
     <FBProvider {...{ lhrStepState }}>
       {expand}
-      <Accordion className={classes.panelBorder} expanded={expand}>
+      <Accordion className={classes.panelBorder} expanded={expand} style={{ marginBottom: 5 }}>
         <AccordionSummary onClick={() => setExpand(!expand)} className={classes.panelSummary} expandIcon={
           getIcon()
         }>
@@ -112,16 +123,16 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             <Box display="flex"
               alignItems="flex-start" style={{ fontSize: 12 }} >
               <Box mr={1} display="flex" alignItems="center">
-                <CheckCircle style={{
+                {isDocumentRevisionReleased(stepLHRs?.status) && <CheckCircle style={{
                   color:
                   getStatusColor(), fontSize: 14, marginTop: 4,
-                }} className="fontSizeSmall" />
+                }} className="fontSizeSmall" />}
                 {isDocumentRevisionInReview(stepLHRs?.status) && <RemoveCircleOutline style={{
                   color:
                   getStatusColor(), fontSize: 14, marginTop: 4,
                 }} className="fontSizeSmall"></RemoveCircleOutline>}
               </Box>
-              <Box style={{ fontWeight: 700 }} component={"span"} mr={2} mt={0.4} >{stepLHRs?.status}</Box>
+              <Box style={{ fontWeight: 700 }} component={"span"} mr={2} mt={0.4} >{getLHRStatus()}</Box>
               <Box component={"span"} mt={0.3}>
                 {getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime)}
               </Box>
