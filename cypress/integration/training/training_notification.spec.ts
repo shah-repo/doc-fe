@@ -1109,6 +1109,22 @@ context("Training notification test", () => {
     });
   });
 
+  context("Check training notifications due days", () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+    });
+
+    it("Select 'Trainings' tab", () => {
+      cy.contains("Trainings").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify training notification", () => {
+      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+    });
+  });
+
   context("Verify the AR in Close State", () => {
     it("Navigate to ar list", () => {
       cy.navigToApprovalRequestList();
