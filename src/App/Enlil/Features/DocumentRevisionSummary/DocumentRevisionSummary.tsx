@@ -1,11 +1,12 @@
-import { isEmpty, map } from "lodash";
+import { get, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupType, TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../../state/reducers";
+import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
@@ -26,7 +27,10 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
 }) => {
-  const group = documentRevision?.document?.documentType?.group || "OTHER";
+  const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
+  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
+
+  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
   if (documentRevision.retrain && tabConfig) {
@@ -37,8 +41,15 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     }];
   }
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+
+  useEffect(() => {
+    if (!tabConfig) {
+      return;
+    }
+    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabConfig]);
 
   return (
     <SMForm
@@ -74,7 +85,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           <Observer>
             {() => (
               <SMTabs
-                onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
+                onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
                 boxProps={{ stretchY: "100%", px: 4.25 }}
               >
@@ -85,7 +96,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                   const availableSchema = schema?.filter((schemaItem) =>
                     schemaItem.tabId === tabId && !schemaItem.deleted);
 
-                  const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
                   return <SMBox height="100%"  overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="100%">
                       {tabType === "MIXED" &&  <>
@@ -103,7 +113,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                         />
                         }
                       </>}
-                      {tabType !== "TRAINING" && isFB && showFBLabels && (
+                      {tabType === "DYNAMIC" && isFB && (
                         <FBWorkspace
                           document={documentRevision}
                           initialValues={documentRevision.formInput}

@@ -36,8 +36,9 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     // MARK: @helpers
 
     // MARK: @methods
-    onTabChange = (_ev, newValue) => {
+    onTabChange = (_ev, newValue, tabConfig) => {
       _tabsState?.setValue(newValue);
+      _tabsState?.setTabID(tabConfig[newValue].tabId);
     };
 
     onScroll = (ev) => {
