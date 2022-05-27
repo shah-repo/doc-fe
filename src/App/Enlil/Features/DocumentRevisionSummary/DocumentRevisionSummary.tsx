@@ -26,26 +26,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
 }) => {
-
-  const posummaryItem =
-    schema?.filter((data) => data.type === "purchaseordersummary") || [];
-  if (!posummaryItem.length) {
-    // TODO :: remove once backend is ready
-    schema?.push({
-      name: "po-items-built-in-summary",
-      type: "purchaseordersummary",
-      // lineItems: ["po-items-built-in"],
-      index: 10,
-      label: "Purchase Order",
-      tabId: "details",
-      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-      deleteDisabled: true,
-      validationAttribute: "Purchase Order",
-      deleteInFormDisabled: true,
-      applicableValidationSchema: true,
-    });
-  }
-
   const group = documentRevision?.document?.documentType?.group || "OTHER";
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));

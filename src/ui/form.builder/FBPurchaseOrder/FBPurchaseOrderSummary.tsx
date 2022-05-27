@@ -11,18 +11,19 @@ import Colors from "../../layout/theme/utils/colors";
 import FBStore from "../FBStore/FBStore";
 
 const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({ defaultValue, name, ...props }) => {
+  const requiredKeys = ["subTotal", "tax", "currency", "totalAmount"];
   const { formState } = FB.useStores();
   const { _tabsState } = SM.useStores();
   const formInputName = props?.lineItems ? props?.lineItems[0] : "po-items-built-in";
   const formValue = formState?.getFieldValue(formInputName, defaultValue);
-  const [poSummary, setPoSummary] = React.useState(pick(formValue, ["subTotal", "tax", "currency", "totalAmount"]));
+  const [poSummary, setPoSummary] = React.useState(pick(formValue, requiredKeys));
 
 
   useEffect(() => reaction(
     () => _tabsState?.value,
     () => {
       const formValue = FBStore?.purchaseOrderValue || formState?.getFieldValue("po-items-built-in", defaultValue);
-      const poSummaryObj = pick(formValue, ["subTotal", "tax", "currency", "totalAmount"]);
+      const poSummaryObj = pick(formValue, requiredKeys);
       setPoSummary(poSummaryObj);
     }
   ));
