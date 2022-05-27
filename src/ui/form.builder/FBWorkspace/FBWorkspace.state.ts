@@ -23,7 +23,6 @@ class FBWorkspaceState extends FBSchemaState {
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
-  @observable public poCountChanged?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
 
@@ -135,11 +134,6 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setAutosave = (autosave: boolean) => {
     set(this, "autosave", autosave);
-  };
-
-  @action public setPoCountChanged = () => {
-
-    set(this, "poCountChanged", !this.poCountChanged);
   };
 
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
