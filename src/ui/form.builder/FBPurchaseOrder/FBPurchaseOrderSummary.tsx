@@ -24,7 +24,6 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
   useEffect(() => reaction(
     () => workspaceState?.poCountChanged,
     (val) => {
-      alert(1);
       const formValue = formState?.getFieldValue(name, defaultValue);
       const poSummaryObj = pick(formValue, ["subTotal", "tax"]);
       setPoSummary(poSummaryObj);
