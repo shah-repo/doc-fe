@@ -35,6 +35,7 @@ declare global {
       grpClickAddGroup(): Chainable;
       grpSelectOfficial(): Chainable;
       grpEnterGroupName(params: { name: string }): Chainable;
+      grpSearchEditChangeName(params: { name: string; field: string | number }): Chainable<Subject>;
       grpAssignUser(params: { name: string }): Chainable;
       grpRemoveUser(params: { name: string }): Chainable;
       grpAssignUserDialog(params: { name: string }): Chainable;
@@ -255,6 +256,16 @@ Cypress.Commands.add("grpSelectOfficial", () => {
 Cypress.Commands.add("grpEnterGroupName", (params: { name: string }) => {
   cy.get(`td[role="gridcell"] input`).eq(0).clear().arrowType(params.name);
 });
+
+Cypress.Commands.add("grpSearchEditChangeName", (params: { name: string; field: string }) => {
+  cy.get("[class=\"k-textbox\"]").eq(0).clear();
+      cy.get("[class=\"k-textbox\"]").eq(0).arrowType(params.name);
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("right").wait(1000);
+      cy.get("[class=\"MuiIconButton-label\"]").eq(2).arrowClick();
+      cy.get("[data-cy=\"Group-groupName\"]").clear().arrowType(params.field);
+      cy.unClick();
+});
+
 
 Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
   cy.get(`td[role="gridcell"] input`).eq(1).arrowType(params.name);
