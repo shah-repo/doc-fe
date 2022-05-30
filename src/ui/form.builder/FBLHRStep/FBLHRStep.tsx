@@ -218,6 +218,11 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 shouldReloadOnInit
                 disabled={isOutput || !(isDraft || isPendingChange)}
                 withoutPrefixRoot={Boolean(stepLHRs)}
+                inputPropStyle={{
+                  background: Colors.background_white,
+                  padding: "0px 0px 0px 6px",
+                  minHeight: 36,
+                }}
                 {...{ name, loading, filterOptions }}
                 inputStyle={
                   stepLHRs?.redline
@@ -329,8 +334,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               <Text translation="common.operators" />
             </Box>
             <List>
-              {map(operatorList, (e) => (
-                <ListItem alignItems="flex-start" disableGutters className={classes.listItem}>
+              {map(operatorList, (e, index) => (
+                <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
                   <ListItemAvatar>
                     {e.user.avatar ? (
                       <Avatar alt={e.user?.name} src={e.user?.avatar} />

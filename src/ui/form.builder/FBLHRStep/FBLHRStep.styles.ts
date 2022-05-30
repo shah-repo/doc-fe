@@ -13,7 +13,7 @@ export const FBLHRStepStyles = makeStyles(() =>
       "fontSize": 12,
       "fontWeight": 600,
       "color": Colors.white,
-      "border": `1px solid ${Colors.navy}`,
+      "border": 0,
       "&.Mui-disabled": {
         border: "none",
         backgroundColor: Colors.gains_boro,
@@ -21,8 +21,10 @@ export const FBLHRStepStyles = makeStyles(() =>
       },
       "&:hover": {
         backgroundColor: Colors.navy,
+        border: 0,
       },
       "padding": "12px 25px",
+      "textTransform": "capitalize",
     },
     expansionPanelHedding: {
       Colors: Colors.navy,
