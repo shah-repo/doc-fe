@@ -232,7 +232,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Box>
           )}
         </AccordionSummary>
-        <AccordionDetails style={{ padding: "2.1rem", display: "block" }}>
+        <AccordionDetails className={classes.panelDetails}>
           <Box display="flex" alignItems="flex-start">
             <Box
               flexGrow={1}
@@ -368,7 +368,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Box>
             <List>
               {map(operatorList, (e) => (
-                <ListItem alignItems="flex-start">
+                <ListItem alignItems="flex-start" disableGutters className={classes.listItem}>
                   <ListItemAvatar>
                     {e.user.avatar ? (
                       <Avatar alt={e.user?.name} src={e.user?.avatar} />
@@ -379,7 +379,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     )}
                   </ListItemAvatar>
                   <ListItemText
-                    style={{ marginLeft: 20 }}
+                    style={{ marginLeft: 4 }}
                     primary={
                       <div className={classes.operatorTitle}>
                         {e.user?.name}

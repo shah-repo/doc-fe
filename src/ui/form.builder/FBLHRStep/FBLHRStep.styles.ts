@@ -28,9 +28,18 @@ export const FBLHRStepStyles = makeStyles(() =>
       "flexDirection": "row-reverse",
       "padding": 0,
       "margin": 0,
+      "height": "55px",
+      "alignItems": "center",
       "& .Mui-expanded": {
         transform: "rotate(0deg)",
+        height: "55px",
+        alignItems: "center",
       },
+    },
+    panelDetails: {
+      marginLeft: "22px",
+      marginRight: "22px",
+      display: "block",
     },
     panelBorder: {
       marginBottom: 5,
@@ -47,6 +56,10 @@ export const FBLHRStepStyles = makeStyles(() =>
       fontWeight: 400,
       color: Colors.almost_black,
       marginTop: 10,
+    },
+    listItem: {
+      paddingTop: 0,
+      paddingBottom: 0,
     },
     operatorTitle: {
       fontWeight: 700,
