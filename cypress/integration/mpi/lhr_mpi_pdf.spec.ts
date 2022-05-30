@@ -1756,6 +1756,7 @@ context("Autosave LHR", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Check lot number", () => {
@@ -1797,12 +1798,17 @@ context("Autosave LHR", () => {
   context("Start LHRs #1 and Save it", () => {
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Upload attachment 'test_image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Verify LHRs title", () => {
@@ -2186,9 +2192,13 @@ context("Autosave LHR", () => {
 
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Verify LHRs title", () => {
@@ -2196,8 +2206,10 @@ context("Autosave LHR", () => {
         .should("have.text", lotDocumentIdRef + "02RD | LHR-00004 | CS-00005.1 Part document");
     });
 
-    it("Upload attachment 'test_image.jpg'", () => {
+    it("Upload attachment 'test.docx'", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Enter 'Start quntity' for LHRs #2", () => {
@@ -2284,8 +2296,13 @@ context("Autosave LHR", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Approve step", () => {
-      cy.ebApprove();
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -2364,8 +2381,13 @@ context("Autosave LHR", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Approve record", () => {
-      cy.ebApprove();
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check doc status for Released and click on Send To Email", () => {
@@ -2473,7 +2495,7 @@ context("Autosave LHR", () => {
       cy.readFile(attachedFile).its("length").should("be.gt", 500);
     });
 
-    it("Verify attached file length for test_image.jpg is more than 500 bytes", () => {
+    it("Verify attached file length for test.docx is more than 500 bytes", () => {
       const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
         downloadFile.replace(".zip", ""), "LHR Step 2", "test.docx");
       cy.readFile(attachedFile).its("length").should("be.gt", 10);
