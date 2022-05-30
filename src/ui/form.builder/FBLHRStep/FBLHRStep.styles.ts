@@ -1,0 +1,64 @@
+import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
+
+export const FBLHRStepStyles = makeStyles(() =>
+  createStyles({
+    button: {
+      "backgroundColor": Colors.navy,
+      "borderRadius": "100px",
+      "fontFamily": "Sora",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "color": Colors.white,
+      "border": `1px solid ${Colors.navy}`,
+      "&.Mui-disabled": {
+        border: "none",
+        backgroundColor: Colors.gains_boro,
+        color: Colors.spanish_gray,
+      },
+      "&:hover": {
+        backgroundColor: Colors.navy,
+      },
+      "padding": "12px 25px",
+    },
+    expansionPanelHedding: {
+      Colors: Colors.navy,
+    },
+    panelSummary: {
+      "flexDirection": "row-reverse",
+      "padding": 0,
+      "margin": 0,
+      "& .Mui-expanded": {
+        transform: "rotate(0deg)",
+      },
+    },
+    panelBorder: {
+      marginBottom: 5,
+      border: `1px solid ${Colors.gray_goose}`,
+      borderRadius: "4px",
+    },
+    fontTitle: {
+      fontSize: 12,
+      fontWeight: 600,
+      color: Colors.almost_black,
+    },
+    subTitle: {
+      fontSize: 14,
+      fontWeight: 400,
+      color: Colors.almost_black,
+      marginTop: 10,
+    },
+    operatorTitle: {
+      fontWeight: 700,
+      fontSize: 14,
+      color: Colors.almost_black,
+    },
+    operatorStatus: {
+      marginRight: 2,
+      fontSize: 14,
+      fontWeight: 400,
+      color: Colors.almost_black,
+      marginTop: 10,
+    },
+  })
+);

@@ -57,7 +57,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       if (exitObj) {
         formState?.setApprovalMap({ [defaultValue?.id]: formObj });
       }
-      console.log("ddddd", formState?.getApprovalMap);
     }
 
     useEffect(() => {
