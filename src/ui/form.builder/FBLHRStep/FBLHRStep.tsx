@@ -301,7 +301,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               />
             </Box>
           )}
-          <Box mb={2}>
+          <Box mb={3.75}>
             <Grid container spacing={3}>
               <Grid item xs={4}>
                 <Typography className={classes.fontTitle}>
