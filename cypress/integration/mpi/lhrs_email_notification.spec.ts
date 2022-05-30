@@ -868,23 +868,16 @@ context("LHRs email notifications", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        wait_time_sec: 5,
-        max_wait_time_sec: 50,
-        include_body: true,
         after: dateAfterEmailShouldArrive,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 
     it("Verify emails that should be received", () => {
+      SystemRequirement("REQ-4700");
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[1].email,

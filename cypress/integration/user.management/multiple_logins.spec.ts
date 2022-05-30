@@ -5,6 +5,7 @@ import faker from "faker";
 import { CONFIG } from "../../support/config";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -155,6 +156,7 @@ context("Multiple consecutive logins", () => {
   context("Lock unlock normal user", () => {
     context("Login with normal user by inserting wrong password 5 times", () => {
       it("Enter wrong password 5 times", () => {
+        SystemRequirement("REQ-3970");
         cy.authLoginWithInvalidPassword({ email: emailOfUserToSignUp, password: "tester123" });
         cy.authSubmitLoginError({ show: true, message: "Incorrect username or password." });
         cy.authLoginWithInvalidPassword({ email: emailOfUserToSignUp, password: "tester123" });
@@ -168,7 +170,8 @@ context("Multiple consecutive logins", () => {
     });
 
     context("User should see locked notification", () => {
-      it("should see locked notification", () => {
+      it("Should see locked notification", () => {
+        SystemRequirement("REQ-3970");
         cy.get("[data-cy=UserLocked-lockedInfo]").should("have.text", "Your account has been locked.");
       });
     });
@@ -203,6 +206,7 @@ context("Multiple consecutive logins", () => {
 
     context("Error message should be displayed on input invalid passwords", () => {
       it("Error message on input old password", () => {
+        SystemRequirement("REQ-4200");
         cy.authEnterSignUpPassword();
         cy.authEnterSignUpConfirmPassword();
         cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();

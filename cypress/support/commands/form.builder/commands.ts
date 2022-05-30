@@ -51,6 +51,7 @@ declare global {
       fbEditHiddenBtn(): Chainable<Subject>;
       fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIf(params: { name: string; value: string | number }): Chainable<Subject>;
+      fbFieldRequiredIfIn(params: { name: string }): Chainable<Subject>;
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string; value: string }): Chainable<Subject>;
@@ -264,6 +265,11 @@ Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string
   cy.get("input[name=\"validators.required_if\"]").arrowClick();
   cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
   cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(params.value);
+});
+
+Cypress.Commands.add("fbFieldRequiredIfIn", (params: { name: string}) => {
+  cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").arrowClick();
+  cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect(params.name);
 });
 
 Cypress.Commands.add("fbVerifyCheckboxValue", (...list: string[]) => {

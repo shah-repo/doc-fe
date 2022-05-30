@@ -9,6 +9,7 @@ class SMTabsState implements SMTabsStateProps {
    * @cfg {number} Index value of the active tab.
    */
   @observable public value = 0;
+  @observable public tabID = "";
 
   // MARK: @constructor
 
@@ -17,6 +18,10 @@ class SMTabsState implements SMTabsStateProps {
   // MARK: @actions
   @action public setValue = (value = 0) => {
     set(this, "value", value);
+  };
+
+  @action public setTabID = (id) => {
+    set(this, "tabID", id);
   };
 
   // MARK: @helpers
