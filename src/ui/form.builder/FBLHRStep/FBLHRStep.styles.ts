@@ -6,6 +6,9 @@ export const FBLHRStepStyles = makeStyles(() =>
     button: {
       "backgroundColor": Colors.navy,
       "borderRadius": "100px",
+      "height": 36,
+      "minWidth": 180,
+      "marginTop": 0,
       "fontFamily": "Sora",
       "fontSize": 12,
       "fontWeight": 600,
@@ -72,6 +75,9 @@ export const FBLHRStepStyles = makeStyles(() =>
       fontWeight: 400,
       color: Colors.almost_black,
       marginTop: 10,
+    },
+    borderColorIcon: {
+      color: Colors.red,
     },
   })
 );

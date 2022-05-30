@@ -61,6 +61,7 @@ enum Colors {
   trinary_red = "#F14822",
   mandy = "#EB4770",
   dawn="#A2A2A2",
+  seashell="#FCF0ED",
   // purple
   deep_purple = "#29064C",
   purple = "#99c",

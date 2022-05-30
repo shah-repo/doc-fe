@@ -17,13 +17,11 @@ import {
   RemoveCircle,
 } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
-import { isEmpty, map } from "lodash";
-import { reaction } from "mobx";
+import { find, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  FB,
   FBAutocompleteAsync,
   FBAutocompleteAsyncOption,
   FBButton,
@@ -73,25 +71,18 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   lhrBuildTypeExist,
   ...props
 }) => {
-  const { formState } = FB.useStores();
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
-  const getUserDetails = (userId: string) =>
-    allEmployees.find((obj) => obj.id === userId);
+  const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
   const getStatusInfo = (opert, operatorId: string) => {
     const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];
-    return approvers?.filter(
-      (o) => o.approverId === operatorId && o.status !== "ABANDONED"
-    )[0];
+    return find(approvers, (o) => o.approverId === operatorId && o.status !== "ABANDONED");
   };
-  const operatorList = stepLHRs?.formInput?.[
-    "fb-approvals-approvals-built-in"
-  ]?.map((e) => ({
+  const [operatorList] = useState(stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((e) => ({
     stepId: e,
     user: getUserDetails(e)?.user,
-  }));
+  })));
   const classes = FBLHRStepStyles();
-  const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""
-  }`;
+  const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`;
   const [expand, setExpand] = React.useState(false);
   const getAvtarStyle = (initialColor) => ({
     width: "35px",
@@ -103,29 +94,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     background: `${initialColor}`,
   });
 
-  React.useEffect(
-    () =>
-      reaction(
-        () => formState?.approvalMap,
-        (value) => {
-          if (value) {
-            lhrStepState?.setApproval(value);
-          }
-        }
-        /* eslint-disable-next-line react-hooks/exhaustive-deps */
-      ),
-    []
-  );
-
-  const stepButtonStyle = {
-    marginTop: 0,
-    height: 36,
-    minWidth: 180,
-    borderRadius: 100,
-  };
   const getStatusColor = () => {
     const status = stepLHRs?.status;
-    let statusColor = ""; /* latest_yellow_varient */
+    let statusColor = "";
     if (stepLHRs && isDocumentRevisionReleased(status)) {
       statusColor = Colors.green_blue;
     } else if (stepLHRs && !isDocumentRevisionReleased(status)) {
@@ -151,7 +122,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   return (
     <FBProvider {...{ lhrStepState }}>
-      {expand}
       <Accordion className={classes.panelBorder} expanded={expand}>
         <AccordionSummary
           onClick={() => setExpand(!expand)}
@@ -160,10 +130,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         >
           <Box display="flex" alignItems="flex-start">
             <Box mr={2} ml={1}>
-              <Typography
-                variant="h6"
-                style={{ color: expand ? Colors.navy : Colors.almost_black }}
-              >
+              <Typography variant="h6" style={{ color: expand ? Colors.navy : Colors.almost_black }}>
                 <FBText locale={stepLabel} />
               </Typography>
             </Box>
@@ -212,7 +179,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               </Box>
               {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
                 <Box component={"span"} mt={0.3}>
-                  <span style={{ marginRight: 4 }}>&bull;</span>
+                  <Box component="span" marginRight={4}>&bull;</Box>
                   {isDocumentRevisionReleased(stepLHRs.status)
                     ? getFormattedDateString(
                       stepLHRs?.releasedAt,
@@ -228,7 +195,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           </Box>
           {stepLHRs?.redline && (
             <Box position="relative" left="64%">
-              <BorderColorIcon style={{ color: Colors.red }}></BorderColorIcon>
+              <BorderColorIcon className={classes.borderColorIcon}></BorderColorIcon>
             </Box>
           )}
         </AccordionSummary>
@@ -236,12 +203,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           <Box display="flex" alignItems="flex-start">
             <Box
               flexGrow={1}
-              onClick={() => {
-                if (isOutput && stepLHRs) {
-                  openLHRs();
-                }
-              }}
-              style={{ background: Colors.alabaster, borderRadius: 4 }}
+              onClick={() => isOutput && stepLHRs && openLHRs()}
+              bgcolor={Colors.alabaster}
+              borderRadius={4}
             >
               <FBAutocompleteAsync
                 boxProps={{ flexGrow: 1 }}
@@ -258,11 +222,11 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 inputStyle={
                   stepLHRs?.redline
                     ? {
-                      background: Colors.light_red,
+                      background: Colors.seashell,
                       border: `1px solid ${Colors.error_red}`,
                       paddingLeft: "5px",
                     }
-                    : { background: Colors.alabaster, borderRadius: 4 }
+                    : { background: Colors.background_white, borderRadius: 4 }
                 }
               />
             </Box>
@@ -277,12 +241,10 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               style={
                 stepLHRs
                   ? {
-                    ...stepButtonStyle,
                     background: Colors.step_blue,
                     color: Colors.navy,
                   }
                   : {
-                    ...stepButtonStyle,
                     background: Colors.navy,
                     color: Colors.white,
                   }
@@ -386,9 +348,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                       </div>
                     }
                     secondary={
-                      <React.Fragment>
-                        <Observer>
-                          {() => (
+                      <Observer>
+                        {() => (
+                          <>
                             <Typography
                               component="span"
                               variant="body2"
@@ -399,20 +361,14 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                                   ?.status
                               }
                             </Typography>
-                          )}
-                        </Observer>
-                        {getStatusInfo(lhrStepState?.approvals, e.stepId)
-                          ?.reviewedAt && (
-                            <span style={{ marginRight: 4 }}>&bull;</span>
-                          )}
-                        {getStatusInfo(lhrStepState?.approvals, e.stepId)
-                          ?.reviewedAt &&
-                          getFormattedDateString(
-                            getStatusInfo(lhrStepState?.approvals, e.stepId)
-                              ?.reviewedAt,
-                            MomentFormats.DateTime
-                          )}
-                      </React.Fragment>
+                            {getStatusInfo(lhrStepState?.approvals, e.stepId)?.reviewedAt &&
+                              (<Box component="span" marginRight={4}>&bull;</Box>)}
+                            {getStatusInfo(lhrStepState?.approvals, e.stepId)?.reviewedAt &&
+                              getFormattedDateString(getStatusInfo(lhrStepState?.approvals, e.stepId)?.reviewedAt,
+                                MomentFormats.DateTime)}
+                          </>
+                        )}
+                      </Observer>
                     }
                   />
                 </ListItem>

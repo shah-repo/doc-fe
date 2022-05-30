@@ -90,12 +90,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     React.useEffect(() => reaction(
       () => formState?.approvalMap,
-      (value) => {
-        if (value) {
-          // const formattedObj = JSON.parse(JSON.stringify(value));
-        }
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      (value) => value && (lhrStepState?.setApproval(value))
+      /* eslint-disable-next-line react-hooks/exhaustive-deps */
     ), []);
 
     // on LHRS create

@@ -78,7 +78,6 @@ class FBLHRStepState {
   public setLHRs = (lhrs) => set(this, "stepLHRs", lhrs);
 
   public setMaterials = (materials) => set(this, "materials", materials);
-
   public setEquipment = (equipment) => set(this, "equipment", equipment);
   public setEditedParameters = (editedParameters) => set(this, "editedParameters", editedParameters);
 

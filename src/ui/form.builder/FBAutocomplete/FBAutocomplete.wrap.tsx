@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBAutocompleteProps, FBOptionValueType } from "..";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isTranslation } from "../../translations/types";
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
@@ -46,17 +47,10 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     const intl = useIntl();
     const [modifiedOptions, setModifiedOptions] = useState(options);
-    // TO DO: Find another way with BE to chechk if doc is LHRT
-    // isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
-    // {[defaultValue?.id]: defaultValue?.approvals}
 
-    const isDocumentLHR = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHR-";
+    const isDocumentLHR = checkIsDocumentLHR(workspaceState?.document?.document.documentType.groupOptions);
     if (isDocumentLHR && !isEmpty(defaultValue?.approvals)) {
-      const formObj = JSON.parse(JSON.stringify(defaultValue?.approvals));
-      const exitObj = formState?.getApprovals as any;
-      if (exitObj) {
-        formState?.setApprovalMap({ [defaultValue?.id]: formObj });
-      }
+      formState?.setApprovalMap({ [defaultValue?.id]: defaultValue?.approvals });
     }
 
     useEffect(() => {
