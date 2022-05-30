@@ -39,6 +39,7 @@ import {
 } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
+import Text from "../../components/Text";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
@@ -337,7 +338,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             <Grid container spacing={3}>
               <Grid item xs={4}>
                 <Typography className={classes.fontTitle}>
-                  Start Qunatity
+                  <Text translation="form.builder.start.quantity" />
                 </Typography>
                 <Typography className={classes.subTitle}>
                   {stepLHRs?.formInput?.["lhrs-start-quantity"]}
@@ -345,7 +346,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               </Grid>
               <Grid item xs={4}>
                 <Typography className={classes.fontTitle}>
-                  Accepted Qunatity
+                  <Text translation="form.builder.accepted.quantity" />
                 </Typography>
                 <Typography className={classes.subTitle}>
                   {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
@@ -353,7 +354,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               </Grid>
               <Grid item xs={4}>
                 <Typography className={classes.fontTitle}>
-                  Rejected Qunatity
+                  <Text translation="form.builder.rejected.quantity" />
                 </Typography>
                 <Typography className={classes.subTitle}>
                   {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
@@ -362,7 +363,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Grid>
           </Box>
           <Box>
-            <Box className={classes.fontTitle}>Operators</Box>
+            <Box className={classes.fontTitle}>
+              <Text translation="common.operators" />
+            </Box>
             <List>
               {map(operatorList, (e) => (
                 <ListItem alignItems="flex-start">
