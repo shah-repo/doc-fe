@@ -56,7 +56,6 @@ class FBLHRStepState {
   };
 
   @action public setApproval = (approvals) => set(this, "approvals", approvals);
-
   // MARK: @helpers
   public getLHRsDocument = (id?: string) => {
     if (!id) { return; }

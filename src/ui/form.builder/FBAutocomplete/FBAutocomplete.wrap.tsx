@@ -46,13 +46,13 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
 
     const intl = useIntl();
+
     const [modifiedOptions, setModifiedOptions] = useState(options);
 
     const isDocumentLHR = checkIsDocumentLHR(workspaceState?.document?.document.documentType.groupOptions);
     if (isDocumentLHR && !isEmpty(defaultValue?.approvals)) {
       formState?.setApprovalMap({ [defaultValue?.id]: defaultValue?.approvals });
     }
-
     useEffect(() => {
       setModifiedOptions(options);
     }, [options]);

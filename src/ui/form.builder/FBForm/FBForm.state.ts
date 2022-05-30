@@ -141,7 +141,6 @@ class FBFormState extends FBSchemaState {
   @action public setApprovalMap = (approvals) => {
     set(this, "approvalMap", { ...this.approvalMap, ...approvals });
   };
-
   @action public setRules = (rules: Dictionary<string>) =>
     set(this.rules, rules);
 
