@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { EBExport } from "../../utils/constants/documentTypes/engineeringBuild";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -336,6 +337,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify export", () => {
+        SystemRequirement("REQ-3800");
         cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-EB-inline-form" });
       });
     });

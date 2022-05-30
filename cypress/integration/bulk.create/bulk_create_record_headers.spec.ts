@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { TestDocumentTypeRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -608,6 +609,7 @@ context("Bulk create record headers", () => {
 
     context("Upload correct template", () => {
       it("Upload template file", () => {
+        SystemRequirement("REQ-4760 ");
         cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplate.xlsx" });
       });
 

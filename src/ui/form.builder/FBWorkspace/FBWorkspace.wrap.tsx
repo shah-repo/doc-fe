@@ -40,22 +40,24 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     ...props
   }: T) => {
 
-    const { _formState, _documentRevisionFormState } = SM.useStores();
+    const dispatch = useDispatch();
+    const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
     mode = _formState?.mode;
     autosave = _formState?.autosave || false;
+
     const isParentWorkspaceExists = !isEmpty(workspaceState);
     workspaceState = workspaceState ? workspaceState : FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,
       mode,
       autosave,
     });
+
     if (isParentWorkspaceExists) {
       schema && (workspaceState.schema = schema);
       mode && (workspaceState.mode = mode);
       workspaceState.autosave = autosave;
     }
-    const dispatch = useDispatch();
 
     // Bridging to new context
 
@@ -182,6 +184,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       snackbarState,
       autosave,
       includeProcedureDiff,
+      _tabsState,
     });
   };
 

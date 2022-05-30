@@ -11,6 +11,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -28,7 +29,7 @@ let createdClinicalProtocolForm;
 let developersGroup;
 let createdClinicalProtocolForm2;
 const assignDate = moment().tz("America/Los_Angeles").format("l");
-const dueDate = moment().tz("America/Los_Angeles").add(1, "month").format("l");
+const dueDate = moment().tz("America/Los_Angeles").add(1, "month").subtract(1, "days").format("l");
 
 context("Test training records and training curriculum landing page", () => {
   before(() => {
@@ -735,6 +736,7 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     it("Verify all columns are present", () => {
+      SystemRequirement("REQ-2810");
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "TRN ID");
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Doc ID");
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Revision");

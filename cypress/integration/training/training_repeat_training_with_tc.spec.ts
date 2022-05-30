@@ -5,6 +5,7 @@ import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -27,6 +28,7 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 let arId;
+let asyncTasksGroup;
 
 const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
@@ -106,6 +108,28 @@ context("Repeat Training with Training Curriculum", () => {
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
             GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
           ],
+        },
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
         },
       });
     });
@@ -417,6 +441,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
         arId = x.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -429,28 +454,16 @@ context("Repeat Training with Training Curriculum", () => {
 
   context("Verify email for training released notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${releasedFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
@@ -717,34 +730,23 @@ context("Repeat Training with Training Curriculum", () => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
   });
 
   context("Verify email for draft training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${releasedFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
@@ -915,34 +917,23 @@ context("Repeat Training with Training Curriculum", () => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
   });
 
   context("Verify email for draft training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${releasedFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
@@ -1124,6 +1115,75 @@ context("Repeat Training with Training Curriculum", () => {
       }).as("response");
       cy.reload();
       cy.wait("@response");
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 1 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 1 });
+    });
+
+    it("Select next task TRAINING_RECORDS_REFRESH", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH });
+    });
+
+    it("Select next task TRAINING_RECORDS_STATUS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.wait(1000);
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Check training notifications", () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify training notification", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
+    });
+  });
+
+  context("Verify new Training Record with pending on 'Completed On' column", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[1].name} with pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
+        .and("contain", USERS[1].name).and("contain", "Pending");
+    });
+
+    it("Clear filters", () => {
+      cy.trClearFilters();
+    });
+
+    it(`${USERS[2].name} with pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
+        .and("contain", USERS[2].name).and("contain", "Pending");
     });
   });
 

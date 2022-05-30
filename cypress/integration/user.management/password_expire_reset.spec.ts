@@ -6,6 +6,7 @@ import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -338,6 +339,7 @@ context("Password expire reset flow", () => {
         });
 
         it("Verify password expiration message", () => {
+          SystemRequirement("REQ-4180");
           // eslint-disable-next-line no-irregular-whitespace
           cy.checkToastMessageIsEqual({ message: `Your password will expire in ${5 - i} days. Reset it now.` });
         });
