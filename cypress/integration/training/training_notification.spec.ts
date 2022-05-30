@@ -637,6 +637,9 @@ context("Training notification test", () => {
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
@@ -924,9 +927,12 @@ context("Training notification test", () => {
 
     it("Clear filters", () => {
       cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Verify Assign Date is Now", () => {
+    it("Verify Assign Date is Today", () => {
       cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("Assign Date").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
@@ -1049,11 +1055,10 @@ context("Training notification test", () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
       cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
       cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
-      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "REQUESTED");
-      cy.wait(2000);
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
     });
 
-    it("reload the page", () => {
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
           CyRoutes.GetAvailableApprovers], () => {
@@ -1061,15 +1066,12 @@ context("Training notification test", () => {
         });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Check status as COMPLETE", () => {
       cy.get("tr.k-master-row").should("have.length", 1);
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
       cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
       cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
       cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
-      cy.wait(2000);
+      cy.wait(5000);
     });
   });
 
@@ -1080,6 +1082,9 @@ context("Training notification test", () => {
 
     it("Clear filters", () => {
       cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify Assign Date is adjusted by 23 days", () => {
@@ -1109,19 +1114,13 @@ context("Training notification test", () => {
     });
   });
 
-  context("Check training notifications due days", () => {
+  context("Check training notifications due for 7 days", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
     });
   });
 
