@@ -7,7 +7,7 @@ import { ApplicationState } from "../../../state/reducers";
 import { FBSchemaProps } from "../../form.builder";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../../hooks/docCustomization/useCustomization";
-import AuditPresenter from "./Audit.presenter";
+import AuditPresenter from "./Audit.presenter.new";
 
 interface OwnProps {
   documentRevisionId: string;

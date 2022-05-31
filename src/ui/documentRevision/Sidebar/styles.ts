@@ -67,6 +67,18 @@ export default makeStyles((theme: Theme) =>
         stroke: Colors.hint_gray,
       },
     },
+    iconButtonNew: {
+      "&:hover, &:focus, li.active > a": {
+        "background": Colors.light_blue,
+        "borderRadius": "5px",
+        "& svg": {
+          stroke: Colors.medium_blue,
+        },
+      },
+      "& svg": {
+        stroke: Colors.hint_gray,
+      },
+    },
     titleOfRevision: {
       color: theme.palette.text.primary,
       textDecoration: "none",

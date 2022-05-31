@@ -8,6 +8,7 @@ import { isDocumentRevisionReleased } from "../../documentRevision/helpers/docum
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
+import { FBButtonStyles } from "../styles/FBButton.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
@@ -35,83 +36,92 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   autosave,
   lhrBuildTypeExist,
   ...props
-}) => (
-  <FBProvider {...{ lhrStepState }}>
-    <FBSection {...{ stepIndex, label }} />
-    <Box
-      display="flex"
-      alignItems="flex-start"
-    >
+}) => {
+  const classes = FBButtonStyles();
+  return (
+    <FBProvider {...{ lhrStepState }}>
+      <FBSection {...{ stepIndex, label }} />
       <Box
-        flexGrow={1}
-        onClick={() => {
-          if (isOutput && stepLHRs) {
-            openLHRs();
-          }
-        }}
+        display="flex"
+        alignItems="flex-start"
       >
-        <FBAutocompleteAsync
-          boxProps={{ flexGrow: 1 }}
-          type="lhrstep"
-          optionId={FBAutocompleteAsyncOption.mpiDocuments}
-          gutter={false}
-          autosave
-          rules="required"
-          withState
-          shouldReloadOnInit
-          disabled={isOutput || !(isDraft || isPendingChange)}
-          withoutPrefixRoot={Boolean(stepLHRs)}
-          {...{ name, loading, filterOptions }}
-          inputStyle={stepLHRs?.redline ? {
-            background: Colors.light_red,
-            border: `1px solid ${Colors.error_red}`,
-            paddingLeft: "5px",
-          } : {}}
-        />
-      </Box>
-      <FBButton
-        disabled={!isOutput || loading || !lhrBuildTypeExist || disabled}
-        label={ stepLHRs ? "form.builder.view.step" : "form.builder.start.step" }
-        onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi }
-        {...{ loading }}
-      />
-    </Box>
-    {isDocumentLHRT && !isEmpty(materials) && <FBLHRStepProcedureItem
-      value={materials}
-      type={FBProcedureItemType.materials}
-      lhrStepIndex={index}
-      isPendingChange
-    />}
-    {isDocumentLHRT && !isEmpty(equipment) && <FBLHRStepProcedureItem
-      value={equipment}
-      type={FBProcedureItemType.equipment}
-      lhrStepIndex={index}
-      isPendingChange
-    />}
-    {stepLHRs && (
-      <Box display="flex" alignItems="center" mt={1} mb={4}>
-        <Box mr={1} display="flex" alignItems="center">
-          {
-            isDocumentRevisionReleased(stepLHRs.status)
-              ? <CheckCircle />
-              : <PlayCircleFilled />
-          }
+        <Box
+          flexGrow={1}
+          onClick={() => {
+            if (isOutput && stepLHRs) {
+              openLHRs();
+            }
+          }}
+        >
+          <FBAutocompleteAsync
+            boxProps={{ flexGrow: 1 }}
+            type="lhrstep"
+            optionId={FBAutocompleteAsyncOption.mpiDocuments}
+            gutter={false}
+            autosave
+            rules="required"
+            withState
+            shouldReloadOnInit
+            disabled={isOutput || !(isDraft || isPendingChange)}
+            withoutPrefixRoot={Boolean(stepLHRs)}
+            {...{ name, loading, filterOptions }}
+            inputStyle={stepLHRs?.redline ? {
+              background: Colors.light_red,
+              border: `1px solid ${Colors.error_red}`,
+              paddingLeft: "5px",
+            } : {}}
+          />
         </Box>
-        <FBText
-          locale={
-            isDocumentRevisionReleased(stepLHRs.status)
-              ? "form.builder.step.completed"
-              : "form.builder.step.started"
-          }
-          values={{
-            date: isDocumentRevisionReleased(stepLHRs.status)
-              ? getFormattedDateString(stepLHRs?.releasedAt, MomentFormats.DateTime)
-              : getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime),
+        <FBButton
+          disabled={!isOutput || loading || !lhrBuildTypeExist || disabled}
+          label={ stepLHRs ? "form.builder.view.step" : "form.builder.start.step" }
+          onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi }
+          {...{ loading }}
+          className={classes.button}
+          style={{
+            marginTop: "0px",
+            height: "40px",
           }}
         />
       </Box>
-    )}
-  </FBProvider>
-);
+      {isDocumentLHRT && !isEmpty(materials) && <FBLHRStepProcedureItem
+        value={materials}
+        type={FBProcedureItemType.materials}
+        lhrStepIndex={index}
+        isPendingChange
+      />}
+      {isDocumentLHRT && !isEmpty(equipment) && <FBLHRStepProcedureItem
+        value={equipment}
+        type={FBProcedureItemType.equipment}
+        lhrStepIndex={index}
+        isPendingChange
+      />}
+      {stepLHRs && (
+        <Box display="flex" alignItems="center" mt={1} mb={4}>
+          <Box mr={1} display="flex" alignItems="center">
+            {
+              isDocumentRevisionReleased(stepLHRs.status)
+                ? <CheckCircle />
+                : <PlayCircleFilled />
+            }
+          </Box>
+          <FBText
+            locale={
+              isDocumentRevisionReleased(stepLHRs.status)
+                ? "form.builder.step.completed"
+                : "form.builder.step.started"
+            }
+            values={{
+              date: isDocumentRevisionReleased(stepLHRs.status)
+                ? getFormattedDateString(stepLHRs?.releasedAt, MomentFormats.DateTime)
+                : getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime),
+            }}
+          />
+        </Box>
+      )}
+    </FBProvider>
+  );
+};
+
 
 export default withFBLHRStep(FBLHRStep);

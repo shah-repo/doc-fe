@@ -3,6 +3,8 @@ import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import moment from "moment";
 import React from "react";
+import { SM } from "../../../App";
+import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { AsyncState } from "../../../state/types";
 import AlertDialog from "../../app/alert.dialog/AlertDialog";
 import { EffectiveDateFormValues } from "../../change.request/form/types";
@@ -39,6 +41,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
     transitionDialog,
     effectiveDateDialog,
   }) => {
+    const isNewLayout = SM.isNewCRLayout;
     const renderPasswordForm = (props: FormikProps<any>) => (
       <PasswordForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
     );
@@ -50,16 +53,28 @@ const TransitionDialog: React.FunctionComponent<Props> =
     const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
     return (
       <div className={classes.container}>
-        <Button
-          color= "secondary"
-          variant= "outlined"
-          aria-label={transition}
-          onClick={openDialog}
-          data-cy={`transition-${transition}`}
-          {...buttonProps}
-        >
-          <Text message={label} />
-        </Button>
+        {isNewLayout ? (
+          <StyledButton
+            color="primary"
+            aria-label={transition}
+            onClick={openDialog}
+            data-cy={`transition-${transition}`}
+            {...buttonProps}
+          >
+            <Text message={label} />
+          </StyledButton>
+        ) : (
+          <Button
+            color= "secondary"
+            variant= "outlined"
+            aria-label={transition}
+            onClick={openDialog}
+            data-cy={`transition-${transition}`}
+            {...buttonProps}
+          >
+            <Text message={label} />
+          </Button>
+        )}
         {effectiveDateDialog && (
           <AlertDialog
             dialog={effectiveDateDialog}

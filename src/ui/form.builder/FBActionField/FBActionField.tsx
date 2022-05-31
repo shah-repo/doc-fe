@@ -1,5 +1,6 @@
 import React from "react";
 import { FBActionFieldProps, FBActionOptionProps, FBButton, FBDialog, FBMapWrapper, FBProvider } from "..";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBActionField } from "./FBActionField.wrap";
 
 const FBActionField: React.FunctionComponent<FBActionFieldProps> = ({
@@ -18,6 +19,7 @@ const FBActionField: React.FunctionComponent<FBActionFieldProps> = ({
             label={action?.actionLabel}
             onClick={() => handleAction && handleAction(action)}
             {...{ disabled }}
+            style={FBFontStyle.font}
           />}
         </>
       )}

@@ -2,6 +2,7 @@ import { isEmpty, last } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixSection, FBApprovalMatrixTable, FBDialogState, FBWorkspaceMode } from "..";
+import { SM } from "../../../App";
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>
@@ -20,6 +21,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   }: T) => {
 
     const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
@@ -100,10 +102,10 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       // Used for disabling save while DAM is in add mode
       // to prevent saving an empty row in the table
       if (approvalMatrixFieldState?.mode === "add") {
-        workspaceState?.setDisabledAction(true);
+        _documentRevisionFormState?.setDisabledAction(true);
       }
       else {
-        workspaceState?.setDisabledAction(false);
+        _documentRevisionFormState?.setDisabledAction(false);
       }
 
       if (dialogState?.open) {

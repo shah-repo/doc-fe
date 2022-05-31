@@ -8,6 +8,7 @@ import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell, FBTooltip } from "..";
+import { FBTableCellStyles } from "../styles/FBTableCell.styles";
 import { FBPurchaseOrderDetailsProduct, FBPurchaseOrderTableDetailsProps } from "./FBPurchaseOrderTable.types";
 import { FBPurchaseOrderCollection } from "./helpers";
 
@@ -22,6 +23,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
   calculation,
 }) => {
   const intl = useIntl();
+  const cellStyle = FBTableCellStyles();
   return (
     <Box width="100%" overflow="auto">
       <Table className={classes?.table}>
@@ -34,6 +36,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                   label={head}
                   key={`fb-po-head-${head}-${index}`}
                   align={(index > 2 && head !== "form.builder.field.lots") ? "right" : "left"}
+                  className={`${cellStyle.cellFont} ${cellStyle.cellFontWeightLow}`}
                 />
               )}
             </FBMapWrapper>
@@ -85,6 +88,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                             align={(index > 2 && key !== "lots") ? "right" : "left"}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}
+                            className={`${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
                           />
                         )}
                       </React.Fragment>

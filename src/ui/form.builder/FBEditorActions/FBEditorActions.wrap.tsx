@@ -2,6 +2,7 @@
 import { compact, Dictionary, filter, isEmpty, isString, kebabCase, omit, size, union } from "lodash";
 import React from "react";
 import { editorPropertiesFlags, FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
+import { SM } from "../../../App";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { COMMON_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
@@ -20,7 +21,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     ...props
   }: T) => {
 
-    const { dialogState, workspaceState, formState } = FB.useStores();
+    const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
+    const { _tabsState } = SM.useStores();
     const { isOutput } = workspaceState || {};
 
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
@@ -126,11 +128,17 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
+        tabId: _tabsState?.tabID,
       }, index);
+
       dialogState?.closeDialog();
+      leftPanelState?.HideLeftPanel();
     };
 
-    handleCancel = () => dialogState?.closeDialog();
+    handleCancel = () => {
+      dialogState?.closeDialog();
+      leftPanelState?.HideLeftPanel();
+    };
 
     return Component({
       ...(props as T),

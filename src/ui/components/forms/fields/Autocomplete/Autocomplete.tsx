@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import Select, { components, createFilter } from "react-select";
@@ -7,6 +7,7 @@ import { ValueType } from "react-select/src/types";
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
+import { styles as FBAutoCompleteStyles } from "../../../../form.builder/styles/FBAutocomplete.styles";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
@@ -35,8 +36,15 @@ export const selectStyles = {
   }),
   control: (base) => ({
     ...base,
-    minHeight: "52px",
-    padding: "5px 3px",
+    minHeight: "40px",
+  }),
+  option: (base) => ({
+    ...base,
+  }),
+  placeholder: (base) => ({
+    ...base,
+    letterSpacing: "normal",
+    color: Colors.spanish_gray,
   }),
 };
 
@@ -81,11 +89,9 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
 
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={0.4}>
-        <Typography variant="h5">
-          <Text message={fieldProps.label} />
-        </Typography>
-      </Box>
+      <Typography variant="h5" style={FBAutoCompleteStyles.labelProps}>
+        <Text message={fieldProps.label} />
+      </Typography>
       <Select
         {...fieldProps.field}
         {...autocompleteProps}

@@ -1,10 +1,10 @@
 
-import { differenceBy, filter, map } from "lodash";
+import { differenceBy, filter, isEmpty, map } from "lodash";
 import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceProps, FBWorkspaceState } from "..";
+import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceProps, FBWorkspaceState } from "..";
+import { SM } from "../../../App";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -32,8 +32,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     dialogState,
     snackbarState,
     mode,
-    isStarter,
-    active,
     document,
     changeRequest,
     autosave = false,
@@ -42,14 +40,68 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     ...props
   }: T) => {
 
+    const dispatch = useDispatch();
+    const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
-    let workspaceSchema: FBSchemaProps[] = [];
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+    mode = _formState?.mode;
+    autosave = _formState?.autosave || false;
+
+    const isParentWorkspaceExists = !isEmpty(workspaceState);
+    workspaceState = workspaceState ? workspaceState : FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,
       mode,
       autosave,
     });
-    const dispatch = useDispatch();
+
+    if (isParentWorkspaceExists) {
+      schema && (workspaceState.schema = schema);
+      mode && (workspaceState.mode = mode);
+      workspaceState.autosave = autosave;
+    }
+
+    // Bridging to new context
+
+    SM.reaction(
+      () => workspaceState?.schema,
+      (schema: FBSchemaProps[] | undefined) => {
+        _documentRevisionFormState?.setFBSchema(schema);
+      }
+    );
+
+    SM.reaction(
+      () => workspaceState?.mode,
+      (mode: FBWorkspaceMode | undefined) => {
+        _formState?.setMode(mode || "none");
+      }
+    );
+
+    SM.reaction(
+      () => _formState?.mode,
+      (mode?: FBWorkspaceMode) => {
+        workspaceState?.setMode(mode || "none");
+      }
+    );
+
+    SM.reaction(
+      () => _formState?.autosave,
+      (autosave?: boolean) => {
+        workspaceState?.setAutosave(autosave || false);
+      }
+    );
+
+    SM.reaction(
+      () => workspaceState?.isDirty,
+      (isDirty: boolean | undefined) => {
+        _formState?.setDirty(isDirty || false);
+      }
+    );
+
+    SM.reaction(
+      () => workspaceState?.loading,
+      (loading: boolean | undefined) => {
+        _formState?.setLoading(loading);
+      }
+    );
 
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
@@ -113,13 +165,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.externalState = store.getState();
     }, [workspaceState, changeRequest]);
 
-    useObserver(() => {
-      isStarter = workspaceState?.isStarter;
-      active = workspaceState?.active;
-      workspaceSchema = workspaceState?.schema || [];
-      mode = workspaceState?.mode;
-    });
-
     useEffect(() => reaction(
       () => workspaceState?.schema,
       () => {
@@ -132,15 +177,14 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
 
     return Component({
       ...(props as T),
-      isStarter,
-      active,
-      schema: workspaceSchema,
+      schema,
       mode,
       dialogState,
       workspaceState,
       snackbarState,
       autosave,
       includeProcedureDiff,
+      _tabsState,
     });
   };
 

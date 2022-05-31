@@ -1,4 +1,4 @@
-import { Box, Chip, IconButton, Popper, TextField, Typography } from "@material-ui/core";
+import { Box, IconButton, Popper, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
@@ -7,8 +7,9 @@ import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
 import Text from "../../components/Text";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
-import { StyledAutoComplete } from "./StyledAutoComplete";
+import { StyledAutoComplete, StyledChip } from "./StyledAutoComplete";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onInputChange,
@@ -34,6 +35,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   groupByKey,
   value,
   inputStyle = {},
+  inputPropStyle = {},
+  inputPropStyleSize = "",
   disabledOptions = [],
   disableBackspace = false,
   disableChipDelete = false,
@@ -55,6 +58,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         {...{ multiple, defaultValue, loading }}
         type="autocomplete"
         disabled={props.name === "approvers" ? false : disabled}
+        labelProps={FBFontStyle.labelProps}
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
         <StyledAutoComplete
@@ -91,13 +95,14 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   variant="outlined"
                   InputProps={{
                     ...params.InputProps,
-                    ...(refresh) && { style: { paddingRight: "33px" } },
+                    ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
                   }}
                   inputProps={{
                     ...params.inputProps,
                     "style": { padding: "10.5px 0", ...inputStyle, marginRight: disabled ? "28px" : "0px" },
                     "data-cy": props.name,
                   }}
+                  size={inputPropStyleSize}
                 />
               </Box>
               {refresh && (
@@ -116,7 +121,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
                 const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
                 return (
-                  <Chip
+                  <StyledChip
                     key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
                     label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}

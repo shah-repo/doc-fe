@@ -14,7 +14,7 @@ import { FormHeaderSummaryContext } from "../../../document.revision/header/Summ
 import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
-import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.container";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -375,7 +375,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   });
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", marginTop: "2rem" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", marginTop: sortedAttachments.length ? "2rem" : "0rem" }}>
       <AttachmentRedLineWarningDialog
         isDialogOpen={redlineWarningDialogHandler.isOpen}
         onSubmit={warningSubmit}

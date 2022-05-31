@@ -19,13 +19,21 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     },
   },
   MuiTypography: {
+    caption: {
+      fontFamily: "Sora, sans-serif;",
+    },
+    body1: {
+      fontFamily: "Sora, sans-serif;",
+    },
     body2: {
       color: "#8A9DAD",
       fontSize: "0.8rem",
+      fontFamily: "Sora, sans-serif;",
     },
     subtitle1: {
       color: appTheme.palette.text.primary,
       fontSize: "0.885rem",
+      fontFamily: "Sora, sans-serif;",
     },
     subtitle2: {
       color: appTheme.palette.text.primary,
@@ -34,6 +42,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     h5: {
       color: appTheme.palette.text.primary,
       fontSize: "1rem",
+      fontFamily: "Sora, sans-serif;",
     },
     h4: {
       color: appTheme.palette.text.primary,
@@ -42,6 +51,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     h6: {
       color: Colors.dark_gray,
       fontSize: "1rem",
+      fontFamily: "Sora, sans-serif;",
       fontWeight: "bold",
     },
   },
@@ -51,6 +61,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       borderRadius: 3,
       margin: appTheme.spacing(1),
       fontWeight: "bold",
+      fontFamily: "Sora, sans-serif;",
     },
     contained: {
       boxShadow: "none",
@@ -68,17 +79,20 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       color: appTheme.palette.primary.main,
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiTableCell: {
     root: {
       fontSize: "0.8rem",
+      fontFamily: "Sora, sans-serif;",
       padding: 0,
     },
     head: {
       fontSize: "0.81rem",
       background: appTheme.palette.background.default,
       color: appTheme.palette.common.white,
+      fontFamily: "Sora",
       fontWeight: "bold",
       lineHeight: "0.9rem",
     },
@@ -86,6 +100,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiInputBase: {
     root: {
       fontSize: "0.8rem",
+      fontFamily: "Sora, sans-serif;",
     },
     input: {
       "fontSize": "0.8rem",
@@ -99,6 +114,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       lineHeight: "1.2rem",
+      fontFamily: "Sora, sans-serif;",
     },
     icon: {
       right: "10px",
@@ -115,11 +131,13 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       overflowWrap: "break-word",
       wordWrap: "break-word",
       hyphens: "auto",
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiMenuItem: {
     root: {
       fontSize: "0.8rem",
+      fontFamily: "Sora, sans-serif;",
     },
   },
   MuiListItemText: {
@@ -145,6 +163,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiOutlinedInput: {
     root: {
+      fontFamily: "Sora, sans-serif;",
       backgroundColor: Colors.white,
     },
     notchedOutline: {
@@ -159,6 +178,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiFormControl: {
     root: {
+      fontFamily: "Sora, sans-serif;",
       [`& .${FBClasses.hoverVisibility}`]: {
         "&:hover": {
           "& .MuiButton-root": {
@@ -177,7 +197,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       [`& .${FBClasses.inputPreview}`]: {
         [`& .Mui-disabled`]: {
           color: `${appTheme.palette.text.primary} !important`,
-          backgroundColor: Colors.light_gray,
+          backgroundColor: "unset",
           paddingLeft: "2px",
           fontSize: "1rem",
           fontWeight: 400,
@@ -193,6 +213,49 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
           borderWidth: "1px!important",
         },
       },
+    },
+  },
+  MuiChip: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+    },
+  },
+  MuiGrid: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+    },
+  },
+  MuiTab: {
+    root: {
+      "fontFamily": "Sora, sans-serif;",
+      "lineHeight": "15px",
+      "paddingLeft": "0px",
+      "paddingTop": "5px",
+      "fontStyle": "normal",
+      "fontWeight": 600,
+      "&.Mui-selected": {
+        color: Colors.navy,
+      },
+    },
+  },
+  MuiFormHelperText: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+    },
+  },
+  MuiFormLabel: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+    },
+  },
+  MuiAvatar: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
+    },
+  },
+  MuiButtonBase: {
+    root: {
+      fontFamily: "Sora, sans-serif;",
     },
   },
 });

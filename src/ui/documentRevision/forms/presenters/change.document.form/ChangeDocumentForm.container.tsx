@@ -110,7 +110,7 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
   }, [documentTypeId]);
 
   return (
-    <Box display="flex">
+    <Box m={1.825} width={1}>
       <FormContext.Provider value={{ submitOnChange: false }}>
         <Formik
           initialValues={generateInitialValues}

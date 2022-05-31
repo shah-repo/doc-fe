@@ -1,5 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { useEffect } from "react";
+import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../../../App/Shifamed/Utils/SM/SM";
 import Text from "../../../../components/Text";
 import useDialog from "../../../../hooks/useDialog";
 import UpgradeToLatestDialog from "./UpgradeToLatestDialog";
@@ -15,6 +17,7 @@ const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
   shouldShowUpgrade,
   onUpgradeClick,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
 
   useEffect(() => {
@@ -23,19 +26,28 @@ const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {
-        shouldShowUpgrade &&
+      {shouldShowUpgrade && (
         <>
-          <Button
-            variant="outlined"
-            onClick={dialog.open}
-            id="UpgradeToLatest-upgrade"
-          >
-            <Text translation="common.upgrade"/>
-          </Button>
-          <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }}/>
+          {isNewLayout ? (
+            <StyledButton
+              color="primary"
+              onClick={dialog.open}
+              id="UpgradeToLatest-upgrade"
+            >
+              <Text translation="common.upgrade" />
+            </StyledButton>
+          ) : (
+            <Button
+              variant="outlined"
+              onClick={dialog.open}
+              id="UpgradeToLatest-upgrade"
+            >
+              <Text translation="common.upgrade" />
+            </Button>
+          )}
+          <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }} />
         </>
-      }
+      )}
     </>
   );
 };

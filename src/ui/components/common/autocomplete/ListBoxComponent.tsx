@@ -1,5 +1,8 @@
+import { truncate } from "lodash";
 import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, useContext, useEffect, useRef } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
+import { SM } from "../../../../App";
+import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
 
 const LISTBOX_PADDING = 8; // px
 const OuterElementContext = createContext({});
@@ -19,12 +22,36 @@ InnerElementType.displayName = "InnerElementType";
 
 const renderRow = (props: ListChildComponentProps) => {
   const { data, index, style } = props;
-  return cloneElement(data[index], {
+  const inputRef = React.createRef();
+  const { _documentRevisionFormState } = SM.useStores();
+  const tooltipItem = {
+    ...data[index],
+    props: {
+      ...data[index].props,
+      children: _documentRevisionFormState?.leftPanelOpen ? truncate(data[index].props.children, {
+        length: 28,
+        omission: " ...",
+      }) : data[index].props.children,
+    },
+  };
+  const listItem = cloneElement(tooltipItem, {
     style: {
       ...style,
       top: (style.top as number) + LISTBOX_PADDING,
+      whiteSpace: "nowrap",
     },
   });
+  return (
+    <StyleTooltip
+      ref={inputRef}
+      title={data[index].props.children}
+      placement="right"
+      arrow
+    >
+      {listItem}
+    </StyleTooltip>
+
+  );
 };
 
 const useResetCache = (data: any) => {

@@ -2,6 +2,8 @@ import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } fro
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -32,6 +34,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   updatedAt,
   currentDocumentType,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const classes = styles();
   const dispatch = useDispatch();
   const voidRecordDialog = useDialog();
@@ -86,15 +89,26 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Button
-        color="secondary"
-        variant="outlined"
-        onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
-        id="ApproveAndRelease-button"
-        data-cy="ApproveAndRelease-button"
-      >
-        <Text message={isObsolete ? "common.void" : label} />
-      </Button>
+      {isNewLayout ? (
+        <StyledButton
+          color="primary"
+          onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
+          id="ApproveAndRelease-button"
+          data-cy="ApproveAndRelease-button"
+        >
+          <Text message={isObsolete ? "common.void" : label} />
+        </StyledButton>
+      ) : (
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
+          id="ApproveAndRelease-button"
+          data-cy="ApproveAndRelease-button"
+        >
+          <Text message={isObsolete ? "common.void" : label} />
+        </Button>
+      )}
       <Dialog
         open={voidRecordDialog.isOpen}
       >

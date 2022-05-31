@@ -1,6 +1,8 @@
 import { Box } from "@material-ui/core";
-import React from "react";
+import AddIcon from "@material-ui/icons/Add";
+import React, { useState } from "react";
 import { FBButton, FBFieldBottomBarProps } from "..";
+import Colors from "../../layout/theme/utils/colors";
 import { withFBStarter } from "../FBStarter/FBStarter.wrap";
 
 const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
@@ -8,31 +10,40 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   onClick,
   index = 0,
   mt,
-}) => (
-  <Box display="flex" {...{ visibility, mt }}>
+}) => {
+  const [isHover, setIsHover] = useState(false);
+  return (<Box display="flex" {...{ visibility, mt }}
+    onMouseEnter={() => setIsHover(true)}
+    onMouseLeave={() => setIsHover(false)}>
     <Box
-      borderTop={3}
+      border={0}
+      borderTop={1}
       my="auto"
-      height="1px"
       width="100%"
-      color="primary.main"
+      color={Colors.navy}
+      style={{ borderStyle: isHover ? "solid" : "dashed" }}
     />
     <FBButton
       label="form.builder.add.field"
-      color="primary"
-      fullWidth={true}
+      dataCy="form.builder.add.field"
       size="medium"
-      variant="text"
+      variant="contained"
+      fullWidth={true}
+      isHover={isHover}
+      showNewButton ={true}
+      startIcon={<AddIcon fontSize="small" />}
       onClick={() => onClick && onClick(index + 1)}
     />
     <Box
-      borderTop={3}
+      border={0}
+      borderTop={1}
       my="auto"
-      height="1px"
       width="100%"
-      color="primary.main"
+      color={Colors.navy}
+      style={{ borderStyle: isHover ? "solid" : "dashed" }}
     />
-  </Box>
-);
+  </Box>);
+
+};
 
 export default withFBStarter(FBFieldBottomBar);

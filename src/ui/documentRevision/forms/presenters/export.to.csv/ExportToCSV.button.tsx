@@ -1,6 +1,8 @@
 import { Button } from "@material-ui/core";
 import { includes, isEmpty } from "lodash";
 import * as React from "react";
+import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../../../App/Shifamed/Utils/SM/SM";
 import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../components/Text";
@@ -14,6 +16,7 @@ interface Props {
 const ExportToCSVButton: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
   const schema = documentRevision?.schema || documentRevision?.formDocument?.formTemplate?.schema;
   const input = documentRevision?.formInput || {};
@@ -101,9 +104,16 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Button data-cy="exportCSVButton" variant="outlined" color="secondary" onClick={dialog.open}>
-        <Text translation="common.export" />
-      </Button>
+      {isNewLayout ? (
+        <StyledButton
+          color="primary" data-cy="exportCSVButton" onClick={dialog.open}>
+          <Text translation="common.export" />
+        </StyledButton>
+      ) : (
+        <Button data-cy="exportCSVButton" variant="outlined" color="secondary" onClick={dialog.open}>
+          <Text translation="common.export" />
+        </Button>
+      )}
       <ExportListDialog
         {...{ data, dialog }}
         useKeysAsHeaders
