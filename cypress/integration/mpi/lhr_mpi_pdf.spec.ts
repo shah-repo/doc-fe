@@ -1754,9 +1754,6 @@ context("Autosave LHR", () => {
 
     it("Upload attachment 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Check lot number", () => {
@@ -1807,7 +1804,6 @@ context("Autosave LHR", () => {
 
     it("Upload attachment 'test_image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-      cy.listLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
@@ -2072,6 +2068,8 @@ context("Autosave LHR", () => {
 
           expect(el).match(/Attachments/);
 
+          expect(el).match(/test_image.jpg/);
+
           expect(el).match(/WIP/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -2092,8 +2090,6 @@ context("Autosave LHR", () => {
         if (el.includes("Page 2 of 3")) {
           tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
           expect(el).match(tmpRegex);
-
-          expect(el).match(/test_image.jpg/);
 
           expect(el).match(/PI PROCEDURE\nMaterials/);
 
@@ -2116,6 +2112,10 @@ context("Autosave LHR", () => {
           tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.859999999999999 days`);
           expect(el).match(tmpRegex);
 
+          expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
+
+          expect(el).match(/Select field\noption1/);
+
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
@@ -2134,10 +2134,6 @@ context("Autosave LHR", () => {
         if (el.includes("Page 3 of 3")) {
           tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
           expect(el).match(tmpRegex);
-
-          expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
-
-          expect(el).match(/Select field\noption1/);
 
           expect(el).match(/APPROVALS\nNone/);
 
@@ -2192,8 +2188,6 @@ context("Autosave LHR", () => {
 
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -2208,7 +2202,6 @@ context("Autosave LHR", () => {
 
     it("Upload attachment 'test.docx'", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
-      cy.landingPageLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
@@ -2561,6 +2554,8 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Attachments/);
 
+        expect(el).match(/test_image.jpg/);
+
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -2582,8 +2577,6 @@ context("Autosave LHR", () => {
         tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
 
-        expect(el).match(/test_image.jpg/);
-
         expect(el).match(/PI PROCEDURE\nMaterials/);
 
         tmpRegex = new RegExp(`${lotDocumentIdRef}01 \\| MT-00004.1 \\| 0.5 days`);
@@ -2599,6 +2592,14 @@ context("Autosave LHR", () => {
 
         tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}`);
         expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `${lhrDocId}, Step #2 \\(PI-00008, MPI created with API, Rev 1\\)`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Step completed \\| ${pdfDocRelDate}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments/);
 
         expect(el).match(/Released/);
 
@@ -2624,13 +2625,6 @@ context("Autosave LHR", () => {
         tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `${lhrDocId}, Step #2 \\(PI-00008, MPI created with API, Rev 1\\)`);
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp( `Step completed \\| ${pdfDocRelDate}`);
-        expect(el).match(tmpRegex);
-
-        expect(el).match(/Attachments/);
         expect(el).match(/test.docx/);
 
         expect(el).match(/PI PROCEDURE\nMaterials/);
@@ -2651,6 +2645,9 @@ context("Autosave LHR", () => {
         expect(el).match(/Accepted quantity\n10\.8/);
 
         expect(el).match(/Rejected quantity\n80\.1/);
+
+        tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${pdfDocRelDate}`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
 
@@ -2678,6 +2675,7 @@ context("Autosave LHR", () => {
         expect(el).not.match(/TEXT FIELD/);
 
         tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${pdfDocRelDate}`);
+        expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
