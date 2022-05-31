@@ -70,8 +70,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
               lineHeight: "25px",
               color: Colors.almost_black,
             }}
-            id="SummaryHeaderDecription-Text"
-            data-cy="SummaryHeaderDecription-Text"
+            id="field-description"
+            data-cy="field-description"
           >{editor?.trim()}
             <span className={classes.btnStyle}
               id="SummaryHeaderDecription-ViewMore-button"
