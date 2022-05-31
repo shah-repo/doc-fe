@@ -9,6 +9,7 @@ export const FBLHRStepStyles = makeStyles(() =>
       "height": 36,
       "minWidth": 180,
       "marginTop": 0,
+      "marginBottom": 0,
       "fontFamily": "Sora",
       "fontSize": 12,
       "fontWeight": 600,

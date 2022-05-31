@@ -2,7 +2,7 @@ import { Avatar, Box, Grid, List, ListItem, ListItemAvatar, ListItemText, Typogr
 import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
-import { CheckCircle, PlayCircleFilled, RemoveCircle } from "@material-ui/icons";
+import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import { find, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
@@ -15,7 +15,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { companySelectors } from "../../../state/ducks/company";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
-import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
@@ -102,7 +102,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
       style={{
         color: getStatusColor(),
         fontSize: 17,
-        marginTop: 4,
       }}
       className="fontSizeSmall"
     ></RemoveCircle>
@@ -116,7 +115,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           className={classes.panelSummary}
           expandIcon={expand ? <ExpandMoreIcon /> : <CollapseMoreIcon />}
         >
-          <Box display="flex" alignItems="flex-start">
+          <Box display="flex" alignItems="center" justifyContent="center">
             <Box mr={2} ml={1}>
               <Typography variant="h6" style={{ color: expand ? Colors.navy : Colors.almost_black }}>
                 <FBText locale={stepLabel} />
@@ -129,7 +128,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     style={{
                       color: getStatusColor(),
                       fontSize: 17,
-                      marginTop: 4,
                     }}
                     className="fontSizeSmall"
                   />
@@ -142,14 +140,14 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 fontSize={12}
                 color={Colors.almost_black}
                 component={"span"}
-                mr={2}
-                mt={0.4}
+                mr={0.75}
               >
                 <FBText locale={getLHRStatus()} values={{}}></FBText>
               </Box>
-              {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
-                <Box component={"span"} mt={0.3}>
-                  <Box component="span" marginRight={4}>&bull;</Box>
+              {stepLHRs &&
+                (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status)) &&
+                (<Box component={"span"}>
+                  <Box component="span" marginRight={0.75}>&bull;</Box>
                   {isDocumentRevisionReleased(stepLHRs.status)
                     ? getFormattedDateString(
                       stepLHRs?.releasedAt,
@@ -159,8 +157,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                       stepLHRs?.createdAt,
                       MomentFormats.DateTime
                     )}
-                </Box>
-              )}
+                </Box>)}
             </Box>
           </Box>
           {stepLHRs?.redline && (
@@ -242,36 +239,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               isPendingChange
             />
           )}
-          {stepLHRs && (
-            <Box display="flex" alignItems="center" mt={1} mb={4}>
-              <Box mr={1} display="flex" alignItems="center">
-                {isDocumentRevisionReleased(stepLHRs.status) ? (
-                  <CheckCircle />
-                ) : (
-                  <PlayCircleFilled />
-                )}
-              </Box>
-              <FBText
-                locale={
-                  isDocumentRevisionReleased(stepLHRs.status)
-                    ? "form.builder.step.completed"
-                    : "form.builder.step.started"
-                }
-                values={{
-                  date: isDocumentRevisionReleased(stepLHRs.status)
-                    ? getFormattedDateString(
-                      stepLHRs?.releasedAt,
-                      MomentFormats.DateTime
-                    )
-                    : getFormattedDateString(
-                      stepLHRs?.createdAt,
-                      MomentFormats.DateTime
-                    ),
-                }}
-              />
-            </Box>
-          )}
-          <Box mb={3.75}>
+          <Box mb={3.75} mt={3.75}>
             <Grid container spacing={3}>
               <Grid item xs={4}>
                 <Typography className={classes.fontTitle}>
