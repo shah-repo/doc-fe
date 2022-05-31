@@ -215,10 +215,9 @@ context("Dynamic Form Test", () => {
       cy.fbAddNewFieldButton();
     });
 
-    // it("Upload attachement picture 'image.jpg'", () => {
-    //   cy.atchUploadAttachment({ fileName: "image.jpg" });
-    //   cy.pause();
-    // });
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
 
     it("Add Paragraph", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
@@ -285,8 +284,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("upload file in Instructions Media upload", () => {
-      cy.fbNavToTableDetails();
-      cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+      // cy.fbNavToTableDetails();
+      cy.get("[data-cy=\"albumMediaButton\"]").first().arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
         cy.pmUploadAttachment({ fileName: "video.mp4" });
       });
