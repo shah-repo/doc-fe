@@ -24,7 +24,7 @@ const BorderLinearProgress = withStyles((theme) => ({
 
 const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
   const statuses: string[] = [];
-  const Step: string[] = [];
+  const step: string[] = [];
   const resultInprogress: number[] = [];
   const resultCompleted: number[] = [];
   const getLHRStatus = (stepLHRs) => {
@@ -47,13 +47,13 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
         .split("(")[0]
         .trim()
         .replaceAll("#", "");
-      Step.push(match);
+      step.push(match);
     });
   };
 
   prepareProgressBarData(smartReferencesFrom);
   const data = [];
-  Step.forEach((element, index) => {
+  step.forEach((element, index) => {
     data[element] = statuses[index];
   });
   data.forEach((status, index) =>
@@ -64,21 +64,32 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
 
   return (
     <Box px={4.25}>
-      <BorderLinearProgress
-        variant="determinate"
-        value={resultCompleted.length / data.length}
-      />
-      <Box
-        component="div"
-        fontSize={12}
-        fontWeight={600}
-        color={Colors.font_gray}
-      >
+      {(resultCompleted.length > 0 || resultInprogress.length > 0) && (
+        <BorderLinearProgress
+          variant="determinate"
+          value={resultCompleted.length / data.length}
+        />
+      )}
+      <Box component="div" fontSize={12} color={Colors.font_gray} mt={1.25}>
         {resultCompleted.length > 0 && (
-          <Box>Step {resultCompleted?.map((e) => e)} completed.</Box>
+          <>
+            <Box component="span" fontWeight={600}>
+              Step {resultCompleted?.map((e) => e)}
+            </Box>
+            <Box component="span" fontWeight={400}>
+              &nbsp;completed.&nbsp;
+            </Box>
+          </>
         )}
         {resultInprogress.length > 0 && (
-          <Box>Step {resultInprogress?.map((e) => e + ",")} in progress...</Box>
+          <>
+            <Box component="span" fontWeight={600}>
+              Step {resultInprogress?.map((e) => e + ",")}
+            </Box>
+            <Box component="span" fontWeight={400}>
+              &nbsp;in progress...
+            </Box>
+          </>
         )}
       </Box>
     </Box>
