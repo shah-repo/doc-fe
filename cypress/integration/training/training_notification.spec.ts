@@ -1087,7 +1087,7 @@ context("Training notification test", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Verify Assign Date is adjusted by 23 days", () => {
+    it("Verify Assign Date is adjusted by 23 days", { retries: 3 }, () => {
       cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("Assign Date").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
@@ -1098,6 +1098,7 @@ context("Training notification test", () => {
       cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
       cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
         .should("have.text", `${adjAssignDate}`);
+      cy.wait(3000);
     });
 
     it("Verify Due Date is adjusted by 23 days", () => {
