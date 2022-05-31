@@ -1,40 +1,17 @@
-import {
-  Avatar,
-  Box,
-  Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Box, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
-import {
-  CheckCircle,
-  PlayCircleFilled,
-  RemoveCircle,
-} from "@material-ui/icons";
+import { CheckCircle, PlayCircleFilled, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import { find, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  FBAutocompleteAsync,
-  FBAutocompleteAsyncOption,
-  FBButton,
-  FBLHRStepProps,
-  FBProvider,
-  FBText,
-} from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
 import { ReactComponent as CollapseMoreIcon } from "../../../assets/images/CollapseMoreIcon.svg";
 import { ReactComponent as ExpandMoreIcon } from "../../../assets/images/ExpandMoreIcon.svg";
-import {
-  getFormattedDateString,
-  MomentFormats,
-} from "../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
