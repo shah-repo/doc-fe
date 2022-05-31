@@ -546,14 +546,12 @@ context("Dynamic Form Test", () => {
 
   context("Approve and Release form", () => {
     it("Approve and release form", () => {
-      cy.pause();
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Verify form Released status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Released" });
       cy.arCheckTitleInEditableAndMatches({ name: "New Dynamic Form" });
-      cy.pause();
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
       });
@@ -833,6 +831,9 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'New Dynamic Form' field", () => {
+      cy.fbSelectNavField({ field: "Custom Controls" });
+      cy.fbSelectItemFromNewFieldList({ field: "New Dynamic Form" });
+      cy.pause();
       cy.fbSelectCustomControl();
     });
 
@@ -842,6 +843,8 @@ context("Dynamic Form Test", () => {
 
     it("Select 'Text Field 2' field", () => {
       cy.fbSelectTextField();
+      // cy.fbSelectNavField({ field: "Inputs" });
+      // cy.fbSelectItemFromNewFieldList({ field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field 2'", () => {

@@ -114,7 +114,7 @@ Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
 });
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
+  cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
