@@ -2,6 +2,7 @@ import { Box, LinearProgress, withStyles } from "@material-ui/core";
 import { countBy, each } from "lodash";
 import React from "react";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../../../../../ui/documentRevision/helpers/documentRevisionStatus";
+import Colors from "../../../../../../ui/layout/theme/utils/colors";
 
 const BorderLinearProgress = withStyles((theme) => ({
   root: {
@@ -71,8 +72,9 @@ const DocumentRevisionFormProgressBar = ({
   return (
     <Box px={4.25}>
       <BorderLinearProgress variant="determinate" value={resultCompleted.length / Data.length} />
-      <Box component="div">{resultCompleted.length > 0 && <p>Step {resultCompleted?.map((e) => e)} completed.</p>}
-        {resultInprogress && <p>Step {resultInprogress?.map((e) => e + ",")} in progress...</p>}</Box>
+      <Box component="div" fontSize={12} fontWeight={600} color={Colors.font_gray}>
+        {resultCompleted.length > 0 && <p>Step {resultCompleted?.map((e) => e)} completed.</p>}
+        {resultInprogress.length > 0 && <p>Step {resultInprogress?.map((e) => e + ",")} in progress...</p>}</Box>
     </Box>
   );
 };
