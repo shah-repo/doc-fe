@@ -97,6 +97,17 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     return lhrstatus || status;
   };
 
+  const renderRemoveCircle = () => (
+    <RemoveCircle
+      style={{
+        color: getStatusColor(),
+        fontSize: 17,
+        marginTop: 4,
+      }}
+      className="fontSizeSmall"
+    ></RemoveCircle>
+  );
+
   return (
     <FBProvider {...{ lhrStepState }}>
       <Accordion className={classes.panelBorder} expanded={expand}>
@@ -123,26 +134,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     className="fontSizeSmall"
                   />
                 )}
-                {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && (
-                  <RemoveCircle
-                    style={{
-                      color: getStatusColor(),
-                      fontSize: 17,
-                      marginTop: 4,
-                    }}
-                    className="fontSizeSmall"
-                  ></RemoveCircle>
-                )}
-                {!stepLHRs && (
-                  <RemoveCircle
-                    style={{
-                      color: getStatusColor(),
-                      fontSize: 17,
-                      marginTop: 4,
-                    }}
-                    className="fontSizeSmall"
-                  ></RemoveCircle>
-                )}
+                {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && renderRemoveCircle()}
+                {!stepLHRs && renderRemoveCircle()}
               </Box>
               <Box
                 fontWeight={700}
@@ -223,7 +216,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               style={
                 stepLHRs
                   ? {
-                    background: Colors.step_blue,
+                    background: Colors.light_blue,
                     color: Colors.navy,
                   }
                   : {
