@@ -1,5 +1,6 @@
 .Toastify__toast {
   border-radius: 4px !important;
+
 }
 
 .Toastify__toast-container {
@@ -34,7 +35,7 @@
 
 
 
-.Toastify__toast--success {  
+.Toastify__toast--success {
   background-color: #d3ead8 !important;
   border: 1px solid #C3E6CB !important;
   color: #2E5424

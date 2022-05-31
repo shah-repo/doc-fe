@@ -7,12 +7,12 @@ export default makeStyles((theme: Theme) =>
       width: "-webkit-fill-available",
       borderRadius: theme.spacing(0.5),
       borderColor: Colors.hint_gray,
+      fontFamily: "inherit",
     },
     label: {
       margin: theme.spacing(3, 0, 4, 0),
       fontWeight: "bold",
       color: Colors.dark_gray,
-      fontFamily: "Open Sans, sans-serif",
     },
     gridWrapper: {
       display: "flex",
