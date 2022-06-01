@@ -6,7 +6,6 @@ export type SMTabsProps =
   onChange: (event: any, newValue: number) => void;
   tabs: string[];
   children: React.ReactNode;
-  tabWidth?: string;
   boxProps?: SMBoxProps;
 };
 

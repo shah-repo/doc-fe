@@ -87,7 +87,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
               <SMTabs
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
-                tabWidth="85%"
                 boxProps={{ stretchY: "100%", px: 4.25 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
