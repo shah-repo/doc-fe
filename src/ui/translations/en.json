@@ -1307,5 +1307,6 @@
   "tabId.changedetails": "Change Details",
   "tabId.general": "General",
   "tabId.training": "Training",
+  "tabId.calpmhistory":"Cal/PM History",
   "common.load.more": "Load More"
 }

@@ -1,5 +1,6 @@
 import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { useFormikContext } from "formik";
+import { get } from "lodash";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
@@ -42,6 +43,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const classes = styles();
   const formik = useFormikContext();
   const { _documentRevisionFormState } = SM.useStores();
+  const [selectedValues, setSelectedValues] = React.useState<any>([]);
 
   const disabled: boolean = (docRevId !== undefined) || isDisabled;
   const isdocRevStatusDraft =
@@ -53,6 +55,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const documentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
+
+  React.useEffect(() => {
+    setSelectedValues(get(formik.values, "outputDocumentTypes", []));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const outputDocumentTypeOptions: OptionType[] = React.useMemo(
     () =>
@@ -66,6 +73,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   );
 
   const handleTypeChange = (value: ValueType<OptionType>) => {
+    setSelectedValues(value ?? []);
     const formValue = {
       ...formik.values as Partial<DocumentRevision>,
       outputDocumentTypes: value as OptionType[],
@@ -89,6 +97,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
           isMulti: true,
           closeMenuOnSelect: false,
           className: !outputDocEnabled ? classes.outputGrey : "",
+          isOptionDisabled: (option) => selectedValues?.length >= 1,
         }}
         options={outputDocumentTypeOptions}
         validate={validator(requiredAtLeastOne)}
