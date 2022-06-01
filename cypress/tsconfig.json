@@ -9,7 +9,8 @@
     "info",
     "utils",
     "test_company_replica/spec/make_test_company_replica.spec.ts",
-    "test_company_replica"
+    "test_company_replica",
+    "./../eslint/cypress.eslint.rules/index.js"
     // "./../src"
   ],
   "compilerOptions": {

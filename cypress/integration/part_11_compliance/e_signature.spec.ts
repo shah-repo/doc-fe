@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -578,6 +579,7 @@ context("E-signature test", () => {
       });
 
       it("Verify old names of approvers are present", () => {
+        SystemRequirement("REQ-4090");
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfFirstUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfSecondUserToSignUp);
       });
@@ -638,6 +640,7 @@ context("E-signature test", () => {
       });
 
       it("Verify correct names and emails of approvers are present", () => {
+        SystemRequirement("REQ-4090");
         cy.get("[data-cy=\"SummaryBaseProps-values\"]").contains(nameOfFirstUserToSignUp);
         cy.get("[data-cy=\"SummaryBaseProps-values\"]").contains(nameOfSecondUserToSignUp);
         cy.get("[data-cy=\"SummaryBaseProps-values\"]").contains(newNameThirdApprover);
@@ -695,6 +698,7 @@ context("E-signature test", () => {
       });
 
       it("Check user names and emails of approvers on old revision are not changed", () => {
+        SystemRequirement("REQ-4060");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Released").arrowClick();
         });

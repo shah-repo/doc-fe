@@ -1,14 +1,15 @@
 /* eslint-disable react/jsx-key */
-import { isEmpty, map } from "lodash";
+import { get, isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupType, TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { FBWorkspace } from "../../../../ui/form.builder";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -48,9 +49,16 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   formInput,
   autosaveEnabled,
   mode,
+  workspaceState,
 }) => {
-  const group = documentRevision?.document?.documentType?.group || "OTHER";
+  const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
+  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
+
+  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+
   if (formValues.values?.retrain) {
     tabConfig = tabConfig && [...tabConfig, {
       labelId: "tabId.training",
@@ -58,9 +66,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       type: "TRAINING",
     } ];
   }
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const isDynamic = Boolean(tabConfig?.find((tabInfo) => tabInfo.type === "DYNAMIC"));
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
   const changeLayoutHeight = () => {
     setTimeout(() => {
@@ -70,6 +75,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
     }, 100);
   };
+
   useEffect(() => reaction(
     () => _documentRevisionFormState?.viewMore,
     () => {
@@ -80,6 +86,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   useEffect(() => {
     changeLayoutHeight();
   }, []);
+
+  useEffect(() => {
+    if (!tabConfig) {
+      return;
+    }
+    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabConfig]);
 
   return (
     <SMForm
@@ -116,17 +130,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           <Observer>
             {() => (
               <SMTabs
-                onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
+                onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
                 boxProps={{ stretchY: "100%", px: 3.75 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
-                  const { tabId } = tabInfo || {};
-                  const showFBLabels = tabType === "MIXED" ? !isDynamic : isDynamic;
-                  const tabSchema = schema.filter((schemaItem) => schemaItem.tabId === tabId);
+                  const tabSchema = schema.filter((schemaItem) => schemaItem.tabId === _tabsState?.tabID);
                   const availableSchema = schema.filter((schemaItem) =>
-                    schemaItem.tabId === tabId && !schemaItem.deleted);
+                    schemaItem.tabId === _tabsState?.tabID && !schemaItem.deleted);
 
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="calc(100% - 40px)">
@@ -159,25 +171,25 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             mode,
                           }}
                         />
-                        {!isEmpty(availableSchema) && <FBWorkspace
+                        {(!isEmpty(availableSchema) || !documentRevision) && <FBWorkspace
                           isPortal={false}
                           document={{
                             ...formValues.values as unknown as DocumentRevision,
                             ...documentRevision as unknown as DocumentRevision,
                           }}
-                          {... { autosaveEnabled }}
+                          {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
                           schema={tabSchema}
                         />}
                       </>}
-                      {tabType !== "TRAINING" && _formState?.mode !== "none" && showFBLabels &&  (
+                      {tabType === "DYNAMIC" && _formState?.mode !== "none" &&  (
                         <FBWorkspace
                           isPortal={false}
                           document={{
                             ...formValues.values as unknown as DocumentRevision,
                             ...documentRevision as unknown as DocumentRevision,
                           }}
-                          {... { autosaveEnabled }}
+                          {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
                           schema={tabSchema}
                         />

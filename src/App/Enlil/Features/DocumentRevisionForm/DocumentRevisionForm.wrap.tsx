@@ -31,6 +31,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     });
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
+
     useEffect(() => {
       if (!document?.id) { return; }
       const releasedDocument = (document?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status));
@@ -80,12 +81,12 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
         }
       }
     );
-
     // MARK: @helpers
 
     // MARK: @methods
-    onTabChange = (_ev, newValue) => {
+    onTabChange = (_ev, newValue, tabConfig) => {
       _tabsState?.setValue(newValue);
+      _tabsState?.setTabID(tabConfig[newValue].tabId);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -103,6 +104,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               _tabsState,
               _formState,
               autosaveEnabled,
+              workspaceState,
             }}
           />
         </FBProvider>

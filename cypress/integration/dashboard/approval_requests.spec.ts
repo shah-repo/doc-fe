@@ -7,6 +7,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -344,6 +345,7 @@ context("Approval request form", () => {
     });
 
     it("Check that in Recent tab, the latest open should appear on top", () => {
+      SystemRequirement("REQ-4990");
       cy.navigToDashboard();
       cy.get("#scrollable-auto-tab-1").arrowClick();
       cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
@@ -560,6 +562,7 @@ context("Approval request form", () => {
     });
 
     it("Clicking on the arrow should show the AR details", () => {
+      SystemRequirement("REQ-4970");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).next()
@@ -593,7 +596,8 @@ context("Approval request form", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("there should be a notification that User 3 has rejected AR", () => {
+    it("There should be a notification that User 3 has rejected AR", () => {
+      SystemRequirement("REQ-4980");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
         .and("contain.text", "Approval request form")

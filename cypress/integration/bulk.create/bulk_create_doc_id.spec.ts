@@ -10,6 +10,7 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -543,6 +544,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.get("#HeaderInfo-docId").then((x) => {
         releasedFormId = x.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -555,29 +557,18 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
   context("Verify email for bulk create form notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${releasedFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+        .then((emails) => {
           emailsFromInbox = emails;
           expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
+        });
     });
 
     it("Verify the emails that should be received", () => {
@@ -843,6 +834,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           releasedFormId = x.text();
         });
         cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
       });
 
@@ -855,29 +847,19 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify email for WIP bulk create notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${releasedFormId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+          .then((emails) => {
             emailsFromInbox = emails;
             expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
             downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
+
+          });
       });
 
       it("Verify the emails that should be received", () => {
@@ -1080,6 +1062,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           releasedFormId = x.text();
         });
         cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
       });
 
@@ -1092,29 +1075,18 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify email for bulk create released notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${releasedFormId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+          .then((emails) => {
             emailsFromInbox = emails;
             expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
             downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
+          });
       });
 
       it("Verify the emails that should be received", () => {
@@ -1421,6 +1393,11 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
           expect($document.text()).to.be.oneOf(documetsWhichShouldBeOnList);
         });
+      });
+
+      it("Verify first item on list is in DRAFT", () => {
+        SystemRequirement("REQ-4730");
+        cy.dlVerifyFilterByStatus({ status: "Draft" });
       });
     });
   });

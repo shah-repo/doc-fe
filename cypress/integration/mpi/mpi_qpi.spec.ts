@@ -322,35 +322,25 @@ context("Mpi/Qpi test", () => {
           cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
             MPIDocId = $docIdElement.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
       });
 
       context("Verify email for Draft MPI notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${MPIDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+            .then((emails) => {
               emailsFromInbox = emails;
               expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
               downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
+            });
         });
 
         it("Verify the emails that should be received", () => {
@@ -550,6 +540,7 @@ context("Mpi/Qpi test", () => {
           cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
             arId = $lnEl.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
       });
@@ -558,29 +549,18 @@ context("Mpi/Qpi test", () => {
 
   context("Verify email for Released MPI notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${MPIDocId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+        .then((emails) => {
           emailsFromInbox = emails;
           expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
+        });
     });
 
     it("Verify the emails that should be received", () => {
@@ -878,35 +858,25 @@ context("Mpi/Qpi test", () => {
           cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             QPIDocId = $docIdElement.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
       });
 
       context("Verify email for Draft QPI notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${QPIDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+            .then((emails) => {
               emailsFromInbox = emails;
               expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
               downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
+            });
         });
 
         it("Verify the emails that should be received", () => {
@@ -1097,35 +1067,25 @@ context("Mpi/Qpi test", () => {
           cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
             arId = $lnEl.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
       });
 
       context("Verify email for Released QPI notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${QPIDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+            .then((emails) => {
               emailsFromInbox = emails;
               expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
               downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
+            });
         });
 
         it("Verify the emails that should be received", () => {

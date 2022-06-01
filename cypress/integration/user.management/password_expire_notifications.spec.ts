@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { momentInPST } from "../../utils/constants/dateHandler";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -223,6 +224,7 @@ context("Password expire flow", () => {
           });
 
           it("Verify password expiration message", () => {
+            SystemRequirement("REQ-4180");
             // eslint-disable-next-line no-irregular-whitespace
             cy.checkToastMessageIsEqual({ message: `Your password will expire in ${5 - i} days. Reset it now.` });
           });
@@ -356,13 +358,8 @@ context("Password expire flow", () => {
           after: dateAfterEmailShouldArrive,
         };
 
-        cy.imapGetMails({ userEmail: emailOfUserToSignUp, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-          }
-          else {
-            assert.fail("No email found");
-          }
+        cy.imapGetMails({ userEmail: emailOfUserToSignUp, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
         });
       });
 

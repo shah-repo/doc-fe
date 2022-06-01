@@ -11,3 +11,12 @@ export const LegalRecord: IdocumentTypeDto = {
   needsSignature: true,
   category: Categories.Record,
 };
+
+export const RecordOne: IdocumentTypeDto = {
+  documentTypeName: "Record one",
+  documentTypeAcronym: "RD-",
+  group: DOC_TYPE_GROUP.RECORD,
+  isQms: true,
+  needsSignature: true,
+  category: Categories.Record,
+};

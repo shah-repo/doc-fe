@@ -272,9 +272,9 @@ context("Send PO Owner an email notification when a PO is approved", () => {
 
   context("Submit PO for Approval", () => {
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
+      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[2].name);
       });
     });
 
@@ -310,22 +310,11 @@ context("Send PO Owner an email notification when a PO is approved", () => {
       it("Verify emails", () => {
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-          }
-          else {
-            assert.fail("No email found");
-          }
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
         });
       });
 

@@ -13,6 +13,7 @@ export const styles = makeStyles(() =>
       "&.add_section": {
         color: Colors.navy,
       },
+      "cursor": "pointer",
     },
     iconButton: {
       "&:hover": {
