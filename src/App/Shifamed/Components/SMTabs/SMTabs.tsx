@@ -23,7 +23,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
             zIndex: 1,
             backgroundColor: Colors.alabaster,
             height: "48px",
-            width: `calc(100% - 570px)`,
+            width: "100%",
             fontSize: "12px",
           }}
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}
