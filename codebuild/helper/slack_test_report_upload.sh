@@ -35,6 +35,8 @@ curl --verbose \
   -H "Authorization: Bearer $SLACK_TOKEN" \
   -F "filename=report_$DATE_REPORT" \
   -F "initial_comment= ****************
+      Pipeline Name: $CODEBUILD_INITIATOR
+
       Started: $START_TIMESTAMP
       Finished: $END_TIMESTAMP
 
