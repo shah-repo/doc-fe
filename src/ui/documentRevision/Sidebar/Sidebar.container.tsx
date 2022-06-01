@@ -1,21 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import FBStore from "../../form.builder/FBStore/FBStore";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import SidebarPresenter from "./Sidebar.presenter";
-import { Sidebar } from "./types";
+import SidebarPresenter from "./Sidebar.presenter.new";
+import { Sidebar } from "./types.new";
 
 interface SidebarContainerProps {
   sidebarList: Sidebar[];
-  isDrawerOpen: boolean;
-  setOpen: (value: boolean) => void;
+  isDrawerOpen?: boolean;
+  setOpen?: (value: boolean) => void;
+  setTab?: (value: number) => void;
 }
 
-export const SidebarContainer: React.FunctionComponent<
+const SidebarContainer: React.FunctionComponent<
   SidebarContainerProps
 > = ({
   sidebarList,
-  isDrawerOpen,
+  isDrawerOpen = true,
   setOpen,
+  setTab,
 }) => {
   const [indexNumber, setIndex] = useState(0);
   useEffect(() => {
@@ -25,7 +27,7 @@ export const SidebarContainer: React.FunctionComponent<
   const inputRef = useRef(null);
   useScrollIntoView();
   const onDrawerToggle = () => {
-    setOpen(!isDrawerOpen);
+    setOpen?.(!isDrawerOpen);
     if (isDrawerOpen) {
       setIndex(0);
     }
@@ -37,11 +39,12 @@ export const SidebarContainer: React.FunctionComponent<
   };
   const handleMenuIconClick = (index: number) => {
     if (!isDrawerOpen) {
-      setOpen(!isDrawerOpen);
+      setOpen?.(!isDrawerOpen);
       setIndex(index);
       return;
     }
     setIndex(index);
+    setTab?.(index);
   };
 
   return (
@@ -51,7 +54,6 @@ export const SidebarContainer: React.FunctionComponent<
         indexNumber,
         sidebarList,
         inputRef,
-        setIndex,
         handleMenuIconClick,
         onDrawerToggle,
       }}

@@ -2,6 +2,7 @@ import { isArray, isEmpty, isObject, isString, isUndefined, size } from "lodash"
 import { IReactionOptions, IReactionPublic, reaction as xReaction } from "mobx";
 import { MobXProviderContext } from "mobx-react";
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { SMProviderProps } from "../../..";
 
 export default class SM {
@@ -40,5 +41,19 @@ export default class SM {
       xReaction<T>(expression, effect, opts);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+  }
+
+  public static get pathname(): string {
+    return useLocation().pathname;
+  }
+
+  // For the new tabpanel layout
+  // This can be removed once all is refactored to new layout
+  public static get isNewLayout(): boolean {
+    return SM.pathname.includes("document_revision/");
+  }
+
+  public static get isNewCRLayout(): boolean {
+    return SM.pathname.includes("change_request/");
   }
 }

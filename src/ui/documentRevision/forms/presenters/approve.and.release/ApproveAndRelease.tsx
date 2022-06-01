@@ -6,6 +6,8 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../../../App/Shifamed/Utils/SM/SM";
 import { getStartOfDayDateString, TIME_ZONE } from "../../../../../common/utils/date";
 import { getHasPermission } from "../../../../../common/utils/selectors";
 import { Group, Permission } from "../../../../../state/ducks/auth/types";
@@ -86,6 +88,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
 
   // MARK: @config
+  const isNewLayout = SM.isNewLayout;
   const history = useHistory();
   const docId = documentRevision?.document?.docId || "";
   const title = documentRevision?.name;
@@ -314,15 +317,26 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        <Button
-          color="secondary"
-          variant="outlined"
-          onClick={isRecord ? alertDialog.open :  openDialog}
-          id="ApproveAndRelease-button"
-          data-cy="ApproveAndRelease-button"
-        >
-          <Text message={isRecord ? "record.finalize.and.release" : label} />
-        </Button>
+        {isNewLayout ? (
+          <StyledButton
+            color="primary"
+            onClick={isRecord ? alertDialog.open : openDialog}
+            id="ApproveAndRelease-button"
+            data-cy="ApproveAndRelease-button"
+          >
+            <Text message={isRecord ? "record.finalize.and.release" : label} />
+          </StyledButton>
+        ) : (
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={isRecord ? alertDialog.open : openDialog}
+            id="ApproveAndRelease-button"
+            data-cy="ApproveAndRelease-button"
+          >
+            <Text message={isRecord ? "record.finalize.and.release" : label} />
+          </Button>
+        )}
       </CustomLabelTooltip>
       {
         dialog.isOpen &&

@@ -274,4 +274,5 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   );
 };
 
-export default AccessPermissionsPresenter;
+// TODO: Remove this in 22.3 as new component created for this
+AccessPermissionsPresenter;

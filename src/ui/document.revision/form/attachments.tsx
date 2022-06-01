@@ -6,6 +6,7 @@ import AttachmentField from "../../components/common/attachment.field/container"
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 import { useAttachments } from "../../hooks/docCustomization/useCustomization";
+import Colors from "../../layout/theme/utils/colors";
 
 interface Props {
   isDisabled: boolean;
@@ -26,6 +27,9 @@ const classes = {
     flex: "0 0 50%",
     display: "flex",
     justifyContent: "flex-start",
+    fontSize: "12px",
+    fontWeight: 600,
+    color: Colors.almost_black,
   },
 };
 
@@ -46,7 +50,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box marginBottom="33px">
+    <Box marginBottom="30px">
       <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
         <Typography variant="h6" style = {classes.attachmentHeadText}>
           <Text message={label}/>

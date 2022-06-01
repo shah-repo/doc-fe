@@ -19,8 +19,11 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   canChangeOwnerShip,
   canShowCreateVersionButton,
-}) => (
-  <Header>
+}) => {
+  const headerRenderer = () => <Header
+    displayStatus={documentRevision.displayStatus}
+    status={documentRevision.status}
+  >
     <HeaderInfo
       revisionStage={documentRevision.revisionStage}
       groupOptions={documentRevision.document.documentType.groupOptions}
@@ -35,6 +38,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       subRevision={documentRevision?.subRevision}
       displayStatus={documentRevision.displayStatus}
       subtitle={generateSubtitle(documentRevision)}
+      displayRevision={documentRevision.displayRevision}
     />
     <Grid item={true} xs={6}>
       <Grid container={true} alignItems="flex-end" justify="flex-end">
@@ -47,11 +51,17 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
           <OwnerChangerContainer
             requestId={documentRevision.id}
             requestType={RequestType.Document}
+            renderAsButton={true}
           />
         )}
       </Grid>
     </Grid>
-  </Header>
-);
+  </Header>;
+
+  return (<>
+    { headerRenderer()}
+  </>
+  );
+};
 
 export default SummaryHeaderPresenter;

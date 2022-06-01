@@ -1,6 +1,7 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDialog, FBForm, FBInput, FBPOReceiveProps, FBProvider } from "..";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBPOReceive } from "./FBPOReceive.wrap";
 
 const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
@@ -18,7 +19,7 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
 }) => (
   <FBProvider {...{ poReceiveState, dialogState }} >
     <FBDialog />
-    <FBInput {...{ name }} {...props} type="poreceive">
+    <FBInput {...{ name }} {...props} type="poreceive" labelProps={FBFontStyle.labelProps}>
       <FBAutocompleteAsync
         {...{ onChange, defaultValue, gutter, disabled }}
         name={`porec-${name}`}

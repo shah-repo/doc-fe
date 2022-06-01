@@ -4,15 +4,14 @@ import React from "react";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common/types";
 import { AsyncState } from "../../../state/types";
-import SummaryField from "../../common/summary/base";
-import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import SummaryField from "../../common/summary/NewBase";
+import SummaryFieldWithHtml from "../../common/summary/NewBaseWithHtml";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { FB } from "../../form.builder";
 import { ChangeRequestFormValues } from "../form/types";
 import Approvers from "./approvers";
-import SummaryHeader from "./SummaryHeader";
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,7 +54,6 @@ const Presenter: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      <SummaryHeader {...{ dataProp, canChangeOwnerShip, asyncState, errors, canEdit }}/>
       <Grid container={true} spacing={4} direction="column" className={classes.container}>
         {canEdit && <FormProgress asyncState={asyncState} />}
         {canEdit && <FormMessage asyncState={asyncState} />}

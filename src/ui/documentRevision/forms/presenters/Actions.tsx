@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { isEqual, isUndefined, keys, omit } from "lodash";
+import { get, isEqual, isUndefined, keys, omit } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import CopyEBButton from "../../../components/forms/CopyEBButton";
-import SubmitButton from "../../../components/forms/SubmitButton";
-import { FB } from "../../../form.builder";
+import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
@@ -24,7 +25,7 @@ import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../hel
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
-import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
+import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.container";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
@@ -36,21 +37,22 @@ import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.contai
 import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
+  const isNewLayout = SM.isNewLayout;
   const formik = useFormikContext();
   const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
   const { isCreateDocumentDisabled } = props;
-  const { workspaceState, formState } = FB.useStores();
+  const { _formState, _documentRevisionFormState } = SM.useStores();
 
   const {
     documentRevision,
     values,
-    docInfo,
     asyncState,
     canChangeOwnerShip,
     type,
   } = React.useContext(FormHeaderContext)!;
+  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || "";
@@ -72,19 +74,20 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const [isInlineApproval, setInlineApproval] = React.useState(false);
   const [isApproved, setIsApproved] = React.useState(false);
 
+
   React.useEffect(() => {
-    formState?.validate((_valid) => {
+    _formState?.validate((_valid) => {
       const validSchema = schema?.filter((schemaItem) => {
         if (schemaItem.validationMode === "visibility" || schemaItem.validationMode === "disabled") {
-          return !isUndefined(formState.errors.get(schemaItem.name ?? ""));
+          return !isUndefined(_formState.errors.get(schemaItem.name ?? ""));
         }
         return true;
       });
       setInlineApproval(isFormWithInlineApproval(validSchema));
-      setIsApproved(isInlineFormApproved( documentRevision, formState, validSchema));
+      setIsApproved(isInlineFormApproved( documentRevision, _formState, validSchema));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formState, schema, formState?.Validator]);
+  }, [_formState, schema, _formState?.Validator]);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
@@ -99,7 +102,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
-  const isLHRProductionBuild =  workspaceState?.isLHRProductionBuild || false;
+  const isLHRProductionBuild =  _formState?.isLHRProductionBuild || false;
 
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
@@ -110,19 +113,22 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
+    const workspaceSchema = _documentRevisionFormState?.schema;
     const { groupOptions } = documentRevision?.document?.documentType || {};
     return (
       (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
-      !isEqual(JSON.stringify(workspaceState?.schema), JSON.stringify(documentSchema))
+      !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
     );
   }
 
   function setFBValue() {
-    const schema = workspaceState?.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-    switch (workspaceState?.getMode()) {
+    const workspaceSchema = _documentRevisionFormState?.schema;
+    const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    const values = get(formik, "values") as DocumentRevision;
+    switch (_formState?.mode) {
       case "design":
         formik.setFieldValue("formTemplate", {
-          outputDocumentTypes: (values.outputDocumentTypes || [])
+          outputDocumentTypes: (values?.outputDocumentTypes || [])
             .map((outputDoc) => ({ id: outputDoc.value })),
           schema,
         });
@@ -130,11 +136,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       case "form":
       case "formDesign":
         formik.setFieldValue("formDocument", {
-          id: values.formDocument?.id,
+          id: values?.formDocument?.id,
         });
         if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
           const newInput = {};
-          keys(values.formInput).map((key) => {
+          keys(values?.formInput).map((key) => {
             newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key !== "equipment_id"
               ? "Void"
               : key === "equipment_id" ?  null : values?.formInput?.[key];
@@ -148,7 +154,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         } else {
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue("formInput",
-            omit(formState?.getValues(),
+            omit(_formState?.getValues(),
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         }
@@ -163,7 +169,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const onFormClick = () => {
     if (redlineActive) {
       formik.setFieldValue("redline", true);
-      workspaceState?.setMode("form");
+      _formState?.setMode("form");
       dispatch(companyActions.autosaveConfig());
     }
     setFBValue();
@@ -187,7 +193,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
+    <OwnerChanger requestId={values.id} requestType={RequestType.Document}
+      renderAsButton={false} />
   );
 
   return (
@@ -195,7 +202,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <Observer>
         {() => (
           <>
-            {<SubmitButton
+            {<StyledSubmitButton
+              showNewButton={isNewLayout && !isCreateUrl}
               asyncState={asyncState}
               label={isDisabled ?
                 "common.save" :
@@ -204,7 +212,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
               data-cy={"DocumentRevisionForm-submit"}
-              disabled={isCreateDocumentDisabled || workspaceState?.disabledAction}
+              disabled={isCreateDocumentDisabled || _documentRevisionFormState?.disabledAction}
             />}
           </>
         )}
@@ -240,30 +248,34 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         }
         {
           (!isRecord || (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))) && (
-            <ApproveAndRelease
-              id={values.id}
-              status={values.status}
-              needsSignature={docInfo.needsSignature}
-              isQms={docInfo.isQms}
-              documentName={docInfo.name}
-              docRevId={values.id as string}
-              owner={documentRevision?.owner}
-              {
-                ...{
-                  isRecord,
-                  documentTypeId,
-                  revisionStage,
-                  isInlineApproval,
-                }
-              }
-            />
+            <Observer>
+              {() => (
+                <ApproveAndRelease
+                  id={values.id}
+                  status={values.status}
+                  needsSignature={_documentRevisionFormState?.docInfo.needsSignature || false}
+                  isQms={_documentRevisionFormState?.docInfo.isQms || false}
+                  documentName={_documentRevisionFormState?.docInfo.name || ""}
+                  docRevId={values.id as string}
+                  owner={documentRevision?.owner}
+                  {
+                    ...{
+                      isRecord,
+                      documentTypeId,
+                      revisionStage,
+                      isInlineApproval,
+                    }
+                  }
+                />
+              )}
+            </Observer>
           )
         }
         {isExportable && <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
         />}
-        <HeaderMenu>
+        { !isCreateUrl && (<HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton
           {...{ documentRevision }}
@@ -283,7 +295,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
           {isRecord && isInlineApproval &&
           isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
-        </HeaderMenu>
+        </HeaderMenu> )}
       </span>
       }
     </div>

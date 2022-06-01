@@ -1,13 +1,17 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
+import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
 import { PDF } from "../../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../../state/types";
 import AsyncButton from "../../components/AsyncButton";
 import ViewFileContent from "../../components/common/view.file/components/dialog.content";
 import { styles } from "../../components/common/view.file/utils/styles";
 import { toastError } from "../../components/notifications";
+import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -18,6 +22,7 @@ interface Props {
 const DownloadHTML: React.FunctionComponent<Props> = ({
   pdf,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const dialog = useDialog();
   const [URL, setURL] = React.useState<string>("");
@@ -42,6 +47,19 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
     async.start(action, pdf.s3Url, async);
   };
 
+  if (isNewLayout) {
+    const isActive = async.asyncState.status === AsyncStatus.Active;
+    return (
+      <StyledButton
+        color="primary"
+        disabled={isActive}
+        data-cy="downloadHtml"
+        onClick={handleClick}
+      >
+        <Text translation="common.download.html" />
+      </StyledButton>
+    );
+  }
   return (
     <>
       {dialog.isOpen && <Dialog

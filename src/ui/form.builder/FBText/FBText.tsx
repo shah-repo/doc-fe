@@ -9,9 +9,10 @@ const FBText: React.FunctionComponent<FBTextProps> = ({
   loading,
   locale,
   values,
+  labelProps,
 }) => (
   <Box {...boxProps} data-cy={locale} flexDirection="row">
-    <Box display="flex">
+    <Box display="flex" style={labelProps}>
       <Text message={locale} {...{ values }} />
       {loading && (
         <Box ml={1} mt={0.3}>
