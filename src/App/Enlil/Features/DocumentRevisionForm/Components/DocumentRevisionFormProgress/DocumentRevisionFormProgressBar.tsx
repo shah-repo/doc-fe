@@ -10,15 +10,15 @@ import Colors from "../../../../../../ui/layout/theme/utils/colors";
 const BorderLinearProgress = withStyles((theme) => ({
   root: {
     height: 10,
-    borderRadius: "10px 0px 0px 10px",
+    borderRadius: "10px 10px 10px 10px",
   },
   colorPrimary: {
-    backgroundColor: "#E9EBF0",
+    backgroundColor: Colors.light_athens_gray,
   },
-  bar: {
+  barColorPrimary: {
     borderRadius: "10px 0px 0px 10px",
-    backgroundColor:
-      "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 45.54%, #011FBB 85.48%)",
+    background:
+    `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 45.54%, ${Colors.navy} 85.48%)`,
   },
 }))(LinearProgress);
 
@@ -70,7 +70,7 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
           value={resultCompleted.length / data.length}
         />
       )}
-      <Box component="div" fontSize={12} color={Colors.font_gray} mt={1.25}>
+      <Box component="div" fontSize={12} color={Colors.font_gray} mt={1.25} mb={2.125}>
         {resultCompleted.length > 0 && (
           <>
             <Box component="span" fontWeight={600}>

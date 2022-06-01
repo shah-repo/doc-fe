@@ -30,6 +30,7 @@ enum Colors {
   link_water = "#ccd4d9",
   platinum_grey = "#E2E2E2",
   cultured="#f6f7f7",
+  light_athens_gray ="#E9EBF0",
   // blue
   light_blue = "#edf4ff",
   step_blue = "#EDF4FF",
