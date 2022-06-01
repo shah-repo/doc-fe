@@ -1,31 +1,35 @@
 /* For pop up window - schema, fieldConfig in document Type management grid  start here*/
 .gridTextAreaForm .k-textarea>.k-input {
   resize: none;
-  font-family: "Sora";
   font-size: 14px;
   font-weight: 400;
 }
-.gridTextAreaForm > .k-textarea::selection, .k-textarea .k-input::selection {
+
+.gridTextAreaForm>.k-textarea::selection,
+.k-textarea .k-input::selection {
   background-color: #011FBB;
 }
-.gridTextAreaForm .k-form-field  {
+
+.gridTextAreaForm .k-form-field {
   margin-top: 0;
 }
+
 .gridTextAreaForm .MuiButton-root.Mui-disabled {
   color: white;
 }
+
 .gridTextAreaForm .MuiTypography-h6 {
-position: static;
-height: 18px;
-left: 20px;
-top: 20px;
-font-family: Sora;
-font-style: normal;
-font-weight: 600;
-font-size: 14px;
-line-height: 18px;
+  position: static;
+  height: 18px;
+  left: 20px;
+  top: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
 }
+
 .checkbox-cell {
-  text-align: center !important; 
-}  
+  text-align: center !important;
+}
+
 /* For pop up window - schema, fieldConfig in document Type management grid ends here */

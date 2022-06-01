@@ -19,38 +19,29 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     },
   },
   MuiTypography: {
-    caption: {
-      fontFamily: "Open Sans, sans-serif;",
-    },
     body2: {
       color: "#8A9DAD",
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     subtitle1: {
       color: appTheme.palette.text.primary,
       fontSize: "0.885rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     subtitle2: {
       color: appTheme.palette.text.primary,
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     h5: {
       color: appTheme.palette.text.primary,
       fontSize: "1rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     h4: {
       color: appTheme.palette.text.primary,
       fontSize: "1.4rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     h6: {
       color: Colors.dark_gray,
       fontSize: "1rem",
-      fontFamily: "Open Sans, sans-serif;",
       fontWeight: "bold",
     },
   },
@@ -60,7 +51,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       borderRadius: 3,
       margin: appTheme.spacing(1),
       fontWeight: "bold",
-      fontFamily: "Open Sans, sans-serif;",
     },
     contained: {
       boxShadow: "none",
@@ -69,7 +59,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiFab: {
     root: {
       fontSize: "0.75rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     label: {
       lineHeight: "1rem",
@@ -79,20 +68,17 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       color: appTheme.palette.primary.main,
-      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiTableCell: {
     root: {
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
       padding: 0,
     },
     head: {
       fontSize: "0.81rem",
       background: appTheme.palette.background.default,
       color: appTheme.palette.common.white,
-      fontFamily: "Open Sans",
       fontWeight: "bold",
       lineHeight: "0.9rem",
     },
@@ -100,7 +86,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiInputBase: {
     root: {
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     input: {
       "fontSize": "0.8rem",
@@ -114,7 +99,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       lineHeight: "1.2rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
     icon: {
       right: "10px",
@@ -131,20 +115,17 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       overflowWrap: "break-word",
       wordWrap: "break-word",
       hyphens: "auto",
-      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiMenuItem: {
     root: {
       fontSize: "0.8rem",
-      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiListItemText: {
     primary: {
       fontSize: "0.9rem",
       color: appTheme.palette.text.primary,
-      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiExpansionPanel: {
@@ -178,7 +159,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiFormControl: {
     root: {
-      fontFamily: "Open Sans, sans-serif;",
       [`& .${FBClasses.hoverVisibility}`]: {
         "&:hover": {
           "& .MuiButton-root": {
@@ -213,21 +193,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
           borderWidth: "1px!important",
         },
       },
-    },
-  },
-  MuiChip: {
-    root: {
-      fontFamily: "Open Sans, sans-serif;",
-    },
-  },
-  MuiGrid: {
-    root: {
-      fontFamily: "Open Sans, sans-serif;",
-    },
-  },
-  MuiFormHelperText: {
-    root: {
-      fontFamily: "Open Sans, sans-serif;",
     },
   },
 });

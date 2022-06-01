@@ -8,8 +8,6 @@ export const styles = makeStyles(() =>
       maxHeight: "calc(100vh - 300px)",
     },
     title: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "16px",
       lineHeight: "20px",
@@ -47,8 +45,6 @@ export const styles = makeStyles(() =>
       borderRadius: "50%",
     },
     tabHeader: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "10px",

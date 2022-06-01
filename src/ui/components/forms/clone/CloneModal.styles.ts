@@ -56,8 +56,6 @@ export const styles = makeStyles((theme: Theme) =>
       },
     },
     title: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "18px",
@@ -96,16 +94,12 @@ export const styles = makeStyles((theme: Theme) =>
       borderRadius: "6px",
     },
     radioLabel: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "20px",
       color: Colors.almost_black,
     },
     buttonLabel: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 700,
       fontSize: "12px",
       lineHeight: "15px",
