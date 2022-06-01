@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-#SLACK_INFO
-SLACK_TOKEN=xoxb-551215374854-3605684868578-SN9Ij3r4D3HRLKGFOxhEoZmP
-CHANNEL=test_channel_for_cypress_reports
+if [ "$SLACK_CHANNELS" == "none" ]; then
+	exit 0
+fi
 
 START_TIMESTAMP=$(date --date="@$CODEBUILD_START_TIME")
 END_TIMESTAMP=$(date)
@@ -49,7 +49,7 @@ curl --verbose \
       * docx-to-pdf: <https://bitbucket.org/shifamed/docx-to-pdf:/commits/$DOCXTOPDF_GIT_COMMIT_HASH|$DOCXTOPDF_GIT_COMMIT_HASH>
       * word-service: <https://bitbucket.org/shifamed/word-service/commits/$WORDSERVICE_GIT_COMMIT_HASH|$WORDSERVICE_GIT_COMMIT_HASH>
       * remote-js-validators: <https://bitbucket.org/shifamed/remote-js-validators/commits/$VALIDATORS_GIT_COMMIT_HASH|$VALIDATORS_GIT_COMMIT_HASH>" \
-  -F "channels=$CHANNEL" \
+  -F "channels=$SLACK_CHANNELS" \
   -F file=@$ZIP_FILE_NAME_PATH
 
 echo "Uploaded to slack"
