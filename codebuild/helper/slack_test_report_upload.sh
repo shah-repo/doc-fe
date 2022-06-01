@@ -3,7 +3,7 @@ set -e
 
 #SLACK_INFO
 SLACK_TOKEN=xoxb-551215374854-3605684868578-SN9Ij3r4D3HRLKGFOxhEoZmP
-CHANNEL=test-automation
+CHANNEL=test_channel_for_cypress_reports
 
 # START_TIMESTAMP=$(date --date="@$CODEBUILD_START_TIME")
 END_TIMESTAMP=$(date)
