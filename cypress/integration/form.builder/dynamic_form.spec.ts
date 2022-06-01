@@ -833,8 +833,6 @@ context("Dynamic Form Test", () => {
     it("Select 'New Dynamic Form' field", () => {
       cy.fbSelectNavField({ field: "Custom Controls" });
       cy.fbSelectItemFromNewFieldList({ field: "New Dynamic Form" });
-      cy.pause();
-      cy.fbSelectCustomControl();
     });
 
     it("Click on 'Add a field'", () => {
@@ -842,9 +840,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'Text Field 2' field", () => {
-      cy.fbSelectTextField();
-      // cy.fbSelectNavField({ field: "Inputs" });
-      // cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectNavField({ field: "Inputs" });
+      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field 2'", () => {
@@ -880,10 +877,12 @@ context("Dynamic Form Test", () => {
     });
 
     it("Enters text inside 'New Text Field 1' dynamic form field", () => {
+      cy.pause();
       cy.get("[data-cy*=\"new-text-field\"]").eq(0).arrowType("Some text for Dynamic Form field");
     });
 
     it("Enters text inside 'New Text Field 2'", () => {
+      cy.pause();
       cy.get("[data-cy*=\"new-text-field-2\"]").arrowType("Some text for Text field");
     });
 
