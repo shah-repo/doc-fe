@@ -1,4 +1,4 @@
-import { Box, LinearProgress, withStyles } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { each } from "lodash";
 import React from "react";
 import {
@@ -6,21 +6,7 @@ import {
   isDocumentRevisionReleased,
 } from "../../../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
-
-const BorderLinearProgress = withStyles((theme) => ({
-  root: {
-    height: 10,
-    borderRadius: "10px 10px 10px 10px",
-  },
-  colorPrimary: {
-    backgroundColor: Colors.light_athens_gray,
-  },
-  barColorPrimary: {
-    borderRadius: "10px 0px 0px 10px",
-    background:
-    `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 45.54%, ${Colors.navy} 85.48%)`,
-  },
-}))(LinearProgress);
+import { BorderLinearProgress } from "./BorderLinearProgress";
 
 const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
   const statuses: string[] = [];
