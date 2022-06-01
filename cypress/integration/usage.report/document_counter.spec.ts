@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
+import { integer } from "aws-sdk/clients/cloudfront";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -21,7 +22,81 @@ let loginResponse;
 let createdCompany;
 let dateAfterEmailShouldArrive;
 let emailsFromInbox;
-const usageReportFileName = "Usage_report_" + fileTimeFormat + ".xlsx";
+const usageReportXlsxFileName = "Usage_report_" + fileTimeFormat + ".xlsx";
+const usageReportXlsxFileNameAndPath = "cypress/downloads/" + usageReportXlsxFileName;
+const usageReporJsonFileName = "Usage_report_" + fileTimeFormat + ".json";
+const usageReportJsonFileNameAndPath = "cypress/downloads/" + usageReporJsonFileName;
+
+interface StructureFromUsageReport {
+  name: string;
+  releasedCompleted: integer;
+  draftPending: integer;
+}
+
+const numberOfDocsFromUsageReport: StructureFromUsageReport[] = [];
+
+const numberOfDocsThatWereCreated: StructureFromUsageReport[] = [
+  {
+    name: "Parts",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "Equipment",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "Supplier",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "Purchase Order",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "Receiving",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "EB",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "LHR",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "LOT",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "Records",
+    releasedCompleted: 0,
+    draftPending: 1,
+  },
+  {
+    name: "Documents",
+    releasedCompleted: 2,
+    draftPending: 0,
+  },
+  {
+    name: "Approval Requests",
+    releasedCompleted: 2,
+    draftPending: 0,
+  },
+  {
+    name: "Training Records",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+];
 
 context("Test usage_report is correctly counting documents", () => {
   before(() => {
@@ -290,7 +365,37 @@ context("Test usage_report is correctly counting documents", () => {
     });
   });
 
-  context("Submit request for usage report", () => {
+  context("Time travel one day back to the future", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it(`Select 1 day to back in future`, () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 1 });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+    });
+
+    it("Select task USAGE_REPORT", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.USAGE_REPORT });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+    });
+  });
+
+  context.skip("Submit request for usage report", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
@@ -308,8 +413,8 @@ context("Test usage_report is correctly counting documents", () => {
     });
   });
 
-  context("Get email", () => {
-    it("Get emails", () => {
+  context("Get report and parse it", () => {
+    it("Get attachment from email", () => {
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -321,8 +426,40 @@ context("Test usage_report is correctly counting documents", () => {
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
         const attachmentData = emailsFromInbox[0].attachments[0].data;
-        cy.writeFile("cypress/downloads/" + usageReportFileName, attachmentData, "base64");
+        cy.writeFile(usageReportXlsxFileNameAndPath, attachmentData, "base64");
       });
+    });
+
+    it("Parse to JSON", () => {
+      cy.task("parseXlsx", { file: usageReportXlsxFileNameAndPath, sheet: "Report Per Company" }).then((rows: any) => {
+        cy.writeFile(usageReportJsonFileNameAndPath, { rows });
+      });
+    });
+  });
+
+  context("Verify number of records", () => {
+    it("Read data from JSON", () => {
+      cy.readFile(usageReportJsonFileNameAndPath).then((data) => {
+        const relesedCompletedKey = createdCompany.name;
+
+        const keysInReport = Object.keys(data.rows[1]);
+        const indexOfUnknownKey = keysInReport.indexOf(relesedCompletedKey) + 1;
+        const draftPendingKey = keysInReport[indexOfUnknownKey];
+
+        data.rows.forEach((row, i) => {
+          if (i !== 0) {
+            numberOfDocsFromUsageReport.push({
+              name: row[""],
+              releasedCompleted: parseInt(row[relesedCompletedKey], 10),
+              draftPending: parseInt(row[draftPendingKey], 10),
+            });
+          }
+        });
+      });
+    });
+
+    it("Verify data from usage report", () => {
+      assert.deepEqual(numberOfDocsFromUsageReport, numberOfDocsThatWereCreated);
     });
   });
 });
