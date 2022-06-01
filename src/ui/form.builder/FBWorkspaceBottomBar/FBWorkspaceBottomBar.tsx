@@ -21,6 +21,8 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
   previewDisabled,
 }) => {
   const classes = FBWorkspaceBottomBarStyles();
+  console.log("includeTransport", includeTransport);
+  console.log("previewDisabled", previewDisabled);
   return (
     <Box display="flex" className="formOptionsBox" justifyContent="center" p={1} mt={2}>
       <Grid container justify="space-between" alignItems="center" className={classes.formOptionsBox}>
@@ -41,7 +43,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
             size="small"
             id="FBWorkspace-clickView"
             data-cy="FBWorkspace-clickView"
-            disabled={previewDisabled}
+            disabled={!previewDisabled}
             className={classes.previewIcon}
             onClick={handleFormPreview}
           >
@@ -51,7 +53,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
           </IconButton>
           <IconButton
             size="small"
-            disabled={!includeTransport}
+            disabled={includeTransport}
             className={classes.exportIcon}
             onClick={exportSchema}
           >
@@ -59,7 +61,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
               <ExportIcon />
             </StyledTooltip>
           </IconButton>
-          <IconButton size="small" disabled={!includeTransport}>
+          <IconButton size="small" disabled={includeTransport}>
             <StyledTooltip title="form.builder.import.template">
               <label htmlFor="fb-import-schema">
                 <ImportIcon />
