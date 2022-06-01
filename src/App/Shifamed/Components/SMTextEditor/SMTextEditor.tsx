@@ -170,13 +170,17 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                             justifyContent="center"
                           >
                             <>
-                              <span style={{
-                                fontWeight: 400,
-                                fontSize: "14px",
-                                color: _formState?.getValue(name) ? Colors.almost_black : Colors.hint_gray,
-                                lineHeight: "25px",
-                                cursor: "pointer",
-                              }} >
+                              <span
+                                style={{
+                                  fontWeight: 400,
+                                  fontSize: "14px",
+                                  color: _formState?.getValue(name) ? Colors.almost_black : Colors.hint_gray,
+                                  lineHeight: "25px",
+                                  cursor: "pointer",
+                                }}
+                                id="field-description"
+                                data-cy="field-description"
+                              >
                                 {editor?.trim()}
                               </span>
                               {_formState?.getValue(name) && <span
