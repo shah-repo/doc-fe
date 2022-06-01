@@ -17,8 +17,8 @@ NUMBER_OF_SUCCESSES=$(expr $NUMBER_OF_SUITES - $NUMBER_OF_FAILS)
 DIR_ZIP=zipcontent
 mkdir -p $DIR_ZIP
 cp -r $DIR_REPORTS $DIR_ZIP
-rm -rf "$DIR_ZIP/reports/downloads"
-rm -rf "$DIR_ZIP/reports/videos"
+rm -rf "$DIR_ZIP/downloads"
+rm -rf "$DIR_ZIP/videos"
 DATE=$(date "+%Y-%m-%dT%H-%M-%S%z")
 DATE_REPORT=$(date "+%Y-%m-%d")
 ZIP_FILE_NAME=REPORT_$DATE.zip
