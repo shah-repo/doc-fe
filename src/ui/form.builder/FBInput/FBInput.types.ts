@@ -74,6 +74,7 @@ export type FBInputType =
   | "mediaalbum"
   | "poapprovals"
   | "lhrbuild"
+  | "attachments"
   | "downloadsheet";
 
 export type FBInputProps =
