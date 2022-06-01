@@ -5,7 +5,7 @@ set -e
 SLACK_TOKEN=xoxb-551215374854-3605684868578-SN9Ij3r4D3HRLKGFOxhEoZmP
 CHANNEL=test_channel_for_cypress_reports
 
-# START_TIMESTAMP=$(date --date="@$CODEBUILD_START_TIME")
+START_TIMESTAMP=$(date --date="@$CODEBUILD_START_TIME")
 END_TIMESTAMP=$(date)
 
 #TEST_REPORT_INFO
@@ -35,7 +35,8 @@ curl --verbose \
   -H "Authorization: Bearer $SLACK_TOKEN" \
   -F "filename=report_$DATE_REPORT" \
   -F "initial_comment= ****************
-      Finished at: $END_TIMESTAMP
+      Started: $START_TIMESTAMP
+      Finished: $END_TIMESTAMP
 
       :1234: Number of tests: *$NUMBER_OF_SUITES*
       :white_check_mark: Successes: *$NUMBER_OF_SUCCESSES*
