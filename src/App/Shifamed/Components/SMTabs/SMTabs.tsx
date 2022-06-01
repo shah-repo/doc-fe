@@ -9,6 +9,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   onChange,
   _tabsState,
   tabs,
+  tabWidth,
   children,
   boxProps,
 }) =>  (
@@ -23,7 +24,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
             zIndex: 1,
             backgroundColor: Colors.alabaster,
             height: "48px",
-            width: `calc(100% - 570px)`,
+            width: tabWidth ? tabWidth : `calc(100% - 570px)`,
             fontSize: "12px",
           }}
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}

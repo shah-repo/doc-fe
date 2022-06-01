@@ -132,6 +132,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               <SMTabs
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
+                tabWidth= "85%"
                 boxProps={{ stretchY: "100%", px: 3.75 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
