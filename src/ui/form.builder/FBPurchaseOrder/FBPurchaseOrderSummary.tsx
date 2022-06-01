@@ -14,7 +14,7 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
   const requiredKeys = ["subTotal", "tax", "currency", "totalAmount"];
   const { formState } = FB.useStores();
   const { _tabsState } = SM.useStores();
-  const formInputName = props?.lineItems ? props?.lineItems[0] : "po-items-built-in";
+  const formInputName = props?.lineItem ? props?.lineItem : "po-items-built-in";
   const formValue = formState?.getFieldValue(formInputName, defaultValue);
   const [poSummary, setPoSummary] = React.useState(pick(formValue, requiredKeys));
 
