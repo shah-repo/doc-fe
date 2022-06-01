@@ -40,10 +40,18 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disabledOptions = [],
   disableBackspace = false,
   disableChipDelete = false,
+  type,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
   const CustomPopper = (props) => <Popper {...props} placement="bottom-start" />;
+  const renderRefreshButton = (refresh, disabled) => (
+    <Box ml={-4} display="flex" alignItems="center">
+      <IconButton size="small" onClick={refresh} {...{ disabled }}>
+        <CachedIcon fontSize="small" />
+      </ IconButton>
+    </Box>
+  );
   return (
     <>
       {includeQRScan && (
@@ -96,6 +104,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   InputProps={{
                     ...params.InputProps,
                     ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
+                    ...(disabled && type === "lhrstep") && { endAdornment: null },
                   }}
                   inputProps={{
                     ...params.inputProps,
@@ -105,13 +114,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   size={inputPropStyleSize}
                 />
               </Box>
-              {refresh && (
-                <Box ml={-4} display="flex" alignItems="center">
-                  <IconButton size="small" onClick={refresh} {...{ disabled }}>
-                    <CachedIcon fontSize="small" />
-                  </ IconButton>
-                </Box>
-              )}
+              {(refresh && type !== "lhrstep") && renderRefreshButton(refresh, disabled)}
+              {(refresh && type === "lhrstep" && !disabled) && renderRefreshButton(refresh, disabled)}
             </Box>
           )}
           renderTags={(value, getTagProps) => (
