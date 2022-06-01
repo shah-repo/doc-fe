@@ -169,6 +169,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
+                data-cy={arId + "InReview"}
               >
                 <Grid item={true}>
                   <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>

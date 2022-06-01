@@ -12,7 +12,6 @@ export default (theme: Theme) =>
         "border": 0,
         "& .ql-editor": {
           padding: 0,
-          fontFamily: "Open Sans, sans-serif",
           color: "#474747 !important",
         },
       },

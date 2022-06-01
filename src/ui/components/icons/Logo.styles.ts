@@ -28,7 +28,6 @@ const styles = makeStyles((theme: Theme) =>
       fontSize: 10,
       fontWeight: 600,
       letterSpacing: 0,
-      fontFamily: "Sora",
     },
     devtheme: {
       background: Colors.light_slate_blue,
