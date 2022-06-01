@@ -125,7 +125,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
       (data) => {
-        const parameters = schemaItem?.editorConfig.parameters;
+        const parameters = schemaItem?.editorConfig?.parameters;
         const dataValues = Array.from(data.values());
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
 
