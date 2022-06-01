@@ -33,10 +33,10 @@ let asyncTasksGroup;
 const approvalRequestName = "Releasing FM-00003, released form";
 const aRID = "AR-00003";
 const assignDate = momentInPST().format("l");
-const dueDate = momentInPST().add(1, "month").subtract(1, "days").format("l");
+const dueDate = momentInPST().add(30, "days").format("l");
 
 const adjAssignDate = momentInPST().subtract(23, "days").format("l");
-const adjDueDate = momentInPST().add(1, "month").subtract(24, "days").format("l");
+const adjDueDate = momentInPST().add(30, "days").subtract(23, "days").format("l");
 
 context("Training notification test", () => {
   before(() => {
@@ -945,7 +945,7 @@ context("Training notification test", () => {
         .should("have.text", `${assignDate}`);
     });
 
-    it("Verify Due Date is 1 month from Now", () => {
+    it("Verify Due Date is 30 days from Now", () => {
       cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("Due date").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
