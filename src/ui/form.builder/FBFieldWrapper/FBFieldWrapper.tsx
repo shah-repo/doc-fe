@@ -27,7 +27,7 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
       <Box
         border={toolsVisible === "visible" ? `2px solid ${Colors.dodger_blue}` : "none"}
         borderRadius={toolsVisible === "visible" ? "4px 0px 4px 4px" : 0}
-        paddingBottom={1.25}
+        p={1.25}
       >
         <Box display="flex" flexDirection="row">
           <Box width="100%">{props.children}</Box>
