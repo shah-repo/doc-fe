@@ -36,8 +36,8 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
   );
   documentRevision = documentRevision || documentRevisionFromState;
   const isAttachmentEmpty = (documentRevision?.attachments?.length === 0);
-  const documentTypeId = documentRevision.document?.documentType?.id || "";
-  const isDisabledInput = documentRevision.id !== undefined && isCurrentUserOperator && !isOwner;
+  const documentTypeId = documentRevision?.document?.documentType?.id || "";
+  const isDisabledInput = documentRevision?.id !== undefined && isCurrentUserOperator && !isOwner;
 
   const containsRedline = (): boolean => {
     for (const attachment of documentRevision?.attachments) {
@@ -52,17 +52,17 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
     <Grid>
       { mode === "preview" && !isOwner && <Attachment
         isAttachmentEmpty={documentRevision?.attachments?.length < 1}
-        docRevId = {documentRevision.id}
+        docRevId = {documentRevision?.id}
         containsRedline = {containsRedline()}
-        docRevStatus={documentRevision.status}/>}
+        docRevStatus={documentRevision?.status}/>}
 
       {mode === "form" && isOwner  && <AttachmentsField
         isDisabled={isDisabledInput}
         isNewVersion={false}
-        docRevId={documentRevision.id}
+        docRevId={documentRevision?.id}
         isAttachmentEmpty={isAttachmentEmpty}
         containsRedline={false}
-        docRevStatus={documentRevision.status}
+        docRevStatus={documentRevision?.status}
         documentRevision={documentRevision}
         documentTypeId={documentTypeId || ""} />}
     </Grid>

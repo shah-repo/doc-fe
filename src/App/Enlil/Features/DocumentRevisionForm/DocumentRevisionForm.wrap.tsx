@@ -103,6 +103,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               _documentRevisionFormState,
               _tabsState,
               _formState,
+              schema: _documentRevisionFormState?.schema,
               autosaveEnabled,
               workspaceState,
             }}
