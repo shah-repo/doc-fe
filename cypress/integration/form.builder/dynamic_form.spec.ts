@@ -869,12 +869,10 @@ context("Dynamic Form Test", () => {
     });
 
     it("Enters text inside 'New Text Field 1' dynamic form field", () => {
-      cy.pause();
       cy.get("[data-cy*=\"new-text-field\"]").eq(0).arrowType("Some text for Dynamic Form field");
     });
 
     it("Enters text inside 'New Text Field 2'", () => {
-      cy.pause();
       cy.get("[data-cy*=\"new-text-field-2\"]").arrowType("Some text for Text field");
     });
 
