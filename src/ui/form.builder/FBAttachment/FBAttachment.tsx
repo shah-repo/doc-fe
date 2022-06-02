@@ -30,7 +30,6 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
 }) => {
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
-
   const { workspaceState } = FB.useStores();
   const { id: docRevId, mode } = workspaceState || {};
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
@@ -50,13 +49,10 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
     }
     return false;
   };
-  console.log("mode", mode);
   const onSubmit = () => void 0;
-
   return (
     <Grid>
-      { mode === "preview"  &&
-
+      { (mode === "preview" || mode === "design")  &&
       <FormContext.Provider value={{ submitOnChange: false }}>
         <Formik
           initialValues={{ attachments: documentRevision?.attachments }}
@@ -70,8 +66,6 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
             docRevStatus={documentRevision.status}/>
         </Formik>
       </FormContext.Provider>
-
-
       }
 
       {mode === "form"  && <AttachmentsField
