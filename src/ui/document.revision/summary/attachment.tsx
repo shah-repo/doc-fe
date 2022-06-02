@@ -47,7 +47,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
   );
   return (
     <Box pl={2}>
-      <Box style = {classes.buttonsContainer}>
+      <Box>
         <Typography variant="h6" style = {classes.buttonLeft}>
           <Text message="common.attachments"/>
         </Typography>
