@@ -893,7 +893,7 @@ context("Test training curriculum landing page updates", () => {
 
   context("Create Training Curriculum record- Scenario 9", () => {
     it("Create new Training Curriculum", () => {
-     cy.recCreateRecordFromLandingPage();
+      cy.recCreateRecordFromLandingPage();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
@@ -930,7 +930,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select two Groups to train 'Group2'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2"); 
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
     });
 
     it("Select User to train", () => {
@@ -968,7 +968,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select one more group to train", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3"); 
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
     });
 
     it("Click save document", () => {
@@ -1170,7 +1170,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select task PRECALC_DOC_TYPE_FOR_COMPANY", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY});
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY });
     });
 
     it("Submit async task", () => {
@@ -1310,7 +1310,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select task PRECALC_DOC_TYPE_FOR_COMPANY", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY});
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY });
     });
 
     it("Submit async task", () => {
