@@ -104,7 +104,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         isDisabled={isDisabled}
         onChange={handleTypeChange}
       />
-      {canUpdateHTML && <RenderHtmlField isDisabled={isDisabled}/>}
+      {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
     </Box>
   );
 };
