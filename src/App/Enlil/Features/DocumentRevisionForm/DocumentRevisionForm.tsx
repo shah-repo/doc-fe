@@ -136,7 +136,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
-                  const tabSchema = schema.filter((schemaItem) => schemaItem.tabId === _tabsState?.tabID);
 
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="calc(100% - 40px)">
@@ -177,7 +176,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           }}
                           {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
-                          schema={tabSchema}
+                          schema={schema}
                         />}
                       </>}
                       {tabType === "DYNAMIC" && _formState?.mode !== "none" &&  (
@@ -189,7 +188,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           }}
                           {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
-                          schema={tabSchema}
+                          schema={schema}
                         />
                       )}
                       {tabType === "TRAINING" &&
