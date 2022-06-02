@@ -61,8 +61,8 @@ const Attachments: React.FunctionComponent<Props> = ({
           containsRedline={containsRedline}
           docRevStatus = {docRevStatus}/>
       </Box>
-      <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
-      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }}/>
+      {isAttachmentEmpty && <AttachmentField name="attachments" component="field" disabled={isDisabled}/>}
+      {!isAttachmentEmpty && <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }}/>}
     </Box>
   ); };
 
