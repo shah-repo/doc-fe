@@ -4,10 +4,11 @@
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, momentInPST, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -27,6 +28,15 @@ let tmpRegex;
 let downloadFile;
 let fileId;
 let dateAfterEmailShouldArrive;
+let asyncTasksGroup;
+
+const approvalRequestName = "Releasing FM-00003, released form";
+const aRID = "AR-00003";
+const assignDate = momentInPST().format("l");
+const dueDate = momentInPST().add(30, "days").format("l");
+
+const adjAssignDate = momentInPST().subtract(23, "days").format("l");
+const adjDueDate = momentInPST().add(30, "days").subtract(23, "days").format("l");
 
 context("Training notification test", () => {
   before(() => {
@@ -101,6 +111,28 @@ context("Training notification test", () => {
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
             GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
           ],
+        },
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
         },
       });
     });
@@ -448,7 +480,6 @@ context("Training notification test", () => {
     });
   });
 
-
   context("Navigate to Training Records and check separate training record for each user", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
@@ -606,6 +637,9 @@ context("Training notification test", () => {
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
@@ -748,9 +782,7 @@ context("Training notification test", () => {
     });
 
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.documentControl\"]").arrowClick();
-      cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
+      cy.navigToTrainingRecords();
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
@@ -885,6 +917,233 @@ context("Training notification test", () => {
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
       });
+    });
+  });
+
+  context("Verify email for completed training notification", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("Clear filters", () => {
+      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Verify Assign Date is Today", () => {
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("Assign Date").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
+        .should("have.text", `${assignDate}`);
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
+        .should("have.text", `${assignDate}`);
+    });
+
+    it("Verify Due Date is 30 days from Now", () => {
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("Due date").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
+        .should("have.text", `${dueDate}`);
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
+        .should("have.text", `${dueDate}`);
+    });
+  });
+
+  context("Navigate to approval request list and set effective date to 23 days from now", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter list by status", () => {
+      cy.alFilterByStatus({ status: "APPROVED" });
+    });
+
+    it("Verify filter by TITLE", () => {
+      cy.alVerifyFilterByTitle({ title: approvalRequestName });
+    });
+
+    it(`Verify AR ID as ${aRID}`, () => {
+      cy.dlVerifyFilterByDocId({ docId: aRID });
+    });
+
+    it(`Open AR filtered request`, () => {
+      cy.get("#root").contains(approvalRequestName).arrowClick();
+    });
+
+    it("Click Close button", () => {
+      cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+    });
+
+    it("Select option No", () => {
+      cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+    });
+
+    it("Advance Effective Date to 23 days from now", () => {
+      const effectiveDate = momentInPST().add(23, "days");
+      const month = effectiveDate.format("MMM");
+      const day = effectiveDate.format("D");
+
+      cy.get("[aria-label=\"change date\"]").arrowClick();
+
+      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+        const monthYearText = $el.text();
+        if (!monthYearText.includes(month)) {
+          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
+        }
+
+        cy.wait(500);
+
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            if (day === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+          cy.get("#confirmEffectiveDate").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_COMPANY", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 23 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 23 });
+    });
+
+    it("On Next Task, SELECT_ALL", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify the time travel will appear in History list as 'Requested'", () => {
+      cy.get("tr.k-master-row").should("have.length", 1);
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
+    });
+
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
+          CyRoutes.GetAvailableApprovers], () => {
+          cy.reload();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("tr.k-master-row").should("have.length", 1);
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
+      cy.wait(5000);
+    });
+  });
+
+  context("Verify Assign Date and Due Date are adjusted accordingly", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("Clear filters", () => {
+      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Verify Assign Date is adjusted by 23 days", { retries: 3 }, () => {
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("Assign Date").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
+        .should("have.text", `${adjAssignDate}`);
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
+        .should("have.text", `${adjAssignDate}`);
+      cy.wait(3000);
+    });
+
+    it("Verify Due Date is adjusted by 23 days", () => {
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("Due date").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
+        .should("have.text", `${adjDueDate}`);
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
+        .should("have.text", `${adjDueDate}`);
+    });
+  });
+
+  context("Check training notifications due for 7 days", () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+    });
+
+    it("Verify training notification", () => {
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+    });
+  });
+
+  context("Verify the AR in Close State", () => {
+    it("Navigate to ar list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.get("button[data-cy=clearFilter]").arrowClick();
+    });
+
+    it(`Verify AR ID as ${aRID}`, () => {
+      cy.dlFilterByDocId({ docId: aRID });
+    });
+
+    it("Verify first AR is: " + approvalRequestName, () => {
+      cy.alVerifyFilterByTitle({ title: approvalRequestName });
+    });
+
+    it("Verify filter by STATUS as CLOSED", () => {
+      cy.alVerifyFilterByStatus({ status: "CLOSED" });
     });
   });
 });

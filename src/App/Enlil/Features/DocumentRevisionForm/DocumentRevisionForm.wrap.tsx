@@ -53,6 +53,9 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
         if (!schema) {
           schema = get(documentRevision, "schema");
         }
+        if (!schema) {
+          schema = get(documentRevision, "formDocument.formTemplate.schema");
+        }
         _documentRevisionFormState.formSchema = schema;
       },
       { fireImmediately: true }
@@ -104,6 +107,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               _tabsState,
               _formState,
               autosaveEnabled,
+              schema: _documentRevisionFormState?.schema,
               workspaceState,
             }}
           />
