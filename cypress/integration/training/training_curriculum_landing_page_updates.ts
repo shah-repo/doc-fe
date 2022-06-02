@@ -744,6 +744,7 @@ context("Test training curriculum landing page updates", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -874,6 +875,7 @@ context("Test training curriculum landing page updates", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1030,6 +1032,7 @@ context("Test training curriculum landing page updates", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1175,6 +1178,7 @@ context("Test training curriculum landing page updates", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1315,6 +1319,7 @@ context("Test training curriculum landing page updates", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
