@@ -15,6 +15,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   <Observer>
     {() => (
       <SMBox {...boxProps} id="SMBodyTmpl">
+
         <Tabs
           {...{ onChange }}
           value={_tabsState?.value}
@@ -22,19 +23,28 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
             position: "fixed",
             zIndex: 1,
             backgroundColor: Colors.alabaster,
-            height: "48px",
+            height: "auto",
             width: "100%",
             fontSize: "12px",
+            padding: 0,
+            borderBottom: "1px solid #C8CACF",
+            minHeight: 44,
+            maxHeight: 44,
           }}
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}
         >
           {tabs?.map((tab, index) => (
+
             <Tab
+              style={{ width: "auto", minWidth: 40, padding: 0, marginRight: 30 }}
               key={`sm-tabpanel-${tab}-${index}`}
               label={<SMText label={tab} />}
             />
+
+
           ))}
         </Tabs>
+
         <SMMap<ReactNode> collection={children}>
           {(child: ReactNode, index) => (
             <SMTabPanel {...{ index }} key={`sm-tabpanel-${index}`}>
