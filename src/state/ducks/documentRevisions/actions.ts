@@ -74,13 +74,14 @@ const reload = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
-const save = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
+const save = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>, helpers?: any):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: "patch",
   data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
+    helpers && helpers.resetForm();
     // dispatch(documentRevisionSet(undefined, body, id));
   },
   handlers,

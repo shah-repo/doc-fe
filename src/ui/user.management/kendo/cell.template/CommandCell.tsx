@@ -11,6 +11,7 @@ import Tooltip from "../../../components/common/kendo/Tooltip";
 import { toastError } from "../../../components/notifications";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
+import { enterUserInfo } from "../column.definition";
 import { UserManage } from "../types";
 import Commandstyles from "./CommandCell.styles";
 
@@ -60,13 +61,21 @@ export const CommandCell = ({
     },
   });
   const fetchUseInfo = () => {
-    const userName = get(dataItem, "name");
-    const userEmail = get(dataItem, "email");
+    const name = get(dataItem, "name");
+    const email = get(dataItem, "email");
+    const userName = name || enterUserInfo.name;
+    const userEmail = email || enterUserInfo.email;
     if (!userEmail || !userName) {
       toastError(intl.formatMessage({ id: "user.management.name.email.required" }));
       return;
     }
-    asyncName.start(getEmployeeAction, { email: get(dataItem, "email") }, asyncName );
+    if (!name) {
+      set(dataItem, name, userName);
+    }
+    if (!email) {
+      set(dataItem, email, userEmail);
+    }
+    asyncName.start(getEmployeeAction, { email: userEmail }, asyncName );
   };
 
   if (rowType === "groupHeader") {

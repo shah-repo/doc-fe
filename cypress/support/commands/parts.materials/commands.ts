@@ -143,7 +143,6 @@ Cypress.Commands.add("pmDeleteApproverFromApproverList",
     cy.listLoadingElementShouldNotExist();
   });
 
-
 Cypress.Commands.add("ptClickCreateNewPart", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();

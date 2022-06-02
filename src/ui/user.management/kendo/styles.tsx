@@ -11,7 +11,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   },
   link: {
     fontSize: 14,
-    fontFamily: "Sora",
   },
   errorClass: {
     color: Colors.red,
