@@ -739,7 +739,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select task PRECALC_DOC_TYPE_FOR_COMPANY", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY});
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY });
     });
 
     it("Submit async task", () => {
@@ -869,7 +869,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select task PRECALC_DOC_TYPE_FOR_COMPANY", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY});
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY });
     });
 
     it("Submit async task", () => {
@@ -979,7 +979,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name});
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click Submit for Approval", () => {
@@ -1025,7 +1025,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select task PRECALC_DOC_TYPE_FOR_COMPANY", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY});
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY });
     });
 
     it("Submit async task", () => {
@@ -1136,7 +1136,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name});
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click Submit for Approval", () => {
@@ -1276,7 +1276,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name});
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click Submit for Approval", () => {
