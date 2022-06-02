@@ -10,7 +10,7 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
-import { requiredAtLeastOne, validator } from "../../../components/forms/fields/validators";
+import { required, validator } from "../../../components/forms/fields/validators";
 import useGetHasPermission from "../../../hooks/useGetHasPermission";
 import { checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
@@ -100,7 +100,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
           isOptionDisabled: (option) => selectedValues?.length >= 1,
         }}
         options={outputDocumentTypeOptions}
-        validate={validator(requiredAtLeastOne)}
+        validate={validator(required)}
         isDisabled={isDisabled}
         onChange={handleTypeChange}
       />
