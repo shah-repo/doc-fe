@@ -38,7 +38,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                         {...{ includeTransport, workspaceState }}
                         isStarter={workspaceState?.isStarter}
                         mode={workspaceState?.mode}
-                        schema={workspaceState?.schema?.filter((schemaItem) => schemaItem.tabId === _tabsState?.tabID)}
+                        schema={workspaceState?.schema}
                       />
                     </Portal>
                   )}
@@ -51,7 +51,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                         {...{ schema, includeTransport, workspaceState }}
                         isStarter={workspaceState?.isStarter}
                         mode={workspaceState?.mode}
-                        schema={workspaceState?.schema?.filter((schemaItem) => schemaItem.tabId === _tabsState?.tabID)}
+                        schema={workspaceState?.schema}
                       />
                     </>
                   )}
