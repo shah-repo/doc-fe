@@ -29,7 +29,7 @@ let developersGroup;
 let asyncTasksGroup;
 const releasedFormId = "TC-00001";
 
-context("Test training records after refresh period passes", () => {
+context("Test training curriculum landing page updates", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -720,13 +720,16 @@ context("Test training records after refresh period passes", () => {
       cy.grpNavigateToGroupManagement();
     });
 
+    it("Search Group", () => {
+      cy.grpClickEditGroupWithName({ name: "Developers" });
+    });
+
     it("Change the name of the group", () => {
-      cy.grpSearchEditChangeName({ name: "Developers", field: "Developers New" });
+      cy.grpEditGroupName({ name: "Developers New" });
     });
 
     it("Save group", () => {
-      cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
-      cy.wait(3000);
+      cy.grpSaveGroupPatch();
     });
   });
 
@@ -743,29 +746,24 @@ context("Test training records after refresh period passes", () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(500);
     });
   });
 
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(4000);
-      cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="0"]`).contains("TC-00002").arrowClick();
     });
 
     it("Verify the changed Group name", () => {
-      cy.wait(3000);
-      cy.get("[class=\"MuiChip-label\"]").eq(2). should("have.text", "Developers New");
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00002").wait(500);
+      cy.trClearFilters();
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00002").and("contain", "Developers New");
     });
   });
 
   context("Create Training Curriculum record- Scenario 8", () => {
-    it("Navigate to Training Curriculums", () => {
-      cy.navigToTrainingCurriculums();
-    });
-
     it("Create new Training Curriculum", () => {
+      cy.pause();
       cy.recCreateRecordFromLandingPage();
     });
 
@@ -841,21 +839,28 @@ context("Test training records after refresh period passes", () => {
       cy.grpNavigateToGroupManagement();
     });
 
-    it("Change the name of the first group", () => {
-      cy.grpSearchEditChangeName({ name: "Group1", field: "Group1 Test" });
+    it("Search Group", () => {
+      cy.grpClickEditGroupWithName({ name: "Group1" });
+    });
+
+    it("Change the name of the group", () => {
+      cy.grpEditGroupName({ name: "Group1 Test" });
     });
 
     it("Save group", () => {
-      cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
-      cy.wait(1000);
+      cy.grpSaveGroupPatch();
     });
 
-    it("Change the name of the second group", () => {
-      cy.grpSearchEditChangeName({ name: "Async Tasks", field: "Async Tasks 1" });
+    it("Search Group", () => {
+      cy.grpClickEditGroupWithName({ name: "Async Tasks" });
+    });
+
+    it("Change the name of the group", () => {
+      cy.grpEditGroupName({ name: "Async Tasks 1" });
     });
 
     it("Save group", () => {
-      cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
+      cy.grpSaveGroupPatch();
     });
   });
 
@@ -878,22 +883,18 @@ context("Test training records after refresh period passes", () => {
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(4000);
-      cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="0"]`).contains("TC-00003").arrowClick();
     });
 
     it("Verify the changed group names", () => {
-      cy.get("[class=\"MuiChip-label\"]").eq(2). should("have.text", "Group1 Test");
-      cy.get("[class=\"MuiChip-label\"]").eq(3). should("have.text", "Async Tasks 1");
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00003").wait(500);
+      cy.trClearFilters();
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00003").and("contain", "Group1 Test", "Async Tasks 1");
     });
   });
 
   context("Create Training Curriculum record- Scenario 9", () => {
-    it("Navigate to Training Curriculums", () => {
-      cy.navigToTrainingCurriculums();
-    });
-
     it("Create new Training Curriculum", () => {
+      cy.pause();
       cy.recCreateRecordFromLandingPage();
     });
 
@@ -974,7 +975,8 @@ context("Test training records after refresh period passes", () => {
 
     it("Click save document", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.unClick();
     });
 
@@ -994,21 +996,28 @@ context("Test training records after refresh period passes", () => {
       cy.grpNavigateToGroupManagement();
     });
 
-    it("Change the name of the first group", () => {
-      cy.grpSearchEditChangeName({ name: "Group2", field: "Group2 TA Test" });
+    it("Search Group", () => {
+      cy.grpClickEditGroupWithName({ name: "Group2" });
+    });
+
+    it("Change the name of the group", () => {
+      cy.grpEditGroupName({ name: "Group2 TA Test" });
     });
 
     it("Save group", () => {
-      cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
-      cy.wait(1000);
+      cy.grpSaveGroupPatch();
     });
 
-    it("Change the name of the second group", () => {
-      cy.grpSearchEditChangeName({ name: "Group3", field: "Group3 test" });
+    it("Search Group", () => {
+      cy.grpClickEditGroupWithName({ name: "Group3" });
+    });
+
+    it("Change the name of the group", () => {
+      cy.grpEditGroupName({ name: "Group3 test" });
     });
 
     it("Save group", () => {
-      cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
+      cy.grpSaveGroupPatch();
     });
   });
 
@@ -1031,21 +1040,16 @@ context("Test training records after refresh period passes", () => {
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(4000);
-      cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="0"]`).contains("TC-00004").arrowClick();
     });
 
     it("Verify the changed group names", () => {
-      cy.get("[class=\"MuiChip-label\"]").eq(2). should("have.text", "Group2 TA Test");
-      cy.get("[class=\"MuiChip-label\"]").eq(3). should("have.text", "Group3 test");
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00004").wait(500);
+      cy.trClearFilters();
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00004").and("contain", "Group2 TA Test", "Group3 test");
     });
   });
 
   context("Create Training Curriculum record- Scenario 10", () => {
-    it("Navigate to Training Curriculums", () => {
-      cy.navigToTrainingCurriculums();
-    });
-
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
     });
@@ -1128,7 +1132,8 @@ context("Test training records after refresh period passes", () => {
 
     it("Click save document", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.unClick();
     });
 
@@ -1148,13 +1153,16 @@ context("Test training records after refresh period passes", () => {
       cy.grpNavigateToGroupManagement();
     });
 
-    it("Change the name of the first group", () => {
-      cy.grpSearchEditChangeName({ name: "Group4", field: "Group4 test" });
+    it("Search Group", () => {
+      cy.grpClickEditGroupWithName({ name: "Group4" });
+    });
+
+    it("Change the name of the group", () => {
+      cy.grpEditGroupName({ name: "Group4 test" });
     });
 
     it("Save group", () => {
-      cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
-      cy.wait(1000);
+      cy.grpSaveGroupPatch();
     });
   });
 
@@ -1177,20 +1185,16 @@ context("Test training records after refresh period passes", () => {
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(4000);
-      cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="0"]`).contains("TC-00005").arrowClick();
     });
 
     it("Verify the changed group names", () => {
-      cy.get("[class=\"MuiChip-label\"]").eq(2). should("have.text", "Group4 test");
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00005").wait(500);
+      cy.trClearFilters();
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00005").and("contain", "Group4 test");
     });
   });
 
   context("Create Training Curriculum record- Scenario 11", () => {
-    it("Navigate to Training Curriculums", () => {
-      cy.navigToTrainingCurriculums();
-    });
-
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
     });
@@ -1268,7 +1272,8 @@ context("Test training records after refresh period passes", () => {
 
     it("Click save document", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.unClick();
     });
 
@@ -1288,13 +1293,16 @@ context("Test training records after refresh period passes", () => {
       cy.grpNavigateToGroupManagement();
     });
 
+    it("Search Group", () => {
+      cy.grpClickEditGroupWithName({ name: "Group5" });
+    });
+
     it("Change the name of the group", () => {
-      cy.grpSearchEditChangeName({ name: "Group5", field: "Group5 test" });
+      cy.grpEditGroupName({ name: "Group5 test" });
     });
 
     it("Save group", () => {
-      cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
-      cy.wait(1000);
+      cy.grpSaveGroupPatch();
     });
   });
 
@@ -1317,12 +1325,12 @@ context("Test training records after refresh period passes", () => {
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(4000);
-      cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="0"]`).contains("TC-00006").arrowClick();
     });
 
     it("Verify the changed group names", () => {
-      cy.get("[class=\"MuiChip-label\"]").eq(2). should("have.text", "Group5 test");
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00006").wait(500);
+      cy.trClearFilters();
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00006").and("contain", "Group5 test");
     });
   });
 });

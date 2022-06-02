@@ -20,6 +20,7 @@ declare global {
       grpSetTypeFilter(params: { type: string }): Chainable;
       grpFilterByName(params: { name: string }): Chainable;
       grpClickEditGroupWithName(params: { name: string }): Chainable;
+      grpEditGroupName(params: { name: string });
       grpFilterByMembers(params: { member: string }): Chainable;
       grpFilterByType(params: { type: string }): Chainable;
       grpCheckIfNameFilterIsEmpty(): Chainable;
@@ -257,15 +258,9 @@ Cypress.Commands.add("grpEnterGroupName", (params: { name: string }) => {
   cy.get(`td[role="gridcell"] input`).eq(0).clear().arrowType(params.name);
 });
 
-Cypress.Commands.add("grpSearchEditChangeName", (params: { name: string; field: string }) => {
-  cy.get("[class=\"k-textbox\"]").eq(0).clear();
-      cy.get("[class=\"k-textbox\"]").eq(0).arrowType(params.name);
-      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("right").wait(1000);
-      cy.get("[class=\"MuiIconButton-label\"]").eq(2).arrowClick();
-      cy.get("[data-cy=\"Group-groupName\"]").clear().arrowType(params.field);
-      cy.unClick();
+Cypress.Commands.add("grpEditGroupName", (params: { name: string }) => {
+  cy.get("[data-cy=\"Group-groupName\"]").clear().arrowType(params.name);
 });
-
 
 Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
   cy.get(`td[role="gridcell"] input`).eq(1).arrowType(params.name);
@@ -308,6 +303,7 @@ Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
 });
 
 Cypress.Commands.add("grpClickEditGroupWithName", (params: {name: string}) => {
+  cy.grpClearFilter();
   cy.get("tr.k-master-row").contains(params.name).parents("tr").find("button").arrowClick();
 });
 
