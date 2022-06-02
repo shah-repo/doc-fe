@@ -14,6 +14,7 @@ import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAut
 import useDidMount from "../../../hooks/useDidMount";
 import { ChangeRequestFormValues } from "../types";
 import styles from "./AssessmentForm.styles";
+import FormHeader from "./FormHeader";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -56,6 +57,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <div className={classes.container}>
+      <FormHeader {...{ changeRequest, asyncState }}/>
       <FormWrapper
         dirty={dirty}
         resetForm={resetForm}

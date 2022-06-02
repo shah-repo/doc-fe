@@ -17,7 +17,6 @@ import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
 import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
-import FormHeader from "./assessmentForm/FormHeader";
 import { ChangeRequestFormValues } from "./types";
 
 
@@ -111,7 +110,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
 
   return (
     <FBProvider {...{ bookmarkState }}>
-      <FormHeader {...{ changeRequest, asyncState }}/>
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <Formik
