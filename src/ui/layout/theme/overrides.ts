@@ -258,6 +258,11 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontFamily: "Sora, sans-serif;",
     },
   },
+  MuiFormControlLabel: {
+    root: {
+      marginLeft: 0,
+    },
+  },
 });
 
 export default ThemeOverrides;
