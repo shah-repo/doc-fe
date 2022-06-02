@@ -31,7 +31,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
   const { workspaceState } = FB.useStores();
-  const { id: docRevId, mode } = workspaceState || {};
+  const { id: docRevId, mode, schema } = workspaceState || {};
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, docRevId || "")
   );
@@ -49,6 +49,8 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
     }
     return false;
   };
+  const getAttachMentLabel = schema?.filter((o) => o.type === "attachments");
+
   const onSubmit = () => void 0;
   return (
     <Grid>
@@ -63,6 +65,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
             isAttachmentEmpty={documentRevision?.attachments?.length < 1}
             docRevId = {documentRevision.id}
             containsRedline = {containsRedline()}
+            label = {getAttachMentLabel && getAttachMentLabel[0].label}
             docRevStatus={documentRevision.status}/>
         </Formik>
       </FormContext.Provider>
@@ -70,6 +73,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
 
       {mode === "form"  && <AttachmentsField
         isDisabled={isDisabledInput}
+        labeld = {getAttachMentLabel && getAttachMentLabel[0].label?.toString()}
         isNewVersion={false}
         docRevId={documentRevision.id}
         isAttachmentEmpty={isAttachmentEmpty}
