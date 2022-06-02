@@ -21,7 +21,7 @@ const FBEditorCustomControl: React.FunctionComponent<FBEditorCustomControlProps>
           {(control: DocumentRevision, i) => (
             <ListItem
               key={`form.builder.${control.id}-${i}`}
-              data-cy={`form.builder.${control.name}-${i}`}
+              data-cy={control.name}
               className={`${classes.listItemStyle} ${
                 controls.length - 1 === i ? "lastItem" : ""
               }`}
@@ -37,7 +37,7 @@ const FBEditorCustomControl: React.FunctionComponent<FBEditorCustomControlProps>
                   FBEditorState.editorTypeIconMapping.default
                 )}
               </IconButton>
-              <ListItemText key={i}>
+              <ListItemText key={i} data-cy={control.name}>
                 <Typography className={classes.listSubItem}>
                   <Text message={control.name} />
                 </Typography>
