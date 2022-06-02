@@ -16,12 +16,10 @@ import Approvers from "./approvers";
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(2, 0, 0, 0),
-      padding: theme.spacing(0, 5),
+      margin: 0,
       width: "100%",
     },
     fbContainer: {
-      paddingLeft: theme.spacing(2),
       marginTop: theme.spacing(2),
     },
   }));
@@ -53,7 +51,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box>
+    <Box height="80vh" overflow="auto">
       <Grid container={true} spacing={4} direction="column" className={classes.container}>
         {canEdit && <FormProgress asyncState={asyncState} />}
         {canEdit && <FormMessage asyncState={asyncState} />}
