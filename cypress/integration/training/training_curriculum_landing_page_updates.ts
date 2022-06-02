@@ -763,7 +763,6 @@ context("Test training curriculum landing page updates", () => {
 
   context("Create Training Curriculum record- Scenario 8", () => {
     it("Create new Training Curriculum", () => {
-      cy.pause();
       cy.recCreateRecordFromLandingPage();
     });
 
@@ -894,8 +893,7 @@ context("Test training curriculum landing page updates", () => {
 
   context("Create Training Curriculum record- Scenario 9", () => {
     it("Create new Training Curriculum", () => {
-      cy.pause();
-      cy.recCreateRecordFromLandingPage();
+     cy.recCreateRecordFromLandingPage();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {

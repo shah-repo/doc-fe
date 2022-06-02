@@ -36,7 +36,6 @@ declare global {
       grpClickAddGroup(): Chainable;
       grpSelectOfficial(): Chainable;
       grpEnterGroupName(params: { name: string }): Chainable;
-      grpSearchEditChangeName(params: { name: string; field: string | number }): Chainable<Subject>;
       grpAssignUser(params: { name: string }): Chainable;
       grpRemoveUser(params: { name: string }): Chainable;
       grpAssignUserDialog(params: { name: string }): Chainable;
