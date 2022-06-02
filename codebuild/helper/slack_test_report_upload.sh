@@ -40,9 +40,9 @@ curl --verbose \
       Started: $START_TIMESTAMP
       Finished: $END_TIMESTAMP
 
-      :1234: Number of tests: *$NUMBER_OF_SUITES*
-      :white_check_mark: Successes: *$NUMBER_OF_SUCCESSES*
-      :octagonal_sign: Failures: *$NUMBER_OF_FAILS*
+      :checkboard4: Number of tests: *$NUMBER_OF_SUITES*
+      :heavy_check_mark: Successes: *$NUMBER_OF_SUCCESSES*
+      :x: Failures: *$NUMBER_OF_FAILS*
 
       _Code_:
       * doc-be: <https://bitbucket.org/shifamed/doc-be/commits/$BE_GIT_COMMIT_HASH|$BE_GIT_COMMIT_HASH>
