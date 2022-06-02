@@ -32,7 +32,6 @@ export type FBWorkspaceProps =
   includeProcedureDiff?: boolean;
   // Temp portal flag. This will be removed once the RichTextEditor double mounting is fixed
   isPortal?: boolean;
-  isNewLayout?: boolean;
 };
 
 export interface FBWorkspaceExternalState {

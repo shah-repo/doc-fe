@@ -37,14 +37,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     autosave = false,
     schema,
     includeProcedureDiff,
-    isNewLayout,
     ...props
   }: T) => {
 
     const dispatch = useDispatch();
     const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
-    isNewLayout = SM.isNewLayout;
     autosave = _formState?.autosave || false;
 
     const isParentWorkspaceExists = !isEmpty(workspaceState);
@@ -186,7 +184,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       autosave,
       includeProcedureDiff,
       _tabsState,
-      isNewLayout,
     });
   };
 
