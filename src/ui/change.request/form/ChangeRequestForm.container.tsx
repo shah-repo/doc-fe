@@ -72,6 +72,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
         asyncState={asyncState}
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}
+        sidebar={changeRequest && <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />}
         {...props}
         {...{ FBContainer }}
       />
@@ -120,7 +121,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
             {render}
           </Formik>
         </div>
-        {changeRequest && <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />}
       </div>
     </FBProvider>
   );

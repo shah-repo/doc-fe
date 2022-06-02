@@ -18,6 +18,8 @@ const styles = makeStyles((theme: Theme) =>
     container: {
       margin: 0,
       width: "100%",
+      paddingLeft: "34px",
+      paddingRight: "34px",
     },
     fbContainer: {
       marginTop: theme.spacing(2),

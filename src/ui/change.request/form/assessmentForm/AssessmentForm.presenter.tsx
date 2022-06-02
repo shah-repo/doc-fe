@@ -1,6 +1,6 @@
 import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
@@ -23,6 +23,7 @@ interface Props
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
+  sidebar?: ReactNode;
 }
 
 export let formIdContext = React.createContext<string | undefined>(undefined);
@@ -40,6 +41,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   values,
   FBContainer,
   doNotPrompt,
+  sidebar,
 }) => {
   const formContext = useFormContext();
   const didMount = useDidMount();
@@ -58,38 +60,45 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <FormHeader {...{ changeRequest, asyncState }}/>
-      <FormWrapper
-        dirty={dirty}
-        resetForm={resetForm}
-        initialValues={initialValues}
-      >
-        <ScrollToError
-          isSubmitting={isSubmitting}
-          isValidating={isValidating}
-          errors={errors}
-        />
-        <PromptIfDirty
-          dirty={dirty}
-          doNotPrompt={doNotPrompt}
-        />
-        <Box>
-          <InputField
-            name="title"
-            label="common.title"
-            inputProps={{ id: "title", multiline: true, rows: "2" }}
-            validate={validator(required)}
-            labelProps={AutoCompleteStyles.labelStyle}
-          />
-          <TextEditorField
-            data-testid="description"
-            name="description"
-            label="common.description"
-            validate={validator(required)}
-            labelProps={AutoCompleteStyles.labelStyle}
-          />
-          <div ref={FBContainer} />
+      <Box width="100%" height="100%" display="flex">
+        <Box width="100%" px="34px" height="80vh" overflow="auto">
+          <FormWrapper
+            dirty={dirty}
+            resetForm={resetForm}
+            initialValues={initialValues}
+          >
+            <ScrollToError
+              isSubmitting={isSubmitting}
+              isValidating={isValidating}
+              errors={errors}
+            />
+            <PromptIfDirty
+              dirty={dirty}
+              doNotPrompt={doNotPrompt}
+            />
+            <Box>
+              <InputField
+                name="title"
+                label="common.title"
+                inputProps={{ id: "title", multiline: true, rows: "2" }}
+                validate={validator(required)}
+                labelProps={AutoCompleteStyles.labelStyle}
+              />
+              <TextEditorField
+                data-testid="description"
+                name="description"
+                label="common.description"
+                validate={validator(required)}
+                labelProps={AutoCompleteStyles.labelStyle}
+              />
+              <div ref={FBContainer} />
+            </Box>
+          </FormWrapper>
         </Box>
-      </FormWrapper>
+        <Box height="80vh">
+          {sidebar}
+        </Box>
+      </Box>
     </div>
   );
 };

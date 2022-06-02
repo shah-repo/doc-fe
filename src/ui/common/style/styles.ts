@@ -10,7 +10,6 @@ export default makeStyles((theme: Theme) =>
     },
     appFrame: ({ isDrawerOpen }) => ( {
       flexGrow: 1,
-      padding: theme.spacing(2, 4.25, 4.25, 4.25),
       transition: theme.transitions.create("paddingRight", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
