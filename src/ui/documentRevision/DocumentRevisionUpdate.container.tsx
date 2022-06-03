@@ -109,8 +109,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     if (redlineActive) {
       if (
         isEmpty(dataToSubmit) ||
-        (Object.keys(dataToSubmit).includes("formInput") &&
-          Object.keys(dataToSubmit).length === 1)
+      (Object.keys(dataToSubmit).includes("formInput") &&
+        Object.keys(dataToSubmit).length === 1)
       ) {
         dispatch(companyActions.redlineConfig(false));
         redlineDataToSubmit.redline = false;
@@ -125,16 +125,16 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
     // Disabled because of ENC-7826
     /* if (shouldHaveNoResponse(dataToSubmit, documentRevision)) {
-      async.reset();
-      async.start(
-        saveWithNoResponseAction,
-        documentRevision.id,
-        dataToSubmit as DocumentRevisionEditRequestBody,
-        async,
-      );
-      helpers.resetForm();
-      return;
-    } */
+    async.reset();
+    async.start(
+      saveWithNoResponseAction,
+      documentRevision.id,
+      dataToSubmit as DocumentRevisionEditRequestBody,
+      async,
+    );
+    helpers.resetForm();
+    return;
+  } */
 
     handleSave(dataToSubmit as DocumentRevisionEditRequestBody, helpers);
   };
