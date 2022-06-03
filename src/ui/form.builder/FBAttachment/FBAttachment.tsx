@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { Formik } from "formik";
-import { each } from "lodash";
+import { each, find } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FB } from "..";
@@ -50,8 +50,8 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
     });
     return false;
   };
-  const getAttachMentLabel = schema?.filter((o) => o.type === "attachments");
-  const schemaLabel = getAttachMentLabel ? getAttachMentLabel[0].label as string : "";
+  const getAttachMentLabel = find(schema, (o) => o.type === "attachments");
+  const schemaLabel = getAttachMentLabel ? getAttachMentLabel.label as string : "";
   const onSubmit = () => void 0;
   return (
     <Grid>
