@@ -40,6 +40,26 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       type: "TRAINING",
     }];
   }
+  if (tabConfig) {
+    tabConfig = [ ...tabConfig, {
+      labelId: "tabId.MEQ",
+      tabId: "MEQ",
+      type: "DYNAMIC",
+    }];
+  }
+  schema?.push({
+    name: "fb-attachment-built-in",
+    type: "materialandeq",
+    index: 0,
+    label: "Material and EQ",
+    tabId: "MEQ",
+    applicableOn: [
+      "ON_STATE_TO_IN_REVIEW",
+    ],
+    deleteDisabled: true,
+    deleteInFormDisabled: true,
+    applicableValidationSchema: true,
+  });
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 

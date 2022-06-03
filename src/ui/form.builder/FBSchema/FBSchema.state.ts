@@ -30,6 +30,7 @@ import FBInlineApproval from "../FBInlineApproval/FBInlineApproval";
 import FBInstructionsDocument from "../FBInstructionsDocument/FBInstructionsDocument";
 import FBLHRBuild from "../FBLHRBuild/FBLHRBuild";
 import FBLHRStep from "../FBLHRStep/FBLHRStep";
+import FBMaterialEqInfoContainer from "../FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import FBMediaAlbumField from "../FBMediaAlbumField/FBMediaAlbumField";
 import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
 import FBParagraph from "../FBParagraph/FBParagraph";
@@ -134,6 +135,7 @@ class FBSchemaState {
     poapprovals: FBPOApprovals,
     lhrbuild: FBLHRBuild,
     downloadsheet: FBDownloadSheetTpl,
+    materialandeq: FBMaterialEqInfoContainer,
   };
 
   @observable public schema?: FBSchemaProps[];

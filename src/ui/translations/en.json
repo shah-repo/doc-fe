@@ -1308,5 +1308,10 @@
   "tabId.general": "General",
   "tabId.training": "Training",
   "tabId.calpmhistory":"Cal/PM History",
-  "common.load.more": "Load More"
+  "common.load.more": "Load More",
+  "meq.expand.all" : "Expand All",
+  "meq.collapse.all" : "Collapse All",
+  "meq.material" : "Material",
+  "meq.equipment" : "Equipment",
+  "meq.jump.to" : "Jump To"
 }
