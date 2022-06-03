@@ -1,4 +1,4 @@
-import { debounce, isEmpty, pick } from "lodash";
+import { debounce, isEmpty, pick, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DocumentRevisionSummary } from "../../App";
@@ -98,12 +98,13 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   };
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
-    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     // Hack to take updated formInput
     const formStateContext = FBFormStateContext as any;
-      values?.formInput?.formInput &&
-      (values.formInput.formInput = formStateContext?._currentValue);
-      const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
+    if (!isEmpty(formStateContext?._currentValue)) {
+      set(values, "formInput.formInput", formStateContext?._currentValue);
+    }
+    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
     if (redlineActive) {
       if (
