@@ -9,7 +9,7 @@ import Colors from "../../layout/theme/utils/colors";
 export interface Props {
   isAttachmentEmpty: boolean;
   docRevId: string;
-  label: string | any;
+  label: string;
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
 }

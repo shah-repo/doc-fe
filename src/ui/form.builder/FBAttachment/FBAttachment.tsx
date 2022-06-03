@@ -50,7 +50,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
     return false;
   };
   const getAttachMentLabel = schema?.filter((o) => o.type === "attachments");
-
+  const schemaLabel = getAttachMentLabel ? getAttachMentLabel[0].label as string : "";
   const onSubmit = () => void 0;
   return (
     <Grid>
@@ -65,7 +65,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
             isAttachmentEmpty={documentRevision?.attachments?.length < 1}
             docRevId = {documentRevision.id}
             containsRedline = {containsRedline()}
-            label = {getAttachMentLabel && getAttachMentLabel[0].label}
+            label = {schemaLabel}
             docRevStatus={documentRevision.status}/>
         </Formik>
       </FormContext.Provider>
@@ -73,7 +73,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
 
       {mode === "form"  && <AttachmentsField
         isDisabled={isDisabledInput}
-        labeld = {getAttachMentLabel && getAttachMentLabel[0].label?.toString()}
+        labeld = {schemaLabel}
         isNewVersion={false}
         docRevId={documentRevision.id}
         isAttachmentEmpty={isAttachmentEmpty}

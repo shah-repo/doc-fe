@@ -13,7 +13,7 @@ interface Props {
   isNewVersion: boolean;
   isAttachmentEmpty: boolean;
   docRevId: string;
-  labeld: string | any;
+  labeld: string;
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
   documentRevision: DocumentRevision;
@@ -63,8 +63,8 @@ const Attachments: React.FunctionComponent<Props> = ({
           containsRedline={containsRedline}
           docRevStatus = {docRevStatus}/>
       </Box>
-      {isAttachmentEmpty && <AttachmentField name="attachments" component="field" disabled={isDisabled}/>}
-      {!isAttachmentEmpty && <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }}/>}
+      <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
+      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }}/>
     </Box>
   ); };
 
