@@ -1,5 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { Formik } from "formik";
+import { each } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FB } from "..";
@@ -36,17 +37,17 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
     documentRevisionsSelectors.getDocumentRevision(state, docRevId || "")
   );
   documentRevision = documentRevision || documentRevisionFromState;
-  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
+  const isOwner = documentRevision?.owner ? documentRevision?.owner?.user?.email === email : true;
   const isAttachmentEmpty = (documentRevision?.attachments?.length === 0);
   const documentTypeId = documentRevision?.document?.documentType?.id || "";
   const isDisabledInput = documentRevision?.id !== undefined && isCurrentUserOperator && !isOwner;
 
   const containsRedline = (): boolean => {
-    for (const attachment of documentRevision?.attachments) {
+    each(documentRevision?.attachments, (attachment) => {
       if (attachment.lineType === LINE_TYPES.RED_LINE) {
         return true;
       }
-    }
+    });
     return false;
   };
   const onSubmit = () => void 0;
@@ -61,9 +62,9 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
         >
           <Attachment
             isAttachmentEmpty={documentRevision?.attachments?.length < 1}
-            docRevId = {documentRevision.id}
+            docRevId = {documentRevision?.id}
             containsRedline = {containsRedline()}
-            docRevStatus={documentRevision.status}/>
+            docRevStatus={documentRevision?.status}/>
         </Formik>
       </FormContext.Provider>
       }
