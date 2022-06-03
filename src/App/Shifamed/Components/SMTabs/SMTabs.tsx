@@ -11,7 +11,8 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   tabs,
   children,
   boxProps,
-}) =>  (
+  tabProps,
+}) => (
   <Observer>
     {() => (
       <SMBox {...boxProps} id="SMBodyTmpl">
@@ -20,16 +21,18 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           {...{ onChange }}
           value={_tabsState?.value}
           style={{
-            position: "fixed",
-            zIndex: 1,
-            backgroundColor: Colors.alabaster,
-            height: "auto",
-            width: "100%",
-            fontSize: "12px",
-            padding: 0,
-            borderBottom: "1px solid #C8CACF",
-            minHeight: 44,
-            maxHeight: 44,
+            ...{
+              position: "fixed",
+              zIndex: 1,
+              backgroundColor: Colors.alabaster,
+              height: "auto",
+              width: "100%",
+              fontSize: "12px",
+              padding: 0,
+              borderBottom: `1px solid ${Colors.chinese_silver}`,
+              minHeight: 44,
+              maxHeight: 44,
+            }, ...tabProps,
           }}
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}
         >

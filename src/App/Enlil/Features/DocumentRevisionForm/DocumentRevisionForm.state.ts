@@ -43,6 +43,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public leftPanelOpen = false;
 
   @observable public isDirty = false;
+  /**
+   * @cfg {boolean} Right Panel open/close.
+   */
+  @observable public rightPanelOpen = true;
 
   @observable public viewMore = false;
 
@@ -121,6 +125,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   };
 
   @action setLeftPanelOpen = () => set(this, "leftPanelOpen", !this.leftPanelOpen);
+  @action setRightPanelOpen = () => set(this, "rightPanelOpen", !this.rightPanelOpen);
 
   // MARK: @helpers
   public setDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
