@@ -56,6 +56,9 @@ const styles = makeStyles((theme) => ({
     width: 20,
     height: 20,
   }),
+  linkButton: {
+    padding: 0,
+  },
 }));
 
 
@@ -132,6 +135,7 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
         startIcon={<AttachFileIcon />}
         onClick={openDialog}
         id="AttachmentFieldPresenter-linkButton"
+        className={classes.linkButton}
       >
         Upload Files
       </Button>
