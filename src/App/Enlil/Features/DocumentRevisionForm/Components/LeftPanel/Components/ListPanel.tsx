@@ -12,6 +12,7 @@ import { ChevronRight, ExpandMore } from "@material-ui/icons";
 import { each } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
 import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
@@ -32,6 +33,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   index = 0,
   openEditor,
 }) => {
+  const intl = useIntl();
   const classes = styles();
   const { leftPanelState } = FB.useStores();
   index = leftPanelState?.getIndex || 0;
@@ -64,10 +66,12 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
             onClick={() => {
               handleClick(section);
             }}
+            data-cy={intl.formatMessage({ id: `form.builder.${section}` }) + "-btn"}
             className={`${classes.listItemBtn} ${ section === "section" ? "firstItem" : ""}`}
           >
             <ListItemText key={section}>
-              <Typography className={classes.listItemText}>
+              <Typography className={classes.listItemText}
+                data-cy={intl.formatMessage({ id: `form.builder.${section}` })}>
                 <Text message={`form.builder.${section}`} />
               </Typography>
             </ListItemText>
