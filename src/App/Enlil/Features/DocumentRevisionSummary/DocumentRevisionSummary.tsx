@@ -42,7 +42,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   }
   if (tabConfig) {
     tabConfig = [ ...tabConfig, {
-      labelId: "tabId.MEQ",
+      labelId: "tabId.materialsandequipment",
       tabId: "MEQ",
       type: "DYNAMIC",
     }];
