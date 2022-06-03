@@ -372,7 +372,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.ArAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.ArAudit], () => {
     cy.get(".k-master-row").contains(params.title).arrowClick();
   });
   cy.progressBarShouldNotExist();
