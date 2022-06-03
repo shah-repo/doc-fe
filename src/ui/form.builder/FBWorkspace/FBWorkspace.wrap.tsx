@@ -46,18 +46,20 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     mode = _formState?.mode;
     autosave = _formState?.autosave || false;
 
-    const isParentWorkspaceExists = !isEmpty(workspaceState);
-    workspaceState = workspaceState ? workspaceState : FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
-      schema,
-      mode,
-      autosave,
-    });
-
-    if (isParentWorkspaceExists) {
-      schema && (workspaceState.schema = schema);
-      mode && (workspaceState.mode = mode);
-      workspaceState.autosave = autosave;
+    // const isParentWorkspaceExists = !isEmpty(workspaceState);
+    if (isEmpty(workspaceState)) {
+      workspaceState =  FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+        schema,
+        mode,
+        autosave,
+      });
     }
+
+    // if (isParentWorkspaceExists) {
+    //   schema && (workspaceState.schema = schema);
+    //   mode && (workspaceState.mode = mode);
+    //   workspaceState.autosave = autosave;
+    // }
 
     // Bridging to new context
 
@@ -107,7 +109,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
     workspaceState && (workspaceState.document = document);
     const { formInput = {} } = document ?? {};
-    workspaceState.formInput = formInput;
+    workspaceState && (workspaceState.formInput = formInput);
 
     React.useEffect(() => {
       map(formInput, (value, key) => {

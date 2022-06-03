@@ -67,6 +67,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       () => workspaceState?.formInputSync.get(name),
       (value?: string) => {
         formState?.setFieldValue(name, value, true);
+        console.log("FORM in put changed", name);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
