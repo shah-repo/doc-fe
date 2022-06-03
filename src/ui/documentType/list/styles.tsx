@@ -5,7 +5,6 @@ const commonButtonStyles = {
   "margin": 0,
   "boxShadow": "none",
   "borderRadius": 100,
-  "fontFamily": "Sora",
   "text-transform": "capitalize",
 };
 export const styles = makeStyles((theme: Theme) =>

@@ -12,7 +12,6 @@ const styles = makeStyles(() =>
       "right": "18.54%",
       "top": "0%",
       "bottom": "0%",
-      "font-family": "Sora",
       "fontSize": "10px",
       "font-weight": 600,
       "letter-spacing": "0.5px",

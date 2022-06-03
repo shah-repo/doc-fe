@@ -119,7 +119,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center">
+              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + "InReview"}>
                 <Grid item={true}>
                   <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId}/>
                 </Grid>

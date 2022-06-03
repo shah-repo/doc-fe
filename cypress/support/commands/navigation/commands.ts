@@ -107,7 +107,7 @@ Cypress.Commands.add("navigToLots", () => {
 });
 
 Cypress.Commands.add("navigToLHR", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.PreventIdleLogout], () => {
     cy.navigToNestedItem({
       navigItems: [
         NavigationItems.DASHBOARD,

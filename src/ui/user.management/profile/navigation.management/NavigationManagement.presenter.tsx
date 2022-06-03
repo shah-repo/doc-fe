@@ -23,7 +23,6 @@ const styles = makeStyles((theme: Theme) =>
       margin: theme.spacing(3, 0, 3, 0),
       fontWeight: "bold",
       color: Colors.dark_gray,
-      fontFamily: "Open Sans, sans-serif",
     },
   },
   ));
