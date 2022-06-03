@@ -10,6 +10,7 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
+import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
 import FBStore from "../form.builder/FBStore/FBStore";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
@@ -98,7 +99,11 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
-    const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
+    // Hack to take updated formInput
+    const formInputValues = FBFormStateContext as any;
+      values?.formInput?.formInput &&
+      (values.formInput.formInput = formInputValues?._currentValue);
+      const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
     if (redlineActive) {
       if (

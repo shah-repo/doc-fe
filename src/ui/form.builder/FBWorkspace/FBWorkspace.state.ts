@@ -175,7 +175,6 @@ class FBWorkspaceState extends FBSchemaState {
 
   public saveDocRev = (values?: Record<string, any>) => {
     this.loadAudit = false;
-    console.log("Values ::", values);
     const { id, mode, autosave } = this;
     if ((mode === "form") && !values) { return; }
     if (!autosave) { return; }
