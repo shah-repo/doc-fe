@@ -363,6 +363,679 @@ context("Test usage_report is correctly counting documents", () => {
         sessionId: loginResponse.sessionId as unknown as string,
       }).then(() => done());
     });
+
+    it("[API]Create Equipment form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Maintenance and Calibration form</p>",
+              document: {
+                docId: "FM-00003",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Maintenance and calibration form document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: equipmentDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "fb-default-eq-status",
+                    type: "radiogroup",
+                    index: 0,
+                    label: "EQ Status",
+                    rules: "required",
+                    options: [
+                      {
+                        text: "Active",
+                        value: "Active",
+                      },
+                      {
+                        text: "Inactive",
+                        value: "Inactive",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-primary-owner-eq",
+                    type: "autocomplete",
+                    index: 1,
+                    label: "Primary Owner",
+                    optionId: "13",
+                    placeholder: "Select employee as primary owner",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Primary Owner",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-coordinator-eq",
+                    type: "autocomplete",
+                    index: 2,
+                    label: "Coordinator",
+                    optionId: "13",
+                    placeholder: "Select employee as coordinator",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Coordinator",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    index: 3,
+                    type: "eqmaintenance",
+                    name: "pm-ki5wtk5l",
+                    editorConfig: {
+                      type: "preventativeMaintenance",
+                    },
+                    editorProperties: [],
+                    label: "Preventative Maintenance",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "PM",
+                  },
+                  {
+                    index: 4,
+                    type: "eqmaintenance",
+                    name: "calibration-ki5wtyj0",
+                    editorConfig: {
+                      type: "calibration",
+                    },
+                    editorProperties: [],
+                    label: "Calibration",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "Calibration",
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-kycyk1n8",
+                    uniqueSchemaItem: true,
+                    index: 5,
+                  },
+                ],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdEquipmentFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdEquipmentFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+
+    it("[API]Create Supplier form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Supplier Form document</p>",
+              document: {
+                docId: "FM-00010",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: SupplierFormTitle,
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: supplierDocumentType[0].id,
+                }],
+                schema: [],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdSupplierFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdSupplierFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => {
+              cy.poAPICreatePO({
+                payload: {
+                  name: "API Supplier Document",
+                  attachments: [],
+                  referenceTo: [],
+                  formDocument: { id: createdSupplierFormDocument.id },
+                  description: "API Supplier document",
+                  revisionChangeType: RevisionChangeType.NextRevision,
+                  document: {
+                    docId: "SUP-00001",
+                    documentType: {
+                      id: supplierDocumentType[0].id,
+                    },
+                    securityList: {
+                      operators: [],
+                      securityEmployees: [],
+                      securityGroups: [
+                        {
+                          id: group.body[0].id,
+                        },
+                      ],
+                    },
+                  },
+                },
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then((response) => {
+                createdSupplierDocument = response;
+                cy.drAPIApproveAndRelease({
+                  documentId: createdSupplierDocument.id,
+                  payload: {
+                    effectiveDate: (new Date()).toISOString(),
+                    documentType: { id: approvalRequestDocumentType[0].id },
+                    formDocument: { id: initialArDocument[0].id },
+                    approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                  },
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                }).then(() => {
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+
+    it("[API]Create PO form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>PO Form document</p>",
+          document: {
+            docId: "FM-00003",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "PO Form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: purchaseOrderDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "po-status-built-in",
+                type: "select",
+                index: 0,
+                label: "PO Status",
+                options: [
+                  {
+                    text: "Open",
+                    value: "Open",
+                  },
+                  {
+                    text: "Closed",
+                    value: "Closed",
+                  },
+                  {
+                    text: "Cancelled",
+                    value: "Cancelled",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                validationAttribute: "PO Status",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "general-information-to-be-completed-by-requester-kc3oqlpn",
+                type: "section",
+                index: 1,
+                label: "General Information",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+              },
+              {
+                name: "requestor-k740hxlb",
+                type: "autocomplete",
+                index: 2,
+                label: "Requestor",
+                rules: "",
+                hidden: false,
+                deleted: false,
+                optionId: "3",
+                placeholder: "[Select requestor here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: false,
+                optionLabelKey: "user.email",
+                optionValueKey: "id",
+                outputDisabled: false,
+                validationMode: "default",
+                editorProperties: [
+                  "deleteDisabled",
+                ],
+                validationAttribute: "Requestor",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "po-supplier-built-in",
+                type: "supplier",
+                index: 3,
+                label: "Supplier ",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                validationAttribute: "Supplier",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "ordered-k6mlhan7",
+                type: "datepicker",
+                index: 4,
+                label: "Order Date",
+                rules: "required",
+                hidden: false,
+                deleted: false,
+                validators: {
+                  required: true,
+                },
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: false,
+                outputDisabled: false,
+                validationMode: "default",
+                editorProperties: [
+                  "deleteDisabled",
+                ],
+                validationAttribute: "Order Date",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "po-items-built-in",
+                type: "purchaseorder",
+                index: 5,
+                label: "Purchase Order",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationAttribute: "Purchase Order",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "approvals-built-in",
+                type: "approvals",
+                index: 6,
+                label: "Approvals",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                uniqueSchemaItem: true,
+                validationAttribute: "Approvals",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPOFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPOFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done() );
+      });
+    });
+
+    it("[API]Create old receiving form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Old receiving Form document</p>",
+          document: {
+            docId: "FM-00004",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Old Receiving Form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: receivingDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "receiving-ku6t73ty",
+                type: "poreceive",
+                index: 0,
+                label: "Select PO",
+                rules: "",
+                hidden: false,
+                deleted: false,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: false,
+                outputDisabled: false,
+                validationMode: "default",
+                editorProperties: [],
+                validationAttribute: "Select PO",
+                deleteInFormDisabled: false,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "fb-approvals-ku6t6gzw",
+                type: "approvals",
+                index: 1,
+                label: "form.builder.approvals",
+                deleteDisabled: true,
+                uniqueSchemaItem: true,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        oldReceivingForm = response;
+        cy.drAPIApproveAndRelease({
+          documentId: oldReceivingForm.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done() );
+      });
+    });
+
+    it("[API]Create record inline form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Record inline form</p>",
+              document: {
+                docId: "FM-00003",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "API record inline form",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: legalRecordDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    index: 0,
+                    type: "textfield",
+                    name: "textfield-for-inline-l39qj0uv",
+                    hidden: false,
+                    outputDisabled: false,
+                    deleted: false,
+                    deleteInFormDisabled: false,
+                    validationMode: "default",
+                    validationAttribute: "Textfield for inline",
+                    rules: "",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    editorProperties: [],
+                    placeholder: "",
+                    rows: 1,
+                    label: "Textfield for inline",
+                  },
+                  {
+                    index: 1,
+                    type: "inlineapproval",
+                    name: "inline-field-l39qj2f2",
+                    hidden: false,
+                    outputDisabled: false,
+                    deleted: false,
+                    deleteInFormDisabled: false,
+                    validationMode: "default",
+                    validationAttribute: "Inline field",
+                    rules: "",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    editorProperties: [],
+                    label: "Inline field",
+                    editorConfig: {
+                      approvers: [
+                        adminEmployee.id,
+                      ],
+                    },
+                  },
+                  {
+                    index: 2,
+                    type: "textfield",
+                    name: "second-textfield-for-inline-l39qj3i5",
+                    hidden: false,
+                    outputDisabled: false,
+                    deleted: false,
+                    deleteInFormDisabled: false,
+                    validationMode: "default",
+                    validationAttribute: "Second textfield for inline",
+                    rules: "",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    editorProperties: [],
+                    placeholder: "",
+                    rows: 1,
+                    label: "Second textfield for inline",
+                  },
+                  {
+                    index: 3,
+                    type: "inlineapproval",
+                    name: "second-inline-field-l39qj5nh",
+                    hidden: false,
+                    outputDisabled: false,
+                    deleted: false,
+                    deleteInFormDisabled: false,
+                    validationMode: "default",
+                    validationAttribute: "Second inline field",
+                    rules: "",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    editorProperties: [],
+                    label: "Second inline field",
+                    editorConfig: {
+                      approvers: [
+                        secondEmployee.id,
+                      ],
+                    },
+                  },
+                ],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            inlineRecordForm = response;
+            cy.drAPIApproveAndRelease({
+              documentId: inlineRecordForm.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
   });
 
   context("Time travel one day back to the future", () => {
