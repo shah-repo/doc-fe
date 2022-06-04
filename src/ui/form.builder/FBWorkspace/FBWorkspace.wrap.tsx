@@ -43,7 +43,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const dispatch = useDispatch();
     const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
-    mode = _formState?.mode;
     autosave = _formState?.autosave || false;
 
     const isParentWorkspaceExists = !isEmpty(workspaceState);
