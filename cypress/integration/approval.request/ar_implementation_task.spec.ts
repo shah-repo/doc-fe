@@ -149,7 +149,7 @@ context("Approval request implementation tasks", () => {
 
     it("Add 'Implementation Task' to AR", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Implementation Task" });
       cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
       cy.fbAddField();
     });

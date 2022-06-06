@@ -134,7 +134,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Select equipment", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       });
 
       it("Add label for preventative maintenance", () => {
@@ -156,7 +156,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Select equipment", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       });
 
       it("Add label for Calibration", () => {

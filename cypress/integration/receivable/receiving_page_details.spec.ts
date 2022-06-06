@@ -904,7 +904,7 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Select Receive Purchase Order from given fields", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
       });
 
       it("Enter label Receive", () => {
@@ -931,7 +931,7 @@ context("Receivable test with Page Details", () => {
 
       it("Click add new field and select 'Radio Button group'", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: FIELD_RADIO_BUTTON_GROUP });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: FIELD_RADIO_BUTTON_GROUP });
         cy.fbEnterNameValue({ name: "label", value: RADIO_BUTTON_GROUP_LABEL });
         cy.fbGroupOptions("1", "2", "3");
         cy.fbOpenValidation();
@@ -942,7 +942,7 @@ context("Receivable test with Page Details", () => {
 
       it("Click add new field and select 'Checkbox group'", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: FIELD_CHECKBOX_GROUP });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: FIELD_CHECKBOX_GROUP });
         cy.fbEnterNameValue({ name: "label", value: CHECKBOX_LABEL });
         cy.fbGroupOptions("1", "2", "3");
         cy.fbOpenValidation();

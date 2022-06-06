@@ -188,7 +188,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Add Text field with range", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
         cy.fbEnterNameValue({ name: "label", value: "fb-range" });
         cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
         cy.fbClickButton({ el: "fb-control-form.builder.range" });
@@ -200,7 +200,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Add Radio Button group", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
         cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
         cy.fbGroupOptions("X", "Y", "Z");
         cy.fbOpenValidation();
@@ -210,7 +210,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Add Text Editor", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
         cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
@@ -222,7 +222,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Add Text Field", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "fb-text-field" });
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
@@ -1282,7 +1282,7 @@ context("Autocomplete 'Lots' test", () => {
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

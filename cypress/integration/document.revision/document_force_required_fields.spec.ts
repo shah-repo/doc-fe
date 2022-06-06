@@ -247,14 +247,14 @@ context("Document force required fields", () => {
   context("Fill required fields and add fields to form", () => {
     it("Add TextField", () => {
       cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Text Editor", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });

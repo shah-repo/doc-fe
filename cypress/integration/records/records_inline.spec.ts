@@ -228,7 +228,7 @@ context("Record inline Flow", () => {
 
       it("Add Checkbox group", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
         cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
         cy.fbGroupOptions("1", "2", "3");
         cy.fbOpenValidation();

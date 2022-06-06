@@ -106,7 +106,7 @@ context("Autosave on leaving page while data is still not saved", () => {
 
     it("Add TextField", () => {
       cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();

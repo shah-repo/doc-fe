@@ -113,7 +113,7 @@ context("Dynamic Form Test", () => {
     it("Add section field", () => {
       cy.fbAddNewField();
       cy.fbSelectNavField({ field: "Section" });
-      cy.fbSelectItemFromNewFieldList({ field: "Section" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
       cy.fbEnterLabel({ label: "fb-section" });
       cy.fbAddNewFieldButton();
     });
@@ -121,7 +121,7 @@ context("Dynamic Form Test", () => {
     it("Add Select field", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Select" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "Select field" });
       cy.fbGroupOptions("A", "B", "C");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -132,7 +132,7 @@ context("Dynamic Form Test", () => {
     it("Add Text Editor", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });
@@ -140,7 +140,7 @@ context("Dynamic Form Test", () => {
     it("Add TextField", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
@@ -150,7 +150,7 @@ context("Dynamic Form Test", () => {
     it("Add Subsection", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Section" });
-      cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Subsection" });
       cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
       cy.fbAddNewFieldButton();
     });
@@ -158,7 +158,7 @@ context("Dynamic Form Test", () => {
     it("Add Autocomplete with Document Revision", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-revision" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
       cy.fbAddNewFieldButton();
@@ -167,7 +167,7 @@ context("Dynamic Form Test", () => {
     it("Add Autocomplete with Parts", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-parts" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Parts");
       cy.fbAddNewFieldButton();
@@ -176,7 +176,7 @@ context("Dynamic Form Test", () => {
     it("Add Autocomplete with Document Approvers", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-approvers" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
       cy.fbAddNewFieldButton();
@@ -185,7 +185,7 @@ context("Dynamic Form Test", () => {
     it("Add Checkbox group", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("1", "2", "3");
       cy.fbAddNewFieldButton();
@@ -194,7 +194,7 @@ context("Dynamic Form Test", () => {
     it("Add Date picker", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbOpenValidation();
       cy.get("input[value^=\"visibility\"]").check();
@@ -209,7 +209,7 @@ context("Dynamic Form Test", () => {
     it("Add File Upload", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
@@ -222,7 +222,7 @@ context("Dynamic Form Test", () => {
     it("Add Paragraph", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
         .click({ force: true }).clear().arrowType("fb-paragraph");
       cy.fbAddNewFieldButton();
@@ -231,7 +231,7 @@ context("Dynamic Form Test", () => {
     it("Add Radio Button group", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
@@ -240,7 +240,7 @@ context("Dynamic Form Test", () => {
     it("Add Evidence Media upload", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
@@ -249,7 +249,7 @@ context("Dynamic Form Test", () => {
     it("Add Instructions Media upload", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
       cy.fbAddNewFieldButton();
     });
@@ -257,7 +257,7 @@ context("Dynamic Form Test", () => {
     it("Add Blank Template Form", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
       cy.elUploadAttachment({ fileName: "TestTemplate.json", el: "fb-attachment-field-fb-blank-template-" });
@@ -266,7 +266,7 @@ context("Dynamic Form Test", () => {
     it("Add Step", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Section" });
-      cy.fbSelectItemFromNewFieldList({ field: "Step" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Step" });
       cy.fbEnterNameValue({ name: "label", value: "fb-step" });
       cy.fbAddNewFieldButton();
     });
@@ -274,7 +274,7 @@ context("Dynamic Form Test", () => {
     it("Add Quantity", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
       cy.fbAddNewFieldButton();
     });
@@ -824,7 +824,7 @@ context("Dynamic Form Test", () => {
 
     it("Select 'New Dynamic Form' field", () => {
       cy.fbSelectNavField({ field: "Custom Controls" });
-      cy.fbSelectItemFromNewFieldList({ field: "New Dynamic Form" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "New Dynamic Form" });
     });
 
     it("Click on 'Add a field'", () => {
@@ -833,7 +833,7 @@ context("Dynamic Form Test", () => {
 
     it("Select 'Text Field 2' field", () => {
       cy.fbSelectNavField({ field: "Inputs" });
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field 2'", () => {

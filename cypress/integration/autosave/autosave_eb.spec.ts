@@ -168,7 +168,7 @@ context("Autosave EB test", () => {
 
       it("Add EB Procedure", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "EB Procedure" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.fbAddNewFieldButton();
       });
     });

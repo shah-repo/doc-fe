@@ -597,7 +597,7 @@ context("Bulk create flow", () => {
         });
 
         it("Select text field", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         });
 
         it("Enter text in label field", () => {
@@ -615,7 +615,7 @@ context("Bulk create flow", () => {
         });
 
         it("Select Checkbox group", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
         });
 
         it("Enter text in label field", () => {
@@ -637,7 +637,7 @@ context("Bulk create flow", () => {
         });
 
         it("Select Select", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Select" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         });
 
         it("Enter text in label field", () => {
@@ -659,7 +659,7 @@ context("Bulk create flow", () => {
         });
 
         it("Select Radio button group", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
         });
 
         it("Enter text in label field", () => {
@@ -681,7 +681,7 @@ context("Bulk create flow", () => {
         });
 
         it("Select Date picker", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
         });
 
         it("Enter text in label field", () => {
@@ -699,7 +699,7 @@ context("Bulk create flow", () => {
         });
 
         it("Select Text Editor", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
         });
 
         it("Enter text in label field", () => {
@@ -717,7 +717,7 @@ context("Bulk create flow", () => {
         });
 
         it("Select Paragraph", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
         });
 
         it("Enter text to present in paragraph", () => {
