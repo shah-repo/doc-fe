@@ -394,7 +394,7 @@ context("Autocomplete 'Equipment' test", () => {
         }).then(() => done());
       });
     });
-    });
+  });
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
@@ -1851,14 +1851,14 @@ context("Autocomplete 'Equipment' test", () => {
       cy.log(calTtDueDate);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
+        to: USERS[1].email,
         after: dateAfterEmailShouldArrive,
         subject: `Equipment EQ-00001 Equipment document has Calibration Due`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
-        cy.log(emails.body.text());
+        cy.log(emails[0].body.text);
       });
     });
 
@@ -1867,8 +1867,12 @@ context("Autocomplete 'Equipment' test", () => {
         {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
-            `Equipment EQ-00001 Equipment document has Calibration due on`]
+            `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
         }];
+
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -1986,7 +1990,7 @@ context("Autocomplete 'Equipment' test", () => {
     it(`Open assigned Training`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `FM-00001Rev 1 AR Form` });
     });
-  }); 
+  });
 
   context("Use time tool to travel user back to future", () => {
     it("Navigate to async tasks", () => {
