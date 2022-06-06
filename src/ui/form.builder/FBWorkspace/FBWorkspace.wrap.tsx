@@ -45,7 +45,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const { bookmarkState } = FB.useStores();
     autosave = _formState?.autosave || false;
 
-    // const isParentWorkspaceExists = !isEmpty(workspaceState);
     if (isEmpty(workspaceState)) {
       workspaceState =  FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
         schema,
@@ -53,12 +52,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
         autosave,
       });
     }
-
-    // if (isParentWorkspaceExists) {
-    //   schema && (workspaceState.schema = schema);
-    //   mode && (workspaceState.mode = mode);
-    //   workspaceState.autosave = autosave;
-    // }
 
     // Bridging to new context
 
