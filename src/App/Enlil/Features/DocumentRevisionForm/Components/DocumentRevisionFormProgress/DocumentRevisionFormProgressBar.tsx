@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { each } from "lodash";
+import { each, isEmpty } from "lodash";
 import React from "react";
 import {
   isDocumentRevisionInDraft,
@@ -33,7 +33,7 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
   };
 
   prepareProgressBarData(smartReferencesFrom);
-  const data = [];
+  const data: string[] = [];
   step.forEach((element, index) => {
     data[element] = statuses[index];
   });
@@ -45,10 +45,10 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
 
   return (
     <Box px={4.25}>
-      {(resultCompleted.length > 0 || resultInprogress.length > 0) && (
+      {(!isEmpty(resultCompleted) || !isEmpty(resultInprogress)) && (
         <BorderLinearProgress
           variant="determinate"
-          value={resultCompleted.length / data.length}
+          value={(resultCompleted.length / data.filter(Boolean).length) * 100}
         />
       )}
       <Box
@@ -58,17 +58,17 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
         mt={1.25}
         mb={2.125}
       >
-        {resultCompleted.length > 0 && (
+        {!isEmpty(resultCompleted) && (
           <>
             <Box component="span" fontWeight={600}>
-              Step {resultCompleted?.map((e) => e)}
+              Step {resultCompleted?.map((e) => e + ",")}
             </Box>
             <Box component="span" fontWeight={400}>
               &nbsp;completed.&nbsp;
             </Box>
           </>
         )}
-        {resultInprogress.length > 0 && (
+        {!isEmpty(resultInprogress) && (
           <>
             <Box component="span" fontWeight={600}>
               Step {resultInprogress?.map((e) => e + ",")}
