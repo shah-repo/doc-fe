@@ -158,7 +158,7 @@ const Container: React.FunctionComponent<Props> = ({
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks />,
+        component: <Bookmarks fromAR={true} />,
       },
     },
   ];

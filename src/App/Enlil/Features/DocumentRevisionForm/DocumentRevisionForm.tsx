@@ -56,9 +56,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
-
   if (formValues.values?.retrain) {
     tabConfig = tabConfig && [...tabConfig, {
       labelId: "tabId.training",
@@ -66,6 +63,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       type: "TRAINING",
     } ];
   }
+  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
   const changeLayoutHeight = () => {
     setTimeout(() => {

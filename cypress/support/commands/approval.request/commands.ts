@@ -405,7 +405,7 @@ Cypress.Commands.add("arApproveARFromDashboard", () => {
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
-  cy.get("[id=\"HeaderInfo-name\"]").should("have.text", params.name);
+  cy.get("[id=\"field-name\"]").should("have.text", params.name);
 });
 
 Cypress.Commands.add("arWithdrawSubmission", () => {
