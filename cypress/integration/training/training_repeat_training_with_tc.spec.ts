@@ -1275,7 +1275,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 30 days", () => {
+  context("Log in as first user and set time travel tool to 20 days", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1291,12 +1291,12 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 30 days and submit", () => {
-      cy.trSetTimeTravelInDays({ days: 30 });
+    it("Set Time Travel tool for 20 days and submit", () => {
+      cy.trSetTimeTravelInDays({ days: 20 });
     });
   });
 
-  context("Log in as second user and check training is still pending and 'assigned to you'", () => {
+  context("Log in as second user and check training is still pending and 'DUE IN 7 DAYS'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1314,7 +1314,7 @@ context("Repeat Training with Training Curriculum", () => {
 
     it("Verify training notification", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
     });
 
@@ -1329,7 +1329,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as third user and check training is still pending and 'assigned to you'", () => {
+  context("Log in as third user and check training is still pending and 'DUE IN 7 DAYS'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1347,7 +1347,7 @@ context("Repeat Training with Training Curriculum", () => {
 
     it("Verify training notification", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
     });
 
@@ -1362,7 +1362,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 31 days", () => {
+  context("Log in as first user and set time travel tool to 1 days", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1378,8 +1378,8 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 31 days and submit", () => {
-      cy.trSetTimeTravelInDays({ days: 31 });
+    it("Set Time Travel tool for 1 days and submit", () => {
+      cy.trSetTimeTravelInDays({ days: 1 });
     });
   });
 
@@ -1431,28 +1431,49 @@ context("Repeat Training with Training Curriculum", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
       cy.dashVerifyListItemExistsOnDashboard({
         listItem: momentInPST().add(30, "days")
-          .subtract(10, "days").subtract(31, "days").format("MMM DD"),
+          .subtract(10, "days").subtract(1, "days").format("MMM DD"),
       });
     });
   });
 
   // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 40 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 40 });
+  //   it("Set Time Travel tool for 9 days and submit", () => {
+  //     cy.trSetTimeTravelInDays({ days: 9 });
   //     cy.pause();
   //   });
   // });
 
   // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 49 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 49 });
+  //   it("Set Time Travel tool for 9 days and submit", () => {
+  //     cy.trSetTimeTravelInDays({ days: 9 });
   //     cy.pause();
   //   });
   // });
 
   // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 50 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 50 });
+  //   it("Set Time Travel tool for 1 days and submit", () => {
+  //     cy.trSetTimeTravelInDays({ days: 1 });
+  //     cy.pause();
+  //   });
+  // });
+
+  // context("Use time tool to travel user back to future", () => {
+  //   it("Set Time Travel tool for 19 days and submit", () => {
+  //     cy.trSetTimeTravelInDays({ days: 19 });
+  //     cy.pause();
+  //   });
+  // });
+
+  // context("Use time tool to travel user back to future", () => {
+  //   it("Set Time Travel tool for 1 days and submit", () => {
+  //     cy.trSetTimeTravelInDays({ days: 1 });
+  //     cy.pause();
+  //   });
+  // });
+
+  // context("Use time tool to travel user back to future", () => {
+  //   it("Set Time Travel tool for 1 days and submit", () => {
+  //     cy.trSetTimeTravelInDays({ days: 1 });
   //     cy.pause();
   //   });
   // });
