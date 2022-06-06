@@ -1145,7 +1145,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.trCompleteTraining();
     });
 
-    it("Verify expire on is 40 day", () => {
+    it("Verify expire on is 40 days", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -1174,8 +1174,7 @@ context("Repeat Training with Training Curriculum", () => {
 
     it("Verify training notification", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
     });
   });
 
@@ -1446,7 +1445,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Complete Training for second user and verify training notification disappears", () => {
+  context("Complete Training for second user and verify the training notification disappeared", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1557,7 +1556,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check training notifications for first user is disappeared", () => {
+  context("Check training notifications for first user is not valid anymore", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1604,26 +1603,243 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 19 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 19 });
-  //     cy.pause();
-  //   });
-  // });
+  context("Log in as first user and set time travel tool to 19 days", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
 
-  // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 1 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 1 });
-  //     cy.pause();
-  //   });
-  // });
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
 
-  // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 1 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 1 });
-  //     cy.pause();
-  //   });
-  // });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Set Time Travel tool for 19 days and submit", () => {
+      cy.trSetTimeTravelInDays({ days: 19 });
+    });
+  });
+
+  context("Check training notifications for second user as 'assigned to you'", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify training notification", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[2].name} with no Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("not.contain", "Pending");
+    });
+  });
+
+  context("Log in as first user and set time travel tool to 1 day again", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Set Time Travel tool for 1 days and submit", () => {
+      cy.trSetTimeTravelInDays({ days: 1 });
+    });
+  });
+
+  context("Check training notifications for first user is not valid anymore", () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify that the notification disappeared from dashboard", () => {
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[1].name} with no Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("not.contain", "Pending");
+    });
+  });
+
+  context("Check training notifications for second user is not valid anymore", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify that the notification disappeared from dashboard", () => {
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[1].name} with no Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("not.contain", "Pending");
+    });
+  });
+
+  context("Log in as third user and check training is OVERDUE", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Verify training notification is OVERDUE", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+    });
+  });
+
+  context("Log in as first user and set time travel tool to 1 day finally", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Set Time Travel tool for 1 days and submit", () => {
+      cy.trSetTimeTravelInDays({ days: 1 });
+    });
+  });
+
+  context("Log in as first user and check training is OVERDUE", () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify training notification is OVERDUE", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+    });
+  });
+
+  context("Complete Training for third user and verify the training notification disappeared", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Verify that the notification disappeared from dashboard", () => {
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[3].name} with no Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[3].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("not.contain", "Pending");
+    });
+  });
 });
 
 export { };
