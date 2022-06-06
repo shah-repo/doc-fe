@@ -1,7 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable max-classes-per-file */
-
-import { CyRoutes } from "../../routes";
 
 
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -12,6 +9,9 @@ declare global {
     interface Chainable<Subject> {
       fbAddNewFieldOption(): Chainable<Subject>;
       fbRemoveLastAddedItem(): Chainable<Subject>;
+      fbSelectNavField(params: { field: string }): Chainable<Subject>;
+      fbNavToTableOverview(): Chainable<Subject>;
+      fbNavToTableDetails(): Chainable<Subject>;
       fbSelectItemFromNewFieldList(params: { field: string }): Chainable<Subject>;
       fbEnterPOLabelName(params: { name: string }): Chainable<Subject>;
       fbAddNewFieldButton(): Chainable<Subject>;
@@ -106,21 +106,15 @@ Cypress.Commands.add("fbAddNewField", () => {
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-    cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
-  });
+  cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-    cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
-  });
+  cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-    cy.get("button[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
-  });
+  cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
@@ -129,8 +123,20 @@ Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: str
   cy.get("[role=dialog]>div>h2").arrowClick();
 });
 
+Cypress.Commands.add("fbSelectNavField", (params: { field: string }) => {
+  cy.get(".MuiButtonBase-root.MuiListItem-root.MuiListItem-button").contains(new RegExp(params.field, "g")).arrowClick();
+});
+
+Cypress.Commands.add("fbNavToTableDetails", () => {
+  cy.get("[data-cy=\"tabId.details\"]").contains("Details").arrowClick();
+});
+
+Cypress.Commands.add("fbNavToTableOverview", () => {
+  cy.get("[data-cy=\"tabId.overview\"]").contains("Overview").arrowClick();
+});
+
 Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { field: string }) => {
-  cy.get("[class=\"MuiButton-label\"]").contains(new RegExp(params.field, "g")).arrowClick();
+  cy.get(`[data-cy="${params.field}"]`).contains(new RegExp(params.field, "g")).arrowClick();
 });
 
 Cypress.Commands.add("fbEnterPOLabelName", (params: { name: string }) => {

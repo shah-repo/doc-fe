@@ -5,8 +5,8 @@ if [ "$SLACK_CHANNELS" == "none" ]; then
 	exit 0
 fi
 
-START_TIMESTAMP=$(date --date="@$CODEBUILD_START_TIME")
-END_TIMESTAMP=$(date)
+START_TIMESTAMP=$(date --date="@${CODEBUILD_START_TIME::-3}" +%c)
+END_TIMESTAMP=$(date +%c)
 
 #TEST_REPORT_INFO
 NUMBER_OF_FAILS=$(jq '.stats.failures' ./$DIR_REPORTS/result.json)
@@ -48,7 +48,7 @@ curl --verbose \
       * doc-be: <https://bitbucket.org/shifamed/doc-be/commits/$BE_GIT_COMMIT_HASH|$BE_GIT_COMMIT_HASH>
       * doc-fe: <https://bitbucket.org/shifamed/doc-fe/commits/$FE_GIT_COMMIT_HASH|$FE_GIT_COMMIT_HASH>
       * doc-export: <https://bitbucket.org/shifamed/doc-export/commits/$EXPORT_GIT_COMMIT_HASH|$EXPORT_GIT_COMMIT_HASH>
-      * docx-to-pdf: <https://bitbucket.org/shifamed/docx-to-pdf:/commits/$DOCXTOPDF_GIT_COMMIT_HASH|$DOCXTOPDF_GIT_COMMIT_HASH>
+      * docx-to-pdf: <https://bitbucket.org/shifamed/docx-to-pdf/commits/$DOCXTOPDF_GIT_COMMIT_HASH|$DOCXTOPDF_GIT_COMMIT_HASH>
       * word-service: <https://bitbucket.org/shifamed/word-service/commits/$WORDSERVICE_GIT_COMMIT_HASH|$WORDSERVICE_GIT_COMMIT_HASH>
       * remote-js-validators: <https://bitbucket.org/shifamed/remote-js-validators/commits/$VALIDATORS_GIT_COMMIT_HASH|$VALIDATORS_GIT_COMMIT_HASH>" \
   -F "channels=$SLACK_CHANNELS" \
