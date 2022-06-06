@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { get, isEmpty, map } from "lodash";
+import { filter, get, includes, isEmpty, map, size } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
@@ -12,7 +12,7 @@ import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { checkIsDocumentLHR } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBWorkspace } from "../../../../ui/form.builder";
+import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
@@ -63,6 +63,25 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+
+  schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
+    ...schemaItem,
+    index: i,
+    ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
+      stepIndex: size(
+        filter(
+          ro.slice(0, i + 1),
+          (step) =>
+            !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
+        )
+      ),
+    }),
+  }));
+
+  smartReferencesFrom?.forEach((ele, i) => {
+    const obj = schema.filter((el) => ele.metadata.fieldId === el.name);
+    ele.stepIndex = obj[0].stepIndex;
+  });
 
   if (formValues.values?.retrain) {
     tabConfig = tabConfig && [...tabConfig, {

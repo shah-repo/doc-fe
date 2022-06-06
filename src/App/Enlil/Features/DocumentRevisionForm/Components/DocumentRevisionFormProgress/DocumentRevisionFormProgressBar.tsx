@@ -28,12 +28,7 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
     each(smartRefs, (e) => {
       const lhrStep = e?.fromDocRev;
       statuses.push(getLHRStatus(lhrStep));
-      const match = lhrStep?.name
-        .split("Step")[1]
-        .split("(")[0]
-        .trim()
-        .replaceAll("#", "");
-      step.push(match);
+      step.push(e?.stepIndex);
     });
   };
 
@@ -56,7 +51,13 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
           value={resultCompleted.length / data.length}
         />
       )}
-      <Box component="div" fontSize={12} color={Colors.font_gray} mt={1.25} mb={2.125}>
+      <Box
+        component="div"
+        fontSize={12}
+        color={Colors.font_gray}
+        mt={1.25}
+        mb={2.125}
+      >
         {resultCompleted.length > 0 && (
           <>
             <Box component="span" fontWeight={600}>
