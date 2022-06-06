@@ -232,7 +232,9 @@ Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
+  cy.get("[data-cy=\"field-name\"]").arrowClick();
   cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+  cy.unClick();
 });
 
 Cypress.Commands.add("drClearDocumentTitle", () => {
@@ -248,9 +250,8 @@ Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) 
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear().arrowType(params.description);
-  cy.wait(500);
-  cy.get("[data-cy=field-description]>label").arrowClick();
+  cy.get("[data-cy=\"description\"]").first().arrowClick();
+  cy.get("[data-cy=\"description\"]").first().arrowType(params.description);
   cy.unClick();
 });
 
@@ -447,11 +448,11 @@ Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
+  cy.get("span[class=\"MuiChip-label MuiChip-labelSmall\"]").should("have.text", params.status);
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {
-  cy.get(`[id="HeaderInfo-docId"]`);
+  cy.get(`span[id="HeaderInfo-docId"]`);
 });
 
 Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {
