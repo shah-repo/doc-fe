@@ -7,7 +7,7 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, fileTimeFormat, momentInPST, pdfDocRelDate, pdfFooterDate, trAssignedDate, trCompleteDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, trAssignedDate, trCompleteDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -449,7 +449,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify email for training released notification", () => {
+  context("Verify email for training released notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -483,7 +483,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify PDF file downloaded", () => {
+  context("Verify PDF file downloaded", () => {
     it("Extract download link from gmail", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -521,7 +521,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify PDF file content", () => {
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile(
         {
@@ -732,7 +732,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify email for draft training notification", () => {
+  context("Verify email for draft training notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -766,7 +766,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify PDF file downloaded", () => {
+  context("Verify PDF file downloaded", () => {
     it("Extract download link from gmail", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -804,7 +804,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify PDF file content", () => {
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -919,7 +919,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify email for Released training notification", () => {
+  context("Verify email for Released training notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -953,7 +953,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify PDF file downloaded", () => {
+  context("Verify PDF file downloaded", () => {
     it("Extract download link from gmail", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -985,7 +985,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  xcontext("Verify PDF file content", () => {
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -1122,7 +1122,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it(`Verify training notification`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
     });
   });
 
@@ -1132,13 +1132,13 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Complete Training and verify expire on field", () => {
+  context("Complete Training for first user and verify expire on field", () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
     });
 
     it("Open assigned Training", () => {
-      cy.dashGoToListItemFromDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashGoToListItemFromDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
     });
 
     it("Click complete training button", () => {
@@ -1173,7 +1173,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
     });
@@ -1226,7 +1226,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
     });
@@ -1259,7 +1259,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
     });
@@ -1313,9 +1313,8 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
     });
 
     it("Navigate to Training Records", () => {
@@ -1346,9 +1345,8 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
     });
 
     it("Navigate to Training Records", () => {
@@ -1397,16 +1395,11 @@ context("Repeat Training with Training Curriculum", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-      cy.pause();
     });
 
     it("Verify training notification is OVERDUE", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
-      cy.dashVerifyListItemExistsOnDashboard({
-        listItem: momentInPST().add(30, "days")
-          .subtract(10, "days").subtract(31, "days").format("MMM DD"),
-      });
     });
   });
 
@@ -1427,35 +1420,189 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify training notification is OVERDUE", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
-      cy.dashVerifyListItemExistsOnDashboard({
-        listItem: momentInPST().add(30, "days")
-          .subtract(10, "days").subtract(1, "days").format("MMM DD"),
-      });
     });
   });
 
-  // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 9 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 9 });
-  //     cy.pause();
-  //   });
-  // });
+  context("Log in as first user and set time travel tool to 9 days", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
 
-  // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 9 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 9 });
-  //     cy.pause();
-  //   });
-  // });
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
 
-  // context("Use time tool to travel user back to future", () => {
-  //   it("Set Time Travel tool for 1 days and submit", () => {
-  //     cy.trSetTimeTravelInDays({ days: 1 });
-  //     cy.pause();
-  //   });
-  // });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Set Time Travel tool for 9 days and submit", () => {
+      cy.trSetTimeTravelInDays({ days: 9 });
+    });
+  });
+
+  context("Complete Training for second user and verify training notification disappears", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Open assigned Training", () => {
+      cy.dashGoToListItemFromDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    });
+
+    it("Click complete training button", () => {
+      cy.trCompleteTraining();
+    });
+
+    it("Navigate to Dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it("Verify that the notification disappeared from dashboard", () => {
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[2].name} with no Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("not.contain", "Pending");
+    });
+  });
+
+  context("Log in as first user and set time travel tool to 9 days again", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Set Time Travel tool for 9 days and submit", () => {
+      cy.trSetTimeTravelInDays({ days: 9 });
+    });
+  });
+
+  context("Check training notifications for first user as 'assigned to you'", () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify training notification", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[1].name} with no Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("not.contain", "Pending");
+    });
+  });
+
+  context("Log in as first user and set time travel tool to 1 day again", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Set Time Travel tool for 1 day and submit", () => {
+      cy.trSetTimeTravelInDays({ days: 1 });
+    });
+  });
+
+  context("Check training notifications for first user is disappeared", () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify that the notification disappeared from dashboard", () => {
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[1].name} with no Pending on 'Completed on' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("not.contain", "Pending");
+    });
+  });
+
+  context("Log in as third user and check training is OVERDUE", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Verify training notification is OVERDUE", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+    });
+  });
 
   // context("Use time tool to travel user back to future", () => {
   //   it("Set Time Travel tool for 19 days and submit", () => {
