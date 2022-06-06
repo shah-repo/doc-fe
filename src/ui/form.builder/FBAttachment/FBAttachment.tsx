@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { Formik } from "formik";
-import { each } from "lodash";
+import { each, find } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FB } from "..";
@@ -32,7 +32,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
   const { workspaceState } = FB.useStores();
-  const { id: docRevId, mode } = workspaceState || {};
+  const { id: docRevId, mode, schema } = workspaceState || {};
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, docRevId || "")
   );
@@ -50,6 +50,8 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
     });
     return false;
   };
+  const getAttachMentLabel = find(schema, (o) => o.type === "attachments");
+  const schemaLabel = getAttachMentLabel ? getAttachMentLabel.label as string : "";
   const onSubmit = () => void 0;
   return (
     <Grid>
@@ -64,6 +66,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
             isAttachmentEmpty={documentRevision?.attachments?.length < 1}
             docRevId = {documentRevision?.id}
             containsRedline = {containsRedline()}
+            label = {schemaLabel}
             docRevStatus={documentRevision?.status}/>
         </Formik>
       </FormContext.Provider>
@@ -71,6 +74,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
 
       {mode === "form"  && <AttachmentsField
         isDisabled={isDisabledInput}
+        labeld = {schemaLabel}
         isNewVersion={false}
         docRevId={documentRevision?.id}
         isAttachmentEmpty={isAttachmentEmpty}
