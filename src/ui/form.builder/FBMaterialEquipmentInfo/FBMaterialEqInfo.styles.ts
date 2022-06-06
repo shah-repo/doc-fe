@@ -26,6 +26,27 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: 400,
       fontSize: 12,
     },
+    fontNormal12: {
+      fontWeight: 400,
+      fontSize: 12,
+      color: Colors.almost_black,
+    },
+    expanSionPannelPadding: {
+      padding: "0rem 2.1rem  2.1rem 2.1rem",
+      display: "block",
+    },
+    fontNormal14: {
+      fontWeight: 400,
+      fontSize: 14,
+      color: Colors.almost_black,
+    },
+    qunatityText: {
+      float: "right",
+      marginRight: "1rem",
+      fontSize: 13,
+      fontWeight: 400,
+      color: Colors.font_gray,
+    },
     panelSummary: {
       "fontWeight": 600,
       "fontSize": 16,

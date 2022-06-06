@@ -12,6 +12,7 @@ import { styles } from "./FBMaterialEqInfo.styles";
 const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
   const classes = styles();
   const materialArray = [1, 2, 3, 4];
+  const unit = " Items";
   const [isMaterialPannel, setIsMaterialPannel] = React.useState(false);
   const [isEquipmentPannel, setIsEquipmentPannel] = React.useState(false);
   const updatePanelState = (text) => (event: React.MouseEvent) => {
@@ -47,8 +48,11 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
   const genRateEquipmentDetail = () => (map(materialArray, (o) =>
     <>
       <ListItem  style={{ display: "block" }}>
-        <ListItemText>Eq-00004 - Heat Shrink Tubing | Qty : 25</ListItemText>
-        <ListItemText><Chip size="small"  label="Lot #21072033 |N/A|25 ft" /></ListItemText>
+        <ListItemText className={classes.fontNormal14}>Eq-00004 - Heat Shrink Tubing | Qty : 25</ListItemText>
+        <ListItemText className={classes.fontNormal12}>
+          <Chip style={{ borderRadius: 4, backgroundColor: Colors.whitest_grey }}
+            size="small"  label="Lot #21072033 |N/A|25 ft" />
+        </ListItemText>
       </ListItem>
       <Divider />
     </>
@@ -58,18 +62,9 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
       <Grid container spacing={3}>
         <Grid item xs={10}>
           <Box mb={1}>
-
             <Button style={{ color: Colors.navy }}  className={classes.fontNormal}
               onClick={updatePanelState(predictExpandCollapseText())} >
               <SMText label={ predictExpandCollapseText()} /></Button>
-
-            {/* { isExapndAll  &&
-            <Button style={{ color: Colors.navy }}  className={classes.fontNormal}
-              onClick={updatePanelState(true)} >
-              <SMText label={"meq.expand.all"} /></Button> }
-            {!isExapndAll  && <Button style={{ color: Colors.navy }} className={classes.fontNormal}
-              onClick={updatePanelState(false)} ><SMText label={"meq.collapse.all"} /></Button>} */}
-
           </Box>
           <Box mb={1} className={classes.expandCollapseText}>
             <Accordion className={classes.panelBorder} expanded={isMaterialPannel} >
@@ -82,9 +77,18 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
                       color: isMaterialPannel ? Colors.navy : "inherit",
                     }}
                   />}>
-                <SMText label={"meq.material"} />
+                <Grid container spacing={3}>
+                  <Grid item xs={6}>
+                    <SMText label={"meq.material"} />
+                  </Grid>
+                  <Grid item xs={6} >
+                    <Box className={classes.qunatityText}>
+                      <SMText   label={materialArray.length + unit} />
+                    </Box>
+                  </Grid>
+                </Grid>
               </AccordionSummary>
-              <AccordionDetails  style={{ padding: "2.1rem", display: "block" }}>
+              <AccordionDetails  className= {classes.expanSionPannelPadding}>
                 <List>
                   {genRateMaterialDetail()}
                 </List>
@@ -102,9 +106,20 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
                     color: isEquipmentPannel ? Colors.navy : "inherit",
                   }}
                   />}>
-                <SMText label={"meq.equipment"} />
+
+                <Grid container spacing={3}>
+                  <Grid item xs={6} >
+                    <SMText label={"meq.equipment"} />
+                  </Grid>
+                  <Grid item xs={6} >
+                    <Box className={classes.qunatityText}>
+                      <SMText   label={materialArray.length + unit} />
+                    </Box>
+                  </Grid>
+                </Grid>
+
               </AccordionSummary>
-              <AccordionDetails  style={{ padding: "2.1rem", display: "block" }}>
+              <AccordionDetails  className={classes.expanSionPannelPadding}>
                 <List>
                   {genRateEquipmentDetail()}
                 </List>
@@ -115,11 +130,24 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
         <Grid item xs={2}>
           <Box>
             <Box className={classes.fontText}><SMText label={"meq.jump.to"} /></Box>
-            <Box><Button  style={{ height: 20, color: Colors.navy, fontSize: 12, fontWeight: 400 }}   onClick={() =>
-            { setIsMaterialPannel(true); setIsEquipmentPannel(false); }} ><SMText label={"meq.material"} /></Button>
+            <Box style={{ height: 31, background: isMaterialPannel ? Colors.light_cream_blue : "inherit" }}>
+              <Button  style={{
+                height: 20, color: Colors.navy,
+                fontSize: 12, fontWeight: 400,
+              }}   onClick={() =>
+              { setIsMaterialPannel(true); setIsEquipmentPannel(false); }} >
+                <Box style={{ marginBottom: 8, marginTop: 8 }}>
+                  <SMText label={"meq.material"} />
+                </Box>
+              </Button>
             </Box>
-            <Box mb={1}><Button  style={{ height: 25, color: Colors.navy, fontSize: 12, fontWeight: 400 }}
-              onClick={() => { setIsMaterialPannel(false); setIsEquipmentPannel(true); }} ><SMText label={"meq.equipment"} /></Button>
+            <Box mb={1} style={{ height: 31, background: isEquipmentPannel ? Colors.light_cream_blue : "inherit" }}>
+              <Button  style={{ height: 25, color: Colors.navy, fontSize: 12, fontWeight: 400 }}
+                onClick={() => { setIsMaterialPannel(false); setIsEquipmentPannel(true); }} >
+                <Box style={{ marginBottom: 8, marginTop: 8 }}>
+                  <SMText label={"meq.equipment"} />
+                </Box>
+              </Button>
             </Box>
           </Box>
 
