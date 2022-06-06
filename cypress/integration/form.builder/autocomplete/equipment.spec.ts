@@ -6,11 +6,12 @@ import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
 import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
+import { SQS_TYPES } from "../../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { calTtDueDate, emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -37,6 +38,8 @@ let arId;
 let equipmentURL;
 let pmSchemaFieldName;
 let calibrationSchemaFieldName;
+let asyncTasksGroup;
+let adminEmployeeLoginResponse;
 
 const pages = ["", "", "", ""];
 const ADMIN_USER = USERS[1];
@@ -92,6 +95,35 @@ context("Autocomplete 'Equipment' test", () => {
       }).then((response) => {
         loginResponse = response;
         done();
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [
+            {
+              id: adminEmployee.id,
+            },
+            {
+              id: secondEmployee.id,
+            },
+          ],
+        },
       });
     });
 
@@ -362,7 +394,7 @@ context("Autocomplete 'Equipment' test", () => {
         }).then(() => done());
       });
     });
-  });
+    });
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
@@ -1098,7 +1130,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).arrowType(`${equimentDueDays}`);
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType("40");
       cy.unClick();
     });
 
@@ -1121,7 +1153,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).arrowType(`${equimentDueDays}`);
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType("31");
     });
 
     it("Type calibration maintenance instruction", () => {
@@ -1133,7 +1165,9 @@ context("Autocomplete 'Equipment' test", () => {
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
+  });
 
+  context("Verify form Released status and click on Send To Email", () => {
     it("Verify form Released status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Draft" });
       cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
@@ -1155,12 +1189,6 @@ context("Autocomplete 'Equipment' test", () => {
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${formId}`,
       };
@@ -1781,6 +1809,256 @@ context("Autocomplete 'Equipment' test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 1 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 1 });
+    });
+
+    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Get emails", () => {
+      cy.log(calTtDueDate);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment EQ-00001 Equipment document has Calibration Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        cy.log(emails.body.text());
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            `Equipment EQ-00001 Equipment document has Calibration due on`]
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.pause();
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 11 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 11 });
+    });
+
+    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.pause();
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 25 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 25 });
+    });
+
+    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.pause();
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 32 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 32 });
+    });
+
+    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.pause();
+    });
+  });
+
+  context("Check the EQ on dashboard", () => {
+    it("Goto Dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it(`Open assigned Training`, () => {
+      cy.dashGoToListItemFromDashboard({ listItem: `FM-00001Rev 1 AR Form` });
+    });
+  }); 
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 34 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 34 });
+    });
+
+    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.pause();
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 41 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 41 });
+    });
+
+    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.pause();
     });
   });
 
