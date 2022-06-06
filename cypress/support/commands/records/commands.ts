@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
 import { CyRoutes } from "../../routes";
 
 export { };
@@ -24,9 +25,48 @@ declare global {
       recVerifyDescription(params: {description: string }): Chainable<Subject>;
       recVerifyDescriptionWIP(params: {description: string }): Chainable<Subject>;
       equipReloadDocument(): Chainable<Subject>;
+      recCreateVoidedDocument(): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("recCreateVoidedDocument", (params: {
+  fromDocumentId: string;
+  formInputFieldName: string;
+  formInputApprovalId: string;
+
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
+    body: {
+      formDocument: {
+        id: params.fromDocumentId,
+      },
+      formInput: {
+        params.formInputFieldName: [
+          params.formInputApprovalId,
+        ],
+      },
+      schema: null,
+      parentParts: [],
+      description: "<p>Supplier voided</p>",
+      name: "Supplier voided",
+      attachments: [],
+      referenceTo: [],
+      revisionStage: null,
+      revisionChangeType: RevisionChangeType.Obsolete,
+      retrain: false,
+      renderHTML: null,
+      document: {
+        id: "aba8158f-b6b2-45ce-845a-30408856f355",
+      },
+    },
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
 
 Cypress.Commands.add("recFilterByStatus", (params: {status: string }) => {
   cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
