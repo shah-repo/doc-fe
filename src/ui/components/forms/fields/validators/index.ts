@@ -19,12 +19,6 @@ export const email: Validator = (value: string) => {
   }
 };
 
-export const requiredAtLeastOne: Validator = (value) => {
-  if (!value || value.length === 0) {
-    return "validators.requiredAtLeastOne";
-  }
-};
-
 export const passwordSchema = Yup.string()
   .min(8, "validator.password.min")
   .required("validators.required")

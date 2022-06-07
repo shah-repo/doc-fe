@@ -323,7 +323,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
         }
         {
-          _formState?.active &&
+          _formState?.active && documentRevision &&
           <Box>
             {
               values.id &&
