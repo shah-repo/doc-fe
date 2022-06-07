@@ -1,3 +1,4 @@
+export { default as DocumentRevisionFormProgressBar } from "./Enlil/Features/DocumentRevisionForm/Components/DocumentRevisionFormProgress/DocumentRevisionFormProgressBar";
 export { default as DocumentRevisionFooterNew } from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.new";
 export { default as DocumentRevisionFooterState } from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.state";
 export * from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.types";

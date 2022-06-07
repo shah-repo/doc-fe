@@ -3,6 +3,7 @@ import { SMBox, SMTemplateProps } from "../../..";
 
 const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
   header,
+  lhrSteps,
   templateBoxProps,
   headerBoxProps,
   footerBoxProps,
@@ -24,6 +25,11 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
       {header && (
         <SMBox {...headerBoxProps}>
           {header}
+        </SMBox>
+      )}
+      {lhrSteps && (
+        <SMBox {...headerBoxProps}>
+          {lhrSteps}
         </SMBox>
       )}
       <SMBox display="flex" {...contentBoxProps} >
