@@ -2,9 +2,11 @@
 /// <reference types="Cypress" />
 
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { momentInPST } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -14,6 +16,7 @@ let loginResponse;
 let secondEmployee;
 let clinicalProtocolDocumentType;
 let group;
+let asyncTasksGroup;
 const documentRevisionName = "New document for testing AR";
 
 context("Approval request form", () => {
@@ -230,6 +233,28 @@ context("Approval request form", () => {
         });
       });
     });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        payload: {
+          employees: [{ id: secondEmployee.id }],
+        },
+      });
+    });
   });
 
   context("Login user", () => {
@@ -386,23 +411,17 @@ context("Approval request form", () => {
     });
 
     it("Hovering on the status should highlight it", () => {
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
       cy.contains("IN REVIEW").parent().parent().parent().parent()
         .find(".MuiChip-root").trigger("mouseover");
-
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
       cy.contains("IN REVIEW").parent().parent().parent().parent()
         .find(".MuiChip-root").should("have.css", "background-color", "rgb(48, 128, 234)");
     });
 
     it("click on status or approvers should open the email modal box", () => {
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(1)
       cy.contains("IN REVIEW").parent().parent().parent().parent().next()
         .find("a").arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
       cy.get("button[aria-label=close]").last().arrowClick();
-
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
       cy.contains("IN REVIEW").parent().parent().parent().parent()
         .find(".MuiGrid-root").eq(2).arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
@@ -412,9 +431,6 @@ context("Approval request form", () => {
     it("Clicking on the arrow should show the AR details", () => {
       cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent()
         .find("svg").eq(0).arrowClick();
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find("svg").eq(0).arrowClick();
-
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).next()
       cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent().next()
         .find("ul div").eq(0)
         .should("contain.text", "New document for testing AR");
@@ -423,19 +439,10 @@ context("Approval request form", () => {
     it("Close line item by click arrow", () => {
       cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent()
         .find("svg").eq(0).arrowClick();
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find("svg").eq(0).arrowClick();
     });
 
     it("Hovering AR line item should display buttons", () => {
       cy.contains("needs your approval for").trigger("mouseover");
-      // cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-      //   .find("svg").should("have.length", 3);
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-      //   .find("[data-cy=\"transition-approve\"]").should('exist')
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-      //   .find("[data-cy=\"transition-reject\"]").should('exist')
-
       cy.contains("needs your approval for").parent().parent().parent().parent().parent()
         .find(".MuiBox-root").eq(0)
         .find("svg").should("have.length", 3);
@@ -904,6 +911,219 @@ context("Approval request form", () => {
     });
   });
 
+});
+
+context("Navigate to DRAFT approval request and approve request", () => {
+  it("Navigate to approval request list", () => {
+    cy.navigToApprovalRequestList();
+  });
+
+  it("Clear filters", () => {
+    cy.alClearFilters();
+  });
+
+  it("Filter AR by title as 'Second AR'", () => {
+    cy.alFilterByTitle({ title: "Second AR" });
+  });
+
+  it(`Filter list by OWNER as USERS[1].name`, () => {
+    cy.alFilterByOwner({ owner: USERS[1].name });
+  });
+
+  it("Filter list by STATUS as DRAFT", () => {
+    cy.alFilterByStatus({ status: "DRAFT" });
+  });
+
+  it("Verify filter by STATUS as DRAFT", () => {
+    cy.alVerifyFilterByStatus({ status: "DRAFT" });
+  });
+
+  it("Click on DRAFT", () => {
+    cy.get(`td[data-grid-col-index="3"]`).should("contain.text", "DRAFT").arrowClick();
+    cy.progressBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+  });
+
+  it("Add approver", () => {
+    cy.arAddApproverOnApproverList({ approver: USERS[1].name });
+  });
+
+  it("Send to review", () => {
+    cy.arClickSendToReview();
+  });
+
+  it("Click approve submission", () => {
+    cy.arApproveAR();
+  });
+
+  it("Click Close button", () => {
+    cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+  });
+
+  it("Select option No", () => {
+    cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+  });
+
+  it("Advance Effective Date to 10 days from now", () => {
+    const effectiveDate = momentInPST().add(10, "days");
+    const month = effectiveDate.format("MMM");
+    const day = effectiveDate.format("D");
+
+    cy.get("[aria-label=\"change date\"]").arrowClick();
+
+    cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+      const monthYearText = $el.text();
+      if (!monthYearText.includes(month)) {
+        cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
+      }
+
+      cy.wait(500);
+
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          if (day === dayNumber) {
+            cy.wrap($el).arrowClick();
+          }
+        });
+    });
+
+    cy.wrapWithWaitOnApiCalls(
+      [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+        cy.get("#confirmEffectiveDate").arrowClick();
+      });
+    cy.progressBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+    cy.checkToastMessage({ exists: false });
+  });
+});
+
+context("Verify the AR in APPROVED State", () => {
+  it("Navigate to ar list", () => {
+    cy.navigToApprovalRequestList();
+  });
+
+  it("Clear filters", () => {
+    cy.alClearFilters();
+  });
+
+  it("Filter AR by title as 'Second AR'", () => {
+    cy.alFilterByTitle({ title: "Second AR" });
+  });
+
+  it(`Filter list by OWNER as USERS[1].name`, () => {
+    cy.alFilterByOwner({ owner: USERS[1].name });
+  });
+
+  it("Filter list by STATUS as APPROVED", () => {
+    cy.alFilterByStatus({ status: "APPROVED" });
+  });
+
+  it("Verify filter by STATUS as APPROVED", () => {
+    cy.alVerifyFilterByStatus({ status: "APPROVED" });
+  });
+});
+
+context("Set time travel tool to 9 days", () => {
+  it("Navigate to async tasks", () => {
+    cy.navigToAsyncTasks();
+  });
+
+  it("Select task TIME_TRAVEL_COMPANY", () => {
+    cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+  });
+
+  it("Select 9 days to back in future", () => {
+    cy.asyncSelectBackToTheFutureTime({ day: 9 });
+  });
+
+  it("On Next Task, SELECT_ALL", () => {
+    cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+  });
+
+  it("Submit async task", () => {
+    cy.asyncTaskClickSubmit();
+    cy.progressBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+  });
+});
+
+context("Verify the AR is still in APPROVED State", () => {
+  it("Navigate to ar list", () => {
+    cy.navigToApprovalRequestList();
+  });
+
+  it("Clear filters", () => {
+    cy.alClearFilters();
+  });
+
+  it("Filter AR by title as 'Second AR'", () => {
+    cy.alFilterByTitle({ title: "Second AR" });
+  });
+
+  it(`Filter list by OWNER as USERS[1].name`, () => {
+    cy.alFilterByOwner({ owner: USERS[1].name });
+  });
+
+  it("Filter list by STATUS as APPROVED", () => {
+    cy.alFilterByStatus({ status: "APPROVED" });
+  });
+
+  it("Verify filter by STATUS as APPROVED", () => {
+    cy.alVerifyFilterByStatus({ status: "APPROVED" });
+  });
+});
+
+context("Set time travel tool to 10 days", () => {
+  it("Navigate to async tasks", () => {
+    cy.navigToAsyncTasks();
+  });
+
+  it("Select task TIME_TRAVEL_COMPANY", () => {
+    cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+  });
+
+  it("Select 10 days to back in future", () => {
+    cy.asyncSelectBackToTheFutureTime({ day: 10 });
+  });
+
+  it("On Next Task, SELECT_ALL", () => {
+    cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+  });
+
+  it("Submit async task", () => {
+    cy.asyncTaskClickSubmit();
+    cy.progressBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+  });
+});
+
+context("Verify the AR is in auto CLOSED State", () => {
+  it("Navigate to ar list", () => {
+    cy.navigToApprovalRequestList();
+  });
+
+  it("Clear filters", () => {
+    cy.alClearFilters();
+  });
+
+  it("Filter AR by title as 'Second AR'", () => {
+    cy.alFilterByTitle({ title: "Second AR" });
+  });
+
+  it(`Filter list by OWNER as USERS[1].name`, () => {
+    cy.alFilterByOwner({ owner: USERS[1].name });
+  });
+
+  it("Filter list by STATUS as CLOSED", () => {
+    cy.alFilterByStatus({ status: "CLOSED" });
+  });
+
+  it("Verify filter by STATUS as CLOSED", () => {
+    SystemRequirement("REQ-0770", "REQ-0750");
+    cy.alVerifyFilterByStatus({ status: "CLOSED" });
+  });
 });
 
 export { };
