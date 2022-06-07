@@ -40,7 +40,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   match,
 }) => {
   const { isVisible, label, tooltipConfig, validation: validators } = useDocumentTypeSelect(documentTypeId);
-  const { _formState, _documentRevisionFormState } = SM.useStores() || {};
+  const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores() || {};
   const formik = useFormikContext();
   const classes = styles();
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -129,6 +129,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         formValues,
         documentTypesById,
         _documentRevisionFormState?.schema,
+        _tabsState?.tabID
       ); }
     }
     if (!isCreateMaintenance) {
