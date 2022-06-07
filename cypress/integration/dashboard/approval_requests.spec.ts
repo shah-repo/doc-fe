@@ -1075,7 +1075,7 @@ context("Verify the AR is still in APPROVED State", () => {
   });
 });
 
-context("Set time travel tool to 10 days", () => {
+context("Set time travel tool to 1 day", () => {
   it("Navigate to async tasks", () => {
     cy.navigToAsyncTasks();
   });
@@ -1084,8 +1084,8 @@ context("Set time travel tool to 10 days", () => {
     cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
   });
 
-  it("Select 10 days to back in future", () => {
-    cy.asyncSelectBackToTheFutureTime({ day: 10 });
+  it("Select 1 day to back in future", () => {
+    cy.asyncSelectBackToTheFutureTime({ day: 1 });
   });
 
   it("On Next Task, SELECT_ALL", () => {
