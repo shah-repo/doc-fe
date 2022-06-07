@@ -1,6 +1,11 @@
 import { Box } from "@material-ui/core";
-import { each, isEmpty } from "lodash";
-import React from "react";
+import { concat, each, isEmpty, sum } from "lodash";
+import React, { useEffect, useState } from "react";
+import { Nullable } from "../../../../../../state/ducks/common/types";
+import {
+  DocumentRevision,
+  SmartReference,
+} from "../../../../../../state/ducks/documentRevisions/types";
 import {
   isDocumentRevisionInDraft,
   isDocumentRevisionReleased,
@@ -8,12 +13,16 @@ import {
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
 import { BorderLinearProgress } from "./BorderLinearProgress";
 
-const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
-  const statuses: string[] = [];
-  const step: string[] = [];
-  const resultInprogress: number[] = [];
-  const resultCompleted: number[] = [];
-  const getLHRStatus = (stepLHRs) => {
+interface Props {
+  smartReferencesFrom: SmartReference[] | undefined;
+}
+
+const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
+  smartReferencesFrom,
+}) => {
+  const [inprogress, setInprogress] = useState<number[]>([]);
+  const [completed, setCompleted] = useState<number[]>([]);
+  const getLHRStatus = (stepLHRs: Nullable<DocumentRevision> | undefined) => {
     const status = stepLHRs?.status;
     let lhrstatus = "";
     if (stepLHRs && isDocumentRevisionReleased(status)) {
@@ -24,31 +33,30 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
     return lhrstatus || status;
   };
 
-  const prepareProgressBarData = (smartRefs) => {
-    each(smartRefs, (e) => {
-      const lhrStep = e?.fromDocRev;
-      statuses.push(getLHRStatus(lhrStep));
-      step.push(e?.stepIndex);
+  const prepareProgressBarData = () => {
+    const inProgress: number[] = [];
+    const complete: number[] = [];
+    each(smartReferencesFrom, (e) => {
+      e?.stepIndex &&
+        (getLHRStatus(e?.fromDocRev) === "inprogress"
+          ? inProgress.push(e.stepIndex)
+          : complete.push(e.stepIndex));
     });
+    setInprogress(inProgress);
+    setCompleted(complete);
   };
 
-  prepareProgressBarData(smartReferencesFrom);
-  const data: string[] = [];
-  step.forEach((element, index) => {
-    data[element] = statuses[index];
-  });
-  data.forEach((status, index) =>
-    status === "inprogress"
-      ? resultInprogress.push(index)
-      : resultCompleted.push(index)
-  );
+  useEffect(() => {
+    prepareProgressBarData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [smartReferencesFrom]);
 
   return (
     <Box px={4.25}>
-      {(!isEmpty(resultCompleted) || !isEmpty(resultInprogress)) && (
+      {(!isEmpty(completed) || !isEmpty(inprogress)) && (
         <BorderLinearProgress
           variant="determinate"
-          value={(resultCompleted.length / data.filter(Boolean).length) * 100}
+          value={(completed.length / sum(concat(completed, inprogress))) * 100}
         />
       )}
       <Box
@@ -58,20 +66,20 @@ const DocumentRevisionFormProgressBar = ({ smartReferencesFrom }) => {
         mt={1.25}
         mb={2.125}
       >
-        {!isEmpty(resultCompleted) && (
+        {!isEmpty(completed) && (
           <>
             <Box component="span" fontWeight={600}>
-              Step {resultCompleted?.map((e) => e + ",")}
+              Step {completed?.sort().map((e) => e + ",")}
             </Box>
             <Box component="span" fontWeight={400}>
               &nbsp;completed.&nbsp;
             </Box>
           </>
         )}
-        {!isEmpty(resultInprogress) && (
+        {!isEmpty(inprogress) && (
           <>
             <Box component="span" fontWeight={600}>
-              Step {resultInprogress?.map((e) => e + ",")}
+              Step {inprogress?.sort().map((e) => e + ",")}
             </Box>
             <Box component="span" fontWeight={400}>
               &nbsp;in progress...

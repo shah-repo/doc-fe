@@ -64,24 +64,26 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
-  schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
-    ...schemaItem,
-    index: i,
-    ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
-      stepIndex: size(
-        filter(
-          ro.slice(0, i + 1),
-          (step) =>
-            !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
-        )
-      ),
-    }),
-  }));
+  if (isLHR) {
+    schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
+      ...schemaItem,
+      index: i,
+      ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
+        stepIndex: size(
+          filter(
+            ro.slice(0, i + 1),
+            (step) =>
+              !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
+          )
+        ),
+      }),
+    }));
 
-  smartReferencesFrom?.forEach((ele, i) => {
-    const obj = schema.filter((el) => ele.metadata.fieldId === el.name);
-    ele.stepIndex = obj[0].stepIndex;
-  });
+    smartReferencesFrom?.forEach((ele, i) => {
+      const obj = schema.filter((el) => ele.metadata.fieldId === el.name);
+      ele.stepIndex = obj[0].stepIndex;
+    });
+  }
 
   if (formValues.values?.retrain) {
     tabConfig = tabConfig && [...tabConfig, {
