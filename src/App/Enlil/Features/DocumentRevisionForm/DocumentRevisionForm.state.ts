@@ -42,6 +42,8 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
    */
   @observable public leftPanelOpen = false;
 
+  @observable public isDirty = false;
+
   @observable public viewMore = false;
 
   // MARK: @api
@@ -114,6 +116,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, "disabledAction", disabledAction);
   };
 
+  @action public setDirty = (isDirty: boolean) => {
+    set(this, "isDirty", isDirty);
+  };
+
   @action setLeftPanelOpen = () => set(this, "leftPanelOpen", !this.leftPanelOpen);
 
   // MARK: @helpers
@@ -160,6 +166,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     const { id } = this.documentRevision || {};
     if (!id) { return; }
     this.loading = true;
+    this.setDirty(true);
     SMStore.patch<{}, Partial<DocumentRevision>>({
       url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
@@ -171,6 +178,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
         toastError(error.message);
         return;
       }
+      this.setDirty(false);
       const url = SMStore.templateUrl(FBEndpoint.DocumentRevisionPatch, { id });
       SMStore.setData<DocumentRevision>(url, data as DocumentRevision);
       this.loading = false;

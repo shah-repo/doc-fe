@@ -188,6 +188,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   SM.reaction(
     () => _formState?.isDirty,
     (isDirty: boolean | undefined) => {
+      console.log("Fibally in presenter Inside prompt component dirty ::", isDirty);
       dirty = isDirty || false;
     }
   );
@@ -196,6 +197,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     workspaceState?.setMode(mode);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
+  console.log("Before send  Inside prompt component dirty ::", dirty);
 
   return (
     <>
