@@ -1868,6 +1868,7 @@ context("Autocomplete 'Equipment' test", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
+            `${calTtDueDate}`,
             `Please click on the button below to view it`,
             "<button type=\"button\">VIEW ITEM</button>",
             createdCompany.id],
