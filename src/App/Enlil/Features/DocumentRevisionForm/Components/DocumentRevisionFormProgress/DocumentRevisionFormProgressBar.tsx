@@ -14,7 +14,7 @@ import Colors from "../../../../../../ui/layout/theme/utils/colors";
 import { BorderLinearProgress } from "./BorderLinearProgress";
 
 interface Props {
-  smartReferencesFrom: SmartReference[] | undefined;
+  smartReferencesFrom?: SmartReference[];
 }
 
 const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
@@ -22,7 +22,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
 }) => {
   const [inprogress, setInprogress] = useState<number[]>([]);
   const [completed, setCompleted] = useState<number[]>([]);
-  const getLHRStatus = (stepLHRs: Nullable<DocumentRevision> | undefined) => {
+  const getLHRStatus = (stepLHRs?: Nullable<DocumentRevision>) => {
     const status = stepLHRs?.status;
     let lhrstatus = "";
     if (stepLHRs && isDocumentRevisionReleased(status)) {
