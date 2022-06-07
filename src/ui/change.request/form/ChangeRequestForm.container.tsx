@@ -17,7 +17,6 @@ import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
 import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
-import FormHeader from "./assessmentForm/FormHeader";
 import { ChangeRequestFormValues } from "./types";
 
 
@@ -73,6 +72,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
         asyncState={asyncState}
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}
+        sidebar={changeRequest && <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />}
         {...props}
         {...{ FBContainer }}
       />
@@ -104,14 +104,13 @@ const ChangeRequestFormContainer: React.FunctionComponent<
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks />,
+        component: <Bookmarks fromAR={true} />,
       },
     },
   ];
 
   return (
     <FBProvider {...{ bookmarkState }}>
-      <FormHeader {...{ changeRequest, asyncState }}/>
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <Formik
@@ -122,7 +121,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
             {render}
           </Formik>
         </div>
-        {changeRequest && <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />}
       </div>
     </FBProvider>
   );
