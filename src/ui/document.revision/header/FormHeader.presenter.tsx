@@ -53,7 +53,8 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
       <Observer>
         {() => (
           <>
-            { (asyncState.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading) && (
+            {(asyncState.status === AsyncStatus.Active ||
+              workspaceState?.documentRevApi.loading) && (
               <Box width="100%" pt={1}>
                 <LinearProgress style={{ width: "100%" }} />
               </Box>
