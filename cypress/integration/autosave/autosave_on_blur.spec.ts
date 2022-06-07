@@ -687,11 +687,11 @@ context("Autosave on blur", () => {
     });
 
     it("Enters title 'New document from form'", () => {
-      cy.drEnterDocumentTitleWithWait({ name: "New document from form" });
+      cy.drEnterDocumentTitle({ name: "New document from form" });
     });
 
     it("Enters description 'New document from form description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "New document from form description" });
+      cy.drEnterDocumentDescription({ description: "New document from form description" });
     });
 
     it("Fill TextField and check for autosave", () => {

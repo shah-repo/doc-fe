@@ -131,10 +131,8 @@ context("Autosave on leaving page while data is still not saved", () => {
       cy.navigToDocumentListWithUnsavedChanges({ confirmPopup: false });
     });
 
-    it("Type 'Test description' inside title field", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
-        .clear().arrowType("Test description");
-      cy.get("[data-cy=field-description]>label").arrowClick();
+    it("Type 'Test description' inside description field", () => {
+      cy.drEnterDocumentDescription({ description: "Test description" });
     });
 
     it("Navigate to document list and wait for pop-up to prompt for unsaved changes then click 'Cancel'", () => {
@@ -162,9 +160,8 @@ context("Autosave on leaving page while data is still not saved", () => {
     it("Click on created 'Draft' document and check if data is saved", () => {
       cy.drFilterDocListByNameAndStatus({ title: "Test", status: "Draft" });
       cy.cmpTurnOnAutosave();
-      cy.get("[id=Title-field]").contains("Test");
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div:nth-child(2)>div>div>div>div>div>div>span>span")
-        .contains("Test description");
+      cy.get("[id='field-name']").contains("Test");
+      cy.get("[id='field-description']").contains("Test description");
     });
 
     it("Click on navigation while document is being saved", () => {

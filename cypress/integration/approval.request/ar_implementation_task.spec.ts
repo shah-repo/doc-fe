@@ -147,15 +147,15 @@ context("Approval request implementation tasks", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Add 'Implementation Task' to AR", () => {
-      cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Implementation Task" });
-      cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
-      cy.fbAddField();
-    });
-
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add 'Implementation Task' to AR", () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
+      cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
+      cy.fbAddField();
     });
 
     it("Approve and release document", () => {
