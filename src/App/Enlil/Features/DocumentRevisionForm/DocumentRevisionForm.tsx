@@ -61,8 +61,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -92,6 +90,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       type: "TRAINING",
     } ];
   }
+  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
   const changeLayoutHeight = () => {
     setTimeout(() => {
