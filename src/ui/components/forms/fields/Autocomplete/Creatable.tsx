@@ -131,6 +131,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                 minHeight: "32px",
               }),
             }}
+            autoFocus={true}
             isClearable={Boolean(formikValue)}
             components={{ DropdownIndicator: null }}
             placeholder={!inputValue ?
