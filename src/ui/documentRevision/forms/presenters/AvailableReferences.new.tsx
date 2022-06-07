@@ -212,6 +212,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 variant="outlined"
                 InputProps={{
                   ...params.InputProps,
+                  style: { padding: "0px 30px 0px 9px", height: value.length ? "100%" : "40px" },
                   endAdornment: (
                     <>
                       { open && loading && (

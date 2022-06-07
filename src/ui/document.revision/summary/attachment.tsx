@@ -9,11 +9,12 @@ import Colors from "../../layout/theme/utils/colors";
 export interface Props {
   isAttachmentEmpty: boolean;
   docRevId: string;
+  label: string;
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
 }
 
-export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus }) => {
+export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label }) => {
 
   const classes = {
     buttonsContainer: {
@@ -47,9 +48,9 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
   );
   return (
     <Box pl={2}>
-      <Box style = {classes.buttonsContainer}>
+      <Box>
         <Typography variant="h6" style = {classes.buttonLeft}>
-          <Text message="common.attachments"/>
+          <Text message={label || "common.attachments" }/>
         </Typography>
         <AttachmentDownloadAllButton
           isAttachmentEmpty = {isAttachmentEmpty}

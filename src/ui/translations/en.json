@@ -359,6 +359,7 @@
   "common.line.items": "Line items",
   "common.undefined": "Undefined",
   "common.summary": "Summary",
+  "common.summary.total": "Summary of totals",
   "common.supplier": "Supplier",
   "common.cancel.draft": "Cancel Draft",
   "common.none": "None",
@@ -775,6 +776,7 @@
   "form.builder.field.training.req": "Training req.",
   "form.builder.field.order.received": "Order Received",
   "form.builder.sub.total": "Sub Total: ",
+  "form.builder.grand.total": "Grand Total",
   "form.builder.receive": "Receive All",
   "form.builder.quantity.received": "Receipt Quantity",
   "form.builder.comments.optional": "Comments (optional)",
@@ -1308,5 +1310,6 @@
   "tabId.changedetails": "Change Details",
   "tabId.general": "General",
   "tabId.training": "Training",
+  "tabId.calpmhistory":"Cal/PM History",
   "common.load.more": "Load More"
 }

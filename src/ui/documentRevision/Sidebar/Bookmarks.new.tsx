@@ -13,6 +13,7 @@ import { styles } from "./Bookmarks.new.styles";
 
 interface SidebarPresenterProps {
   bookmarks?: FBBookmarkItem[];
+  fromAR?: boolean;
 }
 
 const StyledTooltip = (props: TooltipProps) => {
@@ -20,7 +21,7 @@ const StyledTooltip = (props: TooltipProps) => {
   return <FBTooltip arrow placement="top" classes={classes} {...props} />;
 };
 
-const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }) => {
+const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks, fromAR }) => {
   const history = useHistory();
   const classes = styles();
   const { bookmarkState } = FB.useStores();
@@ -31,6 +32,9 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
   });
   const bookmarkClick = (hash, index, tabIndex) => {
     setSelectedIndex(index);
+    if (fromAR) {
+      history.push(`#${hash}`);
+    }
     if (isUndefined(tabIndex) || tabIndex < 0) {
       return;
     }

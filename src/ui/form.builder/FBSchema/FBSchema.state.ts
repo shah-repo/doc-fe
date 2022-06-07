@@ -14,6 +14,7 @@ import {
 import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixField";
 import FBApprovals from "../FBApprovals/FBApprovals";
 import FBApprovers from "../FBApprovers/FBApprovers";
+import FBAttachment from "../FBAttachment/FBAttachment";
 import FBBlankTplForm from "../FBBlankTplForm/FBBlankTplForm";
 import FBButton from "../FBButton/FBButton";
 import FBCheckbox from "../FBCheckbox/FBCheckbox";
@@ -40,6 +41,7 @@ import FBPOReceive from "../FBPOReceive/FBPOReceive";
 import FBProcedure from "../FBProcedure/FBProcedure";
 import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
 import FBPurchaseOrder from "../FBPurchaseOrder/FBPurchaseOrder";
+import FBPurchaseOrderSummary from "../FBPurchaseOrder/FBPurchaseOrderSummary";
 import FBQuantityField from "../FBQuantityField/FBQuantityField";
 import FBQuantityUnitField from "../FBQuantityUnitField/FBQuantityUnitField";
 import FBRadio from "../FBRadio/FBRadio";
@@ -90,6 +92,7 @@ class FBSchemaState {
     radio: FBRadio,
     radiogroup: FBRadioGroup,
     fileupload: FBFileUpload,
+    attachments: FBAttachment,
     zipattachment: FBZIPUpload,
     blanktplform: FBBlankTplForm,
     schemaselect: FBSchemaSelect,
@@ -97,6 +100,7 @@ class FBSchemaState {
     quantity: FBQuantityField,
     timer: FBTimerField,
     purchaseorder: FBPurchaseOrder,
+    purchaseordersummary: FBPurchaseOrderSummary,
     poreceive: FBPOReceive,
     documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,

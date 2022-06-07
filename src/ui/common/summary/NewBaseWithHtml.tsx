@@ -70,8 +70,12 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
               lineHeight: "25px",
               color: Colors.almost_black,
             }}
+            id="field-description"
+            data-cy="field-description"
           >{editor?.trim()}
             <span className={classes.btnStyle}
+              id="SummaryHeaderDecription-ViewMore-button"
+              data-cy="SummaryHeaderDecription-ViewMore-button"
               style={{
                 marginTop: "-3px",
                 cursor: "pointer",

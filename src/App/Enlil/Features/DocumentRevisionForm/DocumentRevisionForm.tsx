@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { filter, get, includes, isEmpty, map, size } from "lodash";
+import { filter, get, includes, map, size } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
@@ -163,9 +163,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
-                  const tabSchema = schema.filter((schemaItem) => schemaItem.tabId === _tabsState?.tabID);
-                  const availableSchema = schema.filter((schemaItem) =>
-                    schemaItem.tabId === _tabsState?.tabID && !schemaItem.deleted);
 
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={8} stretchY="calc(100% - 40px)">
@@ -198,7 +195,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             mode,
                           }}
                         />
-                        {(!isEmpty(availableSchema) || !documentRevision) && <FBWorkspace
+                        {<FBWorkspace
                           isPortal={false}
                           document={{
                             ...formValues.values as unknown as DocumentRevision,
@@ -206,7 +203,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           }}
                           {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
-                          schema={tabSchema}
+                          schema={schema}
                         />}
                       </>}
                       {tabType === "DYNAMIC" && _formState?.mode !== "none" &&  (
@@ -218,7 +215,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           }}
                           {... { autosaveEnabled, workspaceState }}
                           initialValues={formInput}
-                          schema={tabSchema}
+                          schema={schema}
                         />
                       )}
                       {tabType === "TRAINING" &&

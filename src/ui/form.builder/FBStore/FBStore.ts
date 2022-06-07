@@ -9,12 +9,18 @@ import FBRequest from "../FBApi/FBApi.request";
 class FBStore {
   @observable public audit = new FBRequest<FBAuditData[], null>(FBEndpoint.DocumentRevisionAudit);
   @observable public selectedTab: SidebarType | undefined;
+  @observable purchaseOrderValue;
+
   @computed public get isHistoryTabSelected() {
     return this.selectedTab === "history";
   }
   @action public setSelectedTab = (tab) => {
     set(this, "selectedTab", tab);
   };
+  @action public setPurchaseOrderValue = (value) => {
+    set(this, "purchaseOrderValue", value);
+  };
+
   @computed public get getSelectedTab() { return this.selectedTab; }
 }
 
