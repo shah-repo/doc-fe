@@ -5,8 +5,13 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { emailDateOffset, fileTimeFormat } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
+import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
+import { GeneralDocumentDocType } from "../../utils/constants/documentTypes/generalDocument";
+import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
+import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
+import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let asyncTasksGroup;
@@ -29,7 +34,7 @@ let createdSupplierFormDocument;
 let supplierDocumentType;
 let createdSupplierDocument;
 let createdPOFormDocument;
-let oldReceivingForm;
+let createdReceivingForm;
 let purchaseOrderDocumentType;
 let receivingDocumentType;
 let ebDocumentType;
@@ -44,7 +49,25 @@ let createdPartDocument;
 let createdDraftPart;
 let releasedequipmentDocument;
 let approvalForVoidedSupplier;
+let createdMPIDocument;
+let MPIDocumentType;
+let generalDocumentType;
+let createdGeneralDocument;
+let createdLotsFormDocument;
+let CSLDocumentType;
+let createdPODocument;
+let createdPODocument3;
+let createdRelesedReceivable;
+let EBDocumentType;
+let LHRtDocumentType;
+let createdLHRtDocument;
+let LHRDocumentType;
+let trainingCurriculumDocumentType;
+let createdTrainingCurriculumFormDocument;
+let createdARForGD;
 
+const todaysDate = momentInPST();
+const todaysDateFormated = momentInPST().format("L");
 const usageReportXlsxFileName = "Usage_report_" + fileTimeFormat + ".xlsx";
 const usageReportXlsxFileNameAndPath = "cypress/downloads/" + usageReportXlsxFileName;
 const usageReporJsonFileName = "Usage_report_" + fileTimeFormat + ".json";
@@ -58,7 +81,7 @@ interface StructureFromUsageReport {
 
 const numberOfDocsFromUsageReport: StructureFromUsageReport[] = [];
 
-const numberOfDocsThatWereCreated: StructureFromUsageReport[] = [
+const numberOfCreatedDocs: StructureFromUsageReport[] = [
   {
     name: "Parts",
     releasedCompleted: 0,
@@ -121,7 +144,7 @@ const numberOfDocsThatWereCreated: StructureFromUsageReport[] = [
   },
 ];
 
-context("Test usage_report is correctly counting documents", () => {
+context("Test usage report is correctly counting documents", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -149,6 +172,11 @@ context("Test usage_report is correctly counting documents", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               LegalRecord,
+              MPITest,
+              GeneralDocumentDocType,
+              EngineeringBuild,
+              LHRTTest,
+              { ...TrainingCurriculum, documentTypeName: "Training Curriculum Test" },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -165,6 +193,13 @@ context("Test usage_report is correctly counting documents", () => {
           ebDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Engineering Build");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           damDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Document Approval Matrix");
+          MPIDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
+          generalDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, GeneralDocumentDocType.documentTypeName);
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
+          EBDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Engineering Build Test");
+          LHRtDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "LHR template");
+          LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record");
+          trainingCurriculumDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Training Curriculum Test");
           done();
         });
       });
@@ -422,6 +457,264 @@ context("Test usage_report is correctly counting documents", () => {
           });
         });
       });
+
+      it("[API]Create PO form", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>PO Form document</p>",
+            document: {
+              docId: "FM-00006",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "PO Form document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [{
+                id: purchaseOrderDocumentType[0].id,
+              }],
+              schema: [
+                {
+                  name: "po-status-built-in",
+                  type: "select",
+                  index: 0,
+                  label: "PO Status",
+                  options: [
+                    {
+                      text: "Open",
+                      value: "Open",
+                    },
+                    {
+                      text: "Closed",
+                      value: "Closed",
+                    },
+                    {
+                      text: "Cancelled",
+                      value: "Cancelled",
+                    },
+                  ],
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationAttribute: "PO Status",
+                  applicableValidationSchema: true,
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "po-general-information-to-be-completed-by-requester-section",
+                  type: "section",
+                  index: 1,
+                  label: "General Information",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                },
+                {
+                  name: "po-requestor-autocomplete",
+                  type: "autocomplete",
+                  index: 2,
+                  label: "Requestor",
+                  rules: "required",
+                  hidden: false,
+                  deleted: false,
+                  optionId: "3",
+                  placeholder: "[Select requestor here]",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: false,
+                  optionLabelKey: "user.email",
+                  optionValueKey: "id",
+                  outputDisabled: false,
+                  validationMode: "default",
+                  editorProperties: [
+                    "deleteDisabled",
+                  ],
+                  validationAttribute: "Requestor",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "po-supplier-built-in",
+                  type: "supplier",
+                  index: 3,
+                  label: "Supplier ",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationAttribute: "Supplier",
+                  applicableValidationSchema: true,
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "po-order-date",
+                  type: "datepicker",
+                  index: 4,
+                  label: "Order Date",
+                  rules: "required",
+                  hidden: false,
+                  deleted: false,
+                  validators: {
+                    required: true,
+                  },
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: false,
+                  outputDisabled: false,
+                  validationMode: "default",
+                  editorProperties: [
+                    "deleteDisabled",
+                  ],
+                  validationAttribute: "Order Date",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "po-items-built-in",
+                  type: "purchaseorder",
+                  index: 5,
+                  label: "Purchase Order",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  applicableValidationSchema: true,
+                  validationAttribute: "Purchase Order",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "fb-po-approvals",
+                  type: "approvals",
+                  index: 6,
+                  label: "Approvals",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  uniqueSchemaItem: true,
+                  validationAttribute: "Approvals",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+              ],
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdPOFormDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdPOFormDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+
+      it("[API] Create receivable form", () => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Receivable form</p>",
+            document: {
+              docId: "FM-00007",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            formTemplate: {
+              outputDocumentTypes: [
+                { id: receivingDocumentType[0].id },
+              ],
+              schema: [
+                {
+                  name: "receive-po-kzqkr5yl",
+                  type: "poreceive",
+                  index: 0,
+                  label: "Receive PO",
+                  rules: "",
+                  hidden: false,
+                  deleted: false,
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  outputDisabled: false,
+                  validationMode: "default",
+                  editorProperties: [
+
+                  ],
+                  validationAttribute: "Receive PO",
+                  deleteInFormDisabled: false,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "fb-approvals-kzqkpxqm",
+                  type: "approvals",
+                  index: 1,
+                  label: "form.builder.approvals",
+                  deleteDisabled: true,
+                  uniqueSchemaItem: true,
+                },
+              ],
+            },
+            name: "Receivable form",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdReceivingForm = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdReceivingForm.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          });
+        });
+      });
+
     });
 
     context.skip("[API]Create form documents", () => {
@@ -748,7 +1041,16 @@ context("Test usage_report is correctly counting documents", () => {
               outputDocumentTypes: [{
                 id: supplierDocumentType[0].id,
               }],
-              schema: [],
+              schema: [
+                {
+                  name: "fb-approvals-l42iv0i2",
+                  type: "approvals",
+                  index: 3,
+                  label: "form.builder.approvals",
+                  deleteDisabled: true,
+                  uniqueSchemaItem: true,
+                },
+              ],
             },
 
           },
@@ -824,14 +1126,13 @@ context("Test usage_report is correctly counting documents", () => {
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
-                  deleteDisabled: true,
-                  validationMode: "default",
                   validationAttribute: "PO Status",
-                  deleteInFormDisabled: true,
                   applicableValidationSchema: true,
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
                 },
                 {
-                  name: "general-information-to-be-completed-by-requester-kc3oqlpn",
+                  name: "po-general-information-to-be-completed-by-requester-section",
                   type: "section",
                   index: 1,
                   label: "General Information",
@@ -840,11 +1141,11 @@ context("Test usage_report is correctly counting documents", () => {
                   ],
                 },
                 {
-                  name: "requestor-k740hxlb",
+                  name: "po-requestor-autocomplete",
                   type: "autocomplete",
                   index: 2,
                   label: "Requestor",
-                  rules: "",
+                  rules: "required",
                   hidden: false,
                   deleted: false,
                   optionId: "3",
@@ -872,14 +1173,13 @@ context("Test usage_report is correctly counting documents", () => {
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
-                  deleteDisabled: true,
-                  validationMode: "default",
                   validationAttribute: "Supplier",
-                  deleteInFormDisabled: true,
                   applicableValidationSchema: true,
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
                 },
                 {
-                  name: "ordered-k6mlhan7",
+                  name: "po-order-date",
                   type: "datepicker",
                   index: 4,
                   label: "Order Date",
@@ -900,6 +1200,7 @@ context("Test usage_report is correctly counting documents", () => {
                   ],
                   validationAttribute: "Order Date",
                   deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
                 },
                 {
                   name: "po-items-built-in",
@@ -910,12 +1211,12 @@ context("Test usage_report is correctly counting documents", () => {
                     "ON_STATE_TO_IN_REVIEW",
                   ],
                   deleteDisabled: true,
+                  applicableValidationSchema: true,
                   validationAttribute: "Purchase Order",
                   deleteInFormDisabled: true,
-                  applicableValidationSchema: true,
                 },
                 {
-                  name: "approvals-built-in",
+                  name: "fb-po-approvals",
                   type: "approvals",
                   index: 6,
                   label: "Approvals",
@@ -945,15 +1246,17 @@ context("Test usage_report is correctly counting documents", () => {
             },
             employeeId: adminEmployee.id,
             sessionId: loginResponse.sessionId,
-          }).then(() => done() );
+          }).then(() => {
+            done();
+          });
         });
       });
 
-      it("[API]Create receiving form", (done: any) => {
+      it("[API] Create receivable form", () => {
         cy.drCreateDocumentRevision({
           payload: {
             attachments: [],
-            description: "<p>Old receiving Form document</p>",
+            description: "<p>Receivable form</p>",
             document: {
               docId: "FM-00007",
               documentType: {
@@ -969,37 +1272,33 @@ context("Test usage_report is correctly counting documents", () => {
                 ],
               },
             },
-            name: "Old Receiving Form document",
-            referenceTo: [],
-            retrain: false,
-            revisionChangeType: RevisionChangeType.NextRevision,
-            revisionStage: 1,
             formTemplate: {
-              outputDocumentTypes: [{
-                id: receivingDocumentType[0].id,
-              }],
+              outputDocumentTypes: [
+                { id: receivingDocumentType[0].id },
+              ],
               schema: [
                 {
-                  name: "receiving-ku6t73ty",
+                  name: "receive-po-kzqkr5yl",
                   type: "poreceive",
                   index: 0,
-                  label: "Select PO",
+                  label: "Receive PO",
                   rules: "",
                   hidden: false,
                   deleted: false,
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
-                  deleteDisabled: false,
                   outputDisabled: false,
                   validationMode: "default",
-                  editorProperties: [],
-                  validationAttribute: "Select PO",
+                  editorProperties: [
+
+                  ],
+                  validationAttribute: "Receive PO",
                   deleteInFormDisabled: false,
                   applicableValidationSchema: true,
                 },
                 {
-                  name: "fb-approvals-ku6t6gzw",
+                  name: "fb-approvals-kzqkpxqm",
                   type: "approvals",
                   index: 1,
                   label: "form.builder.approvals",
@@ -1008,13 +1307,18 @@ context("Test usage_report is correctly counting documents", () => {
                 },
               ],
             },
+            name: "Receivable form",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
           },
           employeeId: adminEmployee.id as unknown as string,
           sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
-          oldReceivingForm = response;
+          createdReceivingForm = response;
           cy.drAPIApproveAndRelease({
-            documentId: oldReceivingForm.id,
+            documentId: createdReceivingForm.id,
             payload: {
               effectiveDate: (new Date()).toISOString(),
               documentType: { id: approvalRequestDocumentType[0].id },
@@ -1023,7 +1327,7 @@ context("Test usage_report is correctly counting documents", () => {
             },
             employeeId: adminEmployee.id,
             sessionId: loginResponse.sessionId,
-          }).then(() => done() );
+          });
         });
       });
 
@@ -1434,7 +1738,7 @@ context("Test usage_report is correctly counting documents", () => {
       });
     });
 
-    context.skip("[API]Create Part documents", () => {
+    context("[API]Create Part documents", () => {
       it("[API]Create released part document", (done: any) => {
         cy.drCreateDocumentRevision({
           payload: {
@@ -1642,134 +1946,1644 @@ context("Test usage_report is correctly counting documents", () => {
         }).then(() => done());
       });
     });
-  });
 
-  context("[API]Create Suppliers document", () => {
-    it("[API]Create Draft Supplier document", () => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Supplier</p>",
-          document: {
-            docId: "SUP-00001",
-            documentType: {
-              id: supplierDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Draft Supplier",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      });
-    });
-
-    it("[API]Create Released Supplier document", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Supplier</p>",
-          document: {
-            docId: "SUP-00002",
-            documentType: {
-              id: supplierDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Draft Supplier",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdSupplierDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdSupplierDocument.id,
+    context("[API]Create Suppliers document", () => {
+      it("[API]Create Draft Supplier document", () => {
+        cy.drCreateDocumentRevision({
           payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            attachments: [],
+            description: "<p>Supplier</p>",
+            document: {
+              docId: "SUP-00001",
+              documentType: {
+                id: supplierDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Draft Supplier",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
           },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        });
+      });
+
+      it("[API]Create Draft Supplier document 2", () => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Supplier</p>",
+            document: {
+              docId: "SUP-00002",
+              documentType: {
+                id: supplierDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Draft Supplier2",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        });
+      });
+
+      it("[API]Create Voided Supplier document", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            formDocument: {
+              id: createdSupplierFormDocument.id,
+            },
+            description: "Supplier voided",
+            name: "Supplier voided",
+            attachments: [],
+            referenceTo: [],
+            revisionStage: 1,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            document: {
+              docId: "SUP-00004",
+              securityList: {
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+                operators: [],
+              },
+              documentType: {
+                id: supplierDocumentType[0].id,
+              },
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdSupplierDocument = response;
+          cy.approvals({
+            assignedEmployeeId: adminEmployee.id,
+            fieldId: "fb-approvals-l42iv0i2",
+            recordId: createdSupplierDocument.id,
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then((response) => {
+            approvalForVoidedSupplier = response;
+            cy.approvalSubmitForApproval({
+              docRevId: createdSupplierDocument.id,
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => {
+              cy.approvalApprove({
+                approvalsId: approvalForVoidedSupplier.id,
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then(() => {
+                cy.recAPICreateVoidedDocument({
+                  fromDocumentId: createdSupplierFormDocument.id,
+                  formInputFieldName: "fb-approvals-l42iv0i2",
+                  formInputApprovalId: adminEmployee.id,
+                  documentId: createdSupplierDocument.documentId,
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                }).then((response) => {
+                  createdSupplierDocument = response;
+                  cy.approvals({
+                    assignedEmployeeId: adminEmployee.id,
+                    fieldId: "fb-approvals-l42iv0i2",
+                    recordId: createdSupplierDocument.id,
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                  }).then((response) => {
+                    approvalForVoidedSupplier = response;
+                    cy.approvalSubmitForApproval({
+                      docRevId: createdSupplierDocument.id,
+                      employeeId: adminEmployee.id,
+                      sessionId: loginResponse.sessionId,
+                    }).then(() => {
+                      cy.approvalApprove({
+                        approvalsId: approvalForVoidedSupplier.id,
+                        employeeId: adminEmployee.id,
+                        sessionId: loginResponse.sessionId,
+                      }).then(() => done());
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+
+      it("[API]Create Released Supplier document", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Supplier</p>",
+            document: {
+              docId: "SUP-00003",
+              documentType: {
+                id: supplierDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Released Supplier",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdSupplierDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdSupplierDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => done());
+        });
       });
     });
 
-    it("[API]Create Voided Supplier document", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          formDocument: {
-            id: createdSupplierFormDocument.id,
-          },
-          description: "Supplier voided",
-          name: "Supplier voided",
-          attachments: [],
-          referenceTo: [],
-          revisionStage: 1,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          document: {
-            docId: "SUP-00003",
-            securityList: {
-              securityEmployees: [],
-              securityGroups: [
+    context("[API]Create MPI, LOT form and GD document", () => {
+      it("[API]Create MPI document", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>MPI created through API</p>",
+            document: {
+              docId: "PI-00001",
+              documentType: {
+                id: MPIDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "API MPI",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [],
+              schema: [
                 {
-                  id: group.body[0].id,
+                  name: "fb-mpi-procedure-section-built-in",
+                  type: "section",
+                  index: 0,
+                  label: "form.builder.mpiprocedure",
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "mpi-procedure-built-in",
+                  type: "mpiprocedure",
+                  index: 1,
+                  stepIndex: 1,
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                  editorProperties: [
+                    "includeNotes",
+                  ],
+                  includeNotes: true,
+                  editorConfig: {
+                    description: "<p>Description for step 1</p>",
+                    materials: [
+                      {
+                        id: "kvasuama",
+                        title: createdPartDocument.id,
+                        quantity: 3,
+                        unit: "each",
+                      },
+                    ],
+                    equipment: [
+                    ],
+                  },
+                },
+                {
+                  name: "lhrs-start-quantity",
+                  type: "quantity",
+                  index: 2,
+                  label: "Start quantity",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  editorProperties: [
+                    "includeNotes",
+                  ],
+                  validationAttribute: "Start quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                  includeNotes: true,
+                },
+                {
+                  name: "lhrs-accepted-quantity",
+                  type: "quantity",
+                  index: 3,
+                  label: "Accepted quantity",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  editorProperties: [
+                    "includeNotes",
+                  ],
+                  validationAttribute: "Accepted quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                  includeNotes: true,
+                },
+                {
+                  name: "lhrs-rejected-quantity",
+                  type: "quantity",
+                  index: 4,
+                  label: "Rejected quantity",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  editorProperties: [
+                    "includeNotes",
+                  ],
+                  validationAttribute: "Rejected quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                  includeNotes: true,
+                },
+                {
+                  name: "approvals-built-in",
+                  type: "approvals",
+                  index: 5,
+                  label: "Approvals",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  uniqueSchemaItem: true,
+                  validationAttribute: "Approvals",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
                 },
               ],
-              operators: [],
-            },
-            documentType: {
-              id: supplierDocumentType[0].id,
             },
           },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdSupplierDocument = response;
-        cy.approvals({
-          assignedEmployeeId: adminEmployee.id,
-          fieldId: "fb-approvals-l42iv0i2",
-          recordId: createdSupplierDocument.id,
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
-          approvalForVoidedSupplier = response;
-          cy.approvalSubmitForApproval({
-            docRevId: createdSupplierDocument.id,
+          createdMPIDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdMPIDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
             employeeId: adminEmployee.id,
             sessionId: loginResponse.sessionId,
           }).then(() => {
-            cy.approvalApprove({
-              approvalsId: approvalForVoidedSupplier.id,
+            done();
+          });
+        });
+      });
+
+      it("[API]Create Lots form", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Lots Form document</p>",
+            document: {
+              docId: "FM-00012",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Lots form document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [{
+                id: CSLDocumentType[0].id,
+              }],
+              schema: [
+                {
+                  name: "lot_quantity",
+                  type: "quantity",
+                  index: 0,
+                  label: "Initial Quantity",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  editorProperties: [],
+                  validationAttribute: "Initial Quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "lot_usable_quantity",
+                  type: "quantity",
+                  index: 1,
+                  label: "Usable Quantity",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  editorProperties: [],
+                  validationAttribute: "Usable Quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "lot_expiry_date",
+                  type: "datepicker",
+                  index: 2,
+                  label: "Expiration Date",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationAttribute: "Expiration Date",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "lot_part",
+                  type: "autocomplete",
+                  index: 3,
+                  label: "Part Selection",
+                  optionId: "21",
+                  placeholder: "Select the appropriate part for this lot",
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "100-inspection-override",
+                  type: "checkboxgroup",
+                  index: 4,
+                  label: "100% Inspection Override",
+                  options: [
+                    {
+                      text: "100% Inspection Override",
+                      value: "100% Inspection Override",
+                    },
+                  ],
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  editorProperties: [],
+                  validationAttribute: "100% Inspection Override",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  label: "form.builder.approvals",
+                  type: "approvals",
+                  deleteDisabled: true,
+                  name: "fb-approvals-",
+                  uniqueSchemaItem: true,
+                  index: 5,
+                },
+              ],
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdLotsFormDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdLotsFormDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+
+      it("[API]Create General Document", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>General document</p>",
+            document: {
+              docId: "GD-00001",
+              documentType: {
+                id: generalDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "API General Document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdGeneralDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdGeneralDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+    });
+
+    context.skip("[API]Create POs", () => {
+      it("[API]Create released PO", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>released PO</p>",
+            document: {
+              docId: "POT-00001",
+              documentType: {
+                id: purchaseOrderDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            formDocument: {
+              id: createdPOFormDocument.id,
+            },
+            name: "",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formInput: {
+              "po-items-built-in": {
+                tax: "0.00",
+                taxRate: 9.25,
+                subTotal: "2100.00",
+                totalAmount: "2100.00",
+                shippingCost: "0.00",
+                currency: "USD",
+                exchangeRate: 1,
+                totalInUSD: "2100.00",
+                dateOfExchangeRate: "",
+                items: [
+                  {
+                    type: "product",
+                    partNumberTitle: "Part document",
+                    partNumberDocId: "PRT-00005 - 1",
+                    partNumber: createdPartDocument.id,
+                    order: 200,
+                    units: "each",
+                    unitPrice: 5,
+                    date: todaysDate,
+                    id: "l1or09um",
+                    received: 0,
+                    totalAmount: "1000.00",
+                    formattedDate: todaysDateFormated,
+                    index: 0,
+                  },
+                ],
+              },
+              "fb-po-approvals": [
+                adminEmployee.id,
+              ],
+              "po-status-built-in": "Open",
+              "po-requestor-autocomplete": adminEmployee.id,
+              "po-order-date": todaysDate,
+              "po-supplier-built-in": createdSupplierDocument.id,
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdPODocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdPODocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+
+      it("[API]Create draft PO", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>draft PO</p>",
+            document: {
+              docId: "POT-00002",
+              documentType: {
+                id: purchaseOrderDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            formDocument: {
+              id: createdPOFormDocument.id,
+            },
+            name: "",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formInput: {
+              "po-items-built-in": {
+                tax: "0.00",
+                taxRate: 9.25,
+                subTotal: "2100.00",
+                totalAmount: "2100.00",
+                shippingCost: "0.00",
+                currency: "USD",
+                exchangeRate: 1,
+                totalInUSD: "2100.00",
+                dateOfExchangeRate: "",
+                items: [
+                  {
+                    type: "product",
+                    partNumberTitle: "Part document",
+                    partNumberDocId: "PRT-00006 - 1",
+                    partNumber: createdPartDocument.id,
+                    order: 200,
+                    units: "each",
+                    unitPrice: 5,
+                    date: todaysDate,
+                    id: "l1or09um",
+                    received: 0,
+                    totalAmount: "1000.00",
+                    formattedDate: todaysDateFormated,
+                    index: 0,
+                  },
+                ],
+              },
+              "fb-po-approvals": [
+                adminEmployee.id,
+              ],
+              "po-status-built-in": "Closed",
+              "po-requestor-autocomplete": adminEmployee.id,
+              "po-order-date": todaysDate,
+              "po-supplier-built-in": createdSupplierDocument.id,
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => done());
+      });
+
+      it("[API]Create Pending PO", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>pending PO</p>",
+            document: {
+              docId: "POT-00003",
+              documentType: {
+                id: purchaseOrderDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            formDocument: {
+              id: createdPOFormDocument.id,
+            },
+            name: "",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formInput: {
+              "po-items-built-in": {
+                tax: "0.00",
+                taxRate: 9.25,
+                subTotal: "2100.00",
+                totalAmount: "2100.00",
+                shippingCost: "0.00",
+                currency: "USD",
+                exchangeRate: 1,
+                totalInUSD: "2100.00",
+                dateOfExchangeRate: "",
+                items: [
+                  {
+                    type: "product",
+                    partNumberTitle: "Part document",
+                    partNumberDocId: "PRT-00007 - 1",
+                    partNumber: createdPartDocument.id,
+                    order: 200,
+                    units: "each",
+                    unitPrice: 5,
+                    date: todaysDate,
+                    id: "l1or09um",
+                    received: 0,
+                    totalAmount: "1000.00",
+                    formattedDate: todaysDateFormated,
+                    index: 0,
+                  },
+                ],
+              },
+              "fb-po-approvals": [
+                adminEmployee.id,
+              ],
+              "po-status-built-in": "Closed",
+              "po-requestor-autocomplete": adminEmployee.id,
+              "po-order-date": todaysDate,
+              "po-supplier-built-in": createdSupplierDocument.id,
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdPODocument3 = response;
+          cy.approvals({
+            assignedEmployeeId: adminEmployee.id,
+            fieldId: "fb-po-approvals",
+            recordId: createdPODocument3.id,
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then((response) => {
+            approvalForVoidedSupplier = response;
+            cy.approvalSubmitForApproval({
+              docRevId: createdPODocument3.id,
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
             }).then(() => done());
+          });
+        });
+      });
+    });
+
+    context.skip("[API]Create Receiving documents", () => {
+      it("[API] Create draft receivable", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            name: "",
+            description: "",
+            document: {
+              docId: "RC-00001",
+              documentType: {
+                id: receivingDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formDocument: {
+              id: createdReceivingForm.id,
+            },
+            formInput: {
+              "receive-po-kzqkr5yl": { id: createdPODocument.id },
+              "fb-approvals-fb-approvals-kzqkpxqm": [],
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => done());
+      });
+
+      it("[API] Create released receivable", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            name: "",
+            description: "",
+            document: {
+              docId: "RC-00002",
+              documentType: {
+                id: receivingDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formDocument: {
+              id: createdReceivingForm.id,
+            },
+            formInput: {
+              "receive-po-kzqkr5yl": { id: createdPODocument3.id },
+              "fb-approvals-fb-approvals-kzqkpxqm": [],
+            },
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then((response) => {
+          createdRelesedReceivable = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdRelesedReceivable.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+    });
+
+    context.skip("[API]Create EB record", () => {
+      it("[API]Create EB record", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>EB document</p>",
+            document: {
+              docId: "EB-00001",
+              documentType: {
+                id: EBDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Engineering Build document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdPartDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdPartDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+    });
+
+    context.skip("[API]Create LHRt and GD in pending change", () => {
+      it("[API]Create LHRt document", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>LHRt created with API</p>",
+            document: {
+              docId: "LHRT-00001",
+              documentType: {
+                id: LHRtDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "API LHRt document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [
+                { id: LHRDocumentType[0].id },
+              ],
+              schema: [
+                {
+                  name: "lhr-selected-part",
+                  type: "partsselection",
+                  index: 0,
+                  label: "Part to be Manufactured",
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                  editorConfig: {
+                    id: createdPartDocument.documentId,
+                  },
+                },
+                {
+                  name: "lhr_initial_quantity",
+                  type: "quantity",
+                  index: 1,
+                  label: "Initial Quantity",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationAttribute: "Initial Quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "lhr-end-quantity",
+                  type: "quantity",
+                  index: 2,
+                  label: "End Quantity",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  outputDisabled: true,
+                  validationAttribute: "End Quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "lhr-build-type",
+                  type: "radiogroup",
+                  index: 3,
+                  label: "Build Type",
+                  options: [
+                    {
+                      text: "R&D",
+                      value: "R&D",
+                    },
+                    {
+                      text: "Production",
+                      value: "Production",
+                    },
+                  ],
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  validationAttribute: "Build Type",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "lhr-due-date",
+                  type: "datepicker",
+                  index: 4,
+                  label: "Due Date",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "default",
+                  validationAttribute: "Due Date",
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "lhrstep-built-in",
+                  type: "lhrstep",
+                  index: 5,
+                  label: "LHR Step",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "default",
+                  applicableValidationSchema: true,
+                  stepIndex: 1,
+                  editorConfig: {
+                    value: createdMPIDocument.id,
+                  },
+                },
+                {
+                  label: "form.builder.approvals",
+                  type: "approvals",
+                  deleteDisabled: true,
+                  name: "fb-approvals-kvateryo",
+                  uniqueSchemaItem: true,
+                  index: 6,
+                },
+              ],
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdLHRtDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdLHRtDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+
+      it("[API]Create General Document in Pending", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>GD document</p>",
+            document: {
+              docId: "GD-00002",
+              documentType: {
+                id: generalDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Pending GD document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdGeneralDocument = response;
+          cy.arCreateApprovalRequest({
+            payload: {
+              title: "Approval for part",
+              description: "Description for approval part",
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              formInput: {
+                documentRevisions: [{
+                  proposedDocumentRevision: { id: createdGeneralDocument.id },
+                  descriptionOfChange: "description of change",
+                  justificationOfChange: "justification of change",
+                  id: faker.random.uuid(),
+                }],
+              },
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+    });
+
+    context("[API]Create additional forms", () => {
+      it("[API]Create form for Legal Record 1", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Record form 1</p>",
+            document: {
+              docId: "FM-00013",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "API Legal Record form",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [{
+                id: legalRecordDocumentType[0].id,
+              }],
+              schema: [
+                {
+                  index: 0,
+                  type: "textfield",
+                  name: "textfield-l39qj0uv",
+                  hidden: false,
+                  outputDisabled: false,
+                  deleted: false,
+                  deleteInFormDisabled: false,
+                  validationMode: "default",
+                  validationAttribute: "Random textfield",
+                  rules: "",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  applicableValidationSchema: true,
+                  editorProperties: [],
+                  placeholder: "",
+                  rows: 1,
+                  label: "Textfield for inline",
+                },
+                {
+                  name: "fb-approvals",
+                  type: "approvals",
+                  index: 1,
+                  label: "Approvals",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  uniqueSchemaItem: true,
+                  validationAttribute: "Approvals",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+              ],
+            },
+
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          inlineRecordForm = response;
+          cy.drAPIApproveAndRelease({
+            documentId: inlineRecordForm.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => done());
+        });
+      });
+
+      it("[API]Create form for Legal Record 2", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Record form 2</p>",
+            document: {
+              docId: "FM-00014",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "API Legal Record form 2",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [{
+                id: legalRecordDocumentType[0].id,
+              }],
+              schema: [
+                {
+                  index: 0,
+                  type: "textfield",
+                  name: "textfield-l39qj0uv",
+                  hidden: false,
+                  outputDisabled: false,
+                  deleted: false,
+                  deleteInFormDisabled: false,
+                  validationMode: "default",
+                  validationAttribute: "Random textfield",
+                  rules: "",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  applicableValidationSchema: true,
+                  editorProperties: [],
+                  placeholder: "",
+                  rows: 1,
+                  label: "Textfield for inline",
+                },
+                {
+                  name: "fb-approvals",
+                  type: "approvals",
+                  index: 1,
+                  label: "Approvals",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  uniqueSchemaItem: true,
+                  validationAttribute: "Approvals",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+              ],
+            },
+
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          inlineRecordForm = response;
+          cy.drAPIApproveAndRelease({
+            documentId: inlineRecordForm.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => done());
+        });
+      });
+
+      it("[API]Create Training Curriculum form", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Training Curriculum form</p>",
+            document: {
+              docId: "FM-000015",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Training Curriculum form document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [{
+                id: trainingCurriculumDocumentType[0].id,
+              }],
+              schema: [
+                {
+                  name: "training-curriculum-details-section",
+                  type: "section",
+                  index: 0,
+                  label: "Periodic Training",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "default",
+                  validationAttribute: "Periodic Training",
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "training-document-to-be-trained-on",
+                  type: "autocomplete",
+                  index: 1,
+                  label: "Documents to Train on",
+                  rules: "|required",
+                  multiple: true,
+                  optionId: "36",
+                  validators: {
+                    required: true,
+                  },
+                  placeholder: "Select documents for training",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "visibility",
+                  editorProperties: [
+                    "multiple",
+                  ],
+                  validationAttribute: "Documents to Train on",
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "training-refresh-training-periodically",
+                  type: "radiogroup",
+                  index: 2,
+                  label: "Refresh/repeat training periodically?",
+                  rules: "required||",
+                  options: [
+                    {
+                      text: "Yes",
+                      value: "Yes",
+                    },
+                  ],
+                  validators: {
+                    required: true,
+                  },
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "default",
+                  validationAttribute: "Refresh/repeat training periodically?",
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "training-validity",
+                  type: "quantity",
+                  index: 3,
+                  label: "Training Frequency (in days)",
+                  rules: "required_if:training-refresh-training-periodically,Yes",
+                  validators: {
+                    required_if: {
+                      name: "training-refresh-training-periodically",
+                      value: [
+                        "Yes",
+                      ],
+                    },
+                  },
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "visibility",
+                  validationAttribute: "Training Frequency (in days)",
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "training-details-section",
+                  type: "section",
+                  index: 4,
+                  label: "Trainees Details",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "default",
+                  validationAttribute: "Trainees Details",
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "training-select-groups-to-train",
+                  type: "autocomplete",
+                  index: 5,
+                  label: "Groups to Train",
+                  multiple: true,
+                  optionId: "10",
+                  placeholder: "Select groups",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "default",
+                  editorProperties: [
+                    "multiple",
+                  ],
+                  validationAttribute: "Groups to Train",
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "training-select-users-to-train",
+                  type: "autocomplete",
+                  index: 6,
+                  label: "Users to Train (if applicable)",
+                  multiple: true,
+                  optionId: "13",
+                  placeholder: "Select users",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  validationMode: "default",
+                  editorProperties: [
+                    "multiple",
+                  ],
+                  validationAttribute: "Users to Train (if applicable)",
+                  applicableValidationSchema: true,
+                },
+                {
+                  label: "form.builder.approvals",
+                  type: "approvals",
+                  deleteDisabled: true,
+                  name: "fb-approvals-l0wcpa0v",
+                  uniqueSchemaItem: true,
+                  index: 7,
+                },
+              ],
+            },
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdTrainingCurriculumFormDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdTrainingCurriculumFormDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => done());
+        });
+      });
+
+      it("[API]Create General Document in Approved", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>GD document3 </p>",
+            document: {
+              docId: "GD-00003",
+              documentType: {
+                id: generalDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Pending GD document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdGeneralDocument = response;
+          cy.arCreateApprovalRequest({
+            payload: {
+              title: "Approval for part",
+              description: "Description for approval part",
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              formInput: {
+                documentRevisions: [{
+                  proposedDocumentRevision: { id: createdGeneralDocument.id },
+                  descriptionOfChange: "description of change",
+                  justificationOfChange: "justification of change",
+                  id: faker.random.uuid(),
+                }],
+              },
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdARForGD = response;
+            cy.arPatchAR({
+              payload: {
+                formInput: {
+                  documentRevisions: [{
+                    proposedDocumentRevision: { id: createdGeneralDocument.id },
+                    descriptionOfChange: "description of change",
+                    justificationOfChange: "justification of change",
+                    id: faker.random.uuid(),
+                  }],
+                  approvers: [
+                    {
+                      approver: {
+                        id: adminEmployee.id,
+                      },
+                      signatureGroupId: {
+                        id: null,
+                      },
+                    },
+                  ],
+                },
+              },
+              arID: createdARForGD.id,
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => {
+              cy.arInReview({
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+                arID: createdARForGD.id,
+              }).then(() => {
+                cy.arApprove({
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                  arID: createdARForGD.id,
+                }).then(() => done());
+              });
+            });
+          });
+        });
+      });
+
+      it("[API]Create General Obsoleted Document", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Obsoleted General document</p>",
+            document: {
+              docId: "GD-00004",
+              documentType: {
+                id: generalDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "API General Document",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdGeneralDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdGeneralDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            cy.drCreateDocumentRevision({
+              payload: {
+                description: "<p>General document</p>",
+                name: "API General Document",
+                attachments: [],
+                referenceTo: [],
+                revisionStage: 1,
+                revisionChangeType: RevisionChangeType.Obsolete,
+                retrain: false,
+                document: {
+                  id: createdGeneralDocument.documentId,
+                },
+              },
+              employeeId: adminEmployee.id as unknown as string,
+              sessionId: loginResponse.sessionId as unknown as string,
+            }).then((response) => {
+              createdGeneralDocument = response;
+              cy.drAPIApproveAndRelease({
+                documentId: createdGeneralDocument.id,
+                payload: {
+                  effectiveDate: (new Date()).toISOString(),
+                  documentType: { id: approvalRequestDocumentType[0].id },
+                  formDocument: { id: initialArDocument[0].id },
+                  approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                },
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then(() => done());
+            });
           });
         });
       });
@@ -1831,6 +3645,7 @@ context("Test usage_report is correctly counting documents", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.wait(10000);
     });
 
     it("Select task USAGE_REPORT", () => {
@@ -1907,8 +3722,8 @@ context("Test usage_report is correctly counting documents", () => {
 
     it("Verify data from usage report", () => {
       console.log(numberOfDocsFromUsageReport);
-      console.log(numberOfDocsThatWereCreated);
-      assert.deepEqual(numberOfDocsFromUsageReport, numberOfDocsThatWereCreated);
+      console.log(numberOfCreatedDocs);
+      assert.deepEqual(numberOfDocsFromUsageReport, numberOfCreatedDocs);
     });
   });
 });
