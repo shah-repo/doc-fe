@@ -1,11 +1,11 @@
 import { Box, Grid, LinearProgress } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
+import { AsyncStatus } from "../../../state/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../components/common/header/subtitles";
 import FormMessage from "../../components/forms/FormMessage";
-import FormProgress from "../../components/forms/FormProgress";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.presenter";
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
@@ -50,11 +50,10 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
         </Grid>
       </Grid>
       <FormMessage asyncState={asyncState} />
-      <FormProgress asyncState={asyncState} fullWidth />
       <Observer>
         {() => (
           <>
-            {workspaceState?.documentRevApi.loading && (
+            { (asyncState.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading) && (
               <Box width="100%" pt={1}>
                 <LinearProgress style={{ width: "100%" }} />
               </Box>
