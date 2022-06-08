@@ -14,9 +14,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
     <FBWorkspaceSocket />
     {isStarter && <FBStarter />}
     {!isStarter && size(schema) > 0 && <FBSchema {...{ schema }} schemaState={workspaceState} workspaceMode={mode} />}
-    <Box position="absolute" left={0} right={0} alignItems="center" style={{ bottom: -60 }}>
-      <FBWorkspaceBottomBar {...{ includeTransport }} />
-    </Box>
+    <FBWorkspaceBottomBar {...{ includeTransport }} />
   </Box>
 );
 

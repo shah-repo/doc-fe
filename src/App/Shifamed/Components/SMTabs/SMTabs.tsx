@@ -37,17 +37,13 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}
         >
           {tabs?.map((tab, index) => (
-
             <Tab
               style={{ width: "auto", minWidth: 40, padding: 0, marginRight: 30 }}
               key={`sm-tabpanel-${tab}-${index}`}
               label={<SMText label={tab} />}
             />
-
-
           ))}
         </Tabs>
-
         <SMMap<ReactNode> collection={children}>
           {(child: ReactNode, index) => (
             <SMTabPanel {...{ index }} key={`sm-tabpanel-${index}`}>
