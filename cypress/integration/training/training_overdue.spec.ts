@@ -38,11 +38,6 @@ context("Test for Training Overdue", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorage();
-    cy.intercept({ url: "/api/v1/*/search", middleware: true }, (req) => {
-      req.continue((res) => {
-        res.setDelay(100);
-      });
-    }).as("Search");
   });
 
   afterEach(() => {
