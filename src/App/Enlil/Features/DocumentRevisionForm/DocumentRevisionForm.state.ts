@@ -162,11 +162,11 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // *TODO
   // Extend this to have one saving point for doc rev (static and fb)
   public save = (name: string, value: any) => {
+    this.setDirty(true);
     if (!this.formAutosave) { return; }
     const { id } = this.documentRevision || {};
     if (!id) { return; }
     this.loading = true;
-    this.setDirty(true);
     SMStore.patch<{}, Partial<DocumentRevision>>({
       url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
