@@ -34,7 +34,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### Requirements
 
 - **Node.js**. Check actual version in `package.json engines.node`
-- **Yarn**. Last version
+- **Yarn** v1
 
 ### First time config
 
@@ -48,7 +48,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     ```
 3. Install dependencies
     ```
-    yarn install
+    yarn install --frozen-lockfile
     ```
 4. That's it! You are ready to start the app
     ```
