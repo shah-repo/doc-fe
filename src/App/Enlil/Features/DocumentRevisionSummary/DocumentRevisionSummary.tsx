@@ -45,7 +45,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
-  const changeLayoutHeight = () => {
+  const updateLayoutHeight = () => {
     setTimeout(() => {
       const bodyTmpl = document.getElementById("SMBodyTmpl");
       setTabWidth(bodyTmpl?.clientWidth || 0);
@@ -61,7 +61,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   }, [tabConfig]);
 
   useEffect(() => {
-    changeLayoutHeight();
+    updateLayoutHeight();
   }, []);
 
   useEffect(() => reaction(

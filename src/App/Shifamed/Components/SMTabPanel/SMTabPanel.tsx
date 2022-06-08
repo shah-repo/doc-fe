@@ -14,7 +14,6 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
         hidden={_tabsState?.value !== index}
         id={`sm-tabpanel-${index}`}
         stretchY="100%"
-        position="relative"
       >
         {children}
       </SMBox>
