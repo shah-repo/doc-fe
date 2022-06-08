@@ -42,7 +42,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const formik = useFormikContext();
-  const { _documentRevisionFormState } = SM.useStores();
+  const { _documentRevisionFormState, _tabsState } = SM.useStores();
   const [selectedValues, setSelectedValues] = React.useState<any>([]);
 
   const disabled: boolean = (docRevId !== undefined) || isDisabled;
@@ -82,6 +82,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       formValue,
       documentTypesById,
       _documentRevisionFormState?.schema,
+      _tabsState?.tabID,
     );
 
     _documentRevisionFormState?.setFBSchema(scheme);
