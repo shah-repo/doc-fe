@@ -62,7 +62,6 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     SM.reaction(
       () => _documentRevisionFormState?.isDirty,
       (isDirty: boolean | undefined) => {
-        console.log("DESC DIRTY changes Inside prompt component dirty::", isDirty );
         workspaceState?.setDirty(isDirty || false);
       }
     );
