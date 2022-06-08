@@ -20,7 +20,6 @@ export const withFBForm = <T extends FBFormProps>(
     const { workspaceState } = FB.useStores();
     !formState && (formState = FB.useRef<FBFormState>(FBFormState, {
       schema,
-      // initialValues,
       initialValues: initialValues?.formInput || initialValues,
       workspaceMode: workspaceMode || workspaceState?.mode || "form",
       workspaceState,

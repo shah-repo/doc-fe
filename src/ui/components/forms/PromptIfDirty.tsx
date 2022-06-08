@@ -34,8 +34,6 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
       cancelBeforeUnload();
     };
   }, [dirty, doNotPrompt, onDirtyFlagChange]);
-  console.log("Inside prompt component dirty", dirty);
-  console.log("Inside prompt component doNotPrompt", doNotPrompt);
 
   return (
     <Prompt
