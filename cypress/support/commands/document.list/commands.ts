@@ -192,7 +192,7 @@ Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string
 });
 
 Cypress.Commands.add("dlSelectFirstDocument", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
     cy.get("tr.k-master-row").first().arrowClick();
   });
   cy.progressBarShouldNotExist();

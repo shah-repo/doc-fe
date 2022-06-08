@@ -148,8 +148,7 @@ context("Document force required fields", () => {
     });
 
     it("description should be blank", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
-        .should("have.value", "");
+      cy.get("[data-cy=\"description\"]").should("have.value", "");
     });
   });
 
@@ -220,7 +219,9 @@ context("Document force required fields", () => {
     });
 
     it("remove description", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear();
+      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+      cy.get("[data-cy=\"description\"]").first().clear();
+      cy.unClick();
     });
 
     it("remove title", () => {

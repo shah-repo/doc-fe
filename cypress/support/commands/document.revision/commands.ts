@@ -250,7 +250,7 @@ Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) 
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"description\"]").first().arrowClick();
+  cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
   cy.get("[data-cy=\"description\"]").first().arrowType(params.description);
   cy.unClick();
 });
