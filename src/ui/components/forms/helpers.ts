@@ -1,4 +1,4 @@
-import { every, get, includes, isArray, isEmpty, isEqual, omit } from "lodash";
+import { every, get, has, includes, isArray, isEmpty, isEqual, omit } from "lodash";
 import { toJS } from "mobx";
 
 const clearMobxObject = (value) => typeof value === "object" ?
@@ -78,12 +78,15 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     return diff;
   }
 
+  const updatedFormInput = has(transformedValues.formInput, "formInput") ?
+    transformedValues.formInput.formInput : transformedValues.formInput;
+
   return {
     ...diff,
     // TEMPORARY FIX FOR BE VALIDATION
     // formInput: transformedValues.formInput,
     formInput: omit(
-      transformedValues.formInput.formInput || transformedValues.formInput,
+      updatedFormInput,
       ["partType", "childForRevise"]
     ),
   };
