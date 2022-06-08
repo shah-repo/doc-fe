@@ -1079,7 +1079,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Verify Training Records with 'Completed On' column should be Pending", () => {
+  context("Verify Training Records with 'Completed On' column should be Pending for all users", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
     });
@@ -1112,7 +1112,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check training notifications", () => {
+  context("Check training notifications exists for first user in dashboard", () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
     });
@@ -1162,7 +1162,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check training notifications for first user as 'assigned to you'", () => {
+  context("Check training notifications for first user shown as 'COMPLETED'", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1183,7 +1183,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with no pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[1].name} with 'Completed on' column should show no Pending item`, () => {
       cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Last 30 days" });
@@ -1191,7 +1191,7 @@ context("Repeat Training with Training Curriculum", () => {
         .and("contain", USERS[1].name).and("contain", trCompleteDate);
     });
 
-    it(`${USERS[2].name} with pending on 'Completed on' column should be present`, () => {
+    it(` Verify ${USERS[2].name} with'Completed on' column should show Pending item`, () => {
       cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
@@ -1199,7 +1199,7 @@ context("Repeat Training with Training Curriculum", () => {
         .and("contain", USERS[2].name).and("contain", "Pending");
     });
 
-    it(`${USERS[3].name} with pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[3].name} with 'Completed on' column should show Pending item`, () => {
       cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[3].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
@@ -1208,7 +1208,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as second user and check for training is pending and 'assigned to you'", () => {
+  context("Log in as second user and check for Pending training and nortification as 'assigned to you'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1224,7 +1224,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification", () => {
+    it("Verify training notification as 'assigned to you'", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
@@ -1234,14 +1234,14 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[2].name} with 'Completed on' column should have Pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
     });
   });
 
-  context("Log in as third user and check for training is pending and 'assigned to you'", () => {
+  context("Log in as third user and check for Pending training and notification as 'assigned to you'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1257,7 +1257,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification", () => {
+    it("Verify training notification as 'assigned to you'", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: trAssignedDate });
@@ -1267,14 +1267,14 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[3].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[3].name} with 'Completed on' column should have Pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[3].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
     });
   });
 
-  context("Log in as first user and set time travel tool to 20 days", () => {
+  context("Log in as first user and set time travel tool to 30 days", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1295,7 +1295,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as second user and check training is still pending and 'DUE IN 7 DAYS'", () => {
+  context("Log in as second user and check for Pending training and notification as 'DUE IN 7 DAYS'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1311,7 +1311,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification", () => {
+    it("Verify training notification as 'DUE IN 7 DAYS'", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
     });
@@ -1320,14 +1320,14 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[2].name} with 'Completed on' column should show Pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
     });
   });
 
-  context("Log in as third user and check training is still pending and 'DUE IN 7 DAYS'", () => {
+  context("Log in as third user and check for Pending training and notification as 'DUE IN 7 DAYS'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1343,7 +1343,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification", () => {
+    it("Verify training notification as 'DUE IN 7 DAYS'", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
     });
@@ -1352,14 +1352,14 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[3].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[3].name} with 'Completed on' column should show Pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[3].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
     });
   });
 
-  context("Log in as first user and set time travel tool to 1 days", () => {
+  context("Log in as first user and set time travel tool to 31 days", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1380,7 +1380,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as second user and check training is OVERDUE", () => {
+  context("Log in as second user and check training notification is OVERDUE", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1402,7 +1402,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as third user and check training is OVERDUE", () => {
+  context("Log in as third user and check training notification is OVERDUE", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1424,7 +1424,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 9 days", () => {
+  context("Log in as first user and set time travel tool to 40 days", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1445,7 +1445,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Complete Training for second user and verify the training notification OVERDUE disappeared and changed to COMPLETED", () => {
+  context("Complete Training for second user and verify old notification OVERDUE changed to COMPLETED", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1482,14 +1482,14 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[2].name} with no Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[2].name} with 'Completed on' column should have no Pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("not.contain", "Pending");
     });
   });
 
-  context("Log in as first user and set time travel tool to 9 days again", () => {
+  context("Log in as first user and set time travel tool to 49 days again", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1510,7 +1510,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check training notifications for first user as 'COMPLETED'", () => {
+  context("Check for first user the training notifications as 'COMPLETED'", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1520,7 +1520,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify training notification as COMPLETED", () => {
+    it("Verify the training notification as COMPLETED", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
     });
@@ -1529,14 +1529,14 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with 'Completed on' column should have no Pending item`, () => {
+    it(`Verify ${USERS[1].name} with 'Completed on' column should have no Pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("not.contain", "Pending");
     });
   });
 
-  context("Log in as first user and set time travel tool to 1 day again", () => {
+  context("Log in as first user and set time travel tool to 50 day again", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1567,7 +1567,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify that the notification shows one as COMPLETED and another as training assigned", () => {
+    it("Verify that the notification as 'COMPLETED' and another notification 'assigned to you'", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
@@ -1578,17 +1578,19 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} 'Completed on' column should have two records - pending and not pending`, () => {
+    it(`Verify ${USERS[1].name} with 'Completed on' column should have one pending item and another valid item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
-      cy.get(`[data-grid-row-index="1"]`).should("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.get("[data-grid-row-index]").should("have.length", 2);
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.get(`[data-grid-row-index]`).should("contain", USERS[1].name).and("contain", "Pending");
+      cy.get("[data-grid-row-index]").should("have.length", 1);
     });
   });
 
-  context("Log in as third user and check training is OVERDUE", () => {
+  context("Log in as third user and check notification as OVERDUE", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1604,13 +1606,13 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification is OVERDUE", () => {
+    it("Verify training notification as OVERDUE", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
     });
   });
 
-  context("Log in as first user and set time travel tool to 19 days", () => {
+  context("Log in as first user and set time travel tool to 79 days", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1631,7 +1633,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check training notifications for second user as 'COMPLETED'", () => {
+  context("Check training for second user notifications as 'COMPLETED'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1656,7 +1658,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify training notification", () => {
+    it("Verify training notification as 'COMPLETED'", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
     });
@@ -1665,14 +1667,14 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[2].name} 'Completed on' column should show no pending item`, () => {
+    it(`${USERS[2].name} 'Completed on' column should have no pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("not.contain", "Pending");
     });
   });
 
-  context("Log in as first user and set time travel tool to 1 day again", () => {
+  context("Log in as first user and set time travel tool to 80 days again", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1693,7 +1695,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check training notifications for first user is not valid anymore", () => {
+  context("Check training notifications for first user as is", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1701,27 +1703,32 @@ context("Repeat Training with Training Curriculum", () => {
       cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
     });
 
-    it("Verify that the notification disappeared from dashboard", () => {
-      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    it("Verify that the notification as 'COMPLETED' and another notification 'assigned to you'", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
     });
 
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with no Pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[1].name} with 'Completed on' column should have one pending item and another valid item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
-      cy.pause();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-grid-row-index]").should("have.length", 2);
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.get(`[data-grid-row-index]`).should("contain", USERS[1].name).and("contain", "Pending");
+      cy.get("[data-grid-row-index]").should("have.length", 1);
     });
   });
 
-  context("Check training notifications for second user is not valid anymore", () => {
+  context("Check for second user training notification as 'COMPLETED' and has no Pending training", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1744,25 +1751,25 @@ context("Repeat Training with Training Curriculum", () => {
       cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
     });
 
-    it("Verify that the notification disappeared from dashboard", () => {
-      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    it("Verify that the notification as 'COMPLETED'", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
     });
 
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with no Pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[2].name} with 'Completed on' column should have no Pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("not.contain", "Pending");
     });
   });
 
-  context("Log in as third user and check training is OVERDUE", () => {
+  context("Log in as third user and check training notification as 'OVERDUE'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1778,13 +1785,13 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification is OVERDUE", () => {
+    it("Verify training notification as 'OVERDUE'", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
     });
   });
 
-  context("Log in as first user and set time travel tool to 1 day finally", () => {
+  context("Log in as first user and set time travel tool to 81 days finally", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1805,7 +1812,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and check training is OVERDUE", () => {
+  context("Log in as first user and check training notification as 'OVERDUE'", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1815,13 +1822,13 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify training notification is OVERDUE", () => {
+    it("Verify training notification as 'OVERDUE'", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
     });
   });
 
-  context("Complete Training for third user and verify the training notification disappeared", () => {
+  context("Log in as third user and verify notification as 'OVERDUE'", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1837,18 +1844,19 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify that the notification disappeared from dashboard", () => {
-      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+    it("Verify that OVERDUE notification appeared in dashboard", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
     });
 
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[3].name} with no Pending on 'Completed on' column should be present`, () => {
+    it(`Verify ${USERS[3].name} with 'Completed on' column should have Pending item`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[3].name });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("not.contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
     });
   });
 });
