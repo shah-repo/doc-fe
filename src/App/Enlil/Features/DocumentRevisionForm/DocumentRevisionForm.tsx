@@ -179,7 +179,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             mode,
                           }}
                         />
-                        {<FBWorkspace
+                        {documentRevision && <FBWorkspace
                           isPortal={false}
                           document={{
                             ...formValues.values as unknown as DocumentRevision,

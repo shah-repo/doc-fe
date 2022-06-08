@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, isEmpty } from "lodash";
-import { Observer, observer } from "mobx-react";
+import { Observer, observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -185,12 +185,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revisionChangeType]);
 
-  SM.reaction(
-    () => _formState?.isDirty,
-    (isDirty: boolean | undefined) => {
-      dirty = isDirty || false;
-    }
-  );
+  useObserver(() => {
+    dirty = _formState?.isDirty || false;
+  });
 
   useEffect(() => {
     workspaceState?.setMode(mode);
@@ -323,7 +320,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
         }
         {
-          _formState?.active &&
+          _formState?.active && documentRevision &&
           <Box>
             {
               values.id &&

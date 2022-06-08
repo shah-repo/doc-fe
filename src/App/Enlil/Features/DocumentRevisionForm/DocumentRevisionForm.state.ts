@@ -47,6 +47,8 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
    */
   @observable public rightPanelOpen = true;
 
+  @observable public isDirty = false;
+
   @observable public viewMore = false;
 
   // MARK: @api
@@ -119,6 +121,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, "disabledAction", disabledAction);
   };
 
+  @action public setDirty = (isDirty: boolean) => {
+    set(this, "isDirty", isDirty);
+  };
+
   @action setLeftPanelOpen = () => set(this, "leftPanelOpen", !this.leftPanelOpen);
   @action setRightPanelOpen = () => set(this, "rightPanelOpen", !this.rightPanelOpen);
 
@@ -162,6 +168,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // *TODO
   // Extend this to have one saving point for doc rev (static and fb)
   public save = (name: string, value: any) => {
+    this.setDirty(true);
     if (!this.formAutosave) { return; }
     const { id } = this.documentRevision || {};
     if (!id) { return; }
@@ -177,6 +184,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
         toastError(error.message);
         return;
       }
+      this.setDirty(false);
       const url = SMStore.templateUrl(FBEndpoint.DocumentRevisionPatch, { id });
       SMStore.setData<DocumentRevision>(url, data as DocumentRevision);
       this.loading = false;
