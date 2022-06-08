@@ -59,6 +59,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     }
     setFieldValue(name, (value as any)?.value);
     setShowOnlyText(true);
+    setBoxClicked(false);
     // submitForm();
   };
   const onInputChange = (value) => {
@@ -89,7 +90,17 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const onAway = () => {
     setHover(false);
     setShowOnlyText(true);
+    setBoxClicked(false);
   };
+
+  const [boxClicked, setBoxClicked] = React.useState(false);
+  const handleBoxClick = React.useCallback(
+    () => {
+      setShowOnlyText(false);
+      setBoxClicked(true);
+    },
+    []
+  );
 
   const intl = useIntl();
   const titlePlaceholder = intl.formatMessage({ id: "form.builder.enter.title" });
@@ -109,7 +120,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
         justifyContent="center"
         onMouseEnter={() => { setHover(true); }}
         onMouseLeave={() => { setHover(false); }}
-        onClick={() => { setShowOnlyText(false); }}
+        onClick={handleBoxClick}
         >{inputValue || titlePlaceholder}
         </Box>}
           {!showOnlyText && <CreatableSelect
@@ -131,7 +142,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                 minHeight: "32px",
               }),
             }}
-            autoFocus={true}
+            autoFocus={boxClicked}
             isClearable={Boolean(formikValue)}
             components={{ DropdownIndicator: null }}
             placeholder={!inputValue ?
