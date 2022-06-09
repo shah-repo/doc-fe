@@ -48,10 +48,6 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public rightPanelOpen = true;
 
   @observable public isDirty = false;
-  /**
-   * @cfg {boolean} Right Panel open/close.
-   */
-  @observable public rightPanelOpen = true;
 
   @observable public viewMore = false;
 
