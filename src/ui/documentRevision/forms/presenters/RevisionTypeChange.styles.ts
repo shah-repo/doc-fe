@@ -5,6 +5,7 @@ export const styles = makeStyles((theme: Theme) =>
   createStyles({
     label: {
       width: "fit-content",
+      marginLeft: 0,
     },
     labelTitle: {
       fontWeight: 600,
