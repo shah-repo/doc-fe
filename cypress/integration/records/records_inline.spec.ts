@@ -27,6 +27,7 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 let arId;
+let asyncTasksGroup;
 
 context("Record inline Flow", () => {
   before(() => {
@@ -66,6 +67,28 @@ context("Record inline Flow", () => {
           RDdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record one");
           done();
         });
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
+        },
       });
     });
 
@@ -1276,6 +1299,24 @@ context("Record inline Flow", () => {
           }
         });
       });
+    });
+  });
+
+  context("Navigate to dashboard for first user and check notification for inline approval", () => {
+    it("Navigate to dashboard", () => {
+      SystemRequirement("REQ-2200");
+      cy.navigToDashboard();
+    });
+
+    it("Verify inline approval notification for first user", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${recDocId}Rev A Record Document Revision` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `RELEASED` });
+    });
+  });
+
+  context("Set time travel tool to 10 days", () => {
+    it("Set Time Travel tool for 10 days and submit", () => {
+      cy.recSetTimeTravelInDays({ days: 10 });
     });
   });
 });
