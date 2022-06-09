@@ -12,6 +12,7 @@ import { ChangeRequestFormValues } from "../change.request/form/types";
 import { changeRequestPreviewPath } from "../change.request/utils/paths";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
+import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
 import useAsync from "../hooks/useAsync";
 import { canEditChangeRequest } from "./helpers";
 
@@ -54,7 +55,13 @@ ChangeRequestUpdateContainerProps
   }
 
   const onSubmit = (values: ChangeRequestFormValues) => {
-    const dataToSubmit = compareValuesToSubmit(initialValues, values, toChangeRequestEditRequestBody);
+    // Hack to take updated formInput
+    const formStateContext = FBFormStateContext as any;
+    const dataToSubmit = compareValuesToSubmit(
+      initialValues,
+      { ...values, formInput: formStateContext?._currentValue },
+      toChangeRequestEditRequestBody
+    );
 
     if (isEmpty(dataToSubmit)) {
       return;
