@@ -89,7 +89,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           ...selectStyles,
           input: (base) => ({
             ...base,
-            input: { opacity: inputValue ? "1 !important" : 0, backgroundColor: "red" },
+            input: { opacity: inputValue ? "1 !important" : 0, backgroundColor: "red", fontFamily: "Sora" },
           }),
           control: (base) => ({
             ...base,
