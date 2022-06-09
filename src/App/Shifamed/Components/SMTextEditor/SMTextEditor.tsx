@@ -160,14 +160,14 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         }
                         return (
                           <Box
-                            style={{
-                              backgroundColor: hover
-                                ? Colors.platinum
-                                : Colors.alabaster,
-                              width: "100%",
-                              minHeight: "32px",
-                            }}
-                            justifyContent="center"
+                            bgcolor={hover ? Colors.platinum : Colors.alabaster}
+                            width="100%"
+                            minHeight="32px"
+                            alignItems="center"
+                            display="flex"
+                            justifyContent="flex-start"
+                            borderRadius={4}
+                            paddingLeft={1.375}
                           >
                             <>
                               <span

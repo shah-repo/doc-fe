@@ -18,7 +18,8 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
         id="SMHeaderTmpl"
         paddingTop={_documentRevisionFormState?.documentRevision?.id ? 0.75 : 9.125}
         paddingBottom={2.5}
-        px={4.25}
+        pl={2.75}
+        pr={4.25}
       >
         {
           type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
