@@ -22,7 +22,6 @@ import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
@@ -125,7 +124,6 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
   const handleCreateDocument = useHandleCreateDoc();
   const classes = styles();
-  const gridClasses = KendoGridStyles();
 
   const formDialog = useDialog();
   const multipleFormDialog = useDialog();
@@ -298,57 +296,55 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   }
   return (
     <>
-      <Grid item xs={12} className={gridClasses.headerGridItem}>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <GridTitle title={title} />
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              className={classes.exportListbutton}
-              id="ListPresenter-export-list"
-              data-cy="document.revision.export.list"
-              onClick={exportDialog.open}
-            >
-              <Box display="flex">
-                <ExportIcon className={classes.iconSvg} height={14} width={14}/>
-              </Box>
-              <Text translation="document.revision.export.list" />
-            </Button>
-            <ExportListDialog
-              {...{ headers, data  }}
-              dialog={exportDialog}
-              customFileName="DocumentList"
-            />
-            <CustomLabelTooltip {...{ tooltipConfig }}>
-              <Button
-                // variant="contained"
-                // color="primary"
-                className={classes.createButton}
-                onClick={handleAddButtonClick}
-                id="DocumentByTypeListPresenter-openDocRev"
-              >
-                <Text
-                  message={buttonLabel}
-                  values={{ name: labelName }}
-                />
-              </Button>
-            </CustomLabelTooltip>
-          </Grid>
+      <Grid container alignItems="center" justify="space-between">
+        <Grid item>
+          <GridTitle title={title} />
         </Grid>
-        {
-          errorMessage && (
-            <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.exportListbutton}
+            id="ListPresenter-export-list"
+            data-cy="document.revision.export.list"
+            onClick={exportDialog.open}
+          >
+            <Box display="flex">
+              <ExportIcon className={classes.iconSvg} height={14} width={14}/>
+            </Box>
+            <Text translation="document.revision.export.list" />
+          </Button>
+          <ExportListDialog
+            {...{ headers, data  }}
+            dialog={exportDialog}
+            customFileName="DocumentList"
+          />
+          <CustomLabelTooltip {...{ tooltipConfig }}>
+            <Button
+              // variant="contained"
+              // color="primary"
+              className={classes.createButton}
+              onClick={handleAddButtonClick}
+              id="DocumentByTypeListPresenter-openDocRev"
+            >
               <Text
-                message={errorMessage}
-                values={{ name: isByCategory ? selectedTypeLabel : labelName }}
+                message={buttonLabel}
+                values={{ name: labelName }}
               />
-            </div>
-          )
-        }
+            </Button>
+          </CustomLabelTooltip>
+        </Grid>
       </Grid>
+      {
+        errorMessage && (
+          <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
+            <Text
+              message={errorMessage}
+              values={{ name: isByCategory ? selectedTypeLabel : labelName }}
+            />
+          </div>
+        )
+      }
       {
         <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>

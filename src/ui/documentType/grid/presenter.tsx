@@ -81,15 +81,17 @@ export function DocumentTypePresenter({
   };
   return (
     <Grid container>
-      <CreateDocumentByType
-        {...createDocumentProps}
-        {...{ isByCategory, headers, tableData: dataToBeExported }}
-        labelName={
-          isByCategory
-            ? documentCategory.addNewBtnLabel
-            : documentType.documentTypeName
-        }
-      />
+      <Grid item xs={12} className={classes.headerGridItem}>
+        <CreateDocumentByType
+          {...createDocumentProps}
+          {...{ isByCategory, headers, tableData: dataToBeExported }}
+          labelName={
+            isByCategory
+              ? documentCategory.addNewBtnLabel
+              : documentType.documentTypeName
+          }
+        />
+      </Grid>
       <Grid item xs={12} className={classes.kendoGridItem}>
         {ref.current === tableName && <KendoGrid
           tableName={tableName}

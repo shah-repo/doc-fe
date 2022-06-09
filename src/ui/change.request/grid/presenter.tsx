@@ -31,7 +31,9 @@ export function DocumentListPresenter({
   }));
   return (
     <Grid container>
-      <FromListContainer {...{ headers, tableData: dataToBeExported }} />
+      <Grid item xs={12} className={classes.headerGridItem}>
+        <FromListContainer {...{ headers, tableData: dataToBeExported }} />
+      </Grid>
       <Grid item xs={12} className={classes.kendoGridItem}>
         <KendoGrid
           tableName={tableName}
