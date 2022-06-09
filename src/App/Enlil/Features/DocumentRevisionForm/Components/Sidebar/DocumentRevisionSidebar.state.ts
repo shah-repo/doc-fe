@@ -1,4 +1,4 @@
-import { action, observable, set } from "mobx";
+import { action, computed, observable, set } from "mobx";
 import { DocumentRevisionSidebarStateProps } from "../../../../..";
 
 export default class DocumentRevisionSidebarState implements DocumentRevisionSidebarStateProps {
@@ -14,6 +14,9 @@ export default class DocumentRevisionSidebarState implements DocumentRevisionSid
   // MARK: @constructor
 
   // MARK: @computed
+  @computed public get leftPanelState(): boolean {
+    return this.open;
+  }
 
   // MARK: @actions
   @action setOpen = () => set(this, "open", !this.open);

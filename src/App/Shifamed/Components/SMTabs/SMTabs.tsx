@@ -11,25 +11,34 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   tabs,
   children,
   boxProps,
-}) =>  (
+  tabProps,
+}) => (
   <Observer>
     {() => (
       <SMBox {...boxProps} id="SMBodyTmpl">
+
         <Tabs
           {...{ onChange }}
           value={_tabsState?.value}
           style={{
-            position: "fixed",
-            zIndex: 1,
-            backgroundColor: Colors.alabaster,
-            height: "48px",
-            width: "100%",
-            fontSize: "12px",
+            ...{
+              position: "fixed",
+              zIndex: 1,
+              backgroundColor: Colors.alabaster,
+              height: "auto",
+              width: "100%",
+              fontSize: "12px",
+              padding: 0,
+              borderBottom: `1px solid ${Colors.chinese_silver}`,
+              minHeight: 44,
+              maxHeight: 44,
+            }, ...tabProps,
           }}
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}
         >
           {tabs?.map((tab, index) => (
             <Tab
+              style={{ width: "auto", minWidth: 40, padding: 0, marginRight: 30 }}
               key={`sm-tabpanel-${tab}-${index}`}
               label={<SMText label={tab} />}
             />
