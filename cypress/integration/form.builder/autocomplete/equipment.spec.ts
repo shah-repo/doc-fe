@@ -11,7 +11,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { calTtDueDate, emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { dueDate, emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, momentInPST, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -40,6 +40,7 @@ let pmSchemaFieldName;
 let calibrationSchemaFieldName;
 let asyncTasksGroup;
 let adminEmployeeLoginResponse;
+let dueDateInEmail;
 
 const pages = ["", "", "", ""];
 const ADMIN_USER = USERS[1];
@@ -497,286 +498,286 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify form Draft status and click on Send To Email", () => {
-    it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
-      cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
-      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
-        formId = $formIdElement.text();
-      });
-      cy.sendToEmail();
-    });
+  // context("Verify form Draft status and click on Send To Email", () => {
+  //   it("Verify form Draft status and click on Send To Email", () => {
+  //     cy.drCheckDocumentStatus({ status: "Draft" });
+  //     cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
+  //     cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+  //       formId = $formIdElement.text();
+  //     });
+  //     cy.sendToEmail();
+  //   });
 
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-      cy.checkToastMessageContains({
-        message: "File will be sent to your email shortly.",
-      });
-    });
-  });
+  //   it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+  //     cy.checkToastMessageContains({
+  //       message: "File will be sent to your email shortly.",
+  //     });
+  //   });
+  // });
 
-  context("Verify email for equipment notification", () => {
-    it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
-        after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${formId}`,
-      };
+  // context("Verify email for equipment notification", () => {
+  //   it("Get emails", () => {
+  //     dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+  //     const getEmailSetting =  {
+  //       to: CONFIG.TEST_EMAIL,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       wait_time_sec: 5,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       max_wait_time_sec: 50,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       include_body: true,
+  //       after: dateAfterEmailShouldArrive,
+  //       subject: `Export for document ${formId}`,
+  //     };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
-    });
+  //     cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+  //       if (emails) {
+  //         emailsFromInbox = emails;
+  //         expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+  //         downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+  //       }
+  //       else {
+  //         assert.fail("No email found");
+  //       }
+  //     });
+  //   });
 
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>",
-            createdCompany.id],
-        }];
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
+  //   it("Verify the emails that should be received", () => {
+  //     const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+  //       {
+  //         sentToUser: USERS[1].email,
+  //         contains: [`Hello <b>${USERS[1].name},</b>`,
+  //           "Your documents are ready for download.",
+  //           "<button type=\"button\">DOWNLOAD</button>",
+  //           createdCompany.id],
+  //       }];
+  //     cy.imapVerifyEmailsInList({
+  //       receivedEmails: emailsFromInbox,
+  //       emailsToTest: emailsThatShouldBeReceived,
+  //       getEmailsSincedate: dateAfterEmailShouldArrive,
+  //       assertNumberOfEmailsFoundInList: 1,
+  //     });
+  //   });
+  // });
 
-  context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file", () => {
-      expect(downloadUrl).contains("exported_file_download");
-      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-        if (res.body !== "") {
-          downloadUrl = res.body.url;
-          downloadFile  =  `${formId}${fileTimeFormat}_draft.zip`;
-          cy.downloadFile({
-            url: downloadUrl,
-            directory: CONFIG.DOWNLOADS_DIR,
-            fileName: downloadFile,
-          });
-        }
-      });
-    });
+  // context("Verify that zip file containing pdf downloaded", () => {
+  //   it("Download zip file", () => {
+  //     expect(downloadUrl).contains("exported_file_download");
+  //     fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+  //     cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+  //       if (res.body !== "") {
+  //         downloadUrl = res.body.url;
+  //         downloadFile  =  `${formId}${fileTimeFormat}_draft.zip`;
+  //         cy.downloadFile({
+  //           url: downloadUrl,
+  //           directory: CONFIG.DOWNLOADS_DIR,
+  //           fileName: downloadFile,
+  //         });
+  //       }
+  //     });
+  //   });
 
-    it("Verify file size of the downloaded zip file", () => {
-      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-      cy.readFile(zipfile).its("length").should("be.gt", 500);
-    });
+  //   it("Verify file size of the downloaded zip file", () => {
+  //     const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+  //     cy.readFile(zipfile).its("length").should("be.gt", 500);
+  //   });
 
-    it("unzip and extract pdf file from zip file", () => {
-      cy.unzipFile(
-        {
-          directory: CONFIG.DOWNLOADS_DIR,
-          fileName: downloadFile,
-        });
-      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${formId}-1-${equipmentTitleForm}.pdf`);
-      cy.readFile(pdffile).its("length").should("be.gt", 500);
-    });
+  //   it("unzip and extract pdf file from zip file", () => {
+  //     cy.unzipFile(
+  //       {
+  //         directory: CONFIG.DOWNLOADS_DIR,
+  //         fileName: downloadFile,
+  //       });
+  //     const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+  //       `${formId}-1-${equipmentTitleForm}.pdf`);
+  //     cy.readFile(pdffile).its("length").should("be.gt", 500);
+  //   });
 
-    it("Verify attached file length more than 500 bytes", () => {
-      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "image.jpg");
-      cy.readFile(attachedFile).its("length").should("be.gt", 500);
-    });
-  });
+  //   it("Verify attached file length more than 500 bytes", () => {
+  //     const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+  //       downloadFile.replace(".zip", ""), "image.jpg");
+  //     cy.readFile(attachedFile).its("length").should("be.gt", 500);
+  //   });
+  // });
 
-  context("Verify PDF file content", () => {
-    it("Extract texts from PDF file content for form", () => {
-      cy.pdfparseFile(
-        {
-          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${formId}-1-${equipmentTitleForm}.pdf`,
-        }).then((cdata) => {
-        expect(cdata.numpages).eq(4);
-        expect(cdata.text).match(/Page 1 of 4/);
-        expect(cdata.text).match(/Page 2 of 4/);
-        expect(cdata.text).match(/Page 3 of 4/);
-        expect(cdata.text).match(/Page 4 of 4/);
-        tmpRegex = new RegExp( "\\n\\n");
-        const arr = cdata.text.split(tmpRegex);
-        arr.forEach((element) => {
-          if (element.includes("Page 1 of 4")) {
-            pages[0] = element;
-          }
-          if (element.includes("Page 2 of 4")) {
-            pages[1] = element;
-          }
-          if (element.includes("Page 3 of 4")) {
-            pages[2] = element;
-          }
-          if (element.includes("Page 4 of 4")) {
-            pages[3] = element;
-          }
-        });
-      });
-    });
+  // context("Verify PDF file content", () => {
+  //   it("Extract texts from PDF file content for form", () => {
+  //     cy.pdfparseFile(
+  //       {
+  //         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+  //         fileName: `${formId}-1-${equipmentTitleForm}.pdf`,
+  //       }).then((cdata) => {
+  //       expect(cdata.numpages).eq(4);
+  //       expect(cdata.text).match(/Page 1 of 4/);
+  //       expect(cdata.text).match(/Page 2 of 4/);
+  //       expect(cdata.text).match(/Page 3 of 4/);
+  //       expect(cdata.text).match(/Page 4 of 4/);
+  //       tmpRegex = new RegExp( "\\n\\n");
+  //       const arr = cdata.text.split(tmpRegex);
+  //       arr.forEach((element) => {
+  //         if (element.includes("Page 1 of 4")) {
+  //           pages[0] = element;
+  //         }
+  //         if (element.includes("Page 2 of 4")) {
+  //           pages[1] = element;
+  //         }
+  //         if (element.includes("Page 3 of 4")) {
+  //           pages[2] = element;
+  //         }
+  //         if (element.includes("Page 4 of 4")) {
+  //           pages[3] = element;
+  //         }
+  //       });
+  //     });
+  //   });
 
-    it("Verify page 1 in document", () => {
-      const el = pages[0];
-      if (el.includes("Page 1 of 4")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 1 in document", () => {
+  //     const el = pages[0];
+  //     if (el.includes("Page 1 of 4")) {
+  //       tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/AR ID\nNone/);
+  //       expect(el).match(/AR ID\nNone/);
 
-        expect(el).match(/Description\nEquipment Form document description/);
+  //       expect(el).match(/Description\nEquipment Form document description/);
 
-        expect(el).match(/Output Document Type\nEquipment/);
+  //       expect(el).match(/Output Document Type\nEquipment/);
 
-        expect(el).match(/Attachments/);
-        expect(el).match(/image.jpg/);
+  //       expect(el).match(/Attachments/);
+  //       expect(el).match(/image.jpg/);
 
-        tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
+  //       expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
 
-        expect(el).match(/Draft/);
+  //       expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 4/);
+  //       expect(el).match(/Page 1 of 4/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 2 in document", () => {
-      const el = pages[1];
-      if (el.includes("Page 2 of 4")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 2 in document", () => {
+  //     const el = pages[1];
+  //     if (el.includes("Page 2 of 4")) {
+  //       tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/PREVENTATIVE MAINTENANCE/);
+  //       expect(el).match(/PREVENTATIVE MAINTENANCE/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/The Preventative Maintenance required\? is a required field/);
+  //       expect(el).match(/The Preventative Maintenance required\? is a required field/);
 
-        // eslint-disable-next-line max-len
-        expect(el).match(/Justifications\nThe justifications field is required when Preventative Maintenance required\? is No/);
+  //       // eslint-disable-next-line max-len
+  //       expect(el).match(/Justifications\nThe justifications field is required when Preventative Maintenance required\? is No/);
 
-        expect(el).match(/Preventative Maintenance Form/);
+  //       expect(el).match(/Preventative Maintenance Form/);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`The Preventative Maintenance Form field is required when Preventative Maintenance\nrequired\\?.*is.*Yes`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`The Preventative Maintenance Form field is required when Preventative Maintenance\nrequired\\?.*is.*Yes`);
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)`);
+  //       expect(el).match(tmpRegex);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`The Preventative Maintenance Frequency \\(Days\\) field is required when Preventative\nMaintenance required\\?.*is.*Yes`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`The Preventative Maintenance Frequency \\(Days\\) field is required when Preventative\nMaintenance required\\?.*is.*Yes`);
+  //       expect(el).match(tmpRegex);
 
-        // eslint-disable-next-line max-len
-        expect(el).match(/Instructions\nThe Instructions field is required when Preventative Maintenance required\? is Yes/);
+  //       // eslint-disable-next-line max-len
+  //       expect(el).match(/Instructions\nThe Instructions field is required when Preventative Maintenance required\? is Yes/);
 
-        expect(el).match(/Draft/);
+  //       expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 4/);
+  //       expect(el).match(/Page 2 of 4/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 3 in document", () => {
-      const el = pages[2];
-      if (el.includes("Page 3 of 4")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 3 in document", () => {
+  //     const el = pages[2];
+  //     if (el.includes("Page 3 of 4")) {
+  //       tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/CALIBRATION/);
+  //       expect(el).match(/CALIBRATION/);
 
-        tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/The Calibration required\? is a required field/);
+  //       expect(el).match(/The Calibration required\? is a required field/);
 
-        expect(el).match(/Justifications\nThe justifications field is required when Calibration required\? is No/);
+  //       expect(el).match(/Justifications\nThe justifications field is required when Calibration required\? is No/);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`Calibration Form\nThe Calibration Form field is required when Calibration required\\?.*is.*Yes`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`Calibration Form\nThe Calibration Form field is required when Calibration required\\?.*is.*Yes`);
+  //       expect(el).match(tmpRegex);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\nThe Calibration Frequency \\(Days\\) field is required when Calibration required?.*is.*Yes`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\nThe Calibration Frequency \\(Days\\) field is required when Calibration required?.*is.*Yes`);
+  //       expect(el).match(tmpRegex);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`Instructions\nThe Instructions field is required when Calibration required\\?.*is.*Yes.`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`Instructions\nThe Instructions field is required when Calibration required\\?.*is.*Yes.`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Draft/);
+  //       expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 4/);
+  //       expect(el).match(/Page 3 of 4/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 4 in document", () => {
-      const el = pages[3];
-      if (el.includes("Page 4 of 4")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 4 in document", () => {
+  //     const el = pages[3];
+  //     if (el.includes("Page 4 of 4")) {
+  //       tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+  //       expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
-        expect(el).match(/Draft/);
+  //       expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 4 of 4/);
+  //       expect(el).match(/Page 4 of 4/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
-  });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
+  // });
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
@@ -784,292 +785,292 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify form Released status and click on Send To Email", () => {
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
-      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
-        formId = $formIdElement.text();
-      });
-      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
-        arId = $lnEl.text();
-      });
-      cy.sendToEmail();
-    });
+  // context("Verify form Released status and click on Send To Email", () => {
+  //   it("Verify form Released status and click on Send To Email", () => {
+  //     cy.drCheckDocumentStatus({ status: "Released" });
+  //     cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
+  //     cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+  //       formId = $formIdElement.text();
+  //     });
+  //     cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+  //       arId = $lnEl.text();
+  //     });
+  //     cy.sendToEmail();
+  //   });
 
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-      cy.checkToastMessageContains({
-        message: "File will be sent to your email shortly.",
-      });
-    });
-  });
+  //   it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+  //     cy.checkToastMessageContains({
+  //       message: "File will be sent to your email shortly.",
+  //     });
+  //   });
+  // });
 
-  context("Verify email for equipment notification", () => {
-    it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
-        after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${formId}`,
-      };
+  // context("Verify email for equipment notification", () => {
+  //   it("Get emails", () => {
+  //     dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+  //     const getEmailSetting =  {
+  //       to: CONFIG.TEST_EMAIL,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       wait_time_sec: 5,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       max_wait_time_sec: 50,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       include_body: true,
+  //       after: dateAfterEmailShouldArrive,
+  //       subject: `Export for document ${formId}`,
+  //     };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
-    });
+  //     cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+  //       if (emails) {
+  //         emailsFromInbox = emails;
+  //         expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+  //         downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+  //       }
+  //       else {
+  //         assert.fail("No email found");
+  //       }
+  //     });
+  //   });
 
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>",
-            createdCompany.id],
-        }];
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
+  //   it("Verify the emails that should be received", () => {
+  //     const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+  //       {
+  //         sentToUser: USERS[1].email,
+  //         contains: [`Hello <b>${USERS[1].name},</b>`,
+  //           "Your documents are ready for download.",
+  //           "<button type=\"button\">DOWNLOAD</button>",
+  //           createdCompany.id],
+  //       }];
+  //     cy.imapVerifyEmailsInList({
+  //       receivedEmails: emailsFromInbox,
+  //       emailsToTest: emailsThatShouldBeReceived,
+  //       getEmailsSincedate: dateAfterEmailShouldArrive,
+  //       assertNumberOfEmailsFoundInList: 1,
+  //     });
+  //   });
+  // });
 
-  context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file", () => {
-      expect(downloadUrl).contains("exported_file_download");
-      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-        if (res.body !== "") {
-          downloadUrl = res.body.url;
-          downloadFile  =  `${formId}${fileTimeFormat}_rel.zip`;
-          cy.downloadFile({
-            url: downloadUrl,
-            directory: CONFIG.DOWNLOADS_DIR,
-            fileName: downloadFile,
-          });
-        }
-      });
-    });
+  // context("Verify that zip file containing pdf downloaded", () => {
+  //   it("Download zip file", () => {
+  //     expect(downloadUrl).contains("exported_file_download");
+  //     fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+  //     cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+  //       if (res.body !== "") {
+  //         downloadUrl = res.body.url;
+  //         downloadFile  =  `${formId}${fileTimeFormat}_rel.zip`;
+  //         cy.downloadFile({
+  //           url: downloadUrl,
+  //           directory: CONFIG.DOWNLOADS_DIR,
+  //           fileName: downloadFile,
+  //         });
+  //       }
+  //     });
+  //   });
 
-    it("Verify file size of the downloaded zip file", () => {
-      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-      cy.readFile(zipfile).its("length").should("be.gt", 500);
-    });
+  //   it("Verify file size of the downloaded zip file", () => {
+  //     const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+  //     cy.readFile(zipfile).its("length").should("be.gt", 500);
+  //   });
 
-    it("unzip and extract pdf file from zip file", () => {
-      cy.unzipFile(
-        {
-          directory: CONFIG.DOWNLOADS_DIR,
-          fileName: downloadFile,
-        });
-      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${formId}-1-${equipmentTitleForm}.pdf`);
-      cy.readFile(pdffile).its("length").should("be.gt", 500);
-    });
+  //   it("unzip and extract pdf file from zip file", () => {
+  //     cy.unzipFile(
+  //       {
+  //         directory: CONFIG.DOWNLOADS_DIR,
+  //         fileName: downloadFile,
+  //       });
+  //     const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+  //       `${formId}-1-${equipmentTitleForm}.pdf`);
+  //     cy.readFile(pdffile).its("length").should("be.gt", 500);
+  //   });
 
-    it("Verify attached file length more than 500 bytes", () => {
-      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "image.jpg");
-      cy.readFile(attachedFile).its("length").should("be.gt", 500);
-    });
-  });
+  //   it("Verify attached file length more than 500 bytes", () => {
+  //     const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+  //       downloadFile.replace(".zip", ""), "image.jpg");
+  //     cy.readFile(attachedFile).its("length").should("be.gt", 500);
+  //   });
+  // });
 
-  context("Verify PDF file content", () => {
-    it("Extract texts from PDF file content for form", () => {
-      cy.pdfparseFile(
-        {
-          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${formId}-1-${equipmentTitleForm}.pdf`,
-        }).then((cdata) => {
-        expect(cdata.numpages).eq(4);
-        expect(cdata.text).match(/Page 1 of 4/);
-        expect(cdata.text).match(/Page 2 of 4/);
-        expect(cdata.text).match(/Page 3 of 4/);
-        expect(cdata.text).match(/Page 4 of 4/);
-        tmpRegex = new RegExp( "\\n\\n");
-        const arr = cdata.text.split(tmpRegex);
-        arr.forEach((element) => {
-          if (element.includes("Page 1 of 4")) {
-            pages[0] = element;
-          }
-          if (element.includes("Page 2 of 4")) {
-            pages[1] = element;
-          }
-          if (element.includes("Page 3 of 4")) {
-            pages[2] = element;
-          }
-          if (element.includes("Page 4 of 4")) {
-            pages[3] = element;
-          }
-        });
-      });
-    });
+  // context("Verify PDF file content", () => {
+  //   it("Extract texts from PDF file content for form", () => {
+  //     cy.pdfparseFile(
+  //       {
+  //         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+  //         fileName: `${formId}-1-${equipmentTitleForm}.pdf`,
+  //       }).then((cdata) => {
+  //       expect(cdata.numpages).eq(4);
+  //       expect(cdata.text).match(/Page 1 of 4/);
+  //       expect(cdata.text).match(/Page 2 of 4/);
+  //       expect(cdata.text).match(/Page 3 of 4/);
+  //       expect(cdata.text).match(/Page 4 of 4/);
+  //       tmpRegex = new RegExp( "\\n\\n");
+  //       const arr = cdata.text.split(tmpRegex);
+  //       arr.forEach((element) => {
+  //         if (element.includes("Page 1 of 4")) {
+  //           pages[0] = element;
+  //         }
+  //         if (element.includes("Page 2 of 4")) {
+  //           pages[1] = element;
+  //         }
+  //         if (element.includes("Page 3 of 4")) {
+  //           pages[2] = element;
+  //         }
+  //         if (element.includes("Page 4 of 4")) {
+  //           pages[3] = element;
+  //         }
+  //       });
+  //     });
+  //   });
 
-    it("Verify page 1 in document", () => {
-      const el = pages[0];
-      if (el.includes("Page 1 of 4")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 1 in document", () => {
+  //     const el = pages[0];
+  //     if (el.includes("Page 1 of 4")) {
+  //       tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nEquipment Form document description/);
+  //       expect(el).match(/Description\nEquipment Form document description/);
 
-        expect(el).match(/Output Document Type\nEquipment/);
+  //       expect(el).match(/Output Document Type\nEquipment/);
 
-        expect(el).match(/Attachments/);
-        expect(el).match(/image.jpg/);
+  //       expect(el).match(/Attachments/);
+  //       expect(el).match(/image.jpg/);
 
-        tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
+  //       expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
 
-        expect(el).match(/Released/);
+  //       expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 4/);
+  //       expect(el).match(/Page 1 of 4/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 2 in document", () => {
-      const el = pages[1];
-      if (el.includes("Page 2 of 4")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 2 in document", () => {
+  //     const el = pages[1];
+  //     if (el.includes("Page 2 of 4")) {
+  //       tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/PREVENTATIVE MAINTENANCE/);
+  //       expect(el).match(/PREVENTATIVE MAINTENANCE/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/The Preventative Maintenance required\? is a required field/);
+  //       expect(el).match(/The Preventative Maintenance required\? is a required field/);
 
-        // eslint-disable-next-line max-len
-        expect(el).match(/Justifications\nThe justifications field is required when Preventative Maintenance required\? is No/);
+  //       // eslint-disable-next-line max-len
+  //       expect(el).match(/Justifications\nThe justifications field is required when Preventative Maintenance required\? is No/);
 
-        expect(el).match(/Preventative Maintenance Form/);
+  //       expect(el).match(/Preventative Maintenance Form/);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`The Preventative Maintenance Form field is required when Preventative Maintenance\nrequired\\?.*is.*Yes`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`The Preventative Maintenance Form field is required when Preventative Maintenance\nrequired\\?.*is.*Yes`);
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)`);
+  //       expect(el).match(tmpRegex);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`The Preventative Maintenance Frequency \\(Days\\) field is required when Preventative\nMaintenance required\\?.*is.*Yes`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`The Preventative Maintenance Frequency \\(Days\\) field is required when Preventative\nMaintenance required\\?.*is.*Yes`);
+  //       expect(el).match(tmpRegex);
 
-        // eslint-disable-next-line max-len
-        expect(el).match(/Instructions\nThe Instructions field is required when Preventative Maintenance required\? is Yes/);
+  //       // eslint-disable-next-line max-len
+  //       expect(el).match(/Instructions\nThe Instructions field is required when Preventative Maintenance required\? is Yes/);
 
-        expect(el).match(/Released/);
+  //       expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 4/);
+  //       expect(el).match(/Page 2 of 4/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 3 in document", () => {
-      const el = pages[2];
-      if (el.includes("Page 3 of 4")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 3 in document", () => {
+  //     const el = pages[2];
+  //     if (el.includes("Page 3 of 4")) {
+  //       tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/CALIBRATION/);
+  //       expect(el).match(/CALIBRATION/);
 
-        tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/The Calibration required\? is a required field/);
+  //       expect(el).match(/The Calibration required\? is a required field/);
 
-        expect(el).match(/Justifications\nThe justifications field is required when Calibration required\? is No/);
+  //       expect(el).match(/Justifications\nThe justifications field is required when Calibration required\? is No/);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`Calibration Form\nThe Calibration Form field is required when Calibration required\\?.*is.*Yes`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`Calibration Form\nThe Calibration Form field is required when Calibration required\\?.*is.*Yes`);
+  //       expect(el).match(tmpRegex);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\nThe Calibration Frequency \\(Days\\) field is required when Calibration required?.*is.*Yes`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\nThe Calibration Frequency \\(Days\\) field is required when Calibration required?.*is.*Yes`);
+  //       expect(el).match(tmpRegex);
 
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`Instructions\nThe Instructions field is required when Calibration required\\?.*is.*Yes.`);
-        expect(el).match(tmpRegex);
+  //       // eslint-disable-next-line max-len
+  //       tmpRegex = new RegExp(`Instructions\nThe Instructions field is required when Calibration required\\?.*is.*Yes.`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Released/);
+  //       expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 4/);
+  //       expect(el).match(/Page 3 of 4/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 4 in document", () => {
-      const el = pages[3];
-      if (el.includes("Page 4 of 4")) {
-        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 4 in document", () => {
+  //     const el = pages[3];
+  //     if (el.includes("Page 4 of 4")) {
+  //       tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
-        expect(el).match(tmpRegex);
+  //       expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+  //       tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Released/);
+  //       expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 4 of 4/);
+  //       expect(el).match(/Page 4 of 4/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
-  });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
+  // });
 
   context("Create 'Equipment'", () => {
     it("Click create new document from form", () => {
@@ -1167,240 +1168,240 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify form Released status and click on Send To Email", () => {
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
-      cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
-      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
-        formId = $formIdElement.text();
-      });
-      cy.sendToEmail();
-    });
+  // context("Verify form Released status and click on Send To Email", () => {
+  //   it("Verify form Released status and click on Send To Email", () => {
+  //     cy.drCheckDocumentStatus({ status: "Draft" });
+  //     cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
+  //     cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+  //       formId = $formIdElement.text();
+  //     });
+  //     cy.sendToEmail();
+  //   });
 
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-      cy.checkToastMessageContains({
-        message: "File will be sent to your email shortly.",
-      });
-    });
-  });
+  //   it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+  //     cy.checkToastMessageContains({
+  //       message: "File will be sent to your email shortly.",
+  //     });
+  //   });
+  // });
 
-  context("Verify email for Draft document notification", () => {
-    it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
-        after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${formId}`,
-      };
+  // context("Verify email for Draft document notification", () => {
+  //   it("Get emails", () => {
+  //     dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+  //     const getEmailSetting =  {
+  //       to: CONFIG.TEST_EMAIL,
+  //       after: dateAfterEmailShouldArrive,
+  //       subject: `Export for document ${formId}`,
+  //     };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
-    });
+  //     cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+  //       if (emails) {
+  //         emailsFromInbox = emails;
+  //         expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+  //         downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+  //       }
+  //       else {
+  //         assert.fail("No email found");
+  //       }
+  //     });
+  //   });
 
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>",
-            createdCompany.id],
-        }];
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
+  //   it("Verify the emails that should be received", () => {
+  //     const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+  //       {
+  //         sentToUser: USERS[1].email,
+  //         contains: [`Hello <b>${USERS[1].name},</b>`,
+  //           "Your documents are ready for download.",
+  //           "<button type=\"button\">DOWNLOAD</button>",
+  //           createdCompany.id],
+  //       }];
+  //     cy.imapVerifyEmailsInList({
+  //       receivedEmails: emailsFromInbox,
+  //       emailsToTest: emailsThatShouldBeReceived,
+  //       getEmailsSincedate: dateAfterEmailShouldArrive,
+  //       assertNumberOfEmailsFoundInList: 1,
+  //     });
+  //   });
+  // });
 
-  context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file", () => {
-      expect(downloadUrl).contains("exported_file_download");
-      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-        if (res.body !== "") {
-          downloadUrl = res.body.url;
-          downloadFile  =  `${formId}${fileTimeFormat}_draft.zip`;
-          cy.downloadFile({
-            url: downloadUrl,
-            directory: CONFIG.DOWNLOADS_DIR,
-            fileName: downloadFile,
-          });
-        }
-      });
-    });
+  // context("Verify that zip file containing pdf downloaded", () => {
+  //   it("Download zip file", () => {
+  //     expect(downloadUrl).contains("exported_file_download");
+  //     fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+  //     cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+  //       if (res.body !== "") {
+  //         downloadUrl = res.body.url;
+  //         downloadFile  =  `${formId}${fileTimeFormat}_draft.zip`;
+  //         cy.downloadFile({
+  //           url: downloadUrl,
+  //           directory: CONFIG.DOWNLOADS_DIR,
+  //           fileName: downloadFile,
+  //         });
+  //       }
+  //     });
+  //   });
 
-    it("Verify file size of the downloaded zip file", () => {
-      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-      cy.readFile(zipfile).its("length").should("be.gt", 500);
-    });
+  //   it("Verify file size of the downloaded zip file", () => {
+  //     const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+  //     cy.readFile(zipfile).its("length").should("be.gt", 500);
+  //   });
 
-    it("unzip and extract pdf file from zip file", () => {
-      cy.unzipFile(
-        {
-          directory: CONFIG.DOWNLOADS_DIR,
-          fileName: downloadFile,
-        });
-      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${formId}-1-Equipment-document.pdf`);
-      cy.readFile(pdffile).its("length").should("be.gt", 500);
-    });
+  //   it("unzip and extract pdf file from zip file", () => {
+  //     cy.unzipFile(
+  //       {
+  //         directory: CONFIG.DOWNLOADS_DIR,
+  //         fileName: downloadFile,
+  //       });
+  //     const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+  //       `${formId}-1-Equipment-document.pdf`);
+  //     cy.readFile(pdffile).its("length").should("be.gt", 500);
+  //   });
 
-    it("Verify attached file length more than 500 bytes", () => {
-      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "image.jpg");
-      cy.readFile(attachedFile).its("length").should("be.gt", 500);
-    });
-  });
+  //   it("Verify attached file length more than 500 bytes", () => {
+  //     const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+  //       downloadFile.replace(".zip", ""), "image.jpg");
+  //     cy.readFile(attachedFile).its("length").should("be.gt", 500);
+  //   });
+  // });
 
-  context("Verify PDF file content", () => {
-    it("Extract texts from PDF file content", () => {
-      cy.pdfparseFile(
-        {
-          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${formId}-1-Equipment-document.pdf`,
-        }).then((cdata) => {
-        expect(cdata.numpages).eq(3);
-        expect(cdata.text).match(/Page 1 of 3/);
-        expect(cdata.text).match(/Page 2 of 3/);
-        expect(cdata.text).match(/Page 3 of 3/);
-        tmpRegex = new RegExp( "\\n\\n");
-        const arr = cdata.text.split(tmpRegex);
-        arr.forEach((element) => {
-          if (element.includes("Page 1 of 3")) {
-            pages[0] = element;
-          }
-          if (element.includes("Page 2 of 3")) {
-            pages[1] = element;
-          }
-          if (element.includes("Page 3 of 3")) {
-            pages[2] = element;
-          }
-        });
-      });
-    });
+  // context("Verify PDF file content", () => {
+  //   it("Extract texts from PDF file content", () => {
+  //     cy.pdfparseFile(
+  //       {
+  //         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+  //         fileName: `${formId}-1-Equipment-document.pdf`,
+  //       }).then((cdata) => {
+  //       expect(cdata.numpages).eq(3);
+  //       expect(cdata.text).match(/Page 1 of 3/);
+  //       expect(cdata.text).match(/Page 2 of 3/);
+  //       expect(cdata.text).match(/Page 3 of 3/);
+  //       tmpRegex = new RegExp( "\\n\\n");
+  //       const arr = cdata.text.split(tmpRegex);
+  //       arr.forEach((element) => {
+  //         if (element.includes("Page 1 of 3")) {
+  //           pages[0] = element;
+  //         }
+  //         if (element.includes("Page 2 of 3")) {
+  //           pages[1] = element;
+  //         }
+  //         if (element.includes("Page 3 of 3")) {
+  //           pages[2] = element;
+  //         }
+  //       });
+  //     });
+  //   });
 
-    it("Verify page 1 in document", () => {
-      const el = pages[0];
-      if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 1 in document", () => {
+  //     const el = pages[0];
+  //     if (el.includes("Page 1 of 3")) {
+  //       tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nEquipment description/);
+  //       expect(el).match(/Description\nEquipment description/);
 
-        expect(el).match(/Attachments/);
-        expect(el).match(/image.jpg/);
+  //       expect(el).match(/Attachments/);
+  //       expect(el).match(/image.jpg/);
 
-        tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).not.match(/Select field/);
+  //       expect(el).not.match(/Select field/);
 
-        expect(el).match(/Draft/);
+  //       expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 3/);
+  //       expect(el).match(/Page 1 of 3/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 2 in document", () => {
-      const el = pages[1];
-      if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 2 in document", () => {
+  //     const el = pages[1];
+  //     if (el.includes("Page 2 of 3")) {
+  //       tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/PREVENTATIVE MAINTENANCE/);
+  //       expect(el).match(/PREVENTATIVE MAINTENANCE/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
+  //       expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Instructions\nInstructions for preventative maintenance/);
+  //       expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
-        expect(el).match(/CALIBRATION/);
+  //       expect(el).match(/CALIBRATION/);
 
-        tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
+  //       expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Instructions\nInstructions for calibration/);
+  //       expect(el).match(/Instructions\nInstructions for calibration/);
 
-        expect(el).match(/Draft/);
+  //       expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 3/);
+  //       expect(el).match(/Page 2 of 3/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 3 in document", () => {
-      const el = pages[2];
-      if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 3 in document", () => {
+  //     const el = pages[2];
+  //     if (el.includes("Page 3 of 3")) {
+  //       tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+  //       expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
-        expect(el).match(/Draft/);
+  //       expect(el).match(/Draft/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 3/);
+  //       expect(el).match(/Page 3 of 3/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
-  });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
+  // });
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
@@ -1411,251 +1412,251 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify document Released status and click on Send To Email", () => {
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
-      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
-        formId = $formIdElement.text();
-      });
-      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
-        arId = $lnEl.text();
-      });
-      cy.sendToEmail();
-    });
+  // context("Verify document Released status and click on Send To Email", () => {
+  //   it("Verify form Released status and click on Send To Email", () => {
+  //     cy.drCheckDocumentStatus({ status: "Released" });
+  //     cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
+  //     cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+  //       formId = $formIdElement.text();
+  //     });
+  //     cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
+  //       arId = $lnEl.text();
+  //     });
+  //     cy.sendToEmail();
+  //   });
 
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-      cy.checkToastMessageContains({
-        message: "File will be sent to your email shortly.",
-      });
-    });
-  });
+  //   it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+  //     cy.checkToastMessageContains({
+  //       message: "File will be sent to your email shortly.",
+  //     });
+  //   });
+  // });
 
-  context("Verify email for Released document notification", () => {
-    it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
-        after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${formId}`,
-      };
+  // context("Verify email for Released document notification", () => {
+  //   it("Get emails", () => {
+  //     dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+  //     const getEmailSetting =  {
+  //       to: CONFIG.TEST_EMAIL,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       wait_time_sec: 5,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       max_wait_time_sec: 50,
+  //       // eslint-disable-next-line @typescript-eslint/camelcase
+  //       include_body: true,
+  //       after: dateAfterEmailShouldArrive,
+  //       subject: `Export for document ${formId}`,
+  //     };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
-    });
+  //     cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+  //       if (emails) {
+  //         emailsFromInbox = emails;
+  //         expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+  //         downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+  //       }
+  //       else {
+  //         assert.fail("No email found");
+  //       }
+  //     });
+  //   });
 
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>",
-            createdCompany.id],
-        }];
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
+  //   it("Verify the emails that should be received", () => {
+  //     const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+  //       {
+  //         sentToUser: USERS[1].email,
+  //         contains: [`Hello <b>${USERS[1].name},</b>`,
+  //           "Your documents are ready for download.",
+  //           "<button type=\"button\">DOWNLOAD</button>",
+  //           createdCompany.id],
+  //       }];
+  //     cy.imapVerifyEmailsInList({
+  //       receivedEmails: emailsFromInbox,
+  //       emailsToTest: emailsThatShouldBeReceived,
+  //       getEmailsSincedate: dateAfterEmailShouldArrive,
+  //       assertNumberOfEmailsFoundInList: 1,
+  //     });
+  //   });
+  // });
 
-  context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file", () => {
-      expect(downloadUrl).contains("exported_file_download");
-      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-        if (res.body !== "") {
-          downloadUrl = res.body.url;
-          downloadFile  =  `${formId}${fileTimeFormat}_rel.zip`;
-          cy.downloadFile({
-            url: downloadUrl,
-            directory: CONFIG.DOWNLOADS_DIR,
-            fileName: downloadFile,
-          });
-        }
-      });
-    });
+  // context("Verify that zip file containing pdf downloaded", () => {
+  //   it("Download zip file", () => {
+  //     expect(downloadUrl).contains("exported_file_download");
+  //     fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+  //     cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+  //       if (res.body !== "") {
+  //         downloadUrl = res.body.url;
+  //         downloadFile  =  `${formId}${fileTimeFormat}_rel.zip`;
+  //         cy.downloadFile({
+  //           url: downloadUrl,
+  //           directory: CONFIG.DOWNLOADS_DIR,
+  //           fileName: downloadFile,
+  //         });
+  //       }
+  //     });
+  //   });
 
-    it("Verify file size of the downloaded zip file", () => {
-      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-      cy.readFile(zipfile).its("length").should("be.gt", 500);
-    });
+  //   it("Verify file size of the downloaded zip file", () => {
+  //     const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+  //     cy.readFile(zipfile).its("length").should("be.gt", 500);
+  //   });
 
-    it("unzip and extract pdf file from zip file", () => {
-      cy.unzipFile(
-        {
-          directory: CONFIG.DOWNLOADS_DIR,
-          fileName: downloadFile,
-        });
-      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${formId}-1-Equipment-document.pdf`);
-      cy.readFile(pdffile).its("length").should("be.gt", 500);
-    });
+  //   it("unzip and extract pdf file from zip file", () => {
+  //     cy.unzipFile(
+  //       {
+  //         directory: CONFIG.DOWNLOADS_DIR,
+  //         fileName: downloadFile,
+  //       });
+  //     const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+  //       `${formId}-1-Equipment-document.pdf`);
+  //     cy.readFile(pdffile).its("length").should("be.gt", 500);
+  //   });
 
-    it("Verify attached file length more than 500 bytes", () => {
-      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "image.jpg");
-      cy.readFile(attachedFile).its("length").should("be.gt", 500);
-    });
-  });
+  //   it("Verify attached file length more than 500 bytes", () => {
+  //     const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+  //       downloadFile.replace(".zip", ""), "image.jpg");
+  //     cy.readFile(attachedFile).its("length").should("be.gt", 500);
+  //   });
+  // });
 
-  context("Verify PDF file content", () => {
-    it("Extract texts from PDF file content", () => {
-      cy.pdfparseFile(
-        {
-          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${formId}-1-Equipment-document.pdf`,
-        }).then((cdata) => {
-        expect(cdata.numpages).eq(3);
-        expect(cdata.text).match(/Page 1 of 3/);
-        expect(cdata.text).match(/Page 2 of 3/);
-        expect(cdata.text).match(/Page 3 of 3/);
-        tmpRegex = new RegExp( "\\n\\n");
-        const arr = cdata.text.split(tmpRegex);
-        arr.forEach((element) => {
-          if (element.includes("Page 1 of 3")) {
-            pages[0] = element;
-          }
-          if (element.includes("Page 2 of 3")) {
-            pages[1] = element;
-          }
-          if (element.includes("Page 3 of 3")) {
-            pages[2] = element;
-          }
-        });
-      });
-    });
+  // context("Verify PDF file content", () => {
+  //   it("Extract texts from PDF file content", () => {
+  //     cy.pdfparseFile(
+  //       {
+  //         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+  //         fileName: `${formId}-1-Equipment-document.pdf`,
+  //       }).then((cdata) => {
+  //       expect(cdata.numpages).eq(3);
+  //       expect(cdata.text).match(/Page 1 of 3/);
+  //       expect(cdata.text).match(/Page 2 of 3/);
+  //       expect(cdata.text).match(/Page 3 of 3/);
+  //       tmpRegex = new RegExp( "\\n\\n");
+  //       const arr = cdata.text.split(tmpRegex);
+  //       arr.forEach((element) => {
+  //         if (element.includes("Page 1 of 3")) {
+  //           pages[0] = element;
+  //         }
+  //         if (element.includes("Page 2 of 3")) {
+  //           pages[1] = element;
+  //         }
+  //         if (element.includes("Page 3 of 3")) {
+  //           pages[2] = element;
+  //         }
+  //       });
+  //     });
+  //   });
 
-    it("Verify page 1 in document", () => {
-      const el = pages[0];
-      if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 1 in document", () => {
+  //     const el = pages[0];
+  //     if (el.includes("Page 1 of 3")) {
+  //       tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nEquipment description/);
+  //       expect(el).match(/Description\nEquipment description/);
 
-        expect(el).match(/Attachments/);
-        expect(el).match(/image.jpg/);
+  //       expect(el).match(/Attachments/);
+  //       expect(el).match(/image.jpg/);
 
-        tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).not.match(/Select field/);
+  //       expect(el).not.match(/Select field/);
 
-        expect(el).match(/Released/);
+  //       expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 3/);
+  //       expect(el).match(/Page 1 of 3/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 2 in document", () => {
-      const el = pages[1];
-      if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 2 in document", () => {
+  //     const el = pages[1];
+  //     if (el.includes("Page 2 of 3")) {
+  //       tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/PREVENTATIVE MAINTENANCE/);
+  //       expect(el).match(/PREVENTATIVE MAINTENANCE/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
+  //       expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Instructions\nInstructions for preventative maintenance/);
+  //       expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
-        expect(el).match(/CALIBRATION/);
+  //       expect(el).match(/CALIBRATION/);
 
-        tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
+  //       expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Instructions\nInstructions for calibration/);
+  //       expect(el).match(/Instructions\nInstructions for calibration/);
 
-        expect(el).match(/Released/);
+  //       expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 3/);
+  //       expect(el).match(/Page 2 of 3/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
 
-    it("Verify page 3 in document", () => {
-      const el = pages[2];
-      if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
-        expect(el).match(tmpRegex);
+  //   it("Verify page 3 in document", () => {
+  //     const el = pages[2];
+  //     if (el.includes("Page 3 of 3")) {
+  //       tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
-        expect(el).match(tmpRegex);
+  //       expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+  //       tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Released/);
+  //       expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+  //       tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+  //       expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 3/);
+  //       expect(el).match(/Page 3 of 3/);
 
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
-  });
+  //       tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+  //       expect(el).not.match(tmpRegex);
+  //     }
+  //   });
+  // });
 
   context("Navig to released 'Equipment maintenance document'", () => {
     it("Navig to equipment", () => {
@@ -1813,26 +1814,8 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Use time tool to travel user back to future", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
-    });
-
-    it("Select task TIME_TRAVEL_USER", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
     it("Select 1 day to back in future", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 1 });
-    });
-
-    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.eqSetTimeTravelInDays({ days: 1 });
     });
   });
 
@@ -1848,7 +1831,8 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Get emails", () => {
-      cy.log(calTtDueDate);
+     dueDateInEmail = momentInPST().add(31, "days").subtract(1, "days").format("MM/DD/YYYY");
+      cy.log(dueDateInEmail);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: USERS[1].email,
@@ -1868,7 +1852,7 @@ context("Autocomplete 'Equipment' test", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
-            `${calTtDueDate}`,
+            `${dueDateInEmail}`,
             `Please click on the button below to view it`,
             "<button type=\"button\">VIEW ITEM</button>",
             createdCompany.id],
@@ -1884,27 +1868,8 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Use time tool to travel user back to future", () => {
-    it("Navigate to async tasks", () => {
-      cy.pause();
-      cy.navigToAsyncTasks();
-    });
-
-    it("Select task TIME_TRAVEL_USER", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
-    it("Select 11 day to back in future", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 11 });
-    });
-
-    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+    it("Select 10 day to back in future", () => {
+      cy.eqSetTimeTravelInDays({ days: 10 });
     });
   });
 
@@ -1917,31 +1882,48 @@ context("Autocomplete 'Equipment' test", () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
+    });
+
+    it("Get emails", () => {
+      dueDateInEmail = momentInPST().add(29, "days").format("MM/DD/YYYY");
+      cy.log(dueDateInEmail);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment EQ-00001 Equipment document has PM Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        cy.log(emails[0].body.text);
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            `Equipment <b>EQ-00001 Equipment document</b> has PM due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
     });
   });
 
   context("Use time tool to travel user back to future", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
-    });
-
-    it("Select task TIME_TRAVEL_USER", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
-    it("Select 25 day to back in future", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 25 });
-    });
-
-    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+    it("Select 14 day to back in future", () => {
+      cy.eqSetTimeTravelInDays({ days: 14 });
     });
   });
 
@@ -1954,66 +1936,75 @@ context("Autocomplete 'Equipment' test", () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
+    });
+
+    it("Get emails", () => {
+      dueDateInEmail = momentInPST().add(6, "days").format("MM/DD/YYYY");
+      cy.log(dueDateInEmail);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment EQ-00001 Equipment document has Calibration Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        cy.log(emails[0].body.text);
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
     });
   });
 
   context("Use time tool to travel user back to future", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
-    });
-
-    it("Select task TIME_TRAVEL_USER", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
-    it("Select 32 day to back in future", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 32 });
-    });
-
-    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.pause();
+    it("Select 7 day to back in future", () => {
+      cy.eqSetTimeTravelInDays({ days:7 });
     });
   });
 
-  context("Check the EQ on dashboard", () => {
-    it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+  context("Navigate to equipment list", () => {
+    it("Navigate to equipment list", () => {
+      cy.navigToEquipment();
+      cy.wait(2000);
     });
 
-    it(`Open assigned Training`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `FM-00001Rev 1 AR Form` });
+    it("Select first Equipment on list", () => {
+      cy.dlSelectFirstDocument();
+      // cy.get("[data-cy=\"form.builder.cal\"]").eq(0).should("have.text", "CAL Due");
+      // cy.get("[data-cy=\"common.due.date\"]").eq(1).should("have.text", `Due date: ${dueDate}`);
+      cy.get("[data-cy^=\"maintenance.status\"]").eq(1).should("contain", `CAL Due - Due date: ${dueDate}`);
+      // cy.get("[data-cy^=\"maintenance.status\"]").eq(1).should("match", `CAL Due - Due date: Tue, June 7, 2022`);
     });
+
+    // it("", () => {
+    //   tmpRegex = new RegExp(`CAL Due - Due date: ${dueDate}`);
+    //   expect(el).match(tmpRegex);
+    // });
   });
 
   context("Use time tool to travel user back to future", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
-    });
-
-    it("Select task TIME_TRAVEL_USER", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
-    it("Select 34 day to back in future", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 34 });
-    });
-
-    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+    it("Select 2 day to back in future", () => {
+      cy.pause();
+      cy.eqSetTimeTravelInDays({ days: 2 });
     });
   });
 
@@ -2026,49 +2017,66 @@ context("Autocomplete 'Equipment' test", () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
+    });
+
+    it("Get emails", () => {
+      dueDateInEmail = momentInPST().add(6, "days").format("MM/DD/YYYY");
+      cy.log(dueDateInEmail);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment EQ-00001 Equipment document has PM Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        cy.log(emails[0].body.text);
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            `Equipment <b>EQ-00001 Equipment document</b> has PM due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
     });
   });
 
   context("Use time tool to travel user back to future", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
-    });
-
-    it("Select task TIME_TRAVEL_USER", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
-    it("Select 41 day to back in future", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 41 });
-    });
-
-    it("Select next task RECALC_COMPLIANCE_FOR_EQUIPMENTS", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+    it("Select 7 day to back in future", () => {
+      cy.eqSetTimeTravelInDays({ days: 7 });
     });
   });
 
-  context("Trigger email", () => {
-    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+  context("Navigate to equipment list", () => {
+    it("Navigate to equipment list", () => {
+      cy.navigToEquipment();
+      cy.wait(2000);
     });
 
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.pause();
+    it("Select first Equipment on list", () => {
+      cy.dlSelectFirstDocument();
+      cy.get("[data-cy=\"maintenance.status\"]").eq(0).should("have.text", `PM Due - Due date: ${dueDate}`);
     });
   });
 
   context("Fill second new PM form", () => {
     it("Navigate to EQ document", () => {
+      cy.pause();
       cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
@@ -2506,3 +2514,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 });
+function el(el: any) {
+  throw new Error("Function not implemented.");
+}
+

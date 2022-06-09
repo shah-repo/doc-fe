@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { SQS_TYPES } from "../../../../src/ui/async.tasks/types";
 import { CyRoutes } from "../../routes";
 
 export { };
@@ -24,6 +25,7 @@ declare global {
       recVerifyDescription(params: {description: string }): Chainable<Subject>;
       recVerifyDescriptionWIP(params: {description: string }): Chainable<Subject>;
       equipReloadDocument(): Chainable<Subject>;
+      eqSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
     }
   }
 }
@@ -136,6 +138,17 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
     }
     cy.progressBarShouldAppear();
   });
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("eqSetTimeTravelInDays", (params: {days: number}) => {
+  cy.navigToAsyncTasks();
+  cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+  cy.asyncSelectBackToTheFutureTime({ day: params.days });
+  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+  cy.asyncTaskClickSubmit();
+  cy.progressBarShouldNotExist();
+  cy.wait(1000);
   cy.listLoadingElementShouldNotExist();
 });
 
