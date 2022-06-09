@@ -62,6 +62,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       margin: appTheme.spacing(1),
       fontWeight: "bold",
       fontFamily: "Sora, sans-serif;",
+      textTransform: "capitalize",
     },
     contained: {
       boxShadow: "none",

@@ -25,7 +25,6 @@ const CellStyles = makeStyles((theme) => ({
     boxShadow: "none",
     borderRadius: 200,
     marginRight: theme.spacing(1.875),
-    textTransform: "uppercase",
     paddingRight: theme.spacing(2.5),
     paddingLeft: theme.spacing(2.5),
     fontSize: 12,
@@ -43,7 +42,6 @@ const CellStyles = makeStyles((theme) => ({
     "color": Colors.white,
     "paddingRight": theme.spacing(2.5),
     "paddingLeft": theme.spacing(2.5),
-    "textTransform": "uppercase",
     "&:hover": {
       background: Colors.navy,
     },
