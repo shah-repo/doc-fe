@@ -4,7 +4,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { KendoPresenterProps } from "../../components/KendoGrid/interfaces";
 import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
-import styles from "../../components/KendoGrid/KendoGrid.styles";
+import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { documentRevisionQueryStatus } from "../utils/helpers";
 import CreateButton from "./CreateButton/presenter";
@@ -19,7 +19,7 @@ export function DocumentListPresenter({
   onRowClick,
   queryUrl,
 }: KendoPresenterProps) {
-  const classes = styles();
+  const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const handleExportData = (dataToBeExported: DocumentRevision[]) => {
     setDataToBeExported(dataToBeExported);
@@ -27,12 +27,7 @@ export function DocumentListPresenter({
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Grid
-          container
-          alignItems="center"
-          justify="space-between"
-          className={classes.headerGridItem}
-        >
+        <Grid container alignItems="center" justify="space-between" className={classes.headerGridItem} >
           <Grid item>
             <GridTitle translation="navigation.document.list" />
           </Grid>
