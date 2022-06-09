@@ -11,7 +11,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { dueDate, emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, momentInPST, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, momentInPST, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -1831,7 +1831,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Get emails", () => {
-     dueDateInEmail = momentInPST().add(31, "days").subtract(1, "days").format("MM/DD/YYYY");
+      dueDateInEmail = momentInPST().add(31, "days").subtract(1, "days").format("MM/DD/YYYY");
       cy.log(dueDateInEmail);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
@@ -1977,7 +1977,7 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Use time tool to travel user back to future", () => {
     it("Select 7 day to back in future", () => {
-      cy.eqSetTimeTravelInDays({ days:7 });
+      cy.eqSetTimeTravelInDays({ days: 7 });
     });
   });
 
@@ -1989,16 +1989,15 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select first Equipment on list", () => {
       cy.dlSelectFirstDocument();
-      // cy.get("[data-cy=\"form.builder.cal\"]").eq(0).should("have.text", "CAL Due");
-      // cy.get("[data-cy=\"common.due.date\"]").eq(1).should("have.text", `Due date: ${dueDate}`);
-      cy.get("[data-cy^=\"maintenance.status\"]").eq(1).should("contain", `CAL Due - Due date: ${dueDate}`);
-      // cy.get("[data-cy^=\"maintenance.status\"]").eq(1).should("match", `CAL Due - Due date: Tue, June 7, 2022`);
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+        .subtract(2, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(1).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
+        });
     });
-
-    // it("", () => {
-    //   tmpRegex = new RegExp(`CAL Due - Due date: ${dueDate}`);
-    //   expect(el).match(tmpRegex);
-    // });
   });
 
   context("Use time tool to travel user back to future", () => {
@@ -2070,7 +2069,15 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select first Equipment on list", () => {
       cy.dlSelectFirstDocument();
-      cy.get("[data-cy=\"maintenance.status\"]").eq(0).should("have.text", `PM Due - Due date: ${dueDate}`);
+      // cy.get("[data-cy=\"maintenance.status\"]").eq(0).should("have.text", `PM Due - Due date: ${dueDate}`);
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+        .add(40, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`PMDone - Due date: ${prevMaintenanceComplianceDate}`);
+        });
     });
   });
 
