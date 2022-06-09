@@ -911,218 +911,242 @@ context("Approval request form", () => {
     });
   });
 
-});
-
-context("Navigate to DRAFT approval request and approve request", () => {
-  it("Navigate to approval request list", () => {
-    cy.navigToApprovalRequestList();
-  });
-
-  it("Clear filters", () => {
-    cy.alClearFilters();
-  });
-
-  it("Filter AR by title as 'Second AR'", () => {
-    cy.alFilterByTitle({ title: "Second AR" });
-  });
-
-  it(`Filter list by OWNER as USERS[1].name`, () => {
-    cy.alFilterByOwner({ owner: USERS[1].name });
-  });
-
-  it("Filter list by STATUS as DRAFT", () => {
-    cy.alFilterByStatus({ status: "DRAFT" });
-  });
-
-  it("Verify filter by STATUS as DRAFT", () => {
-    cy.alVerifyFilterByStatus({ status: "DRAFT" });
-  });
-
-  it("Click on DRAFT", () => {
-    cy.get(`td[data-grid-col-index="3"]`).should("contain.text", "DRAFT").arrowClick();
-    cy.progressBarShouldNotExist();
-    cy.listLoadingElementShouldNotExist();
-  });
-
-  it("Add approver", () => {
-    cy.arAddApproverOnApproverList({ approver: USERS[1].name });
-  });
-
-  it("Send to review", () => {
-    cy.arClickSendToReview();
-  });
-
-  it("Click approve submission", () => {
-    cy.arApproveAR();
-  });
-
-  it("Click Close button", () => {
-    cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
-  });
-
-  it("Select option No", () => {
-    cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
-  });
-
-  it("Advance Effective Date to 10 days from now", () => {
-    const effectiveDate = momentInPST().add(10, "days");
-    const month = effectiveDate.format("MMM");
-    const day = effectiveDate.format("D");
-
-    cy.get("[aria-label=\"change date\"]").arrowClick();
-
-    cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
-      const monthYearText = $el.text();
-      if (!monthYearText.includes(month)) {
-        cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
-      }
-
-      cy.wait(500);
-
-      cy.get("button.MuiPickersDay-day")
-        .not(".MuiPickersDay-hidden")
-        .each(($el) => {
-          const dayNumber = $el.text();
-          if (day === dayNumber) {
-            cy.wrap($el).arrowClick();
-          }
-        });
+  context("Navigate to DRAFT approval request and approve request", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
     });
 
-    cy.wrapWithWaitOnApiCalls(
-      [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-        cy.get("#confirmEffectiveDate").arrowClick();
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Second AR'", () => {
+      cy.alFilterByTitle({ title: "Second AR" });
+    });
+
+    it(`Filter list by OWNER as USERS[1].name`, () => {
+      cy.alFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Filter list by STATUS as DRAFT", () => {
+      cy.alFilterByStatus({ status: "DRAFT" });
+    });
+
+    it("Verify filter by STATUS as DRAFT", () => {
+      cy.alVerifyFilterByStatus({ status: "DRAFT" });
+    });
+
+    it("Click on DRAFT", () => {
+      cy.get(`td[data-grid-col-index="3"]`).should("contain.text", "DRAFT").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add approver", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Send to review", () => {
+      cy.arClickSendToReview();
+    });
+
+    it("Click approve submission", () => {
+      cy.arApproveAR();
+    });
+
+    it("Click Close button", () => {
+      cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+    });
+
+    it("Select option No", () => {
+      cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+    });
+
+    it("Advance Effective Date to 30 days from now", () => {
+      const effectiveDate = momentInPST().add(30, "days");
+      const month = effectiveDate.format("MMM");
+      const day = effectiveDate.format("D");
+
+      cy.get("[aria-label=\"change date\"]").arrowClick();
+
+      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+        const monthYearText = $el.text();
+        if (!monthYearText.includes(month)) {
+          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
+        }
+
+        cy.wait(500);
+
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            if (day === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
       });
-    cy.progressBarShouldNotExist();
-    cy.listLoadingElementShouldNotExist();
-    cy.checkToastMessage({ exists: false });
-  });
-});
 
-context("Verify the AR in APPROVED State", () => {
-  it("Navigate to ar list", () => {
-    cy.navigToApprovalRequestList();
-  });
-
-  it("Clear filters", () => {
-    cy.alClearFilters();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+          cy.get("#confirmEffectiveDate").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
   });
 
-  it("Filter AR by title as 'Second AR'", () => {
-    cy.alFilterByTitle({ title: "Second AR" });
+  context("Verify the AR in APPROVED State", () => {
+    it("Navigate to ar list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Second AR'", () => {
+      cy.alFilterByTitle({ title: "Second AR" });
+    });
+
+    it(`Filter list by OWNER as USERS[1].name`, () => {
+      cy.alFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Filter list by STATUS as APPROVED", () => {
+      cy.alFilterByStatus({ status: "APPROVED" });
+    });
+
+    it("Verify filter by STATUS as APPROVED", () => {
+      cy.alVerifyFilterByStatus({ status: "APPROVED" });
+    });
   });
 
-  it(`Filter list by OWNER as USERS[1].name`, () => {
-    cy.alFilterByOwner({ owner: USERS[1].name });
+  context("Set time travel tool to 29 days", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_COMPANY", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 29 days to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 29 });
+    });
+
+    it("On Next Task, SELECT_ALL", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
   });
 
-  it("Filter list by STATUS as APPROVED", () => {
-    cy.alFilterByStatus({ status: "APPROVED" });
+  context("Verify the AR is still in APPROVED State", () => {
+    it("Navigate to ar list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Second AR'", () => {
+      cy.alFilterByTitle({ title: "Second AR" });
+    });
+
+    it(`Filter list by OWNER as USERS[1].name`, () => {
+      cy.alFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Filter list by STATUS as APPROVED", () => {
+      cy.alFilterByStatus({ status: "APPROVED" });
+    });
+
+    it("Verify filter by STATUS as APPROVED", () => {
+      cy.alVerifyFilterByStatus({ status: "APPROVED" });
+    });
   });
 
-  it("Verify filter by STATUS as APPROVED", () => {
-    cy.alVerifyFilterByStatus({ status: "APPROVED" });
-  });
-});
+  context("Set time travel tool to 1 day", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
 
-context("Set time travel tool to 9 days", () => {
-  it("Navigate to async tasks", () => {
-    cy.navigToAsyncTasks();
-  });
+    it("Select task TIME_TRAVEL_COMPANY", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
 
-  it("Select task TIME_TRAVEL_COMPANY", () => {
-    cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-  });
+    it("Select 1 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 1 });
+    });
 
-  it("Select 9 days to back in future", () => {
-    cy.asyncSelectBackToTheFutureTime({ day: 9 });
-  });
+    it("On Next Task, SELECT_ALL", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+    });
 
-  it("On Next Task, SELECT_ALL", () => {
-    cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
-  });
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-  it("Submit async task", () => {
-    cy.asyncTaskClickSubmit();
-    cy.progressBarShouldNotExist();
-    cy.listLoadingElementShouldNotExist();
-  });
-});
+    it("Verify the time travel will appear in History list as 'Requested'", () => {
+      cy.get("tr.k-master-row").should("have.length", 2);
+      cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).eq(0)
+        .should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="3"]`).eq(0)
+        .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
+    });
 
-context("Verify the AR is still in APPROVED State", () => {
-  it("Navigate to ar list", () => {
-    cy.navigToApprovalRequestList();
-  });
-
-  it("Clear filters", () => {
-    cy.alClearFilters();
-  });
-
-  it("Filter AR by title as 'Second AR'", () => {
-    cy.alFilterByTitle({ title: "Second AR" });
-  });
-
-  it(`Filter list by OWNER as USERS[1].name`, () => {
-    cy.alFilterByOwner({ owner: USERS[1].name });
-  });
-
-  it("Filter list by STATUS as APPROVED", () => {
-    cy.alFilterByStatus({ status: "APPROVED" });
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).eq(0)
+        .should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="3"]`).eq(0)
+        .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
+        .should("contain.text", "COMPLETE");
+      cy.wait(5000);
+    });
   });
 
-  it("Verify filter by STATUS as APPROVED", () => {
-    cy.alVerifyFilterByStatus({ status: "APPROVED" });
-  });
-});
+  context("Verify the AR is in auto CLOSED State", () => {
+    it("Navigate to ar list", () => {
+      cy.navigToApprovalRequestList();
+    });
 
-context("Set time travel tool to 1 day", () => {
-  it("Navigate to async tasks", () => {
-    cy.navigToAsyncTasks();
-  });
+    it("Clear filters", () => {
+      cy.alClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-  it("Select task TIME_TRAVEL_COMPANY", () => {
-    cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-  });
+    it("Filter AR by title as 'Second AR'", () => {
+      cy.alFilterByTitle({ title: "Second AR" });
+    });
 
-  it("Select 1 day to back in future", () => {
-    cy.asyncSelectBackToTheFutureTime({ day: 1 });
-  });
+    it(`Filter list by OWNER as USERS[1].name`, () => {
+      cy.alFilterByOwner({ owner: USERS[1].name });
+    });
 
-  it("On Next Task, SELECT_ALL", () => {
-    cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
-  });
+    it("Filter list by STATUS as CLOSED", () => {
+      cy.alFilterByStatus({ status: "CLOSED" });
+    });
 
-  it("Submit async task", () => {
-    cy.asyncTaskClickSubmit();
-    cy.progressBarShouldNotExist();
-    cy.listLoadingElementShouldNotExist();
-  });
-});
-
-context("Verify the AR is in auto CLOSED State", () => {
-  it("Navigate to ar list", () => {
-    cy.navigToApprovalRequestList();
-  });
-
-  it("Clear filters", () => {
-    cy.alClearFilters();
-  });
-
-  it("Filter AR by title as 'Second AR'", () => {
-    cy.alFilterByTitle({ title: "Second AR" });
-  });
-
-  it(`Filter list by OWNER as USERS[1].name`, () => {
-    cy.alFilterByOwner({ owner: USERS[1].name });
-  });
-
-  it("Filter list by STATUS as CLOSED", () => {
-    cy.alFilterByStatus({ status: "CLOSED" });
-  });
-
-  it("Verify filter by STATUS as CLOSED", () => {
-    SystemRequirement("REQ-0770", "REQ-0750");
-    cy.alVerifyFilterByStatus({ status: "CLOSED" });
+    it("Verify filter by STATUS as CLOSED", () => {
+      cy.alVerifyFilterByStatus({ status: "CLOSED" });
+    });
   });
 });
 
