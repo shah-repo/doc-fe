@@ -2087,7 +2087,6 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Fill second new PM form", () => {
     it("Navigate to EQ document", () => {
-      cy.pause();
       cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
