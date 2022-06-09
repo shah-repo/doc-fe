@@ -213,6 +213,7 @@ td#kendo-expandable-column[role="gridcell"] {
   color: var(--almost_black);
   border-radius: 4px;
   border: 1px solid var(--lavender-mist);
+  background-color: var(--lavender-mist);
 }
 
 .k-grid .k-grid-table tbody tr {
