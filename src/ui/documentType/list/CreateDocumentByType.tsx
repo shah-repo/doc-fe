@@ -298,8 +298,8 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   }
   return (
     <>
-      <Grid item xs={12}>
-        <Grid container alignItems="center" justify="space-between" className={gridClasses.headerGridItem}>
+      <Grid item xs={12} className={gridClasses.headerGridItem}>
+        <Grid container alignItems="center" justify="space-between">
           <Grid item>
             <GridTitle title={title} />
           </Grid>

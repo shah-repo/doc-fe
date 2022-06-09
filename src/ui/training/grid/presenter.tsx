@@ -25,8 +25,8 @@ export function TrainingListPresenter({
 
   return (
     <Grid container>
-      <Grid item xs={12}>
-        <Grid container alignItems="center" justify="space-between" className={classes.headerGridItem}>
+      <Grid item xs={12} className={classes.headerGridItem}>
+        <Grid container alignItems="center" justify="space-between">
           <Grid item>
             <GridTitle translation="page.title.training" />
           </Grid>
