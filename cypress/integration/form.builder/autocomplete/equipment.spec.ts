@@ -1989,20 +1989,22 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select first Equipment on list", () => {
       cy.dlSelectFirstDocument();
+    });
+
+    it("CAL status should update to CAL Due", () => {
       const calibrationComplianceDate = moment().tz("America/Los_Angeles")
-        .subtract(2, "days")
-        .format("ddd, MMMM D, YYYY");
-      cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(1).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
-        });
+      .subtract(1, "days")
+      .format("ddd, MMMM D, YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+      .eq(1).then(($el) => {
+        const text = $el.text().replace(/\u00a0/g, "");
+        expect(text).to.contain(`CALDue - Due date: ${calibrationComplianceDate}`);
+       });
     });
   });
 
   context("Use time tool to travel user back to future", () => {
     it("Select 2 day to back in future", () => {
-      cy.pause();
       cy.eqSetTimeTravelInDays({ days: 2 });
     });
   });
@@ -2069,15 +2071,17 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select first Equipment on list", () => {
       cy.dlSelectFirstDocument();
-      // cy.get("[data-cy=\"maintenance.status\"]").eq(0).should("have.text", `PM Due - Due date: ${dueDate}`);
+    });
+
+    it("PM status should update to PM Due", () => {
       const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
-        .add(40, "days")
-        .format("ddd, MMMM D, YYYY");
+      .add(-1, "days")
+      .format("ddd, MMMM D, YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`PMDone - Due date: ${prevMaintenanceComplianceDate}`);
-        });
+      .eq(0).then(($el) => {
+        const text = $el.text().replace(/\u00a0/g, "");
+        expect(text).to.contain(`PMDue - Due date: ${prevMaintenanceComplianceDate}`);
+      });
     });
   });
 
