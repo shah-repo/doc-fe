@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { integer } from "aws-sdk/clients/cloudfront";
+import { float } from "aws-sdk/clients/lightsail";
 import faker from "faker";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -92,6 +93,8 @@ const nameOfUserToSignUp = faker.name.findName();
 const emailOfUserToSignUp =
 `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLowerCase();
 
+const usageReportTomorrow = momentInPST().add("days", "2").format("YYYY-MM-DDThh:mm");
+
 interface StructureFromPerCompanyReport {
   name: string;
   releasedCompleted: integer;
@@ -104,8 +107,8 @@ interface StructureFromUserReport {
 }
 
 interface StructureFromSessionReport {
-  sessionTimeAproxAdminUser: string;
-  sessionTimeAproxNewUser: string;
+  sessionTimeAproxAdminUser: float;
+  sessionTimeAproxNewUser: float;
 }
 
 const numberOfDocsFromUsageReport: StructureFromPerCompanyReport[] = [];
@@ -168,26 +171,22 @@ const numberOfCreatedDocs: StructureFromPerCompanyReport[] = [
   {
     name: "Training Records",
     releasedCompleted: 0,
-    draftPending: 5,
+    draftPending: 2,
   },
 ];
 
 const createdUsers: StructureFromUserReport = {
   numberOfRegistredUsers: 6,
-  numberOfUniqueUsers: 1,
+  numberOfUniqueUsers: 2,
 };
 const usersFromReport: StructureFromUserReport = {
   numberOfRegistredUsers: 0,
   numberOfUniqueUsers: 0,
 };
 
-const spentTime: StructureFromSessionReport = {
-  sessionTimeAproxAdminUser: "1450",
-  sessionTimeAproxNewUser: "0",
-};
 const spentTimeFromReport: StructureFromSessionReport = {
-  sessionTimeAproxAdminUser: "",
-  sessionTimeAproxNewUser: "",
+  sessionTimeAproxAdminUser: 0.0,
+  sessionTimeAproxNewUser: 0.0,
 };
 
 context("Test usage report is correctly counting documents", () => {
@@ -468,7 +467,7 @@ context("Test usage report is correctly counting documents", () => {
       });
     });
 
-    context.skip("[API]Create required documents for Usage Report", () => {
+    context("[API]Create required documents for Usage Report", () => {
       context("[API]Create form documents", () => {
         it("[API]Create record inline form", (done: any) => {
           cy.grpGetGroupByName({
@@ -3769,7 +3768,7 @@ context("Test usage report is correctly counting documents", () => {
                 "training-refresh-training-periodically": "Yes",
                 "training-validity": 5,
                 "training-select-groups-to-train": [
-                  group.body[0].id,
+                  asyncTasksGroup.body[0].id,
                 ],
                 "training-select-users-to-train": [
                   adminEmployee.id,
@@ -3829,7 +3828,7 @@ context("Test usage report is correctly counting documents", () => {
                 "training-refresh-training-periodically": "Yes",
                 "training-validity": 5,
                 "training-select-groups-to-train": [
-                  group.body[0].id,
+                  asyncTasksGroup.body[0].id,
                 ],
                 "training-select-users-to-train": [
                   adminEmployee.id,
@@ -3901,13 +3900,35 @@ context("Test usage report is correctly counting documents", () => {
         NavigationItems.DASHBOARD,
         NavigationItems.DOCUMENT_CONTROL);
     });
+  });
+
+  context("Log out and sign in again", () => {
+    it("Logout", () => {
+      cy.authLogout();
+    });
+
+    it("Log user in", () => {
+      cy.authLogin({
+        email: emailOfUserToSignUp,
+      });
+    });
 
     it("Verify user is loged in", () => {
-      cy.authLogout();
+      cy.navigListExistsCheck(
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_CONTROL);
+    });
+
+    it("Navigate to Document List", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Open first document", () => {
+      cy.dlSelectFirstDocument();
     });
   });
 
-  context.skip("Login user and complete one LHR steps", () => {
+  context("Login user and complete one LHR steps", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
@@ -4003,33 +4024,6 @@ context("Test usage report is correctly counting documents", () => {
     });
   });
 
-  context.skip("Time travel one day back to the future", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
-    });
-
-    it("Select task TIME_TRAVEL_USER", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
-    it(`Select 1 day to back in future`, () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 1 });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.wait(10000);
-    });
-
-    it("Select task USAGE_REPORT", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.USAGE_REPORT });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-    });
-  });
-
   context("Submit request for usage report", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
@@ -4043,6 +4037,10 @@ context("Test usage report is correctly counting documents", () => {
       cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.USAGE_REPORT });
     });
 
+    it("Select date time", () => {
+      cy.get("#datetime-local").eq(0).arrowType(usageReportTomorrow);
+    });
+
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
     });
@@ -4051,6 +4049,7 @@ context("Test usage report is correctly counting documents", () => {
   context("Get report and parse it", () => {
     it("Get attachment from email", () => {
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.wait(20000);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
@@ -4117,11 +4116,10 @@ context("Test usage report is correctly counting documents", () => {
         const registeredUsersKey = "Registered Users";
         const uniqueUsersKey = "Unique Users";
 
-
         const companyUsersData = data.rows.find((row) => row[companyKey] === createdCompany.name);
 
-        usersFromReport.numberOfRegistredUsers = companyUsersData[registeredUsersKey];
-        usersFromReport.numberOfUniqueUsers = companyUsersData[uniqueUsersKey];
+        usersFromReport.numberOfRegistredUsers = parseInt(companyUsersData[registeredUsersKey], 10);
+        usersFromReport.numberOfUniqueUsers = parseInt(companyUsersData[uniqueUsersKey], 10);
       });
     });
 
@@ -4141,13 +4139,14 @@ context("Test usage report is correctly counting documents", () => {
         const sessionNewUserData = data.rows.find(
           (row) => row[keysInReport[0]] === createdCompany.name && row[keysInReport[1]] === emailOfUserToSignUp);
 
-        spentTimeFromReport.sessionTimeAproxAdminUser = sessionAdminUserData[keysInReport[2]];
-        spentTimeFromReport.sessionTimeAproxNewUser = sessionNewUserData[keysInReport[2]];
+        spentTimeFromReport.sessionTimeAproxAdminUser = parseFloat(sessionAdminUserData[keysInReport[2]]);
+        spentTimeFromReport.sessionTimeAproxNewUser = parseFloat(sessionNewUserData[keysInReport[2]]);
       });
     });
 
     it("Verify data from usage report", () => {
-      assert.deepEqual(spentTimeFromReport, spentTime);
+      expect(spentTimeFromReport.sessionTimeAproxAdminUser).to.be.within(0, 5);
+      expect(spentTimeFromReport.sessionTimeAproxNewUser).to.be.within(0, 1);
     });
   });
 });
