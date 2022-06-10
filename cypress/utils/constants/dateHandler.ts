@@ -11,4 +11,3 @@ export const pdfDocRelDateMonthFirst = momentInPST().format("MMM D, YYYY");
 export const equimentDueDays = 365;
 export const equimentDueDaysFmt = momentInPST().add(equimentDueDays, "days").format("ddd MMM D YYYY");
 export const lotDocumentIdRef = `LOT #` + lotDateSuffix();
-
