@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Yup from "yup";
 import { logo } from "../../../common/utils/helpers";
 import { AsyncState } from "../../../state/types";
-import { confirmResetPasswordSchema, passwordSchema } from "../../components/forms/fields/validators";
+import { confirmResetPasswordSchema, emailSchema, passwordSchema, requiredSchema } from "../../components/forms/fields/validators";
 import { FormContext } from "../../components/forms/FormContext";
 import { ResetPasswordValues } from "../types";
 import ResetPasswordPresenter from "./ResetPassword.presenter";
@@ -33,6 +33,8 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
   );
 
   const validationSchema = Yup.object({
+    email: emailSchema,
+    currentPassword: requiredSchema,
     newPassword: passwordSchema,
     newPasswordConfirmation: confirmResetPasswordSchema,
   });
