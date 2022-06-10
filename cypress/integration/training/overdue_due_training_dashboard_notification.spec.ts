@@ -372,4 +372,123 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
     });
   });
+
+  context("Create Training Curriculum record", () => {
+    it("Navigate to Training Curriculums", () => {
+      cy.reload();
+      cy.navigToTrainingCurriculums();
+    });
+
+    it("Create new Training Curriculum", () => {
+      cy.recCreateRecordFromLandingPage();
+    });
+
+    it("Select 'Training Curriculum test' as document type", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [
+          CyRoutes.GetRequiredApproversDocRev,
+          CyRoutes.DocPreview,
+          CyRoutes.GetFieldLocks,
+        ],
+        () => {
+          cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
+            .arrowClick({ force: true })
+            .autocompleteSelect("Training Curriculum test");
+        }
+      );
+    });
+
+    it("Enter training title 'Training Dashboard Notification'", () => {
+      cy.drEnterDocumentTitle({ name: "Training Dashboard Notification" });
+    });
+
+    it("Enter description 'Overdue and Due in 7 Days Training Dashboard Notification'", () => {
+      cy.drEnterDocumentDescription({
+        description:
+          "Overdue and Due in 7 Days Training Dashboard Notification",
+      });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.get("[data-cy=\"common.Numeric\"]").first().arrowClick();
+      cy.get("label").contains("Numeric").first().arrowClick();
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Verify training options document types", () => {
+      cy.get("[data-cy=training-document-to-be-trained-on]").arrowClick();
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "AR Form");
+    });
+
+    it("Select document to be trained on", () => {
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(
+        "AR Form"
+      );
+    });
+
+    it("Select refresh training periodically 'Yes'", () => {
+      cy.get("[name=training-refresh-training-periodically]")
+        .eq(0)
+        .arrowClick();
+    });
+
+    it("Enter training refresh period days", () => {
+      cy.get("[name=training-validity]").arrowType("60");
+    });
+
+    it("Select Groups to train 'Owner as approver'", () => {
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect(
+        "Owner as approver"
+      );
+    });
+
+    it("Select User to train", () => {
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
+        `${USERS[1].name}`
+      );
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
+        `${USERS[2].name}`
+      );
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
+        `${USERS[3].name}`
+      );
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Save training", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Check doc Draft status", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Draft");
+      cy.get("#HeaderInfo-name").should(
+        "have.text",
+        "Training Dashboard Notification"
+      );
+    });
+  });
+
+  context("Submit for approval", () => {
+    it("Click Submit for Approval", () => {
+      cy.contains("Submit for approval").arrowClick();
+    });
+
+    it("Click Approve", () => {
+      cy.trApproveTraining();
+    });
+
+    it("Check doc Released status", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should(
+        "have.text",
+        "Training Dashboard Notification"
+      );
+    });
+  });
 });
