@@ -1,5 +1,6 @@
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -142,9 +143,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         employeeId: adminEmployee.id,
         payload: {
           employees: [{ id: adminEmployee.id }],
-          tags: [
-            GroupTag.DASHBOARD_ADMIN,
-          ],
+          tags: [GroupTag.DASHBOARD_ADMIN],
         },
       });
     });
@@ -586,6 +585,77 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     it(`Verify training notification`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem: "FM-00001Rev 1 AR Form",
+      });
+    });
+  });
+
+  context("Log in as Admin user and check training notifications", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    context("Use time tool to travel user back to future", () => {
+      it("Navigate to async tasks", () => {
+        cy.navigToAsyncTasks();
+      });
+
+      it("Select task TIME_TRAVEL_USER", () => {
+        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+      });
+
+      it("Select 24 day to back in future", () => {
+        cy.asyncSelectBackToTheFutureTime({ day: 24 });
+      });
+
+      it("Select next task TRAINING_RECORDS_REFRESH", () => {
+        cy.asyncTaskSelectNextTaskType({
+          taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH,
+        });
+      });
+
+      it("Select next task TRAINING_RECORDS_STATUS", () => {
+        cy.asyncTaskSelectNextTaskType({
+          taskType: SQS_TYPES.TRAINING_RECORDS_STATUS,
+        });
+      });
+
+      it("Submit async task", () => {
+        cy.asyncTaskClickSubmit();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+
+    context("Check training notifications", () => {
+      it("Goto Dashboard", () => {
+        cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      });
+
+      it("Select 'Trainings' tab", () => {
+        cy.contains("Trainings").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Verify training notification", () => {
+        cy.get("[trainingstatus=\"DUE\"]")
+          .eq(0)
+          .should("have.text", "DUE IN 7 DAYS");
       });
     });
   });
