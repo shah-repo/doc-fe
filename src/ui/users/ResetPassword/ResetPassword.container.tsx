@@ -19,6 +19,8 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
 }) => {
 
   const initialValues: ResetPasswordValues = {
+    email: "",
+    currentPassword: "",
     newPassword: "",
     newPasswordConfirmation: "",
   };
