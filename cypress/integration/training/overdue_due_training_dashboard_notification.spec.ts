@@ -1,6 +1,7 @@
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import {
   OneTimeTrainingTest,
@@ -313,6 +314,62 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
+    });
+  });
+
+  context("Create Training Curriculum form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'Form-TC Training Dashboard Notification'", () => {
+      cy.drEnterDocumentTitle({
+        name: "Form-TC Training Dashboard Notification",
+      });
+    });
+
+    it("Enter document description 'Overdue and Due in 7 Days Training Dashboard Notification'", () => {
+      cy.drEnterDocumentDescription({
+        description:
+          "Overdue and Due in 7 Days Training Dashboard Notification",
+      });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Training Curriculum test' output document type", () => {
+      cy.drSelectOutputDocumentType({
+        documentType: "Training Curriculum test",
+      });
+      cy.unClick();
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
   });
 });
