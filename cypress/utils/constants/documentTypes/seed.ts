@@ -23,6 +23,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Document Title",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "document-description-kknwz9iu",
@@ -36,6 +37,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Document Description",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "type-of-document-to-be-created-kknx7kob",
@@ -59,6 +61,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Type of document to be created",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "document-type-to-be-selected-kknx20x4",
@@ -338,6 +341,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Document Type to be selected",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "json-form-kknxl2fm",
@@ -360,6 +364,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "visibility",
       validationAttribute: "JSON Form",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "define-the-output-of-that-form-kknxbkt6",
@@ -643,6 +648,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "visibility",
       validationAttribute: "Define the output of that form",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "default-revision-stage-kknx0vxh",
@@ -666,6 +672,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Default Revision Stage",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-required-kknx4qaq",
@@ -688,6 +695,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Training Required",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "attachments-to-be-included-kknx68g3",
@@ -700,6 +708,7 @@ export const Seed: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Attachments to be included",
       applicableValidationSchema: true,
+      tabId: "details",
     },
   ],
 },
