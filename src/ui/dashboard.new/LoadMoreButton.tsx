@@ -15,7 +15,6 @@ const styles = makeStyles(() =>
       "fontSize": "10px",
       "font-weight": 600,
       "letter-spacing": "0.5px",
-      "text-transform": "uppercase",
       "color": Colors.navy,
       "margin": 0,
       "margin-top": 2,

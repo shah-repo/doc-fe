@@ -6,6 +6,7 @@ import { map } from "lodash";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from "../../..";
+import { FB } from "../../../../ui/form.builder";
 
 export const withSMTextEditor = <T extends SMTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -28,6 +29,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     const intl = useIntl();
     const formik = useFormikContext();
     const { _formState, _documentRevisionFormState } = SM.useStores();
+    const { workspaceState } = FB.useStores();
     formValue = _formState?.getValue(name);
     _textEditorState = SM.useRef(SMTextEditorState, htmlToEditorState(formValue));
     const emptyHtmlContent = "<p></p>";
@@ -55,6 +57,13 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
+    );
+
+    SM.reaction(
+      () => _documentRevisionFormState?.isDirty,
+      (isDirty: boolean | undefined) => {
+        workspaceState?.setDirty(isDirty || false);
+      }
     );
 
     // MARK: @state
