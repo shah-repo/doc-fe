@@ -14,4 +14,3 @@ export const equimentPMDueDaysFmt = momentInPST().add(equimentPMDueDays, "days")
 export const equimentCALDueDaysFmt = momentInPST().add(equimentCALDueDays, "days").format("ddd MMM D YYYY");
 export const lotDocumentIdRef = `LOT #` + lotDateSuffix();
 export const dueDate = momentInPST().subtract(1, "days").format("ddd, MMMM D, YYYY");
-
