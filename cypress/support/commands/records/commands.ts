@@ -25,7 +25,7 @@ declare global {
       recVerifyDescription(params: {description: string }): Chainable<Subject>;
       recVerifyDescriptionWIP(params: {description: string }): Chainable<Subject>;
       equipReloadDocument(): Chainable<Subject>;
-      eqSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
+      equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
     }
   }
 }
@@ -141,7 +141,7 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("eqSetTimeTravelInDays", (params: {days: number}) => {
+Cypress.Commands.add("equipSetTimeTravelInDays", (params: {days: number}) => {
   cy.navigToAsyncTasks();
   cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
   cy.asyncSelectBackToTheFutureTime({ day: params.days });

@@ -11,7 +11,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, momentInPST, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { emailDateOffset, equimentCALDueDays, equimentCALDueDaysFmt, equimentPMDueDays, equimentPMDueDaysFmt, fileTimeFormat, momentInPST, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -39,14 +39,14 @@ let equipmentURL;
 let pmSchemaFieldName;
 let calibrationSchemaFieldName;
 let asyncTasksGroup;
-let adminEmployeeLoginResponse;
 let dueDateInEmail;
+let multipleCompanies;
 
 const pages = ["", "", "", ""];
 const ADMIN_USER = USERS[1];
 const equipmentTitle = `Equipment`;
 const equipmentTitleForm = `Equipment-Form`;
-const equipmentFormId = `EQ-00001`
+const equipmentFormId = `EQ-00001`;
 
 context("Autocomplete 'Equipment' test", () => {
   before(() => {
@@ -69,6 +69,8 @@ context("Autocomplete 'Equipment' test", () => {
         password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
+        multipleCompanies = response.employees.length > 0;
+
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
@@ -96,6 +98,7 @@ context("Autocomplete 'Equipment' test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
+        multipleCompanies = response.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -1132,7 +1135,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).arrowType("40");
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType(`${equimentPMDueDays}`);
       cy.unClick();
     });
 
@@ -1155,7 +1158,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).arrowType("31");
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType(`${equimentCALDueDays}`);
     });
 
     it("Type calibration maintenance instruction", () => {
@@ -1348,7 +1351,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentPMDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
@@ -1360,7 +1363,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentCALDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
@@ -1601,7 +1604,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentPMDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
@@ -1613,7 +1616,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentCALDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
@@ -1814,9 +1817,9 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Use time tool to travel user back to future", () => {
+  context("Set time travel tool to 1 day", () => {
     it("Select 1 day to back in future", () => {
-      cy.eqSetTimeTravelInDays({ days: 1 });
+      cy.equipSetTimeTravelInDays({ days: 1 });
     });
   });
 
@@ -1830,10 +1833,11 @@ context("Autocomplete 'Equipment' test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
+  });
 
+  context("Verify that the Primary owner receives an email", () => {
     it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(31, "days").subtract(1, "days").format("MM/DD/YYYY");
-      cy.log(dueDateInEmail);
+      dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(1, "days").format("MM/DD/YYYY");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: USERS[1].email,
@@ -1843,7 +1847,6 @@ context("Autocomplete 'Equipment' test", () => {
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
-        cy.log(emails[0].body.text);
       });
     });
 
@@ -1866,28 +1869,110 @@ context("Autocomplete 'Equipment' test", () => {
         assertNumberOfEmailsFoundInList: 1,
       });
     });
+  });
 
+  context("Verify that the Coordinator receives an email", () => {
+    it("Get emails", () => {
+      dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(1, "days").format("MM/DD/YYYY");
+      cy.log(dueDateInEmail);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      const getEmailSetting =  {
+        to: USERS[2].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment EQ-00001 Equipment document has Calibration Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [`Hello <b>${USERS[2].name},</b>`,
+            `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Navigate to dashboard for Primary Owner", () => {
     it("Navigate to dashboard", () => {
       cy.navigToDashboard();
     });
 
     it("Verify Dashboard notification that CAL will be due in 30 days", () => {
       const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-      .add(30, "days")
-      .format("MMM D");
+        .add(30, "days")
+        .format("MMM D");
       cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-      .eq(0).then(($el) => {
-        const text = $el.text().replace(/\u00a0/g, "");
-        expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 30 days${dashboardCalDueDate}`);
-      });
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 30 days${dashboardCalDueDate}`);
+        });
     });
   });
 
-  context("Use time tool to travel user back to future", () => {
-    it("Select 10 day to back in future", () => {
-      cy.eqSetTimeTravelInDays({ days: 10 });
+  context("Log in as Coordinator and check for nortification as ''", () => {
+    it("Logout user", () => {
+      cy.authLogout();
     });
-  }); 
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Verify Dashboard notification that CAL will be due in 30 days", () => {
+      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
+        .add(30, "days")
+        .format("MMM D");
+      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 30 days${dashboardCalDueDate}`);
+        });
+    });
+  });
+
+  context("Set QA tool to Day 11", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Select 1 day to back in future", () => {
+      cy.equipSetTimeTravelInDays({ days: 10 });
+    });
+  });
 
   context("Trigger email", () => {
     it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
@@ -1942,19 +2027,19 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify Dashboard notification that CAL will be due in 30 days", () => {
       const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-      .add(20, "days")
-      .format("MMM D");
+        .add(20, "days")
+        .format("MMM D");
       cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-      .eq(0).then(($el) => {
-        const text = $el.text().replace(/\u00a0/g, "");
-        expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 30 days${dashboardCalDueDate}`);
-      });
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 30 days${dashboardCalDueDate}`);
+        });
     });
   });
 
   context("Use time tool to travel user back to future", () => {
     it("Select 14 day to back in future", () => {
-      cy.eqSetTimeTravelInDays({ days: 14 });
+      cy.equipSetTimeTravelInDays({ days: 14 });
     });
   });
 
@@ -2011,19 +2096,19 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify Dashboard notification that CAL will be due in 7 days", () => {
       const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-      .add(6, "days")
-      .format("MMM D");
-        cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-      .eq(0).then(($el) => {
-        const text = $el.text().replace(/\u00a0/g, "");
-        expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 7 days${dashboardCalDueDate}`);
-      });
+        .add(6, "days")
+        .format("MMM D");
+      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 7 days${dashboardCalDueDate}`);
+        });
     });
   });
 
   context("Use time tool to travel user back to future", () => {
     it("Select 7 day to back in future", () => {
-      cy.eqSetTimeTravelInDays({ days: 7 });
+      cy.equipSetTimeTravelInDays({ days: 7 });
     });
   });
 
@@ -2039,19 +2124,19 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("CAL status should update to CAL Due", () => {
       const calibrationComplianceDate = moment().tz("America/Los_Angeles")
-      .subtract(1, "days")
-      .format("ddd, MMMM D, YYYY");
-        cy.get("[data-cy=\"maintenance.status\"]")
-      .eq(1).then(($el) => {
-        const text = $el.text().replace(/\u00a0/g, "");
-        expect(text).to.contain(`CALDue - Due date: ${calibrationComplianceDate}`);
-       });
+        .subtract(1, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(1).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`CALDue - Due date: ${calibrationComplianceDate}`);
+        });
     });
   });
 
   context("Use time tool to travel user back to future", () => {
     it("Select 2 day to back in future", () => {
-      cy.eqSetTimeTravelInDays({ days: 2 });
+      cy.equipSetTimeTravelInDays({ days: 2 });
     });
   });
 
@@ -2108,19 +2193,19 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify Dashboard notification that CAL will be due in 7 days", () => {
       const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-      .subtract(3, "days")
-      .format("MMM D");
+        .subtract(3, "days")
+        .format("MMM D");
       cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-      .eq(0).then(($el) => {
-        const text = $el.text().replace(/\u00a0/g, "");
-        expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 7 days${dashboardCalDueDate}`);
-      });
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 7 days${dashboardCalDueDate}`);
+        });
     });
   });
 
   context("Use time tool to travel user back to future", () => {
     it("Select 7 day to back in future", () => {
-      cy.eqSetTimeTravelInDays({ days: 7 });
+      cy.equipSetTimeTravelInDays({ days: 7 });
     });
   });
 
@@ -2135,13 +2220,13 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("PM status should update to PM Due", () => {
       const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
-      .subtract(1, "days")
-      .format("ddd, MMMM D, YYYY");
+        .subtract(1, "days")
+        .format("ddd, MMMM D, YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
-      .eq(0).then(($el) => {
-        const text = $el.text().replace(/\u00a0/g, "");
-        expect(text).to.contain(`PMDue - Due date: ${prevMaintenanceComplianceDate}`);
-      });
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`PMDue - Due date: ${prevMaintenanceComplianceDate}`);
+        });
     });
   });
 
@@ -2413,7 +2498,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentPMDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
@@ -2425,7 +2510,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
+        tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentPMDueDaysFmt}`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/CALIBRATION/);
@@ -2435,7 +2520,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentCALDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
@@ -2444,7 +2529,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp( `MR-00001 Calibration document \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `Calibration Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
+        tmpRegex = new RegExp( `Calibration Done - Due Date: ${equimentCALDueDaysFmt}`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).not.match(/Select field/);
