@@ -491,4 +491,68 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       );
     });
   });
+
+  context("Check training notifications", () => {
+    it("Navigate to Dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it(`Verify training notification`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem: "FM-00001Rev 1 AR Form",
+      });
+    });
+  });
+
+  context("Log in as second user and check training notifications", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    it(`Verify training notification`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem: "FM-00001Rev 1 AR Form",
+      });
+    });
+  });
+
+  context("Log in as third user and check training notifications", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    it(`Verify training notification`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem: "FM-00001Rev 1 AR Form",
+      });
+    });
+  });
 });
