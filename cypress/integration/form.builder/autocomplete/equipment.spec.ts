@@ -46,7 +46,6 @@ const pages = ["", "", "", ""];
 const ADMIN_USER = USERS[1];
 const equipmentTitle = `Equipment`;
 const equipmentTitleForm = `Equipment-Form`;
-const equipmentFormId = `EQ-00001`;
 
 context("Autocomplete 'Equipment' test", () => {
   before(() => {
@@ -67,7 +66,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
-      }).then((response) => {
+      }).then((response: any) => {
         loginResponse = response;
         multipleCompanies = response.employees.length > 0;
 
@@ -96,7 +95,7 @@ context("Autocomplete 'Equipment' test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-      }).then((response) => {
+      }).then((response: any) => {
         loginResponse = response;
         multipleCompanies = response.employees.length > 1 ? true : false;
         done();
@@ -2669,7 +2668,3 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 });
-function el(el: any) {
-  throw new Error("Function not implemented.");
-}
-
