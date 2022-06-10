@@ -31,41 +31,37 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   return (
     <>
-      <Grid item xs>
-        <Box mb={2}>
-          <Grid container={true} alignItems="center">
-            <Grid item xs>
-              <GridTitle translation="page.table.title.changeRequest" />
-            </Grid>
-            <Grid item={true}>
-              <Button
-                variant="outlined"
-                className={classes.exportListbutton}
-                id="ListPresenter-export-list"
-                data-cy="document.revision.export.list"
-                onClick={exportDialog.open}
-              >
-                <Box display="flex">
-                  <ExportIcon className={classes.iconSvg} height={14} width={14} />
-                </Box>
-                <Text translation="document.revision.export.list" />
-              </Button>
-              <ExportListDialog
-                {...{ headers, data }}
-                dialog={exportDialog}
-                customFileName="DocumentList"
-              />
-              <Button
-                id="ChangeRequest-create"
-                data-cy={"change.request.create"}
-                onClick={handleCreateButton}
-                className={classes.createButton}
-              >
-                <Text translation="change.request.create" />
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
+      <Grid container alignItems="center" justify="space-between">
+        <Grid item>
+          <GridTitle translation="page.table.title.changeRequest" />
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            className={classes.exportListbutton}
+            id="ListPresenter-export-list"
+            data-cy="document.revision.export.list"
+            onClick={exportDialog.open}
+          >
+            <Box display="flex">
+              <ExportIcon className={classes.iconSvg} height={14} width={14} />
+            </Box>
+            <Text translation="document.revision.export.list" />
+          </Button>
+          <ExportListDialog
+            {...{ headers, data }}
+            dialog={exportDialog}
+            customFileName="DocumentList"
+          />
+          <Button
+            id="ChangeRequest-create"
+            data-cy={"change.request.create"}
+            onClick={handleCreateButton}
+            className={classes.createButton}
+          >
+            <Text translation="change.request.create" />
+          </Button>
+        </Grid>
       </Grid>
       <Dialog
         open={dialog.isOpen}
