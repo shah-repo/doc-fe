@@ -17,6 +17,8 @@ declare global {
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
+      drSelectDetailsTab(): Chainable<Subject>;
+      drSelectOverviewTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -222,6 +224,14 @@ Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion:
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevPreview, () => {
     cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).arrowClick();
   });
+});
+
+Cypress.Commands.add("drSelectDetailsTab", () => {
+  cy.get("[data-cy=\"tabId.details\"]").arrowClick();
+});
+
+Cypress.Commands.add("drSelectOverviewTab", () => {
+  cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
 });
 
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
