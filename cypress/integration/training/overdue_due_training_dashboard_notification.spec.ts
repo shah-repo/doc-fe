@@ -16,6 +16,7 @@ let adminEmployee;
 let secondEmployee;
 let developersGroup;
 let asyncTasksGroup;
+let caGroup;
 
 context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
   before(() => {
@@ -119,6 +120,31 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         employeeId: adminEmployee.id,
         payload: {
           employees: [{ id: adminEmployee.id }],
+        },
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Company Admin",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        caGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: caGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
+          tags: [
+            GroupTag.DASHBOARD_ADMIN,
+          ],
         },
       });
     });
@@ -447,13 +473,13 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Select User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
-        `${USERS[1].name}`
-      );
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
         `${USERS[2].name}`
       );
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
         `${USERS[3].name}`
+      );
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
+        `${USERS[4].name}`
       );
     });
 
@@ -492,19 +518,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
   });
 
-  context("Check training notifications", () => {
-    it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
-    });
-
-    it(`Verify training notification`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({
-        listItem: "FM-00001Rev 1 AR Form",
-      });
-    });
-  });
-
-  context("Log in as second user and check training notifications", () => {
+  context("Log in as first user and check training notifications", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -530,7 +544,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
   });
 
-  context("Log in as third user and check training notifications", () => {
+  context("Log in as second user and check training notifications", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -538,6 +552,32 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[3].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    it(`Verify training notification`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem: "FM-00001Rev 1 AR Form",
+      });
+    });
+  });
+
+  context("Log in as third user and check training notifications", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[4].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
