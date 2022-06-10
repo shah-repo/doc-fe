@@ -39,9 +39,6 @@ export const emailSchema = Yup.string()
   .email("validators.email")
   .required("validators.required");
 
-export const requiredSchema = Yup.string()
-  .required("validators.required");
-
 export const validator = (...validators: Validator[]): Validator => (value: any): Translation | undefined => {
   for (const validatorFn of validators) {
     const error = validatorFn(value);

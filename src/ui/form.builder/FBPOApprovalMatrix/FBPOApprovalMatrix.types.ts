@@ -33,14 +33,6 @@ export type FBPOApprovalMatrixFormProps =
 & Pick<FBFormProps, "initialValues">
 & Pick<FBPOApprovalMatrixDialogProps, "signatureStages">;
 
-// export type FBPOApprovalMatrixFormProps =
-// & FBPOApprovalMatrixBasicProps
-// & Pick<FBPOApprovalMatrixDialogProps, "initialValues" |
-// "onSubmit" | "closeDialog" | "groupOptions" | "employees" | "signatureStages">
-// & {
-//   validateForm?: (values: any) => void;
-// };
-
 export type FBPOApprovalMatrixTableProps =
 & FBPOApprovalMatrixBasicProps
 & Pick<FBPOApprovalMatrixDialogProps, "onSubmit" |
