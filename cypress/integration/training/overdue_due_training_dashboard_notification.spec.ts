@@ -465,12 +465,6 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.get("[name=training-validity]").arrowType("60");
     });
 
-    it("Select Groups to train 'Owner as approver'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect(
-        "Owner as approver"
-      );
-    });
-
     it("Select User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
         `${USERS[2].name}`
