@@ -80,7 +80,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
       dialogState?.config({
         open: true,
         content: (
-          <FBForm>
+          <FBForm workspaceMode="form">
             <FBTextField
               label="form.builder.template.name"
               name={FBFieldName.TemplateName}

@@ -17,8 +17,8 @@ import {
 import { Nullable } from "../../../../state/ducks/common/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
-import KendoGridStyles from "../styles";
 import { AddUserManage } from "../types";
+import { styles } from "./styles";
 
 interface GroupOptions {
   label: string;
@@ -46,7 +46,7 @@ export const GroupsCell = ({
 }: GroupsProps) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
-  const classes = KendoGridStyles();
+  const classes = styles();
   const [result, setResult] = React.useState<GroupOptions[]>([]);
   const [data, setData] = React.useState<GroupOptions[]>([]);
 
