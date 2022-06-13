@@ -35,6 +35,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       label: "Part to be Manufactured",
       deleteDisabled: true,
       deleteInFormDisabled: true,
+      tabId: "overview",
     },
     {
       name: "lhr_initial_quantity",
@@ -48,6 +49,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       validationAttribute: "Initial Quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "overview",
     },
     {
       name: "lhr-end-quantity",
@@ -62,6 +64,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       validationAttribute: "End Quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "overview",
     },
     {
       name: "lhr-build-type",
@@ -86,6 +89,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       validationAttribute: "Build Type",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "overview",
     },
     {
       name: "lhr-due-date",
@@ -98,6 +102,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Due Date",
       applicableValidationSchema: true,
+      tabId: "overview",
     },
     {
       name: "lhrstep-built-in",
@@ -109,6 +114,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       ],
       validationMode: "default",
       applicableValidationSchema: true,
+      tabId: "procedure",
     },
   ],
 };
