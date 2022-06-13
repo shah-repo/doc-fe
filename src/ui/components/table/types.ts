@@ -6,7 +6,7 @@ import { TableColumnActionType, TableColumnProps } from "./column/types";
 export type TableSelectionRenderer<T> = (
   props: TableSelectionProps<T>,
 ) => () => any;
-export interface TableSearchQueryType {
+interface TableSearchQueryType {
   [key: string]: any;
 }
 
