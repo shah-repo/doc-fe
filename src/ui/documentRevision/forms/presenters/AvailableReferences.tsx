@@ -227,7 +227,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 }}
                 inputProps={{
                   ...params.inputProps,
-                  style: { padding: "10.5px 10px" },
+                  style: { padding: "10.5px 10px", fontSize: "14px" },
                 }}
               />
             </Box>
