@@ -45,17 +45,43 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
         <Form className={classes.formStyle}>
           <FormMessage asyncState={asyncState} className={classes.status} id="ResetPassword-formError"/>
           <InputField
+            name="email"
+            label="reset.enter.email"
+            size="sm"
+            gutter={false}
+            inputProps={{
+              autoComplete: "email",
+              type: "text",
+            }}
+            validate={validator(required)}
+            lpignore={false}
+            dataCy={"email"}
+          />
+          <InputField
+            name="currentPassword"
+            label="reset.enter.current.password"
+            size="sm"
+            gutter={false}
+            inputProps={{
+              autoComplete: "reset-password",
+              type: "password",
+            }}
+            validate={validator(required)}
+            lpignore={false}
+            dataCy={"currentPassword"}
+          />
+          <InputField
             name="newPassword"
             label="reset.enter.new.password"
             size="sm"
             gutter={false}
             inputProps={{
               autoComplete: "reset-password",
-              id: "ResetPassword-password",
               type: "password",
             }}
             validate={validator(required)}
             lpignore={false}
+            dataCy={"newPasswordFirstInput"}
           />
           <InputField
             name="newPasswordConfirmation"
@@ -64,18 +90,17 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             gutter={false}
             inputProps={{
               autoComplete: "reset-password",
-              id: "ResetPassword-confirmPassword",
               type: "password",
             }}
+            dataCy={"newPasswordConfirmation"}
             validate={validator(required)}
             lpignore={false}
-
           />
           <SubmitButton
             asyncState={asyncState}
             label={"reset.password"}
             className={classes.submit}
-            id="ResetPassword-resetPassword"
+            dataCy={"resetButtonSubmit"}
           />
         </Form>
       </Paper>
