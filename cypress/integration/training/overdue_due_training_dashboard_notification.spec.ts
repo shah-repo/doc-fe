@@ -659,4 +659,85 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
     });
   });
+
+  context(
+    "Log in as First user and check training notifications should now have the Due in 7 Days tag",
+    () => {
+      it("Logout user", () => {
+        cy.authLogout();
+      });
+
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[2].email,
+          password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({
+          name: createdCompany.name,
+          multiple: multipleCompanies,
+        });
+      });
+
+      it("Verify training notification", () => {
+        cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      });
+    }
+  );
+
+  context(
+    "Log in as Second user and check training notifications should now have the Due in 7 Days tag",
+    () => {
+      it("Logout user", () => {
+        cy.authLogout();
+      });
+
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[3].email,
+          password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({
+          name: createdCompany.name,
+          multiple: multipleCompanies,
+        });
+      });
+
+      it("Verify training notification", () => {
+        cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      });
+    }
+  );
+
+  context(
+    "Log in as Third user and check training notifications should now have the Due in 7 Days tag",
+    () => {
+      it("Logout user", () => {
+        cy.authLogout();
+      });
+
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[4].email,
+          password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({
+          name: createdCompany.name,
+          multiple: multipleCompanies,
+        });
+      });
+
+      it("Verify training notification", () => {
+        cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      });
+    }
+  );
 });
