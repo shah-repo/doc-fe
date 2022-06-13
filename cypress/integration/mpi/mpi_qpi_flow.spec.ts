@@ -228,7 +228,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: "DRAFT" });
         });
 
         context("Fill step #1 and check autosave", () => {
@@ -314,7 +314,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+            cy.arVerifyStatus({ status: "RELEASED" });
           });
         });
       });
@@ -357,7 +357,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: "DRAFT" });
         });
 
         context("Fill step #1", () => {
@@ -387,7 +387,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: "IN_REVIEW" });
           });
         });
       });
@@ -437,7 +437,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify MPI state should be Approved", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+        cy.arVerifyStatus({ status: "APPROVED" });
       });
     });
   });
@@ -478,7 +478,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: "DRAFT" });
         });
 
         context("Fill step #1", () => {
@@ -508,7 +508,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: "IN_REVIEW" });
           });
         });
       });
@@ -553,7 +553,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify MPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Pending Change");
+        cy.arVerifyStatus({ status: "PENDING_CHANGE" });
       });
     });
   });
@@ -594,7 +594,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: "DRAFT" });
         });
 
         context("Fill step #1", () => {
@@ -624,7 +624,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+            cy.arVerifyStatus({ status: "RELEASED" });
           });
         });
       });
@@ -667,7 +667,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: "DRAFT");
         });
 
         context("Fill step #1", () => {
@@ -697,7 +697,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: "IN_REVIEW" });
           });
         });
       });
@@ -745,7 +745,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Approved", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+        cy.arVerifyStatus({ status: "APPROVED" });
       });
     });
   });
@@ -786,7 +786,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: "DRAFT"});
         });
 
         context("Fill step #1", () => {
@@ -816,7 +816,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: "IN_REVIEW"});
           });
         });
       });
@@ -861,7 +861,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Pending Change");
+        cy.arVerifyStatus({ status: "PENDING_CHANGE"});
       });
     });
   });

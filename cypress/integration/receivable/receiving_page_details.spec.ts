@@ -1024,8 +1024,8 @@ context("Receivable test with Page Details", () => {
 
   context("Verify `Receiving document` status and send email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "WIP");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "WIP" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -1232,8 +1232,8 @@ context("Receivable test with Page Details", () => {
 
   context("Verify `Receiving document` status and send email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "WIP");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "WIP" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -1610,8 +1610,8 @@ context("Receivable test with Page Details", () => {
 
   context("While in “Pending Approval” state, send to email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Pending Approval");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "PENDING_APPROVAL" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -1791,8 +1791,8 @@ context("Receivable test with Page Details", () => {
 
   context("After “Released” state, send to email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);

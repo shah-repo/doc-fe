@@ -439,7 +439,7 @@ context("Records email popup modal", () => {
     });
 
     it("Check if Record has status 'Released'", () => {
-      cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Released");
+      cy.arVerifyStatus({ status: "RELEASED" });
     });
   });
 });

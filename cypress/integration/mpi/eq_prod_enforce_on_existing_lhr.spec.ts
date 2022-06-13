@@ -1914,7 +1914,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Verify status is Released", () => {
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: "RELEASED" });
     });
   });
 });

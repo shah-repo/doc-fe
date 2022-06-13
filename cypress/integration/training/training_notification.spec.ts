@@ -391,7 +391,7 @@ context("Training notification test", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedFormId = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedFormId = x.text(); });
     });
   });
 
@@ -628,7 +628,7 @@ context("Training notification test", () => {
 
     it(`Click training notification and check doc with Approved status`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
-      cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Approved");
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
 
     it("Navigate to Training Records", () => {

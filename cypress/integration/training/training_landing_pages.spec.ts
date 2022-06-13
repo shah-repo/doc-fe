@@ -1211,9 +1211,9 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     it(`Verify training curriculum could be open`, () => {
-      cy.get("#HeaderInfo-docId").should("not.exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("not.exist");
       cy.trSelectFirstDocument();
-      cy.get("#HeaderInfo-docId").should("exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("exist");
       cy.navigToTrainingCurriculums();
       cy.get("div[role=dialog]").should("not.exist");
     });

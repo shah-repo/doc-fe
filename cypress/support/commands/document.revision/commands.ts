@@ -462,7 +462,7 @@ Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {
-  cy.get(`span[id="HeaderInfo-docId"]`);
+  cy.get(`span[data-cy=\"HeaderInfo-docId\"]`);
 });
 
 Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {
