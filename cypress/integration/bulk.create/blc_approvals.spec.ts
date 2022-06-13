@@ -353,33 +353,41 @@ context("Bulk create approvals block/inline test", () => {
         cy.drEnterDocumentDescription({ description: "Bulk Creation approvals document description" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").eq(1).arrowClick();
           cy.unClick();
         });
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document with approvals for BLC");
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").eq(1).autocompleteSelect("Document with approvals for BLC");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Approvals Document Type");
+        cy.get("[data-cy=\"fb-output-document-type\"]").eq(1).autocompleteSelect("Approvals Document Type");
       });
 
       it("Select 'no' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(1).check();
-      });
-
-      it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(2).check();
       });
     });
 
     context("Upload approvals block spreadsheet template", () => {
       it("Upload template file", () => {
         cy.atchUploadTemplateForBLC({ fileName: "recordApprovalsBlock.xlsx" });
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
       it("Click save document", () => {

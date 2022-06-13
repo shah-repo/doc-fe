@@ -199,17 +199,17 @@ context("Suppliers landing page", () => {
       cy.unClick();
     });
 
-    it("Verify approval field is added as result of predefined schema", () => {
-      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
-      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Verify approval field is added as result of predefined schema", () => {
+      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
+      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
     });
 
     it("Approve and release document", () => {

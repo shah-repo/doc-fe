@@ -161,21 +161,21 @@ context("Autosave EB test", () => {
       it("Select 'Engineering Build' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
       });
-
-      it("Verify that Approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
-
-      it("Add EB Procedure", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "EB Procedure" });
-        cy.fbAddNewFieldButton();
-      });
     });
 
     context("Create the form and release it", () => {
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Add EB Procedure", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Verify that Approvals field is automatically added", () => {
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {

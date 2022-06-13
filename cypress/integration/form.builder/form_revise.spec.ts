@@ -98,14 +98,14 @@ context("FORM document revise test", () => {
     context("Add form fields", () => {
       it("Add section field", () => {
         cy.fbAddNewField();
-        cy.fbSelectItemFromNewFieldList({ field: "Section" });
+        cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
         cy.fbEnterLabel({ label: "Test section" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add Text field", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterLabel({ label: "text field" });
         cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
         cy.fbAddNewFieldButton();

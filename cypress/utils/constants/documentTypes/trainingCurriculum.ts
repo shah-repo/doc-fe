@@ -42,6 +42,7 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       omitFinalValidation: true,
       validationAttribute: "Periodic Training",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-document-to-be-trained-on",
@@ -66,6 +67,7 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       ],
       validationAttribute: "Documents to Train on",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-refresh-training-periodically",
@@ -92,6 +94,7 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       validationMode: "default",
       validationAttribute: "Refresh/repeat training periodically?",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-validity",
@@ -114,6 +117,7 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       validationMode: "visibility",
       validationAttribute: "Training Frequency (in days)",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-details-section",
@@ -127,6 +131,7 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       omitFinalValidation: true,
       validationAttribute: "Trainees Details",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-select-groups-to-train",
@@ -145,6 +150,7 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       ],
       validationAttribute: "Groups to Train",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-select-users-to-train",
@@ -164,6 +170,7 @@ export const TrainingCurriculum: IdocumentTypeDto = {
       ],
       validationAttribute: "Users to Train (if applicable)",
       applicableValidationSchema: true,
+      tabId: "details",
     },
   ],
   category: Categories.TrainingCurriculums,
@@ -209,6 +216,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       omitFinalValidation: true,
       validationAttribute: "Forced Retraining / One-Time Training",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-document-to-be-trained-on",
@@ -234,6 +242,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       ],
       validationAttribute: "Documents to Train on",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-force-retraining-for-everyone",
@@ -263,6 +272,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       validationAttribute:
         "Force retraining (everyone will be retrained regardless of their current status)",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-details-section",
@@ -276,6 +286,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       omitFinalValidation: true,
       validationAttribute: "Trainees Details",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-select-groups-to-train",
@@ -294,6 +305,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       ],
       validationAttribute: "Groups to Train",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "training-select-users-to-train",
@@ -313,6 +325,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       ],
       validationAttribute: "Users to Train (if applicable)",
       applicableValidationSchema: true,
+      tabId: "details",
     },
   ],
   category: Categories.TrainingCurriculums,

@@ -12,7 +12,7 @@ declare global {
       fbSelectNavField(params: { field: string }): Chainable<Subject>;
       fbNavToTableOverview(): Chainable<Subject>;
       fbNavToTableDetails(): Chainable<Subject>;
-      fbSelectItemFromNewFieldList(params: { field: string }): Chainable<Subject>;
+      fbSelectItemFromNewFieldList(params: { section: string; field: string }): Chainable<Subject>;
       fbEnterPOLabelName(params: { name: string }): Chainable<Subject>;
       fbAddNewFieldButton(): Chainable<Subject>;
       fbAddNewField(): Chainable<Subject>;
@@ -135,8 +135,9 @@ Cypress.Commands.add("fbNavToTableOverview", () => {
   cy.get("[data-cy=\"tabId.overview\"]").contains("Overview").arrowClick();
 });
 
-Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { field: string }) => {
-  cy.get(`[data-cy="${params.field}"]`).contains(new RegExp(params.field, "g")).arrowClick();
+Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { section: string; field: string }) => {
+  cy.get(`[data-cy="${params.section}"]`).arrowClick();
+  cy.get(`li > [data-cy='${params.field}']`).contains(new RegExp((params.field).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")).arrowClick();
 });
 
 Cypress.Commands.add("fbEnterPOLabelName", (params: { name: string }) => {
@@ -370,7 +371,7 @@ Cypress.Commands.add("fbAddAutocompleteElement", (params: { name: string; label:
   else {
     cy.fbClickAddNewHiddenBtn();
   }
-  cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+  cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
   cy.fbEnterNameValue({ name: "label", value: params.label });
   cy.get("[data-cy=\"optionId\"]").autocompleteSelect(`${params.name}`);
   cy.fbAddNewFieldButton();

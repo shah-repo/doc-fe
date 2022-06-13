@@ -221,8 +221,8 @@ context("Approval request email popup modal", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status is 'In Review'", () => {
-      cy.arVerifyStatus({ status: "In Review" });
+    it("Verify AR status is 'IN_REVIEW'", () => {
+      cy.arVerifyStatus({ status: "IN_REVIEW" });
     });
   });
 

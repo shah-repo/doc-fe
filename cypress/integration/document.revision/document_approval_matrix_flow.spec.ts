@@ -231,7 +231,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "Description" });
+      cy.drEnterDocumentDescription({ description: "Description" });
     });
   });
 

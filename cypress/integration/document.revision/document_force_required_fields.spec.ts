@@ -148,8 +148,7 @@ context("Document force required fields", () => {
     });
 
     it("description should be blank", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
-        .should("have.value", "");
+      cy.get("[data-cy=\"description\"]").should("have.value", "");
     });
   });
 
@@ -220,7 +219,9 @@ context("Document force required fields", () => {
     });
 
     it("remove description", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear();
+      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+      cy.get("[data-cy=\"description\"]").first().clear();
+      cy.unClick();
     });
 
     it("remove title", () => {
@@ -247,14 +248,14 @@ context("Document force required fields", () => {
   context("Fill required fields and add fields to form", () => {
     it("Add TextField", () => {
       cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Text Editor", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });

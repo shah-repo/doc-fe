@@ -17,6 +17,8 @@ declare global {
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
+      drSelectDetailsTab(): Chainable<Subject>;
+      drSelectOverviewTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -224,6 +226,14 @@ Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion:
   });
 });
 
+Cypress.Commands.add("drSelectDetailsTab", () => {
+  cy.get("[data-cy=\"tabId.details\"]").arrowClick();
+});
+
+Cypress.Commands.add("drSelectOverviewTab", () => {
+  cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+});
+
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
   list.forEach((item) => {
     cy.get("[class=\"circle_remove\"]").eq(item).arrowClick({ force: true });
@@ -250,7 +260,7 @@ Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) 
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"description\"]").first().arrowClick();
+  cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
   cy.get("[data-cy=\"description\"]").first().arrowType(params.description);
   cy.unClick();
 });
