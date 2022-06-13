@@ -740,4 +740,85 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
     }
   );
+
+  context("Log in as Admin user and Set the QA tool to Day 30", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    context("Use time tool to travel user back to future", () => {
+      it("Navigate to async tasks", () => {
+        cy.navigToAsyncTasks();
+      });
+
+      it("Select task TIME_TRAVEL_USER", () => {
+        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+      });
+
+      it("Select 30 day to back in future", () => {
+        cy.asyncSelectBackToTheFutureTime({ day: 30 });
+      });
+
+      it("Select next task TRAINING_RECORDS_REFRESH", () => {
+        cy.asyncTaskSelectNextTaskType({
+          taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH,
+        });
+      });
+
+      it("Select next task TRAINING_RECORDS_STATUS", () => {
+        cy.asyncTaskSelectNextTaskType({
+          taskType: SQS_TYPES.TRAINING_RECORDS_STATUS,
+        });
+      });
+
+      it("Submit async task", () => {
+        cy.asyncTaskClickSubmit();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+  });
+
+  context("Log in as Third user and Complete training", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[4].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    it("Open assigned Training", () => {
+      cy.dashGoToListItemFromDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+    });
+
+    it("Click complete training button", () => {
+      cy.trCompleteTraining();
+    });
+  });
 });
