@@ -205,14 +205,10 @@ context("Dynamic Form Test", () => {
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
-      // eslint-disable-next-line cypress.eslint.rules/cy.pause
-      cy.pause();
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Add Paragraph", () => {
-      // eslint-disable-next-line cypress.eslint.rules/cy.pause
-      cy.pause();
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
