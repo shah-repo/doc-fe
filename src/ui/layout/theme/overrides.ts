@@ -42,7 +42,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     h6: {
       color: Colors.dark_gray,
       fontSize: "1rem",
-      fontWeight: "bold",
+      fontWeight: 600,
     },
   },
   MuiButton: {
@@ -50,7 +50,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontSize: "0.75rem",
       borderRadius: 3,
       margin: appTheme.spacing(1),
-      fontWeight: "bold",
+      fontWeight: 600,
     },
     contained: {
       boxShadow: "none",
