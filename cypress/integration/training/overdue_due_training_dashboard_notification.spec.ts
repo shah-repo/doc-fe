@@ -821,4 +821,46 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.trCompleteTraining();
     });
   });
+
+  context("Log in as Admin user and check training notifications", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    context("Check training notifications", () => {
+      it("Goto Dashboard", () => {
+        cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      });
+
+      it("Select 'Trainings' tab", () => {
+        cy.contains("Trainings").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Training notification show pending training of User 1 and 2", () => {
+        cy.get("[trainingstatus=\"OVERDUE\"]")
+          .eq(0)
+          .should("have.text", "OVERDUE")
+          .arrowClick();
+        cy.get("[class='MuiCollapse-wrapperInner']")
+          .should("contain.text", USERS[2].name)
+          .and("contain.text", USERS[3].name);
+      });
+    });
+  });
 });
