@@ -149,6 +149,10 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                 lineHeight: "24px",
                 minHeight: "32px",
               }),
+              menu: (provided) => ({
+                ...provided,
+                zIndex: 2,
+              }),
             }}
             autoFocus={boxClicked}
             isClearable={Boolean(formikValue)}
