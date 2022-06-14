@@ -947,4 +947,159 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
     });
   });
+
+  context("Set the QA tool to Day 31", () => {
+    context("Use time tool to travel user back to future", () => {
+      it("Navigate to async tasks", () => {
+        cy.navigToAsyncTasks();
+      });
+
+      it("Select task TIME_TRAVEL_USER", () => {
+        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+      });
+
+      it("Select 31 day to back in future", () => {
+        cy.asyncSelectBackToTheFutureTime({ day: 31 });
+      });
+
+      it("Select next task TRAINING_RECORDS_REFRESH", () => {
+        cy.asyncTaskSelectNextTaskType({
+          taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH,
+        });
+      });
+
+      it("Select next task TRAINING_RECORDS_STATUS", () => {
+        cy.asyncTaskSelectNextTaskType({
+          taskType: SQS_TYPES.TRAINING_RECORDS_STATUS,
+        });
+      });
+
+      it("Submit async task", () => {
+        cy.asyncTaskClickSubmit();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+
+    context("Check training notifications", () => {
+      it("Goto Dashboard", () => {
+        cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      });
+
+      it("Select 'Trainings' tab", () => {
+        cy.contains("Trainings").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Verify training notification update to Overdue", () => {
+        cy.get("[trainingstatus=\"OVERDUE\"]")
+          .eq(0)
+          .should("have.text", "OVERDUE");
+      });
+    });
+
+    context("Check Outstanding Trainings", () => {
+      it("Select 'My Feed' tab", () => {
+        cy.contains("My Feed").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'ALL' tab", () => {
+        cy.contains("ALL").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Total Outstanding trainings should be +2`, () => {
+        cy.contains("ul").children().children().should("have.length", 2);
+      });
+
+      it("Select 'Overdue' tab", () => {
+        cy.contains("Overdue").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      // it(`Count for Overdue should be +2`, () => {
+      //   cy.pause();
+      //   cy.get("*[class^=\"makeStyles-list-root\"]>li").should("have.length", 2);
+      // });
+
+      it(`Line items for User 1 and 2 should be moved to Overdue`, () => {
+        cy.get("#full-width-tabpanel-1")
+          .children()
+          .should("contain.text", USERS[2].name.split(" ")[0])
+          .and("contain.text", USERS[3].name.split(" ")[0]);
+      });
+
+      it("Select 'DUE IN 7 DAYS' tab", () => {
+        cy.contains("DUE IN 7 DAYS").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Line items for User 1 and 2 should be removed from Due in 7 Days`, () => {
+        cy.get("#full-width-tabpanel-2")
+          .children()
+          .should("not.contain.text", USERS[2].name.split(" ")[0])
+          .and("not.contain.text", USERS[3].name.split(" ")[0]);
+      });
+    });
+
+    context(
+      "Log in as First user and check training notifications should now have the Overdue tag",
+      () => {
+        it("Logout user", () => {
+          cy.authLogout();
+        });
+
+        it("Logs user in", () => {
+          cy.authLogin({
+            email: USERS[2].email,
+            password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+          });
+        });
+
+        it("Selects company", () => {
+          cy.cmpSelectCompany({
+            name: createdCompany.name,
+            multiple: multipleCompanies,
+          });
+        });
+
+        it("Verify training notification", () => {
+          cy.get("[status=\"OVERDUE\"]").eq(0).should("have.text", "OVERDUE");
+        });
+      }
+    );
+    context(
+      "Log in as Second user and check training notifications should now have the Overdue tag",
+      () => {
+        it("Logout user", () => {
+          cy.authLogout();
+        });
+
+        it("Logs user in", () => {
+          cy.authLogin({
+            email: USERS[3].email,
+            password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+          });
+        });
+
+        it("Selects company", () => {
+          cy.cmpSelectCompany({
+            name: createdCompany.name,
+            multiple: multipleCompanies,
+          });
+        });
+
+        it("Verify training notification", () => {
+          cy.get("[status=\"OVERDUE\"]").eq(0).should("have.text", "OVERDUE");
+        });
+      }
+    );
+  });
 });
