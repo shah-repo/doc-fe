@@ -587,16 +587,13 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.poAddApproverOnApproverList({ approver: USERS[1].email });
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
+      it("clicks on 'Save' button", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
-      // it("Check approval role is present", () => {
-      //   cy.get("[data-cy=\"Role One\"]").should("exist");
-      // });
+      it("Add an Approval", () => {
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
+      });
 
       it("Submit for approvals and check enfocment", () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();

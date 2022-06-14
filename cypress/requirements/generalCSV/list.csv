@@ -319,6 +319,7 @@ UN-0070,REQ-4590,Training,Training curriculum,The system shall allow Enlil docum
 UN-0070,REQ-4600,Training,Landing page,"The Training Records module shall contain a list view of all trainings assigned to and completed by Trainees, for each revision of the Enlil document they are trained on. "
 UN-0070,REQ-4680,Training,Training,"The system shall display the following default columns on the landing page of the Training Curriculum sub module: Training Curriculum ID, Document Title, Owner, State"
 UN-0070,REQ-4690,Training,Training,The system shall allow the user to filter the displayed Training Curriculum List for each of the columns displayed on the landing page
+UN-0070,REQ-4810,Training,Training notifications ,"The system shall generate separate training notifications for training documents with Approved & Released revisions"
 UN-0120,REQ-3040,Process Instructions,Creating MPI/ QPI,The system shall allow the user to create an Process Instruction (PI) which can be an MPI (Manufacturing Process Instruction) or a QPI (Quality Process Instruction)
 UN-0120,REQ-3050,Process Instructions,PI Lifecycle,The Process Instruction (PI) shall follow the document lifecycle 
 UN-0120,REQ-3060,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add a step/ multiple steps to the Process Instruction (PI)

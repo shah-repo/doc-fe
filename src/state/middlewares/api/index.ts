@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { first, get, has, isArray, join } from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
+import { intl } from "../../../common/intl";
 import { redirectTo } from "../../../common/redirectHandler";
 import { EXPORTED_FILE_DOWNLOAD, MAINTENANCE, STATUS, USER_LOCKED } from "../../../ui/constants/urls";
 import apiClient from "../../apiClient";
@@ -111,14 +112,23 @@ const apiMiddleware: Middleware = ({
       dispatch(authActions.logoutUser());
     }
 
-    if (exception.response) {
-      const {
-        data: { message },
-      } = exception.response as AsyncActionErrorResponse;
-      if (isArray(message) && has(first(message), "message")) {
-        responseMessage = join(get(first(message), "message"), "\n");
-      } else {
-        responseMessage = Array.isArray(message) ? message.join("; ") : message;
+    switch (exception?.response?.status) {
+      case 425: {
+        responseMessage = intl.formatMessage({
+          id: "errors.somethingWentWrong",
+        });
+        break;
+      }
+      default: {
+        const {
+          data: { message },
+        } = exception.response as AsyncActionErrorResponse;
+        if (isArray(message) && has(first(message), "message")) {
+          responseMessage = join(get(first(message), "message"), "\n");
+        } else {
+          responseMessage = Array.isArray(message) ? message.join("; ") : message;
+        }
+        break;
       }
     }
 

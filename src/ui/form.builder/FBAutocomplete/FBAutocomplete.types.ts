@@ -26,4 +26,5 @@ export type FBAutocompleteProps =
     * @cfg {Boolean} Option to disable deletion of rendered chips using Backspace key.
     */
    disableBackspace?: boolean;
+   disableChipDelete?: boolean;
  };
