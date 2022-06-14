@@ -18,7 +18,6 @@ let secondEmployee;
 let componentSpecificationDocumentType;
 let group;
 let asyncTasksGroup;
-let arId;
 
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
@@ -224,8 +223,6 @@ context("Approval request implementation tasks", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
-
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
@@ -397,10 +394,6 @@ context("Approval request implementation tasks", () => {
     it("Verify document Approval status", () => {
       cy.drCheckDocumentStatus({ status: "Approved" });
       cy.arCheckTitleInEditableAndMatches({ name: "AR express release form" });
-      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-")
-        .then(($lnEl: JQuery<HTMLElement>) => {
-          arId = $lnEl.text();
-        });
     });
   });
 
@@ -653,4 +646,3 @@ context("Approval request implementation tasks", () => {
 });
 
 export { };
-
