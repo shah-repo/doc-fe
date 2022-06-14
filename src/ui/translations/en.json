@@ -688,7 +688,7 @@
   "form.builder.custom.validator": "Custom Validator",
   "form.builder.error.message": "Error Message",
   "form.builder.field.config": "Field Config",
-  "form.builder.validation": "Validation",
+  "form.builder.validation": "Set Rules",
   "form.builder.form.preview": "Form Preview",
   "form.builder.predefined.validation": "Predefined Validation",
   "form.builder.custom.validation": "Custom Validation",
