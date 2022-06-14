@@ -669,11 +669,23 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           .eq(0)
           .should("have.text", "DUE IN 7 DAYS");
       });
+    });
 
+    context("Check Outstanding Trainings", () => {
       it("Select 'My Feed' tab", () => {
         cy.contains("My Feed").eq(0).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'ALL' tab", () => {
+        cy.contains("ALL").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Total Outstanding trainings should be +3`, () => {
+        cy.contains("ul").children().should("have.length", 3);
       });
 
       it("Select 'DUE IN 7 DAYS' tab", () => {
@@ -682,8 +694,17 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it(`List of trainings Due in 7 Days should show the additional entries for the 3 users`, () => {
+      it(`Count for Due in 7 Days should be + 3`, () => {
         cy.contains("ul").children().should("have.length", 3);
+      });
+
+      it(`List of trainings Due in 7 Days should show the additional entries for the 3 users`, () => {
+        cy.get("#full-width-tabpanel-2")
+          .children()
+          .children()
+          .should("contain.text", USERS[2].name.split(" ")[0])
+          .and("contain.text", USERS[3].name.split(" ")[0])
+          .and("contain.text", USERS[4].name.split(" ")[0]);
       });
     });
   });
@@ -888,6 +909,41 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.get("[class='MuiCollapse-wrapperInner']")
           .should("contain.text", USERS[2].name)
           .and("contain.text", USERS[3].name);
+        cy.get("button[aria-label=close]").eq(0).arrowClick();
+      });
+    });
+
+    context("Check Outstanding Trainings", () => {
+      it("Select 'My Feed' tab", () => {
+        cy.contains("My Feed").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'ALL' tab", () => {
+        cy.contains("ALL").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Total Outstanding trainings should be +2`, () => {
+        cy.contains("ul").children().children().should("have.length", 2);
+      });
+
+      it("Select 'DUE IN 7 DAYS' tab", () => {
+        cy.contains("DUE IN 7 DAYS").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Count for Due in 7 Days should be -1`, () => {
+        cy.get("*[class^=\"makeStyles-list\"]>li").should("have.length", 0);
+      });
+
+      it(`Line item for User 3 should be removed from Due in 7 Days list`, () => {
+        cy.get("#full-width-tabpanel-2")
+          .children()
+          .should("not.contain.text", USERS[4].name.split(" ")[0]);
       });
     });
   });
