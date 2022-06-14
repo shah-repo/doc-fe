@@ -1,4 +1,4 @@
-import { each, groupBy, map, pick, sortBy, without } from "lodash";
+import { each, groupBy, map, pick, sortBy, uniq, without } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -27,7 +27,10 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     intl.formatMessage({ id: `group.management.audit.history.${key}` }, values);
 
   const groups = useSelector(userManagementSelectors.groupsById);
-  const getGroupName = (groupId: string) => groups[groupId] ? groups[groupId].name : "";
+  const getGroupName = (groupIds: string[]) => {
+    const groupNames = uniq(map(groupIds, (groupId) => groups[groupId] ? groups[groupId].name : ""));
+    return groupNames.join(", ");
+  };
 
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
@@ -40,7 +43,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         !auditTypes.includes(ACTION_TITLE_MAPPING.AddedGroup)
     ) {
       sameGroup.unshift({
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroup, {}),
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroups, {}),
         secondaryText: companyGroupName || "N/A",
         sortedIndex: 1,
       });
@@ -57,7 +60,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       const auditType = items[0].auditType;
       const sortedIndex =  map(items, "sortedIndex")[0] || 0;
       let primaryText = key;
-      const secondaryText = map(items, "secondaryText");
+      const secondaryText =  uniq(map(items, "secondaryText"));
       if (auditType === ACTION_TITLE_MAPPING.AddedToGroups && secondaryText.length <= 1) {
         primaryText = getTranslatedText(ACTION_TITLE_MAPPING.AddedToGroup, {});
       }
@@ -243,7 +246,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       if (auditRecord.type === "ARRAY_NEW") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedParentGroups, {}),
-          secondaryText: getGroupName(auditRecord.nextValue),
+          secondaryText: getGroupName([auditRecord.nextValue]),
           auditType: ACTION_TITLE_MAPPING.AddedParentGroups,
           sortedIndex: 6,
         };
@@ -251,7 +254,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       else if (auditRecord.type === "ARRAY_DELETED") {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedParentGroups, {}),
-          secondaryText: getGroupName(auditRecord.previousValue),
+          secondaryText: getGroupName([auditRecord.previousValue]),
           auditType: ACTION_TITLE_MAPPING.RemovedParentGroups,
           sortedIndex: 6,
         };
@@ -277,7 +280,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
       return {
         ...auditRecord,
-        groupKey: `${companyGroupId || groupId}-${ownerId}`,
+        groupKey: `${groupId}-${ownerId}`,
         ownerDetails,
         employeeDetails,
         companyId,
@@ -290,6 +293,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     const auditRecordGroups = groupBy(auditRecords, "groupKey");
     const cardGroups = {};
     each(auditRecordGroups, (groupedItems, groupKey) => {
+      const companyGroupIds = map(auditRecordGroups[groupKey], "companyGroupId");
       cardGroups[groupKey] = {
         ...pick(auditRecordGroups[groupKey][0], [
           "timestamp",
@@ -299,7 +303,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         ]),
         descriptions: createGroups(
           groupedItems as GMAuditGroupProps[],
-          getGroupName(auditRecordGroups[groupKey][0].companyGroupId)
+          getGroupName(companyGroupIds)
         ),
       };
     });
