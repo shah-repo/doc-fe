@@ -25,6 +25,13 @@ declare global {
       recVerifyDescription(params: {description: string }): Chainable<Subject>;
       recVerifyDescriptionWIP(params: {description: string }): Chainable<Subject>;
       equipReloadDocument(): Chainable<Subject>;
+      recAPICreateVoidedDocument(params: {
+        fromDocumentId: string;
+        formInputFieldName: string;
+        formInputApprovalId: string;
+        documentId: string;
+        employeeId: string;
+        sessionId: string;}): Chainable<Subject>;
       equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
     }
   }
@@ -139,6 +146,10 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
     cy.progressBarShouldAppear();
   });
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
+  cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains(params.stage);
 });
 
 Cypress.Commands.add("equipSetTimeTravelInDays", (params: {days: number}) => {
