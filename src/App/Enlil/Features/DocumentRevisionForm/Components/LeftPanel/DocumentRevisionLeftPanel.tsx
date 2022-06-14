@@ -23,7 +23,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
               <Box
                 height="100%"
                 bgcolor={Colors.white}
-                width={300}
+                width="auto"
                 boxShadow= {`inset -1px 0px 0px ${Colors.lightest_grey1}`}
                 zIndex={1202}
               >
