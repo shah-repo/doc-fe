@@ -23,7 +23,6 @@ Cypress.Commands.add("dashVerifyListItemExistsOnDashboard", (params: { listItem:
 
 Cypress.Commands.add("dashVerifyListItemNotExistsOnDashboard", (params: { listItem: string}) => {
   cy.get("[data-cy=dashboardFeedList]>div")
-    .contains(params.listItem)
     .should("not.exist");
 });
 
