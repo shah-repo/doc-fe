@@ -652,6 +652,18 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Training for Doc A show pending training of Users 1, 2 and 3", () => {
+        cy.get("[trainingstatus=\"DUE\"]")
+          .eq(0)
+          .should("have.text", "DUE IN 7 DAYS")
+          .arrowClick();
+        cy.get("[class='MuiCollapse-wrapperInner']")
+          .should("contain.text", USERS[2].name)
+          .and("contain.text", USERS[3].name)
+          .and("contain.text", USERS[4].name);
+        cy.get("button[aria-label=close]").eq(0).arrowClick();
+      });
+
       it("Verify training notification", () => {
         cy.get("[trainingstatus=\"DUE\"]")
           .eq(0)
