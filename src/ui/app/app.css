@@ -367,3 +367,8 @@ td#kendo-expandable-column[role="gridcell"] {
 .MuiMenuItem-root span, .MuiAutocomplete-listbox {
   font-family: "Sora"
 }
+
+.Toastify__toast, .Toastify__toast-body,
+.Toastify__toast-container, .Toastify__close-button {
+  font-family: 'Sora';
+}
