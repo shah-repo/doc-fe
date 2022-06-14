@@ -669,6 +669,22 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           .eq(0)
           .should("have.text", "DUE IN 7 DAYS");
       });
+
+      it("Select 'My Feed' tab", () => {
+        cy.contains("My Feed").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'DUE IN 7 DAYS' tab", () => {
+        cy.contains("DUE IN 7 DAYS").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`List of trainings Due in 7 Days should show the additional entries for the 3 users`, () => {
+        cy.contains("ul").children().should("have.length", 3);
+      });
     });
   });
 
