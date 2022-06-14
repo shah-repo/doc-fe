@@ -11,7 +11,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { emailDateOffset, equimentCALDueDays, equimentPMDueDays, fileTimeFormat, momentInPST, pdfDocRelDate, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { emailDateOffset, equimentCALDueDays, equimentDueDays, equimentDueDaysFmt, equimentPMDueDays, fileTimeFormat, momentInPST, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -41,11 +41,13 @@ let calibrationSchemaFieldName;
 let asyncTasksGroup;
 let dueDateInEmail;
 let multipleCompanies;
+let dashboardDueDate;
 
 const pages = ["", "", "", ""];
 const ADMIN_USER = USERS[1];
 const equipmentTitle = `Equipment`;
 const equipmentTitleForm = `Equipment-Form`;
+const equipmentDocId = "EQ-00002";
 
 context("Autocomplete 'Equipment' test", () => {
   before(() => {
@@ -69,7 +71,6 @@ context("Autocomplete 'Equipment' test", () => {
       }).then((response: any) => {
         loginResponse = response;
         multipleCompanies = response.employees.length > 0;
-
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
@@ -1122,13 +1123,13 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).arrowType(`${equimentPMDueDays}`);
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType(`${equimentDueDays}`);
       cy.unClick();
     });
 
     it("Type preventative maintenance instruction", () => {
-      // eslint-disable-next-line max-len
-      cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]").click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
+      cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]")
+        .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
       cy.unClick();
     });
 
@@ -1145,12 +1146,12 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).arrowType(`${equimentCALDueDays}`);
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType(`${equimentDueDays}`);
     });
 
     it("Type calibration maintenance instruction", () => {
-      // eslint-disable-next-line max-len
-      cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]").click({ force: true }).clear().arrowType("Instructions for calibration");
+      cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]").click({ force: true })
+        .clear().arrowType("Instructions for calibration");
       cy.unClick();
     });
 
@@ -1159,7 +1160,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify form Released status and click on Send To Email", () => {
+  context("Verify form Draft status and click on Send To Email", () => {
     it("Verify form Released status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Draft" });
       cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
@@ -1338,7 +1339,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentPMDueDays}`);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
@@ -1350,7 +1351,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentCALDueDays}`);
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
@@ -1585,7 +1586,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
 
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentPMDueDays}`);
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
@@ -1597,7 +1598,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
 
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentCALDueDays}`);
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Instructions\nInstructions for calibration/);
@@ -1798,661 +1799,6 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Set time travel tool to 1 day", () => {
-    it("Select 1 day to back in future", () => {
-      cy.equipSetTimeTravelInDays({ days: 1 });
-    });
-  });
-
-  context("Trigger email", () => {
-    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-  });
-
-  context("Verify that the Primary owner receives an email", () => {
-    it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(1, "days").format("MM/DD/YYYY");
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: USERS[1].email,
-        after: dateAfterEmailShouldArrive,
-        subject: `Equipment EQ-00001 Equipment document has Calibration Due`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
-            `${dueDateInEmail}`,
-            `Please click on the button below to view it`,
-            "<button type=\"button\">VIEW ITEM</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
-
-  context("Verify that the Coordinator receives an email", () => {
-    it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(1, "days").format("MM/DD/YYYY");
-      const getEmailSetting =  {
-        to: USERS[2].email,
-        after: dateAfterEmailShouldArrive,
-        subject: `Equipment EQ-00001 Equipment document has Calibration Due`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
-            `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
-            `${dueDateInEmail}`,
-            `Please click on the button below to view it`,
-            "<button type=\"button\">VIEW ITEM</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
-
-  context("Navigate to dashboard for Primary Owner", () => {
-    it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
-    });
-
-    it("Verify Dashboard notification that CAL will be due in 30 days", () => {
-      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-        .add(30, "days")
-        .format("MMM D");
-      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 30 days${dashboardCalDueDate}`);
-        });
-    });
-  });
-
-  context("Log in as Coordinator and check Dashboard notification", () => {
-    it("Logout user", () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Verify Dashboard notification that CAL will be due in 30 days", () => {
-      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-        .add(30, "days")
-        .format("MMM D");
-      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 30 days${dashboardCalDueDate}`);
-        });
-    });
-  });
-
-  context("Set QA tool to Day 11", () => {
-    it("Logout user", () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Select 10 day to back in future", () => {
-      cy.equipSetTimeTravelInDays({ days: 10 });
-    });
-  });
-
-  context("Trigger email", () => {
-    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-  });
-
-  context("Verify that the Primary owner receives an email", () => {
-    it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(29, "days").format("MM/DD/YYYY");
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: USERS[1].email,
-        after: dateAfterEmailShouldArrive,
-        subject: `Equipment EQ-00001 Equipment document has PM Due`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            `Equipment <b>EQ-00001 Equipment document</b> has PM due on`,
-            `${dueDateInEmail}`,
-            `Please click on the button below to view it`,
-            "<button type=\"button\">VIEW ITEM</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
-
-  context("Verify that the coordinator receives an email", () => {
-    it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(29, "days").format("MM/DD/YYYY");
-      cy.log(dueDateInEmail);
-      cy.wait(2000);
-      const getEmailSetting =  {
-        to: USERS[2].email,
-        after: dateAfterEmailShouldArrive,
-        subject: `Equipment EQ-00001 Equipment document has PM Due`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
-            `Equipment <b>EQ-00001 Equipment document</b> has PM due on`,
-            `${dueDateInEmail}`,
-            `Please click on the button below to view it`,
-            "<button type=\"button\">VIEW ITEM</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
-
-  context("Navigate to dashboard for Primary Owner", () => {
-    it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
-    });
-
-    it("Verify Dashboard notification that CAL will be due in 30 days", () => {
-      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-        .add(20, "days")
-        .format("MMM D");
-      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 30 days${dashboardCalDueDate}`);
-        });
-    });
-  });
-
-  context("Log in as Coordinator and check Dashboard notification", () => {
-    it("Logout user", () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Verify Dashboard notification that CAL will be due in 30 days", () => {
-      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-        .add(29, "days")
-        .format("MMM D");
-      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Preventative Maintenance in 30 days${dashboardCalDueDate}`);
-        });
-    });
-  });
-
-  context("Set time travel tool to 25 day", () => {
-    it("Logout user", () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-    it("Select 14 day to back in future", () => {
-      cy.equipSetTimeTravelInDays({ days: 14 });
-    });
-  });
-
-  context("Trigger email", () => {
-    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-  });
-
-  context("Verify that the Primary owner receives an email", () => {
-    it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(6, "days").format("MM/DD/YYYY");
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: USERS[1].email,
-        after: dateAfterEmailShouldArrive,
-        subject: `Equipment EQ-00001 Equipment document has Calibration Due`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
-            `${dueDateInEmail}`,
-            `Please click on the button below to view it`,
-            "<button type=\"button\">VIEW ITEM</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
-
-  context("Verify that the coordinator receives an email", () => {
-    it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(6, "days").format("MM/DD/YYYY");
-      cy.wait(2000);
-      const getEmailSetting =  {
-        to: USERS[2].email,
-        after: dateAfterEmailShouldArrive,
-        subject: `Equipment EQ-00001 Equipment document has Calibration Due`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
-            `Equipment <b>EQ-00001 Equipment document</b> has Calibration due on`,
-            `${dueDateInEmail}`,
-            `Please click on the button below to view it`,
-            "<button type=\"button\">VIEW ITEM</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
-
-  context("Navigate to dashboard for Primary Owner", () => {
-    it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
-    });
-
-    it("Verify Dashboard notification that CAL will be due in 7 days", () => {
-      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-        .add(6, "days")
-        .format("MMM D");
-      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 7 days${dashboardCalDueDate}`);
-        });
-    });
-  });
-
-  context("Log in as Coordinator and check Dashboard notification", () => {
-    it("Logout user", () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Verify Dashboard notification that CAL will be due in 7 days", () => {
-      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-        .add(6, "days")
-        .format("MMM D");
-      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 7 days${dashboardCalDueDate}`);
-        });
-    });
-  });
-
-  context("Set time travel tool to 32 day", () => {
-    it("Logout user", () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Select 7 day to back in future", () => {
-      cy.equipSetTimeTravelInDays({ days: 7 });
-    });
-  });
-
-  context("Navigate to equipment list", () => {
-    it("Navigate to equipment list", () => {
-      cy.navigToEquipment();
-      cy.wait(2000);
-    });
-
-    it("Select first Equipment on list", () => {
-      cy.dlSelectFirstDocument();
-    });
-
-    it("CAL status should update to CAL Due", () => {
-      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
-        .subtract(1, "days")
-        .format("ddd, MMMM D, YYYY");
-      cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(1).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`CALDue - Due date: ${calibrationComplianceDate}`);
-        });
-    });
-  });
-
-  context("Set time travel tool to 34 day", () => {
-    it("Select 2 day to back in future", () => {
-      cy.equipSetTimeTravelInDays({ days: 2 });
-    });
-  });
-
-  context("Trigger email", () => {
-    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-  });
-
-  context("Verify that the Primary owner receives an email", () => {
-    it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(6, "days").format("MM/DD/YYYY");
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: USERS[1].email,
-        after: dateAfterEmailShouldArrive,
-        subject: `Equipment EQ-00001 Equipment document has PM Due`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            `Equipment <b>EQ-00001 Equipment document</b> has PM due on`,
-            `${dueDateInEmail}`,
-            `Please click on the button below to view it`,
-            "<button type=\"button\">VIEW ITEM</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
-
-  context("Verify that the coordinator receives an email", () => {
-    it("Get emails", () => {
-      dueDateInEmail = momentInPST().add(6, "days").format("MM/DD/YYYY");
-      cy.wait(2000);
-      const getEmailSetting =  {
-        to: USERS[2].email,
-        after: dateAfterEmailShouldArrive,
-        subject: `Equipment EQ-00001 Equipment document has PM Due`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
-            `Equipment <b>EQ-00001 Equipment document</b> has PM due on`,
-            `${dueDateInEmail}`,
-            `Please click on the button below to view it`,
-            "<button type=\"button\">VIEW ITEM</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-  });
-
-  context("Navigate to dashboard for Primary Owner", () => {
-    it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
-    });
-
-    it("Verify Dashboard notification that CAL will be due in 7 days", () => {
-      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-        .subtract(3, "days")
-        .format("MMM D");
-      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Calibration in 7 days${dashboardCalDueDate}`);
-        });
-    });
-  });
-
-  context("Log in as Coordinator and check Dashboard notification", () => {
-    it("Logout user", () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Verify Dashboard notification that PM will be due in 7 days", () => {
-      const dashboardCalDueDate = moment().tz("America/Los_Angeles")
-        .add(6, "days")
-        .format("MMM D");
-      cy.get("[class=\"MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`EQ-00001Rev1 Equipment documentis Due for Preventative Maintenance in 7 days${dashboardCalDueDate}`);
-        });
-    });
-  });
-
-  context("Set time travel tool to 41 day", () => {
-    it("Logout user", () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Select 7 day to back in future", () => {
-      cy.equipSetTimeTravelInDays({ days: 7 });
-    });
-  });
-
-  context("Navigate to equipment list", () => {
-    it("Navigate to equipment list", () => {
-      cy.navigToEquipment();
-      cy.wait(2000);
-    });
-
-    it("Select first Equipment on list", () => {
-      cy.dlSelectFirstDocument();
-    });
-
-    it("PM status should update to PM Due", () => {
-      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
-        .subtract(1, "days")
-        .format("ddd, MMMM D, YYYY");
-      cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(0).then(($el) => {
-          const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`PMDue - Due date: ${prevMaintenanceComplianceDate}`);
-        });
-    });
-  });
-
   context("Fill second new PM form", () => {
     it("Navigate to EQ document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
@@ -2633,10 +1979,6 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Verify PDF file content", () => {
-    const pdfDocRelDateFormat1 = momentInPST().subtract(41, "days").format("D MMM YYYY");
-    const pdfDocRelDateFormat2 = momentInPST().subtract(41, "days").format("MMMM D, YYYY");
-    const equimentPMDueDaysFmt = momentInPST().add(equimentPMDueDays, "days").subtract(41, "days").format("ddd MMMM D YYYY");
-    const equimentCALDueDaysFmt = momentInPST().add(equimentCALDueDays, "days").subtract(41, "days").format("ddd MMMM D YYYY");
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile(
         {
@@ -2666,27 +2008,41 @@ context("Autocomplete 'Equipment' test", () => {
     it("Verify page 1 in document", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Equipment\nEQ-00001, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
+
         tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/Description\nEquipment description/);
+
         expect(el).match(/Attachments/);
         expect(el).match(/image.jpg/);
+
         tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
         expect(el).match(tmpRegex);
+
         tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
         expect(el).match(tmpRegex);
+
         tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
         expect(el).match(tmpRegex);
+
         tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
         expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select field/);
+
         expect(el).match(/Released/);
+
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfDocRelDateFormat1}`, "gi");
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
+
         expect(el).match(/Page 1 of 3/);
+
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -2695,62 +2051,89 @@ context("Autocomplete 'Equipment' test", () => {
     it("Verify page 2 in document", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Equipment\nEQ-00001, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/PREVENTATIVE MAINTENANCE/);
+
         tmpRegex = new RegExp(`Preventative Maintenance required\\?\n.*Yes.*No`);
         expect(el).match(tmpRegex);
+
         expect(el).match(/Preventative Maintenance Form\nFM-00004 - rev 1 - Preventative Maintenance form/);
-        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentPMDueDays}`);
+
+        tmpRegex = new RegExp(`Preventative Maintenance Frequency \\(Days\\)\n${equimentDueDays}`);
         expect(el).match(tmpRegex);
+
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
+
         expect(el).match(/History/);
         tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| `, "gi" );
         expect(el).match(tmpRegex);
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateFormat2}`, "gi" );
+
+        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
         expect(el).match(tmpRegex);
-        tmpRegex = new RegExp( `Preventative Maintenance Due - Due Date: ${equimentPMDueDaysFmt}`, "gi" );
+
+        tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/CALIBRATION/);
+
         tmpRegex = new RegExp(`Calibration required\\?\n.*Yes.*No`);
         expect(el).match(tmpRegex);
+
         expect(el).match(/Calibration Form\nFM-00005 - rev 1 - Calibration form/);
-        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentCALDueDays}`);
+
+        tmpRegex = new RegExp(`Calibration Frequency \\(Days\\)\n${equimentDueDays}`);
         expect(el).match(tmpRegex);
+
         expect(el).match(/Instructions\nInstructions for calibration/);
+
         expect(el).match(/History/);
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `MR-00001 Calibration document \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateFormat2}`, "gi" );
+        tmpRegex = new RegExp( `MR-00001 Calibration document \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
         expect(el).match(tmpRegex);
-        tmpRegex = new RegExp( `Calibration Due - Due Date: ${equimentCALDueDaysFmt}`, "gi" );
+
+        tmpRegex = new RegExp( `Calibration Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).not.match(/Select field/);
+
         expect(el).match(/Released/);
+
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfDocRelDateFormat1}`, "gi");
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
+
         expect(el).match(/Page 2 of 3/);
+
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
     });
+
     it("Verify page 3 in document", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Equipment\nEQ-00001, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
+        tmpRegex = new RegExp( `Equipment\n${formId}, Revision 1\nEQUIPMENT DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDateFormat1}\nReleased`, "gi" );
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/Released/);
+
         expect(el).not.match(/Select field/);
+
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfDocRelDateFormat1}`, "gi");
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
+
         expect(el).match(/Page 3 of 3/);
+
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -2846,6 +2229,897 @@ context("Autocomplete 'Equipment' test", () => {
       it("Verify count in the list", () => {
         cy.get(".MuiAutocomplete-popper ul li").should("have.length", 1);
       });
+    });
+  });
+
+  context("Create 'Equipment'", () => {
+    it("Navigate to Equipment", () => {
+      cy.navigToEquipment();
+    });
+
+    it("Click on 'create a document'", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.get("[id=\"DocumentByTypeListPresenter-openDocRev\"]").arrowClick();
+      });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Enter title 'Equipment document for test'", () => {
+      cy.drEnterDocumentTitle({ name: "Equipment document" });
+    });
+
+    it("Enter description 'Equipment description for test'", () => {
+      cy.drEnterDocumentDescription({ description: "Equipment description" });
+    });
+
+    it("Select references", () => {
+      cy.drSelectReferences( "FM-00004" );
+      cy.drSelectReferences( "FM-00005" );
+      cy.unClick();
+    });
+
+    it("Select 'Active' as EQ status", () => {
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+    });
+
+    it(`Select '${USERS[1].name}' for Primary Owner`, () => {
+      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+    });
+
+    it(`Select '${USERS[2].name}' for Coordinator`, () => {
+      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+    });
+
+    it("Autocomplete-Approvers", () => {
+      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
+    });
+
+    it("Select document 'Yes' for preventative maintenance required", () => {
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+    });
+
+    it("Select 'Preventative Maintenance form' for preventative maintenance required", () => {
+      cy.get("[name$=\"preventativeForm\"] button").eq(2).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.unClick();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains("Preventative Maintenance form").arrowClick();
+    });
+
+    it("Select preventative maintenance frequency", () => {
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType(`${equimentPMDueDays}`);
+      cy.unClick();
+    });
+
+    it("Type preventative maintenance instruction", () => {
+      cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]")
+        .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
+      cy.unClick();
+    });
+
+    it("Select document 'Yes' for calibration required", () => {
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+    });
+
+    it("Select 'Calibration form' for calibration required", () => {
+      cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.unClick();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains("Calibration form").arrowClick();
+    });
+
+    it("Select calibration frequency", () => {
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType(`${equimentCALDueDays}`);
+    });
+
+    it("Type calibration maintenance instruction", () => {
+      cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]").click({ force: true })
+        .clear().arrowType("Instructions for calibration");
+      cy.unClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Approve and release document", () => {
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.url().then((url: any) => {
+        equipmentURL = url;
+      });
+    });
+
+    it("Verify equipment Released status and header information", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
+      cy.get("[id=\"HeaderInfo-docId\"]").should("have.text", equipmentDocId );
+    });
+  });
+
+  context("Navig to released 'Equipment maintenance document'", () => {
+    it("Navig to equipment", () => {
+      cy.navigToEquipment();
+    });
+
+    it("Select 'Equipment maintenance document'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
+        cy.get("tr.k-master-row").first().arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Fill new calbration form", () => {
+    it("Click 'NEW CAL' on calibration section", () => {
+      cy.url().then((url: any) => {
+        const docIdFromUrl = url.split("/").pop();
+        // eslint-disable-next-line max-len
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaFieldName}`;
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+          CyRoutes.GetAvailableApprovers,
+          CyRoutes.GetAutocompleteOptions], () => {
+          cy.visit(newPMUrl);
+        });
+      });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Enter title 'Calibration document'", () => {
+      cy.drEnterDocumentTitle({ name: "Calibration document" });
+    });
+
+    it("Select document type 'Maintenance Record'", () => {
+      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+    });
+
+    it("Select revision stage 'Numeric'", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
+    });
+
+    it("Fill 'Completion Date'", () => {
+      const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          cy.log(dayNumber);
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).arrowClick();
+          }
+        });
+    });
+
+    it("Create 'Calibration document' and approve", () => {
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
+        cy.ebApprove();
+      });
+    });
+  });
+
+  context("Fill new PM form", () => {
+    it("Navigate to EQ document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
+        cy.visit(equipmentURL);
+      });
+    });
+
+    it("Click 'NEW PM' on Preventative Maintenance section", () => {
+      cy.url().then((url: any) => {
+        const docIdFromUrl = url.split("/").pop();
+        // eslint-disable-next-line max-len
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+          CyRoutes.GetAvailableApprovers,
+          CyRoutes.GetAutocompleteOptions], () => {
+          cy.visit(newPMUrl);
+        });
+      });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Enter title 'Preventative Maintenance'", () => {
+      cy.drEnterDocumentTitle({ name: "Preventative Maintenance" });
+    });
+
+    it("Select revision stage 'Numeric'", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
+    });
+
+    it("Fill 'Completion Date'", () => {
+      const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          cy.log(dayNumber);
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).arrowClick();
+          }
+        });
+    });
+
+    it("Create 'Preventative Maintenance' and approve it", () => {
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
+        cy.ebApprove();
+      });
+    });
+  });
+
+  context("Set time travel tool to 1 day", () => {
+    it("Select 1 day to back in future", () => {
+      cy.equipSetTimeTravelInDays({ days: 1 });
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(1, "days").format("MM/DD/YYYY");
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+    });
+  });
+
+  context("Verify that the Primary owner receives an email for CAL due", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received for CAL due", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify Dashboard notification for Primary owner as CAL due", () => {
+    it("Navigate to dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it("Verify the Dashboard notification as 'CAL will be due in 30 days'", () => {
+      dashboardDueDate = moment().tz("America/Los_Angeles").add(30, "days").format("MMM DD");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days${dashboardDueDate}` });
+    });
+  });
+
+  context("Verify that the Coordinator receives an email as CAL due", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: USERS[2].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received as CAL due", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [`Hello <b>${USERS[2].name},</b>`,
+            `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify Dashboard notification for Coordinator as CAL due", () => {
+    it("Logout current user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Verify the Dashboard notification as 'CAL will be due in 30 days'", () => {
+      dashboardDueDate = moment().tz("America/Los_Angeles").add(30, "days").format("MMM DD");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days${dashboardDueDate}` });
+    });
+  });
+
+  context("Set time travel tool to 11 day", () => {
+    it("Logout currect user", () => {
+      cy.authLogout();
+    });
+
+    it("Log in as Primary owner", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Select 10 day to back in future", () => {
+      cy.equipSetTimeTravelInDays({ days: 10 });
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      dueDateInEmail = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(11, "days").format("MM/DD/YYYY");
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+    });
+  });
+
+  context("Verify that the Primary owner receives an email for PM due", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that the Primary owner did not receive notification as Preventative Maintenance due", () => {
+    it("Navigate to dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it("Verify the Dashboard notification not received as 'Preventative Maintenance will be due in 30 days'", () => {
+      dashboardDueDate = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(11, "days").format("MMM DD");
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days${dashboardDueDate}` });
+    });
+  });
+
+  context("Verify that the Coordinator receives an email as PM due", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: USERS[2].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received as PM due", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [`Hello <b>${USERS[2].name},</b>`,
+            `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify Dashboard notification for Coordinator as Preventative Maintenance due", () => {
+    it("Logout current user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Verify the Dashboard notification as 'Preventative Maintenance will be due in 30 days'", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days${dashboardDueDate}` });
+    });
+  });
+
+  context("Set time travel tool to 25 day", () => {
+    it("Logout currect user", () => {
+      cy.authLogout();
+    });
+
+    it("Log in as Primary owner", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Select 14 day to back in future", () => {
+      cy.equipSetTimeTravelInDays({ days: 14 });
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MM/DD/YYYY");
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+    });
+  });
+
+  context("Verify that the Primary owner receives an email for CAL due", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received for CAL due", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify Dashboard notification for Primary owner as CAL due", () => {
+    it("Navigate to dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it("Verify the Dashboard notification as 'Due for Calibration in 7 days'", () => {
+      dashboardDueDate = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MMM DD");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days${dashboardDueDate}` });
+    });
+  });
+
+  context("Verify that the Coordinator receives an email as CAL due", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: USERS[2].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received as CAL due", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [`Hello <b>${USERS[2].name},</b>`,
+            `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify Dashboard notification for Coordinator as CAL due", () => {
+    it("Logout current user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Verify the Dashboard notification as 'Due for Calibration in 7 days'", () => {
+      dashboardDueDate = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MMM DD");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days${dashboardDueDate}` });
+    });
+  });
+
+  context("Set time travel tool to 32 days", () => {
+    it("Logout currect user", () => {
+      cy.authLogout();
+    });
+
+    it("Log in as Primary owner", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Select 7 days to back in future", () => {
+      cy.equipSetTimeTravelInDays({ days: 7 });
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Navigate to equipment list and verify CAL status updated to CAL Due", () => {
+    it("Navigate to equipment list", () => {
+      cy.navigToEquipment();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select first Equipment on list", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("CAL status should update to CAL Due", () => {
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+        .subtract(1, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(1).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`CALDue - Due date: ${calibrationComplianceDate}`);
+        });
+    });
+  });
+
+  context("Set time travel tool to 34 days", () => {
+    it("Select 2 days to back in future", () => {
+      cy.equipSetTimeTravelInDays({ days: 2 });
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      dueDateInEmail = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(34, "days").format("MM/DD/YYYY");
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+    });
+  });
+
+  context("Verify that the Primary owner receives an email for PM due", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that the Primary owner did not receive notification as Preventative Maintenance due", () => {
+    it("Navigate to dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it("Verify the Dashboard notification not received as 'Preventative Maintenance will be due in 7 days'", () => {
+      dashboardDueDate = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(34, "days").format("MMM DD");
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days${dashboardDueDate}` });
+    });
+  });
+
+  context("Verify that the Coordinator receives an email as PM due", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: USERS[2].email,
+        after: dateAfterEmailShouldArrive,
+        subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received as PM due", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [`Hello <b>${USERS[2].name},</b>`,
+            `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+            `${dueDateInEmail}`,
+            `Please click on the button below to view it`,
+            "<button type=\"button\">VIEW ITEM</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify Dashboard notification for Coordinator as Preventative Maintenance due", () => {
+    it("Logout current user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Verify the Dashboard notification as 'Preventative Maintenance will be due in 7 days'", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days${dashboardDueDate}` });
+    });
+  });
+
+  context("Set time travel tool to 41 days", () => {
+    it("Logout currect user", () => {
+      cy.authLogout();
+    });
+
+    it("Log in as Primary owner", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Select 7 days to back in future", () => {
+      cy.equipSetTimeTravelInDays({ days: 7 });
+    });
+  });
+
+  context("Trigger email", () => {
+    it("Select task SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Navigate to equipment list and verify PM status updated to PM Due", () => {
+    it("Navigate to equipment list", () => {
+      cy.navigToEquipment();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select first Equipment on list", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("PM status should update to PM Due", () => {
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+        .subtract(1, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(1).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`PMDue - Due date: ${prevMaintenanceComplianceDate}`);
+        });
     });
   });
 });
