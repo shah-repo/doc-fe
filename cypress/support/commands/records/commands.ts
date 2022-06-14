@@ -1,7 +1,9 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../../src/ui/async.tasks/types";
+import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 export { };
@@ -37,6 +39,46 @@ declare global {
   }
 }
 
+Cypress.Commands.add("recAPICreateVoidedDocument", (params: {
+  fromDocumentId: string;
+  formInputFieldName: string;
+  formInputApprovalId: string;
+  documentId: string;
+  employeeId: string;
+  sessionId: string;}) => {
+
+  const requestBody = {
+    formDocument: {
+      id: params.fromDocumentId,
+    },
+    formInput: {
+    },
+    schema: null,
+    parentParts: [],
+    description: "<p>Supplier voided</p>",
+    name: "Supplier voided",
+    attachments: [],
+    referenceTo: [],
+    revisionStage: null,
+    revisionChangeType: RevisionChangeType.Obsolete,
+    retrain: false,
+    renderHTML: null,
+    document: {
+      id: params.documentId,
+    },
+  };
+  requestBody.formInput[params.formInputFieldName] = [params.formInputApprovalId];
+
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
+    body: requestBody,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
 Cypress.Commands.add("recFilterByStatus", (params: {status: string }) => {
   cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
@@ -66,8 +108,7 @@ Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
   });
 });
 
-Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params:
-{recordType: string; recordForms: string[]}) => {
+Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType: string; recordForms: string[]}) => {
   cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
   cy.get("div[id^=react-select]").contains(params.recordType).arrowClick();
@@ -79,8 +120,7 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params:
   cy.get("[data-cy=\"suggestFormCancelBtn\"]").arrowClick();
 });
 
-Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params:
-{recordType: string; recordForm: string}) => {
+Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
@@ -95,8 +135,7 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params:
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params:
-{recordType: string; recordForm: string}) => {
+Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetSpecificDocumentType], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
@@ -149,10 +188,6 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
     cy.progressBarShouldAppear();
   });
   cy.listLoadingElementShouldNotExist();
-});
-
-Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
-  cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains(params.stage);
 });
 
 Cypress.Commands.add("equipSetTimeTravelInDays", (params: {days: number}) => {
