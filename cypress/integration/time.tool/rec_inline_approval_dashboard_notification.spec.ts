@@ -240,10 +240,6 @@ context("Record inline approval dates flow", () => {
         cy.drEnterDocumentTitle({ name: "Record title" });
       });
 
-      it("Enter name", () => {
-        cy.get("[name^=name-]").arrowType("test");
-      });
-
       it("Select approver", () => {
         cy.get("[data-cy^=fb-ia-inline-approval-1-]").autocompleteSelect(`${USERS[2].name}`);
       });
@@ -319,7 +315,7 @@ context("Record inline approval dates flow", () => {
       });
 
       it("Notification should disappear from dashboard now for user 2", () => {
-        cy.dashVerifyListItemNotExistsOnDashboard({ listItem: "RD-00003" });
+        cy.dashVerifyNoPendingActions();
       });
     });
 
@@ -346,22 +342,9 @@ context("Record inline approval dates flow", () => {
       });
     });
 
-    context("Time travel 1 days back to the future", () => {
-      it(`Time travel 1 days back to the future`, () => {
-        cy.recSetTimeTravelInDays({ days: 1 });
-      });
-    });
-
-    context(`Notification of approved record should disappear for ${USERS[1].name}`, () => {
-      it("Notification should disappear from dashboard now for user 1", () => {
-        cy.navigToDashboard();
-        cy.dashVerifyListItemNotExistsOnDashboard({ listItem: "RD-00003" });
-      });
-    });
-
-    context("Time travel 4 days back to the future", () => {
-      it(`Time travel 4 days back to the future`, () => {
-        cy.recSetTimeTravelInDays({ days: 4 });
+    context("Time travel 5 days back to the future", () => {
+      it(`Time travel 5 days back to the future`, () => {
+        cy.recSetTimeTravelInDays({ days: 5 });
       });
     });
 
@@ -388,10 +371,6 @@ context("Record inline approval dates flow", () => {
         });
       });
 
-      it("There should be a notification that rev A is released", () => {
-        cy.get("[data-cy=\"revision\"]").eq(0).should("have.text", "Revision A  - Released");
-      });
-
       it("Goto Dashboard", () => {
         cy.navigToDashboard();
       });
@@ -404,19 +383,6 @@ context("Record inline approval dates flow", () => {
 
         cy.contains("Rev A Record title").parent()
           .should("have.text", "Rev A Record title");
-      });
-    });
-
-    context("Time travel 1 days back to the future", () => {
-      it(`Time travel 1 days back to the future`, () => {
-        cy.recSetTimeTravelInDays({ days: 1 });
-      });
-    });
-
-    context(`Notification of approved record should disappear for ${USERS[1].name}`, () => {
-      it("Notification should disappear from dashboard now for user 1", () => {
-        cy.navigToDashboard();
-        cy.dashVerifyListItemNotExistsOnDashboard({ listItem: "RD-00003" });
       });
     });
 
@@ -468,9 +434,9 @@ context("Record inline approval dates flow", () => {
       });
     });
 
-    context("Time travel 4 days back to the future", () => {
-      it(`Time travel 4 days back to the future`, () => {
-        cy.recSetTimeTravelInDays({ days: 4 });
+    context("Time travel 5 days back to the future", () => {
+      it(`Time travel 5 days back to the future`, () => {
+        cy.recSetTimeTravelInDays({ days: 5 });
       });
     });
 
@@ -480,7 +446,12 @@ context("Record inline approval dates flow", () => {
       });
 
       it("Reject approval", () => {
-        cy.dashRejectApprovalForListItem({ listItem: `${USERS[2].name}needs your approval for RD-00003` });
+        cy.get("[data-cy=dashboardFeedList]>div").contains(`${USERS[1].name}needs your approval forRD-00003`)
+          .parent()
+          .parent()
+          .parent().trigger("mouseover")
+          .find(`[data-cy="transition-reject"]`).first()
+          .arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.checkToastMessage({ exists: false });
@@ -493,9 +464,8 @@ context("Record inline approval dates flow", () => {
       });
 
       it("There should be a notification that User 2 has rejected AR", () => {
-        cy.contains("REJECTED").eq(0).parent().parent().parent().parent()
+        cy.contains(`${USERS[2].name}REJECTEDRD-00003`).eq(0).parent().parent().parent().parent()
           .should("contain.text", "RD-00003")
-          .and("contain.text", "Approval request form")
           .and("contain.text", "REJECTED")
           .and("contain.text", USERS[2].name);
       });
