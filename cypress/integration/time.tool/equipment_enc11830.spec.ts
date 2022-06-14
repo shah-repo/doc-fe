@@ -795,7 +795,8 @@ context("Autocomplete 'Equipment' test", () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(1, "days").format("MM/DD/YYYY");
+      dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days")
+        .subtract(1, "days").format("MM/DD/YYYY");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
   });
@@ -841,7 +842,10 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify the Dashboard notification as 'CAL will be due in 30 days'", () => {
       dashboardDueDate = moment().tz("America/Los_Angeles").add(30, "days").format("MMM DD");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days${dashboardDueDate}` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days${dashboardDueDate}`,
+      });
     });
   });
 
@@ -897,7 +901,10 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify the Dashboard notification as 'CAL will be due in 30 days'", () => {
       dashboardDueDate = moment().tz("America/Los_Angeles").add(30, "days").format("MMM DD");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days${dashboardDueDate}` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days${dashboardDueDate}`,
+      });
     });
   });
 
@@ -931,7 +938,8 @@ context("Autocomplete 'Equipment' test", () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      dueDateInEmail = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(11, "days").format("MM/DD/YYYY");
+      dueDateInEmail = momentInPST().add(`${equimentPMDueDays}`, "days")
+        .subtract(11, "days").format("MM/DD/YYYY");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
   });
@@ -975,9 +983,12 @@ context("Autocomplete 'Equipment' test", () => {
       cy.navigToDashboard();
     });
 
-    it("Verify the Dashboard notification not received as 'Preventative Maintenance will be due in 30 days'", () => {
+    it("Verify Primary owner did not received notification as 'Preventative Maintenance will be due in 30 days'", () => {
       dashboardDueDate = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(11, "days").format("MMM DD");
-      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days${dashboardDueDate}` });
+      cy.dashVerifyListItemNotExistsOnDashboard({
+        listItem:
+        `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days${dashboardDueDate}`,
+      });
     });
   });
 
@@ -1032,7 +1043,10 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify the Dashboard notification as 'Preventative Maintenance will be due in 30 days'", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days${dashboardDueDate}` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days${dashboardDueDate}`,
+      });
     });
   });
 
@@ -1112,7 +1126,10 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify the Dashboard notification as 'Due for Calibration in 7 days'", () => {
       dashboardDueDate = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MMM DD");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days${dashboardDueDate}` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days${dashboardDueDate}`,
+      });
     });
   });
 
@@ -1168,7 +1185,10 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify the Dashboard notification as 'Due for Calibration in 7 days'", () => {
       dashboardDueDate = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MMM DD");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days${dashboardDueDate}` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days${dashboardDueDate}`,
+      });
     });
   });
 
@@ -1289,7 +1309,10 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Verify the Dashboard notification not received as 'Preventative Maintenance will be due in 7 days'", () => {
       dashboardDueDate = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(34, "days").format("MMM DD");
-      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days${dashboardDueDate}` });
+      cy.dashVerifyListItemNotExistsOnDashboard({
+        listItem:
+        `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days${dashboardDueDate}`,
+      });
     });
   });
 
@@ -1344,7 +1367,10 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify the Dashboard notification as 'Preventative Maintenance will be due in 7 days'", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days${dashboardDueDate}` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days${dashboardDueDate}`,
+      });
     });
   });
 

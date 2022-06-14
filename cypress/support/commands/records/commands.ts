@@ -66,7 +66,8 @@ Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
   });
 });
 
-Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType: string; recordForms: string[]}) => {
+Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params:
+{recordType: string; recordForms: string[]}) => {
   cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
   cy.get("div[id^=react-select]").contains(params.recordType).arrowClick();
@@ -78,7 +79,8 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
   cy.get("[data-cy=\"suggestFormCancelBtn\"]").arrowClick();
 });
 
-Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params:
+{recordType: string; recordForm: string}) => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
@@ -93,7 +95,8 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType:
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params:
+{recordType: string; recordForm: string}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetSpecificDocumentType], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
