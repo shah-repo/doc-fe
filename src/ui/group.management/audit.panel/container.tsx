@@ -27,9 +27,9 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     intl.formatMessage({ id: `group.management.audit.history.${key}` }, values);
 
   const groups = useSelector(userManagementSelectors.groupsById);
-  const getGroupName = (groupId: string[]) => {
-    const groupNames = uniq(map(groupId, (gid) => groups[gid] ? groups[gid].name : ""));
-    return groupNames.join(",");
+  const getGroupName = (groupIds: string[]) => {
+    const groupNames = uniq(map(groupIds, (groupId) => groups[groupId] ? groups[groupId].name : ""));
+    return groupNames.join(", ");
   };
 
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
@@ -43,7 +43,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         !auditTypes.includes(ACTION_TITLE_MAPPING.AddedGroup)
     ) {
       sameGroup.unshift({
-        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroup, {}),
+        primaryText: getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroups, {}),
         secondaryText: companyGroupName || "N/A",
         sortedIndex: 1,
       });
@@ -280,7 +280,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       const ownerDetails = getUserDetails(ownerId) || { user: { name: ownerName, email: ownerEmail } };
       return {
         ...auditRecord,
-        groupKey: `${groupId}`,
+        groupKey: `${groupId}-${ownerId}`,
         ownerDetails,
         employeeDetails,
         companyId,
