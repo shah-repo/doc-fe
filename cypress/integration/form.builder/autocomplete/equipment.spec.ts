@@ -3115,8 +3115,9 @@ context("Autocomplete 'Equipment' test", () => {
       const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
         .subtract(1, "days")
         .format("ddd, MMMM D, YYYY");
+
       cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(1).then(($el) => {
+        .eq(0).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
           expect(text).to.contain(`PMDue - Due date: ${prevMaintenanceComplianceDate}`);
         });
