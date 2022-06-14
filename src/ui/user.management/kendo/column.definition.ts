@@ -74,5 +74,5 @@ const gridConfiguration: KendoGridConfiguration = {
   pagerSettings,
   initialDataState,
 };
-
+export const enterUserInfo = { name: "", email: "" };
 export default gridConfiguration;

@@ -5,7 +5,6 @@ export const styles = makeStyles(() =>
   createStyles({
     typographyBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 600,
       letterSpacing: 0,
     },

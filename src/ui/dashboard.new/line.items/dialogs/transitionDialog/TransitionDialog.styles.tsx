@@ -9,8 +9,6 @@ export default () =>
       height: "18px",
       left: "calc(50% - 194.98px/2 - 107.51px)",
       top: "calc(50% - 18px/2)",
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "18px",

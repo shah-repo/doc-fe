@@ -21,14 +21,12 @@ export default makeStyles((theme: Theme) =>
       color: "white",
       fontsize: "1.9rem",
       marginTop: theme.spacing(1),
-      fontFamily: "Open Sans, sans-serif",
     },
     userNameEdit: {
       "& .MuiInputBase-input": {
         color: theme.palette.common.white,
         fontSize: "3rem",
         textAlign: "center",
-        fontFamily: "Open Sans, sans-serif",
         padding: theme.spacing(0.5, 0, 0.5, 0),
       },
       "& .MuiInput-underline": {

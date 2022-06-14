@@ -27,16 +27,12 @@ export default (theme: Theme) =>
       width: "100%",
     },
     emailStyle: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "11px",
       lineHeight: "14px",
       color: Colors.white,
     },
     nameStyle: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",

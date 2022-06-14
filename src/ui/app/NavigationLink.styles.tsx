@@ -44,7 +44,7 @@ export default makeStyles((theme: Theme) =>
     itemText: {
       color: "inherit !important",
       letterSpacing: 0,
-      fontFamily: "Open Sans",
+      fontSize: "13px",
     },
     menu: {
       paddingTop: 4,
