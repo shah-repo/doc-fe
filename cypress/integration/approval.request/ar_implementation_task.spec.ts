@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { ChangeRequestStatus } from "../../../src/state/ducks/changeRequest/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -254,7 +255,7 @@ context("Approval request implementation tasks", () => {
 
     it("Check 'Implementation task' status is 'Draft'", () => {
       SystemRequirement("REQ-0710");
-      cy.arCheckImplementationTaskStatus({ status: "DRAFT" });
+      cy.arCheckImplementationTaskStatus({ status: ChangeRequestStatus.Draft });
     });
 
     it("Click 'Send To Review'", () => {
@@ -279,7 +280,7 @@ context("Approval request implementation tasks", () => {
       });
     });
 
-    it("Check 'Implementation task' status is 'Pending'", () => {
+    it(`Check 'Implementation task' status is 'PENDING'`, () => {
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: "PENDING" });
     });
@@ -293,7 +294,7 @@ context("Approval request implementation tasks", () => {
       });
     });
 
-    it("Check 'Implementation task' status is 'Done'", () => {
+    it(`Check 'Implementation task' status is DONE`, () => {
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: "DONE" });
     });
@@ -303,7 +304,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "APPROVED" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: ChangeRequestStatus.Approved });
     });
 
     it("Check approval request status is 'Approved'", () => {
@@ -312,25 +313,50 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-  context("Created a new form and approve it", () => {
-    it("Form with Released status", () => {
+  context("Create a document with revision as Numeric", () => {
+    it("Navigate to document list", () => {
       cy.navigToDocumentList();
+    });
+
+    it("Create a new document", () => {
       cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title", () => {
       cy.drEnterDocumentTitle({ name: "AR express release form" });
+    });
+
+    it("Enter document description", () => {
       cy.drEnterDocumentDescription({ description: "AR form description" });
+    });
+
+    it("Select document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select document revision as Numeric", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select document revision", () => {
       cy.drClickTrainingRequired();
+    });
+
+    it("Select training required", () => {
+      cy.drClickTrainingRequired();
+    });
+
+    it("Select output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Submit form for approval", () => {
+    it("Click on ‘Approve & Release’", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
     });
 
-    it("Advance Effective Date to 10 days from now", () => {
+    it("Set effective date to 10 days", () => {
       const effectiveDate = momentInPST().add(10, "days");
       const month = effectiveDate.format("MMM");
       const day = effectiveDate.format("D");
@@ -362,16 +388,34 @@ context("Approval request implementation tasks", () => {
       cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
     });
 
-    it("Approve and Release the form", () => {
+    it("Approve and Release the document", () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
     });
+  });
 
-    it("Verify form Approval status and get AR id", () => {
+  context("Verify document Approval status as 'Approved'", () => {
+    it("Verify document Approval status", () => {
       cy.drCheckDocumentStatus({ status: "Approved" });
       cy.arCheckTitleInEditableAndMatches({ name: "AR express release form" });
-      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
-        arId = $lnEl.text();
-      });
+      cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-")
+        .then(($lnEl: JQuery<HTMLElement>) => {
+          arId = $lnEl.text();
+        });
+    });
+  });
+
+  context("Verify AR Approval status as 'Approved'", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Select first document", () => {
+      cy.alClearFilters();
+      cy.arSelectFirstDocument();
+    });
+
+    it("Verify AR status is 'Approved'", () => {
+      cy.arVerifyStatus({ status: "Approved" });
     });
   });
 
@@ -405,7 +449,8 @@ context("Approval request implementation tasks", () => {
         .should("contain.text", "TIME_TRAVEL_COMPANY");
       cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="3"]`).eq(0)
         .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`)
+        .eq(0).contains(/REQUESTED|COMPLETE/g);
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
@@ -420,6 +465,48 @@ context("Approval request implementation tasks", () => {
       cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
         .should("contain.text", "COMPLETE");
       cy.wait(5000);
+    });
+  });
+
+  context(`Verify the document is still in Approved State`, () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clear filters", () => {
+      cy.dlClearFilters();
+    });
+
+    it("Filter list by document title", () => {
+      cy.dlFilterByDocTitle({ docTitle: "AR express release form" });
+    });
+
+    it("Verify filter by document title", () => {
+      cy.dlVerifyFilterByDocTitle({ docTitle: "AR express release form" });
+    });
+
+    it("Filter list by owner", () => {
+      cy.dlFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Verify filter by owner", () => {
+      cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Verify document counter on document list", () => {
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+    });
+
+    it("Verify filter by revision", () => {
+      cy.dlVerifyFilterByRev({ revision: "1" });
+    });
+
+    it("Filter list by status", () => {
+      cy.dlFilterByStatus({ status: "Approved" });
+    });
+
+    it("Verify filter by status", () => {
+      cy.dlVerifyFilterByStatus({ status: "Approved" });
     });
   });
 
@@ -440,12 +527,12 @@ context("Approval request implementation tasks", () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
-    it("Filter list by STATUS as APPROVED", () => {
-      cy.alFilterByStatus({ status: "APPROVED" });
+    it(`Filter list by STATUS as ${ChangeRequestStatus.Approved}`, () => {
+      cy.alFilterByStatus({ status: ChangeRequestStatus.Approved });
     });
 
-    it("Verify filter by STATUS as APPROVED", () => {
-      cy.alVerifyFilterByStatus({ status: "APPROVED" });
+    it(`Verify filter by STATUS as ${ChangeRequestStatus.Approved}`, () => {
+      cy.alVerifyFilterByStatus({ status: ChangeRequestStatus.Approved });
     });
   });
 
@@ -479,7 +566,8 @@ context("Approval request implementation tasks", () => {
         .should("contain.text", "TIME_TRAVEL_COMPANY");
       cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="3"]`).eq(0)
         .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`)
+        .eq(0).contains(/REQUESTED|COMPLETE/g);
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
@@ -494,6 +582,44 @@ context("Approval request implementation tasks", () => {
       cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
         .should("contain.text", "COMPLETE");
       cy.wait(5000);
+    });
+  });
+
+  context(`Verify the document is in Released State`, () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clear filters", () => {
+      cy.dlClearFilters();
+    });
+
+    it("Filter list by document title", () => {
+      cy.dlFilterByDocTitle({ docTitle: "AR express release form" });
+    });
+
+    it("Verify filter by document title", () => {
+      cy.dlVerifyFilterByDocTitle({ docTitle: "AR express release form" });
+    });
+
+    it("Filter list by owner", () => {
+      cy.dlFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Verify filter by owner", () => {
+      cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Verify document counter on document list", () => {
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+    });
+
+    it("Filter list by status", () => {
+      cy.dlFilterByStatus({ status: "Released" });
+    });
+
+    it("Verify filter by status", () => {
+      cy.dlVerifyFilterByStatus({ status: "Released" });
     });
   });
 
@@ -516,12 +642,12 @@ context("Approval request implementation tasks", () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
-    it("Filter list by STATUS as CLOSED", () => {
-      cy.alFilterByStatus({ status: "CLOSED" });
+    it(`Filter list by STATUS as ${ChangeRequestStatus.Closed}`, () => {
+      cy.alFilterByStatus({ status: ChangeRequestStatus.Closed  });
     });
 
-    it("Verify filter by STATUS as CLOSED", () => {
-      cy.alVerifyFilterByStatus({ status: "CLOSED" });
+    it(`Verify filter by STATUS as ${ChangeRequestStatus.Closed}`, () => {
+      cy.alVerifyFilterByStatus({ status: ChangeRequestStatus.Closed });
     });
   });
 });
