@@ -685,7 +685,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it(`Total Outstanding trainings should be +3`, () => {
-        cy.contains("ul").children().should("have.length", 3);
+        cy.get("div[id=\"full-width-tabpanel-0\"]")
+          .children()
+          .find("li")
+          .should("have.length", 3);
       });
 
       it("Select 'DUE IN 7 DAYS' tab", () => {
@@ -695,13 +698,16 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it(`Count for Due in 7 Days should be + 3`, () => {
-        cy.contains("ul").children().should("have.length", 3);
+        cy.get("div[id=\"full-width-tabpanel-2\"]")
+          .children()
+          .find("li")
+          .should("have.length", 3);
       });
 
       it(`List of trainings Due in 7 Days should show the additional entries for the 3 users`, () => {
-        cy.get("#full-width-tabpanel-2")
+        cy.get("div[id=\"full-width-tabpanel-2\"]")
           .children()
-          .children()
+          .find("li")
           .should("contain.text", USERS[2].name.split(" ")[0])
           .and("contain.text", USERS[3].name.split(" ")[0])
           .and("contain.text", USERS[4].name.split(" ")[0]);
@@ -927,7 +933,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it(`Total Outstanding trainings should be +2`, () => {
-        cy.contains("ul").children().children().should("have.length", 2);
+        cy.get("div[id=\"full-width-tabpanel-0\"]")
+          .children()
+          .find("li")
+          .should("have.length", 2);
       });
 
       it("Select 'DUE IN 7 DAYS' tab", () => {
@@ -936,12 +945,15 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it(`Count for Due in 7 Days should be -1`, () => {
-        cy.get("*[class^=\"makeStyles-list\"]>li").should("have.length", 0);
+      it(`Count for Due in 7 Days should be 0`, () => {
+        cy.get("div[id=\"full-width-tabpanel-2\"]")
+          .children()
+          .find("li")
+          .should("have.length", 0);
       });
 
       it(`Line item for User 3 should be removed from Due in 7 Days list`, () => {
-        cy.get("#full-width-tabpanel-2")
+        cy.get("div[id=\"full-width-tabpanel-2\"]")
           .children()
           .should("not.contain.text", USERS[4].name.split(" ")[0]);
       });
@@ -1014,7 +1026,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it(`Total Outstanding trainings should be +2`, () => {
-        cy.contains("ul").children().children().should("have.length", 2);
+        cy.get("div[id=\"full-width-tabpanel-0\"]")
+          .children()
+          .find("li")
+          .should("have.length", 2);
       });
 
       it("Select 'Overdue' tab", () => {
@@ -1024,12 +1039,16 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it(`Count for Overdue should be +2`, () => {
-        cy.get("div[id=\"full-width-tabpanel-1\"]").children().find("li").should("have.length", 2);
+        cy.get("div[id=\"full-width-tabpanel-1\"]")
+          .children()
+          .find("li")
+          .should("have.length", 2);
       });
 
       it(`Line items for User 1 and 2 should be moved to Overdue`, () => {
-        cy.get("#full-width-tabpanel-1")
+        cy.get("div[id=\"full-width-tabpanel-1\"]")
           .children()
+          .find("li")
           .should("contain.text", USERS[2].name.split(" ")[0])
           .and("contain.text", USERS[3].name.split(" ")[0]);
       });
@@ -1041,7 +1060,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it(`Line items for User 1 and 2 should be removed from Due in 7 Days`, () => {
-        cy.get("#full-width-tabpanel-2")
+        cy.get("div[id=\"full-width-tabpanel-2\"]")
           .children()
           .should("not.contain.text", USERS[2].name.split(" ")[0])
           .and("not.contain.text", USERS[3].name.split(" ")[0]);
@@ -1218,8 +1237,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           .eq(0)
           .should("have.text", "OVERDUE")
           .arrowClick();
-        cy.get("[class='MuiCollapse-wrapperInner']")
-          .should("contain.text", USERS[2].name);
+        cy.get("[class='MuiCollapse-wrapperInner']").should(
+          "contain.text",
+          USERS[2].name
+        );
         cy.get("button[aria-label=close]").eq(0).arrowClick();
       });
     });
@@ -1238,7 +1259,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it(`Total Outstanding trainings should be +1`, () => {
-        cy.get("#full-width-tabpanel-0").children().should("have.length", 1);
+        cy.get("div[id=\"full-width-tabpanel-0\"]")
+          .children()
+          .find("li")
+          .should("have.length", 1);
       });
 
       it("Select 'Overdue' tab", () => {
@@ -1248,12 +1272,16 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it(`Count for Overdue should be +1`, () => {
-        cy.get("#full-width-tabpanel-1").children().should("have.length", 1);
+        cy.get("div[id=\"full-width-tabpanel-1\"]")
+          .children()
+          .find("li")
+          .should("have.length", 1);
       });
 
       it(`Line item for User 2 should be removed from overdue list`, () => {
-        cy.get("#full-width-tabpanel-1")
+        cy.get("div[id=\"full-width-tabpanel-1\"]")
           .children()
+          .find("li")
           .should("not.contain.text", USERS[3].name.split(" ")[0]);
       });
     });
