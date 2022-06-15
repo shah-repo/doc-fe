@@ -1023,10 +1023,9 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      // it(`Count for Overdue should be +2`, () => {
-      //   cy.pause();
-      //   cy.get("*[class^=\"makeStyles-list-root\"]>li").should("have.length", 2);
-      // });
+      it(`Count for Overdue should be +2`, () => {
+        cy.get("div[id=\"full-width-tabpanel-1\"]").children().find("li").should("have.length", 2);
+      });
 
       it(`Line items for User 1 and 2 should be moved to Overdue`, () => {
         cy.get("#full-width-tabpanel-1")
