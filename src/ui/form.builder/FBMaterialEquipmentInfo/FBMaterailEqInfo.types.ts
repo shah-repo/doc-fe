@@ -1,34 +1,31 @@
-
-export enum TrainingStatusHeaders {
-  Completed="Training Completed",
-  Pending="Training Pending"
+export interface LotItem {
+  lotId: string;
+  partId: string;
+  quantity: number;
+  unit: string;
 }
-
-export enum TrainingStates {
-  COMPLETED="Completed",
-  PENDING="Pending"
-}
-
-export interface TrainingItem {
-  name: string;
-  email: string;
-  state: string;
-  avatar: string;
-  initialColor: string;
-  dueOn: Date;
-  completedAt?: Date;
-}
-
-interface TrainingItemDataProps {
-  data: TrainingItem[];
+export interface Material {
+  docId: string;
   title: string;
+  revision: string;
+  quantity: number;
+  unit: string;
+  lots: LotItem[];
+}
+export interface Equipment {
+  docId: string;
+  title: string;
+  nextCalibration: Date;
+  nextPm: Date;
+  lots?: LotItem[];
+  quantity: number;
+  unit: string;
+}
+export interface  MaterialAndEquipment {
+  equipment: Equipment[];
+  materials:  Material [];
 }
 
-export interface GroupByStateProps {
-  [key: string]: TrainingItemDataProps;
-}
-
-export interface FBTrainingInfoProps {
-  trainingData?: GroupByStateProps;
-  isLoading: boolean;
+export interface MaterialEqProps {
+  materialData: MaterialAndEquipment;
 }

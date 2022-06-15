@@ -32,9 +32,9 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.almost_black,
     },
     expanSionPannelPadding: {
-      padding: "0rem 2.1rem  2.1rem 2.1rem",
+      padding: "0rem 0.5rem  2.1rem 2.1rem",
       display: "block",
-      marginTop: -22,
+      marginTop: -15,
     },
     fontNormal14: {
       fontWeight: 400,
@@ -56,9 +56,11 @@ export const styles = makeStyles((theme: Theme) =>
       "margin": 0,
       "height": "55px",
       "alignItems": "center",
+      "zIndex": 2,
       "& .Mui-expanded": {
         height: "55px",
         alignItems: "center",
+        cursor: "pointer",
       },
 
     },
