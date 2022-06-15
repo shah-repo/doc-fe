@@ -1102,4 +1102,161 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       }
     );
   });
+
+  context("Log in as Admin user and Set the QA tool to Day 40", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    context("Use time tool to travel user back to future", () => {
+      it("Navigate to async tasks", () => {
+        cy.navigToAsyncTasks();
+      });
+
+      it("Select task TIME_TRAVEL_USER", () => {
+        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+      });
+
+      it("Select 40 day to back in future", () => {
+        cy.asyncSelectBackToTheFutureTime({ day: 40 });
+      });
+
+      it("Select next task TRAINING_RECORDS_REFRESH", () => {
+        cy.asyncTaskSelectNextTaskType({
+          taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH,
+        });
+      });
+
+      it("Select next task TRAINING_RECORDS_STATUS", () => {
+        cy.asyncTaskSelectNextTaskType({
+          taskType: SQS_TYPES.TRAINING_RECORDS_STATUS,
+        });
+      });
+
+      it("Submit async task", () => {
+        cy.asyncTaskClickSubmit();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+  });
+
+  context("Log in as Second user and Complete training", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    it("Open assigned Training", () => {
+      cy.dashGoToListItemFromDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+    });
+
+    it("Click complete training button", () => {
+      cy.trCompleteTraining();
+    });
+  });
+
+  context("Log in as Admin user and check training notifications", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
+    });
+
+    context("Check training notifications", () => {
+      it("Goto Dashboard", () => {
+        cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      });
+
+      it("Select 'Trainings' tab", () => {
+        cy.contains("Trainings").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Training notification show overdue training of User 1", () => {
+        cy.get("[trainingstatus=\"OVERDUE\"]")
+          .eq(0)
+          .should("have.text", "OVERDUE")
+          .arrowClick();
+        cy.get("[class='MuiCollapse-wrapperInner']")
+          .should("contain.text", USERS[2].name);
+        cy.get("button[aria-label=close]").eq(0).arrowClick();
+      });
+    });
+
+    context("Check Outstanding Trainings", () => {
+      it("Select 'My Feed' tab", () => {
+        cy.contains("My Feed").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'ALL' tab", () => {
+        cy.contains("ALL").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Total Outstanding trainings should be +1`, () => {
+        cy.get("#full-width-tabpanel-0").children().should("have.length", 1);
+      });
+
+      it("Select 'Overdue' tab", () => {
+        cy.contains("Overdue").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Count for Overdue should be +1`, () => {
+        cy.get("#full-width-tabpanel-1").children().should("have.length", 1);
+      });
+
+      it(`Line item for User 2 should be removed from overdue list`, () => {
+        cy.get("#full-width-tabpanel-1")
+          .children()
+          .should("not.contain.text", USERS[3].name.split(" ")[0]);
+      });
+    });
+  });
 });
