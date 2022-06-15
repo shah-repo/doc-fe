@@ -4,14 +4,16 @@
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { momentInPST } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { GeneralDocumentDocType } from "../../utils/constants/documentTypes/generalDocument";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { StructureFromPerCompanyReport } from "./document_counter.spec";
 
 let createdCompany;
 let loginResponse;
@@ -38,9 +40,82 @@ let createdPODocument;
 let createdPOFormDocument;
 let developersGroup;
 let EBDocumentType;
+let dateAfterEmailShouldArrive;
+let emailsFromInbox;
 
 const todaysDate = momentInPST();
 const todaysDateFormated = momentInPST().format("L");
+
+const usageReportTomorrow = momentInPST().add("days", "2").format("YYYY-MM-DDThh:mm");
+
+const usageReportXlsxFileName = "Usage_report_" + fileTimeFormat + ".xlsx";
+const usageReportXlsxFileNameAndPath = "cypress/downloads/" + usageReportXlsxFileName;
+const perCompanyReportJsonFileName = "Per_company_report_" + fileTimeFormat + ".json";
+const perCompanyReportJsonFileNameAndPath = "cypress/downloads/" + perCompanyReportJsonFileName;
+
+const numberOfDocsFromUsageReport: StructureFromPerCompanyReport[] = [];
+const numberOfCreatedDocs: StructureFromPerCompanyReport[] = [
+  {
+    name: "Parts",
+    releasedCompleted: 2,
+    draftPending: 0,
+  },
+  {
+    name: "Equipment",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "Supplier",
+    releasedCompleted: 1,
+    draftPending: 0,
+  },
+  {
+    name: "Purchase Order",
+    releasedCompleted: 1,
+    draftPending: 1,
+  },
+  {
+    name: "Receiving",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "EB",
+    releasedCompleted: 1,
+    draftPending: 1,
+  },
+  {
+    name: "LHR",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "LOT",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+  {
+    name: "Records",
+    releasedCompleted: 1,
+    draftPending: 1,
+  },
+  {
+    name: "Documents",
+    releasedCompleted: 5,
+    draftPending: 1,
+  },
+  {
+    name: "Approval Requests",
+    releasedCompleted: 11,
+    draftPending: 0,
+  },
+  {
+    name: "Training Records",
+    releasedCompleted: 0,
+    draftPending: 0,
+  },
+];
 
 context("Usage report document counter for new revisions", () => {
   before(() => {
@@ -159,7 +234,7 @@ context("Usage report document counter for new revisions", () => {
       });
     });
 
-    it.skip("[API]API request for updating company navigation", (done: any) => {
+    it("[API]API request for updating company navigation", (done: any) => {
       cy.cmpUpdateCompany({
         employeeId: adminEmployee.id,
         sessionId: loginResponse.sessionId as unknown as string,
@@ -261,6 +336,15 @@ context("Usage report document counter for new revisions", () => {
                   ],
                 },
                 {
+                  icon: "/navigation_icons/eb_icon.svg",
+                  type: "CATEGORY",
+                  label: "Engineering Builds",
+                  category: "EB",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
                   icon: "/navigation_icons/tag-check.svg",
                   type: "CATEGORY",
                   label: "Lots",
@@ -336,6 +420,84 @@ context("Usage report document counter for new revisions", () => {
       }).then(() => {
         done();
       });
+    });
+
+    it("[API]POST EB page details", (done: any) => {
+      cy.request({
+        method: "POST",
+        url: `${CONFIG.BE_URL}/api/v1/page_details`,
+        headers: {
+          Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
+        },
+        body: {
+          category: "EB",
+          addNewBtnLabel: "Create Engineering Build",
+          columns: [
+            {
+              label: "EB ID",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "document.docId",
+              showOnAndroid: true,
+            },
+            {
+              fn: "DOCUMENT_REVISION_VERSION",
+              label: "Revision",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.revision",
+              sourcePath: ["revisionStage:revision"],
+              showOnAndroid: true,
+            },
+            {
+              label: "State",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "status",
+              showOnAndroid: true,
+            },
+            {
+              label: "Title",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "name",
+              showOnAndroid: true,
+            },
+            {
+              label: "Owner",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "owner.user.name",
+              showOnAndroid: true,
+            },
+            {
+              label: "Released Date",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "releasedAt",
+              showOnAndroid: true,
+            },
+            {
+              fn: "FORM_DOC_ID",
+              label: "Form ID",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.formDocId",
+              sourcePath: ["irrelevant"],
+              showOnAndroid: true,
+            },
+            {
+              fn: "PART_ID_FROM_EB",
+              label: "Part ID",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.partFromEb",
+              sourcePath: ["irrelevant"],
+              showOnAndroid: true,
+            },
+          ],
+        },
+      }).then(() =>  done());
     });
 
     it("[API]Create General Document", (done: any) => {
@@ -1047,6 +1209,151 @@ context("Usage report document counter for new revisions", () => {
 
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
+    });
+  });
+
+  context("Revise normal document", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: "API General Document", status: "Released" });
+    });
+
+    it("Click revise button", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Clicks Save button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Revise record document", () => {
+    it("Navigate to records", () => {
+      cy.navigToRecords();
+    });
+
+    it("Select first record", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Click revise button", () => {
+      cy.drClickReviseDocument();
+    });
+  });
+
+  context("Revise PO document", () => {
+    it("Navigate to PO list", () => {
+      cy.navigToPurchaseOrder();
+    });
+
+    it("Select PO document", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Click revise button", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Clicks Save button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Revise EB document", () => {
+    it("Navigate to EB list", () => {
+      cy.navigToEB();
+    });
+
+    it("Select EB document", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Click revise button", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Select administrative change", () => {
+      cy.drAdministrativeRevisionLevel();
+    });
+
+    it("Clicks Save button", () => {
+      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
+    });
+  });
+
+  context("Submit request for usage report", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task USAGE_REPORT", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.USAGE_REPORT });
+    });
+
+    it("Select date time", () => {
+      cy.get("#datetime-local").eq(0).arrowType(usageReportTomorrow);
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+    });
+  });
+
+  context("Get report and parse it", () => {
+    it("Get attachment from email", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.wait(20000);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Enlil Usage Report:`,
+        include_attachments: true,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        const attachmentData = emailsFromInbox[0].attachments[0].data;
+        cy.writeFile(usageReportXlsxFileNameAndPath, attachmentData, "base64");
+      });
+    });
+
+    it("Parse to JSON for number of documents", () => {
+      cy.task("parseXlsx", { file: usageReportXlsxFileNameAndPath, sheet: "Report Per Company" }).then((rows: any) => {
+        cy.writeFile(perCompanyReportJsonFileNameAndPath, { rows });
+      });
+    });
+  });
+
+  context("Verify number of documents", () => {
+    it("Read data from JSON", () => {
+      cy.readFile(perCompanyReportJsonFileNameAndPath).then((data) => {
+        const relesedCompletedKey = createdCompany.name;
+
+        const keysInReport = Object.keys(data.rows[1]);
+        const indexOfUnknownKey = keysInReport.indexOf(relesedCompletedKey) + 1;
+        const draftPendingKey = keysInReport[indexOfUnknownKey];
+
+        data.rows.forEach((row, i) => {
+          if (i !== 0) {
+            numberOfDocsFromUsageReport.push({
+              name: row[""],
+              releasedCompleted: parseInt(row[relesedCompletedKey], 10),
+              draftPending: parseInt(row[draftPendingKey], 10),
+            });
+          }
+        });
+      });
+    });
+
+    it("Verify data from usage report", () => {
+      assert.deepEqual(numberOfDocsFromUsageReport, numberOfCreatedDocs);
     });
   });
 });
