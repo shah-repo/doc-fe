@@ -28,7 +28,8 @@ export interface GmailTesterOptions {
 }
 
 export async function getEmails(email: string, options: GmailTesterOptions = {}) {
-  const settings: GmailTesterOptions = {
+  const settings: gmail.CheckInboxOptions = {
+    label: "INBOX",
     to: email,
     wait_time_sec: 5,
     max_wait_time_sec: 60,

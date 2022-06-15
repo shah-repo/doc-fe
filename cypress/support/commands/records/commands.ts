@@ -1,6 +1,8 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
+import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 export { };
@@ -24,9 +26,56 @@ declare global {
       recVerifyDescription(params: {description: string }): Chainable<Subject>;
       recVerifyDescriptionWIP(params: {description: string }): Chainable<Subject>;
       equipReloadDocument(): Chainable<Subject>;
+      recAPICreateVoidedDocument(params: {
+        fromDocumentId: string;
+        formInputFieldName: string;
+        formInputApprovalId: string;
+        documentId: string;
+        employeeId: string;
+        sessionId: string;}): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("recAPICreateVoidedDocument", (params: {
+  fromDocumentId: string;
+  formInputFieldName: string;
+  formInputApprovalId: string;
+  documentId: string;
+  employeeId: string;
+  sessionId: string;}) => {
+
+  const requestBody = {
+    formDocument: {
+      id: params.fromDocumentId,
+    },
+    formInput: {
+    },
+    schema: null,
+    parentParts: [],
+    description: "<p>Supplier voided</p>",
+    name: "Supplier voided",
+    attachments: [],
+    referenceTo: [],
+    revisionStage: null,
+    revisionChangeType: RevisionChangeType.Obsolete,
+    retrain: false,
+    renderHTML: null,
+    document: {
+      id: params.documentId,
+    },
+  };
+  requestBody.formInput[params.formInputFieldName] = [params.formInputApprovalId];
+
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
+    body: requestBody,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
 
 Cypress.Commands.add("recFilterByStatus", (params: {status: string }) => {
   cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
