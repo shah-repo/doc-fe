@@ -1140,7 +1140,7 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify Part can be opened`, () => {
       cy.dlSelectFirstDocument();
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
 
     it(`Verify Parts count`, () => {
