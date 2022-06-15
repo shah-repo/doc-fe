@@ -65,7 +65,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       applicableValidationSchema: true,
     });
   }
-
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
