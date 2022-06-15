@@ -205,7 +205,7 @@ context("Approval request form scenario", () => {
 
     it("Verify AR status", () => {
       SystemRequirement("REQ-0020");
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
   });
 
@@ -473,7 +473,7 @@ context("Approval request form scenario", () => {
 
     it("Capture Audit timestamp", () => {
       SystemRequirement("REQ-0960", "REQ-2730");
-      cy.get("[data-cy=\"audit-time-0\"]").should("have.attr", "datetime").then(($time) => {
+      cy.get("[data-cy=\"audit-0\"]").should("have.attr", "datetime").then(($time) => {
         cy.wrap($time).should("not.be.empty");
       });
     });
