@@ -111,6 +111,9 @@ context("Session logout after time travel flow", () => {
 
       it("Verify user is logged in", () => {
         cy.reload();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.navigListExistsCheck(
           NavigationItems.DASHBOARD,
           NavigationItems.DOCUMENT_CONTROL);
@@ -118,7 +121,7 @@ context("Session logout after time travel flow", () => {
 
     });
 
-    context("Time travel 15 minutes back to the future", () => {
+    context("Time travel 45 minutes back to the future", () => {
       it("Navigate to async tasks", () => {
         cy.navigToAsyncTasks();
       });
@@ -127,17 +130,21 @@ context("Session logout after time travel flow", () => {
         cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER_SESSION });
       });
 
-      it("Select 15 minutes to back in future", () => {
-        cy.asyncSelectBackToTheFutureTime({ minute: 15 });
+      it("Select 45 minutes to back in future", () => {
+        cy.asyncSelectBackToTheFutureTime({ minute: 45 });
       });
 
       it("Submit async task", () => {
         cy.asyncSessionTaskClickSubmit();
+
       });
 
       context("Verify that the user is logged out", () => {
         it("Verify user can't access below list", () => {
           cy.reload();
+          cy.landingPageLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
           cy.navigListNotExistsCheck(
             NavigationItems.DASHBOARD,
             NavigationItems.DOCUMENT_CONTROL);
@@ -145,41 +152,7 @@ context("Session logout after time travel flow", () => {
       });
 
     });
-
-    context("Login user again", () => {
-      it("Login user to dashboard", () => {
-        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-      });
-    });
-
-    context("Time travel 1 hour and 15 minutes back to the future", () => {
-      it("Navigate to async tasks", () => {
-        cy.navigToAsyncTasks();
-      });
-
-      it("Select task TIME_TRAVEL_USER_SESSION", () => {
-        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_USER_SESSION });
-      });
-
-      it("Select 1 hour and 15 minutes to back in future", () => {
-        cy.asyncSelectBackToTheFutureTime({ minute: 75 });
-      });
-
-      it("Submit async task", () => {
-        cy.asyncSessionTaskClickSubmit();
-      });
-
-      context("Verify that the user is logged out", () => {
-        it("Verify user can't access below list", () => {
-          cy.reload();
-          cy.navigListNotExistsCheck(
-            NavigationItems.DASHBOARD,
-            NavigationItems.DOCUMENT_CONTROL);
-        });
-      });
-
-    });
-
   });
+
 });
 export { };
