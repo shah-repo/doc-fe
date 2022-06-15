@@ -27,7 +27,7 @@ const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
         />
       </Box>
     )}
-    <Box bgcolor={Colors.cultured} px={2} pt={1}>
+    <Box bgcolor={Colors.white} px={2} pt={1}>
       <FBDialog />
       <FBRadioGroup
         name="validationMode"
