@@ -1,4 +1,4 @@
-import { get, isEmpty, map } from "lodash";
+import { find, get, isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
@@ -49,19 +49,23 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       type: "DYNAMIC",
     }];
   }
-  schema?.push({
-    name: "fb-attachment-built-in",
-    type: "materialandeq",
-    index: 0,
-    label: "Material and EQ",
-    tabId: "MEQ",
-    applicableOn: [
-      "ON_STATE_TO_IN_REVIEW",
-    ],
-    deleteDisabled: true,
-    deleteInFormDisabled: true,
-    applicableValidationSchema: true,
-  });
+  const obj = find(schema, { tabId: "MEQ" });
+  if (!obj) {
+    schema?.push({
+      name: "",
+      type: "materialandeq",
+      index: 0,
+      label: "Material and EQ",
+      tabId: "MEQ",
+      applicableOn: [
+        "ON_STATE_TO_IN_REVIEW",
+      ],
+      deleteDisabled: true,
+      deleteInFormDisabled: true,
+      applicableValidationSchema: true,
+    });
+  }
+
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 

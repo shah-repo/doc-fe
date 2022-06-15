@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Divider, Grid, List, ListItem, ListItemText } from "@material-ui/core";
+import { Box, Chip, Divider, Grid, List, ListItem, ListItemText } from "@material-ui/core";
 import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -11,7 +11,16 @@ import { styles } from "./FBMaterialEqInfo.styles";
 
 const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = ({ materialData }) => {
   const classes = styles();
-  // const materialArray = [1, 2, 3, 4];
+  const tempObj = {
+    lotId: "#202234",
+    partId: "PRT1",
+    quantity: "25",
+    unit: "ft",
+  };
+  if (materialData) {
+    materialData.materials.forEach((obj) => obj.lots.push(tempObj));
+    materialData.equipment.forEach((obj) => obj.lots ? obj.lots.push(tempObj) : obj.lots = []);
+  }
   const unit = " Items";
   const [isMaterialPannel, setIsMaterialPannel] = React.useState(false);
   const [isEquipmentPannel, setIsEquipmentPannel] = React.useState(false);
@@ -35,39 +44,57 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = ({ materialData 
     }
     return text;
   };
-  const genRateMaterialDetail = () => (map(materialData.materials, (o) =>
+  const genRateMaterialDetail = () => (map(materialData.materials, (o, topIndex: number) =>
     <>
       <ListItem  style={{ display: "block" }}>
         <ListItemText className={classes.fontNormal14}>{o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
         <ListItemText className={classes.fontNormal12}>
-          <Chip style={{ borderRadius: 4, backgroundColor: Colors.whitest_grey }}
-            size="small"  label="Lot #21072033 |N/A|25 ft" />
+          {
+            o.lots && o.lots.map((obj, index) => (
+              <Chip key={index} style={{
+                borderRadius: 4, backgroundColor: Colors.whitest_grey,
+                marginRight: 5, fontSize: 12, lineHeight: 15.12,
+                color: Colors.almost_black,
+              }}
+              size="small"  label={constructLotDetail(obj)} />
+            ))
+          }
         </ListItemText>
       </ListItem>
-      <Divider />
+      {++topIndex < materialData.materials.length && <Divider />}
+
     </>
   ));
-  const genRateEquipmentDetail = () => (map(materialData.equipment, (o) =>
+  const genRateEquipmentDetail = () => (map(materialData.equipment, (o, topIndex: number) =>
     <>
       <ListItem  style={{ display: "block" }}>
-        <ListItemText className={classes.fontNormal14}>
+        <ListItemText className={classes.fontNormal14} style={{ color: Colors.almost_black }}>
           {o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
         <ListItemText className={classes.fontNormal12}>
-          <Chip style={{ borderRadius: 4, backgroundColor: Colors.whitest_grey }}
-            size="small"  label="Lot #21072033 |N/A|25 ft" />
+          {
+            o.lots && o.lots.map((obj, index) => (
+              <Chip key={index} style={{
+                borderRadius: 4, backgroundColor: Colors.whitest_grey,
+                marginRight: 5, fontSize: 12, lineHeight: 15.12,
+                color: Colors.almost_black,
+              }}
+              size="small"  label={constructLotDetail(obj)} />
+            ))
+          }
         </ListItemText>
       </ListItem>
-      <Divider />
+      {++topIndex < materialData.equipment.length && <Divider />}
     </>
   ));
+  const constructLotDetail = (obj) => `Lot ${obj.lotId} | ${obj.partId || "N/A"} | ${obj.quantity} ${obj.unit}`;
   return (
     <>
       <Grid container spacing={3}>
-        <Grid item xs={10}>
+        <Grid item xs={9}>
           <Box mb={1}>
-            <Button style={{ color: Colors.navy }}  className={classes.fontNormal}
+            <p style={{ color: Colors.navy, cursor: "pointer" }}  className={classes.fontNormal}
               onClick={updatePanelState(predictExpandCollapseText())} >
-              <SMText label={ predictExpandCollapseText()} /></Button>
+              <SMText label={ predictExpandCollapseText()} /></p>
           </Box>
           <Box mb={1} className={classes.expandCollapseText}>
             <Accordion className={classes.panelBorder} expanded={isMaterialPannel} >
@@ -130,27 +157,28 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = ({ materialData 
             </Accordion>
           </Box>
         </Grid>
-        <Grid item xs={2}>
-          <Box>
+        <Grid item xs={3}>
+          <Box style={{ paddingTop: 22 }}>
             <Box className={classes.fontText}><SMText label={"meq.jump.to"} /></Box>
-            <Box style={{ height: 31, background: isMaterialPannel ? Colors.light_cream_blue : "inherit" }}>
-              <Button  style={{
-                height: 20, color: Colors.navy,
+            <Box style={{ background: isMaterialPannel ? Colors.light_cream_blue : "inherit", marginLeft: 8 }}>
+              <p  style={{
+                height: 30, color: Colors.navy,
+                marginBottom: 5,
                 fontSize: 12, fontWeight: 400,
               }}   onClick={() =>
               { setIsMaterialPannel(true); setIsEquipmentPannel(false); }} >
-                <Box style={{ marginBottom: 8, marginTop: 8 }}>
+                <Box style={{ paddingLeft: 10, paddingTop: 7 }}>
                   <SMText label={"meq.material"} />
                 </Box>
-              </Button>
+              </p>
             </Box>
-            <Box mb={1} style={{ height: 31, background: isEquipmentPannel ? Colors.light_cream_blue : "inherit" }}>
-              <Button  style={{ height: 25, color: Colors.navy, fontSize: 12, fontWeight: 400 }}
+            <Box mb={1} style={{ background: isEquipmentPannel ? Colors.light_cream_blue : "inherit", marginLeft: 8  }}>
+              <p  style={{ height: 30, color: Colors.navy, marginTop: 5, fontSize: 12, fontWeight: 400 }}
                 onClick={() => { setIsMaterialPannel(false); setIsEquipmentPannel(true); }} >
-                <Box style={{ marginBottom: 8, marginTop: 8 }}>
+                <Box style={{ paddingLeft: 10, paddingTop: 7 }}>
                   <SMText label={"meq.equipment"} />
                 </Box>
-              </Button>
+              </p>
             </Box>
           </Box>
 

@@ -34,6 +34,7 @@ export const styles = makeStyles((theme: Theme) =>
     expanSionPannelPadding: {
       padding: "0rem 2.1rem  2.1rem 2.1rem",
       display: "block",
+      marginTop: -22,
     },
     fontNormal14: {
       fontWeight: 400,
