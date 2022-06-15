@@ -13,6 +13,9 @@ import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutpu
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
+import HeaderMenu from "../components/common/header/Menu";
+import OwnerChangerContainer from "../components/common/owner.changer/container";
+import { RequestType } from "../components/common/owner.changer/helpers/types";
 import CopyEBButton from "../components/forms/CopyEBButton";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
@@ -27,7 +30,7 @@ import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
-import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
@@ -36,6 +39,7 @@ interface OwnProps {
   documentRevision: DocumentRevision;
   canShowCreateVersionButton?: boolean;
   hasAccess: boolean;
+  canChangeOwnerShip: boolean;
 }
 
 interface StateProps {
@@ -50,7 +54,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, canChangeOwnerShip,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const handleCreateDocument = useHandleCreateDoc();
@@ -208,12 +212,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             <WarningIcon style={{ marginRight: 10, width: "20px", height: "20px" }} />
             <Text translation="document.security.warning" />
           </Box>
-          {!isEmailSent &&
+          {/* {!isEmailSent &&
             <Button color="secondary" variant="outlined" onClick={onSubmit}
               id="PreviewControlsContainer-access" data-cy="PreviewControlsContainer-access" >
               <Text translation="document.request.access" />
             </Button>
-          }
+          } */}
         </div>
       );
     }
@@ -222,7 +226,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const newRenderNoAccessWarning = () => {
     if (!hasAccess) {
       return (
-        <Box display="flex">
+        <Box display="flex" style={{ lineHeight: "15px" }}>
           <Box alignSelf="center" id="PreviewControlsContainer-warning" color={Colors.white} alignContent="center" >
             <Grid container alignItems="center">
               <Grid item>
@@ -233,7 +237,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               </Grid>
             </Grid>
           </Box>
-          {!isEmailSent && (
+          {/* {!isEmailSent && (
             <StyledButton
               color="primary"
               onClick={onSubmit}
@@ -242,7 +246,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             >
               <Text translation="document.request.access" />
             </StyledButton>
-          )}
+          )} */}
         </Box>
       );
     }
@@ -281,26 +285,122 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       />
     </>;
 
+  const requestAccessSentButton = () => !hasAccess && !isEmailSent && (
+    <StyledButton
+      color="primary"
+      onClick={onSubmit}
+      id="PreviewControlsContainer-access"
+      data-cy="PreviewControlsContainer-access"
+    >
+      <Text translation="document.request.access" />
+    </StyledButton>
+  );
+
+  const accessableButtons: string[] = [];
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && showRevise) {
+    accessableButtons.push("cloneButton");
+  }
+  if ((isStatusReleased || isStatusInDraft) && canCopy) {
+    accessableButtons.push("newcloneButton");
+  }
+
+  if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
+    accessableButtons.push("outputButton");
+  }
+  // if (!hasAccess) {
+  //   accessableButtons.push("nowarning");
+  // }
+  if (!isEmailSent && !hasAccess) {
+    accessableButtons.push("requestAccess");
+  }
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
+    accessableButtons.push("withdrawSubmission");
+  }
+  const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
+  const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
+  const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
+
+  if (!(!isDocumentDraft || !canCreateInspection)) {
+    accessableButtons.push("inspectionControl");
+  }
+  if (documentRevision.pdf) {
+    accessableButtons.push("pdf");
+  }
+  if (canChangeOwnerShip) {
+    accessableButtons.push("changeowner");
+  }
+  if (isExportable) {
+    accessableButtons.push("exportToEmail");
+  }
+  const initialButtons = accessableButtons.length >= 2 ? accessableButtons.slice(0, 2) : accessableButtons;
+  const restButtons = accessableButtons.length >= 2 ? accessableButtons.slice(2) : [];
+
+  console.log("Initial Buttons ::", initialButtons);
+  console.log("Rest Buttons ::", restButtons);
+
+  // return (
+  //   <>
+  //     {!isLastVersionObsolete() && renderCloneButton()}
+  //     {(isStatusReleased || isStatusInDraft) && canCopy &&
+  //       <CopyEBButton
+  //         {...{ documentRevision }}
+  //       />}
+  //     {renderOutputButton()}
+  //     {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
+  //     {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
+  //       !isNewLayout && renderWithdrawSubmissionButton()}
+  //     {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
+  //       isNewLayout && newRenderWithdrawSubmissionButton()}
+  //     <InspectionControlsContainer {...{ documentRevision }} />
+  //     {isExportable && <ExportToEmail
+  //       revisionId={documentRevision.id}
+  //       canAccess={documentRevision.document.canAccess}
+  //     />}
+  //     <DownloadHTML pdf={documentRevision.pdf} />
+  //     <PDFSocket {...{ documentRevision }}/>
+  //   </>
+  // );
+
+  const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
+    <>
+      {buttons.includes("cloneButton") && renderCloneButton()}
+      {buttons.includes("newcloneButton") && (
+        <CopyEBButton {...{ documentRevision }} />
+      )}
+      {buttons.includes("outputButton") && renderOutputButton()}
+      {buttons.includes("requestAccess") && requestAccessSentButton()}
+      {buttons.includes("withdrawSubmission") && !isNewLayout &&
+        renderWithdrawSubmissionButton()}
+      {buttons.includes("withdrawSubmission") && isNewLayout &&
+        newRenderWithdrawSubmissionButton()}
+      {buttons.includes("inspectionControl") && (
+        <InspectionControlsContainer {...{ documentRevision }} />
+      )}
+      {buttons.includes("pdf") && <DownloadHTML pdf={documentRevision.pdf} />}
+      {buttons.includes("changeowner") && (
+        <OwnerChangerContainer
+          requestId={documentRevision.id}
+          requestType={RequestType.Document}
+          renderAsButton={renderAsButton}
+        />
+      )}
+      {buttons.includes("exportToEmail") && (
+        <ExportToEmail
+          revisionId={documentRevision.id}
+          canAccess={documentRevision.document.canAccess}
+        />
+      )}
+    </>
+  );
+
   return (
     <>
-      {!isLastVersionObsolete() && renderCloneButton()}
-      {(isStatusReleased || isStatusInDraft) && canCopy &&
-        <CopyEBButton
-          {...{ documentRevision }}
-        />}
-      {renderOutputButton()}
-      {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
-      {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-        !isNewLayout && renderWithdrawSubmissionButton()}
-      {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-        isNewLayout && newRenderWithdrawSubmissionButton()}
-      <InspectionControlsContainer {...{ documentRevision }} />
-      {isExportable && <ExportToEmail
-        revisionId={documentRevision.id}
-        canAccess={documentRevision.document.canAccess}
-      />}
-      <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
+      {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
+      {renderbuttons(initialButtons, true)}
+      {restButtons.length > 0 && (
+        <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>
+      )}
     </>
   );
 };
