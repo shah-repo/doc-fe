@@ -25,9 +25,9 @@ const UUIDAsyncTaskPresenter: React.FunctionComponent<Props> = ({
           label={
             <Text
               translation={
-                type === SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE
-                  ? "async.tasks.docRevId"
-                  : "async.tasks.pageDetailsId"
+                type === SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS
+                  ? "async.tasks.pageDetailsId"
+                  : "async.tasks.docRevId"
               }
             />
           }

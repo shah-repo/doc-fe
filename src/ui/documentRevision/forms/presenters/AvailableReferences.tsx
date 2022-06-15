@@ -195,7 +195,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   return (
     <Field {...fieldProps} label={undefined}>
       <>
-        <Typography variant="h5" style={FBAutoCompleteStyles.labelProps}>
+        <Typography variant="h6" style={FBAutoCompleteStyles.labelProps}>
           <Text message={fieldProps.label} />
         </Typography>
       </>
