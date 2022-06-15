@@ -421,7 +421,6 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("Add autocomplete of “Approvers” and set validation", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        // cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
         cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
@@ -432,7 +431,6 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("Add select field and set validation ", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        // cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field" });
         cy.fbGroupOptions("option1", "option2");
@@ -444,7 +442,6 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("EQUIPMENT SECTIONS FOR PM", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        // cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
         cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
@@ -453,7 +450,6 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("EQUIPMENT SECTIONS FOR CAL", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        // cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Calibration" });
         cy.get("input[value=\"calibration\"]").arrowClick();
