@@ -643,7 +643,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     context("Check training notifications", () => {
       it("Goto Dashboard", () => {
-        cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+        cy.navigToDashboard();
       });
 
       it("Select 'Trainings' tab", () => {
@@ -984,7 +984,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     context("Check training notifications", () => {
       it("Goto Dashboard", () => {
-        cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+        cy.navigToDashboard();
       });
 
       it("Select 'Trainings' tab", () => {
