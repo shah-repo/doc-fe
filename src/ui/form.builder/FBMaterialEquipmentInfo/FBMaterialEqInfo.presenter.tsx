@@ -38,8 +38,11 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = ({ materialData 
   const genRateMaterialDetail = () => (map(materialData.materials, (o) =>
     <>
       <ListItem  style={{ display: "block" }}>
-        <ListItemText>{o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
-        <ListItemText><Chip size="small"  label="Lot #21072033 |N/A|25 ft" /></ListItemText>
+        <ListItemText className={classes.fontNormal14}>{o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
+        <ListItemText className={classes.fontNormal12}>
+          <Chip style={{ borderRadius: 4, backgroundColor: Colors.whitest_grey }}
+            size="small"  label="Lot #21072033 |N/A|25 ft" />
+        </ListItemText>
       </ListItem>
       <Divider />
     </>
