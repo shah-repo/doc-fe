@@ -895,55 +895,57 @@ context("Autocomplete 'Equipment' test", () => {
                 subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
               };
 
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                emailsFromInbox = emails;
-              }).then(() => {
-                const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                  {
-                    sentToUser: USERS[2].email,
-                    contains: [`Hello <b>${USERS[2].name},</b>`,
-                      `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
-                      `Please click on the button below to view it`,
-                      "<button type=\"button\">VIEW ITEM</button>",
-                      createdCompany.id],
-                  }];
+              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                .then((emails) => {
+                  emailsFromInbox = emails;
+                }).then(() => {
+                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                    {
+                      sentToUser: USERS[2].email,
+                      contains: [`Hello <b>${USERS[2].name},</b>`,
+                        `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
+                        `Please click on the button below to view it`,
+                        "<button type=\"button\">VIEW ITEM</button>",
+                        createdCompany.id],
+                    }];
 
-                cy.imapVerifyEmailsInList({
-                  receivedEmails: emailsFromInbox,
-                  emailsToTest: emailsThatShouldBeReceived,
-                  getEmailsSincedate: dateAfterEmailShouldArrive,
-                  assertNumberOfEmailsFoundInList: 1,
-                }).and(() => {
+                  cy.imapVerifyEmailsInList({
+                    receivedEmails: emailsFromInbox,
+                    emailsToTest: emailsThatShouldBeReceived,
+                    getEmailsSincedate: dateAfterEmailShouldArrive,
+                    assertNumberOfEmailsFoundInList: 1,
+                  }).and(() => {
 
-                  const getEmailSetting =  {
-                    to: USERS[2].email,
-                    after: dateAfterEmailShouldArrive,
-                    subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
-                  };
+                    const getEmailSetting =  {
+                      to: USERS[2].email,
+                      after: dateAfterEmailShouldArrive,
+                      subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
+                    };
 
-                  cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                    emailsFromInbox = emails;
-                  }).then(() => {
+                    cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                      .then((emails) => {
+                        emailsFromInbox = emails;
+                      }).then(() => {
 
-                    const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                      {
-                        sentToUser: USERS[2].email,
-                        contains: [`Hello <b>${USERS[2].name},</b>`,
-                          `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                          `Please click on the button below to view it`,
-                          "<button type=\"button\">VIEW ITEM</button>",
-                          createdCompany.id],
-                      }];
+                        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                          {
+                            sentToUser: USERS[2].email,
+                            contains: [`Hello <b>${USERS[2].name},</b>`,
+                              `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+                              `Please click on the button below to view it`,
+                              "<button type=\"button\">VIEW ITEM</button>",
+                              createdCompany.id],
+                          }];
 
-                    cy.imapVerifyEmailsInList({
-                      receivedEmails: emailsFromInbox,
-                      emailsToTest: emailsThatShouldBeReceived,
-                      getEmailsSincedate: dateAfterEmailShouldArrive,
-                      assertNumberOfEmailsFoundInList: 1,
-                    });
+                        cy.imapVerifyEmailsInList({
+                          receivedEmails: emailsFromInbox,
+                          emailsToTest: emailsThatShouldBeReceived,
+                          getEmailsSincedate: dateAfterEmailShouldArrive,
+                          assertNumberOfEmailsFoundInList: 1,
+                        });
+                      });
                   });
                 });
-              });
             }
 
             else if (i === 0) {
@@ -953,27 +955,28 @@ context("Autocomplete 'Equipment' test", () => {
                 subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
               };
 
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                emailsFromInbox = emails;
-              }).then(() => {
+              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                .then((emails) => {
+                  emailsFromInbox = emails;
+                }).then(() => {
 
-                const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                  {
-                    sentToUser: USERS[2].email,
-                    contains: [`Hello <b>${USERS[2].name},</b>`,
-                      `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                      `Please click on the button below to view it`,
-                      "<button type=\"button\">VIEW ITEM</button>",
-                      createdCompany.id],
-                  }];
+                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                    {
+                      sentToUser: USERS[2].email,
+                      contains: [`Hello <b>${USERS[2].name},</b>`,
+                        `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+                        `Please click on the button below to view it`,
+                        "<button type=\"button\">VIEW ITEM</button>",
+                        createdCompany.id],
+                    }];
 
-                cy.imapVerifyEmailsInList({
-                  receivedEmails: emailsFromInbox,
-                  emailsToTest: emailsThatShouldBeReceived,
-                  getEmailsSincedate: dateAfterEmailShouldArrive,
-                  assertNumberOfEmailsFoundInList: 1,
+                  cy.imapVerifyEmailsInList({
+                    receivedEmails: emailsFromInbox,
+                    emailsToTest: emailsThatShouldBeReceived,
+                    getEmailsSincedate: dateAfterEmailShouldArrive,
+                    assertNumberOfEmailsFoundInList: 1,
+                  });
                 });
-              });
             }
 
             else if (i === 2) {
@@ -983,27 +986,28 @@ context("Autocomplete 'Equipment' test", () => {
                 subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
               };
 
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                emailsFromInbox = emails;
-              }).then(() => {
+              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                .then((emails) => {
+                  emailsFromInbox = emails;
+                }).then(() => {
 
-                const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                  {
-                    sentToUser: USERS[2].email,
-                    contains: [`Hello <b>${USERS[2].name},</b>`,
-                      `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                      `Please click on the button below to view it`,
-                      "<button type=\"button\">VIEW ITEM</button>",
-                      createdCompany.id],
-                  }];
+                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                    {
+                      sentToUser: USERS[2].email,
+                      contains: [`Hello <b>${USERS[2].name},</b>`,
+                        `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+                        `Please click on the button below to view it`,
+                        "<button type=\"button\">VIEW ITEM</button>",
+                        createdCompany.id],
+                    }];
 
-                cy.imapVerifyEmailsInList({
-                  receivedEmails: emailsFromInbox,
-                  emailsToTest: emailsThatShouldBeReceived,
-                  getEmailsSincedate: dateAfterEmailShouldArrive,
-                  assertNumberOfEmailsFoundInList: 1,
+                  cy.imapVerifyEmailsInList({
+                    receivedEmails: emailsFromInbox,
+                    emailsToTest: emailsThatShouldBeReceived,
+                    getEmailsSincedate: dateAfterEmailShouldArrive,
+                    assertNumberOfEmailsFoundInList: 1,
+                  });
                 });
-              });
             }
 
             else if (i === 3) {
@@ -1013,27 +1017,28 @@ context("Autocomplete 'Equipment' test", () => {
                 subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
               };
 
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                emailsFromInbox = emails;
-              }).then(() => {
+              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                .then((emails) => {
+                  emailsFromInbox = emails;
+                }).then(() => {
 
-                const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                  {
-                    sentToUser: USERS[2].email,
-                    contains: [`Hello <b>${USERS[2].name},</b>`,
-                      `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
-                      `Please click on the button below to view it`,
-                      "<button type=\"button\">VIEW ITEM</button>",
-                      createdCompany.id],
-                  }];
+                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                    {
+                      sentToUser: USERS[2].email,
+                      contains: [`Hello <b>${USERS[2].name},</b>`,
+                        `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
+                        `Please click on the button below to view it`,
+                        "<button type=\"button\">VIEW ITEM</button>",
+                        createdCompany.id],
+                    }];
 
-                cy.imapVerifyEmailsInList({
-                  receivedEmails: emailsFromInbox,
-                  emailsToTest: emailsThatShouldBeReceived,
-                  getEmailsSincedate: dateAfterEmailShouldArrive,
-                  assertNumberOfEmailsFoundInList: 1,
+                  cy.imapVerifyEmailsInList({
+                    receivedEmails: emailsFromInbox,
+                    emailsToTest: emailsThatShouldBeReceived,
+                    getEmailsSincedate: dateAfterEmailShouldArrive,
+                    assertNumberOfEmailsFoundInList: 1,
+                  });
                 });
-              });
             }
           });
         });
@@ -1042,27 +1047,35 @@ context("Autocomplete 'Equipment' test", () => {
           cy.get("[data-cy=dashboardFeedList]>div").then(($dayToTest) => {
             if (i === 0) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
+                .should("exist");
               cy.get("[data-cy=dashboardFeedList]>div").eq(1)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days`)
+                .should("exist");
             }
             else if (i === 1) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
+                .should("exist");
               cy.get("[data-cy=dashboardFeedList]>div").eq(1)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days`)
+                .should("exist");
             }
             else if (i === 2) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days`)
+                .should("exist");
               cy.get("[data-cy=dashboardFeedList]>div").eq(1)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
+                .should("exist");
             }
             else if (i === 3) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days`)
+                .should("exist");
               cy.get("[data-cy=dashboardFeedList]>div").eq(1)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days`)
+                .should("exist");
             }
           });
         });
@@ -1098,55 +1111,57 @@ context("Autocomplete 'Equipment' test", () => {
                 subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
               };
 
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                emailsFromInbox = emails;
-              }).then(() => {
-                const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                  {
-                    sentToUser: USERS[2].email,
-                    contains: [`Hello <b>${USERS[2].name},</b>`,
-                      `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
-                      `Please click on the button below to view it`,
-                      "<button type=\"button\">VIEW ITEM</button>",
-                      createdCompany.id],
-                  }];
+              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                .then((emails) => {
+                  emailsFromInbox = emails;
+                }).then(() => {
+                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                    {
+                      sentToUser: USERS[2].email,
+                      contains: [`Hello <b>${USERS[2].name},</b>`,
+                        `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
+                        `Please click on the button below to view it`,
+                        "<button type=\"button\">VIEW ITEM</button>",
+                        createdCompany.id],
+                    }];
 
-                cy.imapVerifyEmailsInList({
-                  receivedEmails: emailsFromInbox,
-                  emailsToTest: emailsThatShouldBeReceived,
-                  getEmailsSincedate: dateAfterEmailShouldArrive,
-                  assertNumberOfEmailsFoundInList: 1,
-                }).and(() => {
+                  cy.imapVerifyEmailsInList({
+                    receivedEmails: emailsFromInbox,
+                    emailsToTest: emailsThatShouldBeReceived,
+                    getEmailsSincedate: dateAfterEmailShouldArrive,
+                    assertNumberOfEmailsFoundInList: 1,
+                  }).and(() => {
 
-                  const getEmailSetting =  {
-                    to: USERS[2].email,
-                    after: dateAfterEmailShouldArrive,
-                    subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
-                  };
+                    const getEmailSetting =  {
+                      to: USERS[2].email,
+                      after: dateAfterEmailShouldArrive,
+                      subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
+                    };
 
-                  cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                    emailsFromInbox = emails;
-                  }).then(() => {
+                    cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                      .then((emails) => {
+                        emailsFromInbox = emails;
+                      }).then(() => {
 
-                    const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                      {
-                        sentToUser: USERS[2].email,
-                        contains: [`Hello <b>${USERS[2].name},</b>`,
-                          `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                          `Please click on the button below to view it`,
-                          "<button type=\"button\">VIEW ITEM</button>",
-                          createdCompany.id],
-                      }];
+                        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                          {
+                            sentToUser: USERS[2].email,
+                            contains: [`Hello <b>${USERS[2].name},</b>`,
+                              `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+                              `Please click on the button below to view it`,
+                              "<button type=\"button\">VIEW ITEM</button>",
+                              createdCompany.id],
+                          }];
 
-                    cy.imapVerifyEmailsInList({
-                      receivedEmails: emailsFromInbox,
-                      emailsToTest: emailsThatShouldBeReceived,
-                      getEmailsSincedate: dateAfterEmailShouldArrive,
-                      assertNumberOfEmailsFoundInList: 1,
-                    });
+                        cy.imapVerifyEmailsInList({
+                          receivedEmails: emailsFromInbox,
+                          emailsToTest: emailsThatShouldBeReceived,
+                          getEmailsSincedate: dateAfterEmailShouldArrive,
+                          assertNumberOfEmailsFoundInList: 1,
+                        });
+                      });
                   });
                 });
-              });
             }
 
             else if (i === 2) {
@@ -1156,27 +1171,28 @@ context("Autocomplete 'Equipment' test", () => {
                 subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
               };
 
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                emailsFromInbox = emails;
-              }).then(() => {
+              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                .then((emails) => {
+                  emailsFromInbox = emails;
+                }).then(() => {
 
-                const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                  {
-                    sentToUser: USERS[2].email,
-                    contains: [`Hello <b>${USERS[2].name},</b>`,
-                      `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                      `Please click on the button below to view it`,
-                      "<button type=\"button\">VIEW ITEM</button>",
-                      createdCompany.id],
-                  }];
+                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                    {
+                      sentToUser: USERS[2].email,
+                      contains: [`Hello <b>${USERS[2].name},</b>`,
+                        `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
+                        `Please click on the button below to view it`,
+                        "<button type=\"button\">VIEW ITEM</button>",
+                        createdCompany.id],
+                    }];
 
-                cy.imapVerifyEmailsInList({
-                  receivedEmails: emailsFromInbox,
-                  emailsToTest: emailsThatShouldBeReceived,
-                  getEmailsSincedate: dateAfterEmailShouldArrive,
-                  assertNumberOfEmailsFoundInList: 1,
+                  cy.imapVerifyEmailsInList({
+                    receivedEmails: emailsFromInbox,
+                    emailsToTest: emailsThatShouldBeReceived,
+                    getEmailsSincedate: dateAfterEmailShouldArrive,
+                    assertNumberOfEmailsFoundInList: 1,
+                  });
                 });
-              });
             }
 
             else if (i === 3) {
@@ -1186,28 +1202,29 @@ context("Autocomplete 'Equipment' test", () => {
                 subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
               };
 
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-                emailsFromInbox = emails;
-              }).then(() => {
+              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+                .then((emails) => {
+                  emailsFromInbox = emails;
+                }).then(() => {
 
-                const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                  {
-                    sentToUser: USERS[2].email,
-                    contains: [`Hello <b>${USERS[2].name},</b>`,
-                      `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
-                      // `${dueDateInEmail}`,
-                      `Please click on the button below to view it`,
-                      "<button type=\"button\">VIEW ITEM</button>",
-                      createdCompany.id],
-                  }];
+                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+                    {
+                      sentToUser: USERS[2].email,
+                      contains: [`Hello <b>${USERS[2].name},</b>`,
+                        `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
+                        // `${dueDateInEmail}`,
+                        `Please click on the button below to view it`,
+                        "<button type=\"button\">VIEW ITEM</button>",
+                        createdCompany.id],
+                    }];
 
-                cy.imapVerifyEmailsInList({
-                  receivedEmails: emailsFromInbox,
-                  emailsToTest: emailsThatShouldBeReceived,
-                  getEmailsSincedate: dateAfterEmailShouldArrive,
-                  assertNumberOfEmailsFoundInList: 1,
+                  cy.imapVerifyEmailsInList({
+                    receivedEmails: emailsFromInbox,
+                    emailsToTest: emailsThatShouldBeReceived,
+                    getEmailsSincedate: dateAfterEmailShouldArrive,
+                    assertNumberOfEmailsFoundInList: 1,
+                  });
                 });
-              });
             }
           });
         });
@@ -1216,19 +1233,23 @@ context("Autocomplete 'Equipment' test", () => {
           cy.get("[data-cy=dashboardFeedList]>div").then(($dayToTest) => {
             if (i === 0) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
+                .should("exist");
             }
             else if (i === 1) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
+                .should("exist");
             }
             else if (i === 2) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
+                .should("exist");
             }
             else if (i === 3) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days`).should("exist");
+                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days`)
+                .should("exist");
             }
           });
         });
