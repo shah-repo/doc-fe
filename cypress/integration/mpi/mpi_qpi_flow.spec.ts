@@ -667,7 +667,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.arVerifyStatus({ status: "DRAFT");
+          cy.arVerifyStatus({ status: "DRAFT" });
         });
 
         context("Fill step #1", () => {
@@ -786,7 +786,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.arVerifyStatus({ status: "DRAFT"});
+          cy.arVerifyStatus({ status: "DRAFT" });
         });
 
         context("Fill step #1", () => {
@@ -816,7 +816,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "IN_REVIEW"});
+            cy.arVerifyStatus({ status: "IN_REVIEW" });
           });
         });
       });
@@ -861,7 +861,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.arVerifyStatus({ status: "PENDING_CHANGE"});
+        cy.arVerifyStatus({ status: "PENDING_CHANGE" });
       });
     });
   });
