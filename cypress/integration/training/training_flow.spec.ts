@@ -423,7 +423,7 @@ context("Training Flow test", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedFormId = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedFormId = x.text(); });
     });
 
     it("Form with Approved status", () => {
@@ -436,7 +436,7 @@ context("Training Flow test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
       cy.drClickCreateDocumentWithApiCall();
-      cy.get("#HeaderInfo-docId").then((x) => { approvedFormId = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { approvedFormId = x.text(); });
       cy.navigToApprovalRequestList();
       cy.cmpClickCreateApprovalRequest();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });

@@ -351,7 +351,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
 
     it("Doc2 with Released status", () => {
@@ -368,7 +368,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc2Id = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc2Id = x.text(); });
     });
 
     it("Doc3 with Released status", () => {
@@ -385,7 +385,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc3Id = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc3Id = x.text(); });
     });
   });
 

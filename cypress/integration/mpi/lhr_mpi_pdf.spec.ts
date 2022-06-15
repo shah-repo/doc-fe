@@ -1744,7 +1744,7 @@ context("Autosave LHR", () => {
 
     it("Verify LHR title", () => {
       cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02");
-      cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "LHR-00004");
     });
 
     it("Verify current released part is 'rev 1'", () => {
@@ -1905,8 +1905,8 @@ context("Autosave LHR", () => {
     it("Check doc status for WIP and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "WIP" });
       cy.get("#HeaderInfo-subtitle").should("contain.text",  lotDocumentIdRef + "02RD");
-      cy.get("#HeaderInfo-docId").should("contain.text", "LHR-00004");
-      cy.get("#HeaderInfo-docId").should("contain.text", "LHR").then(($docIdElement) => {
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("contain.text", "LHR-00004");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("contain.text", "LHR").then(($docIdElement) => {
         lhrDocId = $docIdElement.text();
       });
 
@@ -2386,7 +2386,7 @@ context("Autosave LHR", () => {
     it("Check doc status for Released and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: "Released" });
       cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02RD");
-      cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "LHR-00004");
 
       cy.sendToEmail();
     });

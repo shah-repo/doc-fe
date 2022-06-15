@@ -390,7 +390,7 @@ context("Add/Remove groups from Training Curriculum", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 

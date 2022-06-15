@@ -205,7 +205,7 @@ context("Approval request form scenario", () => {
 
     it("Verify AR status", () => {
       SystemRequirement("REQ-0020");
-      cy.arVerifyStatus({ status: "In Review" });
+      cy.arVerifyStatus({ status: "IN_REVIEW" });
     });
   });
 
@@ -459,7 +459,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Verify AR status is 'Approved'", () => {
-      cy.arVerifyStatus({ status: "Approved" });
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
 
     it("Open history drawer", () => {

@@ -351,7 +351,7 @@ context("Training for same document that was first released and then revised and
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 
@@ -521,7 +521,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Check approval request status is 'Approved'", () => {
-      cy.arVerifyStatus({ status: "Approved" });
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
   });
 

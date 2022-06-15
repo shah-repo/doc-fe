@@ -646,7 +646,7 @@ context("Test Engineering Build landing page", () => {
 
     it(`Verify EB can be opened`, () => {
       cy.dlSelectFirstDocument();
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: "RELEASED" });
     });
 
     it(`Verify EB count`, () => {

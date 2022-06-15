@@ -140,7 +140,7 @@ context("Document force required fields", () => {
   context("Document in Draft without title and description", () => {
     it("Check if document status is Draft after creating a document", () => {
       cy.drCheckDocumentStatus({ status: "Draft" });
-      cy.get("#HeaderInfo-docId").then((x) => { docId = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { docId = x.text(); });
     });
 
     it("title should be blank", () => {

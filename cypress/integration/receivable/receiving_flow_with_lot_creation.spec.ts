@@ -756,7 +756,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Check for ID uniqueness - should be 'RC-00001'", () => {
       SystemRequirement("REQ-1890");
-      cy.get("[id=HeaderInfo-docId]").should("have.text", "RC-00001");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "RC-00001");
     });
 
     it("Click on 'Receiving' on sidebar", () => {
@@ -773,7 +773,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Check for ID uniqueness - should be 'RC-00002'", () => {
       SystemRequirement("REQ-1890");
-      cy.get("[id=HeaderInfo-docId]").should("have.text", "RC-00002");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "RC-00002");
     });
 
     it("Select PO Receivable from dropdown for 'RC-00002'", () => {

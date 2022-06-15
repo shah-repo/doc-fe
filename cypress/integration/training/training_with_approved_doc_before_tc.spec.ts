@@ -349,7 +349,7 @@ context("Training notifications for documents with approved and released revisio
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDocId = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDocId = x.text(); });
     });
 
     it("Revise and changed to Approved status", () => {
@@ -466,7 +466,7 @@ context("Training notifications for documents with approved and released revisio
     it("Click training notification and check doc with Approved status", () => {
       SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -480,7 +480,7 @@ context("Training notifications for documents with approved and released revisio
     it("Click training notification and check doc with Released status", () => {
       SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+      cy.arVerifyStatus({ status: "RELEASED" });
     });
 
     it("Button 'Complete training' should be visible", () => {
