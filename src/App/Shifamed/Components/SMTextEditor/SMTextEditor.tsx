@@ -174,7 +174,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                                 style={{
                                   fontWeight: 400,
                                   fontSize: "14px",
-                                  color: _formState?.getValue(name) ? Colors.almost_black : Colors.hint_gray,
+                                  color: _formState?.getValue(name) ? Colors.almost_black : Colors.lightest_grey2,
                                   lineHeight: "25px",
                                   cursor: "pointer",
                                 }}

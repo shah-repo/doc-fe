@@ -44,7 +44,7 @@ export const selectStyles = {
   placeholder: (base) => ({
     ...base,
     letterSpacing: "normal",
-    color: Colors.spanish_gray,
+    color: Colors.lightest_grey2,
   }),
 };
 
