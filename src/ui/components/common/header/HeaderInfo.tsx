@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { companySelectors } from "../../../../state/ducks/company";
+import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -46,7 +47,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 }) => {
 
   const intl = useIntl();
-  const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
+  const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId,
+    STATUS_TYPES_LABEL[status]);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
   const isStatusReleased = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
