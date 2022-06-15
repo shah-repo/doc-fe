@@ -17,6 +17,8 @@ declare global {
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
+      drSelectDetailsTab(): Chainable<Subject>;
+      drSelectOverviewTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -224,6 +226,14 @@ Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion:
   });
 });
 
+Cypress.Commands.add("drSelectDetailsTab", () => {
+  cy.get("[data-cy=\"tabId.details\"]").arrowClick();
+});
+
+Cypress.Commands.add("drSelectOverviewTab", () => {
+  cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+});
+
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
   list.forEach((item) => {
     cy.get("[class=\"circle_remove\"]").eq(item).arrowClick({ force: true });
@@ -232,7 +242,9 @@ Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
+  cy.get("[data-cy=\"field-name\"]").arrowClick();
   cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+  cy.unClick();
 });
 
 Cypress.Commands.add("drClearDocumentTitle", () => {
@@ -248,9 +260,8 @@ Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) 
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear().arrowType(params.description);
-  cy.wait(500);
-  cy.get("[data-cy=field-description]>label").arrowClick();
+  cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+  cy.get("[data-cy=\"description\"]").first().arrowType(params.description);
   cy.unClick();
 });
 
@@ -447,11 +458,11 @@ Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
+  cy.get("span[class=\"MuiChip-label MuiChip-labelSmall\"]").should("have.text", params.status);
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {
-  cy.get(`[id="HeaderInfo-docId"]`);
+  cy.get(`span[id="HeaderInfo-docId"]`);
 });
 
 Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {

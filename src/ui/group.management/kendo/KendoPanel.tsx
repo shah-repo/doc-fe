@@ -47,6 +47,7 @@ import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
@@ -65,7 +66,6 @@ import { ParentsCell } from "./cell.template/ParentsCell";
 import { PermissionsCell } from "./cell.template/PermissionsCell";
 import { TagsCell } from "./cell.template/TagsCell";
 import GMExport from "./GMExport";
-import KendoGridStyles from "./styles";
 
 interface GroupManagementProps {
   onSelect;
@@ -540,7 +540,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className={`${classes.kGrid} no-row-pointer`}
+          className={`${classes.grid} no-row-pointer`}
           style={{ width: `${width}px` }}
           data={result}
           editField={editField}
@@ -581,25 +581,25 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <Box>
-      <Box mb={2}>
-        <Grid container={true} alignItems="center">
-          <Grid item xs>
+    <>
+      <Grid item xs={12} className={classes.headerGridItem}>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
             <GridTitle translation="navigation.group.management" />
           </Grid>
           <Grid item>
-            <GMExport gridData={dataState.group?.length ? flatMap(map(result, "items")) : result}
-              columns={columnDefinitions} />
-          </Grid>
-          <Grid item>
-            {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+            <Box display="flex">
+              <GMExport gridData={dataState.group?.length ? flatMap(map(result, "items")) : result}
+                columns={columnDefinitions} />
+              {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+            </Box>
           </Grid>
         </Grid>
-      </Box>
-      <Grid item xs>
+      </Grid>
+      <Grid item xs={12} className={classes.kendoGridItem}>
         <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
         {renderBody()}
       </Grid>
-    </Box>
+    </>
   );
 }

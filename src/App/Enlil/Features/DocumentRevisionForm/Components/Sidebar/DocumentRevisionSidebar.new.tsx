@@ -50,6 +50,10 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   edit,
 }) => {
   const classes = styles(_documentRevisionSidebarState?.open);
+  const handleRightPanelToggle = () => {
+    _documentRevisionSidebarState?.setOpen();
+    _documentRevisionFormState?.setRightPanelOpen();
+  };
   return (
     <Observer>
       {() => (
@@ -72,7 +76,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                 }
               >
                 <IconButton
-                  onClick={_documentRevisionSidebarState?.setOpen}
+                  onClick={handleRightPanelToggle}
                   className={`${classes.iconButtonNew} ${!_documentRevisionSidebarState?.open ? "maximize" : ""}`}
                 >
                   <CollapseIcon />

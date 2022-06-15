@@ -104,7 +104,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label Normal text field", () => {
@@ -122,7 +122,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label required text field", () => {
@@ -153,7 +153,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label required text field", () => {
@@ -189,7 +189,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label Enable/disable text field", () => {

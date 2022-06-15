@@ -90,10 +90,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     const mpiOutputTitle = name.match(stepRegex);
 
     return isTypeMpiOutput && mpiOutputTitle ?
-      <Typography variant="h6" id="HeaderInfo-docId" className={className} component="span">
+      <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
         {mpiOutputTitle[0]}
       </Typography> :
-      <Typography variant="h6" id="HeaderInfo-docId" className={className} component="span">
+      <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
         {id}
       </Typography>;
   };
@@ -125,7 +125,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
           {titleRenderer(classes.id)}
           {
             isTitleVisible &&
-            <Typography variant="h6" id="HeaderInfo-name" component="span">
+            <Typography variant="h6" id="HeaderInfo-name" component="span" data-cy="HeaderInfoName">
               {name}
             </Typography>
           }
@@ -171,7 +171,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 </Link>
               </Grid>
             </Typography>
-            <Typography id="HeaderInfo-docId" className={classes.breadcrumbId}>
+            <Typography data-cy="HeaderInfo" className={classes.breadcrumbId}>
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -197,6 +197,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   <Text
                     translation="form.builder.header.rev"
                     values={{ revision: displayRevision }}
+                    dataCy="HeaderInfo-Rev"
                   />
                 </Grid>
                 {isStatusVisible && <Grid item={true}>
@@ -209,6 +210,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                         ]
                       }`}
                       label={displayStatus || label}
+                      data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>
                 </Grid>}

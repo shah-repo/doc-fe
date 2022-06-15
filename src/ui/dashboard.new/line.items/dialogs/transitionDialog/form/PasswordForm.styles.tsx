@@ -27,7 +27,6 @@ export default (theme: Theme) =>
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",
-      textTransform: "uppercase",
       color: Colors.white,
     },
     cancelButton: {

@@ -140,24 +140,22 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click on 'Approval request' outputdocument type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-      });
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Add 'Implementation Task' to AR", () => {
-      cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
-      cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
-      cy.fbAddField();
-    });
-
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add 'Implementation Task' to AR", () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
+      cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
+      cy.fbAddField();
     });
 
     it("Approve and release document", () => {

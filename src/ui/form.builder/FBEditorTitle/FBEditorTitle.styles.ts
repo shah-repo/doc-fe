@@ -37,7 +37,6 @@ export default makeStyles((theme: Theme) =>
       borderRadius: "100px",
       boxShadow: "0 2px 5px rgba(204, 212, 217, 0.8)",
       background: Colors.white,
-      padding: "12px 24px",
     },
     inactive: {
       border: 0,

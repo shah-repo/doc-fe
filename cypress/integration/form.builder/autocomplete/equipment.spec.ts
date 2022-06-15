@@ -402,7 +402,7 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("Add autocomplete of “Approvers” and set validation", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
         cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
         cy.fbOpenValidation();
@@ -412,7 +412,7 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("Add select field and set validation ", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Select" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbOpenValidation();
@@ -423,7 +423,7 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("EQUIPMENT SECTIONS FOR PM", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
         cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
         cy.fbAddField();
@@ -431,7 +431,7 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("EQUIPMENT SECTIONS FOR CAL", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Calibration" });
         cy.get("input[value=\"calibration\"]").arrowClick();
         cy.fbAddField();
@@ -2164,7 +2164,7 @@ context("Autocomplete 'Equipment' test", () => {
       context("Add form fields", () => {
         it("Add Autocomplete", () => {
           cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
         });
       });
 

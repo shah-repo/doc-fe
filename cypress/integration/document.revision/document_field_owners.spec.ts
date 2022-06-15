@@ -108,6 +108,10 @@ context("Document Field Owners Test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Click on 'Add a field'", () => {
       cy.fbAddNewFieldWhenHidden();
     });
@@ -140,10 +144,6 @@ context("Document Field Owners Test", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -160,7 +160,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Enters description 'New Document description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "New Document description" });
+      cy.drEnterDocumentDescription({ description: "New Document description" });
     });
 
     it("Click on sidebar permission icon to add Operators", () => {

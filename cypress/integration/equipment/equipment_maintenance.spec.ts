@@ -885,7 +885,7 @@ context("Equipment maintenance test", () => {
 
     it("Add Section", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Section" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
       cy.fbEnterNameValue({ name: "label", value: "New section" });
       cy.fbAddNewFieldButton();
     });

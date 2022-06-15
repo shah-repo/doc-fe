@@ -526,5 +526,5 @@ export const NCORecord: IdocumentTypeDto = {
       deleteDisabled: false,
       uniqueSchemaItem: true,
     },
-  ],
+  ].map((x) => ({ ...x, tabId: "details" })),
 };

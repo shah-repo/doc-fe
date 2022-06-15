@@ -7,6 +7,7 @@ export type SMTabsProps =
   tabs: string[];
   children: React.ReactNode;
   boxProps?: SMBoxProps;
+  tabProps?: SMBoxProps;
 };
 
 export interface SMTabsStateProps {

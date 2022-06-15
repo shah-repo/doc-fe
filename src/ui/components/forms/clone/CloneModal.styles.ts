@@ -103,7 +103,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       fontSize: "12px",
       lineHeight: "15px",
-      textTransform: "uppercase",
     },
   })
 );

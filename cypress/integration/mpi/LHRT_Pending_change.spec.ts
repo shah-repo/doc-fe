@@ -707,7 +707,7 @@ context("LHRT Pending Change", () => {
       it("Add LHR step", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "LHR Step" });
         });
         cy.listLoadingElementShouldNotExist();
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {

@@ -1131,7 +1131,7 @@ context("Autosave LHR", () => {
 
       it("Add Select field", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Select" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field" });
         cy.fbGroupOptions("option1", "option2", "option3");
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -1182,7 +1182,7 @@ context("Autosave LHR", () => {
       it("Add LHR step", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-4).arrowClick({ force: true });
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "LHR Step" });
         });
         cy.listLoadingElementShouldNotExist();
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {

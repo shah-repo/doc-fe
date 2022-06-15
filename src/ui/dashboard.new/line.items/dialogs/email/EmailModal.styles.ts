@@ -121,7 +121,6 @@ export const styles = makeStyles((theme: Theme) =>
       "lineHeight": "14px",
       /* identical to box height */
       "letterSpacing": "0.5px",
-      "textTransform": "uppercase",
       /* Enlil Navy */
       "color": Colors.navy,
       "&:hover": {
