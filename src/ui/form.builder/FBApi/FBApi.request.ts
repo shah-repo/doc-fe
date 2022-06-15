@@ -48,6 +48,7 @@ export default class FBRequest<Data, Body> {
     set(this, "data", data);
   };
 
+
   @action public setBody = (body: Body) => {
     set(this, "body", body);
   };

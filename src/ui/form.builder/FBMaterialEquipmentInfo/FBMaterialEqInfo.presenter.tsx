@@ -9,9 +9,9 @@ import SMText from "../../../App/Shifamed/Components/SMText/SMText";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./FBMaterialEqInfo.styles";
 
-const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
+const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = ({ materialData }) => {
   const classes = styles();
-  const materialArray = [1, 2, 3, 4];
+  // const materialArray = [1, 2, 3, 4];
   const unit = " Items";
   const [isMaterialPannel, setIsMaterialPannel] = React.useState(false);
   const [isEquipmentPannel, setIsEquipmentPannel] = React.useState(false);
@@ -21,6 +21,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
     setIsEquipmentPannel(result);
     event.preventDefault();
   };
+
   const  predictExpandCollapseText = () => {
     let text = "meq.expand.all";
     if (isMaterialPannel && isEquipmentPannel) {
@@ -34,21 +35,20 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
     }
     return text;
   };
-  // const isAllExpanded = () => isMaterialPannel && isEquipmentPannel;
-  const genRateMaterialDetail = () => (map(materialArray, (o) =>
+  const genRateMaterialDetail = () => (map(materialData.materials, (o) =>
     <>
       <ListItem  style={{ display: "block" }}>
-        <ListItemText>CS-00004 - Heat Shrink Tubing | Qty : 25</ListItemText>
+        <ListItemText>{o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
         <ListItemText><Chip size="small"  label="Lot #21072033 |N/A|25 ft" /></ListItemText>
-
       </ListItem>
       <Divider />
     </>
   ));
-  const genRateEquipmentDetail = () => (map(materialArray, (o) =>
+  const genRateEquipmentDetail = () => (map(materialData.equipment, (o) =>
     <>
       <ListItem  style={{ display: "block" }}>
-        <ListItemText className={classes.fontNormal14}>Eq-00004 - Heat Shrink Tubing | Qty : 25</ListItemText>
+        <ListItemText className={classes.fontNormal14}>
+          {o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
         <ListItemText className={classes.fontNormal12}>
           <Chip style={{ borderRadius: 4, backgroundColor: Colors.whitest_grey }}
             size="small"  label="Lot #21072033 |N/A|25 ft" />
@@ -83,7 +83,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
                   </Grid>
                   <Grid item xs={6} >
                     <Box className={classes.qunatityText}>
-                      <SMText   label={materialArray.length + unit} />
+                      <SMText   label={materialData.materials.length ? materialData.materials.length + unit : ""} />
                     </Box>
                   </Grid>
                 </Grid>
@@ -113,7 +113,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<any> = () => {
                   </Grid>
                   <Grid item xs={6} >
                     <Box className={classes.qunatityText}>
-                      <SMText   label={materialArray.length + unit} />
+                      <SMText  label={materialData.equipment.length ? materialData.equipment.length + unit : ""} />
                     </Box>
                   </Grid>
                 </Grid>

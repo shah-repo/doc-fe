@@ -189,6 +189,7 @@ export { default as FBLock } from "./FBLock/FBLock";
 export * from "./FBLock/FBLock.types";
 export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";
 export * from "./FBMapWrapper/FBMapWrapper.types";
+export { default as FBMeqState } from "./FBMaterialEquipmentInfo/FBMeq.state";
 export { default as FBMediaAlbum } from "./FBMediaAlbum/FBMediaAlbum";
 export { default as FBMediaAlbumState } from "./FBMediaAlbum/FBMediaAlbum.state";
 export * from "./FBMediaAlbum/FBMediaAlbum.types";
