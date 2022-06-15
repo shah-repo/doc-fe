@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
@@ -205,7 +206,7 @@ context("Approval request form scenario", () => {
 
     it("Verify AR status", () => {
       SystemRequirement("REQ-0020");
-      cy.arVerifyStatus({ status: "IN REVIEW" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
