@@ -1,6 +1,8 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
 import Text from "../../components/Text";
 import { InspectionControlsPresenterProps } from "./InspectionControls.types";
@@ -17,22 +19,37 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
   canCreateInspection,
   isDocumentDraft,
   disabled,
+  renderAsButton,
   ...props
 }) => {
   const isNewLayout = SM.isNewLayout;
   if (!isDocumentDraft || !canCreateInspection) { return null; }
 
+  const renderButton = () => {
+    if (!renderAsButton) {
+      return (<StyledMenuListItem disabled={disabled} button alignItems="flex-start">
+        <StyledMenuListItemText
+          data-cy={`PreviewControlsContainer-inspection-FAI`}
+          primary={<Text translation="document.revision.fai" />}
+          onClick={() => onButtonClick()}
+        />
+      </StyledMenuListItem>
+      );
+    }
+    return (<StyledButton
+      color="primary"
+      data-cy={`PreviewControlsContainer-inspection-FAI`}
+      onClick={() => onButtonClick()}
+      {...{ disabled }}
+    >
+      <Text translation={"document.revision.fai"} />
+    </StyledButton>);
+  };
+
   return (
     <>
       {isNewLayout ? (
-        <StyledButton
-          color="primary"
-          data-cy={`PreviewControlsContainer-inspection-FAI`}
-          onClick={() => onButtonClick()}
-          {...{ disabled }}
-        >
-          <Text translation={"document.revision.fai"} />
-        </StyledButton>
+        renderButton()
       ) : (
         <Button
           variant="outlined"

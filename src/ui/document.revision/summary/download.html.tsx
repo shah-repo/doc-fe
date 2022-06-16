@@ -2,6 +2,8 @@ import { Dialog } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
@@ -18,9 +20,10 @@ import useDialog from "../../hooks/useDialog";
 
 interface Props {
   pdf?: PDF;
+  renderAsButton?: boolean;
 }
 const DownloadHTML: React.FunctionComponent<Props> = ({
-  pdf,
+  pdf, renderAsButton,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
@@ -49,6 +52,18 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
 
   if (isNewLayout) {
     const isActive = async.asyncState.status === AsyncStatus.Active;
+
+    if (!renderAsButton) {
+      return (<StyledMenuListItem disabled={isActive} button alignItems="flex-start">
+        <StyledMenuListItemText
+          data-cy="downloadHtml"
+          primary={<Text translation="common.download.html" />}
+          onClick={handleClick}
+        />
+      </StyledMenuListItem>
+      );
+    }
+
     return (
       <StyledButton
         color="primary"

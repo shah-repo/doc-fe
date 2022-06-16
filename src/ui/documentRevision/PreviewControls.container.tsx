@@ -4,6 +4,8 @@ import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { StyledButton } from "../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListItem } from "../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../assets/images/warning_white.svg";
@@ -133,19 +135,27 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
 
-  const renderCloneButton = () => {
+  const renderCloneButton = (renderAsButton) => {
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
           {isNewLayout ? (
-            <StyledButton
+            renderAsButton ? <StyledButton
               color="primary"
               onClick={cloneDocument}
               id="PreviewControlsContainer-revise"
               data-cy="updateRecord"
             >
               <Text message={reviseLabel} />
-            </StyledButton>
+            </StyledButton> :
+              <StyledMenuListItem button alignItems="flex-start">
+                <StyledMenuListItemText
+                  id="PreviewControlsContainer-revise"
+                  data-cy="updateRecord"
+                  primary={<Text message={reviseLabel} />}
+                  onClick={cloneDocument}
+                />
+              </StyledMenuListItem>
           ) : (
             <Button
               color="secondary"
@@ -161,21 +171,28 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     }
   };
 
-  const renderOutputButton = () => {
+  const renderOutputButton = (renderAsButton) => {
     const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
       return isNewLayout ? (
-        <StyledButton
+        renderAsButton ? <StyledButton
           color="primary"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
           data-cy="PreviewControlsContainer-createNew"
         >
           <Text translation={"common.create.new"} />
-        </StyledButton>
+        </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+          <StyledMenuListItemText
+            id="PreviewControlsContainer-createNew"
+            data-cy="PreviewControlsContainer-createNew"
+            primary={<Text translation="common.create.new" />}
+            onClick={cloneOutputDocument}
+          />
+        </StyledMenuListItem>
       ) : (
         <Button
           color="secondary"
@@ -269,31 +286,43 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       />
     </>;
 
-  const newRenderWithdrawSubmissionButton = () =>
-    <>
-      <StyledButton
-        color="primary"
-        onClick={dialog.open}
+  const newRenderWithdrawSubmissionButton = (renderAsButton: boolean) => (<>
+    {renderAsButton ? <StyledButton
+      color="primary"
+      onClick={dialog.open}
+      data-cy="document.revision.withdraw.alert"
+    >
+      <Text translation="changeRequest.transition.withdrawn" />
+    </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+      <StyledMenuListItemText
         data-cy="document.revision.withdraw.alert"
-      >
-        <Text translation="changeRequest.transition.withdrawn" />
-      </StyledButton>
-      <AlertDialog
-        confirmAction={withdrawAction}
-        message={"document.revision.withdraw.alert"}
-        {...{ dialog }}
+        primary={<Text translation="changeRequest.transition.withdrawn" />}
+        onClick={dialog.open}
       />
-    </>;
+    </StyledMenuListItem>}
+    <AlertDialog
+      confirmAction={withdrawAction}
+      message={"document.revision.withdraw.alert"}
+      {...{ dialog }}
+    />
+  </>);
 
-  const requestAccessSentButton = () => !hasAccess && !isEmailSent && (
-    <StyledButton
+  const requestAccessSentButton = (renderAsButton) => !hasAccess && !isEmailSent && (
+    renderAsButton ? <StyledButton
       color="primary"
       onClick={onSubmit}
       id="PreviewControlsContainer-access"
       data-cy="PreviewControlsContainer-access"
     >
       <Text translation="document.request.access" />
-    </StyledButton>
+    </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+      <StyledMenuListItemText
+        id="PreviewControlsContainer-access"
+        data-cy="PreviewControlsContainer-access"
+        primary={<Text translation="document.request.access" />}
+        onClick={onSubmit}
+      />
+    </StyledMenuListItem>
   );
 
   const accessableButtons: string[] = [];
@@ -363,20 +392,20 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>
-      {buttons.includes("cloneButton") && renderCloneButton()}
+      {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
       {buttons.includes("newcloneButton") && (
-        <CopyEBButton {...{ documentRevision }} />
+        <CopyEBButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("outputButton") && renderOutputButton()}
-      {buttons.includes("requestAccess") && requestAccessSentButton()}
+      {buttons.includes("outputButton") && renderOutputButton(renderAsButton)}
+      {buttons.includes("requestAccess") && requestAccessSentButton(renderAsButton)}
       {buttons.includes("withdrawSubmission") && !isNewLayout &&
         renderWithdrawSubmissionButton()}
       {buttons.includes("withdrawSubmission") && isNewLayout &&
-        newRenderWithdrawSubmissionButton()}
+        newRenderWithdrawSubmissionButton(renderAsButton)}
       {buttons.includes("inspectionControl") && (
-        <InspectionControlsContainer {...{ documentRevision }} />
+        <InspectionControlsContainer {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
-      {buttons.includes("pdf") && <DownloadHTML pdf={documentRevision.pdf} />}
+      {buttons.includes("pdf") && <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} />}
       {buttons.includes("changeowner") && (
         <OwnerChangerContainer
           requestId={documentRevision.id}
@@ -388,6 +417,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
+          renderAsButton={renderAsButton}
         />
       )}
     </>
@@ -397,7 +427,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     <>
       <PDFSocket {...{ documentRevision }}/>
       {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
-      {renderbuttons(initialButtons, true)}
+      {initialButtons.length > 1 && renderbuttons(initialButtons, true)}
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>
       )}
