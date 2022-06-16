@@ -18,7 +18,6 @@ let clinicalProtocolDocumentType;
 let group;
 let adminEmployee;
 let asyncTasksGroup;
-let multipleCompanies;
 let formDocumentType;
 let maintenanceRecordDocumentType;
 let approvalRequestDocumentType;
@@ -45,9 +44,8 @@ context("Approval request form", () => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
-      }).then((response: any) => {
+      }).then((response) => {
         loginResponse = response;
-        multipleCompanies = response.employees.length > 0;
 
         cy.cmpCreateCompany({
           specFilePath: __filename,
@@ -372,10 +370,19 @@ context("Approval request form", () => {
     });
 
     it(`Verify for ${USERS[2].name} and ${USERS[3].name} notifications as 'pending approvals from'`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({
-        listItem:
-        `${aRID}Approval request formIN REVIEWpending approvals from${USERS[3].name}, ${USERS[2].name}`,
-      });
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
+        .should("contain.text", aRID)
+        .and("contain.text", "Approval request form")
+        .and("contain.text", "IN REVIEW")
+        .and("contain.text", "pending approvals from");
+
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(1)
+        .find("span").eq(0)
+        .should("contain.text", `${USERS[2].name}`);
+
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(1)
+        .find("span").eq(0)
+        .should("contain.text", `${USERS[3].name}`);
     });
   });
 
@@ -609,6 +616,21 @@ context("Approval request form", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
+          CyRoutes.GetAvailableApprovers], () => {
+          cy.reload();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "9 days");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
+      cy.wait(5000);
+    });
+
     it("Check that the AR was CLOSED", () => {
       cy.navigToApprovalRequestList();
       cy.arClearFilters();
@@ -636,9 +658,26 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set the QA tool to Day 41", () => {
-    it("Select 1 day to back in future", () => {
-      cy.arSetTimeTravelInDays({ days: 1 });
+  context("Set the QA tool to Day 42", () => {
+    it("Select 2 day to back in future", () => {
+      cy.arSetTimeTravelInDays({ days: 2 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
+          CyRoutes.GetAvailableApprovers], () => {
+          cy.reload();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "2 days");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
+      cy.wait(5000);
     });
 
     it("Goto dashboard", () => {
@@ -647,8 +686,8 @@ context("Approval request form", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify for ${USERS[1].name} AR notification status does not appear as 'CLOSED'`, () => {
-      cy.dashVerifyListItemNotExistsOnDashboard({
+    it(`Verify for ${USERS[1].name} AR notification status as 'CLOSED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
         listItem:
             `${aRID}Approval request formisCLOSED`,
       });
