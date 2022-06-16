@@ -4,7 +4,7 @@ import { SM } from "../../../App";
 import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import { ReactComponent as ChangeOwnerIcon } from "../../../assets/images/change_owner_avatar.svg";
+import { ReactComponent as WithdrawSubmissionIcon } from "../../../assets/images/withdraw_submission.svg";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest/types";
 import AlertDialog from "../../app/alert.dialog/AlertDialog";
@@ -44,7 +44,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
       {isNewLayout ? (
         <StyledMenuListItem button alignItems="flex-start">
           <StyledMenuListIcon>
-            <ChangeOwnerIcon />
+            <WithdrawSubmissionIcon />
           </StyledMenuListIcon>
           <StyledMenuListItemText
             id="OwnerChangerPresenter-changeOwner"
