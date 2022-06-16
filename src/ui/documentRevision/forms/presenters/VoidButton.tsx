@@ -1,5 +1,6 @@
 import { Box, Button } from "@material-ui/core";
 import React, { useMemo } from "react";
+import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
@@ -19,9 +20,11 @@ import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 
 interface Props {
   documentRevision: DocumentRevision | undefined;
+  renderAsButton?: boolean;
 }
 const VoidButton: React.FunctionComponent<Props> = ({
   documentRevision,
+  renderAsButton,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
@@ -47,7 +50,11 @@ const VoidButton: React.FunctionComponent<Props> = ({
         <FormProgress asyncState={async.asyncState} />
       </Box>
       {isNewLayout ? (
-        <StyledMenuListItem
+        renderAsButton ? <StyledButton
+          color="primary" id="void" onClick={dialog.open}
+          disabled={async.asyncState.status === AsyncStatus.Active}>
+          <Text translation="common.void" />
+        </StyledButton> : <StyledMenuListItem
           button
           disabled={async.asyncState.status === AsyncStatus.Active}
           alignItems="flex-start"
@@ -56,6 +63,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
             <VoidDocumentIcon />
           </StyledMenuListIcon>
           <StyledMenuListItemText
+            id="void"
             primary={<Text translation="common.void" />}
             onClick={dialog.open}
           />

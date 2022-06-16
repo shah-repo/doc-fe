@@ -1,6 +1,7 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
+import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
@@ -19,11 +20,13 @@ import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus"
 interface Props {
   documentRevision: DocumentRevision;
   setShouldDisplay: (value: boolean) => void;
+  renderAsButton?: boolean;
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
   documentRevision,
   setShouldDisplay,
+  renderAsButton,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
@@ -51,7 +54,7 @@ const CancelButton: React.FunctionComponent<Props> = ({
         </Button>
       }
       {
-        (isNewLayout && canShowCancelButton) &&
+        (isNewLayout && canShowCancelButton && !renderAsButton) &&
        ( <StyledMenuListItem button alignItems="flex-start">
          <StyledMenuListIcon>
            <VoidDocumentIcon />
@@ -64,6 +67,16 @@ const CancelButton: React.FunctionComponent<Props> = ({
          />
        </StyledMenuListItem>)
       }
+      {
+        (isNewLayout && canShowCancelButton && renderAsButton) &&
+        <StyledButton
+          color="primary"
+          id="cancelDraftButton"
+          data-cy="cancelDraftButton"
+          onClick={dialog.open}
+        >
+          <Text translation={"common.cancel.draft"} />
+        </StyledButton> }
       <AlertDialog
         confirmAction={handleCancelDraft}
         message={isRecord ? "record.cancel.draft.alert" : "document.revision.cancel.draft.alert"}

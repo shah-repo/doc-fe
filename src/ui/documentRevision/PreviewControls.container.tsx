@@ -427,7 +427,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     <>
       <PDFSocket {...{ documentRevision }}/>
       {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
-      {initialButtons.length > 1 && renderbuttons(initialButtons, true)}
+      {initialButtons.length > 0 && renderbuttons(initialButtons, true)}
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>
       )}
