@@ -13,6 +13,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import useGetHasTag from "../../../hooks/useGetHasTag";
 import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
 import ChangeRequestWithdrawDialog from "../../dialogs/ChangeRequestWithdrawDialog";
+import ExportARToEmail from "../../export.email/ExportAREmail";
 import { canChangeCROwner } from "../../utils/helpers";
 import TransitionButton from "./TransitionButton";
 import AssessmentFormVoidContainer from "./Void";
@@ -119,6 +120,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
            <OwnerChangerContainer requestId={changeRequest.id} requestType={RequestType.ChangeRequest}
              renderAsButton={false} />
         }
+        <ExportARToEmail {...{ id: changeRequest.id, renderAsButton: false }}/>
         {renderAlertDialogButton(canWithdraw, "withdrawn")}
       </HeaderMenu>
     </>
