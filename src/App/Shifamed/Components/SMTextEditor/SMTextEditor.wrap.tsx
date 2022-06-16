@@ -56,7 +56,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       setTimeout(() => {
         const elm = document.querySelector(".descriptionEditorClass");
         setIsTextClamped(elm ? elm.scrollHeight > elm.clientHeight : false);
-      }, 1000);
+      }, 500);
     };
 
     useMemo(
