@@ -10,7 +10,6 @@ import { CyRoutes } from "../../support/routes";
 import { momentInPST } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -19,6 +18,7 @@ let clinicalProtocolDocumentType;
 let group;
 let adminEmployee;
 let asyncTasksGroup;
+let multipleCompanies;
 let formDocumentType;
 let maintenanceRecordDocumentType;
 let approvalRequestDocumentType;
@@ -45,8 +45,9 @@ context("Approval request form", () => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
-      }).then((response) => {
+      }).then((response: any) => {
         loginResponse = response;
+        multipleCompanies = response.employees.length > 0;
 
         cy.cmpCreateCompany({
           specFilePath: __filename,
@@ -206,40 +207,49 @@ context("Approval request form", () => {
       cy.arClickSendToReview();
     });
   });
-  context("Verify In My Feed that AR is pending the approval of 3 users", () => {
+
+  context(`Verify ${USERS[1].name} received notification as 'needs your approval for'`, () => {
     it("Goto dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("AR in review present on dashboard for all 3 users", () => {
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "IN REVIEW")
-        .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
-        .and("contain.text", `${USERS[2].name}`)
-        .and("contain.text", `${USERS[3].name}`);
+    it(`Verify for ${USERS[1].name} notification as 'needs your approval for'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+      });
     });
   });
 
-  context(`Check ${USERS[1].name} AR request should display on dashboard`, () => {
-    it("AR in review present on dashboard with 2 approvers", () => {
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "IN REVIEW")
-        .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[2].name}`)
-        .and("contain.text", `${USERS[3].name}`);
+  context(`Verify ${USERS[1].name} AR list for status as 'IN_REVIEW'`, () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Approval request form'", () => {
+      cy.alFilterByTitle({ title: "Approval request form" });
+    });
+
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Filter list by STATUS as IN_REVIEW", () => {
+      cy.alFilterByStatus({ status: "IN_REVIEW" });
+    });
+
+    it("Verify filter by STATUS as IN_REVIEW", () => {
+      cy.alVerifyFilterByStatus({ status: "IN_REVIEW" });
     });
   });
 
-  context(`For ${USERS[2].name}, AR request should display on dashboard`, () => {
+  context(`Verify ${USERS[2].name} received notification as 'needs your approval for'`, () => {
     it(`Login as ${USERS[2].name}`, () => {
       cy.authLogout();
       cy.authLogin({
@@ -249,16 +259,41 @@ context("Approval request form", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("For User 2 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
-        .and("contain.text", "needs your approval for")
-        .and("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+    it(`Verify for ${USERS[2].name} notification as '${USERS[1].name} needs your approval for'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+      });
     });
   });
 
-  context(`For ${USERS[3].name}, AR request should display on dashboard`, () => {
+  context(`Verify ${USERS[2].name} AR list for status as 'IN_REVIEW'`, () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Approval request form'", () => {
+      cy.alFilterByTitle({ title: "Approval request form" });
+    });
+
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Filter list by STATUS as IN_REVIEW", () => {
+      cy.alFilterByStatus({ status: "IN_REVIEW" });
+    });
+
+    it("Verify filter by STATUS as IN_REVIEW", () => {
+      cy.alVerifyFilterByStatus({ status: "IN_REVIEW" });
+    });
+  });
+
+  context(`Verify ${USERS[3].name} received notification as '${USERS[1].name} needs your approval for'`, () => {
     it(`Login as ${USERS[3].name}`, () => {
       cy.authLogout();
       cy.authLogin({
@@ -268,12 +303,37 @@ context("Approval request form", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("For User 3 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
-        .and("contain.text", "needs your approval for")
-        .and("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+    it(`Verify for ${USERS[3].name} notification as '${USERS[1].name} needs your approval for'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+      });
+    });
+  });
+
+  context(`Verify ${USERS[3].name} AR list for status as 'IN_REVIEW'`, () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Approval request form'", () => {
+      cy.alFilterByTitle({ title: "Approval request form" });
+    });
+
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Filter list by STATUS as IN_REVIEW", () => {
+      cy.alFilterByStatus({ status: "IN_REVIEW" });
+    });
+
+    it("Verify filter by STATUS as IN_REVIEW", () => {
+      cy.alVerifyFilterByStatus({ status: "IN_REVIEW" });
     });
   });
 
@@ -304,24 +364,18 @@ context("Approval request form", () => {
       cy.checkToastMessage({ exists: false });
     });
 
-    it("Line item for the AR should be back on top", () => {
-      SystemRequirement("REQ-4990");
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+    it("Verify AR notification status as 'APPROVED'", () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+      });
     });
 
-    it("It should update to show that its only pending the approval of User 2 and 3'", () => {
-      cy.get("#scrollable-auto-tab-0").arrowClick();
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "IN REVIEW")
-        .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[2].name}`)
-        .and("contain.text", `${USERS[3].name}`);
+    it(`Verify for ${USERS[2].name} and ${USERS[3].name} notifications as 'pending approvals from'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${aRID}Approval request formIN REVIEWpending approvals from${USERS[3].name}, ${USERS[2].name}`,
+      });
     });
   });
 
@@ -346,13 +400,6 @@ context("Approval request form", () => {
       cy.checkToastMessage({ exists: false });
     });
 
-    it("Line item for the AR should be back on top", () => {
-      SystemRequirement("REQ-4990");
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
-    });
-
     it(`Login as ${USERS[1].name}`, () => {
       cy.authLogout();
       cy.authLogin({
@@ -362,20 +409,38 @@ context("Approval request form", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("It should update to show that its only pending the approval of User 3'", () => {
-      cy.get("#scrollable-auto-tab-0").arrowClick();
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "IN REVIEW")
-        .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[3].name}`);
+    it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+      });
+    });
+
+    it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+          `${USERS[2].name}APPROVED${aRID}Approval request form`,
+      });
+    });
+
+    it(`Verify for ${USERS[3].name} notifications as 'pending approvals from'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${aRID}Approval request formIN REVIEWpending approvals from${USERS[3].name}`,
+      });
     });
   });
 
-  context("Have User 3 approve the AR", () => {
+  context("Set the QA tool to Day 30", () => {
+    it(`Login as ${USERS[1].name}`, () => {
+      cy.authLogout();
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    });
+
     it("Select 20 day to back in future", () => {
       cy.arSetTimeTravelInDays({ days: 20 });
     });
@@ -405,15 +470,29 @@ context("Approval request form", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("there should be a notification that AR has been approved", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "APPROVED");
+    it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+      });
+    });
+
+    it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+          `${USERS[2].name}APPROVED${aRID}Approval request form`,
+      });
+    });
+
+    it(`Verify for ${USERS[3].name} AR notification status as 'APPROVED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+          `${USERS[3].name}APPROVED${aRID}Approval request form`,
+      });
     });
   });
 
-  context("close AR and set effective date to 40 days from now", () => {
+  context("close AR and set effective date to 40 days", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
@@ -481,18 +560,50 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set the QA tool to Day 31/32", () => {
-    it("Select 2 day to back in future", () => {
+  context("Set the QA tool to Day 31", () => {
+    it("Select 1 day to back in future", () => {
       cy.arSetTimeTravelInDays({ days: 1 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Goto dashboard", () => {
       cy.navigToDashboard();
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisAPPROVED")
-        .trigger("mouseover");
-      // validation need to be add//
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+            `${USERS[1].name}APPROVED${aRID}Approval request form`,
+      });
+    });
+
+    it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+            `${USERS[2].name}APPROVED${aRID}Approval request form`,
+      });
+    });
+
+    it(`Verify for ${USERS[3].name} AR notification status as 'APPROVED'`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+            `${USERS[3].name}APPROVED${aRID}Approval request form`,
+      });
+    });
+
+    it(`Verify for notification for 'APPROVED' AR will appear`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+            `${aRID}Approval request formisAPPROVED`,
+      });
     });
   });
 
   context("Set the QA tool to Day 40", () => {
-    it("Select 8 day to back in future", () => {
+    it("Select 9 day to back in future", () => {
       cy.arSetTimeTravelInDays({ days: 9 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -501,8 +612,8 @@ context("Approval request form", () => {
     it("Check that the AR was CLOSED", () => {
       cy.navigToApprovalRequestList();
       cy.arClearFilters();
-      cy.alFilterByArId({ arId: "AR-00001" });
-      cy.alFilterByTitle({ title: approvalRequestName });
+      cy.alFilterByArId({ arId: `${aRID}` });
+      cy.alFilterByTitle({ title: "Approval request form" });
       cy.alVerifyFilterByStatus({ status: "CLOSED" });
     });
 
@@ -514,24 +625,33 @@ context("Approval request form", () => {
       cy.arVerifyStatus({ status: "Released" });
     });
 
-    it("You should get a dashboard notification that AR was closed", () => {
+    it("You should get a dashboard notification as CLOSED", () => {
       cy.navigToDashboard();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "CLOSED");
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+            `${aRID}Approval request formisCLOSED`,
+      });
     });
   });
 
-  context("Set the QA tool to Day 41/42", () => {
-    it("Select 2 day to back in future", () => {
-      cy.arSetTimeTravelInDays({ days: 2 });
+  context("Set the QA tool to Day 41", () => {
+    it("Select 1 day to back in future", () => {
+      cy.arSetTimeTravelInDays({ days: 1 });
+    });
+
+    it("Goto dashboard", () => {
       cy.navigToDashboard();
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisCLOSED")
-        .trigger("mouseover");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Verify for ${USERS[1].name} AR notification status does not appear as 'CLOSED'`, () => {
+      cy.dashVerifyListItemNotExistsOnDashboard({
+        listItem:
+            `${aRID}Approval request formisCLOSED`,
+      });
     });
   });
 });
-
