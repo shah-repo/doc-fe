@@ -6,7 +6,7 @@ import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/pr
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
+import { ReactComponent as CancelDraftIcon } from "../../../../assets/images/cancel_draft.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
@@ -57,7 +57,7 @@ const CancelButton: React.FunctionComponent<Props> = ({
         (isNewLayout && canShowCancelButton && !renderAsButton) &&
        ( <StyledMenuListItem button alignItems="flex-start">
          <StyledMenuListIcon>
-           <VoidDocumentIcon />
+           <CancelDraftIcon />
          </StyledMenuListIcon>
          <StyledMenuListItemText
            id="cancelDraftButton"

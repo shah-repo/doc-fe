@@ -3,8 +3,10 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { SM } from "../../../../../App";
 import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { ReactComponent as RedlineIcon } from "../../../../../assets/images/redline.svg";
 import { companyActions } from "../../../../../state/ducks/company";
 import Text from "../../../../components/Text";
 
@@ -37,7 +39,7 @@ const RedlineButton: React.FunctionComponent<Props> = ({
   if (isNewLayout) {
     if (!renderAsButton) {
       return <StyledMenuListItem button alignItems="flex-start">
-        {/* <StyledMenuListIcon> */}
+        <StyledMenuListIcon><RedlineIcon/></StyledMenuListIcon>
         <StyledMenuListItemText
           data-cy="redlineButton"
           onClick={() => handleClick()}

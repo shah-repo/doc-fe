@@ -4,11 +4,13 @@ import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { StyledButton } from "../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../assets/images/warning_white.svg";
+import { ReactComponent as WithDrawSubmissionIcon } from "../../assets/images/withdraw_submission.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
@@ -149,6 +151,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               <Text message={reviseLabel} />
             </StyledButton> :
               <StyledMenuListItem button alignItems="flex-start">
+                <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
                 <StyledMenuListItemText
                   id="PreviewControlsContainer-revise"
                   data-cy="updateRecord"
@@ -294,6 +297,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     >
       <Text translation="changeRequest.transition.withdrawn" />
     </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+      <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
       <StyledMenuListItemText
         data-cy="document.revision.withdraw.alert"
         primary={<Text translation="changeRequest.transition.withdrawn" />}
