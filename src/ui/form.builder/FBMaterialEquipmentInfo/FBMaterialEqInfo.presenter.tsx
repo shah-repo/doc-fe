@@ -63,7 +63,6 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
         </ListItemText>
         {++topIndex < materialData.materials.length && <Divider style={{ marginTop: 10 }} />}
       </ListItem>
-
     </>
   ));
   const genRateEquipmentDetail = () => (map(materialData.equipment, (o, topIndex: number) =>
@@ -84,7 +83,6 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
         </ListItemText>
         {++topIndex < materialData.equipment.length && <Divider style={{ marginTop: 10 }} />}
       </ListItem>
-
     </>
   ));
   const constructLotDetail = (obj) => `Lot ${obj.lotId} | ${obj.partId || "N/A"} | ${obj.quantity} ${obj.unit}`;
@@ -178,12 +176,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
           <Box style={{ paddingTop: 22 }}>
             <Box className={classes.fontText}><SMText label={"meq.jump.to"} /></Box>
             <Box style={{ background: isMaterialPannel ? Colors.light_cream_blue : "inherit", marginLeft: 8 }}>
-              <p  style={{
-                height: 30, color: Colors.navy,
-                marginBottom: 5,
-                cursor: "pointer",
-                fontSize: 12, fontWeight: 400,
-              }}   onClick={() =>
+              <p  className={classes.paraGraphMaterial}   onClick={() =>
               { setIsMaterialPannel(true); setIsEquipmentPannel(false); }} >
                 <Box style={{ paddingLeft: 10, paddingTop: 7 }}>
                   <SMText label={"meq.material"} />
@@ -191,18 +184,14 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
               </p>
             </Box>
             <Box mb={1} style={{ background: isEquipmentPannel ? Colors.light_cream_blue : "inherit", marginLeft: 8  }}>
-              <p  style={{
-                height: 30, cursor: "pointer", color: Colors.navy,
-                marginTop: 5, fontSize: 12, fontWeight: 400,
-              }}
-              onClick={() => { setIsMaterialPannel(false); setIsEquipmentPannel(true); }} >
+              <p  className={classes.paraGraphEq}
+                onClick={() => { setIsMaterialPannel(false); setIsEquipmentPannel(true); }} >
                 <Box style={{ paddingLeft: 10, paddingTop: 7 }}>
                   <SMText label={"meq.equipment"} />
                 </Box>
               </p>
             </Box>
           </Box>
-
         </Grid>
       </Grid>
     </>

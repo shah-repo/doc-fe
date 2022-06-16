@@ -46,6 +46,20 @@ export const styles = makeStyles((theme: Theme) =>
       marginRight: 5, fontSize: 12, lineHeight: 15.12,
       color: Colors.almost_black,
     },
+    paraGraphMaterial: {
+      height: 30, color: Colors.navy,
+      marginBottom: 5,
+      cursor: "pointer",
+      fontSize: 12, fontWeight: 400,
+    },
+    paraGraphEq: {
+      height: 30,
+      cursor: "pointer",
+      color: Colors.navy,
+      marginTop: 5,
+      fontSize: 12,
+      fontWeight: 400,
+    },
     qunatityText: {
       float: "right",
       marginRight: "1rem",

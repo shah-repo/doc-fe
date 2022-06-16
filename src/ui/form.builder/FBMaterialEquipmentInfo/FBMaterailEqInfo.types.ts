@@ -1,10 +1,10 @@
-export interface LotItem {
+interface LotItem {
   lotId: string;
   partId: string;
   quantity: number;
   unit: string;
 }
-export interface Material {
+interface Material {
   docId: string;
   title: string;
   revision: string;
@@ -12,7 +12,7 @@ export interface Material {
   unit: string;
   lots: LotItem[];
 }
-export interface Equipment {
+interface Equipment {
   docId: string;
   title: string;
   nextCalibration: Date;
