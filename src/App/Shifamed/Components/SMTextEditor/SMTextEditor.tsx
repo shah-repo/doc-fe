@@ -68,8 +68,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
         {() => (
           <Box
             bgcolor={isPreview ? "transparent" : "white"}
-            border={(isPreview || _textEditorState?.masked) ? 0 : `1px solid ${Colors.clear_blue}`}
-            boxShadow={(isPreview || _textEditorState?.masked) ? 0 : `0 0 0 1px ${Colors.clear_blue}`}
+            border={(isPreview || _textEditorState?.masked) ? 0 : `1px solid ${Colors.dodger_blue}`}
             borderColor={Colors.hint_gray}
             borderRadius={4}
             style={{ display: "grid" }}
@@ -160,7 +159,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         }
                         return (
                           <Box
-                            bgcolor={hover ? Colors.platinum : Colors.alabaster}
+                            bgcolor={hover ? Colors.whitest_grey : Colors.alabaster}
                             width="100%"
                             minHeight="32px"
                             alignItems="center"

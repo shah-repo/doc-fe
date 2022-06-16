@@ -100,12 +100,39 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiInputBase: {
     root: {
-      fontSize: "0.8rem",
-      fontFamily: "Sora, sans-serif;",
+      "fontSize": "0.8rem",
+      "fontFamily": "Sora, sans-serif;",
+      "&$focused input": {
+        backgroundColor: Colors.white,
+        border: `1px solid ${Colors.dodger_blue}`,
+      },
+      "&.MuiAutocomplete-inputRoot": {
+        "transition": appTheme.transitions.create("all"),
+        "&:hover": {
+          backgroundColor: Colors.background_white,
+        },
+        "& fieldset, &:hover fieldset": {
+          border: `1px solid ${Colors.mild_wind_blue}`,
+        },
+        "&$focused": {
+          backgroundColor: Colors.white,
+        },
+        "&$focused input": {
+          border: "none",
+        },
+        "&$focused fieldset": {
+          border: `1px solid ${Colors.dodger_blue}`,
+        },
+      },
     },
     input: {
       "fontSize": "0.8rem",
       "borderRadius": "4px",
+      "borderColor": Colors.mild_wind_blue,
+      "transition": appTheme.transitions.create("all"),
+      "&:hover": {
+        backgroundColor: Colors.background_white,
+      },
       "&.Mui-disabled": {
         backgroundColor: Colors.white,
       },
