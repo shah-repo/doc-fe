@@ -1313,5 +1313,6 @@
   "meq.collapse.all" : "Collapse All",
   "meq.material" : "Material",
   "meq.equipment" : "Equipment",
-  "meq.jump.to" : "Jump To"
+  "meq.jump.to" : "Jump To",
+  "meq.chip.nextCalDate" : "Next Callibration Due"
 }

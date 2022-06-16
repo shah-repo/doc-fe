@@ -41,6 +41,11 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: 14,
       color: Colors.almost_black,
     },
+    chipStyle: {
+      borderRadius: 4, backgroundColor: Colors.whitest_grey,
+      marginRight: 5, fontSize: 12, lineHeight: 15.12,
+      color: Colors.almost_black,
+    },
     qunatityText: {
       float: "right",
       marginRight: "1rem",

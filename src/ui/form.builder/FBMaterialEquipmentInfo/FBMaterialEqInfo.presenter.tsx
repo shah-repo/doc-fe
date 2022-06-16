@@ -2,16 +2,19 @@ import { Box, Chip, Divider, Grid, List, ListItem, ListItemText } from "@materia
 import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { map } from "lodash";
 import React from "react";
 import SMText from "../../../App/Shifamed/Components/SMText/SMText";
+import { ReactComponent as CollapseIcon } from "../../../assets/images/tabCollapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { MaterialEqProps } from "./FBMaterailEqInfo.types";
 import { styles } from "./FBMaterialEqInfo.styles";
 
 const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ materialData }) => {
   const classes = styles();
+  // For testing only
   const tempObj: any = {
     lotId: "#202234",
     partId: "PRT1",
@@ -20,8 +23,8 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
   };
   if (materialData) {
     materialData.materials.forEach((obj) => obj.lots.push(tempObj));
-    materialData.equipment.forEach((obj) => obj.lots ? obj.lots.push(tempObj) : obj.lots = []);
   }
+  // end of testing
   const unit = " Items";
   const [isMaterialPannel, setIsMaterialPannel] = React.useState(false);
   const [isEquipmentPannel, setIsEquipmentPannel] = React.useState(false);
@@ -53,12 +56,8 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
         <ListItemText className={classes.fontNormal12} >
           {
             o.lots && o.lots.map((obj, index) => (
-              <Chip key={index} style={{
-                borderRadius: 4, backgroundColor: Colors.whitest_grey,
-                marginRight: 5, fontSize: 12, lineHeight: 15.12,
-                color: Colors.almost_black,
-              }}
-              size="small"  label={constructLotDetail(obj)} />
+              <Chip key={index} className={classes.chipStyle}
+                size="small"  label={constructLotDetail(obj)} />
             ))
           }
         </ListItemText>
@@ -71,17 +70,16 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
     <>
       <ListItem  style={{ display: "block",  paddingTop: 0  }}>
         <ListItemText className={classes.fontNormal14} style={{ color: Colors.almost_black }}>
-          {o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
+          {o.docId} {o.title}</ListItemText>
         <ListItemText className={classes.fontNormal12}>
-          {
-            o.lots && o.lots.map((obj, index) => (
-              <Chip key={index} style={{
-                borderRadius: 4, backgroundColor: Colors.whitest_grey,
-                marginRight: 5, fontSize: 12, lineHeight: 15.12,
-                color: Colors.almost_black,
-              }}
-              size="small"  label={constructLotDetail(obj)} />
-            ))
+          {o.nextCalibration && <Chip  className={classes.chipStyle}
+            size="small"  label={`Next Callibration Due : `
+          + getFormattedDateString(o.nextCalibration, MomentFormats.BriefDate)} />
+          }
+          {o.nextPm &&
+          <Chip  className={classes.chipStyle}
+            size="small"  label={`Preventive Maintenance Due : `
+          + getFormattedDateString(o.nextPm, MomentFormats.BriefDate)} />
           }
         </ListItemText>
         {++topIndex < materialData.equipment.length && <Divider style={{ marginTop: 10 }} />}
@@ -104,14 +102,20 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
               <AccordionSummary onClick={() => setIsMaterialPannel(!isMaterialPannel)}
                 className={classes.panelSummary}
                 style={{ color: isMaterialPannel ? Colors.navy : "inherit", cursor: "pointer" }} expandIcon={
-                  <ExpandMoreIcon
+                  isMaterialPannel ? <ExpandIcon
                     fontSize="small"
                     style={{
-                      transform: isMaterialPannel ? "rotate(180deg)" : "rotate(-90deg)",
-                      color: isMaterialPannel ? Colors.navy : "inherit",
                       cursor: "pointer",
+                      transform: "rotate(180deg)",
                     }}
-                  />}>
+                  /> :
+                    <CollapseIcon
+                      fontSize="small"
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    />
+                }>
                 <Grid container spacing={3}>
                   <Grid item xs={6} style={{ paddingLeft: 28 }} >
                     <SMText label={"meq.material"} />
@@ -136,14 +140,20 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
                 className={classes.panelSummary}
                 style={{ color: isEquipmentPannel ? Colors.navy : "inherit", cursor: "pointer" }}
                 expandIcon={
-                  <ExpandMoreIcon  style={{
-                    transform: isEquipmentPannel ? "rotate(180deg)" : "rotate(-90deg)",
-                    color: isEquipmentPannel ? Colors.navy : "inherit",
-                    cursor: "pointer",
-                  }}
-                  fontSize="small"
-                  />}>
-
+                  isEquipmentPannel ? <ExpandIcon
+                    fontSize="small"
+                    style={{
+                      cursor: "pointer",
+                      transform: "rotate(180deg)",
+                    }}
+                  /> :
+                    <CollapseIcon
+                      fontSize="small"
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    />
+                }>
                 <Grid container spacing={3}>
                   <Grid item xs={6} style={{ paddingLeft: 28 }} >
                     <SMText label={"meq.equipment"} />
@@ -195,7 +205,6 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
 
         </Grid>
       </Grid>
-
     </>
   );
 };

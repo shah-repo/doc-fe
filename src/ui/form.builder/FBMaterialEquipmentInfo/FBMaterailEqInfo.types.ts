@@ -17,9 +17,6 @@ export interface Equipment {
   title: string;
   nextCalibration: Date;
   nextPm: Date;
-  lots?: LotItem[];
-  quantity: number;
-  unit: string;
 }
 export interface  MaterialAndEquipment {
   equipment: Equipment[];
