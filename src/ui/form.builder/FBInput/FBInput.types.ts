@@ -38,6 +38,7 @@ export type FBInputType =
   | "evidencemediaupload"
   | "purchaseorder"
   | "approvalMatrix"
+  | "approvalRoles"
   | "poreceive"
   | "stepsection"
   | "teststep"
@@ -116,6 +117,7 @@ export type FBInputProps =
     includeQRScan?: boolean;
     isInputOwner?: boolean;
     designDisabled?: boolean;
+    tabId?: string;
 
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.

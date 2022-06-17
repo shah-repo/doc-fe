@@ -231,6 +231,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   parentEquipment?: Id;
   equipmentSection?: string;
   redline?: boolean;
+  tabId?: string;
 }
 
 export interface DocumentRevisionSetAction {

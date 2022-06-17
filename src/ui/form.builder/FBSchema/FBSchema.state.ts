@@ -12,6 +12,7 @@ import {
   FBSchemaProps,
 } from "..";
 import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixField";
+import FBApprovalMatrixFieldRoles from "../FBApprovalMatrixField/FBApprovalMatrixFieldRoles";
 import FBApprovals from "../FBApprovals/FBApprovals";
 import FBApprovers from "../FBApprovers/FBApprovers";
 import FBAttachment from "../FBAttachment/FBAttachment";
@@ -115,6 +116,7 @@ class FBSchemaState {
     action: FBActionField,
     hellosign: FBHelloSign,
     approvalMatrix: FBApprovalMatrixField,
+    approvalRoles: FBApprovalMatrixFieldRoles,
     poApprovalMatrix: FBPOApprovalMatrix,
     task: FBTask,
     approvers: FBApprovers,

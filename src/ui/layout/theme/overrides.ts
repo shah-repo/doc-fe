@@ -52,7 +52,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       color: Colors.dark_gray,
       fontSize: "1rem",
       fontFamily: "Sora, sans-serif;",
-      fontWeight: "bold",
+      fontWeight: 600,
     },
   },
   MuiButton: {
@@ -60,9 +60,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontSize: "0.75rem",
       borderRadius: 3,
       margin: appTheme.spacing(1),
-      fontWeight: "bold",
       fontFamily: "Sora, sans-serif;",
       textTransform: "capitalize",
+      fontWeight: 600,
     },
     contained: {
       boxShadow: "none",
@@ -100,12 +100,39 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiInputBase: {
     root: {
-      fontSize: "0.8rem",
-      fontFamily: "Sora, sans-serif;",
+      "fontSize": "0.8rem",
+      "fontFamily": "Sora, sans-serif;",
+      "&$focused input": {
+        backgroundColor: Colors.white,
+        border: `1px solid ${Colors.dodger_blue}`,
+      },
+      "&.MuiAutocomplete-inputRoot": {
+        "transition": appTheme.transitions.create("all"),
+        "&:hover": {
+          backgroundColor: Colors.background_white,
+        },
+        "& fieldset, &:hover fieldset": {
+          border: `1px solid ${Colors.mild_wind_blue}`,
+        },
+        "&$focused": {
+          backgroundColor: Colors.white,
+        },
+        "&$focused input": {
+          border: "none",
+        },
+        "&$focused fieldset": {
+          border: `1px solid ${Colors.dodger_blue}`,
+        },
+      },
     },
     input: {
       "fontSize": "0.8rem",
       "borderRadius": "4px",
+      "borderColor": Colors.mild_wind_blue,
+      "transition": appTheme.transitions.create("all"),
+      "&:hover": {
+        backgroundColor: Colors.background_white,
+      },
       "&.Mui-disabled": {
         backgroundColor: Colors.white,
       },

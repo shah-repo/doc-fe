@@ -12,14 +12,16 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     disabled,
     name,
     mode,
+    type,
     ...props
   }: T) => {
 
     const { formState, workspaceState } = FB.useStores();
     const { document: { outputRevision = false } = {}, isOutput } = workspaceState || {};
     const formValue = formState?.getFieldValue(name);
+
     approvalMatrixFieldState = FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
-      formValue: cloneDeep(formValue),
+      formValue: { [type as string]: cloneDeep(formValue) },
       outputRevision,
       isOutput,
     });
@@ -32,7 +34,7 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
       reaction( // Form sync & autosave
         () => approvalMatrixFieldState?.data,
         (data) => {
-          formState?.setFieldValue(name, cloneDeep(data));
+          formState?.setFieldValue(name, cloneDeep(data?.[type || ""]));
           formState?.setFieldAutosave(name);
         }
       );
