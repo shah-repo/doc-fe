@@ -6,10 +6,12 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
+import { getHasPermission } from "../../../../common/utils/selectors";
+import { Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import HeaderMenu from "../../../components/common/header/Menu";
 import { default as OwnerChangerContainer } from "../../../components/common/owner.changer/container";
@@ -18,6 +20,7 @@ import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
+import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
@@ -195,19 +198,17 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const accessableButtons: string[] = [];
   const { status = "", version = 0 } = documentRevision || [];
   const canShowCancelButton = isDocumentRevisionInDraft(status) && version > 1;
-
-  if (
-    !(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
-    canShowCancelButton
-  ) {
-    accessableButtons.push("cancelButton");
-  }
+  const { isVisible } = useApproveAndRelease(documentTypeId);
+  const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
 
   if (
     !isRecord ||
     (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))
   ) {
-    accessableButtons.push("approveAndReleaseButton");
+    if (!(!isVisible || !values.id || values.status !== DocumentRevisionStatus.Draft ||
+       !canApprove || revisionStage !== 1)) {
+      accessableButtons.push("approveAndReleaseButton");
+    }
   }
   if (
     isDirectlyApproved &&
@@ -224,6 +225,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild)) {
     accessableButtons.push("redlineButton");
+  }
+  if (
+    !(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
+    canShowCancelButton
+  ) {
+    accessableButtons.push("cancelButton");
   }
   if (shouldShowUpgrade) {
     accessableButtons.push("upgradeContainerButton");
