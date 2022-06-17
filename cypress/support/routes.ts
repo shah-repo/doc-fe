@@ -108,6 +108,7 @@ export enum CyRoutes {
   PostChangeRequestsSearch = "PostChangeRequestsSearch",
   AsyncTasks = "AsyncTasks",
   PostTrainingDue = "PostTrainingDue",
+  AsyncSessionTasks = "AsyncSessionTasks",
 }
 
 export const routes: ICyRoutes =   {
@@ -171,6 +172,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/async_tasks",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  AsyncSessionTasks: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/async_tasks/sessionTimeTravel",
     },
     callConfig: {
       responseTimeout: 30 * 1000,
