@@ -10,6 +10,7 @@ declare global {
       asyncTaskSelectTaskType(params: {taskType: SQS_TYPES}): Chainable<Subject>;
       asyncTaskSelectNextTaskType(params: {taskType: SQS_TYPES}): Chainable<Subject>;
       asyncTaskClickSubmit(params?: {password?: string}): Chainable<Subject>;
+      asyncSessionTaskClickSubmit(params?: {password?: string}): Chainable<Subject>;
       asyncSelectBackToTheFutureTime(params: {
         year?: number;
         month?: number;
@@ -53,6 +54,15 @@ Cypress.Commands.add("asyncTaskClickSubmit", (params: {password?: string}) => {
   cy.get(`button[type="submit"]`).arrowClick();
   cy.get(`input[name="password"]`).arrowType(password);
   cy.wrapWithWaitOnApiCall(CyRoutes.AsyncTasks, () => {
+    cy.get(`button[data-cy="passwordConfirm"]`).arrowClick();
+  });
+});
+
+Cypress.Commands.add("asyncSessionTaskClickSubmit", (params: {password?: string}) => {
+  const password = params?.password ? params.password : CONFIG.DEFAULT_ENLIL_USER_PASSWORD;
+  cy.get(`button[type="submit"]`).arrowClick();
+  cy.get(`input[name="password"]`).arrowType(password);
+  cy.wrapWithWaitOnApiCall(CyRoutes.AsyncSessionTasks, () => {
     cy.get(`button[data-cy="passwordConfirm"]`).arrowClick();
   });
 });
