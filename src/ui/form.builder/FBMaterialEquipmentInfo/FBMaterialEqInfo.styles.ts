@@ -60,6 +60,13 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: 12,
       fontWeight: 400,
     },
+    expandIconStyle: {
+      cursor: "pointer",
+      transform: "rotate(180deg)",
+    },
+    tabCursor: {
+      cursor: "pointer",
+    },
     qunatityText: {
       float: "right",
       marginRight: "1rem",

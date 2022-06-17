@@ -1,4 +1,4 @@
-import { find, get, isEmpty, map } from "lodash";
+import { get, isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspace } from "../../../../ui/form.builder";
+import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -31,7 +32,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const [tabWidth, setTabWidth] = useState(0);
-
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
@@ -42,28 +42,12 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       type: "TRAINING",
     }];
   }
-  if (tabConfig) {
+  if (tabConfig && group === "LHR") {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
       tabId: "MEQ",
-      type: "DYNAMIC",
+      type: "MEQ",
     }];
-  }
-  const obj = find(schema, { tabId: "MEQ" });
-  if (!obj) {
-    schema?.push({
-      name: "",
-      type: "materialandeq",
-      index: 0,
-      label: "Material and EQ",
-      tabId: "MEQ",
-      applicableOn: [
-        "ON_STATE_TO_IN_REVIEW",
-      ],
-      deleteDisabled: true,
-      deleteInFormDisabled: true,
-      applicableValidationSchema: true,
-    });
   }
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
@@ -175,6 +159,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           documentRevisionId={documentRevision?.id}
                         />
                       )}
+                      {tabType === "MEQ" &&
+                        <FBMaterialEqInfoContainer
+                          documentRevisionId={documentRevision?.id}
+                        />
+                      }
                     </SMBox>
                   </SMBox>;
                 })}

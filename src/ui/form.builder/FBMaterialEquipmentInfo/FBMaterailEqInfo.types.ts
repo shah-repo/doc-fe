@@ -26,3 +26,7 @@ export interface  MaterialAndEquipment {
 export interface MaterialEqProps {
   materialData: MaterialAndEquipment;
 }
+
+export interface MaterialEqContainerProps {
+  documentRevisionId?: string;
+}

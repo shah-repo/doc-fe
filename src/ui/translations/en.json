@@ -1314,5 +1314,6 @@
   "meq.material" : "Material",
   "meq.equipment" : "Equipment",
   "meq.jump.to" : "Jump To",
-  "meq.chip.nextCalDate" : "Next Callibration Due"
+  "meq.chip.nextCalDate" : "Next Callibration Due :",
+  "meq.chip.prevMaintance" : "Preventive Maintenance Due : "
 }

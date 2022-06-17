@@ -458,7 +458,7 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType;
 }
 
-type TabType = "MIXED" | "DYNAMIC" | "TRAINING";
+type TabType = "MIXED" | "DYNAMIC" | "TRAINING" | "MEQ";
 
 export interface TabInfo {
   labelId: string;

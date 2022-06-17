@@ -4,6 +4,7 @@ import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { map } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import SMText from "../../../App/Shifamed/Components/SMText/SMText";
 import { ReactComponent as CollapseIcon } from "../../../assets/images/tabCollapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
@@ -14,18 +15,10 @@ import { styles } from "./FBMaterialEqInfo.styles";
 
 const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ materialData }) => {
   const classes = styles();
-  // For testing only
-  const tempObj: any = {
-    lotId: "#202234",
-    partId: "PRT1",
-    quantity: "25",
-    unit: "ft",
-  };
-  if (materialData) {
-    materialData.materials.forEach((obj) => obj.lots.push(tempObj));
-  }
-  // end of testing
   const unit = " Items";
+  const intl = useIntl();
+  const nextCalText = intl.formatMessage({ id: "meq.chip.nextCalDate" }) + "";
+  const PreventMaintainanceText = intl.formatMessage({ id: "meq.chip.prevMaintance" });
   const [isMaterialPannel, setIsMaterialPannel] = React.useState(false);
   const [isEquipmentPannel, setIsEquipmentPannel] = React.useState(false);
   const updatePanelState = (text) => (event: React.MouseEvent) => {
@@ -34,17 +27,10 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
     setIsEquipmentPannel(result);
     event.preventDefault();
   };
-
   const  predictExpandCollapseText = () => {
     let text = "meq.expand.all";
     if (isMaterialPannel && isEquipmentPannel) {
       text = "meq.collapse.all";
-    } else if (!isMaterialPannel || !isEquipmentPannel) {
-      text = "meq.expand.all";
-    } else if (isMaterialPannel) {
-      text = "meq.expand.all";
-    } else if (isEquipmentPannel) {
-      text = "meq.expand.all";
     }
     return text;
   };
@@ -71,21 +57,24 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
         <ListItemText className={classes.fontNormal14} style={{ color: Colors.almost_black }}>
           {o.docId} {o.title}</ListItemText>
         <ListItemText className={classes.fontNormal12}>
-          {o.nextCalibration && <Chip  className={classes.chipStyle}
-            size="small"  label={`Next Callibration Due : `
-          + getFormattedDateString(o.nextCalibration, MomentFormats.BriefDate)} />
+          {
+            o.nextCalibration &&
+          <Chip  className={classes.chipStyle}
+            size="small"  label={o.nextCalibration ? nextCalText +
+           getFormattedDateString(o.nextCalibration, MomentFormats.BriefDate) : ""} />
           }
           {o.nextPm &&
           <Chip  className={classes.chipStyle}
-            size="small"  label={`Preventive Maintenance Due : `
-          + getFormattedDateString(o.nextPm, MomentFormats.BriefDate)} />
+            size="small"  label={o.nextPm ? PreventMaintainanceText
+          + getFormattedDateString(o.nextPm, MomentFormats.BriefDate) : ""} />
           }
         </ListItemText>
         {++topIndex < materialData.equipment.length && <Divider style={{ marginTop: 10 }} />}
       </ListItem>
     </>
   ));
-  const constructLotDetail = (obj) => `Lot ${obj.lotId} | ${obj.partId || "N/A"} | ${obj.quantity} ${obj.unit}`;
+  const constructLotDetail = (obj) => `Lot ${obj.lotId || ""} | ${obj.partId || "N/A"}
+   | ${obj.quantity || ""} ${obj.unit || ""}`;
   return (
     <>
       <Grid container spacing={3}>
@@ -102,14 +91,11 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
                 style={{ color: isMaterialPannel ? Colors.navy : "inherit", cursor: "pointer" }} expandIcon={
                   isMaterialPannel ? <ExpandIcon
                     fontSize="small"
-                    style={{
-                      cursor: "pointer",
-                      transform: "rotate(180deg)",
-                    }}
+                    className= {classes.expandIconStyle}
                   /> :
                     <CollapseIcon
                       fontSize="small"
-                      style={{
+                      className= {classes.tabCursor}style={{
                         cursor: "pointer",
                       }}
                     />
@@ -140,16 +126,11 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
                 expandIcon={
                   isEquipmentPannel ? <ExpandIcon
                     fontSize="small"
-                    style={{
-                      cursor: "pointer",
-                      transform: "rotate(180deg)",
-                    }}
+                    className= {classes.expandIconStyle}
                   /> :
                     <CollapseIcon
                       fontSize="small"
-                      style={{
-                        cursor: "pointer",
-                      }}
+                      className= {classes.tabCursor}
                     />
                 }>
                 <Grid container spacing={3}>

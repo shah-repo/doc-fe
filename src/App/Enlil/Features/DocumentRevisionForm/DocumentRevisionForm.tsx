@@ -12,6 +12,7 @@ import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { FBWorkspace } from "../../../../ui/form.builder";
+import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
@@ -62,6 +63,13 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       tabId: "training",
       type: "TRAINING",
     } ];
+  }
+  if (tabConfig && group === "LHR") {
+    tabConfig = [ ...tabConfig, {
+      labelId: "tabId.materialsandequipment",
+      tabId: "MEQ",
+      type: "MEQ",
+    }];
   }
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
@@ -208,6 +216,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           documentRevisionId={documentRevision?.id}
                         />
                       )}
+                      {tabType === "MEQ" &&
+                        <FBMaterialEqInfoContainer
+                          documentRevisionId={documentRevision?.id}
+                        />
+                      }
                     </SMBox>
                   </SMBox>;
                 })}

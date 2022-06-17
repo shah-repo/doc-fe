@@ -1,20 +1,18 @@
 import React, { useState } from "react";
 import { FBMeqState } from "..";
 import FB from "../helpers/FB";
-import { MaterialAndEquipment } from "./FBMaterailEqInfo.types";
+import { MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
 import FBMaterialInfoPresenter from "./FBMaterialEqInfo.presenter";
 
-const FBMaterialEqInfoContainer: React.FunctionComponent = () => {
+const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProps> = ({ documentRevisionId }) => {
   const [materialData, setMaterialData] = useState<MaterialAndEquipment>({ equipment: [], materials: [] });
-  const { workspaceState  } = FB.useStores();
   const meqState = FB.useRef(FBMeqState);
-  const docRevId = workspaceState?.document?.id;
   const callBack = (data: MaterialAndEquipment)  => {
     meqState.setMaterialsEquipment(data);
     setMaterialData(data);
   };
   if (!meqState.materialsEquipment) {
-    meqState.getMeqDetail(docRevId, callBack);
+    meqState.getMeqDetail(documentRevisionId, callBack);
   }
   return (
     <FBMaterialInfoPresenter
