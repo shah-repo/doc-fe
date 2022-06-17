@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-key */
 import { get, map } from "lodash";
-import { reaction } from "mobx";
 import { Observer } from "mobx-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -53,7 +52,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
-  const [tabWidth, setTabWidth] = useState(0);
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   if (formValues.values?.retrain) {
@@ -66,36 +64,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
-  const changeLayoutHeight = () => {
-    setTimeout(() => {
-      const headerTmpl = document.getElementById("SMHeaderTmpl");
-      const bodyTmpl = document.getElementById("SMBodyTmpl");
-      setTabWidth(bodyTmpl?.clientWidth || 0);
-      const restHeight = headerTmpl?.clientHeight ? 150 + (+(headerTmpl?.clientHeight)) : 200;
-      bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
-    }, 100);
-  };
-
-  useEffect(() => reaction(
-    () => _documentRevisionFormState?.viewMore,
-    () => {
-      changeLayoutHeight();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }), []);
-
-  useEffect(() => reaction(
-    () => _documentRevisionFormState?.rightPanelOpen,
-    () => {
-      setTimeout(() => {
-        const bodyTmpl = document.getElementById("SMBodyTmpl");
-        setTabWidth(bodyTmpl?.clientWidth || 0);
-      }, 250);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }), []);
-
-  useEffect(() => {
-    changeLayoutHeight();
-  }, []);
 
   useEffect(() => {
     if (!tabConfig) {
@@ -142,14 +110,13 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               <SMTabs
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
-                boxProps={{ stretchY: "100%", px: 3.75 }}
-                tabProps={{ width: `${tabWidth - 60}px` }}
+                boxProps={{ stretchY: "100%", px: 3.75, height: "100%" }}
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
 
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} stretchY="calc(100% - 40px)">
+                    <SMBox mt={2} stretchY="calc(100% - 40px)">
                       {tabType === "MIXED" && <>
                         <DocumentRevisionFormPresenter
                           {...formValues}

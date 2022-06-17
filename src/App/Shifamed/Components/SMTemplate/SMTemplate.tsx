@@ -20,7 +20,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
         {leftSidebar}
       </SMBox>
     )}
-    <SMBox display={"flex"} flexDirection={"column"} flex={5}>
+    <SMBox display={"flex"} flexDirection={"column"} flex={5} overflow="scroll">
       {header && (
         <SMBox {...headerBoxProps}>
           {header}

@@ -21,18 +21,15 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           {...{ onChange }}
           value={_tabsState?.value}
           style={{
-            ...{
-              position: "fixed",
-              zIndex: 1,
-              backgroundColor: Colors.alabaster,
-              height: "auto",
-              width: "100%",
-              fontSize: "12px",
-              padding: 0,
-              borderBottom: `1px solid ${Colors.chinese_silver}`,
-              minHeight: 44,
-              maxHeight: 44,
-            }, ...tabProps,
+            zIndex: 1,
+            backgroundColor: Colors.alabaster,
+            height: "auto",
+            width: "100%",
+            fontSize: "12px",
+            padding: 0,
+            borderBottom: `1px solid ${Colors.chinese_silver}`,
+            minHeight: 44,
+            maxHeight: 44,
           }}
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}
         >
