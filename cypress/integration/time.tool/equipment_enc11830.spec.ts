@@ -780,8 +780,8 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Set time travel tool to 1 day", () => {
-    it("Select 1 day to back in future", () => {
+  context("Set time travel to Day 1", () => {
+    it("Select 1 day to time travel", () => {
       cy.equipSetTimeTravelInDays({ days: 1 });
     });
   });
@@ -908,7 +908,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Set time travel tool to 11 day", () => {
+  context("Set time travel to Day 11", () => {
     it("Logout currect user", () => {
       cy.authLogout();
     });
@@ -924,7 +924,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Select 10 day to back in future", () => {
+    it("Select 10 days to time travel", () => {
       cy.equipSetTimeTravelInDays({ days: 10 });
     });
   });
@@ -1050,7 +1050,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Set time travel tool to 25 day", () => {
+  context("Set time travel to Day 25", () => {
     it("Logout currect user", () => {
       cy.authLogout();
     });
@@ -1066,7 +1066,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Select 14 day to back in future", () => {
+    it("Select 14 days to time travel", () => {
       cy.equipSetTimeTravelInDays({ days: 14 });
     });
   });
@@ -1192,7 +1192,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Set time travel tool to 32 days", () => {
+  context("Set time travel to Day 32", () => {
     it("Logout currect user", () => {
       cy.authLogout();
     });
@@ -1208,7 +1208,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Select 7 days to back in future", () => {
+    it("Select 7 days to time travel", () => {
       cy.equipSetTimeTravelInDays({ days: 7 });
     });
   });
@@ -1248,8 +1248,8 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Set time travel tool to 34 days", () => {
-    it("Select 2 days to back in future", () => {
+  context("Set time travel to Day 34", () => {
+    it("Select 2 days to time travel", () => {
       cy.equipSetTimeTravelInDays({ days: 2 });
     });
   });
@@ -1374,7 +1374,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Set time travel tool to 41 days", () => {
+  context("Set time travel to Day 41", () => {
     it("Logout currect user", () => {
       cy.authLogout();
     });
@@ -1390,7 +1390,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Select 7 days to back in future", () => {
+    it("Select 7 days to time travel", () => {
       cy.equipSetTimeTravelInDays({ days: 7 });
     });
   });
