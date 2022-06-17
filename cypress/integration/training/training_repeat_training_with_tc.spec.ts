@@ -1291,7 +1291,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 30 days", () => {
+  context("Log in as first user and Set time travel to Day 30", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1307,7 +1307,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 20 days and submit", () => {
+    it("Select 20 days to time travel and submit", () => {
       cy.trSetTimeTravelInDays({ days: 20 });
     });
   });
@@ -1376,7 +1376,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 31 days", () => {
+  context("Log in as first user and Set time travel to Day 31", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1392,7 +1392,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 1 days and submit", () => {
+    it("Select 1 day to time travel and submit", () => {
       cy.trSetTimeTravelInDays({ days: 1 });
     });
   });
@@ -1441,7 +1441,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 40 days", () => {
+  context("Log in as first user and Set time travel to Day 40", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1457,7 +1457,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 9 days and submit", () => {
+    it("Select 9 days to time travel and submit", () => {
       cy.trSetTimeTravelInDays({ days: 9 });
     });
   });
@@ -1511,7 +1511,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 49 days again", () => {
+  context("Log in as first user and Set time travel to Day 49", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1527,7 +1527,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 9 days and submit", () => {
+    it("Select 9 days to time travel and submit", () => {
       cy.trSetTimeTravelInDays({ days: 9 });
     });
   });
@@ -1559,7 +1559,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 50 day again", () => {
+  context("Log in as first user and Set time travel to Day 50", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1575,7 +1575,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 1 day and submit", () => {
+    it("Select 1 day to time travel and submit", () => {
       cy.trSetTimeTravelInDays({ days: 1 });
     });
   });
@@ -1635,7 +1635,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 79 days", () => {
+  context("Log in as first user and Set time travel to Day 79", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1651,7 +1651,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 29 days and submit", () => {
+    it("Select 29 days to time travel and submit", () => {
       cy.trSetTimeTravelInDays({ days: 29 });
     });
   });
@@ -1698,7 +1698,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 80 days again", () => {
+  context("Log in as first user and Set time travel to Day 80", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1714,7 +1714,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 1 days and submit", () => {
+    it("Select 1 day to time travel and submit", () => {
       cy.trSetTimeTravelInDays({ days: 1 });
     });
   });
@@ -1820,7 +1820,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and set time travel tool to 81 days finally", () => {
+  context("Log in as first user and Set time travel to Day 81 finally", () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1836,7 +1836,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Set Time Travel tool for 1 days and submit", () => {
+    it("Select 1 day to time travel and submit", () => {
       cy.trSetTimeTravelInDays({ days: 1 });
     });
   });
