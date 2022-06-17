@@ -924,7 +924,7 @@ context("Approval request form", () => {
       cy.alFilterByTitle({ title: "Second AR" });
     });
 
-    it(`Filter list by OWNER as USERS[1].name`, () => {
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
@@ -1010,7 +1010,7 @@ context("Approval request form", () => {
       cy.alFilterByTitle({ title: "Second AR" });
     });
 
-    it(`Filter list by OWNER as USERS[1].name`, () => {
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
@@ -1023,7 +1023,7 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set time travel tool to 29 days", () => {
+  context("Set time travel to Day 29", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
     });
@@ -1032,7 +1032,7 @@ context("Approval request form", () => {
       cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
     });
 
-    it("Select 29 days to back in future", () => {
+    it("Select 29 days to time travel", () => {
       cy.asyncSelectBackToTheFutureTime({ day: 29 });
     });
 
@@ -1060,7 +1060,7 @@ context("Approval request form", () => {
       cy.alFilterByTitle({ title: "Second AR" });
     });
 
-    it(`Filter list by OWNER as USERS[1].name`, () => {
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
@@ -1073,7 +1073,7 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set time travel tool to 1 day", () => {
+  context("Set time travel to Day 30", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
     });
@@ -1082,7 +1082,7 @@ context("Approval request form", () => {
       cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
     });
 
-    it("Select 1 day to back in future", () => {
+    it("Select 1 day to time travel", () => {
       cy.asyncSelectBackToTheFutureTime({ day: 1 });
     });
 
@@ -1136,7 +1136,7 @@ context("Approval request form", () => {
       cy.alFilterByTitle({ title: "Second AR" });
     });
 
-    it(`Filter list by OWNER as USERS[1].name`, () => {
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
