@@ -335,7 +335,7 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set the QA tool to Day 5", () => {
+  context("Set time travel to Day 5", () => {
     it(`Login as ${USERS[1].name}`, () => {
       cy.authLogout();
       cy.authLogin({
@@ -345,7 +345,7 @@ context("Approval request form", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("Select 5 day to back in future", () => {
+    it("Select 5 day to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 5 });
     });
 
@@ -379,8 +379,8 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set the QA tool to Day 10", () => {
-    it("Select 5 day to back in future", () => {
+  context("Set time travel to Day 10", () => {
+    it("Select 5 days to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 5 });
     });
 
@@ -431,7 +431,7 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set the QA tool to Day 30", () => {
+  context("Set time travel to Day 30", () => {
     it(`Login as ${USERS[1].name}`, () => {
       cy.authLogout();
       cy.authLogin({
@@ -441,7 +441,7 @@ context("Approval request form", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("Select 20 day to back in future", () => {
+    it("Select 20 days to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 20 });
     });
 
@@ -560,8 +560,8 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set the QA tool to Day 31", () => {
-    it("Select 1 day to back in future", () => {
+  context("Set time travel to Day 31", () => {
+    it("Select 1 day to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 1 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -602,8 +602,8 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set the QA tool to Day 40", () => {
-    it("Select 9 day to back in future", () => {
+  context("Set time travel to Day 40", () => {
+    it("Select 9 days to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 9 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -651,8 +651,8 @@ context("Approval request form", () => {
     });
   });
 
-  context("Set the QA tool to Day 42", () => {
-    it("Select 2 day to back in future", () => {
+  context("Set time travel to Day 42", () => {
+    it("Select 2 days to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 2 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
