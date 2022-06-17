@@ -137,6 +137,16 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       borderRadius: "4px",
     },
   },
+  MuiRadio: {
+    root: {
+      "&:hover": {
+        background: "none !important",
+      },
+      "&:not($checked):not($disabled):hover circle": {
+        fill: Colors.background_white,
+      },
+    },
+  },
   MuiTooltip: {
     tooltip: {
       fontSize: "0.8rem",
