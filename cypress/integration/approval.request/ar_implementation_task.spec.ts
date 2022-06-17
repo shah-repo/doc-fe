@@ -412,7 +412,7 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-  context("Set time travel tool to 9 days", () => {
+  context("Set time travel to Day 9", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
     });
@@ -421,7 +421,7 @@ context("Approval request implementation tasks", () => {
       cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
     });
 
-    it("Select 9 days to back in future", () => {
+    it("Select 9 days to time travel", () => {
       cy.asyncSelectBackToTheFutureTime({ day: 9 });
     });
 
@@ -529,7 +529,7 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-  context("Set time travel tool to 10 days", () => {
+  context("", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
     });
@@ -538,7 +538,7 @@ context("Approval request implementation tasks", () => {
       cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
     });
 
-    it("Select 1 days to back in future", () => {
+    it("Select 1 day to time travel", () => {
       cy.asyncSelectBackToTheFutureTime({ day: 1 });
     });
 
