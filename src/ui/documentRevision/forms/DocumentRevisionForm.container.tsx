@@ -15,7 +15,6 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
-import { DRAWER_WIDTH } from "../../app/Navigation.styles";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
@@ -27,7 +26,6 @@ import { DocumentCloneType } from "../Clone.container";
 import { checkIsDocumentEditableSchema, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
 import { getShouldShowUpgradeForRecord } from "../helpers/records";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
-import { SIDEBAR_WIDTH } from "../Sidebar/styles";
 import { DocumentRevisionFormValues } from "./types";
 
 export interface FormHeaderContext {
@@ -257,9 +255,7 @@ DocumentRevisionFormContainerProps
 
   return (
     <>
-      <div ref={bannerPortal}
-        style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }}
-      />
+      <Grid ref={bannerPortal} />
       <Grid style={{ background: Colors.alabaster }} >
         <Formik
           initialValues={cleanInitialValues}
