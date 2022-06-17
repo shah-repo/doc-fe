@@ -79,7 +79,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
               display="flex"
               style={{ gridArea: "1/1" }}
               borderRadius={4}
-              data-cy={name}
               maxHeight= {150}
               overflow= "auto"
             >
@@ -177,8 +176,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                                   lineHeight: "25px",
                                   cursor: "pointer",
                                 }}
-                                id="field-description"
-                                data-cy="field-description"
+                                id={`field-${name}`}
+                                data-cy={`field-${name}`}
                               >
                                 {editor?.trim()}
                               </span>
