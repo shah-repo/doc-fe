@@ -370,19 +370,12 @@ context("Approval request form", () => {
     });
 
     it(`Verify for ${USERS[2].name} and ${USERS[3].name} notifications as 'pending approvals from'`, () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
-        .should("contain.text", aRID)
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "IN REVIEW")
-        .and("contain.text", "pending approvals from");
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(1)
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[2].name}`);
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(1)
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[3].name}`);
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${aRID}Approval request formIN REVIEWpending approvals from`,
+      });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[2].name}` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[3].name}` });
     });
   });
 
