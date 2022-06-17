@@ -115,7 +115,7 @@ context("Document voiding Flow", () => {
       it("Clicks on VOID button in header menu ", () => {
         SystemRequirement("REQ-2800");
         cy.get("#HeaderMenuButton").arrowClick();
-        cy.get("#void").arrowClick();
+        cy.get("[data-cy=\"void-button\"]").arrowClick();
         cy.get("#AlertDialog-continueButton").arrowClick();
         cy.checkToastMessage({ exists: false });
       });

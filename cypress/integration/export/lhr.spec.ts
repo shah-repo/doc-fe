@@ -596,7 +596,7 @@ context("Export for LHR", () => {
 
     it("Complete step", () => {
       cy.pmSubmitForApproval();
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("visit the LHR", () => {
@@ -771,7 +771,7 @@ context("Export for LHR", () => {
 
     it("Complete step", () => {
       cy.pmSubmitForApproval();
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Approve step", () => {

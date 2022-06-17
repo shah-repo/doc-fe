@@ -575,7 +575,7 @@ context("Training notifications for documents with approved and released revisio
     it("Click training notification and check doc with Released status", () => {
       SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
 
     it("Button 'Complete training' should be visible", () => {

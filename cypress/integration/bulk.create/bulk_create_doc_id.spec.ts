@@ -539,7 +539,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
   context("Verify Bulk Create form title report", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", "Bulk create form");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
