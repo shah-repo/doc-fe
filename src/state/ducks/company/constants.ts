@@ -115,7 +115,7 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
         label: "Parts",
         type: "CATEGORY",
         icon: "/navigation_icons/tag-check.svg",
-        category: "Parts",
+        category: "Lhr",
       },
     ],
     restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],

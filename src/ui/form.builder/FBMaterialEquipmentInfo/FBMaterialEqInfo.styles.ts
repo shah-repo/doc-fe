@@ -1,10 +1,8 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
-
     expandCollapseText: {
       color: "red",
     },
@@ -88,8 +86,6 @@ export const styles = makeStyles((theme: Theme) =>
         alignItems: "center",
         cursor: "pointer",
       },
-
     },
-
   })
 );
