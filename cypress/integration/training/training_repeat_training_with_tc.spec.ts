@@ -433,7 +433,7 @@ context("Repeat Training with Training Curriculum", () => {
 
   context("Verify Refresh/Repeat Training form title report", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", "Test Form-Training Curriculum Refresh-Repeat");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
@@ -911,7 +911,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", "Training Curricula");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();

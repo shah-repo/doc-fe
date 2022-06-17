@@ -577,7 +577,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Check equipment status is 'Released'", () => {
-          cy.arVerifyStatus({ status: "RELEASED" });
+          cy.arVerifyStatus({ status: "Released" });
         });
       });
     });

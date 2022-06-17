@@ -440,7 +440,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check equipment status is 'Released'", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
 
     context("Navig to released 'Equipment maintenance document'", () => {

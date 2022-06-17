@@ -222,7 +222,7 @@ context("Approval request email popup modal", () => {
     });
 
     it("Verify AR status is 'IN_REVIEW'", () => {
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
   });
 

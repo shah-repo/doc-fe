@@ -602,7 +602,7 @@ context("Export maintenance record", () => {
     });
 
     it("Check equipment status is 'Released'", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
   });
 

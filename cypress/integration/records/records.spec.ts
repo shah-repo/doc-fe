@@ -788,7 +788,7 @@ context("Records flow", () => {
     });
 
     it("Get the document Id", () => {
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });

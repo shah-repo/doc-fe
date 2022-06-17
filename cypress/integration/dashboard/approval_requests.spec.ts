@@ -366,7 +366,7 @@ context("Approval request form", () => {
       cy.listLoadingElementShouldNotExist();
       cy.arClickSendToReview();
       cy.wait(1000);
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Goto dashboard", () => {
@@ -783,7 +783,7 @@ context("Approval request form", () => {
     });
 
     it("Verify AR status is 'IN_REVIEW'", () => {
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Goto dashboard", () => {

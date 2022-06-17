@@ -247,7 +247,7 @@ context("Approval request form", () => {
 
   context("Verify `Approval request form` title", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", approvalRequestFormName);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
@@ -523,7 +523,7 @@ context("Approval request form", () => {
 
     it("Verify AR status is 'In Review'", () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
         releasedFormId = $x.text();
       });
@@ -726,7 +726,7 @@ context("Approval request form", () => {
 
     it("Verify AR status is 'In Review'", () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
   });
 
