@@ -28,8 +28,8 @@ Cypress.Commands.add("exportVerifyEmail", (params: { status: string; filename: s
   let downloadFile;
   const dateOffset = (5 * 1000);
 
-  cy.get("#HeaderInfo-status").should("have.text", params.status);
-  cy.get("#HeaderInfo-docId").then(($x) => {
+  cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
+  cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
     recordId = $x.text();
     dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
     cy.sendToEmail();
@@ -107,7 +107,7 @@ Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename:
   const dateOffset = (5 * 1000);
 
   cy.get("#HeaderInfo-status").should("have.text", params.status);
-  cy.get("#HeaderInfo-docId").then(($x) => {
+  cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
     recordId = $x.text();
     dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
     cy.sendToEmail();

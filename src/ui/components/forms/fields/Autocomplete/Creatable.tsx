@@ -117,9 +117,9 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           fontWeight={600}
           fontSize={19}
           minHeight={32}
-          color={Colors.almost_black}
+          color={inputValue ? Colors.almost_black : Colors.lightest_grey2}
           padding="5.5px 11px"
-          bgcolor={hover ? Colors.platinum : Colors.alabaster}
+          bgcolor={hover ? Colors.whitest_grey : Colors.alabaster}
           borderRadius={4}
           onMouseEnter={() => { setHover(true); }}
           onMouseLeave={() => { setHover(false); }}
@@ -148,6 +148,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                 fontWeight: 600,
                 lineHeight: "24px",
                 minHeight: "32px",
+                boxShadow: "none",
               }),
               menu: (provided) => ({
                 ...provided,
@@ -158,7 +159,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
             isClearable={Boolean(formikValue)}
             components={{ DropdownIndicator: null }}
             placeholder={!inputValue ?
-              <div style={{ color: Colors.almost_black }}>{titlePlaceholder}</div> : null}
+              <div style={{ color: Colors.lightest_grey2 }}>{titlePlaceholder}</div> : null}
             openMenuOnClick={false}
             openMenuOnFocus={false}
             createOptionPosition="first"

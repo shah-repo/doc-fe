@@ -809,7 +809,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Verify assigned record ID is one not reserved in BLC", () => {
-          cy.get("[id=\"HeaderInfo-docId\"]").should("have.text", "TPP-00009");
+          cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "TPP-00009");
         });
       });
 
@@ -841,7 +841,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Verify assigned record ID is one released reserved in BLC", () => {
-          cy.get("[id=\"HeaderInfo-docId\"]").should("have.text", "TPP-00002");
+          cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "TPP-00002");
         });
       });
     });

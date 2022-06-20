@@ -181,9 +181,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify `Draft DAM request form` title", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", "Form DAM");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "DRAFT" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", "Form DAM");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -364,9 +364,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify `Released DAM request form` title", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "Form DAM");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "Released" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", "Form DAM");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
@@ -743,9 +743,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Check doc Draft status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", `${DAMDocument}`);
-      cy.get("#HeaderInfo-docId").contains("DAM-").then((x) => {
+      cy.arVerifyStatus({ status: "DRAFT" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", `${DAMDocument}`);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
@@ -965,9 +965,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Check doc rev 1 released status", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", `${DAMDocument}`);
-      cy.get("#HeaderInfo-docId").contains("DAM-").then((x) => {
+      cy.arVerifyStatus({ status: "Released" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", `${DAMDocument}`);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
@@ -992,9 +992,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Check revised doc released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", `${DAMDocument}`);
-      cy.get("#HeaderInfo-docId").contains("DAM-").then((x) => {
+      cy.arVerifyStatus({ status: "Released" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", `${DAMDocument}`);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
@@ -1363,9 +1363,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Check approval request document draft status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", `${ARDocument}`);
-      cy.get("#HeaderInfo-docId").contains("AR-").then((x) => {
+      cy.arVerifyStatus({ status: "DRAFT" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", `${ARDocument}`);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -1513,13 +1513,13 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify AR status is 'In Review'", () => {
-      cy.arVerifyStatus({ status: "In Review" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Check AR status in review and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "In Review");
-      cy.get("#HeaderInfo-name").should("have.text", `${ARDocument}`);
-      cy.get("#HeaderInfo-docId").contains("AR-").then((x) => {
+      cy.arVerifyStatus({ status: "IN REVIEW" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", `${ARDocument}`);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -1771,9 +1771,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Check Approval Request closed status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Closed");
-      cy.get("#HeaderInfo-name").should("have.text", `${ARDocument}`);
-      cy.get("#HeaderInfo-docId").contains("AR-").then((x) => {
+      cy.arVerifyStatus({ status: "CLOSED" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", `${ARDocument}`);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);

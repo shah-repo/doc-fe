@@ -23,7 +23,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
               <Box
                 height="100%"
                 bgcolor={Colors.white}
-                maxWidth={(!leftPanelState?.showLeftPanelEditor ||  !leftPanelState) ? 315 : 300}
+                maxWidth={(!leftPanelState?.showLeftPanelEditor ||  !leftPanelState) ? "max-content" : 300}
                 boxShadow= {`inset -1px 0px 0px ${Colors.lightest_grey1}`}
                 zIndex={1202}
               >

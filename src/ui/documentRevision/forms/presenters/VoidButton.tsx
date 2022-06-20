@@ -51,7 +51,8 @@ const VoidButton: React.FunctionComponent<Props> = ({
       </Box>
       {isNewLayout ? (
         renderAsButton ? <StyledButton
-          color="primary" id="void" onClick={dialog.open}
+          color="primary" id="void-button"
+          data-cy="void-button" onClick={dialog.open}
           disabled={async.asyncState.status === AsyncStatus.Active}>
           <Text translation="common.void" />
         </StyledButton> : <StyledMenuListItem
@@ -63,14 +64,16 @@ const VoidButton: React.FunctionComponent<Props> = ({
             <VoidDocumentIcon />
           </StyledMenuListIcon>
           <StyledMenuListItemText
-            id="void"
+            id="void-button"
+            data-cy="void-button"
             primary={<Text translation="common.void" />}
             onClick={dialog.open}
           />
         </StyledMenuListItem>
       ) : (
         <Button
-          id="void"
+          id="void-button"
+          data-cy="void-button"
           variant="outlined"
           color="secondary"
           onClick={dialog.open}

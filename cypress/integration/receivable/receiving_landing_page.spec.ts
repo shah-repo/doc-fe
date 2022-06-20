@@ -1164,9 +1164,9 @@ context("Receiving landing page test", () => {
     });
 
     it(`Verify receiving can be opened`, () => {
-      cy.get("#HeaderInfo-docId").should("not.exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("not.exist");
       cy.dlSelectFirstDocument();
-      cy.get("#HeaderInfo-docId").should("exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("exist");
       cy.navigToReceivableList();
       cy.get("div[role=dialog]").should("not.exist");
     });
