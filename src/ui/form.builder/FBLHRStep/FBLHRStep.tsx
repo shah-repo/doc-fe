@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Avatar, Badge, Box, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
 import { ReactComponent as CollapseMoreIcon } from "../../../assets/images/CollapseMoreIcon.svg";
 import { ReactComponent as ExpandMoreIcon } from "../../../assets/images/ExpandMoreIcon.svg";
+import { ReactComponent as OperatorApprovedIcon } from "../../../assets/images/OperatorApproved.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
@@ -276,7 +277,19 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
                   <ListItemAvatar>
                     {e.user.avatar ? (
-                      <Avatar alt={e.user?.name} src={e.user?.avatar} />
+                      <Badge
+                        overlap="circle"
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                        badgeContent={
+                          getStatusInfo(lhrStepState?.approvals, e.stepId)
+                            ?.status === "APPROVED"
+                         && <OperatorApprovedIcon />}
+                      >
+                        <Avatar alt={e.user?.name} src={e.user?.avatar} />
+                      </Badge>
                     ) : (
                       <Avatar style={getAvtarStyle(e.user.initialColor)}>
                         {getInitalsFromName(e.user?.name)}
