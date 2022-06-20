@@ -1059,6 +1059,13 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it(`Count for DUE IN 7 DAYS should be 0`, () => {
+        cy.get("div[id=\"full-width-tabpanel-2\"]")
+          .children()
+          .find("li")
+          .should("have.length", 0);
+      });
+
       it(`Line items for User 1 and 2 should be removed from Due in 7 Days`, () => {
         cy.get("div[id=\"full-width-tabpanel-2\"]")
           .children()
