@@ -75,6 +75,7 @@ export const styles = makeStyles((theme: Theme) =>
     meqListItem: {
       display: "block",
       paddingTop: 0,
+      cursor: "pointer",
     },
     dividerMargin: {
       marginTop: 10,
@@ -93,6 +94,12 @@ export const styles = makeStyles((theme: Theme) =>
     },
     jumpToBolckpadding: {
       paddingTop: 22,
+    },
+    jumpToTextPadding: {
+      paddingLeft: 10, paddingTop: 7,
+    },
+    jumpToTextMargin: {
+      marginLeft: 8,
     },
     panelSummary: {
       "fontWeight": 600,

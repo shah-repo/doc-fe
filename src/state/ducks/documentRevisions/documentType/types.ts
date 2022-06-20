@@ -123,9 +123,13 @@ export enum DOC_TYPE_GROUP_OPTION {
   TABS_NEW_COMPANY = "TABS_NEW_COMPANY",
   TABS_MAINTENANCE_RECORD = "TABS_MAINTENANCE_RECORD",
   TABS_SEED = "TABS_SEED",
-  TABS_DYNAMIC_FORM = "TABS_DYNAMIC_FORM"
+  TABS_DYNAMIC_FORM = "TABS_DYNAMIC_FORM",
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
+
+export enum TabTypeOptions {
+  TABS_MEQ = "MEQ"
+}
 
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export const GroupWithGroupOptions =  {

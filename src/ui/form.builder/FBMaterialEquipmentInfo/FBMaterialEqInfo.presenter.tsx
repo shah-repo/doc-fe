@@ -22,7 +22,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
   const [isMaterialPannel, setIsMaterialPannel] = React.useState(false);
   const [isEquipmentPannel, setIsEquipmentPannel] = React.useState(false);
   const updatePanelState = (text) => (event: React.MouseEvent) => {
-    const result = text === "meq.collapse.all" ? false : true;
+    const result = text === "common.collapse.all" ? false : true;
     setIsMaterialPannel(result);
     setIsEquipmentPannel(result);
     event.preventDefault();
@@ -36,7 +36,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
   };
   const genRateMaterialDetail = () => (map(materialData.materials, (o, topIndex: number) =>
     <>
-      <ListItem  className={classes.meqListItem}>
+      <ListItem  className={classes.meqListItem} key={o.docId}>
         <ListItemText
           className={classes.fontNormal14}>{o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
         <ListItemText className={classes.fontNormal12} >
@@ -53,8 +53,8 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
   ));
   const genRateEquipmentDetail = () => (map(materialData.equipment, (o, topIndex: number) =>
     <>
-      <ListItem  className={classes.meqListItem}>
-        <ListItemText className={classes.fontNormal14} style={{ color: Colors.almost_black }}>
+      <ListItem  className={classes.meqListItem} key={o.docId}>
+        <ListItemText className={classes.fontNormal14}>
           {o.docId} {o.title}</ListItemText>
         <ListItemText className={classes.fontNormal12}>
           {
@@ -87,17 +87,15 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
           <Box mb={1} >
             <Accordion className={classes.panelBorder} expanded={isMaterialPannel} >
               <AccordionSummary onClick={() => setIsMaterialPannel(!isMaterialPannel)}
-                className={classes.panelSummary}
-                style={{ color: isMaterialPannel ? Colors.navy : "inherit", cursor: "pointer" }} expandIcon={
+                className={`${classes.panelSummary} ${classes.tabCursor}`}
+                style={{ color: isMaterialPannel ? Colors.navy : "inherit" }} expandIcon={
                   isMaterialPannel ? <ExpandIcon
                     fontSize="small"
                     className= {classes.expandIconStyle}
                   /> :
                     <CollapseIcon
                       fontSize="small"
-                      className= {classes.tabCursor}style={{
-                        cursor: "pointer",
-                      }}
+                      className= {classes.tabCursor}
                     />
                 }>
                 <Grid container spacing={3}>
@@ -121,8 +119,8 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
           <Box>
             <Accordion className={classes.panelBorder} expanded={isEquipmentPannel}>
               <AccordionSummary onClick={() => setIsEquipmentPannel(!isEquipmentPannel)}
-                className={classes.panelSummary}
-                style={{ color: isEquipmentPannel ? Colors.navy : "inherit", cursor: "pointer" }}
+                className={`${classes.panelSummary} ${classes.tabCursor}`}
+                style={{ color: isEquipmentPannel ? Colors.navy : "inherit" }}
                 expandIcon={
                   isEquipmentPannel ? <ExpandIcon
                     fontSize="small"
@@ -156,18 +154,20 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
         <Grid item xs={3}>
           <Box className={classes.jumpToBolckpadding}>
             <Box className={classes.fontText}><SMText label={"common.jump.to"} /></Box>
-            <Box style={{ background: isMaterialPannel ? Colors.light_cream_blue : "inherit", marginLeft: 8 }}>
+            <Box className={classes.jumpToTextMargin}
+              style={{ background: isMaterialPannel ? Colors.light_cream_blue : "inherit" }}>
               <p  className={classes.paraGraphMaterial}   onClick={() =>
               { setIsMaterialPannel(true); setIsEquipmentPannel(false); }} >
-                <Box style={{ paddingLeft: 10, paddingTop: 7 }}>
+                <Box className={classes.jumpToTextPadding}>
                   <SMText label={"form.builder.materials|s"} />
                 </Box>
               </p>
             </Box>
-            <Box mb={1} style={{ background: isEquipmentPannel ? Colors.light_cream_blue : "inherit", marginLeft: 8  }}>
+            <Box mb={1} className={classes.jumpToTextMargin}
+              style={{ background: isEquipmentPannel ? Colors.light_cream_blue : "inherit" }}>
               <p  className={classes.paraGraphEq}
                 onClick={() => { setIsMaterialPannel(false); setIsEquipmentPannel(true); }} >
-                <Box style={{ paddingLeft: 10, paddingTop: 7 }}>
+                <Box className={classes.jumpToTextPadding}>
                   <SMText label={"form.builder.equipment"} />
                 </Box>
               </p>

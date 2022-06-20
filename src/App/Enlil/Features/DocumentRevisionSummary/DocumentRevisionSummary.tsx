@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupType, TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
@@ -42,11 +42,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       type: "TRAINING",
     }];
   }
-  if (tabConfig && group === "LHR") {
+  if (tabConfig && group === DOC_TYPE_GROUP.LHR) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
-      tabId: "MEQ",
-      type: "MEQ",
+      tabId: TabTypeOptions.TABS_MEQ,
+      type: TabTypeOptions.TABS_MEQ,
     }];
   }
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
