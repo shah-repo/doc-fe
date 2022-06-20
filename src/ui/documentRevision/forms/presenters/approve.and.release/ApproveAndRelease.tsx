@@ -330,7 +330,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           >
             <Text message={isRecord ? "record.finalize.and.release" : label} />
           </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
-            {/* <StyledMenuListIcon> */}
             <StyledMenuListItemText
               id="ApproveAndRelease-button"
               data-cy="ApproveAndRelease-button"
