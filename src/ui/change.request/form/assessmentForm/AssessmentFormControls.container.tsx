@@ -57,6 +57,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
           transition={transition}
           changeRequestId={changeRequest.id}
           buttonProps={buttonProps}
+          renderAsButton={true}
           label={`changeRequest.transition.${transition}`}
         />;
 
@@ -113,6 +114,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
       {renderDialogButton(canApproveOrReject, "reject", { disabled: formHasErrors })}
       {renderDialogButton(canApproveOrReject, "approve", { disabled: formHasErrors })}
       {renderDialogButton(canClose, "closed")}
+      {renderAlertDialogButton(canWithdraw, "withdrawn")}
       <HeaderMenu>
         {canSendToReview && <AssessmentFormVoidContainer changeRequest={changeRequest} />}
         {
@@ -121,7 +123,6 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
              renderAsButton={false} />
         }
         <ExportARToEmail {...{ id: changeRequest.id, renderAsButton: false }}/>
-        {renderAlertDialogButton(canWithdraw, "withdrawn")}
       </HeaderMenu>
     </>
   );

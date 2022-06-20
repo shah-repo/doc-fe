@@ -1,6 +1,7 @@
 import Button, { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
 import { SM } from "../../../App";
+import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
@@ -18,6 +19,7 @@ interface Props {
   label: string;
   transition: ChangeRequestTransition;
   changeRequestId: string;
+  renderAsButton?: boolean;
 }
 
 const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
@@ -25,6 +27,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   label,
   changeRequestId,
   transition,
+  renderAsButton = false,
 }) => {
   const isNewLayout = SM.isNewCRLayout;
   const dialog = useDialog();
@@ -41,7 +44,11 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   };
   return (
     <>
-      {isNewLayout ? (
+      {isNewLayout ? (renderAsButton ? <StyledButton
+        color="primary"  data-cy="change.request.withdraw.alert"
+        id="OwnerChangerPresenter-changeOwner" onClick={dialog.open}>
+        <Text message={label} />
+      </StyledButton> :
         <StyledMenuListItem button alignItems="flex-start">
           <StyledMenuListIcon>
             <WithdrawSubmissionIcon />
