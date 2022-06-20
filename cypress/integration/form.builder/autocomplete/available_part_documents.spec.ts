@@ -179,6 +179,10 @@ context("Autocomplete 'Available Part Documents' test", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
         });
 
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();

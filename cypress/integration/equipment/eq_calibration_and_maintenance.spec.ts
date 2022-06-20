@@ -128,6 +128,10 @@ context("Equipment maintenance and calibration", () => {
       cy.unClick();
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Add preventative maintenance section", () => {
       it("Click add a field", () => {
         cy.fbClickAddNewHiddenBtn();
@@ -174,7 +178,7 @@ context("Equipment maintenance and calibration", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
 
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
 

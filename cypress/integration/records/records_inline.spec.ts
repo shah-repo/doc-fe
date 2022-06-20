@@ -201,6 +201,12 @@ context("Record inline Flow", () => {
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
+    });
+
+    context("Create document", () => {
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
@@ -208,22 +214,20 @@ context("Record inline Flow", () => {
       });
 
       it("Add textfield", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectTextField();
-        cy.fbAddLabelName({ name: "Textfield for inline" });
-        cy.fbAddField();
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add inline approval", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.fbSelectInlineApproval();
-        });
-        cy.get("[name=\"label\"]").arrowType("Inline field");
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
-        cy.fbAddField();
+        cy.fbAddNewFieldButton();
       });
 
       it("Add Checkbox group", () => {
@@ -237,9 +241,9 @@ context("Record inline Flow", () => {
       });
 
       it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectTextField();
-        cy.fbAddLabelName({ name: "TEXT FIELD" });
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
         cy.fbFieldRequiredIfIn({ name: "Checkbox" });
@@ -248,16 +252,16 @@ context("Record inline Flow", () => {
       });
 
       it("Add second textfield", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectTextField();
-        cy.fbAddLabelName({ name: "Second textfield for inline" });
-        cy.fbAddField();
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "Second textfield for inline" });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add second inline approval", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectInlineApproval();
-        cy.get("[name=\"label\"]").arrowType("Second inline field");
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "Second inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
@@ -276,12 +280,6 @@ context("Record inline Flow", () => {
           fromSelector: ".MuiBox-root>div>ul>li:eq(0)",
           toSelector: ".MuiBox-root>div>ul>li:eq(-1)",
         });
-      });
-    });
-
-    context("Create document", () => {
-      it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Verify form Draft status and click on Send To Email", () => {
