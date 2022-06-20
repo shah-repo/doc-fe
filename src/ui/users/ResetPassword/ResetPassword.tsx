@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect, RouteComponentProps, useHistory } from "react-router-dom";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { HOME_URL, RESET_PASSWORD_SUCCESSFUL_URL } from "../../constants/urls";
+import { useDispatch } from "react-redux";
+import { RouteComponentProps, useHistory } from "react-router-dom";
+import { authActions } from "../../../state/ducks/auth";
+import { RESET_PASSWORD_SUCCESSFUL_URL } from "../../constants/urls";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import useAsync from "../../hooks/useAsync";
 import { ResetPasswordValues } from "../types";
@@ -13,7 +13,6 @@ type Props = Pick<RouteComponentProps, "location">;
 const ResetPassword: React.FunctionComponent<Props> = ({
   location,
 }) => {
-  const isUserAuth = useSelector(authSelectors.isAuthenticated);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -37,10 +36,6 @@ const ResetPassword: React.FunctionComponent<Props> = ({
       ),
     );
   };
-
-  if (!isUserAuth) {
-    return <Redirect to={{ pathname: HOME_URL }} />;
-  }
 
   return (
     <ResetPasswordContainer
