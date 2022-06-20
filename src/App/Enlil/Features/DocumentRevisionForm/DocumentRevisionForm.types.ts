@@ -5,7 +5,6 @@ import { Id } from "../../../../state/ducks/common/types";
 import { DocumentType, DocumentTypeByIdState, TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { Document, DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../../state/ducks/documents";
-import { OptionType } from "../../../../ui/components/forms/fields/Autocomplete/types";
 import { DocumentCloneType } from "../../../../ui/documentRevision/Clone.container";
 import { DocumentRevisionFormValues } from "../../../../ui/documentRevision/forms/types";
 import { FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "../../../../ui/form.builder";
@@ -31,7 +30,6 @@ export type DocumentRevisionFormProps =
   isDisabled: boolean;
   formValues: FormikProps<DocumentRevisionFormValues>;
   documentRevisions?: DocumentRevision[];
-  availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
   proposedDocId?: string;
   doNotPrompt?: boolean;

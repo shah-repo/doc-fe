@@ -22,7 +22,6 @@ import { isOperator } from "../DocumentRevisionDisplay.container";
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
-import AvailableReferencesField from "./presenters/AvailableReferences";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
@@ -38,15 +37,12 @@ interface Props
 {
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
-  availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
   proposedDocId?: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   documentTypesById: DocumentTypeByIdState;
   canChangeOwnerShip: boolean;
   type?: DocumentCloneType;
-  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
-  isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
@@ -59,7 +55,6 @@ interface Props
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
-  availableReferences,
   showRevisionTypeChange,
   proposedDocId,
   values,
@@ -73,12 +68,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   setFieldValue,
   type,
-  isNewVersion = false,
   showAdministrativeAndVoidChange,
   pmFormId,
   releasedDocRev,
   redlineActive,
-  bannerPortal,
   mode,
   doNotPrompt,
   onDirtyFlagChange,
@@ -126,7 +119,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
-  const documentReferences = documentRevision?.referenceTo;
 
   useEffect(() => {
     if (!redlineActive) {
@@ -171,12 +163,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDocRevStatusDraft, values.document, values.name]);
-
-  useEffect(() => {
-    if (!isSubmitting) {
-      return;
-    }
-  }, [isSubmitting]);
 
   useEffect(() => {
     if (revisionChangeType) {
@@ -240,18 +226,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               }}
             />
           </Grid>
-          {type === "none" && (
-            <Grid item xs={4}>
-              <AvailableReferencesField
-                availableReferences={availableReferences}
-                documentReferences={documentReferences}
-                name="referenceTo"
-                label="documentRevision.form.references"
-                disabled={isDisabledInput}
-                documentGroupOptions={groupOptions}
-              />
-            </Grid>
-          )}
         </Grid>
         <Grid container spacing={3}>
           <Grid item xs={4}>
