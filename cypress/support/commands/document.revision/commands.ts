@@ -170,7 +170,7 @@ Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; 
 
 Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
   cy.dlClearFilters();
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevPreview, () => {
     cy.get("tr.k-master-row").contains(params.item).arrowClick();
   });
   cy.progressBarShouldNotExist();
