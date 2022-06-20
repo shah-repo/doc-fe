@@ -176,7 +176,7 @@ context("Usage report document counter for new revisions", () => {
     });
   });
 
-  context("Verify number of users", () => {
+  context("Verify Users Report attributes", () => {
     it("Verify total users report exist", () => {
       const companyKey = "Enlil Customer (enlil.io)";
       const registeredUsersKey = "Registered Users";
@@ -186,6 +186,72 @@ context("Usage report document counter for new revisions", () => {
       assert.exists(total[uniqueUsersKey]);
       assert.exists(total[registeredUsersKey]);
       assert.exists(total[companyKey]);
+    });
+  });
+
+  context("Verify All Companies Report attributes", () => {
+    it("Verify different document types", () => {
+      const docRecordItemKey = "Doc/Record/Items";
+      const differentTypes = [
+        "Parts",
+        "Equipment",
+        "Supplier",
+        "Purchase Order",
+        "Receiving",
+        "EB",
+        "LHR",
+        "LOT",
+        "Records",
+        "Documents",
+        "Approval Requests",
+        "Training Records",
+      ];
+
+      for (let i = 0; i < differentTypes.length; i++) {
+        assert.oneOf(allCompaniesReportJSON[i][docRecordItemKey], differentTypes);
+      }
+    });
+  });
+
+  context("Verify Report Per Company attributes", () => {
+    it("Verify different document types", () => {
+      const docRecordItemKey = "";
+      const releasedCompletedKey = createdCompany.name;
+      const draftPendingKey = "__EMPTY";
+      const differentTypes = [
+        "Parts",
+        "Equipment",
+        "Supplier",
+        "Purchase Order",
+        "Receiving",
+        "EB",
+        "LHR",
+        "LOT",
+        "Records",
+        "Documents",
+        "Approval Requests",
+        "Training Records",
+      ];
+
+      assert.strictEqual(reportPerCompanyJSON[0][releasedCompletedKey], "Released/Completed");
+      assert.strictEqual(reportPerCompanyJSON[0][draftPendingKey],  "Draft/Pending");
+
+      for (let i = 1; i <= differentTypes.length; i++) {
+        assert.oneOf(reportPerCompanyJSON[i][docRecordItemKey], differentTypes);
+      }
+    });
+  });
+
+  context("Verify Session Time report attributes", () => {
+    it("Verify total time spent in system", () => {
+      const timeSpentInSystemKey = "Time spent in the system";
+      const textOfTimeSpentInTheSystem = "Average Session Time (minutes)";
+      const valueOfTimeSpentInSystemKey = "__EMPTY";
+
+      const total = sessionTimeJSON[sessionTimeJSON.length - 1];
+      assert.exists(total[timeSpentInSystemKey]);
+      assert.strictEqual(total[timeSpentInSystemKey], textOfTimeSpentInTheSystem);
+      assert.exists(total[valueOfTimeSpentInSystemKey]);
     });
   });
 });
