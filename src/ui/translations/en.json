@@ -26,7 +26,6 @@
   "reset.enter.current.password": "Enter current password",
   "reset.enter.email": "Email",
   "reset.confirm.new.password": "Confirm new password",
-  "reset.password.info": "Password must contain a minimum of 1 lower case letter [a-z] and at least 1 upper case, numeric, and special character.",
   "reset.password.successful": "Password Reset Successfully!",
   "reset.password.successful.info": "You will be taken back to the login screen.",
   "reset.password.successful.info.link": "Click here or below if it's taking too long.",

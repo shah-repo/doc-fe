@@ -37,11 +37,6 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             <Text translation={"reset.choose.new.password"} />
           </Typography>
         </Box>
-        <Box display="flex" alignSelf="flex-start" data-cy="ResetPassword-passwordInfo">
-          <Typography variant="h5"className={classes.passwordInfo}>
-            <Text translation={"reset.password.info"} />
-          </Typography>
-        </Box>
         <Form className={classes.formStyle}>
           <FormMessage asyncState={asyncState} className={classes.status} id="ResetPassword-formError"/>
           <InputField
