@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { concat, each, isEmpty, sum } from "lodash";
+import { concat, each, isEmpty, sum, uniq } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import {
@@ -69,7 +69,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
         {!isEmpty(completed) && (
           <>
             <Box component="span" fontWeight={600}>
-              Step {completed?.sort().map((e) => e + ",")}
+              Step {uniq(completed)?.sort().map((e) => e + ",")}
             </Box>
             <Box component="span" fontWeight={400}>
               &nbsp;completed.&nbsp;
@@ -79,7 +79,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
         {!isEmpty(inprogress) && (
           <>
             <Box component="span" fontWeight={600}>
-              Step {inprogress?.sort().map((e) => e + ",")}
+              Step {uniq(inprogress)?.sort().map((e) => e + ",")}
             </Box>
             <Box component="span" fontWeight={400}>
               &nbsp;in progress...
