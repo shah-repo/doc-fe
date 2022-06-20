@@ -97,6 +97,10 @@ context("FORM Field Upload test", () => {
       cy.unClick();
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Create FORM document with File Upload fields", () => {
       it("Add File Upload", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();

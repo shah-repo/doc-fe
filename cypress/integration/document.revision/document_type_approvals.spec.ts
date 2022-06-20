@@ -574,7 +574,7 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Enter description 'POAM test'", () => {
         SystemRequirement("REQ-1290");
-        cy.drEnterDocumentDescriptionWithWait({ description: "PO enfocment test" });
+        cy.drEnterDocumentDescription({ description: "PO enfocment test" });
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -614,7 +614,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Fill document description", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "Suppliers address" });
+        cy.drEnterDocumentDescription({ description: "Suppliers address" });
       });
 
       it("Add approver to approvals", () => {

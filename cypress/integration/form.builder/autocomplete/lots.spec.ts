@@ -186,6 +186,10 @@ context("Autocomplete 'Lots' test", () => {
         cy.drSelectOutputDocumentType({ documentType: "Component Specification Lot" });
       });
 
+      it("Click create a document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Add Text field with range", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });

@@ -96,6 +96,10 @@ context("FORM Field test", () => {
       cy.unClick();
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Create FORM document with Form fields", () => {
       it("Add TextField", () => {
         SystemRequirement("FB-0020", "FB-0030");
@@ -780,7 +784,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter description", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "test description" });
+        cy.drEnterDocumentDescription({ description: "test description" });
       });
 
       it("Enter Quantity field value", () => {

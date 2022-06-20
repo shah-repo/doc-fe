@@ -353,7 +353,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Enter description 'Green Record Document Revision description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "Green ecord Document Revision description" });
+      cy.drEnterDocumentDescription({ description: "Green ecord Document Revision description" });
     });
 
     it("Add approval", () => {

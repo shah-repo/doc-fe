@@ -151,13 +151,13 @@ context("Regular Records test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Verify approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
-
       context("Creates document and releases it", () => {
         it("Click create document after filling document", () => {
           cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Verify approvals field is automatically added", () => {
+          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
         it("Approve and Release document", () => {
