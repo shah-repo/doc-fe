@@ -101,48 +101,33 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiInputBase: {
     root: {
       "fontSize": "0.8rem",
-      "fontFamily": "Sora, sans-serif;",
-      "&$focused input": {
-        backgroundColor: Colors.white,
-        border: `1px solid ${Colors.dodger_blue}`,
-      },
-      "&.MuiAutocomplete-inputRoot": {
-        "transition": appTheme.transitions.create("all"),
-        "&:hover": {
-          backgroundColor: Colors.background_white,
-        },
-        "& fieldset, &:hover fieldset": {
-          border: `1px solid ${Colors.mild_wind_blue}`,
-        },
-        "&$focused": {
-          backgroundColor: Colors.white,
-        },
-        "&$focused input": {
-          border: "none",
-        },
-        "&$focused fieldset": {
-          border: `1px solid ${Colors.dodger_blue}`,
-        },
-      },
-    },
-    input: {
-      "fontSize": "0.8rem",
+      "fontFamily": "Sora, sans-serif",
+      "backgroundColor": Colors.white,
+      "border": `1px solid ${Colors.mild_wind_blue}`,
       "borderRadius": "4px",
-      "borderColor": Colors.mild_wind_blue,
       "transition": appTheme.transitions.create("all"),
-      "&:hover": {
+      "&:not($focused):not($disabled):hover": {
         backgroundColor: Colors.background_white,
       },
-      "&.Mui-disabled": {
-        backgroundColor: Colors.white,
+      "&$focused": {
+        borderColor: Colors.dodger_blue,
+      },
+      "&$disabled": {
+        backgroundColor: Colors.whitest_grey,
+      },
+      "& fieldset": {
+        border: "none",
       },
     },
   },
   MuiSelect: {
     root: {
-      fontSize: "0.8rem",
-      lineHeight: "1.2rem",
-      fontFamily: "Sora, sans-serif;",
+      "fontSize": "0.8rem",
+      "lineHeight": "1.2rem",
+      "fontFamily": "Sora, sans-serif;",
+      "&$disabled": {
+        backgroundColor: Colors.whitest_grey,
+      },
     },
     icon: {
       right: "10px",
@@ -150,6 +135,16 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     select: {
       paddingLeft: appTheme.spacing(0.5),
       borderRadius: "4px",
+    },
+  },
+  MuiRadio: {
+    root: {
+      "&:hover": {
+        background: "none !important",
+      },
+      "&:not($checked):not($disabled):hover circle": {
+        fill: Colors.background_white,
+      },
     },
   },
   MuiTooltip: {

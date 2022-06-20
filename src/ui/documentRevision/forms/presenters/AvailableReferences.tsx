@@ -213,7 +213,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                placeholder={intl.formatMessage({ id: "common.select.placeholder" })}
+                placeholder={value.length ? undefined : intl.formatMessage({ id: "common.select.placeholder" })}
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (

@@ -303,7 +303,7 @@ context("PO approval test", () => {
     });
 
     it("Enter description 'POAM test", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "POAM testing description" });
+      cy.drEnterDocumentDescription({ description: "POAM testing description" });
     });
 
     it("Add required order date", () => {
@@ -362,7 +362,7 @@ context("PO approval test", () => {
     });
 
     it("Enter description 'POAM test", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
+      cy.drEnterDocumentDescription({ description: "POAM test" });
     });
 
     it("Click on 'Add item' button", () => {

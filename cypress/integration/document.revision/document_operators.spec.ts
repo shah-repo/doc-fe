@@ -223,6 +223,10 @@ context("Document Operators Access Test", () => {
       cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Test Part");
     });
 
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Click on 'Add a field'", () => {
       cy.fbAddNewFieldWhenHidden();
     });
@@ -254,6 +258,7 @@ context("Document Operators Access Test", () => {
     it("Add 'Text Field' field", () => {
       cy.fbAddNewFieldButton();
     });
+
 
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
