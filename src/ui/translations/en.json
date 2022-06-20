@@ -435,6 +435,10 @@
   "common.go.back": "Go back",
   "common.log.off": "Log off",
   "common.extend": "Extend",
+  "common.load.more": "Load More",
+  "common.expand.all" : "Expand All",
+  "common.collapse.all" : "Collapse All",
+  "common.jump.to" : "Jump To",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -1308,12 +1312,6 @@
   "tabId.general": "General",
   "tabId.training": "Training",
   "tabId.calpmhistory":"Cal/PM History",
-  "common.load.more": "Load More",
-  "meq.expand.all" : "Expand All",
-  "meq.collapse.all" : "Collapse All",
-  "meq.material" : "Material",
-  "meq.equipment" : "Equipment",
-  "meq.jump.to" : "Jump To",
   "meq.chip.nextCalDate" : "Next Callibration Due :",
   "meq.chip.prevMaintance" : "Preventive Maintenance Due : "
 }

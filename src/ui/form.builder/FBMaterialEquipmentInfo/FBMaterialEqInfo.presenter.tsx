@@ -28,15 +28,15 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
     event.preventDefault();
   };
   const  predictExpandCollapseText = () => {
-    let text = "meq.expand.all";
+    let text = "common.expand.all";
     if (isMaterialPannel && isEquipmentPannel) {
-      text = "meq.collapse.all";
+      text = "common.collapse.all";
     }
     return text;
   };
   const genRateMaterialDetail = () => (map(materialData.materials, (o, topIndex: number) =>
     <>
-      <ListItem  style={{ display: "block", paddingTop: 0  }}>
+      <ListItem  className={classes.meqListItem}>
         <ListItemText
           className={classes.fontNormal14}>{o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
         <ListItemText className={classes.fontNormal12} >
@@ -47,13 +47,13 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
             ))
           }
         </ListItemText>
-        {++topIndex < materialData.materials.length && <Divider style={{ marginTop: 10 }} />}
+        {++topIndex < materialData.materials.length && <Divider className={classes.dividerMargin} />}
       </ListItem>
     </>
   ));
   const genRateEquipmentDetail = () => (map(materialData.equipment, (o, topIndex: number) =>
     <>
-      <ListItem  style={{ display: "block",  paddingTop: 0  }}>
+      <ListItem  className={classes.meqListItem}>
         <ListItemText className={classes.fontNormal14} style={{ color: Colors.almost_black }}>
           {o.docId} {o.title}</ListItemText>
         <ListItemText className={classes.fontNormal12}>
@@ -69,7 +69,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
           + getFormattedDateString(o.nextPm, MomentFormats.BriefDate) : ""} />
           }
         </ListItemText>
-        {++topIndex < materialData.equipment.length && <Divider style={{ marginTop: 10 }} />}
+        {++topIndex < materialData.equipment.length && <Divider className={classes.dividerMargin} />}
       </ListItem>
     </>
   ));
@@ -80,11 +80,11 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
       <Grid container spacing={3}>
         <Grid item xs={9}>
           <Box mb={1}>
-            <p style={{ color: Colors.navy, cursor: "pointer" }}  className={classes.fontNormal}
+            <p className={classes.meqAccordianHeading}
               onClick={updatePanelState(predictExpandCollapseText())} >
               <SMText label={ predictExpandCollapseText()} /></p>
           </Box>
-          <Box mb={1} className={classes.expandCollapseText}>
+          <Box mb={1} >
             <Accordion className={classes.panelBorder} expanded={isMaterialPannel} >
               <AccordionSummary onClick={() => setIsMaterialPannel(!isMaterialPannel)}
                 className={classes.panelSummary}
@@ -101,8 +101,8 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
                     />
                 }>
                 <Grid container spacing={3}>
-                  <Grid item xs={6} style={{ paddingLeft: 28 }} >
-                    <SMText label={"meq.material"} />
+                  <Grid item xs={6} className={classes.gridHeadingPadding} >
+                    <SMText label={"form.builder.materials|s"} />
                   </Grid>
                   <Grid item xs={6} >
                     <Box className={classes.qunatityText}>
@@ -134,8 +134,8 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
                     />
                 }>
                 <Grid container spacing={3}>
-                  <Grid item xs={6} style={{ paddingLeft: 28 }} >
-                    <SMText label={"meq.equipment"} />
+                  <Grid item xs={6} className={classes.gridHeadingPadding} >
+                    <SMText label={"form.builder.equipment"} />
                   </Grid>
                   <Grid item xs={6} >
                     <Box className={classes.qunatityText}>
@@ -154,13 +154,13 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
           </Box>
         </Grid>
         <Grid item xs={3}>
-          <Box style={{ paddingTop: 22 }}>
-            <Box className={classes.fontText}><SMText label={"meq.jump.to"} /></Box>
+          <Box className={classes.jumpToBolckpadding}>
+            <Box className={classes.fontText}><SMText label={"common.jump.to"} /></Box>
             <Box style={{ background: isMaterialPannel ? Colors.light_cream_blue : "inherit", marginLeft: 8 }}>
               <p  className={classes.paraGraphMaterial}   onClick={() =>
               { setIsMaterialPannel(true); setIsEquipmentPannel(false); }} >
                 <Box style={{ paddingLeft: 10, paddingTop: 7 }}>
-                  <SMText label={"meq.material"} />
+                  <SMText label={"form.builder.materials|s"} />
                 </Box>
               </p>
             </Box>
@@ -168,7 +168,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
               <p  className={classes.paraGraphEq}
                 onClick={() => { setIsMaterialPannel(false); setIsEquipmentPannel(true); }} >
                 <Box style={{ paddingLeft: 10, paddingTop: 7 }}>
-                  <SMText label={"meq.equipment"} />
+                  <SMText label={"form.builder.equipment"} />
                 </Box>
               </p>
             </Box>

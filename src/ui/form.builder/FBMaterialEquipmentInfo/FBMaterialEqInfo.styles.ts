@@ -3,9 +3,9 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
-    expandCollapseText: {
-      color: "red",
-    },
+    // expandCollapseText: {
+    //   color: "red",
+    // },
     panelBorder: {
       marginBottom: 5,
       border: `1px solid ${Colors.gray_goose}`,
@@ -71,6 +71,28 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: 13,
       fontWeight: 400,
       color: Colors.font_gray,
+    },
+    meqListItem: {
+      display: "block",
+      paddingTop: 0,
+    },
+    dividerMargin: {
+      marginTop: 10,
+    },
+    gridHeadingPadding: {
+      paddingLeft: "28px !important",
+    },
+    meqAccordianHeading: {
+      color: Colors.navy,
+      cursor: "pointer",
+      fontWeight: 400,
+      fontSize: 12,
+    },
+    meqMaterialTab: {
+      paddingLeft: 28,
+    },
+    jumpToBolckpadding: {
+      paddingTop: 22,
     },
     panelSummary: {
       "fontWeight": 600,
