@@ -24,7 +24,7 @@ const usageReportTomorrow = momentInPST().add("days", "2").format("YYYY-MM-DDThh
 const usageReportXlsxFileName = "Usage_report_" + fileTimeFormat + ".xlsx";
 const usageReportXlsxFileNameAndPath = "cypress/downloads/" + usageReportXlsxFileName;
 
-context("Usage report document counter for new revisions", () => {
+context("Check Usage report atributes are present in report", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
