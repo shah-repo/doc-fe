@@ -49,6 +49,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   autosaveEnabled,
   mode,
   workspaceState,
+  isCreateUrl,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
@@ -63,7 +64,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   }
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
-
 
   useEffect(() => {
     if (!tabConfig) {
@@ -102,7 +102,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         <SMTemplate
           templateBoxProps={{ stretchY: "100%" }}
           contentBoxProps={{ minHeight: "20%", height: "100%" }}
-          boxProps={{ overflow: "scroll", height: "86vh" }}
+          boxProps={{ overflow: "scroll", height: isCreateUrl ? "calc(100vh - 48px)" :  "86vh" }}
           header={<DocumentRevisionFormHeader type={type}/>}
         >
           <Observer>
