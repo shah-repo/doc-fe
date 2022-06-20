@@ -68,8 +68,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
         {() => (
           <Box
             bgcolor={isPreview ? "transparent" : "white"}
-            border={(isPreview || _textEditorState?.masked) ? 0 : `1px solid ${Colors.clear_blue}`}
-            boxShadow={(isPreview || _textEditorState?.masked) ? 0 : `0 0 0 1px ${Colors.clear_blue}`}
+            border={(isPreview || _textEditorState?.masked) ? 0 : `1px solid ${Colors.dodger_blue}`}
             borderColor={Colors.hint_gray}
             borderRadius={4}
             style={{ display: "grid" }}
@@ -80,7 +79,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
               display="flex"
               style={{ gridArea: "1/1" }}
               borderRadius={4}
-              data-cy={name}
               maxHeight= {150}
               overflow= "auto"
             >
@@ -160,7 +158,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         }
                         return (
                           <Box
-                            bgcolor={hover ? Colors.platinum : Colors.alabaster}
+                            bgcolor={hover ? Colors.whitest_grey : Colors.alabaster}
                             width="100%"
                             minHeight="32px"
                             alignItems="center"
@@ -174,12 +172,12 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                                 style={{
                                   fontWeight: 400,
                                   fontSize: "14px",
-                                  color: _formState?.getValue(name) ? Colors.almost_black : Colors.hint_gray,
+                                  color: _formState?.getValue(name) ? Colors.almost_black : Colors.lightest_grey2,
                                   lineHeight: "25px",
                                   cursor: "pointer",
                                 }}
-                                id="field-description"
-                                data-cy="field-description"
+                                id={`field-${name}`}
+                                data-cy={`field-${name}`}
                               >
                                 {editor?.trim()}
                               </span>

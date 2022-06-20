@@ -239,7 +239,7 @@ context("Approval request implementation tasks", () => {
 
     it("Check approval request status is 'Implementation'", () => {
       SystemRequirement("REQ-0020", "REQ-0730");
-      cy.arVerifyStatus({ status: "Implementation" });
+      cy.arVerifyStatus({ status: "IMPLEMENTATION" });
     });
 
     it("Verify export", () => {
@@ -279,7 +279,7 @@ context("Approval request implementation tasks", () => {
 
     it("Check approval request status is 'Approved'", () => {
       SystemRequirement("REQ-0020", "REQ-0730");
-      cy.arVerifyStatus({ status: "Approved" });
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
   });
 });

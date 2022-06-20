@@ -15,12 +15,25 @@ const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
   customValidationEnabled,
 }) => (
   <FBProvider {...{ dialogState }} >
-    <Box bgcolor={Colors.cultured} px={2} pt={1}>
+    {customValidationEnabled && (
+      <Box display="flex" justifyContent="flex-end" pb={3}>
+        <StyledCancelFBButton
+          variant="outlined"
+          color="primary"
+          startIcon={<ARIcon />}
+          label="Custom Rules"
+          style={{ width: "270px" }}
+          onClick={handleCustomValidation}
+        />
+      </Box>
+    )}
+    <Box bgcolor={Colors.white} px={2} pt={1}>
       <FBDialog />
       <FBRadioGroup
         name="validationMode"
-        label="Validation Mode"
+        label="Rule Mode"
         defaultValue="default"
+        row={false}
         options={[
           {
             text: "Default",
@@ -38,18 +51,6 @@ const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
         labelProps={FBFontStyle.labelProps}
       />
     </Box>
-    {customValidationEnabled && (
-      <Box display="flex" justifyContent="flex-end">
-        <StyledCancelFBButton
-          variant="outlined"
-          color="primary"
-          startIcon={<ARIcon />}
-          label="Custom Validation"
-          style={{ width: "270px" }}
-          onClick={handleCustomValidation}
-        />
-      </Box>
-    )}
     <Box px={2}>
       <FBSchema {...{ schema, schemaState }} />
     </Box>

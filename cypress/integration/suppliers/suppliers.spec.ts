@@ -869,7 +869,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Get the pending approval document Id", () => {
-        cy.arVerifyStatus({ status: "Pending Approval" });
+        cy.arVerifyStatus({ status: "PENDING APPROVAL" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           supDocId = $docIdElement.text();
         });

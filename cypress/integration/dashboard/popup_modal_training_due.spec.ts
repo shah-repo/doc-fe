@@ -625,7 +625,7 @@ context("Email popup modal for training due", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 

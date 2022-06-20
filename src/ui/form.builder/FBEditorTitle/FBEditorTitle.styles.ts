@@ -21,6 +21,7 @@ export default makeStyles((theme: Theme) =>
       "top": "5px",
       "height": "42px",
       "&:hover": {
+        background: "transparent",
         borderRadius: "100px",
       },
     },
@@ -33,11 +34,13 @@ export default makeStyles((theme: Theme) =>
       left: "160px",
     },
     active: {
-      color: Colors.navy,
-      borderRadius: "100px",
-      boxShadow: "0 2px 5px rgba(204, 212, 217, 0.8)",
-      background: Colors.white,
-      padding: "12px 24px",
+      "color": Colors.navy,
+      "borderRadius": "100px",
+      "boxShadow": "0 2px 5px rgba(204, 212, 217, 0.8)",
+      "background": Colors.white,
+      "&:hover": {
+        background: Colors.white,
+      },
     },
     inactive: {
       border: 0,
