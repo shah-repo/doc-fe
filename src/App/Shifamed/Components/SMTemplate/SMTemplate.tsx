@@ -11,6 +11,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
   contentBoxProps,
   leftSidebar,
   rightSidebar,
+  boxProps,
   footer,
   children,
 }) => (
@@ -20,7 +21,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
         {leftSidebar}
       </SMBox>
     )}
-    <SMBox display={"flex"} flexDirection={"column"} flex={5} overflow="scroll">
+    <SMBox flexDirection={"column"} flex={5} {...boxProps}>
       {header && (
         <SMBox {...headerBoxProps}>
           {header}

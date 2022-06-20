@@ -45,4 +45,8 @@ export interface SMTemplateProps {
    * @cfg {BoxProps} Box props for template.
    */
   templateBoxProps?: SMBoxProps;
+  /**
+   * @cfg {BoxProps} Box props for template.
+   */
+  boxProps?: SMBoxProps;
 }

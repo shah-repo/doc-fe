@@ -37,12 +37,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const toggleBtn = () => {
     setFlag(!flag);
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
-    setTimeout(() => {
-      const headerTmpl = document.getElementById("SMHeaderTmpl");
-      const bodyTmpl = document.getElementById("SMBodyTmpl");
-      const restHeight = headerTmpl?.clientHeight ? 150 + (+(headerTmpl?.clientHeight)) : 200;
-      bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
-    }, 100);
   };
   const onAway = () => {
     _textEditorState?.setPreviewMode(true);

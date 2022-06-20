@@ -101,8 +101,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       >
         <SMTemplate
           templateBoxProps={{ stretchY: "100%" }}
-          headerBoxProps={{ maxHeight: "80%" }}
           contentBoxProps={{ minHeight: "20%", height: "100%" }}
+          boxProps={{ overflow: "scroll", height: "86vh" }}
           header={<DocumentRevisionFormHeader type={type}/>}
         >
           <Observer>
