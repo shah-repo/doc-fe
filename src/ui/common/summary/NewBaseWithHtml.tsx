@@ -20,7 +20,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   const [isTextClamped, setIsTextClamped] = useState(false);
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
-  const [editor, setEditor] = useState();
+  const [editor, setEditor] = useState<string>("");
   const [btnText, setBtnText] = useState(viewMore);
   const [flag, setFlag] = useState(false);
 

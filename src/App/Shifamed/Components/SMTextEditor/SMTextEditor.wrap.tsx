@@ -81,7 +81,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     SM.reaction(
       () => _formState?.getValue(name),
       (value) => {
-        const editorState = htmlToEditorState && htmlToEditorState(value);
+        const editorState = htmlToEditorState(value);
         _textEditorState?.setEditorState(editorState);
         showToggleButton && showToggleButton();
       }
