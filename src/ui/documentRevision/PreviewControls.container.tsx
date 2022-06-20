@@ -232,12 +232,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             <WarningIcon style={{ marginRight: 10, width: "20px", height: "20px" }} />
             <Text translation="document.security.warning" />
           </Box>
-          {/* {!isEmailSent &&
-            <Button color="secondary" variant="outlined" onClick={onSubmit}
-              id="PreviewControlsContainer-access" data-cy="PreviewControlsContainer-access" >
-              <Text translation="document.request.access" />
-            </Button>
-          } */}
         </div>
       );
     }
@@ -246,7 +240,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const newRenderNoAccessWarning = () => {
     if (!hasAccess) {
       return (
-        <Box display="flex" style={{ lineHeight: "15px" }}>
+        <Box display="flex">
           <Box alignSelf="center" id="PreviewControlsContainer-warning" color={Colors.white} alignContent="center" >
             <Grid container alignItems="center">
               <Grid item>
@@ -257,16 +251,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               </Grid>
             </Grid>
           </Box>
-          {/* {!isEmailSent && (
-            <StyledButton
-              color="primary"
-              onClick={onSubmit}
-              id="PreviewControlsContainer-access"
-              data-cy="PreviewControlsContainer-access"
-            >
-              <Text translation="document.request.access" />
-            </StyledButton>
-          )} */}
         </Box>
       );
     }
@@ -340,9 +324,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
     accessableButtons.push("outputButton");
   }
-  // if (!hasAccess) {
-  //   accessableButtons.push("nowarning");
-  // }
   if (!isEmailSent && !hasAccess) {
     accessableButtons.push("requestAccess");
   }
@@ -367,32 +348,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   }
   const initialButtons = accessableButtons.length >= 2 ? accessableButtons.slice(0, 2) : accessableButtons;
   const restButtons = accessableButtons.length >= 2 ? accessableButtons.slice(2) : [];
-
-  console.log("Initial Buttons ::", initialButtons);
-  console.log("Rest Buttons ::", restButtons);
-
-  // return (
-  //   <>
-  //     {!isLastVersionObsolete() && renderCloneButton()}
-  //     {(isStatusReleased || isStatusInDraft) && canCopy &&
-  //       <CopyEBButton
-  //         {...{ documentRevision }}
-  //       />}
-  //     {renderOutputButton()}
-  //     {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
-  //     {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-  //       !isNewLayout && renderWithdrawSubmissionButton()}
-  //     {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-  //       isNewLayout && newRenderWithdrawSubmissionButton()}
-  //     <InspectionControlsContainer {...{ documentRevision }} />
-  //     {isExportable && <ExportToEmail
-  //       revisionId={documentRevision.id}
-  //       canAccess={documentRevision.document.canAccess}
-  //     />}
-  //     <DownloadHTML pdf={documentRevision.pdf} />
-  //     <PDFSocket {...{ documentRevision }}/>
-  //   </>
-  // );
 
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>

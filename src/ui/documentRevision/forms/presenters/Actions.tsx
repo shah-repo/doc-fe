@@ -270,9 +270,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const restButtons =
     accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
 
-  console.log("initialButtons ::", initialButtons);
-  console.log("restButtons ::", restButtons);
-
   const renderActionItems = (buttons: string[], renderAsButton: boolean) => (
     <>
       {buttons.includes("cancelButton") && (
