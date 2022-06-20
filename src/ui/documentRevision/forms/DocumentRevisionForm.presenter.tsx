@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, isEmpty } from "lodash";
 import { Observer, observer } from "mobx-react";
@@ -216,25 +216,77 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
           onDirtyFlagChange={onDirtyFlagChange}
         />
-        <DocumentTypeSelect
-          outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
-          isDisabled={isDisabledInput}
-          {...{
-            type,
-            isDocRevStatusDraft,
-            documentTypeId,
-          }}
-        />
-        <DocIdInput
-          document={values.document}
-          {...{
-            isDisabled,
-            documentTypesById,
-            setDocId,
-            documentTypeId,
-            type,
-          }}
-        />
+        <Grid container spacing={3}>
+          <Grid item xs={4}>
+            <DocumentTypeSelect
+              outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
+              isDisabled={isDisabledInput}
+              {...{
+                type,
+                isDocRevStatusDraft,
+                documentTypeId,
+              }}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <DocIdInput
+              document={values.document}
+              {...{
+                isDisabled,
+                documentTypesById,
+                setDocId,
+                documentTypeId,
+                type,
+              }}
+            />
+          </Grid>
+          {type === "none" && (
+            <Grid item xs={4}>
+              <AvailableReferencesField
+                availableReferences={availableReferences}
+                documentReferences={documentReferences}
+                name="referenceTo"
+                label="documentRevision.form.references"
+                disabled={isDisabledInput}
+                documentGroupOptions={groupOptions}
+              />
+            </Grid>
+          )}
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={4}>
+            {/* hack for rerender revision stage */}
+            <Observer>
+              {() => (
+                <>
+                  {_documentRevisionFormState?.forceRender &&
+                  <RevisionStage {...{
+                    isDisabled,
+                    isDocRevFirstDraft,
+                    shouldShowRevStageForDocType,
+                    documentTypeId,
+                    defaultRevisionStage,
+                  }}/>}
+                  {!_documentRevisionFormState?.forceRender &&
+                  <RevisionStage {...{
+                    isDisabled,
+                    isDocRevFirstDraft,
+                    shouldShowRevStageForDocType,
+                    documentTypeId,
+                    defaultRevisionStage,
+                  }}/>}
+                </>
+              )}
+            </Observer>
+          </Grid>
+          <Grid item xs={4}>
+            <RetrainField
+              revisionChangeType={values.revisionChangeType}
+              isDisabled={isDisabledInput}
+              {...{ documentTypeId, isRecord }}
+            />
+          </Grid>
+        </Grid>
         {isEB && <FBEBPart name="childrenParts" />}
         {isPart && documentRevision?.parentParts && (
           <BuildsContainer
@@ -259,42 +311,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isDocRevStatusDraft || isRevised}
           />
         )}
-        {/* hack for rerender revision stage */}
-        <Observer>
-          {() => (
-            <>
-              {_documentRevisionFormState?.forceRender &&
-          <RevisionStage {...{
-            isDisabled,
-            isDocRevFirstDraft,
-            shouldShowRevStageForDocType,
-            documentTypeId,
-            defaultRevisionStage,
-          }}/>}
-              {!_documentRevisionFormState?.forceRender &&
-          <RevisionStage {...{
-            isDisabled,
-            isDocRevFirstDraft,
-            shouldShowRevStageForDocType,
-            documentTypeId,
-            defaultRevisionStage,
-          }}/>}
-            </>
-          )}
-        </Observer>
-        {type === "none" && <AvailableReferencesField
-          availableReferences={availableReferences}
-          documentReferences={documentReferences}
-          name="referenceTo"
-          label="documentRevision.form.references"
-          disabled={isDisabledInput}
-          documentGroupOptions={groupOptions}
-        />}
-        <RetrainField
-          revisionChangeType={values.revisionChangeType}
-          isDisabled={isDisabledInput}
-          {...{ documentTypeId, isRecord }}
-        />
         {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
         <RevisionTypeChange
           isDisabled={isDisabledInput}
