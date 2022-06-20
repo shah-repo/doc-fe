@@ -67,7 +67,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                 onMouseLeave={() => setHover(false)}
               >
                 <Box
-                  display="flex"
                   style={{ gridArea: "1/1" }}
                   borderRadius={4}
                   data-cy={name}
