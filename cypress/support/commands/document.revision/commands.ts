@@ -20,7 +20,6 @@ declare global {
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
-      drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drEnterHtmlText(params: { htmlText: string }): Chainable<Subject>;
@@ -263,17 +262,6 @@ Cypress.Commands.add("drEnterDocumentDescription", (params: { description: strin
   cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
   cy.get("[data-cy=\"description\"]").first().arrowType(params.description);
   cy.unClick();
-});
-
-Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { description: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-    cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").arrowType(params.description);
-    cy.wait(500);
-    cy.get("[data-cy=field-description]>label").arrowClick();
-    cy.unClick();
-  });
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {

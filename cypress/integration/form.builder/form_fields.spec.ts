@@ -780,7 +780,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter description", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "test description" });
+        cy.drEnterDocumentDescription({ description: "test description" });
       });
 
       it("Enter Quantity field value", () => {

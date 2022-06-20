@@ -122,7 +122,7 @@ Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
   cy.get("[data-cy=\"editorConfig.approvers\"]").arrowClick();
   cy.get("[role=option]").contains(params.approverName).arrowClick();
-  cy.get("[role=dialog]>div>h2").arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("fbSelectNavField", (params: { field: string }) => {

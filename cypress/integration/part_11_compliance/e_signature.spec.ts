@@ -409,7 +409,7 @@ context("E-signature test", () => {
     });
 
     it("Enters description 'EB description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "EB description" });
+      cy.drEnterDocumentDescription({ description: "EB description" });
     });
 
     it("Add first approver to EB document", () => {
