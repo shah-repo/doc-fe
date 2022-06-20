@@ -102,7 +102,6 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
         >
           <Text message={isObsolete ? "common.void" : label} />
         </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
-          {/* <StyledMenuListIcon> */}
           <StyledMenuListItemText
             onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
             id="ApproveAndRelease-button"
