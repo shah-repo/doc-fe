@@ -596,7 +596,7 @@ context("Export for LHR", () => {
 
     it("Complete step", () => {
       cy.pmSubmitForApproval();
-      cy.get("#HeaderInfo-status").should("have.text", "In Review");
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("visit the LHR", () => {
@@ -628,7 +628,7 @@ context("Export for LHR", () => {
 
     it("Approve step", () => {
       cy.ebApprove();
-      cy.get("#HeaderInfo-status").should("have.text", "Completed");
+      cy.arVerifyStatus({ status: "COMPLETED" });
     });
 
     it("visit the LHR", () => {
@@ -671,7 +671,7 @@ context("Export for LHR", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.drCancelDraftButton();
-      cy.get("#HeaderInfo-status").should("have.text", "Canceled");
+      cy.arVerifyStatus({ status: "CANCELED" });
     });
 
     it("visit the LHR", () => {
@@ -771,12 +771,12 @@ context("Export for LHR", () => {
 
     it("Complete step", () => {
       cy.pmSubmitForApproval();
-      cy.get("#HeaderInfo-status").should("have.text", "In Review");
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Approve step", () => {
       cy.ebApprove();
-      cy.get("#HeaderInfo-status").should("have.text", "Completed");
+      cy.arVerifyStatus({ status: "COMPLETED" });
     });
 
     it("visit the LHR", () => {

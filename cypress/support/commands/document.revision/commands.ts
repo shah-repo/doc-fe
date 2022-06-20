@@ -288,6 +288,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowClick();
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowType(`${params.documentType}{enter}`);
+  cy.unClick();
 });
 
 Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
@@ -462,7 +463,7 @@ Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {
-  cy.get(`span[id="HeaderInfo-docId"]`);
+  cy.get(`span[data-cy=\"HeaderInfo-docId\"]`);
 });
 
 Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {
@@ -578,7 +579,7 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
 
 Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOption: string}) => {
   cy.get("[data-cy^=\"common.\"]");
-  cy.get("label").contains(params.revisionStageOption).arrowClick();
+  cy.get("label").contains(new RegExp("^" + params.revisionStageOption + "$", "g")).arrowClick();
 });
 
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {

@@ -401,9 +401,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
   context("Verify One-Time Training form title report", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "One-Time training form title");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "Released" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", "One-Time training form title");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -660,9 +660,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Check doc Draft status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", "One-Time training PDF EXPORT");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "DRAFT" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", "One-Time training PDF EXPORT");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
@@ -869,9 +869,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "One-Time training PDF EXPORT");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "Released" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", "One-Time training PDF EXPORT");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
