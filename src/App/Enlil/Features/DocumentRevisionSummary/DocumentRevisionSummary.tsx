@@ -1,17 +1,18 @@
-import { get, isEmpty, map } from "lodash";
+import { filter, get, includes, isEmpty, map, size } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupType, TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
-import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBWorkspace } from "../../../../ui/form.builder";
+import { checkIsDocumentForm, checkIsDocumentLHR } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -31,6 +32,17 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const [tabWidth, setTabWidth] = useState(0);
+  const groupOptions = documentRevision?.document.documentType.groupOptions;
+  const isLHR = checkIsDocumentLHR(groupOptions);
+  const smartReferencesFrom =
+  documentRevision?.smartReferencesFrom?.filter(
+      (ref) =>
+        ref.active &&
+        ref.type === SmartReferenceType.HiddenPiInstance &&
+        schema
+          ?.map((el) => el.name)
+          .filter((el) => el?.includes(ref.metadata.fieldId))
+    );
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) =>
@@ -51,6 +63,27 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       setTabWidth(bodyTmpl?.clientWidth || 0);
     }, 100);
   };
+
+  if (isLHR) {
+    schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
+      ...schemaItem,
+      index: i,
+      ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
+        stepIndex: size(
+          filter(
+            ro.slice(0, i + 1),
+            (step) =>
+              !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
+          )
+        ),
+      }),
+    }));
+
+    smartReferencesFrom?.forEach((ele, i) => {
+      const obj = schema?.filter((el) => ele.metadata.fieldId === el.name);
+      ele.stepIndex = obj && obj[0].stepIndex;
+    });
+  }
 
   useEffect(() => {
     if (!tabConfig) {
@@ -104,6 +137,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           headerBoxProps={{ maxHeight: "80%" }}
           contentBoxProps={{ minHeight: "20%", height: "100%" }}
           header={<DocumentRevisionSummaryHeader {...{ documentRevision }} />}
+          lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
         >
           <Observer>
             {() => (
