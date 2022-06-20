@@ -1,4 +1,4 @@
-import { find, get, map, some, union, unionBy } from "lodash";
+import { find, get, map, size, some, union, unionBy } from "lodash";
 import { DocumentType, DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -33,8 +33,8 @@ export const getFBSchemeByDocType = (
   formValue: Partial<DocumentRevision> & Partial<FBFormTemplateProps>,
   documentTypesById: DocumentTypeByIdState,
   originScheme?: FBSchemaProps[],
+  tabId?: string,
 ): FBSchemaProps[] => {
-
   const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
   const outputTypesWithGroups = outputTypes?.map((docType) => documentTypesById[docType]);
   const tplType = get(formValue, "document.documentType.id") || "";
@@ -49,6 +49,7 @@ export const getFBSchemeByDocType = (
       ...find(originScheme, { name: schemaItem.name }),
       deleteDisabled: schemaItem.deleteInFormDisabled,
     })));
+
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
 
@@ -60,6 +61,8 @@ export const getFBSchemeByDocType = (
         deleteDisabled: false,
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
+        tabId,
+        index: size(finalScheme),
       });
     } else {
       finalScheme.push({
@@ -68,6 +71,8 @@ export const getFBSchemeByDocType = (
         deleteDisabled: true,
         name: `fb-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
+        tabId,
+        index: size(finalScheme),
       });
     }
   }

@@ -126,7 +126,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "Description" });
+      cy.drEnterDocumentDescription({ description: "Description" });
     });
   });
 

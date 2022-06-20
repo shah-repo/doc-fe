@@ -253,7 +253,7 @@ context("LHR Upgrade", () => {
         });
 
         it("Get created MPI ID", () => {
-          cy.get("#HeaderInfo-docId").then((x) => { mpiID = x.text(); });
+          cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { mpiID = x.text(); });
         });
       });
     });

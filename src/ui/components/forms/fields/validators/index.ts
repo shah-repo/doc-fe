@@ -19,12 +19,6 @@ export const email: Validator = (value: string) => {
   }
 };
 
-export const requiredAtLeastOne: Validator = (value) => {
-  if (!value || value.length === 0) {
-    return "validators.requiredAtLeastOne";
-  }
-};
-
 export const passwordSchema = Yup.string()
   .min(8, "validator.password.min")
   .required("validators.required")
@@ -43,9 +37,6 @@ export const confirmResetPasswordSchema = Yup.string()
 
 export const emailSchema = Yup.string()
   .email("validators.email")
-  .required("validators.required");
-
-export const requiredSchema = Yup.string()
   .required("validators.required");
 
 export const validator = (...validators: Validator[]): Validator => (value: any): Translation | undefined => {

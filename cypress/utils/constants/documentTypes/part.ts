@@ -56,6 +56,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "Make vs Buy",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "primary-supplier",
@@ -79,6 +80,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "Primary Supplier",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "other-suppliers",
@@ -102,6 +104,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "Other Suppliers",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "unit-of-measure",
@@ -224,6 +227,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "Unit of measure",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "traceability-required",
@@ -245,6 +249,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "Traceability required",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "serialized",
@@ -271,6 +276,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "Serialized",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "select-serialization",
@@ -297,6 +303,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "Select serialization",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "iqc-required",
@@ -318,6 +325,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "IQC Required",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "limited-shelf-life",
@@ -339,6 +347,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "Limited Shelf Life",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
     {
       name: "fai-required",
@@ -360,6 +369,7 @@ export const CSPart: IdocumentTypeDto = {
       validationAttribute: "FAI Required",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "specification",
     },
   ],
 };

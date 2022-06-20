@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { companySelectors } from "../../../../state/ducks/company";
+import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -46,7 +47,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 }) => {
 
   const intl = useIntl();
-  const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
+  const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId,
+    STATUS_TYPES_LABEL[status]);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
   const isStatusReleased = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
@@ -90,10 +92,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     const mpiOutputTitle = name.match(stepRegex);
 
     return isTypeMpiOutput && mpiOutputTitle ?
-      <Typography variant="h6" id="HeaderInfo-docId" className={className} component="span">
+      <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
         {mpiOutputTitle[0]}
       </Typography> :
-      <Typography variant="h6" id="HeaderInfo-docId" className={className} component="span">
+      <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
         {id}
       </Typography>;
   };
@@ -125,7 +127,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
           {titleRenderer(classes.id)}
           {
             isTitleVisible &&
-            <Typography variant="h6" id="HeaderInfo-name" component="span">
+            <Typography variant="h6" id="HeaderInfo-name" component="span" data-cy="HeaderInfoName">
               {name}
             </Typography>
           }
@@ -171,7 +173,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 </Link>
               </Grid>
             </Typography>
-            <Typography id="HeaderInfo-docId" className={classes.breadcrumbId}>
+            <Typography data-cy="HeaderInfo" className={classes.breadcrumbId}>
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -197,6 +199,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   <Text
                     translation="form.builder.header.rev"
                     values={{ revision: displayRevision }}
+                    dataCy="HeaderInfo-Rev"
                   />
                 </Grid>
                 {isStatusVisible && <Grid item={true}>
@@ -209,6 +212,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                         ]
                       }`}
                       label={displayStatus || label}
+                      data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>
                 </Grid>}

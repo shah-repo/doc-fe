@@ -200,14 +200,14 @@ context("Records test with Inline approval", () => {
 
       it("Add TextField", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Name" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add Inline Approval", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval1" });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
@@ -216,14 +216,14 @@ context("Records test with Inline approval", () => {
 
       it("Add TextField", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Age" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add Inline Approval", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval2" });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");

@@ -359,14 +359,14 @@ context("Document form upgrade", () => {
     context("Add a new fields to the form", () => {
       it("Add a new section", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Section" });
+        cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
         cy.fbEnterLabel({ label: "New section" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add a new textfield", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterLabel({ label: "New textfield" });
         cy.fbAddNewFieldButton();
       });
@@ -404,14 +404,14 @@ context("Document form upgrade", () => {
     context("Add a new fields to the form", () => {
       it("Add a new section", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Section" });
+        cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
         cy.fbEnterLabel({ label: "New section" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add a new textfield", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterLabel({ label: "New textfield" });
         cy.fbAddNewFieldButton();
       });

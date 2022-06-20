@@ -323,7 +323,7 @@ context("Test upgradability of old supplier form and record", () => {
         });
 
         it("Select approvals from given fields", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Approvals" });
+          cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Approvals" });
         });
 
         it("Click add field", () => {

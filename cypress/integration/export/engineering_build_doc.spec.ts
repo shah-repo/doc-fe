@@ -367,7 +367,7 @@ context("Export Engineering Build doc", () => {
 
     it("Add TextField", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
@@ -376,7 +376,7 @@ context("Export Engineering Build doc", () => {
 
     it("Add File Upload", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
@@ -385,7 +385,7 @@ context("Export Engineering Build doc", () => {
 
     it("Add Checkbox group", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -398,13 +398,13 @@ context("Export Engineering Build doc", () => {
 
     it("Add Procedure1", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Procedure2", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.fbAddNewFieldButton();
     });
 

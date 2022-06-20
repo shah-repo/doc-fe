@@ -221,8 +221,8 @@ context("Approval request email popup modal", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status is 'In Review'", () => {
-      cy.arVerifyStatus({ status: "In Review" });
+    it("Verify AR status is 'IN_REVIEW'", () => {
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
   });
 
@@ -429,7 +429,7 @@ context("Approval request email popup modal", () => {
     });
 
     it("Check if AR has status 'Approved'", () => {
-      cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Approved");
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
   });
 });

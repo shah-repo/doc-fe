@@ -125,8 +125,9 @@ td#kendo-expandable-column[role="gridcell"] {
   flex-shrink: 1;
   overflow: hidden;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--almost_black);
+  text-transform: uppercase;
 }
 
 .k-toolbar,
@@ -213,6 +214,7 @@ td#kendo-expandable-column[role="gridcell"] {
   color: var(--almost_black);
   border-radius: 4px;
   border: 1px solid var(--lavender-mist);
+  background-color: var(--lavender-mist);
 }
 
 .k-grid .k-grid-table tbody tr {
@@ -365,4 +367,9 @@ td#kendo-expandable-column[role="gridcell"] {
 
 .MuiMenuItem-root span, .MuiAutocomplete-listbox {
   font-family: "Sora"
+}
+
+.Toastify__toast, .Toastify__toast-body,
+.Toastify__toast-container, .Toastify__close-button {
+  font-family: 'Sora';
 }

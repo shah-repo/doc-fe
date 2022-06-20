@@ -904,7 +904,7 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Select Receive Purchase Order from given fields", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
       });
 
       it("Enter label Receive", () => {
@@ -931,7 +931,7 @@ context("Receivable test with Page Details", () => {
 
       it("Click add new field and select 'Radio Button group'", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: FIELD_RADIO_BUTTON_GROUP });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: FIELD_RADIO_BUTTON_GROUP });
         cy.fbEnterNameValue({ name: "label", value: RADIO_BUTTON_GROUP_LABEL });
         cy.fbGroupOptions("1", "2", "3");
         cy.fbOpenValidation();
@@ -942,7 +942,7 @@ context("Receivable test with Page Details", () => {
 
       it("Click add new field and select 'Checkbox group'", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: FIELD_CHECKBOX_GROUP });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: FIELD_CHECKBOX_GROUP });
         cy.fbEnterNameValue({ name: "label", value: CHECKBOX_LABEL });
         cy.fbGroupOptions("1", "2", "3");
         cy.fbOpenValidation();
@@ -1024,8 +1024,8 @@ context("Receivable test with Page Details", () => {
 
   context("Verify `Receiving document` status and send email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "WIP");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "WIP" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -1232,8 +1232,8 @@ context("Receivable test with Page Details", () => {
 
   context("Verify `Receiving document` status and send email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "WIP");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "WIP" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -1610,8 +1610,8 @@ context("Receivable test with Page Details", () => {
 
   context("While in “Pending Approval” state, send to email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Pending Approval");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "PENDING_APPROVAL" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -1791,8 +1791,8 @@ context("Receivable test with Page Details", () => {
 
   context("After “Released” state, send to email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "Released" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);

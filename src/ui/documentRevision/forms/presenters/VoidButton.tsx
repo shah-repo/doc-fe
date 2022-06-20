@@ -56,13 +56,16 @@ const VoidButton: React.FunctionComponent<Props> = ({
             <VoidDocumentIcon />
           </StyledMenuListIcon>
           <StyledMenuListItemText
+            id="void-button"
+            data-cy="void-button"
             primary={<Text translation="common.void" />}
             onClick={dialog.open}
           />
         </StyledMenuListItem>
       ) : (
         <Button
-          id="void"
+          id="void-button"
+          data-cy="void-button"
           variant="outlined"
           color="secondary"
           onClick={dialog.open}

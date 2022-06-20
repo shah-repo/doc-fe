@@ -202,14 +202,19 @@ context("Approval request form", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Upload logo picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Add Checkbox group", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
-      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+      // cy.get("[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
       cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
       cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
       cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
@@ -221,9 +226,10 @@ context("Approval request form", () => {
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
-      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      // cy.get("[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
@@ -234,10 +240,6 @@ context("Approval request form", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -245,9 +247,9 @@ context("Approval request form", () => {
 
   context("Verify `Approval request form` title", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", approvalRequestFormName);
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.arVerifyStatus({ status: "Released" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", approvalRequestFormName);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -521,8 +523,8 @@ context("Approval request form", () => {
 
     it("Verify AR status is 'In Review'", () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
-      cy.arVerifyStatus({ status: "In Review" });
-      cy.get("#HeaderInfo-docId").then(($x) => {
+      cy.arVerifyStatus({ status: "IN REVIEW" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
         releasedFormId = $x.text();
       });
     });
@@ -573,9 +575,9 @@ context("Approval request form", () => {
 
   context("Check doc Draft status and click on Send To Email", () => {
     it("Check doc Draft status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should("have.text", approvalRequestTitle);
-      cy.get("#HeaderInfo-docId").then(($x) => {
+      cy.arVerifyStatus({ status: "DRAFT" });
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", approvalRequestTitle);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
         releasedFormId = $x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -724,7 +726,7 @@ context("Approval request form", () => {
 
     it("Verify AR status is 'In Review'", () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
-      cy.arVerifyStatus({ status: "In Review" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
   });
 
@@ -758,7 +760,7 @@ context("Approval request form", () => {
 
     it("Check approval request status is 'Approved'", () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-4050");
-      cy.arVerifyStatus({ status: "Approved" });
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
   });
 
@@ -792,13 +794,12 @@ context("Approval request form", () => {
 
     it("Check approval request status is 'Closed'", () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-2710", "REQ-4050", "REQ-4310", "REQ-4300");
-      cy.arVerifyStatus({ status: "Closed" });
+      cy.arVerifyStatus({ status: "CLOSED" });
     });
 
-    it("Check doc close status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Closed");
-      cy.get("#HeaderInfo-name").should("have.text", approvalRequestTitle);
-      cy.get("#HeaderInfo-docId").then(($x) => {
+    it("Get document ID and Send To Email", () => {
+      cy.get("[data-cy='HeaderInfoName']").should("have.text", approvalRequestTitle);
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
         releasedFormId = $x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -993,7 +994,7 @@ context("Approval request form", () => {
 
     it("Verify AR status is 'Voided'", () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
-      cy.arVerifyStatus({ status: "Voided" });
+      cy.arVerifyStatus({ status: "VOIDED" });
     });
   });
 });

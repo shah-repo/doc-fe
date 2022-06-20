@@ -2,7 +2,7 @@
 import { filter, get, includes, map, size } from "lodash";
 import { reaction } from "mobx";
 import { Observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -59,6 +59,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
       schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
+  const [tabWidth, setTabWidth] = useState(0);
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
 
@@ -97,7 +98,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     setTimeout(() => {
       const headerTmpl = document.getElementById("SMHeaderTmpl");
       const bodyTmpl = document.getElementById("SMBodyTmpl");
-      const restHeight = headerTmpl?.clientHeight ? 150 + (+(headerTmpl?.clientHeight)) : 200;
+      setTabWidth(bodyTmpl?.clientWidth || 0);
+      const restHeight = headerTmpl?.clientHeight ? 56 + (+(headerTmpl?.clientHeight)) : 200;
       bodyTmpl && (bodyTmpl.style.height = `calc(100vh - ${restHeight}px)`);
     }, 100);
   };
@@ -106,6 +108,16 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     () => _documentRevisionFormState?.viewMore,
     () => {
       changeLayoutHeight();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }), []);
+
+  useEffect(() => reaction(
+    () => _documentRevisionFormState?.rightPanelOpen,
+    () => {
+      setTimeout(() => {
+        const bodyTmpl = document.getElementById("SMBodyTmpl");
+        setTabWidth(bodyTmpl?.clientWidth || 0);
+      }, 250);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }), []);
 
@@ -160,6 +172,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
                 boxProps={{ stretchY: "100%", px: 3.75 }}
+                tabProps={{ width: `${tabWidth - 60}px` }}
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
@@ -195,7 +208,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             mode,
                           }}
                         />
-                        {<FBWorkspace
+                        {documentRevision && <FBWorkspace
                           isPortal={false}
                           document={{
                             ...formValues.values as unknown as DocumentRevision,

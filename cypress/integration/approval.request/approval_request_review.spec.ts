@@ -105,9 +105,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Click on 'Approval request' outputdocument type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-      });
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -207,7 +205,7 @@ context("Approval request form scenario", () => {
 
     it("Verify AR status", () => {
       SystemRequirement("REQ-0020");
-      cy.arVerifyStatus({ status: "In Review" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
   });
 
@@ -461,7 +459,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Verify AR status is 'Approved'", () => {
-      cy.arVerifyStatus({ status: "Approved" });
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
 
     it("Open history drawer", () => {
@@ -470,12 +468,12 @@ context("Approval request form scenario", () => {
 
     it("Capture Audit date", () => {
       SystemRequirement("REQ-0960", "REQ-2730");
-      cy.get("[data-cy=\"audit-time-0\"]").should("not.be.empty");
+      cy.get("[data-cy=\"audit-0\"]").should("not.be.empty");
     });
 
     it("Capture Audit timestamp", () => {
       SystemRequirement("REQ-0960", "REQ-2730");
-      cy.get("[data-cy=\"audit-time-0\"]").should("have.attr", "datetime").then(($time) => {
+      cy.get("[data-cy=\"audit-0\"]").should("have.attr", "datetime").then(($time) => {
         cy.wrap($time).should("not.be.empty");
       });
     });
