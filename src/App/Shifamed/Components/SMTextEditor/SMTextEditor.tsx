@@ -60,7 +60,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                 boxShadow={_textEditorState?.previewMode ? 0 : `0 0 0 1px ${Colors.clear_blue}`}
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
-                bgcolor={hover ? Colors.platinum : "transparent"}
+                bgcolor={hover ? Colors.whitest_grey : "transparent"}
                 style={{ display: "grid" }}
                 minHeight= {_textEditorState?.masked ? 30 : 80}
                 onMouseEnter={() => setHover(true)}
