@@ -3,9 +3,6 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
-    // expandCollapseText: {
-    //   color: "red",
-    // },
     panelBorder: {
       marginBottom: 5,
       border: `1px solid ${Colors.gray_goose}`,

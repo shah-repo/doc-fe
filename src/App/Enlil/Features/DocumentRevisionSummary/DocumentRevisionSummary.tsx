@@ -159,7 +159,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           documentRevisionId={documentRevision?.id}
                         />
                       )}
-                      {tabType === "MEQ" &&
+                      {tabType === TabTypeOptions.TABS_MEQ &&
                         <FBMaterialEqInfoContainer
                           documentRevisionId={documentRevision?.id}
                         />
