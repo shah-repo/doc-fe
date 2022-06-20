@@ -333,7 +333,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Filter list by status", () => {
-        cy.alFilterByStatus({ status: "IN_REVIEW" });
+        cy.alFilterByStatus({ status: "IN REVIEW" });
       });
 
       it("Filter list by approval request title", () => {
@@ -350,7 +350,7 @@ context("Approval request landing page test", () => {
 
       it("Verify filter by status", () => {
         SystemRequirement("REQ-0790");
-        cy.alVerifyFilterByStatus({ status: "IN_REVIEW" });
+        cy.alVerifyFilterByStatus({ status: "IN REVIEW" });
       });
 
       it("Verify filter by document title", () => {

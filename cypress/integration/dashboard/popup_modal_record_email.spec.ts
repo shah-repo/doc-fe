@@ -439,7 +439,7 @@ context("Records email popup modal", () => {
     });
 
     it("Check if Record has status 'Released'", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
   });
 });

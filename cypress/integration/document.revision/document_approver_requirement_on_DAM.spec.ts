@@ -364,7 +364,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify `Released DAM request form` title", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", "Form DAM");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
@@ -965,7 +965,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Check doc rev 1 released status", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", `${DAMDocument}`);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
         releasedFormId = x.text();
@@ -992,7 +992,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Check revised doc released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", `${DAMDocument}`);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
         releasedFormId = x.text();
@@ -1513,11 +1513,11 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify AR status is 'In Review'", () => {
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Check AR status in review and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: "IN REVIEW" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", `${ARDocument}`);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
         releasedFormId = x.text();
@@ -1930,7 +1930,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify Document status is 'Released'", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
 
     it("Navigates to document list", () => {
@@ -1947,7 +1947,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Verify Document status is 'Released'", () => {
       SystemRequirement("REQ-0870", "REQ-2700");
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
   });
 });

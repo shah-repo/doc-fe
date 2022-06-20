@@ -401,7 +401,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
   context("Verify One-Time Training form title report", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", "One-Time training form title");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
@@ -869,7 +869,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", "One-Time training PDF EXPORT");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
