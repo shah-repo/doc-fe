@@ -2,7 +2,11 @@ import { Button } from "@material-ui/core";
 import { includes, isEmpty } from "lodash";
 import * as React from "react";
 import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as ExportIcon } from "../../../../../assets/images/export_menu.svg";
 import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../components/Text";
@@ -11,10 +15,12 @@ import useDialog from "../../../../hooks/useDialog";
 
 interface Props {
   documentRevision: DocumentRevision;
+  renderAsButton?: boolean;
 }
 
 const ExportToCSVButton: React.FunctionComponent<Props> = ({
   documentRevision,
+  renderAsButton,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
@@ -105,10 +111,16 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
   return (
     <>
       {isNewLayout ? (
-        <StyledButton
+        renderAsButton ? <StyledButton
           color="primary" data-cy="exportCSVButton" onClick={dialog.open}>
           <Text translation="common.export" />
-        </StyledButton>
+        </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+          <StyledMenuListIcon><ExportIcon/></StyledMenuListIcon>
+          <StyledMenuListItemText
+            data-cy="exportCSVButton" onClick={dialog.open}
+            primary={<Text translation="common.export" />}
+          />
+        </StyledMenuListItem>
       ) : (
         <Button data-cy="exportCSVButton" variant="outlined" color="secondary" onClick={dialog.open}>
           <Text translation="common.export" />

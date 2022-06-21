@@ -3,11 +3,11 @@ import Colors from "../../../../../ui/layout/theme/utils/colors";
 
 const styles = () => ({
   root: {
-    "color": Colors.white,
+    "color": Colors.almost_black,
     "backgroundColor": Colors.white,
     "&:hover": {
-      backgroundColor: Colors.white,
-      color: Colors.white,
+      backgroundColor: Colors.titan_white,
+      color: Colors.almost_black,
     },
   },
 });
