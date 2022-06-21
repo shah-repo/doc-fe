@@ -20,7 +20,6 @@ declare global {
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
-      drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drEnterHtmlText(params: { htmlText: string }): Chainable<Subject>;
@@ -170,7 +169,7 @@ Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; 
 
 Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
   cy.dlClearFilters();
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevPreview, () => {
     cy.get("tr.k-master-row").contains(params.item).arrowClick();
   });
   cy.progressBarShouldNotExist();
@@ -261,19 +260,8 @@ Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) 
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-  cy.get("[data-cy=\"description\"]").first().arrowType(params.description);
+  cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType(params.description);
   cy.unClick();
-});
-
-Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { description: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-    cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").arrowType(params.description);
-    cy.wait(500);
-    cy.get("[data-cy=field-description]>label").arrowClick();
-    cy.unClick();
-  });
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {

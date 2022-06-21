@@ -2,6 +2,7 @@ import { get } from "lodash";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../../ui/constants/urls";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { FB, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
 import FBLeftPanelState from "../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state";
@@ -15,6 +16,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     _documentRevisionFormState,
     document,
     autosaveEnabled,
+    isCreateUrl,
     ...props
   }: T) => {
 
@@ -24,6 +26,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const leftPanelState = FB.useRef<FBLeftPanelState>(FBLeftPanelState);
     const editorState = FB.useRef<FBEditorState>(FBEditorState);
     const formState = FB.useRef<FBFormState>(FBFormState, {});
+    isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
     const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema: _documentRevisionFormState?.schema,
       mode: _formState?.mode,
@@ -109,6 +112,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               autosaveEnabled,
               schema: _documentRevisionFormState?.schema,
               workspaceState,
+              isCreateUrl,
             }}
           />
         </FBProvider>

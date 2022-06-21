@@ -152,6 +152,10 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
           });
+
+          it("Click create a document", () => {
+            cy.drClickCreateDocumentWithApiCall();
+          });
         });
 
         context("Preview FORM document", () => {
