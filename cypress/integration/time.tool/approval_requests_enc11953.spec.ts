@@ -219,6 +219,16 @@ context("Approval request form", () => {
         `${USERS[1].name}needs your approval for${aRID}Approval request form`,
       });
     });
+
+    it(`Verify 'IN REVIEW' notification received for all 3 users`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+          `${aRID}Approval request formIN REVIEWpending approvals from`,
+      });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[1].name}` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[2].name}` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[3].name}` });
+    });
   });
 
   context(`Verify ${USERS[1].name} AR list for status as 'IN_REVIEW'`, () => {
