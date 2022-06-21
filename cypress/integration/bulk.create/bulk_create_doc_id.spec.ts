@@ -153,6 +153,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
                   schema: [
                     {
                       name: "blc-text-field-kv6ef2ii",
+                      tabId: "overview",
                       rows: 1,
                       type: "textfield",
                       index: 0,
@@ -498,6 +499,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add Checkbox group", () => {
       cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
       cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
@@ -762,7 +767,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Fill Bulk creation document atributes", () => {
-
       it("Enter title 'Bulk Creation document'", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document{enter}" });
       });
