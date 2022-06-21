@@ -11,7 +11,7 @@ const FBAutocompleteAsync: React.FunctionComponent<
       <FBAutocomplete
         {...props}
         disabled={true}
-        inputPropStyle={styles.inputPropStyle}
+        inputPropStyle={{ ...styles.inputPropStyle, ...props.inputPropStyle }}
         labelProps={styles.labelProps}
         inputPropStyleSize="small"
       />
@@ -20,7 +20,7 @@ const FBAutocompleteAsync: React.FunctionComponent<
       <FBAutocomplete
         {...props}
         disabled={true}
-        inputPropStyle={styles.inputPropStyle}
+        inputPropStyle={{ ...styles.inputPropStyle, ...props.inputPropStyle }}
         labelProps={styles.labelProps}
         inputPropStyleSize="small"
       />
@@ -29,7 +29,7 @@ const FBAutocompleteAsync: React.FunctionComponent<
       <FBAutocomplete
         {...props}
         {...{ options, defaultValue }}
-        inputPropStyle={styles.inputPropStyle}
+        inputPropStyle={{ ...styles.inputPropStyle, ...props.inputPropStyle }}
         labelProps={styles.labelProps}
         inputPropStyleSize="small"
       />
@@ -38,7 +38,7 @@ const FBAutocompleteAsync: React.FunctionComponent<
       <FBAutocomplete
         {...props}
         {...{ options, defaultValue }}
-        inputPropStyle={styles.inputPropStyle}
+        inputPropStyle={{ ...styles.inputPropStyle, ...props.inputPropStyle }}
         labelProps={styles.labelProps}
         inputPropStyleSize="small"
       />
