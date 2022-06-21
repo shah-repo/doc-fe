@@ -27,7 +27,7 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.almost_black,
     },
     expanSionPannelPadding: {
-      padding: "0rem 0.5rem  2.1rem 2.1rem",
+      padding: "0rem 0.5rem 0.87rem 2.1rem",
       display: "block",
       marginTop: -15,
     },
@@ -78,7 +78,7 @@ export const styles = makeStyles((theme: Theme) =>
       marginTop: 10,
     },
     gridHeadingPadding: {
-      paddingLeft: "28px !important",
+      paddingLeft: "25px !important",
     },
     meqAccordianHeading: {
       color: Colors.navy,
