@@ -1,4 +1,3 @@
-import "moment-timezone";
 import moment from "moment-timezone";
 
 export const momentInPST = () => moment().tz("America/Los_Angeles");
@@ -16,3 +15,5 @@ export const equimentCALDueDays = 31;
 export const equimentPMDueDaysFmt = momentInPST().add(equimentPMDueDays, "days").format("ddd MMM D YYYY");
 export const equimentCALDueDaysFmt = momentInPST().add(equimentCALDueDays, "days").format("ddd MMM D YYYY");
 export const dueDate = momentInPST().subtract(1, "days").format("ddd, MMMM D, YYYY");
+export const trAssignedDate =  momentInPST().add(30, "days").subtract(10, "days").format("MMM D");
+export const trCompleteDate =  momentInPST().format("M/D/YYYY");

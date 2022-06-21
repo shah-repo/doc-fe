@@ -25,7 +25,7 @@ declare global {
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drApproveAndReleaseDocumentWithoutSelectingForm(params?: { approverName?: string; toastifyExists?: boolean }): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
-      drClickCreateDocumentWithApiCall(params?: { toastifyExists?: boolean; requiredApproversDocRev: boolean}): Chainable<Subject>;
+      drClickCreateDocumentWithApiCall(params?: { toastifyExists?: boolean; requiredApproversDocRev?: boolean}): Chainable<Subject>;
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
@@ -39,6 +39,7 @@ declare global {
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
       drFilterDocListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       drFilterDocListByDocIdAndStatus(params: { docId: string; status: string }): Chainable<Subject>;
+      drFilterDocListByDocIdAndName(params: { docId: string; title: string }): Chainable<Subject>;
       drChangeOwner(params: { employee: string }): Chainable<Subject>;
       drChangeOwnerFromMenu(params: { employee: string }): Chainable<Subject>;
       drCancelDraftFromMenu(): Chainable<Subject>;
@@ -361,7 +362,7 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
   cy.checkToastMessage({ exists: false });
 });
 
-Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev: boolean }) => {
+Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev?: boolean }) => {
   let routesToWait;
   if (params && params.requiredApproversDocRev) {
     routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
@@ -501,6 +502,16 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.listLoadingElementShouldNotExist();
+  cy.dlSelectFirstDocument();
+});
+
+Cypress.Commands.add("drFilterDocListByDocIdAndName", (params: { docId: string; title: string }) => {
+  cy.dlClearFilters();
+  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
+  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
