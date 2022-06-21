@@ -273,10 +273,10 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               <Text translation="common.operators" />
             </Box>
             <List>
-              {map(operatorList, (e, index) => (
+              {map(operatorList, (operator, index) => (
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
                   <ListItemAvatar>
-                    {e.user.avatar ? (
+                    {operator.user.avatar ? (
                       <Badge
                         overlap="circle"
                         anchorOrigin={{
@@ -284,15 +284,15 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                           horizontal: "right",
                         }}
                         badgeContent={
-                          getStatusInfo(lhrStepState?.approvals, e.stepId)
+                          getStatusInfo(lhrStepState?.approvals, operator.stepId)
                             ?.status === "APPROVED"
                          && <OperatorApprovedIcon />}
                       >
-                        <Avatar alt={e.user?.name} src={e.user?.avatar} />
+                        <Avatar alt={operator.user?.name} src={operator.user?.avatar} />
                       </Badge>
                     ) : (
-                      <Avatar style={getAvtarStyle(e.user.initialColor)}>
-                        {getInitalsFromName(e.user?.name)}
+                      <Avatar style={getAvtarStyle(operator.user.initialColor)}>
+                        {getInitalsFromName(operator.user?.name)}
                       </Avatar>
                     )}
                   </ListItemAvatar>
@@ -300,7 +300,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     style={{ marginLeft: 4 }}
                     primary={
                       <div className={classes.operatorTitle}>
-                        {e.user?.name}
+                        {operator.user?.name}
                       </div>
                     }
                     secondary={
@@ -313,14 +313,15 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                               className={classes.operatorStatus}
                             >
                               {
-                                getStatusInfo(lhrStepState?.approvals, e.stepId)
+                                getStatusInfo(lhrStepState?.approvals, operator.stepId)
                                   ?.status
                               }
                             </Typography>
-                            {getStatusInfo(lhrStepState?.approvals, e.stepId)?.reviewedAt &&
+                            {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
                               (<Box component="span" marginRight={4}>&bull;</Box>)}
-                            {getStatusInfo(lhrStepState?.approvals, e.stepId)?.reviewedAt &&
-                              getFormattedDateString(getStatusInfo(lhrStepState?.approvals, e.stepId)?.reviewedAt,
+                            {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
+                              getFormattedDateString(
+                                getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt,
                                 MomentFormats.DateTime)}
                           </>
                         )}

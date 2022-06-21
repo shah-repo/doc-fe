@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import { concat, each, isEmpty, sum, uniq } from "lodash";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import {
   DocumentRevision,
@@ -20,6 +21,7 @@ interface Props {
 const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
   smartReferencesFrom,
 }) => {
+  const intl = useIntl();
   const [inprogress, setInprogress] = useState<number[]>([]);
   const [completed, setCompleted] = useState<number[]>([]);
   const getLHRStatus = (stepLHRs?: Nullable<DocumentRevision>) => {
@@ -82,7 +84,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
               Step {uniq(inprogress)?.sort().map((e) => e + ",")}
             </Box>
             <Box component="span" fontWeight={400}>
-              &nbsp;in progress...
+              &nbsp;{intl.formatMessage({ id: `form.builder.step.inprogress` }).toLowerCase()}...
             </Box>
           </>
         )}
