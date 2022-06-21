@@ -8,7 +8,7 @@ import { find, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalStatusIdent, FBLHRStepProps, FBProvider, FBText } from "..";
 import { ReactComponent as CollapseMoreIcon } from "../../../assets/images/CollapseMoreIcon.svg";
 import { ReactComponent as ExpandMoreIcon } from "../../../assets/images/ExpandMoreIcon.svg";
 import { ReactComponent as OperatorApprovedIcon } from "../../../assets/images/OperatorApproved.svg";
@@ -285,7 +285,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                         }}
                         badgeContent={
                           getStatusInfo(lhrStepState?.approvals, operator.stepId)
-                            ?.status === "APPROVED"
+                            ?.status === FBInlineApprovalStatusIdent.APPROVED
                          && <OperatorApprovedIcon />}
                       >
                         <Avatar alt={operator.user?.name} src={operator.user?.avatar} />
