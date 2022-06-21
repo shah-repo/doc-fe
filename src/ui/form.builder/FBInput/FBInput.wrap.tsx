@@ -142,7 +142,7 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
+    if ((isOutput || workspaceState?.mode !== "design") && workspaceState?.mode !== "formPreview") {
       const isUnderMode = (
         !helperText && (
           isUndefined(validationValue) ||
