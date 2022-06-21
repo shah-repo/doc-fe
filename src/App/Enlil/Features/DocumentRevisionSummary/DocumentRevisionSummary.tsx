@@ -1,7 +1,6 @@
 import { get, isEmpty, map } from "lodash";
-import { reaction } from "mobx";
 import { Observer } from "mobx-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -30,7 +29,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
-  const [tabWidth, setTabWidth] = useState(0);
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) =>
@@ -45,13 +43,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
-  const updateLayoutWidth = () => {
-    setTimeout(() => {
-      const bodyTmpl = document.getElementById("SMBodyTmpl");
-      setTabWidth(bodyTmpl?.clientWidth || 0);
-    }, 100);
-  };
-
   useEffect(() => {
     if (!tabConfig) {
       return;
@@ -59,20 +50,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
-
-  useEffect(() => {
-    updateLayoutWidth();
-  }, []);
-
-  useEffect(() => reaction(
-    () => _documentRevisionFormState?.rightPanelOpen,
-    () => {
-      setTimeout(() => {
-        const bodyTmpl = document.getElementById("SMBodyTmpl");
-        setTabWidth(bodyTmpl?.clientWidth || 0);
-      }, 250);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }), []);
 
   return (
     <SMForm
@@ -101,8 +78,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       >
         <SMTemplate
           templateBoxProps={{ stretchY: "100%" }}
-          headerBoxProps={{ maxHeight: "80%" }}
           contentBoxProps={{ minHeight: "20%", height: "100%" }}
+          boxProps={{ overflow: "scroll" }}
           header={<DocumentRevisionSummaryHeader {...{ documentRevision }} />}
         >
           <Observer>
@@ -111,7 +88,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                 onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                 tabs={tabLabels}
                 boxProps={{ stretchY: "100%", px: 4.25 }}
-                tabProps={{ width: `${tabWidth - 60}px` }}
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;
@@ -121,7 +97,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                     schemaItem.tabId === tabId && !schemaItem.deleted);
 
                   return <SMBox height="100%"  overflow={"auto"} {...{ onScroll }}>
-                    <SMBox mt={8} stretchY="100%">
+                    <SMBox mt={2} stretchY="100%">
                       {tabType === "MIXED" &&  <>
                         <SummaryPresenter
                           dataProp={documentRevision}
