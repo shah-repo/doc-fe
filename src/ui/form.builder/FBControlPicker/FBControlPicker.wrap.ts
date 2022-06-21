@@ -38,7 +38,7 @@ export const withFBControlPicker = <T extends FBControlPickerProps>(
       });
     });
     // Always show favourites on top and sort remaining sections
-    let sortedSections = keys(translatedPickers).sort();
+    let sortedSections = keys(translatedPickers);
     if (sortedSections.includes("favourites")) {
       sortedSections = [
         "favourites",
