@@ -37,7 +37,7 @@ let multipleCompanies;
 let dashboardDueDate;
 
 const ADMIN_USER = USERS[1];
-const equipmentTitleForm = `Equipment-Form`;
+const equipmentTitleForm = "Equipment-Form";
 const equipmentDocId = "EQ-00001";
 
 context("Autocomplete 'Equipment' test", () => {
@@ -428,7 +428,7 @@ context("Autocomplete 'Equipment' test", () => {
         cy.drSelectOutputDocumentType({ documentType: "Equipment" });
       });
 
-      it("Add autocomplete of “Approvers” and set validation", () => {
+      it("Add autocomplete of 'Approvers' and set validation", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
