@@ -116,6 +116,7 @@ context("Bulk create record headers", () => {
                   schema: [
                     {
                       name: "blc-text-field-kv6ef2ii",
+                      tabId: "overview",
                       rows: 1,
                       type: "textfield",
                       index: 0,
@@ -135,6 +136,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "-kv6effxq",
+                      tabId: "overview",
                       type: "paragraph",
                       index: 1,
                       rules: "",
@@ -152,6 +154,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-text-editor-kv6efdw2",
+                      tabId: "overview",
                       type: "texteditor",
                       index: 2,
                       label: "BLC Text Editor",
@@ -172,6 +175,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-date-picker-kv6efc5r",
+                      tabId: "overview",
                       type: "datepicker",
                       index: 3,
                       label: "BLC Date picker",
@@ -192,6 +196,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-radio-button-group-kv6efaga",
+                      tabId: "overview",
                       type: "radiogroup",
                       index: 4,
                       label: "BLC radio button group",
@@ -223,6 +228,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-select-field-kv6ef7ot",
+                      tabId: "overview",
                       type: "select",
                       index: 5,
                       label: "BLC select field",
@@ -255,6 +261,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-checkbox-group-kv6ef53q",
+                      tabId: "overview",
                       type: "checkboxgroup",
                       index: 6,
                       label: "BLC Checkbox group",
@@ -286,6 +293,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "approvals-built-in",
+                      tabId: "overview",
                       type: "approvals",
                       index: 7,
                       label: "Approvals",
@@ -389,23 +397,34 @@ context("Bulk create record headers", () => {
         cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
+            .arrowClick();
           cy.unClick();
         });
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
+          .autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Document Type");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]")
+          .autocompleteSelect("Test Document Type");
       });
 
-      it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      it("Select 'no' to have Document id column", () => {
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {
@@ -418,6 +437,10 @@ context("Bulk create record headers", () => {
     });
 
     context("Test excel download", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Download excel template file", () => {
         cy.excelDownloadTemplate({ saveFileName: excelTemplateSaveName });
       });
@@ -458,7 +481,8 @@ context("Bulk create record headers", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -484,7 +508,8 @@ context("Bulk create record headers", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -511,7 +536,8 @@ context("Bulk create record headers", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -537,7 +563,8 @@ context("Bulk create record headers", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -580,6 +607,10 @@ context("Bulk create record headers", () => {
         });
 
         context("Try to approve bulk create", () => {
+          it("Click on 'Overview' tab", () => {
+            cy.drSelectOverviewTab();
+          });
+
           it("Approve record", () => {
             cy.ebTryToApprove();
           });
@@ -599,8 +630,13 @@ context("Bulk create record headers", () => {
             cy.ebWithdrawSubmisison();
           });
 
+          it("Click on 'Details' tab", () => {
+            cy.drSelectDetailsTab();
+          });
+
           it("Remove file", () => {
-            cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+            cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+              .parent().parent()
               .find("button").arrowClick({ force: true });
           });
         });
@@ -621,6 +657,10 @@ context("Bulk create record headers", () => {
     context("Create bulk records", () => {
       it("Save bulk document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Submit for approval", () => {

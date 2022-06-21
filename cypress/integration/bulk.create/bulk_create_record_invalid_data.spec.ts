@@ -122,6 +122,7 @@ context("Test invalid data for records", () => {
                   schema: [
                     {
                       name: "blc-text-field-kv6ef2ii",
+                      tabId: "overview",
                       rows: 1,
                       type: "textfield",
                       index: 0,
@@ -141,6 +142,7 @@ context("Test invalid data for records", () => {
                     },
                     {
                       name: "-kv6effxq",
+                      tabId: "overview",
                       type: "paragraph",
                       index: 1,
                       rules: "",
@@ -158,6 +160,7 @@ context("Test invalid data for records", () => {
                     },
                     {
                       name: "blc-text-editor-kv6efdw2",
+                      tabId: "overview",
                       type: "texteditor",
                       index: 2,
                       label: "BLC Text Editor",
@@ -178,6 +181,7 @@ context("Test invalid data for records", () => {
                     },
                     {
                       name: "blc-date-picker-kv6efc5r",
+                      tabId: "overview",
                       type: "datepicker",
                       index: 3,
                       label: "BLC Date picker",
@@ -198,6 +202,7 @@ context("Test invalid data for records", () => {
                     },
                     {
                       name: "blc-radio-button-group-kv6efaga",
+                      tabId: "overview",
                       type: "radiogroup",
                       index: 4,
                       label: "BLC radio button group",
@@ -229,6 +234,7 @@ context("Test invalid data for records", () => {
                     },
                     {
                       name: "blc-select-field-kv6ef7ot",
+                      tabId: "overview",
                       type: "select",
                       index: 5,
                       label: "BLC select field",
@@ -261,6 +267,7 @@ context("Test invalid data for records", () => {
                     },
                     {
                       name: "blc-checkbox-group-kv6ef53q",
+                      tabId: "overview",
                       type: "checkboxgroup",
                       index: 6,
                       label: "BLC Checkbox group",
@@ -292,6 +299,7 @@ context("Test invalid data for records", () => {
                     },
                     {
                       name: "approvals-built-in",
+                      tabId: "overview",
                       type: "approvals",
                       index: 7,
                       label: "Approvals",
@@ -395,23 +403,35 @@ context("Test invalid data for records", () => {
         cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
+            .arrowClick();
           cy.unClick();
         });
       });
 
+
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
+          .autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Document Type");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]")
+          .autocompleteSelect("Test Document Type");
       });
 
       it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {
@@ -425,6 +445,10 @@ context("Test invalid data for records", () => {
 
     context("Test invalid excel files for bulk create", () => {
       context("Upload template with wrong headers", () => {
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Upload template file", () => {
           cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateMisspelledHeaders.xlsx" });
         });
@@ -446,7 +470,8 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -472,7 +497,8 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -499,7 +525,8 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -525,7 +552,8 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -552,7 +580,8 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -579,7 +608,8 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -607,7 +637,8 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -644,37 +675,11 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
-
-      // context("Test future date formats on Voided/Released", () => {
-      //   it("Upload template file", () => {
-      //     cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateFutureDate.xlsx" });
-      //   });
-
-      //   it("Click save document", () => {
-      //     cy.drClickCreateDocumentWithApiCallForForms();
-      //   });
-
-      //   it("Submit for approval", () => {
-      //     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      //   });
-
-      //   it("Verify error message", () => {
-      //     cy.checkToastMessageIsEqual({
-      //       message: "Row: 4 - Owner with email enlil.testmail+cyy2@gmail.com not found in company.;" +
-      //       " Row: 5 - Owner with email enlil.testmail+cy22@gmail.com not found in company.",
-      //     });
-      //     cy.closeAllAlertMessages();
-      //   });
-
-      //   it("Remove file", () => {
-      //     cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-      //       .find("button").arrowClick({ force: true });
-      //   });
-      // });
 
       context("Upload two correct templates and check for error", () => {
         it("Upload template file one", () => {
@@ -701,8 +706,10 @@ context("Test invalid data for records", () => {
         });
 
         it("Remove file", () => {
-          cy.get("[data-cy=\"remove-recordBulkTemplate.xlsx\"]").trigger("mouseover", { force: true });
-          cy.get("[data-cy=\"remove-recordBulkTemplate.xlsx\"]").arrowClick({ force: true });
+          cy.get("[id=\"sm-tabpanel-1\"] [data-cy=\"remove-recordBulkTemplate.xlsx\"]")
+            .trigger("mouseover", { force: true });
+          cy.get("[id=\"sm-tabpanel-1\"] [data-cy=\"remove-recordBulkTemplate.xlsx\"]")
+            .arrowClick({ force: true });
         });
 
         it("Click save document", () => {
@@ -712,6 +719,10 @@ context("Test invalid data for records", () => {
     });
 
     context("Create bulk records", () => {
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Save bulk document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
@@ -750,7 +761,7 @@ context("Test invalid data for records", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
+        cy.drVerifyTitle({ title: "Void" });
       });
 
       it("Verify description", () => {
@@ -777,7 +788,7 @@ context("Test invalid data for records", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Second bulk document" });
+        cy.drVerifyTitle({ title: "Second bulk document" });
       });
 
       it("Verify description", () => {
@@ -834,7 +845,7 @@ context("Test invalid data for records", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitle({ title: "Third bulk document" });
+          cy.drVerifyTitle({ title: "Third bulk document" });
         });
 
         it("Verify description", () => {
@@ -843,6 +854,10 @@ context("Test invalid data for records", () => {
 
         it("Verify owner", () => {
           cy.drVerifyDocumentOWner({ owner: USERS[2].name });
+        });
+
+        it("Click on revisions tab on side panel", () => {
+          cy.drClickRevisionsSidePanel();
         });
 
         it("Verify updated date", () => {
@@ -895,7 +910,7 @@ context("Test invalid data for records", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitle({ title: "Fourth bulk document" });
+          cy.drVerifyTitle({ title: "Fourth bulk document" });
         });
 
         it("Verify description", () => {
@@ -904,6 +919,10 @@ context("Test invalid data for records", () => {
 
         it("Verify owner", () => {
           cy.drVerifyDocumentOWner({ owner: USERS[2].name });
+        });
+
+        it("Click on revisions tab on side panel", () => {
+          cy.drClickRevisionsSidePanel();
         });
 
         it("Verify updated date", () => {

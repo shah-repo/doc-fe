@@ -123,6 +123,7 @@ context("Bulk create record headers", () => {
                   schema: [
                     {
                       name: "blc-text-field-kv6ef2ii",
+                      tabId: "overview",
                       rows: 1,
                       type: "textfield",
                       index: 0,
@@ -142,6 +143,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "-kv6effxq",
+                      tabId: "overview",
                       type: "paragraph",
                       index: 1,
                       rules: "",
@@ -159,6 +161,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-text-editor-kv6efdw2",
+                      tabId: "overview",
                       type: "texteditor",
                       index: 2,
                       label: "BLC Text Editor",
@@ -179,6 +182,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-date-picker-kv6efc5r",
+                      tabId: "overview",
                       type: "datepicker",
                       index: 3,
                       label: "BLC Date picker",
@@ -199,6 +203,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-radio-button-group-kv6efaga",
+                      tabId: "overview",
                       type: "radiogroup",
                       index: 4,
                       label: "BLC radio button group",
@@ -240,6 +245,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-select-field-kv6ef7ot",
+                      tabId: "overview",
                       type: "select",
                       index: 5,
                       label: "BLC select field",
@@ -282,6 +288,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "blc-checkbox-group-kv6ef53q",
+                      tabId: "overview",
                       type: "checkboxgroup",
                       index: 6,
                       label: "BLC Checkbox group",
@@ -323,6 +330,7 @@ context("Bulk create record headers", () => {
                     },
                     {
                       name: "approvals-built-in",
+                      tabId: "overview",
                       type: "approvals",
                       index: 7,
                       label: "Approvals",
@@ -380,6 +388,7 @@ context("Bulk create record headers", () => {
               schema: [
                 {
                   name: "blc-text-field-kv6ef2ii",
+                  tabId: "overview",
                   rows: 1,
                   type: "textfield",
                   index: 0,
@@ -399,6 +408,7 @@ context("Bulk create record headers", () => {
                 },
                 {
                   name: "-kv6effxq",
+                  tabId: "overview",
                   type: "paragraph",
                   index: 1,
                   rules: "",
@@ -416,6 +426,7 @@ context("Bulk create record headers", () => {
                 },
                 {
                   name: "blc-text-editor-kv6efdw2",
+                  tabId: "overview",
                   type: "texteditor",
                   index: 2,
                   label: "BLC Text Editor",
@@ -436,6 +447,7 @@ context("Bulk create record headers", () => {
                 },
                 {
                   name: "blc-date-picker-kv6efc5r",
+                  tabId: "overview",
                   type: "datepicker",
                   index: 3,
                   label: "BLC Date picker",
@@ -456,6 +468,7 @@ context("Bulk create record headers", () => {
                 },
                 {
                   name: "blc-radio-button-group-kv6efaga",
+                  tabId: "overview",
                   type: "radiogroup",
                   index: 4,
                   label: "BLC radio button group",
@@ -497,6 +510,7 @@ context("Bulk create record headers", () => {
                 },
                 {
                   name: "blc-select-field-kv6ef7ot",
+                  tabId: "overview",
                   type: "select",
                   index: 5,
                   label: "BLC select field",
@@ -539,6 +553,7 @@ context("Bulk create record headers", () => {
                 },
                 {
                   name: "blc-checkbox-group-kv6ef53q",
+                  tabId: "overview",
                   type: "checkboxgroup",
                   index: 6,
                   label: "BLC Checkbox group",
@@ -580,6 +595,7 @@ context("Bulk create record headers", () => {
                 },
                 {
                   name: "approvals-built-in",
+                  tabId: "overview",
                   type: "approvals",
                   index: 7,
                   label: "Approvals",
@@ -681,9 +697,13 @@ context("Bulk create record headers", () => {
         cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
           cy.unClick();
         });
       });
@@ -693,7 +713,7 @@ context("Bulk create record headers", () => {
           "FM-00001 - rev 1 - AR Form",
           "FM-00002 - rev 2 - Revised document for bulk creation",
           "FM-00003 - rev 1 - Bulk create form"];
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
         cy.get("ul>li[role=option]").should("have.length", 3);
         cy.get("ul>li[role=option]").each(($document) => {
           expect($document.text()).to.be.oneOf(BLCDocumentFormList);
@@ -727,19 +747,24 @@ context("Bulk create record headers", () => {
           "Paper Lot History Record",
         ];
 
-        cy.get(`[data-cy="fb-output-document-type"]`).verifyAutocompleteList(documentTypeList);
+        cy.get(`[id=\"sm-tabpanel-1\" ] [data-cy="fb-output-document-type"]`).verifyAutocompleteList(documentTypeList);
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Revised document for bulk creation");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
+          .autocompleteSelect("Revised document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Suppliers");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]").autocompleteSelect("Suppliers");
       });
 
       it("Select 'no' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(1).check();
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(1).check();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {
@@ -748,6 +773,10 @@ context("Bulk create record headers", () => {
     });
 
     context("Upload correct template", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Upload template file", () => {
         SystemRequirement("REQ-4760 ");
         cy.atchUploadTemplateForBLC({ fileName: "recordState.xlsx" });
@@ -777,9 +806,10 @@ context("Bulk create record headers", () => {
 
     context("Add correct type and release bulk create", () => {
       it("Select correct document type to be used for bulk creation", () => {
-        cy.get(`[name="fb-output-document-type"]`).arrowClick().find("button").eq(0).arrowClick();
+        cy.get(`[id=\"sm-tabpanel-1\" ] [name="fb-output-document-type"]`)
+          .arrowClick().find("button").eq(0).arrowClick();
         cy.unClick();
-        cy.get(`[data-cy="fb-output-document-type"]`).autocompleteSelect("Test Document Type");
+        cy.get(`[id=\"sm-tabpanel-1\" ] [data-cy="fb-output-document-type"]`).autocompleteSelect("Test Document Type");
       });
 
       it("Save bulk document", () => {
@@ -843,7 +873,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "-" });
+        cy.drVerifyTitle({ title: "-" });
       });
 
       it("Verify description", () => {
@@ -852,6 +882,10 @@ context("Bulk create record headers", () => {
 
       it("Verify owner", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[2].name });
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Verify no release date is present on WIP record", () => {
@@ -902,7 +936,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.get("[id=Title-field] input").should("have.attr", "value", "title two");
+        cy.drVerifyTitle({ title: "title two" });
       });
 
       it("Verify description", () => {
@@ -911,6 +945,10 @@ context("Bulk create record headers", () => {
 
       it("Verify owner", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[4].name });
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Verify no release date is present on WIP record", () => {
@@ -923,7 +961,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"] span[data-text]").should("have.text", "two");
+        cy.get("[id=\"sm-tabpanel-0\"] [data-cy^=\"blc-text-editor\"] span[data-text]").should("have.text", "two");
       });
 
       it("Verify BLC date picker", () => {
@@ -935,7 +973,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("have.text", "option2");
+        cy.get("[id=\"sm-tabpanel-0\"] [id*=\"select-blc-select-field\"]").should("have.text", "option2");
       });
 
       it("Verify checkbox group", () => {
@@ -958,7 +996,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
+        cy.drVerifyTitle({ title: "Void" });
       });
 
       it("Verify description", () => {
@@ -967,6 +1005,10 @@ context("Bulk create record headers", () => {
 
       it("Verify owner", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[4].name });
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Verify released date", () => {
@@ -1014,7 +1056,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
+        cy.drVerifyTitle({ title: "Void" });
       });
 
       it("Verify description", () => {
@@ -1023,6 +1065,10 @@ context("Bulk create record headers", () => {
 
       it("Verify owner", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[4].name });
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Verify released date", () => {
@@ -1070,7 +1116,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
+        cy.drVerifyTitle({ title: "Void" });
       });
 
       it("Verify description", () => {
@@ -1079,6 +1125,10 @@ context("Bulk create record headers", () => {
 
       it("Verify owner", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[4].name });
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Verify released date", () => {
@@ -1126,7 +1176,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "title six" });
+        cy.drVerifyTitle({ title: "title six" });
       });
 
       it("Verify description", () => {
@@ -1135,6 +1185,10 @@ context("Bulk create record headers", () => {
 
       it("Verify owner", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[4].name });
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Verify no release date is present on WIP record", () => {
@@ -1182,7 +1236,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "title seven" });
+        cy.drVerifyTitle({ title: "title seven" });
       });
 
       it("Verify description", () => {
@@ -1191,6 +1245,10 @@ context("Bulk create record headers", () => {
 
       it("Verify owner", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[4].name });
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Verify no release date is present on WIP record", () => {
@@ -1241,7 +1299,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "title eight" });
+        cy.drVerifyTitle({ title: "title eight" });
       });
 
       it("Verify description", () => {
@@ -1250,6 +1308,10 @@ context("Bulk create record headers", () => {
 
       it("Verify owner", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[4].name });
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Verify no release date is present on WIP record", () => {

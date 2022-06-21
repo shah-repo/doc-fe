@@ -60,6 +60,7 @@ declare global {
       drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
       drApproveAndReleaseDocumentWithSelectingApprover(users: string[], params?: { toastifyExists: boolean }): Chainable<Subject>;
       drClickUpgradeForm(): Chainable<Subject>;
+      drClickRevisionsSidePanel(): Chainable<Subject>;
       drVerifyTitle(params: { title: string }): Chainable<Subject>;
       drVerifyDescription(params: { description: string }): Chainable<Subject>;
       drPatchDocType(params: {
@@ -216,7 +217,7 @@ Cypress.Commands.add("drCancelDraftButton", () => {
 });
 
 Cypress.Commands.add("drVerifyDocumentOWner", (params: { owner: string }) => {
-  cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains(params.owner);
+  cy.get("[data-cy=\"generalInfo\"]>li>div>p").contains(params.owner);
 });
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
@@ -274,8 +275,9 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 });
 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
-  cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowClick();
-  cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowType(`${params.documentType}{enter}`);
+  cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(params.documentType);
+  cy.wait(1500);
+  cy.get(`[data-cy="field-outputDocumentTypes"] div[id^="react-select"]`).contains(params.documentType).arrowClick();
   cy.unClick();
 });
 
@@ -877,11 +879,15 @@ Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number
 });
 
 Cypress.Commands.add("drVerifyTitle", (params: {title: string}) => {
-  cy.get("#Title-field").find("input").should("have.attr", "value", params.title);
+  cy.get("#field-name").should("have.text", params.title);
 });
 
 Cypress.Commands.add("drVerifyDescription", (params: {description: string}) => {
-  cy.get("[data-cy=\"RichTextEditor.description\"]").find("span[data-text]").should("have.text", params.description);
+  cy.get("[data-cy=\"description\"]").find("span[data-text]").should("have.text", params.description);
+});
+
+Cypress.Commands.add("drClickRevisionsSidePanel", () => {
+  cy.get(`button[data-cy="sss"]`).eq(1).arrowClick();
 });
 
 Cypress.Commands.add("drPatchDocType", (params: {

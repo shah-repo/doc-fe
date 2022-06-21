@@ -118,6 +118,7 @@ context("Bulk create approvals block/inline test", () => {
                   schema: [
                     {
                       name: "blc-text-field-kv6ef2ii",
+                      tabId: "overview",
                       rows: 1,
                       type: "textfield",
                       index: 0,
@@ -137,6 +138,7 @@ context("Bulk create approvals block/inline test", () => {
                     },
                     {
                       name: "approvals-built-in",
+                      tabId: "overview",
                       type: "approvals",
                       index: 1,
                       label: "Approvals",
@@ -208,6 +210,7 @@ context("Bulk create approvals block/inline test", () => {
               schema: [
                 {
                   name: "blc-text-field-kv6ef2ii",
+                  tabId: "overview",
                   rows: 1,
                   type: "textfield",
                   index: 0,
@@ -228,6 +231,7 @@ context("Bulk create approvals block/inline test", () => {
                 {
                   index: 1,
                   type: "inlineapproval",
+                  tabId: "overview",
                   name: "inline-approval-kw6gbxwm",
                   hidden: false,
                   outputDisabled: false,
@@ -249,6 +253,7 @@ context("Bulk create approvals block/inline test", () => {
                 },
                 {
                   name: "approvals-built-in",
+                  tabId: "overview",
                   type: "approvals",
                   index: 2,
                   label: "Approvals",
@@ -373,7 +378,7 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Select 'no' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(2).check();
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(1).check();
       });
     });
 
@@ -428,24 +433,33 @@ context("Bulk create approvals block/inline test", () => {
         cy.drEnterDocumentDescription({ description: "Bulk Creation approvals inline document description" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
           cy.unClick();
         });
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]")
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
           .autocompleteSelect("Document with inline approvals for BLC");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Approvals Inline Type");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]")
+          .autocompleteSelect("Approvals Inline Type");
       });
 
       it("Select 'no' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(1).check();
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(1).check();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {
@@ -454,6 +468,10 @@ context("Bulk create approvals block/inline test", () => {
     });
 
     context("Upload approvals block spreadsheet template", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Upload template file", () => {
         cy.atchUploadTemplateForBLC({ fileName: "recordApprovalsInline.xlsx" });
       });
@@ -532,17 +550,17 @@ context("Bulk create approvals block/inline test", () => {
           });
 
           it("Verify approver", () => {
-            cy.get("div[id=Presenter-FBWorkspace]>div:nth-child(2)>div>div:nth-child(5)")
-              .should("contain", USERS[1].name);
+            cy.get(`div[data-cy="approved-${USERS[1].name}"]`)
+              .should("exist", USERS[1].name);
           });
 
           it("Verify record release date", () => {
-            cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-              .should("contain.text", "Released Date: 11/18/2021");
+            cy.get("div[data-cy=releaseDate]").parent().parent().find("p")
+              .should("have.text", "2021.11.18");
           });
 
           it("Verify record approve date", () => {
-            cy.get("div[id=Presenter-FBWorkspace]>div:nth-child(2)>div>div:nth-child(5)")
+            cy.get(`div[data-cy="approved-${USERS[1].name}"]`)
               .should("contain", "November 18, 2021");
           });
         });
@@ -566,17 +584,17 @@ context("Bulk create approvals block/inline test", () => {
           });
 
           it("Verify approver", () => {
-            cy.get("div[id=Presenter-FBWorkspace]>div:nth-child(2)>div>div:nth-child(5)")
-              .should("contain", USERS[1].name);
+            cy.get(`div[data-cy="approved-${USERS[1].name}"]`)
+              .should("exist", USERS[1].name);
           });
 
           it("Verify record release date", () => {
-            cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-              .should("contain.text", "Released Date: 11/18/2021");
+            cy.get("div[data-cy=releaseDate]").parent().parent().find("p")
+              .should("have.text", "2021.11.18");
           });
 
           it("Verify record approve date", () => {
-            cy.get("div[id=Presenter-FBWorkspace]>div:nth-child(2)>div>div:nth-child(5)")
+            cy.get(`div[data-cy="approved-${USERS[1].name}"]`)
               .should("contain", "November 18, 2021");
           });
         });
@@ -637,17 +655,17 @@ context("Bulk create approvals block/inline test", () => {
           });
 
           it("Verify approver", () => {
-            cy.get("div[id=\"Presenter-FBWorkspace\"]>div:nth-child(2)>div>div:nth-child(3)")
+            cy.get("div[data-cy=releasedBy]")
               .should("contain", USERS[1].name);
           });
 
           it("Verify record release date", () => {
-            cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+            cy.get("div[data-cy=releasedDate")
               .should("contain.text", "Released Date: 11/18/2021");
           });
 
           it("Verify record approve date", () => {
-            cy.get("div[id=\"Presenter-FBWorkspace\"]>div:nth-child(2)>div>div:nth-child(3)")
+            cy.get("div[data-cy=fb-approval-history-0]")
               .should("contain", "18 Nov 2021");
           });
         });
@@ -671,17 +689,17 @@ context("Bulk create approvals block/inline test", () => {
           });
 
           it("Verify approver", () => {
-            cy.get("div[id=\"Presenter-FBWorkspace\"]>div:nth-child(2)>div>div:nth-child(3)")
+            cy.get("div[data-cy=releasedBy]")
               .should("contain", USERS[1].name);
           });
 
           it("Verify record release date", () => {
-            cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+            cy.get("div[data-cy=releasedDate]")
               .should("contain.text", "Released Date: 11/18/2021");
           });
 
           it("Verify record approve date", () => {
-            cy.get("div[id=\"Presenter-FBWorkspace\"]>div:nth-child(2)>div>div:nth-child(3)")
+            cy.get("div[data-cy=fb-approval-history-0]")
               .should("contain", "18 Nov 2021");
           });
         });
