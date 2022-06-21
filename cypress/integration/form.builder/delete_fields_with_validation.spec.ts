@@ -87,6 +87,10 @@ context("Field validations test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Add Radio Button", () => {
       it("Click Add a Field", () => {
         cy.fbAddNewField();

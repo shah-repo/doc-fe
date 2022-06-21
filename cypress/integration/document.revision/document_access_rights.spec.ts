@@ -186,6 +186,7 @@ context("Document Access Rights", () => {
 
     it(`Remove default Everyone from group`, () => {
       cy.get(`[data-cy="field-securityGroups"]`).arrowType(`{backspace}`);
+      cy.unClick();
     });
 
     it("Select 'Numeric' revision stage", () => {
