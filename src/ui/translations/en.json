@@ -435,6 +435,10 @@
   "common.go.back": "Go back",
   "common.log.off": "Log off",
   "common.extend": "Extend",
+  "common.load.more": "Load More",
+  "common.expand.all" : "Expand All",
+  "common.collapse.all" : "Collapse All",
+  "common.jump.to" : "Jump To",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -1302,7 +1306,7 @@
   "tabId.specification": "Specification",
   "tabId.procedure": "Procedure",
   "tabId.lineitems": "Line Items",
-  "tabId.materialsandequipment": "Materials and Equipment",
+  "tabId.materialsandequipment": "Materials & Equipment",
   "tabId.approvalroles": "Approval Roles",
   "tabId.matrixdetails": "Matrix Details",
   "tabId.documents": "Documents",
@@ -1310,5 +1314,6 @@
   "tabId.general": "General",
   "tabId.training": "Training",
   "tabId.calpmhistory":"Cal/PM History",
-  "common.load.more": "Load More"
+  "meq.chip.nextCalDate" : "Next Callibration Due :",
+  "meq.chip.prevMaintance" : "Preventive Maintenance Due : "
 }

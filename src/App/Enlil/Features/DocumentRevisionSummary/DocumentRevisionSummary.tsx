@@ -4,13 +4,14 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupType, TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspace } from "../../../../ui/form.builder";
+import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -29,7 +30,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
-
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
@@ -38,6 +38,13 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       labelId: "tabId.training",
       tabId: "training",
       type: "TRAINING",
+    }];
+  }
+  if (tabConfig && group === DOC_TYPE_GROUP.LHR) {
+    tabConfig = [ ...tabConfig, {
+      labelId: "tabId.materialsandequipment",
+      tabId: TabTypeOptions.TABS_MEQ,
+      type: TabTypeOptions.TABS_MEQ,
     }];
   }
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
@@ -128,6 +135,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           documentRevisionId={documentRevision?.id}
                         />
                       )}
+                      {tabType === TabTypeOptions.TABS_MEQ &&
+                        <FBMaterialEqInfoContainer
+                          documentRevisionId={documentRevision?.id}
+                        />
+                      }
                     </SMBox>
                   </SMBox>;
                 })}
