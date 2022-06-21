@@ -110,6 +110,10 @@ context("Dynamic Form Test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add section field", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });

@@ -6,6 +6,7 @@ enum Colors {
   alabaster = "#F9FBFF",
   lily_white="#F8F9F9",
   water="#EEF3FF",
+  titan_white="#EBEFF7",
   // black
   black = "#000",
   almost_black = "#080B11", // font_black

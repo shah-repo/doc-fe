@@ -19,6 +19,8 @@ export type SMTextEditorProps =
   masked?: boolean;
   isPreview?: boolean;
   disabled?: boolean;
+  showToggleButton?: () => void;
+  isTextClamped?: boolean;
 };
 
 export interface SMTextEditorStateProps {

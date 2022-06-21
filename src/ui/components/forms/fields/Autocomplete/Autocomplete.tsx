@@ -50,6 +50,10 @@ export const selectStyles: StylesConfig = {
     letterSpacing: "normal",
     color: Colors.lightest_grey2,
   }),
+  menu: (provided) => ({
+    ...provided,
+    position: "relative",
+  }),
 };
 
 export const MultiValueRemove = (props) => (

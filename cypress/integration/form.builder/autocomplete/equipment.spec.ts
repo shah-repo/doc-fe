@@ -400,6 +400,10 @@ context("Autocomplete 'Equipment' test", () => {
         cy.drSelectOutputDocumentType({ documentType: "Equipment" });
       });
 
+      it("Click create a document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Add autocomplete of “Approvers” and set validation", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });

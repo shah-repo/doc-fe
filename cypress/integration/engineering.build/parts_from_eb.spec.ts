@@ -183,16 +183,16 @@ context("Parts from EB flow test", () => {
       it("Select 'Engineering Build' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
       });
-
-      it("Verify that Approvals field is automatically added", () => {
-        SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
     });
 
     context("Create the form and release it", () => {
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Verify that Approvals field is automatically added", () => {
+        SystemRequirement("REQ-0980");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {
