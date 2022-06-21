@@ -47,8 +47,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 }) => {
 
   const intl = useIntl();
-  const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId,
-    STATUS_TYPES_LABEL[status]);
+  const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
   const isStatusReleased = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
@@ -208,10 +207,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       size="small"
                       className={`${classes.chip} ${
                         classes[
-                          FormHeaderStatusClassMapping[displayStatus || label || ""]
+                          FormHeaderStatusClassMapping[status || label || ""]
                         ]
                       }`}
-                      label={displayStatus || label}
+                      label={STATUS_TYPES_LABEL[status] || label}
                       data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>
