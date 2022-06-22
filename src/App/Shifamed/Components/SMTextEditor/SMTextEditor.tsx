@@ -85,7 +85,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         {...{ editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
                         toolbar={{
-                          options: ["blockType", "inline", "colorPicker", "list",
+                          options: ["blockType", "fontFamily", "inline", "colorPicker", "list",
                             "textAlign", "link", "remove", "history"],
                         }}
                         readOnly={disabled}
