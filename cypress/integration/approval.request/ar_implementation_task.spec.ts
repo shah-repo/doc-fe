@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -245,8 +246,8 @@ context("Approval request implementation tasks", () => {
     it("Verify export", () => {
       SystemRequirement("REQ-3800");
       cy.exportVerifyEmail({
-        status: "IMPLEMENTATION", filename: "-Approval-request-from-newly-created-form",
-        pdfStatus: "IMPLEMENTATION", type: "approval request",
+        status: STATUS_TYPES_LABEL.IMPLEMENTATION, filename: "-Approval-request-from-newly-created-form",
+        pdfStatus: STATUS_TYPES_LABEL.IMPLEMENTATION, type: "approval request",
       });
     });
 
