@@ -409,8 +409,8 @@ Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string
 });
 
 Cypress.Commands.add("arWithdrawSubmission", () => {
-  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
-  cy.get("[data-cy=\"change.request.withdraw.alert\"]").arrowClick();
+  cy.get("div[class=\"MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end\"]")
+    .find("button[data-cy=\"change.request.withdraw.alert\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.PostWithdrawChangeRequests,
     CyRoutes.ARPreview,

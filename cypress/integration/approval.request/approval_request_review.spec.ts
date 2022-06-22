@@ -105,12 +105,12 @@ context("Approval request form scenario", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Click create document", () => {
@@ -145,13 +145,13 @@ context("Approval request form scenario", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click on 'Component Specification' outputdocument type", () =>
     {
       cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document", () => {
