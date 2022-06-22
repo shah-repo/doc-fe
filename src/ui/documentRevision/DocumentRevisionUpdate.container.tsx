@@ -100,7 +100,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     // Hack to take updated formInput
     const formStateContext = FBFormStateContext as any;
-    if (!isEmpty(formStateContext?._currentValue)) {
+    if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
       set(values, "formInput.formInput", formStateContext?._currentValue);
     }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
