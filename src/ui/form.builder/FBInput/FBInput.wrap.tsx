@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Dictionary, find, findIndex, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -97,9 +98,12 @@ export const withFBInput = <T extends FBInputProps>(
       inputState?.setIncludeNotes(includeNotes || false);
     }, []);
 
+    useObserver(() => {
+      if (!formState) { return; }
+      helperText = formState.errors.get(name) || helperText;
+      error = !isUndefined(formState.errors.get(name)) && formState.errorValidation && showErrorMsg;
+    });
 
-    helperText = formState?.errors.get(name) || helperText;
-    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
@@ -142,7 +146,13 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    if ((isOutput || workspaceState?.mode !== "design") && workspaceState?.mode !== "formPreview") {
+    if (
+      (isOutput || workspaceState?.mode !== "design") &&
+      !(
+        workspaceState?.mode === "formPreview" ||
+        workspaceState?.mode === "preview"
+      )
+    ) {
       const isUnderMode = (
         !helperText && (
           isUndefined(validationValue) ||
