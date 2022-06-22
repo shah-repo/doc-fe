@@ -184,7 +184,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             mode,
                           }}
                         />
-                        {documentRevision && <FBWorkspace
+                        {documentRevision && _tabsState?.tabID === tabInfo.tabId &&  <FBWorkspace
                           isPortal={false}
                           document={{
                             ...formValues.values as unknown as DocumentRevision,
@@ -195,7 +195,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           schema={schema}
                         />}
                       </>}
-                      {tabType === "DYNAMIC" && _formState?.mode !== "none" &&  (
+                      {tabType === "DYNAMIC" && _tabsState?.tabID === tabInfo.tabId && _formState?.mode !== "none" &&  (
                         <FBWorkspace
                           isPortal={false}
                           document={{
