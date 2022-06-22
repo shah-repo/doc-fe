@@ -7,14 +7,11 @@ import moment from "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
-import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -27,12 +24,10 @@ let createdPMForm;
 let createdCalibrationForm;
 let group;
 let equipmentURL;
-let pmSchemaFieldName;
-let calibrationSchemaFieldName;
+let pmSchemaField;
+let calibrationSchemaField;
 let adminSessionId;
 let asyncTasksGroup;
-let dateAfterEmailShouldArrive;
-let emailsFromInbox;
 
 const equimentDueDays = (31);
 const multipleCompanies = true;
@@ -40,7 +35,7 @@ const ADMIN_USER = USERS[1];
 const equipmentTitleForm = `Equipment-Form`;
 const equipmentDocId = "EQ-00001";
 
-context("Autocomplete 'Equipment' test", () => {
+context("'Equipment' test with time tool", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -55,7 +50,6 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -389,95 +383,67 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Autocomplete 'Equipment' test", () => {
-    context("Create 'Equipment Form'", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
+  context("Create 'Equipment Form'", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
 
-      it("Enter document title " + equipmentTitleForm, () => {
-        cy.drEnterDocumentTitle({ name: equipmentTitleForm });
-      });
+    it("Enter document title " + equipmentTitleForm, () => {
+      cy.drEnterDocumentTitle({ name: equipmentTitleForm });
+    });
 
-      it("Enter document description 'Equipment document description'", () => {
-        cy.drEnterDocumentDescription({ description: "Equipment Form document description" });
-      });
+    it("Enter document description 'Equipment document description'", () => {
+      cy.drEnterDocumentDescription({ description: "Equipment Form document description" });
+    });
 
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
 
-      it("Select 'Equipment' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Equipment" });
-      });
+    it("Select 'Equipment' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Equipment" });
+    });
 
-      it("Add autocomplete of “Approvers” and set validation", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
-        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
-        cy.fbOpenValidation();
-        cy.fbFieldRequired();
-        cy.fbAddField();
-      });
+    it("EQUIPMENT SECTIONS FOR PM", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
+      cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
+      cy.fbAddField();
+    });
 
-      it("Add select field and set validation ", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Select" });
-        cy.fbEnterNameValue({ name: "label", value: "Select field" });
-        cy.fbGroupOptions("option1", "option2");
-        cy.fbOpenValidation();
-        cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf({ name: "Autocomplete-Approvers", value: USERS[1].email });
-        cy.fbAddField();
-      });
+    it("EQUIPMENT SECTIONS FOR CAL", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "Calibration" });
+      cy.get("input[value=\"calibration\"]").arrowClick();
+      cy.fbAddField();
+    });
 
-      it("EQUIPMENT SECTIONS FOR PM", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
-        cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
-        cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
-        cy.fbAddField();
+    it("Click create document", () => {
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wait("@response").then((res) => {
+        if (res.response) {
+          const response = res.response.body;
+          pmSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Preventative Maintenance");
+          calibrationSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Calibration");
+        }
       });
-
-      it("EQUIPMENT SECTIONS FOR CAL", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
-        cy.fbEnterNameValue({ name: "label", value: "Calibration" });
-        cy.get("input[value=\"calibration\"]").arrowClick();
-        cy.fbAddField();
-      });
-
-      it("Select references", () => {
-        cy.drSelectReferences( "FM-00004" );
-        cy.drSelectReferences( "FM-00005" );
-        cy.unClick();
-      });
-
-      it("Click create document", () => {
-        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        cy.wait("@response").then((res) => {
-          if (res.response) {
-            const response = res.response.body;
-            pmSchemaFieldName = response.formTemplate.schema[5].name;
-            calibrationSchemaFieldName = response.formTemplate.schema[6].name;
-          }
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
+
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
@@ -502,12 +468,6 @@ context("Autocomplete 'Equipment' test", () => {
       cy.drEnterDocumentDescription({ description: "Equipment description" });
     });
 
-    it("Select references", () => {
-      cy.drSelectReferences( "FM-00004" );
-      cy.drSelectReferences( "FM-00005" );
-      cy.unClick();
-    });
-
     it("Select 'Active' as EQ status", () => {
       cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
@@ -520,10 +480,6 @@ context("Autocomplete 'Equipment' test", () => {
     it(`Select '${USERS[2].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
-    });
-
-    it("Autocomplete-Approvers", () => {
-      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -604,7 +560,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaFieldName}`;
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaField.name}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
           CyRoutes.GetAvailableApprovers,
           CyRoutes.GetAutocompleteOptions], () => {
@@ -643,7 +599,6 @@ context("Autocomplete 'Equipment' test", () => {
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
           const dayNumber = $el.text();
-          cy.log(dayNumber);
           if (dayOfTheMonth.toString() === dayNumber) {
             cy.wrap($el).arrowClick();
           }
@@ -680,7 +635,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaField.name}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
           CyRoutes.GetAvailableApprovers,
           CyRoutes.GetAutocompleteOptions], () => {
@@ -753,90 +708,56 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Fill second PM form and keep it in draft", () => {
-    it("Navigate to EQ document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
+  context("Veriy UI notification is present for coordinator on current day", () => {
+    it("Logout", () => {
+      cy.authLogout();
+    });
+
+    it("Log user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
       });
     });
 
-    it("Click 'NEW PM' on Preventative Maintenance section", () => {
-      cy.url().then((url: any) => {
-        const docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
-          cy.visit(newPMUrl);
-        });
-      });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
+    it("Verify user is loged in", () => {
+      cy.navigListExistsCheck(
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_CONTROL);
     });
 
-    it("Enter title 'Second Preventative Maintenance", () => {
-      cy.drEnterDocumentTitle({ name: "Second Preventative Maintenance" });
+    it("Verify Dashboard list", () => {
+      cy.get("[data-cy=dashboardFeedList]>div").eq(0)
+        .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days`)
+        .should("exist");
+      cy.get("[data-cy=dashboardFeedList]>div").eq(1)
+        .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
+        .should("not.exist");
     });
 
-    it("Select revision stage 'Numeric'", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it(`Select maintainer '${ADMIN_USER.name}'`, () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
-    });
-
-    it("Fill 'Completion Date'", () => {
-      const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
-      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
-      cy.get("button.MuiPickersDay-day")
-        .not(".MuiPickersDay-hidden")
-        .each(($el) => {
-          const dayNumber = $el.text();
-          cy.log(dayNumber);
-          if (dayOfTheMonth.toString() === dayNumber) {
-            cy.wrap($el).arrowClick();
-          }
-        });
-    });
-
-    it("Create 'Second Preventative Maintenance'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+    it("Logout", () => {
+      cy.authLogout();
     });
   });
 
-  context("Check equipment calibration history on preventative maintenance history in equipment", () => {
-    it("Navig to Equipment", () => {
-      cy.navigToEquipment();
-    });
-
-    it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
+  context("Login with primary owner", () => {
+    it("Log user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify history for pm", () => {
-      cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
-      cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
-    });
-
-    it("Verify history for calibration", () => {
-      cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
 
-  const testDays = [1, 21, 1, 1];
-  const startingTestDay = 1;
+  const testDays = [1, 22, 1];
   testDays.forEach((dayToTest, i) => {
-    context(`Test UI message for day ${dayToTest}`, () => {
+    context(`Test UI message for day ${(dayToTest + i)}`, () => {
       context("Use time tool to travel user back to future", () => {
         it("Navigate to async tasks", () => {
           cy.navigToAsyncTasks();
@@ -846,22 +767,18 @@ context("Autocomplete 'Equipment' test", () => {
           cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
         });
 
-        const daysToJumpBackInFuture = startingTestDay + i === 1 ? 1 : 1;
-        it(`Select ${daysToJumpBackInFuture.toString()} day to back in future`, () => {
+        it(`Select ${dayToTest.toString()} day to back in future`, () => {
           cy.get("input[name=\"day\"]").clear();
           cy.asyncSelectBackToTheFutureTime({ day: dayToTest });
         });
 
         it("Select next tasks", () => {
           cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
-          cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS });
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         });
 
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit();
           cy.wait(2000);
-          cy.reload();
         });
       });
 
@@ -886,163 +803,6 @@ context("Autocomplete 'Equipment' test", () => {
             NavigationItems.DOCUMENT_CONTROL);
         });
 
-        it("Get emails", () => {
-          cy.then(() => {
-            if (i === 0) {
-              const getEmailSetting =  {
-                to: USERS[2].email,
-                after: dateAfterEmailShouldArrive,
-                subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
-              };
-
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                .then((emails) => {
-                  emailsFromInbox = emails;
-                }).then(() => {
-                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                    {
-                      sentToUser: USERS[2].email,
-                      contains: [`Hello <b>${USERS[2].name},</b>`,
-                        `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
-                        `Please click on the button below to view it`,
-                        "<button type=\"button\">VIEW ITEM</button>",
-                        createdCompany.id],
-                    }];
-
-                  cy.imapVerifyEmailsInList({
-                    receivedEmails: emailsFromInbox,
-                    emailsToTest: emailsThatShouldBeReceived,
-                    getEmailsSincedate: dateAfterEmailShouldArrive,
-                    assertNumberOfEmailsFoundInList: 1,
-                  }).and(() => {
-
-                    const getEmailSetting =  {
-                      to: USERS[2].email,
-                      after: dateAfterEmailShouldArrive,
-                      subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
-                    };
-
-                    cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                      .then((emails) => {
-                        emailsFromInbox = emails;
-                      }).then(() => {
-
-                        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                          {
-                            sentToUser: USERS[2].email,
-                            contains: [`Hello <b>${USERS[2].name},</b>`,
-                              `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                              `Please click on the button below to view it`,
-                              "<button type=\"button\">VIEW ITEM</button>",
-                              createdCompany.id],
-                          }];
-
-                        cy.imapVerifyEmailsInList({
-                          receivedEmails: emailsFromInbox,
-                          emailsToTest: emailsThatShouldBeReceived,
-                          getEmailsSincedate: dateAfterEmailShouldArrive,
-                          assertNumberOfEmailsFoundInList: 1,
-                        });
-                      });
-                  });
-                });
-            }
-
-            else if (i === 0) {
-              const getEmailSetting =  {
-                to: USERS[2].email,
-                after: dateAfterEmailShouldArrive,
-                subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
-              };
-
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                .then((emails) => {
-                  emailsFromInbox = emails;
-                }).then(() => {
-
-                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                    {
-                      sentToUser: USERS[2].email,
-                      contains: [`Hello <b>${USERS[2].name},</b>`,
-                        `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                        `Please click on the button below to view it`,
-                        "<button type=\"button\">VIEW ITEM</button>",
-                        createdCompany.id],
-                    }];
-
-                  cy.imapVerifyEmailsInList({
-                    receivedEmails: emailsFromInbox,
-                    emailsToTest: emailsThatShouldBeReceived,
-                    getEmailsSincedate: dateAfterEmailShouldArrive,
-                    assertNumberOfEmailsFoundInList: 1,
-                  });
-                });
-            }
-
-            else if (i === 2) {
-              const getEmailSetting =  {
-                to: USERS[2].email,
-                after: dateAfterEmailShouldArrive,
-                subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
-              };
-
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                .then((emails) => {
-                  emailsFromInbox = emails;
-                }).then(() => {
-
-                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                    {
-                      sentToUser: USERS[2].email,
-                      contains: [`Hello <b>${USERS[2].name},</b>`,
-                        `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                        `Please click on the button below to view it`,
-                        "<button type=\"button\">VIEW ITEM</button>",
-                        createdCompany.id],
-                    }];
-
-                  cy.imapVerifyEmailsInList({
-                    receivedEmails: emailsFromInbox,
-                    emailsToTest: emailsThatShouldBeReceived,
-                    getEmailsSincedate: dateAfterEmailShouldArrive,
-                    assertNumberOfEmailsFoundInList: 1,
-                  });
-                });
-            }
-
-            else if (i === 3) {
-              const getEmailSetting =  {
-                to: USERS[2].email,
-                after: dateAfterEmailShouldArrive,
-                subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
-              };
-
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                .then((emails) => {
-                  emailsFromInbox = emails;
-                }).then(() => {
-
-                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                    {
-                      sentToUser: USERS[2].email,
-                      contains: [`Hello <b>${USERS[2].name},</b>`,
-                        `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
-                        `Please click on the button below to view it`,
-                        "<button type=\"button\">VIEW ITEM</button>",
-                        createdCompany.id],
-                    }];
-
-                  cy.imapVerifyEmailsInList({
-                    receivedEmails: emailsFromInbox,
-                    emailsToTest: emailsThatShouldBeReceived,
-                    getEmailsSincedate: dateAfterEmailShouldArrive,
-                    assertNumberOfEmailsFoundInList: 1,
-                  });
-                });
-            }
-          });
-        });
-
         it("Verify Dashboard list", () => {
           cy.get("[data-cy=dashboardFeedList]>div").then(($dayToTest) => {
             if (i === 0) {
@@ -1055,21 +815,13 @@ context("Autocomplete 'Equipment' test", () => {
             }
             else if (i === 1) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
-                .should("exist");
-              cy.get("[data-cy=dashboardFeedList]>div").eq(1)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days`)
-                .should("exist");
-            }
-            else if (i === 2) {
-              cy.get("[data-cy=dashboardFeedList]>div").eq(0)
                 .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days`)
                 .should("exist");
               cy.get("[data-cy=dashboardFeedList]>div").eq(1)
                 .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
                 .should("exist");
             }
-            else if (i === 3) {
+            else if (i === 2) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
                 .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days`)
                 .should("exist");
@@ -1102,133 +854,6 @@ context("Autocomplete 'Equipment' test", () => {
             NavigationItems.DOCUMENT_CONTROL);
         });
 
-        it("Get emails", () => {
-          cy.then(($dayToTest) => {
-            if (i === 0) {
-              const getEmailSetting =  {
-                to: USERS[2].email,
-                after: dateAfterEmailShouldArrive,
-                subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
-              };
-
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                .then((emails) => {
-                  emailsFromInbox = emails;
-                }).then(() => {
-                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                    {
-                      sentToUser: USERS[2].email,
-                      contains: [`Hello <b>${USERS[2].name},</b>`,
-                        `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
-                        `Please click on the button below to view it`,
-                        "<button type=\"button\">VIEW ITEM</button>",
-                        createdCompany.id],
-                    }];
-
-                  cy.imapVerifyEmailsInList({
-                    receivedEmails: emailsFromInbox,
-                    emailsToTest: emailsThatShouldBeReceived,
-                    getEmailsSincedate: dateAfterEmailShouldArrive,
-                    assertNumberOfEmailsFoundInList: 1,
-                  }).and(() => {
-
-                    const getEmailSetting =  {
-                      to: USERS[2].email,
-                      after: dateAfterEmailShouldArrive,
-                      subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
-                    };
-
-                    cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                      .then((emails) => {
-                        emailsFromInbox = emails;
-                      }).then(() => {
-
-                        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                          {
-                            sentToUser: USERS[2].email,
-                            contains: [`Hello <b>${USERS[2].name},</b>`,
-                              `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                              `Please click on the button below to view it`,
-                              "<button type=\"button\">VIEW ITEM</button>",
-                              createdCompany.id],
-                          }];
-
-                        cy.imapVerifyEmailsInList({
-                          receivedEmails: emailsFromInbox,
-                          emailsToTest: emailsThatShouldBeReceived,
-                          getEmailsSincedate: dateAfterEmailShouldArrive,
-                          assertNumberOfEmailsFoundInList: 1,
-                        });
-                      });
-                  });
-                });
-            }
-
-            else if (i === 2) {
-              const getEmailSetting =  {
-                to: USERS[2].email,
-                after: dateAfterEmailShouldArrive,
-                subject: `Equipment ${equipmentDocId} Equipment document has PM Due`,
-              };
-
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                .then((emails) => {
-                  emailsFromInbox = emails;
-                }).then(() => {
-
-                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                    {
-                      sentToUser: USERS[2].email,
-                      contains: [`Hello <b>${USERS[2].name},</b>`,
-                        `Equipment <b>${equipmentDocId} Equipment document</b> has PM due on`,
-                        `Please click on the button below to view it`,
-                        "<button type=\"button\">VIEW ITEM</button>",
-                        createdCompany.id],
-                    }];
-
-                  cy.imapVerifyEmailsInList({
-                    receivedEmails: emailsFromInbox,
-                    emailsToTest: emailsThatShouldBeReceived,
-                    getEmailsSincedate: dateAfterEmailShouldArrive,
-                    assertNumberOfEmailsFoundInList: 1,
-                  });
-                });
-            }
-
-            else if (i === 3) {
-              const getEmailSetting =  {
-                to: USERS[2].email,
-                after: dateAfterEmailShouldArrive,
-                subject: `Equipment ${equipmentDocId} Equipment document has Calibration Due`,
-              };
-
-              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
-                .then((emails) => {
-                  emailsFromInbox = emails;
-                }).then(() => {
-
-                  const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-                    {
-                      sentToUser: USERS[2].email,
-                      contains: [`Hello <b>${USERS[2].name},</b>`,
-                        `Equipment <b>${equipmentDocId} Equipment document</b> has Calibration due on`,
-                        // `${dueDateInEmail}`,
-                        `Please click on the button below to view it`,
-                        "<button type=\"button\">VIEW ITEM</button>",
-                        createdCompany.id],
-                    }];
-
-                  cy.imapVerifyEmailsInList({
-                    receivedEmails: emailsFromInbox,
-                    emailsToTest: emailsThatShouldBeReceived,
-                    getEmailsSincedate: dateAfterEmailShouldArrive,
-                    assertNumberOfEmailsFoundInList: 1,
-                  });
-                });
-            }
-          });
-        });
-
         it("Verify Dashboard list", () => {
           cy.get("[data-cy=dashboardFeedList]>div").then(($dayToTest) => {
             if (i === 0) {
@@ -1242,11 +867,6 @@ context("Autocomplete 'Equipment' test", () => {
                 .should("exist");
             }
             else if (i === 2) {
-              cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-                .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
-                .should("exist");
-            }
-            else if (i === 3) {
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
                 .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days`)
                 .should("exist");
