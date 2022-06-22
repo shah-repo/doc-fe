@@ -5,6 +5,7 @@ import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -322,7 +323,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
     });
   });
 
@@ -356,34 +357,36 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.unClick();
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Upload logo picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Add Checkbox group", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "TEST FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).last().check();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.get(`input[type="checkbox"][value="3"]`).first().check();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").first().contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -401,8 +404,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
   context("Verify One-Time Training form title report", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "Released" });
-      cy.get("[data-cy='HeaderInfoName']").should("have.text", "One-Time training form title");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy='field-name']").should("have.text", "One-Time training form title");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
@@ -546,6 +549,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         expect(el).match(/Groups to Train/);
 
+        expect(el).match(/Users to Train \(if applicable\)/);
+
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -564,12 +569,10 @@ context("Repeat One Time Training with Training Curriculum", () => {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Users to Train \(if applicable\)/);
+        expect(el).match(/APPROVALS\nApprovers/);
 
         tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/TEXT FIELD\nAPPROVALS\nApprovers/);
 
         expect(el).match(/Released/);
 
@@ -617,9 +620,10 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
     });
 
-    it("Select 'One-Time Training test' as document type", () => {
-      // eslint-disable-next-line max-len
-      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowType("One-Time Training test",  { force: true }).wait(1500).arrowType("{downarrow}{enter}",  { force: true });
+    it("Select 'One-Time Training test' output document type", () => {
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
+        .arrowType("One-Time Training test",  { force: true }).wait(1500)
+        .arrowType("{downarrow}{enter}",  { force: true });
     });
 
     it("Enter training title 'One-Time training title'", () => {
@@ -634,12 +638,28 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Upload logo picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
+    it("Checkbox option 2 checked", () => {
+      cy.get(`input[type="checkbox"]`).eq(2).check();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
+      cy.get("[name=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
 
     it("Select force training option 'Yes'", () => {
@@ -651,17 +671,13 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
-    it("Checkbox option 2 checked", () => {
-      cy.get(`input[type="checkbox"]`).eq(2).check();
-    });
-
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Check doc Draft status and click on Send To Email", () => {
       cy.arVerifyStatus({ status: "DRAFT" });
-      cy.get("[data-cy='HeaderInfoName']").should("have.text", "One-Time training PDF EXPORT");
+      cy.get("[data-cy='field-name']").should("have.text", "One-Time training PDF EXPORT");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
@@ -846,6 +862,10 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Release the training document", () => {
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
@@ -869,8 +889,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "Released" });
-      cy.get("[data-cy='HeaderInfoName']").should("have.text", "One-Time training PDF EXPORT");
+      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.get("[data-cy='field-name']").should("have.text", "One-Time training PDF EXPORT");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
