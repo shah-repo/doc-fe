@@ -100,10 +100,11 @@ export const withFBInput = <T extends FBInputProps>(
 
     useObserver(() => {
       if (!formState) { return; }
-      helperText = formState.errors.get(name) || helperText;
-      error = !isUndefined(formState.errors.get(name)) && formState.errorValidation && showErrorMsg;
+      formState.validate();
     });
 
+    helperText = formState?.errors.get(name);
+    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
