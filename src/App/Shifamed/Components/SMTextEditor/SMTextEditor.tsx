@@ -39,7 +39,9 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
   };
   const onAway = () => {
-    _textEditorState?.setPreviewMode(true);
+    setTimeout(() => {
+      _textEditorState?.setPreviewMode(true);
+    });
     showToggleButton && showToggleButton();
   };
   return  (
@@ -78,9 +80,14 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         onFocus={() => {
                           _textEditorState?.setPreviewMode(false);
                         }}
+                        onChange={() => _textEditorState?.setPreviewMode(false)}
                         onBlur={(ev) => onBlur?.(ev) }
                         {...{ editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
+                        toolbar={{
+                          options: ["blockType", "inline", "colorPicker", "list",
+                            "textAlign", "link", "remove", "history"],
+                        }}
                         readOnly={disabled}
                         toolbarHidden={_textEditorState?.previewMode}
                         toolbarStyle={{

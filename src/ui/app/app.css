@@ -380,3 +380,7 @@ td#kendo-expandable-column[role="gridcell"] {
   -webkit-box-orient: vertical;  
   overflow: hidden !important;
 }
+
+.rdw-dropdown-optionwrapper {
+  overflow-y: hidden !important;
+}
