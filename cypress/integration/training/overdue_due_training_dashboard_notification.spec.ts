@@ -1,6 +1,5 @@
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
-import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -609,35 +608,13 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
 
     context("Use time tool to travel user back to future", () => {
-      it("Navigate to async tasks", () => {
-        cy.navigToAsyncTasks();
-      });
-
-      it("Select task TIME_TRAVEL_USER", () => {
-        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-      });
-
       it("Select 24 day to back in future", () => {
-        cy.asyncSelectBackToTheFutureTime({ day: 24 });
-      });
-
-      it("Select next task TRAINING_RECORDS_REFRESH", () => {
-        cy.asyncTaskSelectNextTaskType({
-          taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH,
+        cy.trSetTimeTravelInDays({ days: 24 });
+        cy.setTimeTravelToComplete({
+          tasktype: "TIME_TRAVEL_COMPANY",
+          days: "24 days",
+          status: "COMPLETE",
         });
-      });
-
-      it("Select next task TRAINING_RECORDS_STATUS", () => {
-        cy.asyncTaskSelectNextTaskType({
-          taskType: SQS_TYPES.TRAINING_RECORDS_STATUS,
-        });
-      });
-
-      it("Submit async task", () => {
-        cy.asyncTaskClickSubmit();
-        cy.wait(2000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -816,35 +793,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
 
     context("Use time tool to travel user back to future", () => {
-      it("Navigate to async tasks", () => {
-        cy.navigToAsyncTasks();
-      });
-
-      it("Select task TIME_TRAVEL_USER", () => {
-        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-      });
-
       it("Select 30 day to back in future", () => {
-        cy.asyncSelectBackToTheFutureTime({ day: 30 });
-      });
-
-      it("Select next task TRAINING_RECORDS_REFRESH", () => {
-        cy.asyncTaskSelectNextTaskType({
-          taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH,
-        });
-      });
-
-      it("Select next task TRAINING_RECORDS_STATUS", () => {
-        cy.asyncTaskSelectNextTaskType({
-          taskType: SQS_TYPES.TRAINING_RECORDS_STATUS,
-        });
-      });
-
-      it("Submit async task", () => {
-        cy.asyncTaskClickSubmit();
-        cy.wait(2000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.trSetTimeTravelInDays({ days: 30 });
       });
     });
   });
@@ -962,35 +912,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
   context("Set the QA tool to Day 31", () => {
     context("Use time tool to travel user back to future", () => {
-      it("Navigate to async tasks", () => {
-        cy.navigToAsyncTasks();
-      });
-
-      it("Select task TIME_TRAVEL_USER", () => {
-        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-      });
-
       it("Select 31 day to back in future", () => {
-        cy.asyncSelectBackToTheFutureTime({ day: 31 });
-      });
-
-      it("Select next task TRAINING_RECORDS_REFRESH", () => {
-        cy.asyncTaskSelectNextTaskType({
-          taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH,
-        });
-      });
-
-      it("Select next task TRAINING_RECORDS_STATUS", () => {
-        cy.asyncTaskSelectNextTaskType({
-          taskType: SQS_TYPES.TRAINING_RECORDS_STATUS,
-        });
-      });
-
-      it("Submit async task", () => {
-        cy.asyncTaskClickSubmit();
-        cy.wait(2000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.trSetTimeTravelInDays({ days: 31 });
       });
     });
 
@@ -1148,35 +1071,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
 
     context("Use time tool to travel user back to future", () => {
-      it("Navigate to async tasks", () => {
-        cy.navigToAsyncTasks();
-      });
-
-      it("Select task TIME_TRAVEL_USER", () => {
-        cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-      });
-
       it("Select 40 day to back in future", () => {
-        cy.asyncSelectBackToTheFutureTime({ day: 40 });
-      });
-
-      it("Select next task TRAINING_RECORDS_REFRESH", () => {
-        cy.asyncTaskSelectNextTaskType({
-          taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH,
-        });
-      });
-
-      it("Select next task TRAINING_RECORDS_STATUS", () => {
-        cy.asyncTaskSelectNextTaskType({
-          taskType: SQS_TYPES.TRAINING_RECORDS_STATUS,
-        });
-      });
-
-      it("Submit async task", () => {
-        cy.asyncTaskClickSubmit();
-        cy.wait(2000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.trSetTimeTravelInDays({ days: 40 });
       });
     });
   });
