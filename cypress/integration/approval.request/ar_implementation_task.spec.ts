@@ -167,12 +167,14 @@ context("Approval request implementation tasks", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Click create document after filling document", () => {
@@ -249,7 +251,7 @@ context("Approval request implementation tasks", () => {
       cy.arEnterApprovalRequestDescription({ description: "Test" });
     });
 
-    it("Check 'Implementation task' status is 'Draft'", () => {
+    it("Check 'Implementation task' status is 'DRAFT'", () => {
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: ChangeRequestStatus.Draft });
     });
@@ -263,9 +265,9 @@ context("Approval request implementation tasks", () => {
       cy.arApproveAR();
     });
 
-    it("Check approval request status is 'Implementation'", () => {
+    it("Check approval request status is 'IMPLEMENTATION'", () => {
       SystemRequirement("REQ-0020", "REQ-0730");
-      cy.arVerifyStatus({ status: "IMPLEMENTATION" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
     });
 
     it("Verify export", () => {
@@ -278,7 +280,7 @@ context("Approval request implementation tasks", () => {
 
     it(`Check 'Implementation task' status is 'PENDING'`, () => {
       SystemRequirement("REQ-0710");
-      cy.arCheckImplementationTaskStatus({ status: "PENDING" });
+      cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.PENDING });
     });
 
     it("Complete Implementation Task'", () => {
@@ -300,11 +302,113 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: ChangeRequestStatus.Approved });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
     });
 
-    it("Check approval request status is 'Approved'", () => {
+    it("Check approval request status is 'APPROVED'", () => {
       SystemRequirement("REQ-0020", "REQ-0730");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
+    });
+  });
+
+  context("Create a document with revision as Numeric", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Create a new document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title", () => {
+      cy.drEnterDocumentTitle({ name: "AR express release form" });
+    });
+
+    it("Enter document description", () => {
+      cy.drEnterDocumentDescription({ description: "AR form description" });
+    });
+
+    it("Select document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select document revision as Numeric", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select document revision", () => {
+      cy.drClickTrainingRequired();
+    });
+
+    it("Select training required", () => {
+      cy.drClickTrainingRequired();
+    });
+
+    it("Select output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Click on ‘Approve & Release’", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Set effective date to 10 days", () => {
+      const effectiveDate = momentInPST().add(10, "days");
+      const month = effectiveDate.format("MMM");
+      const day = effectiveDate.format("D");
+
+      cy.get("[aria-label=\"change date\"]").arrowClick();
+      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+        const monthYearText = $el.text();
+        if (!monthYearText.includes(month)) {
+          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
+        }
+        cy.wait(500);
+
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            if (day === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+    });
+
+    it("Select document template as 'AR form'", () => {
+      cy.get(`[data-cy="field-formDocument"]`).autocompleteSelect("AR form");
+    });
+
+    it("Enter password", () => {
+      cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+    });
+
+    it("Approve and Release the document", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+    });
+  });
+
+  context("Verify document Approval status as 'APPROVED'", () => {
+    it("Verify document Approval status", () => {
+      cy.drCheckDocumentStatus({ status: "APPROVED" });
+      cy.arCheckTitleInEditableAndMatches({ name: "AR express release form" });
+    });
+  });
+
+  context("Verify AR Approval status as 'APPROVED'", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Select first document", () => {
+      cy.alClearFilters();
+      cy.arSelectFirstDocument();
+    });
+
+    it("Verify AR status is 'APPROVED'", () => {
       cy.arVerifyStatus({ status: "APPROVED" });
     });
   });
@@ -515,16 +619,16 @@ context("Approval request implementation tasks", () => {
       cy.alFilterByTitle({ title: "AR express release form" });
     });
 
-    it(`Filter list by OWNER as USERS[1].name`, () => {
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
-    it(`Filter list by STATUS as ${ChangeRequestStatus.Approved}`, () => {
-      cy.alFilterByStatus({ status: ChangeRequestStatus.Approved });
+    it("Filter list by STATUS as APPROVED", () => {
+      cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
 
-    it(`Verify filter by STATUS as ${ChangeRequestStatus.Approved}`, () => {
-      cy.alVerifyFilterByStatus({ status: ChangeRequestStatus.Approved });
+    it("Verify filter by STATUS as APPROVED", () => {
+      cy.alVerifyFilterByStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 
@@ -634,12 +738,12 @@ context("Approval request implementation tasks", () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
-    it(`Filter list by STATUS as ${ChangeRequestStatus.Closed}`, () => {
-      cy.alFilterByStatus({ status: ChangeRequestStatus.Closed  });
+    it("Filter list by STATUS as CLOSED", () => {
+      cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.CLOSED  });
     });
 
-    it(`Verify filter by STATUS as ${ChangeRequestStatus.Closed}`, () => {
-      cy.alVerifyFilterByStatus({ status: ChangeRequestStatus.Closed });
+    it("Verify filter by STATUS as CLOSED", () => {
+      cy.alVerifyFilterByStatus({ status: STATUS_TYPES_LABEL.CLOSED });
     });
   });
 });
