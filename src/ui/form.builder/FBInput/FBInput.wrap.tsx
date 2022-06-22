@@ -6,7 +6,7 @@ import { useObserver } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceMode, OmitInputClones } from "..";
 import { SM } from "../../../App";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
@@ -149,9 +149,8 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (
       (isOutput || workspaceState?.mode !== "design") &&
-      !(
-        workspaceState?.mode === "formPreview" ||
-        workspaceState?.mode === "preview"
+      !["formPreview", "preview"].includes(
+        workspaceState?.mode as FBWorkspaceMode
       )
     ) {
       const isUnderMode = (
