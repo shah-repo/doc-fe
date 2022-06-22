@@ -444,7 +444,6 @@ context("'Equipment' test with time tool", () => {
     });
   });
 
-
   context("Approve and release document", () => {
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
