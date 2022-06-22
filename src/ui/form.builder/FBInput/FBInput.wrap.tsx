@@ -103,7 +103,7 @@ export const withFBInput = <T extends FBInputProps>(
       formState.validate();
     });
 
-    helperText = formState?.errors.get(name);
+    helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
