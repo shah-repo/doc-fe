@@ -152,7 +152,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               >
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
-
+                  const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                   return <SMBox height="100%" key={index} overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={2} stretchY="calc(100% - 40px)">
                       {tabType === "MIXED" && <>
@@ -184,7 +184,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             mode,
                           }}
                         />
-                        {documentRevision && <FBWorkspace
+                        {documentRevision && showTabContent &&  <FBWorkspace
                           isPortal={false}
                           document={{
                             ...formValues.values as unknown as DocumentRevision,
@@ -195,7 +195,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           schema={schema}
                         />}
                       </>}
-                      {tabType === "DYNAMIC" && _formState?.mode !== "none" &&  (
+                      {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
                         <FBWorkspace
                           isPortal={false}
                           document={{
