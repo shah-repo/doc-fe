@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -265,10 +266,6 @@ context("Dynamic Form Test", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("upload file in Instructions Media upload", () => {
       cy.get("[data-cy=\"albumMediaButton\"]").first().arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
@@ -285,8 +282,8 @@ context("Dynamic Form Test", () => {
   });
 
   context("Send to Email", () => {
-    it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "New Dynamic Form" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -530,8 +527,8 @@ context("Dynamic Form Test", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "New Dynamic Form" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -799,8 +796,16 @@ context("Dynamic Form Test", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Selects 'Clinical Protocol' output document type from dropdown", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Click on 'Add a field'", () => {
@@ -808,8 +813,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'New Dynamic Form' field", () => {
-      cy.fbSelectNavField({ field: "Custom Controls" });
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "New Dynamic Form" });
+      cy.fbSelectItemFromNewFieldList({ section: "Custom Controls", field: "New Dynamic Form" });
     });
 
     it("Click on 'Add a field'", () => {
@@ -817,7 +821,6 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'Text Field 2' field", () => {
-      cy.fbSelectNavField({ field: "Inputs" });
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
@@ -829,12 +832,8 @@ context("Dynamic Form Test", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and Release document", () => {
