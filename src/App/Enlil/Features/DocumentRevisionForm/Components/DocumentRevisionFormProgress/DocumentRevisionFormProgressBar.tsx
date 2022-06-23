@@ -54,7 +54,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
   }, [smartReferencesFrom]);
 
   return (
-    <Box px={4.25}>
+    <Box px={4.25} mt={1.875}>
       {(!isEmpty(completed) || !isEmpty(inprogress)) && (
         <BorderLinearProgress
           variant="determinate"
