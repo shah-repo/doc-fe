@@ -16,6 +16,7 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+let coordinatorUser;
 let formDocumentType;
 let maintenanceRecordDocumentType;
 let approvalRequestDocumentType;
@@ -30,7 +31,6 @@ let adminSessionId;
 let asyncTasksGroup;
 
 const equimentDueDays = (31);
-const multipleCompanies = true;
 const ADMIN_USER = USERS[1];
 const equipmentTitleForm = `Equipment-Form`;
 const equipmentDocId = "EQ-00001";
@@ -68,6 +68,7 @@ context("'Equipment' test with time tool", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
+          coordinatorUser = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -707,25 +708,13 @@ context("'Equipment' test with time tool", () => {
     });
   });
 
-  context("Veriy UI notification is present for coordinator on current day", () => {
+  context("Verify UI notification is present for coordinator on current day", () => {
     it("Logout", () => {
       cy.authLogout();
     });
 
     it("Log user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Verify user is loged in", () => {
-      cy.navigListExistsCheck(
-        NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_CONTROL);
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: coordinatorUser.id });
     });
 
     it("Verify Dashboard list", () => {
@@ -744,19 +733,15 @@ context("'Equipment' test with time tool", () => {
 
   context("Login with primary owner", () => {
     it("Log user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
     });
   });
 
+  let totalDays = 0;
   const testDays = [1, 22, 1];
   testDays.forEach((dayToTest, i) => {
-    context(`Test UI message for day ${(dayToTest + i)}`, () => {
+    totalDays = totalDays +  dayToTest;
+    context(`Test UI message for day ${(totalDays)}`, () => {
       context("Use time tool to travel user back to future", () => {
         it("Navigate to async tasks", () => {
           cy.navigToAsyncTasks();
@@ -787,13 +772,7 @@ context("'Equipment' test with time tool", () => {
         });
 
         it("Log user in", () => {
-          cy.authLogin({
-            email: USERS[2].email,
-          });
-        });
-
-        it("Selects company", () => {
-          cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+          cy.authLoginToDashboard({ USER: USERS[2], employeeId: coordinatorUser.id });
         });
 
         it("Verify user is loged in", () => {
@@ -838,13 +817,7 @@ context("'Equipment' test with time tool", () => {
 
       context("Veriy UI notification is present for primary owner", () => {
         it("Log user in", () => {
-          cy.authLogin({
-            email: USERS[1].email,
-          });
-        });
-
-        it("Selects company", () => {
-          cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+          cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
         });
 
         it("Verify user is loged in", () => {
