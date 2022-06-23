@@ -311,13 +311,6 @@ context("Checkboxes test", () => {
         cy.fbAddNewFieldButton();
       });
 
-      it("Add Approval Matrix with checkboxes", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Approval Matrix" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-      });
-
       it("Add PO Approval Matrix with checkboxes", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
@@ -681,13 +674,6 @@ context("Checkboxes test", () => {
     it("Verify Timer with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "t-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
-    });
-
-    it("Verify Approval Matrix with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "Approval Roles", el: "remove-schema-item",
         class: "MuiSvgIcon-colorDisabled",
       });
     });
@@ -1116,12 +1102,6 @@ context("Checkboxes test", () => {
       cy.fbMouseOverByLabel({ label: "t-wi-ch" } );
       cy.fbVerifyElementNotVisibileByLabel({ label: "t-wi-ch", el: "edit-schema-item" });
       cy.fbVerifyElementNotVisibileByLabel({ label: "t-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Approval Matrix with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "Approval Roles" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "Approval Roles", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "Approval Roles", el: "remove-schema-item" });
     });
 
     it("Verify PO Approval Matrix without 'Revision Disabled' checkbox", () => {
