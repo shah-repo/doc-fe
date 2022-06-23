@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 
+import { SQS_TYPES } from "../../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -27,6 +28,7 @@ declare global {
       trLandingPageName(params: { name: string }): Chainable<Subject>;
       trLandingPagetrId(params: { trId: string }): Chainable<Subject>;
       trLandingPageDynamicParams(params: { dynamicParams: string }): Chainable<Subject>;
+      trSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
     }
   }
 }
@@ -148,5 +150,17 @@ Cypress.Commands.add("trLandingPagetrId", (params: {trId}) => {
 
 Cypress.Commands.add("trLandingPageDynamicParams", (params: {dynamicParams}) => {
   cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType(params.dynamicParams).wait(500);
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("trSetTimeTravelInDays", (params: {days: number}) => {
+  cy.navigToAsyncTasks();
+  cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+  cy.asyncSelectBackToTheFutureTime({ day: params.days });
+  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH });
+  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
+  cy.asyncTaskClickSubmit();
+  cy.progressBarShouldNotExist();
+  cy.wait(1000);
   cy.listLoadingElementShouldNotExist();
 });
