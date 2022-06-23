@@ -62,6 +62,7 @@ declare global {
         payload: any;
         employeeId: string;
         sessionId: string;}): Chainable<Subject>;
+      grpEditAddMembers(...list: string[]): Chainable<Subject>;
     }
   }
 }
@@ -371,3 +372,11 @@ Cypress.Commands.add("grpPatchGroup", (params: {
   }).then((response) => response ? response.body : {})
     .then((response) => JSON.stringify(response));
 });
+
+Cypress.Commands.add("grpEditAddMembers", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-members").arrowType(item);
+    cy.get("#Group-members>div>div>div[id^=react-select]").contains(item).arrowClick();
+  });
+});
+

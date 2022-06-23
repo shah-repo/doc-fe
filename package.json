@@ -59,6 +59,7 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
     "mqtt-pattern": "1.2.0",
+    "neat-csv": "5.1.0",
     "normalizr": "^3.6.1",
     "odiff": "^1.4.3",
     "patch-package": "^6.2.2",
