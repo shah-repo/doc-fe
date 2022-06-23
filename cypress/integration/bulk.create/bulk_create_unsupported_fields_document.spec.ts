@@ -799,6 +799,10 @@ context("Bulk create unsupported fields for documents", () => {
         cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
       });
 
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Click on 'Overview' tab", () => {
         cy.drSelectOverviewTab();
       });
