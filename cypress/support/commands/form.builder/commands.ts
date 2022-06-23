@@ -11,7 +11,6 @@ declare global {
       fbRemoveLastAddedItem(): Chainable<Subject>;
       fbSelectNavField(params: { field: string }): Chainable<Subject>;
       fbNavToTableOverview(): Chainable<Subject>;
-      fbNavToTableDetails(): Chainable<Subject>;
       fbSelectItemFromNewFieldList(params: { section: string; field: string }): Chainable<Subject>;
       fbEnterPOLabelName(params: { name: string }): Chainable<Subject>;
       fbAddNewFieldButton(): Chainable<Subject>;
@@ -104,19 +103,19 @@ Cypress.Commands.add("fbAddNewFieldOption", () => {
 
 Cypress.Commands.add("fbAddNewField", () => {
   cy.unClick();
-  cy.get("button[data-cy=\"form.builder.add.field\"]").arrowClick();
+  cy.get("button[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
-  cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
-  cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
-  cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
@@ -127,10 +126,6 @@ Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: str
 
 Cypress.Commands.add("fbSelectNavField", (params: { field: string }) => {
   cy.get(".MuiButtonBase-root.MuiListItem-root.MuiListItem-button").contains(new RegExp(params.field, "g")).arrowClick();
-});
-
-Cypress.Commands.add("fbNavToTableDetails", () => {
-  cy.get("[data-cy=\"tabId.details\"]").contains("Details").arrowClick();
 });
 
 Cypress.Commands.add("fbNavToTableOverview", () => {

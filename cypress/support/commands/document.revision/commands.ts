@@ -450,11 +450,11 @@ Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.get("span[class=\"MuiChip-label MuiChip-labelSmall\"]").should("have.text", params.status);
+  cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", params.status);
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {
-  cy.get(`span[data-cy=\"HeaderInfo-docId\"]`);
+  cy.get(`span[data-cy="HeaderInfo-docId"]`);
 });
 
 Cypress.Commands.add("drGetChangeRequestLinkElementFromUI", () => {
