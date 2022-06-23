@@ -37,7 +37,7 @@ const References = ({
       </Typography>
       <UserAvatarListItem
         name={owner.user.name}
-        owner={owner}
+        user={owner && owner.user}
         secondaryComponent={<Text translation="common.owner" />}
       />
       {edit && (
