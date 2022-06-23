@@ -1,7 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { ChangeRequestStatus } from "../../../src/state/ducks/changeRequest/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
@@ -299,8 +298,8 @@ context("Approval request implementation tasks", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it(`Filter ${ChangeRequestStatus.Approved} by name and status, and select it`, () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: ChangeRequestStatus.Approved });
+    it(`Filter ${STATUS_TYPES_LABEL.APPROVED} by name and status, and select it`, () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
@@ -389,7 +388,7 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-  context("Verify document Approval status as 'APPROVED'", () => {
+  context(`Verify document Approval status as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
     it("Verify document Approval status", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.APPROVED });
       cy.arCheckTitleInEditableAndMatches({ name: "AR express release form" });
@@ -502,7 +501,7 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-  context("Verify the AR is still in ChangeRequestStatus.Approved State", () => {
+  context(`Verify the AR is still in ${STATUS_TYPES_LABEL.APPROVED} State`, () => {
     it("Navigate to AR list", () => {
       cy.navigToApprovalRequestList();
     });
@@ -515,7 +514,7 @@ context("Approval request implementation tasks", () => {
       cy.alFilterByTitle({ title: "AR express release form" });
     });
 
-    it(`Filter list by OWNER as USERS[1].name`, () => {
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
