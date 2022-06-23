@@ -229,10 +229,12 @@ Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion:
 
 Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.get("[data-cy=\"tabId.details\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {

@@ -3,6 +3,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -491,10 +492,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Upload logo picture 'image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
-    });
-
     it("Select output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
     });
@@ -503,10 +500,15 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
     it("Add Checkbox group", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+      cy.drSelectDetailsTab();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
       cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
       cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
       cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
@@ -518,14 +520,14 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).last().check();
+      cy.get(`input[type="checkbox"][value="3"]`).check({ force: true });
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -544,8 +546,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
   context("Verify Bulk Create form title report", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "Released" });
-      cy.get("[data-cy='HeaderInfoName']").should("have.text", "Bulk create form");
+      cy.drSelectOverviewTab();
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.drVerifyTitle({ title: "Bulk create form" });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
@@ -710,7 +713,13 @@ context("Bulk create public, private and reserved doc-ids", () => {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/MASS CREATE LOGS/);
+        expect(el).match(/FM-00004, Revision 1/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Logs/);
 
@@ -722,12 +731,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
         expect(el).match(/APPROVALS\nApprovers/);
 
         expect(el).match(/Released/);
-
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
-        expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 3/);
       }
@@ -771,6 +774,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document{enter}" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
@@ -786,16 +793,24 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Private Pool");
       });
 
-      it("Upload logo picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      it("Select 'yes' to have Document id column", () => {
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
       });
 
       it("Checkbox option 1 checked", () => {
         cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
 
-      it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Add first Approver'", () => {
@@ -823,6 +838,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Upload template with existing doc-ids", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Upload template file", () => {
         cy.atchUploadTemplateForBLC({ fileName: "privateBulkExistDocId.xlsx" });
       });
@@ -832,8 +851,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Check doc WIP status and click on Send To Email", () => {
-        cy.arVerifyStatus({ status: "WIP" });
-        cy.get("[data-cy='HeaderInfoName']").should("have.text", "Bulk Creation document");
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+        cy.drVerifyTitle({ title: "Bulk Creation document" });
         cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
           releasedFormId = x.text();
         });
@@ -1060,8 +1079,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Check doc Released status and click on Send To Email", () => {
-        cy.arVerifyStatus({ status: "Released" });
-        cy.get("[data-cy='HeaderInfoName']").should("have.text", "Bulk Creation document");
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+        cy.drVerifyTitle({ title: "Bulk Creation document" });
         cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
           releasedFormId = x.text();
         });
@@ -1297,6 +1316,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
@@ -1320,6 +1343,14 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get(`input[type="checkbox"][value="1"]`).check();
       });
 
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Add approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
@@ -1330,6 +1361,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Upload template with existing doc-ids", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Upload template file", () => {
         cy.atchUploadTemplateForBLC({ fileName: "publicBulkExistDocId.xlsx" });
       });
@@ -1367,6 +1402,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Click save document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Submit for approval", () => {
