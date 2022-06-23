@@ -58,8 +58,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
           <ClickAwayListener onClickAway={onAway}>
             <Box>
               <Box
-                border={_textEditorState?.previewMode ? 0 : `1px solid ${Colors.clear_blue}`}
-                boxShadow={_textEditorState?.previewMode ? 0 : `0 0 0 1px ${Colors.clear_blue}`}
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
                 bgcolor={hover ? Colors.whitest_grey : "transparent"}
@@ -85,14 +83,16 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         {...{ editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
                         toolbar={{
-                          options: ["blockType", "fontFamily", "inline", "colorPicker", "list",
-                            "textAlign", "link", "remove", "history"],
+                          options: ["inline", "colorPicker", "list", "textAlign", "link", "remove", "history"],
                         }}
                         readOnly={disabled}
                         toolbarHidden={_textEditorState?.previewMode}
                         toolbarStyle={{
                           border: "none",
                           borderBottom: `1px solid ${Colors.hint_gray}`,
+                          position: "sticky",
+                          top: 0,
+                          zIndex: 1000,
                         }}
                         editorStyle={{
                           padding: "0 11px",
@@ -102,7 +102,9 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                           lineHeight: "24px",
                           height: "auto",
                         }}
-                        editorClassName={_textEditorState?.previewMode ? "descriptionEditorClass" : ""}
+                        toolbarClassName="descriptionToolbarEditorClass"
+                        editorClassName={_textEditorState?.previewMode ? "descriptionEditorClass" :
+                          "descriptionMainEditorClass"}
                         placeholder={descriptionPlaceholder}
                         // fix for extra lines when pasting multiline content
                         stripPastedStyles={true}

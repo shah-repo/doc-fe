@@ -376,9 +376,24 @@ td#kendo-expandable-column[role="gridcell"] {
 
 .descriptionEditorClass {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;  
   overflow: hidden !important;
+}
+
+.descriptionToolbarEditorClass {
+  margin-bottom: 0px !important;
+  border-left: 1px solid #2684FF !important;
+  border-top: 1px solid #2684FF !important;
+  border-right: 1px solid #2684FF !important;
+  border-radius: 4px 4px 0px 0px !important;
+}
+
+.descriptionMainEditorClass {
+  border-left: 1px solid #2684FF !important;
+  border-bottom: 1px solid #2684FF !important;
+  border-right: 1px solid #2684FF !important;
+  border-radius: 0px 0px 4px 4px;
 }
 
 .rdw-dropdown-optionwrapper {
