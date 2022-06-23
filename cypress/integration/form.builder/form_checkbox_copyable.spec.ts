@@ -300,14 +300,6 @@ context("Copyable Checkbox test", () => {
         cy.fbMouseOverByLabel({ label: "t-wo-ch" } );
       });
 
-      it("Add Approval Matrix with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Approval Matrix" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "Approval Roles" } );
-      });
-
       it("Add Procedure with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
@@ -569,12 +561,6 @@ context("Copyable Checkbox test", () => {
     it("Verify Autocompletes values", () => {
       cy.get("[data-cy^=\"ac-wi-ch-\"]").parent().invoke("text").should("not.be.empty");
       cy.get("[data-cy^=\"ac-wo-ch-\"]").should("have.value", "");
-    });
-
-    it("Verify Approval Matrix fields & values", () => {
-      cy.contains("Approval Role").should("exist");
-      cy.contains("Approving Users").should("exist");
-      cy.contains("Approving Groups").should("exist");
     });
 
     it("Verify Procedure", () => {

@@ -253,13 +253,6 @@ context("FORM Field test", () => {
         cy.fbAddNewFieldButton();
       });
 
-      it("Add Approval Matrix", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Approval Matrix" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-      });
-
       it("Add PO Approval Matrix", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
@@ -540,12 +533,6 @@ context("FORM Field test", () => {
       it("Verify Receive Purchase Order attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-receive-purchase-order" });
         cy.fbVerifyNameValue({ name: "label", value: "fb-receive-purchase-order" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbClickButton({ el: "dialog-close" });
-      });
-
-      it("Verify Approval Matrix attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "Approval Roles" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbClickButton({ el: "dialog-close" });
       });

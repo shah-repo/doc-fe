@@ -234,14 +234,6 @@ context.skip("Autosave on add and edit FB fields", () => {
       });
     });
 
-    it("Add Approval Matrix", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Approval Matrix" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Add PO Approval Matrix", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
@@ -389,14 +381,6 @@ context.skip("Autosave on add and edit FB fields", () => {
       });
     });
 
-    it("Edit Approval Matrix", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "Approval Roles" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
-
     it("Edit PO Approval Matrix", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-po-approval-matrix" });
       cy.fbEnterNameValue({ name: "label", value: "fb-po-approval-matrix1" });
@@ -485,10 +469,6 @@ context.skip("Autosave on add and edit FB fields", () => {
 
     it("Verify Receive Purchase Order", () => {
       cy.contains("fb-receive-purchase-order1").should("exist");
-    });
-
-    it("Verify Approval Matrix", () => {
-      cy.contains("Approval Roles").should("exist");
     });
 
     it("Verify PO Approval Matrix", () => {
