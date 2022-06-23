@@ -287,6 +287,7 @@ context("Purchase Order Landing Page", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -314,6 +315,7 @@ context("Purchase Order Landing Page", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -327,6 +329,7 @@ context("Purchase Order Landing Page", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -338,6 +341,7 @@ context("Purchase Order Landing Page", () => {
                   {
                     label: "form.builder.approvals",
                     type: "poapprovals",
+                    tabId: "details",
                     deleteDisabled: false,
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
