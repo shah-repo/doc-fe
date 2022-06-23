@@ -373,10 +373,3 @@ td#kendo-expandable-column[role="gridcell"] {
 .Toastify__toast-container, .Toastify__close-button {
   font-family: 'Sora';
 }
-
-.descriptionEditorClass {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;  
-  overflow: hidden !important;
-}

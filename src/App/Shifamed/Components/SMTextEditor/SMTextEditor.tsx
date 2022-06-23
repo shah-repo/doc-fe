@@ -6,6 +6,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
 import { SMTextEditorProps } from "../../..";
 import Colors from "../../../../ui/layout/theme/utils/colors";
+import { SMEditorStyles } from "./SMTextEditor.styles";
 import { withSMTextEditor } from "./SMTextEditor.wrap";
 
 
@@ -28,6 +29,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   showToggleButton,
   isTextClamped,
 }) => {
+  const classes = SMEditorStyles();
   const intl = useIntl();
   const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
@@ -53,11 +55,9 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     >
       <Observer>
         {() => (
-          <ClickAwayListener onClickAway={onAway}>
-            <Box>
+          <Box>
+            <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseDown">
               <Box
-                border={_textEditorState?.previewMode ? 0 : `1px solid ${Colors.clear_blue}`}
-                boxShadow={_textEditorState?.previewMode ? 0 : `0 0 0 1px ${Colors.clear_blue}`}
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
                 bgcolor={hover ? Colors.whitest_grey : "transparent"}
@@ -81,11 +81,17 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         onBlur={(ev) => onBlur?.(ev) }
                         {...{ editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
+                        toolbar={{
+                          options: ["inline", "colorPicker", "list", "textAlign", "link", "remove", "history"],
+                        }}
                         readOnly={disabled}
                         toolbarHidden={_textEditorState?.previewMode}
                         toolbarStyle={{
                           border: "none",
                           borderBottom: `1px solid ${Colors.hint_gray}`,
+                          position: "sticky",
+                          top: 0,
+                          zIndex: 1000,
                         }}
                         editorStyle={{
                           padding: "0 11px",
@@ -95,7 +101,9 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                           lineHeight: "24px",
                           height: "auto",
                         }}
-                        editorClassName={_textEditorState?.previewMode ? "descriptionEditorClass" : ""}
+                        toolbarClassName={classes.descriptionToolbarEditorClass}
+                        editorClassName={_textEditorState?.previewMode ? classes.descriptionEditorClass :
+                          classes.descriptionMainEditorClass}
                         placeholder={descriptionPlaceholder}
                         // fix for extra lines when pasting multiline content
                         stripPastedStyles={true}
@@ -104,16 +112,16 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                   </Observer>
                 </Box>
               </Box>
-              {_formState?.getValue(name) && isTextClamped && <Button variant="text"
-                onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
-                style={{
-                  color: Colors.navy,
-                  padding: "0 2px",
-                  fontSize: "14px",
-                }}
-              >{_textEditorState?.previewMode ? viewMore : viewLess}</Button>}
-            </Box>
-          </ClickAwayListener>
+            </ClickAwayListener>
+            {_formState?.getValue(name) && isTextClamped && <Button variant="text"
+              onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
+              style={{
+                color: Colors.navy,
+                padding: "0 2px",
+                fontSize: "14px",
+              }}
+            >{_textEditorState?.previewMode ? viewMore : viewLess}</Button>}
+          </Box>
         )}</Observer>
     </Box>
   );
