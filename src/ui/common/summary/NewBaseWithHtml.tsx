@@ -2,6 +2,7 @@ import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
+import { SMEditorStyles } from "../../../App/Shifamed/Components/SMTextEditor/SMTextEditor.styles";
 import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
 import Colors from "../../layout/theme/utils/colors";
 import styles from "./newStyles";
@@ -16,6 +17,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   labelProps,
   labelFont,
 }) => {
+  const descriptionClasses = SMEditorStyles();
   const intl = useIntl();
   const [isTextClamped, setIsTextClamped] = useState(false);
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
@@ -40,7 +42,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
 
   const showToggleButton = () => {
     setTimeout(() => {
-      const elm = document.querySelector(".descriptionEditorClass");
+      const elm = document.querySelector(".rdw-editor-main");
       setIsTextClamped(elm ? elm.scrollHeight > elm.clientHeight : false);
     }, 500);
   };
@@ -54,7 +56,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
               readOnly={true}
               editorState={editor}
               toolbarHidden={true}
-              editorClassName={!flag ? "descriptionEditorClass" : ""}
+              editorClassName={!flag ? descriptionClasses.descriptionEditorClass : ""}
               editorStyle={{
                 lineHeight: "24px",
               }}

@@ -6,6 +6,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
 import { SMTextEditorProps } from "../../..";
 import Colors from "../../../../ui/layout/theme/utils/colors";
+import { SMEditorStyles } from "./SMTextEditor.styles";
 import { withSMTextEditor } from "./SMTextEditor.wrap";
 
 
@@ -28,6 +29,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   showToggleButton,
   isTextClamped,
 }) => {
+  const classes = SMEditorStyles();
   const intl = useIntl();
   const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
@@ -99,9 +101,9 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                           lineHeight: "24px",
                           height: "auto",
                         }}
-                        toolbarClassName="descriptionToolbarEditorClass"
-                        editorClassName={_textEditorState?.previewMode ? "descriptionEditorClass" :
-                          "descriptionMainEditorClass"}
+                        toolbarClassName={classes.descriptionToolbarEditorClass}
+                        editorClassName={_textEditorState?.previewMode ? classes.descriptionEditorClass :
+                          classes.descriptionMainEditorClass}
                         placeholder={descriptionPlaceholder}
                         // fix for extra lines when pasting multiline content
                         stripPastedStyles={true}
