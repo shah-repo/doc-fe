@@ -34,6 +34,7 @@ declare global {
       unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
       pdfparseFile(params: { directory: string; fileName: string}): Promise<Result>;
       sendToEmail(): Chainable<Subject>;
+      sendToEmailFromHeader(): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
@@ -214,6 +215,11 @@ Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: str
 
 Cypress.Commands.add("sendToEmail", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
+  cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+  cy.get("div.Toastify__toast-container").should("exist");
+});
+
+Cypress.Commands.add("sendToEmailFromHeader", () => {
   cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
   cy.get("div.Toastify__toast-container").should("exist");
 });
