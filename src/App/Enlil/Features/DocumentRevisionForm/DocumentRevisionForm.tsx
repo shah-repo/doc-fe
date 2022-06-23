@@ -138,7 +138,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       >
         <SMTemplate
           templateBoxProps={{ stretchY: "100%" }}
-          contentBoxProps={{ minHeight: "20%" }}
+          contentBoxProps={{ minHeight: "20%", height: "auto" }}
           boxProps={{ overflow: "scroll", height: isCreateUrl ? "calc(100vh - 48px)" :  "86vh" }}
           header={<DocumentRevisionFormHeader type={type}/>}
           lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}

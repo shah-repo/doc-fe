@@ -119,8 +119,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       >
         <SMTemplate
           templateBoxProps={{ stretchY: "100%" }}
-          contentBoxProps={{ minHeight: "20%", height: "100%" }}
-          boxProps={{ overflow: "scroll" }}
+          contentBoxProps={{ minHeight: "20%", height: "auto" }}
+          boxProps={{ overflow: "scroll", height: "86vh" }}
           header={<DocumentRevisionSummaryHeader {...{ documentRevision }} />}
           lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
         >
@@ -138,7 +138,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                   const availableSchema = schema?.filter((schemaItem) =>
                     schemaItem.tabId === tabId && !schemaItem.deleted);
 
-                  return <SMBox height="100%"  overflow={"auto"} {...{ onScroll }}>
+                  return <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={2} stretchY="100%">
                       {tabType === "MIXED" &&  <>
                         <SummaryPresenter
