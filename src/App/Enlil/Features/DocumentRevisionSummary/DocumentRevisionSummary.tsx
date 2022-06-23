@@ -139,7 +139,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                   const availableSchema = schema?.filter((schemaItem) =>
                     schemaItem.tabId === tabId && !schemaItem.deleted);
 
-                  return <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
+                  return <SMBox height="auto" overflow={"auto"} {...{ onScroll }}>
                     <SMBox mt={2} stretchY="100%">
                       {tabType === "MIXED" &&  <>
                         <SummaryPresenter

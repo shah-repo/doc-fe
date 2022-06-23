@@ -53,15 +53,14 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     >
       <Observer>
         {() => (
-          <ClickAwayListener onClickAway={onAway}>
-            <Box>
+          <Box>
+            <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseDown">
               <Box
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
                 bgcolor={hover ? Colors.whitest_grey : "transparent"}
                 style={{ display: "grid" }}
                 minHeight= {_textEditorState?.masked ? 30 : 80}
-                onKeyDown={() => _textEditorState?.setPreviewMode(false)}
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
               >
@@ -111,16 +110,16 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                   </Observer>
                 </Box>
               </Box>
-              {_formState?.getValue(name) && isTextClamped && <Button variant="text"
-                onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
-                style={{
-                  color: Colors.navy,
-                  padding: "0 2px",
-                  fontSize: "14px",
-                }}
-              >{_textEditorState?.previewMode ? viewMore : viewLess}</Button>}
-            </Box>
-          </ClickAwayListener>
+            </ClickAwayListener>
+            {_formState?.getValue(name) && isTextClamped && <Button variant="text"
+              onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
+              style={{
+                color: Colors.navy,
+                padding: "0 2px",
+                fontSize: "14px",
+              }}
+            >{_textEditorState?.previewMode ? viewMore : viewLess}</Button>}
+          </Box>
         )}</Observer>
     </Box>
   );
