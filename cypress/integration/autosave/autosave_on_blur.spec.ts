@@ -147,7 +147,6 @@ context("Autosave on blur", () => {
                     validationAttribute: "PO Status",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
-                    tabId: "details",
                   },
                   {
                     name: "po-supplier-built-in",
@@ -161,7 +160,6 @@ context("Autosave on blur", () => {
                     validationAttribute: "Supplier",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
-                    tabId: "details",
                   },
                   {
                     name: "po-items-built-in",
@@ -175,7 +173,6 @@ context("Autosave on blur", () => {
                     validationAttribute: "Purchase Order",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
-                    tabId: "lineitems",
                   },
                   {
                     label: "form.builder.approvals",
@@ -184,7 +181,6 @@ context("Autosave on blur", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
-                    tabId: "details",
                   },
                 ],
               },
@@ -309,7 +305,6 @@ context("Autosave on blur", () => {
                           label: "Receivable",
                           name: "receivable-kdptzei2",
                           applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-                          tabId: "details",
                         }],
                       },
                     },

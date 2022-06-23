@@ -309,7 +309,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Created document with training required", () => {
-    it("Form with Released status", () => {
+    it(`Form with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
       cy.navigToDocumentList();
       cy.cmpClickCreateNewDocument();
       cy.drEnterDocumentTitle({ name: "released form" });
@@ -323,7 +323,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -403,7 +403,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Verify One-Time Training form title report", () => {
-    it("Check doc Released status and click on Send To Email", () => {
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy='field-name']").should("have.text", "One-Time training form title");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
@@ -675,8 +675,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Check doc Draft status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "DRAFT" });
+    it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.get("[data-cy='field-name']").should("have.text", "One-Time training PDF EXPORT");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
@@ -888,8 +888,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.trApproveTraining();
     });
 
-    it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy='field-name']").should("have.text", "One-Time training PDF EXPORT");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
