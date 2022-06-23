@@ -10,7 +10,7 @@ import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
-import { checkIsDocumentForm, checkIsDocumentLHR } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -33,6 +33,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom =
   documentRevision?.smartReferencesFrom?.filter(
       (ref) =>
@@ -119,9 +120,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       >
         <SMTemplate
           templateBoxProps={{ stretchY: "100%" }}
-          contentBoxProps={{ minHeight: "20%", height: "auto" }}
+          contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
           boxProps={{ overflow: "scroll", height: "86vh" }}
-          header={<DocumentRevisionSummaryHeader {...{ documentRevision }} />}
+          header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
           lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
         >
           <Observer>

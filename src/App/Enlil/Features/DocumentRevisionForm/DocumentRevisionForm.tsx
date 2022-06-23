@@ -10,7 +10,7 @@ import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/do
 import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
-import { checkIsDocumentLHR } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -57,6 +57,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
       schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
@@ -138,9 +139,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       >
         <SMTemplate
           templateBoxProps={{ stretchY: "100%" }}
-          contentBoxProps={{ minHeight: "20%", height: "auto" }}
+          contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
           boxProps={{ overflow: "scroll", height: isCreateUrl ? "calc(100vh - 48px)" :  "86vh" }}
-          header={<DocumentRevisionFormHeader type={type}/>}
+          header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
           lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
         >
           <Observer>
