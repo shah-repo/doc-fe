@@ -249,7 +249,7 @@ context("Approval request implementation tasks", () => {
       cy.arEnterApprovalRequestDescription({ description: "Test" });
     });
 
-    it("Check 'Implementation task' status is 'DRAFT'", () => {
+    it(`Check 'Implementation task' status is '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
@@ -263,7 +263,7 @@ context("Approval request implementation tasks", () => {
       cy.arApproveAR();
     });
 
-    it("Check approval request status is 'Implementation'", () => {
+    it(`Check approval request status is ${STATUS_TYPES_LABEL.IMPLEMENTATION}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730");
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
     });
@@ -276,7 +276,7 @@ context("Approval request implementation tasks", () => {
       });
     });
 
-    it(`Check 'Implementation task' status is 'PENDING'`, () => {
+    it(`Check Implementation task' status is ${STATUS_TYPES_LABEL.PENDING}`, () => {
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.PENDING });
     });
@@ -299,11 +299,11 @@ context("Approval request implementation tasks", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Filter approval by name and status, and select it", () => {
+    it(`Filter ${ChangeRequestStatus.Approved} by name and status, and select it`, () => {
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: ChangeRequestStatus.Approved });
     });
 
-    it("Check approval request status is 'Approved'", () => {
+    it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730");
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
@@ -406,7 +406,7 @@ context("Approval request implementation tasks", () => {
       cy.arSelectFirstDocument();
     });
 
-    it("Verify AR status is 'APPROVED'", () => {
+    it(`Verify AR status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
@@ -502,7 +502,7 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-  context("Verify the AR is still in APPROVED State", () => {
+  context("Verify the AR is still in ChangeRequestStatus.Approved State", () => {
     it("Navigate to AR list", () => {
       cy.navigToApprovalRequestList();
     });
@@ -519,12 +519,12 @@ context("Approval request implementation tasks", () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
-    it(`Filter list by STATUS as ${ChangeRequestStatus.Approved}`, () => {
-      cy.alFilterByStatus({ status: ChangeRequestStatus.Approved });
+    it(`Filter list by STATUS as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+      cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.APPROVED  });
     });
 
-    it(`Verify filter by STATUS as ${ChangeRequestStatus.Approved}`, () => {
-      cy.alVerifyFilterByStatus({ status: ChangeRequestStatus.Approved });
+    it(`Verify filter by STATUS as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+      cy.alVerifyFilterByStatus({ status: STATUS_TYPES_LABEL.APPROVED  });
     });
   });
 
@@ -615,7 +615,7 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-  context("Verify the AR is in auto CLOSED State", () => {
+  context(`Verify the AR is in auto ${STATUS_TYPES_LABEL.CLOSED} State`, () => {
     it("Navigate to ar list", () => {
       cy.navigToApprovalRequestList();
     });
@@ -634,12 +634,12 @@ context("Approval request implementation tasks", () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
     });
 
-    it(`Filter list by STATUS as ${ChangeRequestStatus.Closed}`, () => {
-      cy.alFilterByStatus({ status: ChangeRequestStatus.Closed  });
+    it(`Filter list by STATUS as ${STATUS_TYPES_LABEL.CLOSED}`, () => {
+      cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.CLOSED  });
     });
 
-    it(`Verify filter by STATUS as ${ChangeRequestStatus.Closed}`, () => {
-      cy.alVerifyFilterByStatus({ status: ChangeRequestStatus.Closed });
+    it(`Verify filter by STATUS as ${STATUS_TYPES_LABEL.CLOSED}`, () => {
+      cy.alVerifyFilterByStatus({ status: STATUS_TYPES_LABEL.CLOSED });
     });
   });
 });
