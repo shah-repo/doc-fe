@@ -206,7 +206,7 @@ context("Autosave on add and remove FB fields", () => {
       });
     });
 
-    xit("Add Blank Template Form", () => {
+    it("Add Blank Template Form", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
