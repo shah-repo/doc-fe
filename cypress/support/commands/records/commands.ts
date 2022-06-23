@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
+import { SQS_TYPES } from "../../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -33,6 +34,7 @@ declare global {
         documentId: string;
         employeeId: string;
         sessionId: string;}): Chainable<Subject>;
+      equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
     }
   }
 }
@@ -185,6 +187,17 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
     }
     cy.progressBarShouldAppear();
   });
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("equipSetTimeTravelInDays", (params: {days: number}) => {
+  cy.navigToAsyncTasks();
+  cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+  cy.asyncSelectBackToTheFutureTime({ day: params.days });
+  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+  cy.asyncTaskClickSubmit();
+  cy.progressBarShouldNotExist();
+  cy.wait(1000);
   cy.listLoadingElementShouldNotExist();
 });
 

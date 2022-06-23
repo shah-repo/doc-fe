@@ -6,6 +6,7 @@ import { bool } from "aws-sdk/clients/signer";
 import moment from "moment";
 import "moment-timezone";
 import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
+import { SQS_TYPES } from "../../../../src/ui/async.tasks/types";
 import { encodeString } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -31,6 +32,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
+      arSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
       arApproveARFromDashboard(): Chainable<Subject>;
       arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
@@ -394,7 +396,7 @@ Cypress.Commands.add("arApproveAR", () => {
 Cypress.Commands.add("arApproveARFromDashboard", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
-      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.contains("needs your approval for").trigger("mouseover");
       cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
@@ -409,8 +411,8 @@ Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string
 });
 
 Cypress.Commands.add("arWithdrawSubmission", () => {
-  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
-  cy.get("[data-cy=\"change.request.withdraw.alert\"]").arrowClick();
+  cy.get("div[class=\"MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end\"]")
+    .find("button[data-cy=\"change.request.withdraw.alert\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.PostWithdrawChangeRequests,
     CyRoutes.ARPreview,
@@ -434,6 +436,17 @@ Cypress.Commands.add("arVoidAR", () => {
 Cypress.Commands.add("arIsProposedDocumentEmpty", () => {
   cy.get("input[data-cy=\"proposedDocumentRevision\"]").arrowClick();
   cy.get("div.MuiAutocomplete-noOptions").should("have.text", "No options");
+});
+
+Cypress.Commands.add("arSetTimeTravelInDays", (params: {days: number}) => {
+  cy.navigToAsyncTasks();
+  cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+  cy.asyncSelectBackToTheFutureTime({ day: params.days });
+  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+  cy.asyncTaskClickSubmit();
+  cy.progressBarShouldNotExist();
+  cy.wait(1000);
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arRejectComfirmationAR", () => {

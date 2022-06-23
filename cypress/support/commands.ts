@@ -213,7 +213,8 @@ Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: str
 });
 
 Cypress.Commands.add("sendToEmail", () => {
-  cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
+  cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
   cy.get("div.Toastify__toast-container").should("exist");
 });
 
