@@ -95,13 +95,13 @@ context("File delete in Pending Change", () => {
       cy.unClick();
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Upload test.docx and image.jpg files", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
       cy.atchUploadAttachment({ fileName: "image.jpg" });
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release FORM document", () => {
