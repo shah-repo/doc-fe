@@ -395,7 +395,3 @@ td#kendo-expandable-column[role="gridcell"] {
   border-right: 1px solid #2684FF !important;
   border-radius: 0px 0px 4px 4px;
 }
-
-.rdw-dropdown-optionwrapper {
-  overflow-y: hidden !important;
-}

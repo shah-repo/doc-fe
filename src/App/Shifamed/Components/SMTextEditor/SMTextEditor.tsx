@@ -39,9 +39,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
   };
   const onAway = () => {
-    setTimeout(() => {
-      _textEditorState?.setPreviewMode(true);
-    });
+    _textEditorState?.setPreviewMode(true);
     showToggleButton && showToggleButton();
   };
   return  (
@@ -63,6 +61,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                 bgcolor={hover ? Colors.whitest_grey : "transparent"}
                 style={{ display: "grid" }}
                 minHeight= {_textEditorState?.masked ? 30 : 80}
+                onKeyDown={() => _textEditorState?.setPreviewMode(false)}
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
               >
@@ -78,7 +77,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         onFocus={() => {
                           _textEditorState?.setPreviewMode(false);
                         }}
-                        onChange={() => _textEditorState?.setPreviewMode(false)}
                         onBlur={(ev) => onBlur?.(ev) }
                         {...{ editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
