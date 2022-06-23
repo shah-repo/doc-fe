@@ -825,6 +825,10 @@ context("Bulk create flow", () => {
         cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
       });
 
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Select Overview tab", () => {
         cy.drSelectOverviewTab();
       });

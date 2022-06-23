@@ -415,7 +415,6 @@ context("Test invalid data for records", () => {
         });
       });
 
-
       it("Select form to be used for bulk creation", () => {
         cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
           .autocompleteSelect("Document for bulk creation");
@@ -428,6 +427,10 @@ context("Test invalid data for records", () => {
 
       it("Select 'yes' to have Document id column", () => {
         cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Click on 'Overview' tab", () => {

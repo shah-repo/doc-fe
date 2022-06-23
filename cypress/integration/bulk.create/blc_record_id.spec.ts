@@ -474,6 +474,10 @@ context("Bulk create public, private and reserved record-ids", () => {
         cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
       });
 
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
       it("Click on 'Overview' tab", () => {
         cy.drSelectOverviewTab();
       });
@@ -769,6 +773,10 @@ context("Bulk create public, private and reserved record-ids", () => {
 
         it("Select 'yes' to have Document id column", () => {
           cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        });
+
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Click on 'Overview' tab", () => {

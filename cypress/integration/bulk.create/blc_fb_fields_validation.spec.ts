@@ -434,6 +434,10 @@ context("Test fb fields validation in BLC", () => {
         cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(1).check();
       });
 
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
       it("Click on 'Overview' tab", () => {
         cy.drSelectOverviewTab();
       });
@@ -660,9 +664,9 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify radio button group", () => {
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("not.exist");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("not.exist");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("not.exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("exist");
         });
 
         it("Verify checkbox group", () => {
@@ -716,18 +720,18 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify radio button group", () => {
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("not.exist");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("not.exist");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("not.exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("exist");
         });
 
         it("Verify checkbox group", () => {
           cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
-            .should("have.attr", "disabled");
+            .should("have.attr", "value");
           cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
-            .should("have.attr", "disabled");
+            .should("have.attr", "value");
           cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
-            .should("have.attr", "disabled");
+            .should("have.attr", "value");
         });
       });
 
@@ -771,9 +775,9 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify radio button group", () => {
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("not.exist");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("not.exist");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("not.exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("exist");
         });
 
         it("Verify checkbox group", () => {
@@ -886,9 +890,9 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify radio button group", () => {
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("not.exist");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("not.exist");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("not.exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("exist");
         });
 
         it("Verify checkbox group", () => {
