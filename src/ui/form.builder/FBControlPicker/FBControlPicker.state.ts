@@ -60,8 +60,6 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
         "timer",
         ...this.hasPurchaseOrder ? ["purchaseorder"] as FBInputType[] : [],
         ...this.hasRecPurchaseOrder ? ["poreceive"] as FBInputType[] : [],
-        ...!this.hasApprovalMatrix ? ["approvalMatrix"] as FBInputType[] : [],
-        ...!this.hasApprovalRoles ? ["approvalRoles"] as FBInputType[] : [],
         "poApprovalMatrix",
         "instructionsmediaupload",
         "evidencemediaupload",
@@ -88,14 +86,6 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
   private get hasHelloSign(): boolean | undefined {
     const { company } = (store.getState() || {}) as FBWorkspaceExternalState;
     return company?.companyMine.helloSignIntegrationEnabled;
-  }
-
-  private get hasApprovalMatrix(): boolean {
-    return Boolean(find(this.workspaceState?.schema, { type: "approvalMatrix" }));
-  }
-
-  private get hasApprovalRoles(): boolean {
-    return Boolean(find(this.workspaceState?.schema, { type: "approvalRoles" }));
   }
 
   private get isOutputBulkCreate(): boolean | undefined {
