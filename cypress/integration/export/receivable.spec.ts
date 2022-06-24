@@ -142,6 +142,7 @@ context("Export Receivable doc", () => {
                     validationAttribute: "PO Status",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "po-supplier-built-in",
@@ -155,6 +156,7 @@ context("Export Receivable doc", () => {
                     validationAttribute: "Supplier",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "po-items-built-in",
@@ -168,6 +170,7 @@ context("Export Receivable doc", () => {
                     validationAttribute: "Purchase Order",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "lineitems",
                   },
                   {
                     label: "form.builder.approvals",
@@ -176,6 +179,7 @@ context("Export Receivable doc", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -414,6 +418,7 @@ context("Export Receivable doc", () => {
                   label: "Receivable",
                   name: "receivable-kdptzei2",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                  tabId: "details",
                 },
                 {
                   index: 1,
@@ -426,6 +431,7 @@ context("Export Receivable doc", () => {
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
+                  tabId: "details",
                 },
                 // {
                 //   label: "form.builder.approvals",
@@ -446,6 +452,7 @@ context("Export Receivable doc", () => {
                   ],
                   applicableValidationSchema: true,
                   validationAttribute: "textfield",
+                  tabId: "details",
                 },
                 {
                   index: 3,
@@ -459,6 +466,7 @@ context("Export Receivable doc", () => {
                   ],
                   applicableValidationSchema: true,
                   validationAttribute: "textfield",
+                  tabId: "details",
                 },
                 {
                   index: 4,
@@ -470,6 +478,7 @@ context("Export Receivable doc", () => {
                   deleteInFormDisabled: false,
                   validationMode: "default",
                   validationAttribute: "Inline approval",
+                  tabId: "details",
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
@@ -553,6 +562,7 @@ context("Export Receivable doc", () => {
                   label: "Receivable",
                   name: "receivable-kdptzei2",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                  tabId: "details",
                 },
                 {
                   index: 1,
@@ -565,6 +575,7 @@ context("Export Receivable doc", () => {
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
+                  tabId: "details",
                 },
                 {
                   label: "form.builder.approvals",
@@ -573,6 +584,7 @@ context("Export Receivable doc", () => {
                   name: "fb-po-approvals-kqqix31p",
                   uniqueSchemaItem: true,
                   index: 2,
+                  tabId: "details",
                 }],
               },
             },
