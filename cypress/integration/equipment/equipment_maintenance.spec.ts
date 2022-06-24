@@ -274,6 +274,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_id",
@@ -288,6 +289,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_maintainer",
@@ -302,6 +304,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-equipment_due_date",
@@ -314,6 +317,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-requipment-maintenance-section",
@@ -327,6 +331,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -334,6 +339,7 @@ context("Equipment maintenance test", () => {
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
                 uniqueSchemaItem: true,
+                tabId: "overview",
                 index: 5,
               },
             ],
