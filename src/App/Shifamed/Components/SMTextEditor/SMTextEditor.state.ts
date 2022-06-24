@@ -5,7 +5,7 @@ import { SMTextEditorStateProps } from "../../..";
 export default class SMTextEditorState implements SMTextEditorStateProps {
 
   // MARK: @config
-  public editorReference?: HTMLInputElement;
+  public editorReference?: any;
 
   // MARK: @observables
   @observable public editorState?: EditorState;
