@@ -113,6 +113,7 @@ context("Purchase Supplier Update1", () => {
                   {
                     name: "approvals-kycw6cjf",
                     type: "approvals",
+                    tabId: "overview",
                     index: 0,
                     label: "Approvals",
                     rules: "",
