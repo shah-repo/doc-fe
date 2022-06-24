@@ -438,6 +438,7 @@ context("Test for Training Overdue", () => {
                 type: "section",
                 index: 0,
                 label: "Periodic Training",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -450,6 +451,7 @@ context("Test for Training Overdue", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Documents to Train on",
+                tabId: "details",
                 rules: "|required",
                 multiple: true,
                 optionId: "36",
@@ -472,6 +474,7 @@ context("Test for Training Overdue", () => {
                 type: "radiogroup",
                 index: 2,
                 label: "Refresh/repeat training periodically?",
+                tabId: "details",
                 rules: "required||",
                 options: [
                   {
@@ -494,6 +497,7 @@ context("Test for Training Overdue", () => {
                 type: "quantity",
                 index: 3,
                 label: "Training Frequency (in days)",
+                tabId: "details",
                 rules: "required_if:training-refresh-training-periodically,Yes",
                 validators: {
                   required_if: {
@@ -515,6 +519,7 @@ context("Test for Training Overdue", () => {
                 type: "section",
                 index: 4,
                 label: "Trainees Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -527,6 +532,7 @@ context("Test for Training Overdue", () => {
                 type: "autocomplete",
                 index: 5,
                 label: "Groups to Train",
+                tabId: "details",
                 multiple: true,
                 optionId: "10",
                 placeholder: "Select groups",
@@ -545,6 +551,7 @@ context("Test for Training Overdue", () => {
                 type: "autocomplete",
                 index: 6,
                 label: "Users to Train (if applicable)",
+                tabId: "details",
                 multiple: true,
                 optionId: "13",
                 placeholder: "Select users",
@@ -560,6 +567,7 @@ context("Test for Training Overdue", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-l0wcpa0v",
