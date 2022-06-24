@@ -54,7 +54,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
 
     showToggleButton = () => {
       setTimeout(() => {
-        const elm = document.querySelector(".descriptionEditorClass");
+        const elm = document.querySelector(".rdw-editor-main");
         setIsTextClamped(elm ? elm.scrollHeight > elm.clientHeight : false);
       }, 500);
     };
