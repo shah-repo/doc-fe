@@ -708,7 +708,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "purchaseorder",
     index: 29,
     label: "PO - Item(s) Information",
-    tabId: "details",
+    tabId: "lineitems",
     rules: "",
     deleted: true,
     applicableOn: [
