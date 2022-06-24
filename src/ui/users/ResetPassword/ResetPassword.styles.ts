@@ -33,11 +33,6 @@ export const styles = makeStyles((theme: Theme) =>
     subtitle: {
       color: Colors.dark_gray,
     },
-    passwordInfo: {
-      width: "500px",
-      marginTop: "50px",
-      color: Colors.hint_gray,
-    },
     status: {
       marginTop: theme.spacing(3),
     },

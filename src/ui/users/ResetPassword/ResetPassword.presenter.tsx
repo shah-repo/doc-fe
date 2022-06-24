@@ -37,13 +37,34 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             <Text translation={"reset.choose.new.password"} />
           </Typography>
         </Box>
-        <Box display="flex" alignSelf="flex-start" data-cy="ResetPassword-passwordInfo">
-          <Typography variant="h5"className={classes.passwordInfo}>
-            <Text translation={"reset.password.info"} />
-          </Typography>
-        </Box>
         <Form className={classes.formStyle}>
           <FormMessage asyncState={asyncState} className={classes.status} id="ResetPassword-formError"/>
+          <InputField
+            name="email"
+            label="reset.enter.email"
+            size="sm"
+            gutter={false}
+            inputProps={{
+              autoComplete: "email",
+              type: "text",
+            }}
+            validate={validator(required)}
+            lpignore={false}
+            dataCy={"email"}
+          />
+          <InputField
+            name="currentPassword"
+            label="reset.enter.current.password"
+            size="sm"
+            gutter={false}
+            inputProps={{
+              autoComplete: "reset-password",
+              type: "password",
+            }}
+            validate={validator(required)}
+            lpignore={false}
+            dataCy={"currentPassword"}
+          />
           <InputField
             name="newPassword"
             label="reset.enter.new.password"
@@ -51,11 +72,11 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             gutter={false}
             inputProps={{
               autoComplete: "reset-password",
-              id: "ResetPassword-password",
               type: "password",
             }}
             validate={validator(required)}
             lpignore={false}
+            dataCy={"newPasswordFirstInput"}
           />
           <InputField
             name="newPasswordConfirmation"
@@ -64,18 +85,17 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             gutter={false}
             inputProps={{
               autoComplete: "reset-password",
-              id: "ResetPassword-confirmPassword",
               type: "password",
             }}
+            dataCy={"newPasswordConfirmation"}
             validate={validator(required)}
             lpignore={false}
-
           />
           <SubmitButton
             asyncState={asyncState}
             label={"reset.password"}
             className={classes.submit}
-            id="ResetPassword-resetPassword"
+            dataCy={"resetButtonSubmit"}
           />
         </Form>
       </Paper>

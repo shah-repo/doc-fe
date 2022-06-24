@@ -17,7 +17,7 @@ import {
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, flatten, get, isEmpty, map, set, sortBy, startCase, values } from "lodash";
 import qs from "query-string";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
@@ -279,9 +279,9 @@ export function KendoPanel<T>({
           status:
             el?.user?.confirmed && !el?.user?.locked
               ? getTranslatedText("user.management.signed.up")
-              : el?.user?.locked
-                ? getTranslatedText("reset.password")
-                : getTranslatedText("user.management.resend.signup.email"),
+              : !el?.user?.confirmed
+                ? getTranslatedText("user.management.resend.signup.email")
+                : getTranslatedText("reset.password"),
           activeStatus: el?.active
             ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
             : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
