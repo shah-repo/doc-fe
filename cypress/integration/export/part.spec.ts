@@ -112,6 +112,7 @@ context("Export Part doc", () => {
                 schema: [
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
