@@ -109,6 +109,7 @@ context("Test upgradability of old supplier form and record", () => {
                     type: "section",
                     index: 0,
                     label: "Section 1 - Completed by Requester",
+                    tabId: "details",
                     rules: "",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -119,6 +120,7 @@ context("Test upgradability of old supplier form and record", () => {
                     type: "texteditor",
                     index: 1,
                     label: "Contact Information (Name, title, email and phone number)",
+                    tabId: "details",
                     rules: "",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -129,6 +131,7 @@ context("Test upgradability of old supplier form and record", () => {
                     type: "radiogroup",
                     index: 2,
                     label: "Supplier Type:",
+                    tabId: "details",
                     rules: "",
                     options: [
                       {
@@ -157,6 +160,7 @@ context("Test upgradability of old supplier form and record", () => {
                     type: "radiogroup",
                     index: 3,
                     label: "Purpose:",
+                    tabId: "details",
                     rules: "",
                     options: [
                       {
