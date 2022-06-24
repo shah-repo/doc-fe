@@ -18,10 +18,10 @@ export const styles = makeStyles((theme: Theme) =>
       height: "8px",
     },
     arrowPadding: {
-      padding: "0px 8px 0px 8px",
+      padding: "0px 8px",
     },
     spaceLinePadding: {
-      padding: "0px 5px 0px 5px",
+      padding: "0px 5px",
     },
     statusIconReleased: {
       background: Colors.light_green,
