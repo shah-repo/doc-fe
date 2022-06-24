@@ -275,10 +275,12 @@ export function KendoPanel<T>({
             .map((e: { name: string }) => e.name.trimLeft().trimEnd())
             .sort()
             .join(", "),
-          status: el?.user?.confirmed && !el?.user?.locked
-            ? getTranslatedText("user.management.signed.up")
-            : el?.user?.locked ? getTranslatedText("reset.password") :
-              getTranslatedText("user.management.resend.signup.email"),
+          status:
+            el?.user?.confirmed && !el?.user?.locked
+              ? getTranslatedText("user.management.signed.up")
+              : !el?.user?.confirmed
+                ? getTranslatedText("user.management.resend.signup.email")
+                : getTranslatedText("reset.password"),
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
