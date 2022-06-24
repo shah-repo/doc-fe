@@ -116,6 +116,7 @@ context("Export Engineering Build doc", () => {
                 schema: [
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
@@ -128,6 +129,7 @@ context("Export Engineering Build doc", () => {
                     name: "textfield-kn7fc209",
                     validationMode: "default",
                     label: "Section 1",
+                    tabId: "procedure",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -141,6 +143,7 @@ context("Export Engineering Build doc", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 1",
+                    tabId: "procedure",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -163,6 +166,7 @@ context("Export Engineering Build doc", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "procedure",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -236,6 +240,7 @@ context("Export Engineering Build doc", () => {
                 schema: [
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
