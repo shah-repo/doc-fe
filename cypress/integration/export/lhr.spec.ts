@@ -224,12 +224,14 @@ context("Export for LHR", () => {
                 label: "form.builder.mpiprocedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
                 stepIndex: 1,
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -274,6 +276,7 @@ context("Export for LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
+                tabId: "details",
               },
               {
                 name: "lhrs-accepted-quantity",
@@ -291,6 +294,7 @@ context("Export for LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
+                tabId: "details",
               },
               {
                 name: "lhrs-rejected-quantity",
@@ -300,6 +304,7 @@ context("Export for LHR", () => {
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
+                tabId: "details",
                 deleteDisabled: true,
                 editorProperties: [
                   "includeNotes",
@@ -322,6 +327,7 @@ context("Export for LHR", () => {
                 validationAttribute: "Approvals",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "detail",
               },
             ],
           },
@@ -386,6 +392,7 @@ context("Export for LHR", () => {
                 editorConfig: {
                   id: createdPartDocument.documentId,
                 },
+                tabId: "overview",
               },
               {
                 name: "lhr_initial_quantity",
@@ -399,6 +406,7 @@ context("Export for LHR", () => {
                 validationAttribute: "Initial Quantity",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-end-quantity",
@@ -413,6 +421,7 @@ context("Export for LHR", () => {
                 validationAttribute: "End Quantity",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-build-type",
@@ -437,6 +446,7 @@ context("Export for LHR", () => {
                 validationAttribute: "Build Type",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-due-date",
@@ -449,6 +459,7 @@ context("Export for LHR", () => {
                 validationMode: "default",
                 validationAttribute: "Due Date",
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhrstep-built-in",
@@ -464,6 +475,7 @@ context("Export for LHR", () => {
                 editorConfig: {
                   value: createdMPIDocument.id,
                 },
+                tabId: "procedure",
               },
               {
                 label: "form.builder.approvals",
@@ -472,6 +484,7 @@ context("Export for LHR", () => {
                 name: "fb-approvals-kvateryo",
                 uniqueSchemaItem: true,
                 index: 6,
+                tabId: "overview",
               },
             ],
           },
