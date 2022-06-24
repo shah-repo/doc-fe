@@ -42,6 +42,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   };
   const onAway = () => {
     _textEditorState?.setPreviewMode(true);
+    setFlag(true);
     showToggleButton && showToggleButton();
   };
   return  (
@@ -77,7 +78,13 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                       <Editor
                         onFocus={() => {
                           _textEditorState?.setPreviewMode(false);
+                          setTimeout(() => {
+                            const moreThanTwoLines =
+                                Math.floor(_textEditorState?.editorReference.editorContainer.clientHeight / 24) > 2;
+                            setFlag(!moreThanTwoLines);
+                          });
                         }}
+                        onChange={() => showToggleButton && showToggleButton()}
                         onBlur={(ev) => onBlur?.(ev) }
                         {...{ editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
@@ -113,14 +120,21 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                 </Box>
               </Box>
             </ClickAwayListener>
-            {_formState?.getValue(name) && isTextClamped && <Button variant="text"
+            {isTextClamped ? <Button variant="text"
               onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
               style={{
                 color: Colors.navy,
                 padding: "0 2px",
                 fontSize: "14px",
-              }}
-            >{_textEditorState?.previewMode ? viewMore : viewLess}</Button>}
+              }}>{viewMore}</Button> : (
+              !_textEditorState?.previewMode && !isTextClamped && !flag && <Button variant="text"
+                onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
+                style={{
+                  color: Colors.navy,
+                  padding: "0 2px",
+                  fontSize: "14px",
+                }}
+              >{viewLess}</Button>)}
           </Box>
         )}</Observer>
     </Box>
