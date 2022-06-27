@@ -1,5 +1,5 @@
 import { InputLabel, Theme } from "@material-ui/core";
-import InputBase from "@material-ui/core/InputBase";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
 import { createStyles, withStyles } from "@material-ui/core/styles";
 
 export const InputField = withStyles((theme: Theme) =>
@@ -18,7 +18,7 @@ export const InputField = withStyles((theme: Theme) =>
       flex: 1,
     },
   }),
-)(InputBase);
+)(OutlinedInput);
 
 export const LabelField = withStyles((theme: Theme) =>
   createStyles({
