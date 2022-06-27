@@ -94,7 +94,6 @@ context("Records email popup modal", () => {
       });
     });
 
-
     context("[API]Add employee to developers group", () => {
       it("[API]Get group", (done: any) => {
         cy.grpGetGroupByName({
@@ -175,7 +174,6 @@ context("Records email popup modal", () => {
       });
     });
   });
-
 
   context("Create record with newly created form", () => {
     it("Navigate to records list", () => {
@@ -439,8 +437,7 @@ context("Records email popup modal", () => {
     });
 
     it("Check if Record has status 'Released'", () => {
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: "RELEASED" });
     });
   });
 });
-

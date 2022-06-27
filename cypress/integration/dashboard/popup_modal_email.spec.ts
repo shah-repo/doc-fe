@@ -168,6 +168,7 @@ context("Approval request email popup modal", () => {
       });
     });
   });
+
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
@@ -433,4 +434,3 @@ context("Approval request email popup modal", () => {
     });
   });
 });
-
