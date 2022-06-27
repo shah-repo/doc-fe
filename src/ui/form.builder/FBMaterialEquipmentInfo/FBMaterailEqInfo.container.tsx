@@ -10,14 +10,12 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
   const meqState = FB.useRef(FBMeqState);
   const [isMeqDataReceived, setIsMeqDataReceived] = useState(false);
   const callBack = (data: MaterialAndEquipment, error)  => {
-    if (data) {
-      meqState.setMaterialsEquipment(data);
-      setMaterialData(data);
-    }
     if (error) {
       toastError(error.message);
       return;
     }
+    meqState.setMaterialsEquipment(data);
+    setMaterialData(data);
   };
   if (!meqState.materialsEquipment && !isMeqDataReceived) {
     setIsMeqDataReceived(true);
