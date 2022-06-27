@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -622,8 +623,8 @@ context("Test for Training Overdue", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get(`[data-cy="HeaderInfo-docId"]`).then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 
@@ -657,6 +658,14 @@ context("Test for Training Overdue", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document 'released doc1' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
@@ -675,12 +684,22 @@ context("Test for Training Overdue", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[4].name}`);
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -693,8 +712,8 @@ context("Test for Training Overdue", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -773,24 +792,24 @@ context("Test for Training Overdue", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
 
-    it("'Due in 7 days' should exist", () => {
-      cy.contains("DUE IN 7 DAYS").should("exist");
+    it(`${TrainingStatus.DUE_IN_7_DAYS} should exist`, () => {
+      cy.contains(TrainingStatus.DUE_IN_7_DAYS).should("exist");
     });
 
     it(`Login as ${USERS[3].name}`, () => {
       cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
     });
 
-    it("'Due in 7 days' should exist", () => {
-      cy.contains("DUE IN 7 DAYS").should("exist");
+    it(`${TrainingStatus.DUE_IN_7_DAYS} should exist`, () => {
+      cy.contains(TrainingStatus.DUE_IN_7_DAYS).should("exist");
     });
 
     it(`Login as ${USERS[4].name}`, () => {
       cy.authLoginToDashboard({ USER: USERS[4], employeeId: fourthEmployee.id });
     });
 
-    it("'Due in 7 days' should exist", () => {
-      cy.contains("DUE IN 7 DAYS").should("exist");
+    it(`${TrainingStatus.DUE_IN_7_DAYS} should exist`, () => {
+      cy.contains(TrainingStatus.DUE_IN_7_DAYS).should("exist");
     });
   });
 
@@ -806,7 +825,7 @@ context("Test for Training Overdue", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it("Click on due tag", () => {
@@ -818,10 +837,10 @@ context("Test for Training Overdue", () => {
     });
 
     it("Check if pop-up modal has pending trainings with 3 users", () => {
-      cy.get("h2").should("contain.text", "DUE IN 7 DAYS (3)");
+      cy.get("h2").should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (3)`);
       cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[2].name)
         .and("contain.text", USERS[3].name).and("contain.text", USERS[4].name);
-      cy.get("h2").should("contain.text", "DUE IN 7 DAYS (3)");
+      cy.get("h2").should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (3)`);
       cy.get("button[aria-label=close]").eq(0).arrowClick();
     });
 
@@ -842,7 +861,7 @@ context("Test for Training Overdue", () => {
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[2].name.split(" ")[0]);
     });
 
-    it("Chart - Due in 7 Days should have 3", () => {
+    it(`Chart - ${TrainingStatus.DUE_IN_7_DAYS} should have 3`, () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/training_record/dueSummary/*" }, (req) => {
         req.reply((res) => {
           expect(res.body.DUE).to.equal(3);
@@ -889,24 +908,24 @@ context("Test for Training Overdue", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
 
-    it("'OVERDUE' should exist", () => {
-      cy.contains("OVERDUE").should("exist");
+    it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
     it(`Login as ${USERS[3].name}`, () => {
       cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
     });
 
-    it("'OVERDUE' should exist", () => {
-      cy.contains("OVERDUE").should("exist");
+    it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
     it(`Login as ${USERS[4].name}`, () => {
       cy.authLoginToDashboard({ USER: USERS[4], employeeId: fourthEmployee.id });
     });
 
-    it("'OVERDUE' should exist", () => {
-      cy.contains("OVERDUE").should("exist");
+    it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
   });
 
@@ -922,7 +941,7 @@ context("Test for Training Overdue", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", "OVERDUE");
+      cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 
     it("Click on overdue tag", () => {
@@ -1005,7 +1024,7 @@ context("Test for Training Overdue", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", "OVERDUE");
+      cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 
     it("Click on overdue tag", () => {
@@ -1106,7 +1125,7 @@ context("Test for Training Overdue", () => {
     });
 
     it("Verify training notification", () => {
-      cy.contains("OVERDUE").should("not.exist");
+      cy.contains(TrainingStatus.OVERDUE).should("not.exist");
     });
 
     it(`Line item should not present in All tab`, () => {

@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -606,7 +607,7 @@ context("Test for Training due", () => {
   });
 
   context("Create a document", () => {
-    it("Doc1 with Released status", () => {
+    it(`Doc1 with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
       cy.navigToDocumentList();
       cy.cmpClickCreateNewDocument();
       cy.drEnterDocumentTitle({ name: "released doc1" });
@@ -620,8 +621,8 @@ context("Test for Training due", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get(`span[data-cy="HeaderInfo-docId"]`).then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 
@@ -655,6 +656,14 @@ context("Test for Training due", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document 'released doc1' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
@@ -673,12 +682,22 @@ context("Test for Training due", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -691,8 +710,8 @@ context("Test for Training due", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -787,7 +806,7 @@ context("Test for Training due", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
   });
 
@@ -797,7 +816,7 @@ context("Test for Training due", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it("Select 'Trainings' tab", () => {
@@ -807,7 +826,7 @@ context("Test for Training due", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it("Click on due tag", () => {
@@ -878,7 +897,7 @@ context("Test for Training due", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it("Click on due tag", () => {
@@ -890,9 +909,9 @@ context("Test for Training due", () => {
     });
 
     it("Check if pop-up modal has pending trainings with 1 user", () => {
-      cy.get("h2").should("contain.text", "DUE IN 7 DAYS (1)");
+      cy.get("h2").should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (1)`);
       cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[3].name);
-      cy.get("h2").should("contain.text", "DUE IN 7 DAYS (1)");
+      cy.get("h2").should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (1)`);
       cy.get("button[aria-label=close]").eq(0).arrowClick();
     });
 
@@ -941,7 +960,7 @@ context("Test for Training due", () => {
     });
 
     it("'Due in 7 days' should not exist", () => {
-      cy.contains("DUE IN 7 DAYS").should("not.exist");
+      cy.contains(TrainingStatus.DUE_IN_7_DAYS).should("not.exist");
     });
   });
 
@@ -981,7 +1000,7 @@ context("Test for Training due", () => {
       cy.get("#full-width-tabpanel-2 ul li").should("have.length", 0);
     });
 
-    it("Chart - Due in 7 Days should have 0", () => {
+    it(`Chart - ${TrainingStatus.DUE_IN_7_DAYS} should have 0`, () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/training_record/dueSummary/*" }, (req) => {
         req.reply((res) => {
           expect(res.body.DUE).to.equal(0);
