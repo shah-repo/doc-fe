@@ -204,6 +204,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                   <Box width={203} height={40} fontFamily="Sora">
                     <Select
                       options={employeeSelectOptions}
+                      menuPlacement={"auto"}
                       onChange={(e) => saveValue(e)}
                       placeholder={intl.formatMessage({
                         id: "document.revision.search.users",
@@ -279,6 +280,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                   <Box width={203} height={40} fontFamily="Sora">
                     <Select
                       options={groupSelectOptions}
+                      menuPlacement={"auto"}
                       placeholder={intl.formatMessage({
                         id: "document.revision.search.groups",
                       })}
@@ -324,6 +326,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       <Box width={203} height={40} fontFamily="Sora" pt={1.825}>
                         <Select
                           id="document.assing.to.sidebar"
+                          menuPlacement={"auto"}
                           options={operatorsSelectOptions}
                           onChange={(e) => saveValueOperator(e)}
                           placeholder={intl.formatMessage({
