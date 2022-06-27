@@ -4,6 +4,7 @@
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -343,7 +344,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -378,6 +379,10 @@ context("Repeat Training with Training Curriculum", () => {
       cy.unClick();
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Upload logo picture 'image.jpg'", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
@@ -394,9 +399,7 @@ context("Repeat Training with Training Curriculum", () => {
       });
       cy.get("button[data-cy=\"form.builder.radiogroup\"]").contains("Radio Button group").arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "Radio BTN req" });
-      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.fbGroupOptions("1", "2", "3");
       cy.fbAddNewFieldButton();
     });
 
@@ -406,9 +409,7 @@ context("Repeat Training with Training Curriculum", () => {
       });
       cy.get("[data-cy=\"form.builder.select\"]").contains("Select").arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "Select" });
-      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.fbGroupOptions("1", "2", "3");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if"]`).first().check();
@@ -908,7 +909,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy='HeaderInfoName']").should("have.text", "Training Curricula");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
@@ -1112,7 +1113,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check for first user no OVERDUE training notification exists", () => {
+  context(`Check for first user no ${TrainingStatus.OVERDUE} training notification exists`, () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
     });
@@ -1124,7 +1125,7 @@ context("Repeat Training with Training Curriculum", () => {
     it(`Verify training notification`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
-      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: "OVERDUE" });
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: TrainingStatus.OVERDUE });
     });
   });
 
@@ -1164,7 +1165,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check for first user training notifications as 'COMPLETED' and no 'OVERDUE'", () => {
+  context(`Check for first user training notifications as ${TrainingStatus.COMPLETED} and no ${TrainingStatus.OVERDUE}`, () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1174,10 +1175,10 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify earlier notification should disappear and new training notification as 'COMPLETED'", () => {
+    it(`Verify earlier notification should disappear and new training notification as ${TrainingStatus.COMPLETED}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
-      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: "OVERDUE" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.COMPLETED});
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: TrainingStatus.OVERDUE  });
       cy.dashVerifyListItemNotExistsOnDashboard({ listItem: "A training is assigned to you" });
     });
 
@@ -1312,7 +1313,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as second user and check for Pending training and notification as 'DUE IN 7 DAYS'", () => {
+  context(`Log in as second user and check for Pending training and notification as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1328,9 +1329,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification as 'DUE IN 7 DAYS'", () => {
+    it(`Verify training notification as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.DUE_IN_7_DAYS });
     });
 
     it("Navigate to Training Records", () => {
@@ -1344,7 +1345,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as third user and check for Pending training and notification as 'DUE IN 7 DAYS'", () => {
+  context(`Log in as third user and check for Pending training and notification as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1360,9 +1361,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification as 'DUE IN 7 DAYS'", () => {
+    it(`Verify training notification as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.DUE_IN_7_DAYS });
     });
 
     it("Navigate to Training Records", () => {
@@ -1397,7 +1398,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as second user and check training notification is OVERDUE", () => {
+  context(`Log in as second user and check training notification is ${TrainingStatus.OVERDUE}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1413,13 +1414,13 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification is OVERDUE", () => {
+    it(`Verify training notification is ${TrainingStatus.OVERDUE}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.OVERDUE });
     });
   });
 
-  context("Log in as third user and check training notification is OVERDUE", () => {
+  context(`Log in as third user and check training notification is ${TrainingStatus.OVERDUE}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1435,9 +1436,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification is OVERDUE", () => {
+    it(`Verify training notification is ${TrainingStatus.OVERDUE}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.OVERDUE });
     });
   });
 
@@ -1462,7 +1463,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Complete Training for second user and verify notification as COMPLETED", () => {
+  context(`Complete Training for second user and verify notification as ${TrainingStatus.COMPLETED}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1490,9 +1491,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.navigToDashboard();
     });
 
-    it("Verify that the notification as COMPLETED", () => {
+    it(`Verify that the notification as ${TrainingStatus.COMPLETED}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.COMPLETED });
     });
 
     it("Verify that the older notification disappeared", () => {
@@ -1532,7 +1533,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check for first user the training notifications as 'COMPLETED'", () => {
+  context(`Check for first user the training notifications as ${TrainingStatus.COMPLETED}`, () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1542,9 +1543,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify the training notification as COMPLETED", () => {
+    it(`Verify that the notification as ${TrainingStatus.COMPLETED}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.COMPLETED });
     });
 
     it("Navigate to Training Records", () => {
@@ -1580,7 +1581,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check for first user two training notifications - COMPLETED and Pending", () => {
+  context(`Check for first user two training notifications - ${TrainingStatus.COMPLETED} and Pending`, () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1590,9 +1591,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify that the notification as 'COMPLETED' and another notification 'assigned to you'", () => {
+    it(`Verify that the notification as ${TrainingStatus.COMPLETED} and another notification 'assigned to you'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.COMPLETED });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
     });
@@ -1613,7 +1614,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as third user and check notification as OVERDUE", () => {
+  context(`Log in as third user and check notification as ${TrainingStatus.OVERDUE}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1629,9 +1630,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification as OVERDUE", () => {
+    it(`Verify training notification as ${TrainingStatus.OVERDUE}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+      it(`Verify that the notification as ${TrainingStatus.OVERDUE}`, () => {
     });
   });
 
@@ -1656,7 +1657,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check training for second user notifications as 'COMPLETED'", () => {
+  context(`Check training for second user notifications as ${TrainingStatus.COMPLETED}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1681,9 +1682,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify training notification as 'COMPLETED'", () => {
+    it(`Verify training notification as ${TrainingStatus.COMPLETED}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.COMPLETED });
     });
 
     it("Navigate to Training Records", () => {
@@ -1719,7 +1720,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check for first user has two training notifications - 'DUE IN 7 DAYS' and 'COMPLETED'", () => {
+  context(`Check for first user has two training notifications - ${TrainingStatus.DUE_IN_7_DAYS} and ${TrainingStatus.COMPLETED}`, () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1729,10 +1730,10 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify two training notifications - 'DUE IN 7 DAYS' and 'COMPLETED'", () => {
+    it(`Verify two training notifications - ${TrainingStatus.DUE_IN_7_DAYS} and ${TrainingStatus.COMPLETED}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "DUE IN 7 DAYS" });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.DUE_IN_7_DAYS });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.COMPLETED });
     });
 
     it("Navigate to Training Records", () => {
@@ -1751,7 +1752,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Check for second user two training notifications - 'COMPLETED' and 'assigned to you'", () => {
+  context(`Check for second user two training notifications - ${TrainingStatus.COMPLETED} and 'assigned to you'`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1776,9 +1777,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify that the notification as 'COMPLETED'", () => {
+    it(`Verify that the notification as ${TrainingStatus.COMPLETED}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "COMPLETED" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.COMPLETED});
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "A training is assigned to you" });
     });
 
@@ -1798,7 +1799,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as third user and check training notification as 'OVERDUE'", () => {
+  context(`Log in as third user and check training notification as ${TrainingStatus.OVERDUE}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1814,9 +1815,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification as 'OVERDUE'", () => {
+    it(`Verify training notification as ${TrainingStatus.OVERDUE}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.OVERDUE  });
     });
   });
 
@@ -1841,7 +1842,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
-  context("Log in as first user and check training notification as 'OVERDUE'", () => {
+  context(`Log in as first user and check training notification as ${TrainingStatus.OVERDUE}`, () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1851,13 +1852,13 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify training notification as 'OVERDUE'", () => {
+    it(`Verify training notification as ${TrainingStatus.OVERDUE}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.OVERDUE  });
     });
   });
 
-  context("Log in as third user and verify notification as 'OVERDUE'", () => {
+  context(`Log in as third user and verify notification as ${TrainingStatus.OVERDUE}`, () => {
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -1873,9 +1874,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify that OVERDUE notification appeared in dashboard", () => {
+    it(`Verify that ${TrainingStatus.OVERDUE} notification appeared in dashboard`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${trainingFormId}Rev 1 AR Form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "OVERDUE" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: TrainingStatus.OVERDUE  });
     });
 
     it("Navigate to Training Records", () => {

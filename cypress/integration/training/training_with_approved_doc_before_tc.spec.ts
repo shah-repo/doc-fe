@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -348,7 +349,7 @@ context("Training notifications for documents with approved and released revisio
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDocId = x.text(); });
     });
 
@@ -401,6 +402,14 @@ context("Training notifications for documents with approved and released revisio
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -428,6 +437,16 @@ context("Training notifications for documents with approved and released revisio
         CyRoutes.PatchDocRev, () => {
           cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
         });
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {
@@ -463,10 +482,10 @@ context("Training notifications for documents with approved and released revisio
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
     });
 
-    it("Click training notification and check doc with Approved status", () => {
+    it(`Click training notification and check doc with STATUS_TYPES_LABEL.APPROVED status`, () => {
       SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
-      cy.arVerifyStatus({ status: "APPROVED" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Button 'Complete training' should be visible", () => {
