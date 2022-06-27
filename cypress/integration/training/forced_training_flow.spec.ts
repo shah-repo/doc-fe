@@ -403,6 +403,14 @@ context("Forced training flow", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
     });
@@ -418,6 +426,10 @@ context("Forced training flow", () => {
     it("Select Users to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {
@@ -492,6 +504,10 @@ context("Forced training flow", () => {
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Select document to be trained on", () => {

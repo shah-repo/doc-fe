@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -114,7 +115,7 @@ context("File delete in Pending Change", () => {
       });
 
       it("Filters document by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatus({ title: "test title", status: "IN_REVIEW" });
+        cy.arFilterARListByNameAndStatus({ title: "test title", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       });
 
       it("Withdraw Submission", () => {

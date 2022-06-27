@@ -467,6 +467,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "select",
                 index: 0,
                 label: "PO Status",
+                tabId: "details",
                 options: [
                   {
                     text: "Open",
@@ -494,6 +495,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "section",
                 index: 1,
                 label: "General Information",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -503,6 +505,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -528,6 +531,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "supplier",
                 index: 3,
                 label: "Supplier ",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -541,6 +545,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Order Date",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -565,6 +570,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "purchaseorder",
                 index: 5,
                 label: "Purchase Order",
+                tabId: "lineitems",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -578,6 +584,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "approvals",
                 index: 6,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -911,6 +918,7 @@ context("Test Supplier Landing Page for Supira", () => {
                     type: "poreceive",
                     index: 0,
                     label: "Receive PO",
+                    tabId: "details",
                     rules: "",
                     hidden: false,
                     deleted: false,
@@ -929,6 +937,7 @@ context("Test Supplier Landing Page for Supira", () => {
                   {
                     name: "fb-approvals-kzqkpxqm",
                     type: "approvals",
+                    tabId: "overview",
                     index: 1,
                     label: "form.builder.approvals",
                     deleteDisabled: true,

@@ -161,6 +161,7 @@ context("Test Equipment maintenance email notifications", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
+                    tabId: "overview",
                     deleteInFormDisabled: true,
                   },
                   {
@@ -174,6 +175,7 @@ context("Test Equipment maintenance email notifications", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
+                    tabId: "specification",
                     validationAttribute: "Primary Owner",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
@@ -192,6 +194,7 @@ context("Test Equipment maintenance email notifications", () => {
                     validationAttribute: "Coordinator",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     index: 3,
@@ -207,6 +210,7 @@ context("Test Equipment maintenance email notifications", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
+                    tabId: "calpmhistory",
                   },
                 ],
               },
@@ -271,6 +275,7 @@ context("Test Equipment maintenance email notifications", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_id",
@@ -285,6 +290,7 @@ context("Test Equipment maintenance email notifications", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_maintainer",
@@ -299,6 +305,7 @@ context("Test Equipment maintenance email notifications", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-equipment_due_date",
@@ -311,6 +318,7 @@ context("Test Equipment maintenance email notifications", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-requipment-maintenance-section",
@@ -324,6 +332,7 @@ context("Test Equipment maintenance email notifications", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -331,6 +340,7 @@ context("Test Equipment maintenance email notifications", () => {
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
                 uniqueSchemaItem: true,
+                tabId: "overview",
                 index: 5,
               },
             ],

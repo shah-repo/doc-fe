@@ -238,12 +238,14 @@ context("LHRs email notifications", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
+                tabId: "details",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
+                tabId: "details",
                 index: 1,
                 stepIndex: 1,
                 applicableOn: [
@@ -279,6 +281,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -296,6 +299,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -313,6 +317,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -330,6 +335,7 @@ context("LHRs email notifications", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -397,6 +403,7 @@ context("LHRs email notifications", () => {
                 type: "partsselection",
                 index: 0,
                 label: "Part to be Manufactured",
+                tabId: "overview",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
                 editorConfig: {
@@ -408,6 +415,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 1,
                 label: "Initial Quantity",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -421,6 +429,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 2,
                 label: "End Quantity",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -435,6 +444,7 @@ context("LHRs email notifications", () => {
                 type: "radiogroup",
                 index: 3,
                 label: "Build Type",
+                tabId: "overview",
                 options: [
                   {
                     text: "R&D",
@@ -459,6 +469,7 @@ context("LHRs email notifications", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Due Date",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -471,6 +482,7 @@ context("LHRs email notifications", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -483,6 +495,7 @@ context("LHRs email notifications", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kvateryo",

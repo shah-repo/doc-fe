@@ -348,6 +348,7 @@ context("Receivable test with Page Details", () => {
                 type: "select",
                 index: 0,
                 label: "PO Status",
+                tabId: "details",
                 options: [
                   {
                     text: "Open",
@@ -376,6 +377,7 @@ context("Receivable test with Page Details", () => {
                 type: "section",
                 index: 1,
                 label: "General Information",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -385,6 +387,7 @@ context("Receivable test with Page Details", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
+                tabId: "details",
                 rules: "",
                 hidden: false,
                 deleted: false,
@@ -410,6 +413,7 @@ context("Receivable test with Page Details", () => {
                 type: "supplier",
                 index: 3,
                 label: "Supplier ",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -424,6 +428,7 @@ context("Receivable test with Page Details", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Order Date",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -445,6 +450,7 @@ context("Receivable test with Page Details", () => {
               {
                 name: "po-items-built-in",
                 type: "purchaseorder",
+                tabId: "lineitems",
                 index: 5,
                 label: "Purchase Order",
                 applicableOn: [
@@ -460,6 +466,7 @@ context("Receivable test with Page Details", () => {
                 type: "approvals",
                 index: 6,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -525,6 +532,7 @@ context("Receivable test with Page Details", () => {
                 type: "poreceive",
                 index: 0,
                 label: "Select PO",
+                tabId: "details",
                 rules: "",
                 hidden: false,
                 deleted: false,
@@ -542,6 +550,7 @@ context("Receivable test with Page Details", () => {
               {
                 name: "fb-approvals-ku6t6gzw",
                 type: "approvals",
+                tabId: "overview",
                 index: 1,
                 label: "form.builder.approvals",
                 deleteDisabled: true,
@@ -603,6 +612,7 @@ context("Receivable test with Page Details", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -617,6 +627,7 @@ context("Receivable test with Page Details", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -631,6 +642,7 @@ context("Receivable test with Page Details", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -644,6 +656,7 @@ context("Receivable test with Page Details", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -654,6 +667,7 @@ context("Receivable test with Page Details", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",

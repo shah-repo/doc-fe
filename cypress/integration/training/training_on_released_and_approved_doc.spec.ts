@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { LINE_ITEMS_STATUS_TYPES, STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -336,7 +337,7 @@ context("Training for same document that was first released and then revised and
   });
 
   context("Create a document", () => {
-    it("Document with Released status", () => {
+    it(`Document with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
       cy.navigToDocumentList();
       cy.cmpClickCreateNewDocument();
       cy.drEnterDocumentTitle({ name: "released document" });
@@ -350,8 +351,8 @@ context("Training for same document that was first released and then revised and
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get(`[data-cy="HeaderInfo-docId"]`).then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 
@@ -385,6 +386,14 @@ context("Training for same document that was first released and then revised and
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -403,13 +412,23 @@ context("Training for same document that was first released and then revised and
       cy.get("[name=training-validity]").arrowType("5");
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
     it("Select User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Save training", () => {
@@ -469,7 +488,6 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Edit document title", () => {
-      cy.get("[id='Title-field']>div>div>div:nth-child(1)").eq(1).arrowClick();
       cy.drEnterDocumentTitle({ name: "Approved document" });
     });
 
@@ -512,7 +530,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select AR", () => {
-      cy.arFilterARListByNameAndStatus({ title: "Approved document", status: "IN_REVIEW" });
+      cy.arFilterARListByNameAndStatus({ title: "Approved document", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -520,8 +538,8 @@ context("Training for same document that was first released and then revised and
       cy.arApproveAR();
     });
 
-    it("Check approval request status is 'Approved'", () => {
-      cy.arVerifyStatus({ status: "APPROVED" });
+    it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 

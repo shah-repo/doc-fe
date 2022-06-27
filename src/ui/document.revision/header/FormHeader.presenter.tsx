@@ -27,6 +27,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { workspaceState } = FB.useStores();
+  const { _documentRevisionFormState } = SM.useStores();
   const classes = styles();
   const renderLastSavedContnet = () => (
     <Box>
@@ -81,7 +82,8 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
         {() => (
           <>
             {(asyncState.status === AsyncStatus.Active ||
-              workspaceState?.documentRevApi.loading) && (
+              workspaceState?.documentRevApi.loading ||
+              _documentRevisionFormState?.loading) && (
               <Box width="100%" pt={1}>
                 <LinearProgress className={classes.linearProgress} />
               </Box>

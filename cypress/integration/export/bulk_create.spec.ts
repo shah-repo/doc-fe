@@ -130,6 +130,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Select Form Document For Import",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-add-column-document-record-id",
@@ -155,6 +156,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Column Document/Record Id?",
                     deleteInFormDisabled: false,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-output-document-type",
@@ -172,6 +174,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Select Output Document Type",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-download-sheet",
@@ -181,6 +184,7 @@ context("Export Bulk", () => {
                     deleteDisabled: true,
                     editorProperties: [],
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-import",
@@ -189,6 +193,7 @@ context("Export Bulk", () => {
                     label: "EXCEL FOR IMPORT",
                     deleteDisabled: false,
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-import-file",
@@ -204,6 +209,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Upload excel with data for import",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-logging",
@@ -212,6 +218,7 @@ context("Export Bulk", () => {
                     label: "Mass Create Logs",
                     deleteDisabled: false,
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-logging-file",
@@ -226,6 +233,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Logs",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     index: 8,
@@ -238,6 +246,7 @@ context("Export Bulk", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "textfield",
+                    tabId: "details",
                   },
                   {
                     index: 9,
@@ -251,6 +260,7 @@ context("Export Bulk", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "textfield",
+                    tabId: "details",
                   },
                   {
                     index: 10,
@@ -266,6 +276,7 @@ context("Export Bulk", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     applicableValidationSchema: true,
+                    tabId: "details",
                     editorProperties: [],
                     label: "Inline approval",
                     editorConfig: {
@@ -355,6 +366,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Select Form Document For Import",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-add-column-document-record-id",
@@ -380,6 +392,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Column Document/Record Id?",
                     deleteInFormDisabled: false,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-output-document-type",
@@ -397,6 +410,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Select Output Document Type",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-download-sheet",
@@ -406,6 +420,7 @@ context("Export Bulk", () => {
                     deleteDisabled: true,
                     editorProperties: [],
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-import",
@@ -414,6 +429,7 @@ context("Export Bulk", () => {
                     label: "EXCEL FOR IMPORT",
                     deleteDisabled: false,
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-import-file",
@@ -429,6 +445,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Upload excel with data for import",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-logging",
@@ -437,6 +454,7 @@ context("Export Bulk", () => {
                     label: "Mass Create Logs",
                     deleteDisabled: false,
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-logging-file",
@@ -451,6 +469,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Logs",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     label: "form.builder.approvals",
@@ -459,6 +478,7 @@ context("Export Bulk", () => {
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
                     index: 8,
+                    tabId: "details",
                   },
                 ],
               },

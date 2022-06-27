@@ -117,6 +117,7 @@ context("Export Equipment doc", () => {
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
                     index: 0,
+                    tabId: "overview",
                   },
                 ],
               },

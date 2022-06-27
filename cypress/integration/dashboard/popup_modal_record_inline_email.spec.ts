@@ -136,6 +136,7 @@ context("Records Inline approval email popup modal", () => {
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
                     index: 0,
+                    tabId: "overview",
                   },
                   {
                     index: 1,
@@ -143,6 +144,7 @@ context("Records Inline approval email popup modal", () => {
                     name: "textfield-kn7fc209",
                     validationMode: "default",
                     label: "Section 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -156,6 +158,7 @@ context("Records Inline approval email popup modal", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -165,6 +168,7 @@ context("Records Inline approval email popup modal", () => {
                   {
                     index: 3,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "inline-approval-kw6gbxwm",
                     hidden: false,
                     outputDisabled: false,
@@ -190,6 +194,7 @@ context("Records Inline approval email popup modal", () => {
                     name: "textfield-kn7fc208",
                     validationMode: "default",
                     label: "Section 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -203,6 +208,7 @@ context("Records Inline approval email popup modal", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -212,6 +218,7 @@ context("Records Inline approval email popup modal", () => {
                   {
                     index: 6,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "inline-approval-kw6gbxwn",
                     hidden: false,
                     outputDisabled: false,

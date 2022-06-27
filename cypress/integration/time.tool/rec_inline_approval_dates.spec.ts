@@ -152,6 +152,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 0,
                     type: "textfield",
+                    tabId: "details",
                     name: "textfield-for-inline-l39qj0uv",
                     hidden: false,
                     outputDisabled: false,
@@ -172,6 +173,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 1,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "inline-field-l39qj2f2",
                     hidden: false,
                     outputDisabled: false,
@@ -195,6 +197,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 2,
                     type: "textfield",
+                    tabId: "details",
                     name: "second-textfield-for-inline-l39qj3i5",
                     hidden: false,
                     outputDisabled: false,
@@ -215,6 +218,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 3,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "second-inline-field-l39qj5nh",
                     hidden: false,
                     outputDisabled: false,

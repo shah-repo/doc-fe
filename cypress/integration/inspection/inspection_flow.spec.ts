@@ -756,6 +756,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Make vs Buy",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "primary-supplier",
@@ -776,6 +777,7 @@ context("Inspection flow", () => {
                       ],
                       validationAttribute: "Primary Supplier",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "other-suppliers",
@@ -796,6 +798,7 @@ context("Inspection flow", () => {
                       ],
                       validationAttribute: "Other Suppliers",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "unit-of-measure",
@@ -916,6 +919,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Unit of measure",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "traceability-required",
@@ -935,6 +939,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Traceability required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "serialized",
@@ -960,6 +965,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Serialized",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "select-serialization",
@@ -985,6 +991,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Select serialization",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "iqc-required",
@@ -1004,6 +1011,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "IQC Required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "limited-shelf-life",
@@ -1023,6 +1031,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Limited Shelf Life",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "fai-required",
@@ -1042,6 +1051,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "FAI Required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                   ],
                 },
