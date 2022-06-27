@@ -16,6 +16,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   onBlur,
   editorRef,
   _textEditorState,
+  _documentRevisionFormState,
   _formState,
   boxProps,
   loading,
@@ -31,18 +32,17 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
 }) => {
   const classes = SMEditorStyles();
   const intl = useIntl();
-  const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
   const descriptionPlaceholder = intl.formatMessage({ id: "form.builder.enter.description" });
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
   const toggleBtn = () => {
-    setFlag(!flag);
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
+    _documentRevisionFormState?.setExpanded(!_documentRevisionFormState?.expanded);
   };
   const onAway = () => {
+    _documentRevisionFormState?.setExpanded(false);
     _textEditorState?.setPreviewMode(true);
-    setFlag(true);
     showToggleButton && showToggleButton();
   };
   return  (
@@ -81,7 +81,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                           setTimeout(() => {
                             const moreThanTwoLines =
                                 Math.floor(_textEditorState?.editorReference.editorContainer.clientHeight / 24) > 2;
-                            setFlag(!moreThanTwoLines);
+                            _documentRevisionFormState?.setExpanded(moreThanTwoLines);
                           });
                         }}
                         onChange={() => showToggleButton && showToggleButton()}
@@ -127,7 +127,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                 padding: "0 2px",
                 fontSize: "14px",
               }}>{viewMore}</Button> : (
-              !_textEditorState?.previewMode && !isTextClamped && !flag && <Button variant="text"
+              !_textEditorState?.previewMode && !isTextClamped && _documentRevisionFormState?.expanded && <Button variant="text"
                 onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
                 style={{
                   color: Colors.navy,

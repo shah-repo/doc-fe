@@ -3,7 +3,7 @@ import draftToHtml from "draftjs-to-html";
 import { useFormikContext } from "formik";
 import htmlToDraft from "html-to-draftjs";
 import { map } from "lodash";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from "../../..";
 import { FB } from "../../../../ui/form.builder";
@@ -58,6 +58,11 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
         setIsTextClamped(elm ? elm.scrollHeight > elm.clientHeight : false);
       }, 500);
     };
+
+    useEffect(() => {
+      _documentRevisionFormState?.setIsDescTextClamped(isTextClamped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isTextClamped]);
 
     useMemo(
       () => {
@@ -135,6 +140,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       toolbar,
       showToggleButton,
       isTextClamped,
+      _documentRevisionFormState,
     });
   };
   Comp.displayName = "withSMTextEditor";

@@ -27,6 +27,8 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public disabledAction = false;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
+  @observable public expanded = false;
+  @observable public isDesTextClamped = false;
   @observable docInfo: DocumentInfo = {
     name: "",
     isQms: true,
@@ -91,6 +93,14 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // MARK: @actions
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
     set(this, "revisionChangeType", revisionChangeType);
+  };
+
+  @action public setExpanded = (expand) => {
+    set(this, "expanded", expand);
+  };
+
+  @action public setIsDescTextClamped = (clamped: boolean) => {
+    set(this, "isDesTextClamped", clamped);
   };
 
   @action public setViewMore = (flag: boolean) => {
