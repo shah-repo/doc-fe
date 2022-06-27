@@ -100,12 +100,16 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiInputBase: {
     root: {
-      "fontSize": "0.8rem",
-      "fontFamily": "Sora, sans-serif",
+      fontSize: "0.8rem",
+      fontFamily: "Sora, sans-serif",
+      borderRadius: "4px",
+      transition: appTheme.transitions.create("all"),
+    },
+  },
+  MuiOutlinedInput: {
+    root: {
       "backgroundColor": Colors.white,
       "border": `1px solid ${Colors.mild_wind_blue}`,
-      "borderRadius": "4px",
-      "transition": appTheme.transitions.create("all"),
       "&:not($focused):not($disabled):hover": {
         backgroundColor: Colors.background_white,
       },
@@ -119,16 +123,11 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
         border: "none",
       },
     },
+    notchedOutline: {
+      borderRadius: 4,
+    },
   },
   MuiSelect: {
-    root: {
-      "fontSize": "0.8rem",
-      "lineHeight": "1.2rem",
-      "fontFamily": "Sora, sans-serif;",
-      "&$disabled": {
-        backgroundColor: Colors.whitest_grey,
-      },
-    },
     icon: {
       right: "10px",
     },
@@ -182,15 +181,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiExpansionPanelDetails: {
     root: {
       padding: appTheme.spacing(1),
-    },
-  },
-  MuiOutlinedInput: {
-    root: {
-      fontFamily: "Sora, sans-serif;",
-      backgroundColor: Colors.white,
-    },
-    notchedOutline: {
-      borderRadius: 4,
     },
   },
   MuiDialogActions: {
