@@ -609,12 +609,14 @@ context("Usage report document counter for new revisions", () => {
                 placeholder: "",
                 rows: 1,
                 label: "Textfield for inline",
+                tabId: "details",
               },
               {
                 name: "fb-approvals",
                 type: "approvals",
                 index: 1,
                 label: "Approvals",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -910,6 +912,7 @@ context("Usage report document counter for new revisions", () => {
                 type: "select",
                 index: 0,
                 label: "PO Status",
+                tabId: "details",
                 options: [
                   {
                     text: "Open",
@@ -937,6 +940,7 @@ context("Usage report document counter for new revisions", () => {
                 type: "section",
                 index: 1,
                 label: "General Information",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -946,6 +950,7 @@ context("Usage report document counter for new revisions", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -971,6 +976,7 @@ context("Usage report document counter for new revisions", () => {
                 type: "supplier",
                 index: 3,
                 label: "Supplier ",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -984,6 +990,7 @@ context("Usage report document counter for new revisions", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Order Date",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -1008,6 +1015,7 @@ context("Usage report document counter for new revisions", () => {
                 type: "purchaseorder",
                 index: 5,
                 label: "Purchase Order",
+                tabId: "lineitems",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1021,6 +1029,7 @@ context("Usage report document counter for new revisions", () => {
                 type: "approvals",
                 index: 6,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],

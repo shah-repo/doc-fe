@@ -133,6 +133,7 @@ context("Test Supplier Landing Page for Supira", () => {
                     type: "select",
                     index: 6,
                     label: "Supplier Use:",
+                    tabId: "details",
                     options: [
                       {
                         text: "Production",
@@ -153,6 +154,7 @@ context("Test Supplier Landing Page for Supira", () => {
                     type: "select",
                     index: 9,
                     label: "Supplier Use Status:",
+                    tabId: "details",
                     rules: "",
                     options: [
                       {
@@ -190,6 +192,7 @@ context("Test Supplier Landing Page for Supira", () => {
                     type: "select",
                     index: 7,
                     label: "Risk Classification:",
+                    tabId: "details",
                     rules: "required_if:supplier-use-kmdn6oi4,Production",
                     options: [
                       {
@@ -216,6 +219,7 @@ context("Test Supplier Landing Page for Supira", () => {
                   },
                   {
                     name: "approvals-kycw6cjf",
+                    tabId: "overview",
                     type: "approvals",
                     index: 8,
                     label: "Approvals",

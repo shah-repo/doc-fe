@@ -127,6 +127,7 @@ context("Create receivable test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -154,6 +155,7 @@ context("Create receivable test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -167,6 +169,7 @@ context("Create receivable test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -177,6 +180,7 @@ context("Create receivable test", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "poapprovals",
                     deleteDisabled: false,
                     name: "fb-po-approvals-kqqix31p",
@@ -394,6 +398,7 @@ context("Create receivable test", () => {
                               index: 0,
                               type: "poreceive",
                               label: "Receivable",
+                              tabId: "details",
                               name: "receivable-kdptzei2",
                               applicableOn: ["ON_STATE_TO_IN_REVIEW"],
                             },
@@ -404,6 +409,7 @@ context("Create receivable test", () => {
                               rows: 1,
                               editorProperties: [],
                               label: "Text field",
+                              tabId: "details",
                               placeholder: "Enter text",
                               applicableOn: [
                                 "ON_STATE_TO_IN_REVIEW",
@@ -411,6 +417,7 @@ context("Create receivable test", () => {
                             },
                             {
                               label: "form.builder.approvals",
+                              tabId: "overview",
                               type: "poapprovals",
                               deleteDisabled: false,
                               name: "fb-po-approvals-kqqix31p",

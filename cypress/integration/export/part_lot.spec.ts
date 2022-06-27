@@ -118,6 +118,7 @@ context("Export Part Lot", () => {
                     type: "quantity",
                     index: 0,
                     label: "Initial Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -132,6 +133,7 @@ context("Export Part Lot", () => {
                     type: "quantity",
                     index: 1,
                     label: "Usable Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -146,6 +148,7 @@ context("Export Part Lot", () => {
                     type: "datepicker",
                     index: 2,
                     label: "Expiration Date",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -159,6 +162,7 @@ context("Export Part Lot", () => {
                     type: "autocomplete",
                     index: 3,
                     label: "Part Selection",
+                    tabId: "details",
                     optionId: "21",
                     placeholder: "Select the appropriate part for this lot",
                     deleteDisabled: true,
@@ -169,6 +173,7 @@ context("Export Part Lot", () => {
                     type: "checkboxgroup",
                     index: 4,
                     label: "100% Inspection Override",
+                    tabId: "details",
                     options: [
                       {
                         text: "100% Inspection Override",
@@ -187,6 +192,7 @@ context("Export Part Lot", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
@@ -199,6 +205,7 @@ context("Export Part Lot", () => {
                     name: "textfield-kn7fc209",
                     validationMode: "default",
                     label: "Section 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -212,6 +219,7 @@ context("Export Part Lot", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -234,6 +242,7 @@ context("Export Part Lot", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "details",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -246,6 +255,7 @@ context("Export Part Lot", () => {
                     name: "textfield-kn7fc208",
                     validationMode: "default",
                     label: "Section 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -259,6 +269,7 @@ context("Export Part Lot", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -281,6 +292,7 @@ context("Export Part Lot", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "details",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -357,6 +369,7 @@ context("Export Part Lot", () => {
                     type: "quantity",
                     index: 0,
                     label: "Initial Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -371,6 +384,7 @@ context("Export Part Lot", () => {
                     type: "quantity",
                     index: 1,
                     label: "Usable Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -385,6 +399,7 @@ context("Export Part Lot", () => {
                     type: "datepicker",
                     index: 2,
                     label: "Expiration Date",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -398,6 +413,7 @@ context("Export Part Lot", () => {
                     type: "autocomplete",
                     index: 3,
                     label: "Part Selection",
+                    tabId: "details",
                     optionId: "21",
                     placeholder: "Select the appropriate part for this lot",
                     deleteDisabled: true,
@@ -408,6 +424,7 @@ context("Export Part Lot", () => {
                     type: "checkboxgroup",
                     index: 4,
                     label: "100% Inspection Override",
+                    tabId: "details",
                     options: [
                       {
                         text: "100% Inspection Override",
@@ -426,6 +443,7 @@ context("Export Part Lot", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",

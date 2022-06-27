@@ -145,6 +145,7 @@ context("Equipment due date calculation while changing frequency", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
+                    tabId: "overview",
                     deleteInFormDisabled: true,
                   },
                   {
@@ -161,6 +162,7 @@ context("Equipment due date calculation while changing frequency", () => {
                     validationAttribute: "Primary Owner",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     name: "fb-coordinator-eq",
@@ -176,6 +178,7 @@ context("Equipment due date calculation while changing frequency", () => {
                     validationAttribute: "Coordinator",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     index: 3,
@@ -191,6 +194,7 @@ context("Equipment due date calculation while changing frequency", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
+                    tabId: "calpmhistory",
                   },
                   {
                     index: 4,
@@ -205,6 +209,7 @@ context("Equipment due date calculation while changing frequency", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     applicableValidationSchema: true,
+                    tabId: "calpmhistory",
                     validationAttribute: "Calibration",
                   },
                 ],
@@ -270,6 +275,7 @@ context("Equipment due date calculation while changing frequency", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                tabId: "details",
                 deleteInFormDisabled: true,
               },
               {
@@ -279,6 +285,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 label: "Equipment",
                 rules: "required",
                 optionId: "20",
+                tabId: "details",
                 placeholder: "[Select revision here]",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -294,6 +301,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 label: "Maintainer",
                 rules: "required",
                 optionId: "13",
+                tabId: "details",
                 placeholder: "[Select name here]",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -308,6 +316,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 index: 3,
                 label: "Completion Date",
                 rules: "required",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -321,6 +330,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 index: 4,
                 label: "Equipment Maintenance Section",
                 rules: "required",
+                tabId: "details",
                 hidden: true,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -333,6 +343,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 label: "form.builder.approvals",
                 type: "approvals",
                 deleteDisabled: true,
+                tabId: "overview",
                 name: "fb-approvals-kybkhbpt",
                 uniqueSchemaItem: true,
                 index: 5,
@@ -398,6 +409,7 @@ context("Equipment due date calculation while changing frequency", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                tabId: "details",
                 deleteInFormDisabled: true,
               },
               {
@@ -406,6 +418,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 index: 1,
                 label: "Equipment",
                 rules: "required",
+                tabId: "details",
                 optionId: "20",
                 placeholder: "[Select revision here]",
                 applicableOn: [
@@ -421,6 +434,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 index: 2,
                 label: "Maintainer",
                 rules: "required",
+                tabId: "details",
                 optionId: "13",
                 placeholder: "[Select name here]",
                 applicableOn: [
@@ -435,6 +449,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -448,6 +463,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -461,6 +477,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 label: "form.builder.approvals",
                 type: "approvals",
                 deleteDisabled: true,
+                tabId: "overview",
                 name: "fb-approvals-kybkhbpt",
                 uniqueSchemaItem: true,
                 index: 5,

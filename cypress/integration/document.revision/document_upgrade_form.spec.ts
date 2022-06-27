@@ -126,6 +126,7 @@ context("Document form upgrade", () => {
                     name: "fb-approvals-kn7fbu5l",
                     uniqueSchemaItem: true,
                     index: 0,
+                    tabId: "overview",
                   },
                   {
                     index: 1,
@@ -133,6 +134,7 @@ context("Document form upgrade", () => {
                     name: "old-textfield-kn7fc209",
                     validationMode: "default",
                     label: "Old section",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -146,6 +148,7 @@ context("Document form upgrade", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "Old textfield",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -211,6 +214,7 @@ context("Document form upgrade", () => {
                 name: "old-section-kn7ffn15",
                 validationMode: "default",
                 label: "Old section",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -220,6 +224,7 @@ context("Document form upgrade", () => {
               {
                 index: 1,
                 type: "textfield",
+                tabId: "overview",
                 name: "old-textfield-kn7fg4bj",
                 rows: 1,
                 validationMode: "default",
