@@ -52,13 +52,14 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
     prepareProgressBarData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [smartReferencesFrom]);
+  const progressValue = completed.length / (completed.length + inprogress.length);
 
   return (
     <Box px={4.25} mt={1.875}>
       {(!isEmpty(completed) || !isEmpty(inprogress)) && (
         <BorderLinearProgress
           variant="determinate"
-          value={(completed.length / (completed.length + inprogress.length)) * 100}
+          value={progressValue * 100}
         />
       )}
       <Box
