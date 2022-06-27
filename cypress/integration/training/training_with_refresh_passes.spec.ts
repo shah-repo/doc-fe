@@ -5,6 +5,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -614,6 +615,14 @@ context("Test training records after refresh period passes", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
@@ -634,12 +643,22 @@ context("Test training records after refresh period passes", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -652,8 +671,8 @@ context("Test training records after refresh period passes", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -735,6 +754,30 @@ context("Test training records after refresh period passes", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
+
+    it("Verify the time travel will appear in History list as 'Requested'", () => {
+      cy.get("tr.k-master-row").should("have.length", 1);
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "2 days");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.TRAINING_RECORDS_REFRESH);
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
+    });
+
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
+          CyRoutes.GetAvailableApprovers], () => {
+          cy.reload();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("tr.k-master-row").should("have.length", 1);
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "2 days");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.TRAINING_RECORDS_REFRESH);
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
+      cy.wait(5000);
+    });
   });
 
   context("Check training notifications", () => {
@@ -745,9 +788,11 @@ context("Test training records after refresh period passes", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `A training is assigned to you` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${releasedFormId}Rev 1 released form` });
+      // eslint-disable-next-line max-len
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released formA training is assigned to you` });
     });
   });
 

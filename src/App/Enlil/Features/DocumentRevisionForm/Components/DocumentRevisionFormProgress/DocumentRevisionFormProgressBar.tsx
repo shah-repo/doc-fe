@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { concat, each, isEmpty, sum, uniq } from "lodash";
+import { each, isEmpty, uniq } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { Nullable } from "../../../../../../state/ducks/common/types";
@@ -52,13 +52,14 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
     prepareProgressBarData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [smartReferencesFrom]);
+  const progressValue = completed.length / (completed.length + inprogress.length);
 
   return (
     <Box px={4.25} mt={1.875}>
       {(!isEmpty(completed) || !isEmpty(inprogress)) && (
         <BorderLinearProgress
           variant="determinate"
-          value={(completed.length / sum(concat(completed, inprogress))) * 100}
+          value={progressValue * 100}
         />
       )}
       <Box
