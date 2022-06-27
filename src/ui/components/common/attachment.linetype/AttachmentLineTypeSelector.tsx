@@ -57,7 +57,10 @@ const styles = makeStyles((theme) => ({
     height: 20,
   }),
   linkButton: {
-    padding: 0,
+    "padding": 0,
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
   },
 }));
 
