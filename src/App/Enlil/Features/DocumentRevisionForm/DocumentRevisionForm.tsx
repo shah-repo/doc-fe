@@ -111,6 +111,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
+  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "64vh" : "67vh";
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
@@ -143,8 +145,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               templateBoxProps={{ stretchY: "100%" }}
               contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
               boxProps={{
-                overflow: (_documentRevisionFormState?.expanded ? "scroll" : "visible"),
-                height: isCreateUrl ? "calc(100vh - 48px)" :  "86vh",
+                overflow: (_documentRevisionFormState?.expanded ? "scroll" :
+                  (isCreateUrl && _documentRevisionFormState?.isDescriptionFocused ? "scroll" : "visible")),
+                height: isCreateUrl ? "95vh" :  "86vh",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
@@ -159,74 +162,78 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
                       const showTabContent = _tabsState?.tabID === tabInfo.tabId;
-                      return <SMBox height={(_documentRevisionFormState?.expanded || isCreateUrl) ? "auto" : "61vh"} key={index}
-                        overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
-                        <SMBox mt={2} stretchY="calc(100% - 40px)">
-                          {tabType === "MIXED" && <>
-                            <DocumentRevisionFormPresenter
-                              {...formValues}
-                              releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                              {...{
-                                documentRevisions,
-                                documentRevision,
-                                availableReferences,
-                                showRevisionTypeChange,
-                                proposedDocId,
-                                setDocId,
-                                doNotPrompt,
-                                onDirtyFlagChange,
-                                documentTypesById,
-                                canChangeOwnerShip,
-                                type,
-                                isNewVersion,
-                                bannerPortal,
-                                showAdministrativeAndVoidChange,
-                                pmFormId,
-                                redlineActive,
-                                isOutput,
-                                lastSavedTimestamp,
-                                isDisabled,
-                                email,
-                                isOwner,
-                                mode,
-                              }}
-                            />
-                            {documentRevision && showTabContent &&  <FBWorkspace
-                              isPortal={false}
-                              document={{
-                                ...formValues.values as unknown as DocumentRevision,
-                                ...documentRevision as unknown as DocumentRevision,
-                              }}
-                              {... { autosaveEnabled, workspaceState }}
-                              initialValues={formInput}
-                              schema={schema}
-                            />}
-                          </>}
-                          {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
-                            <FBWorkspace
-                              isPortal={false}
-                              document={{
-                                ...formValues.values as unknown as DocumentRevision,
-                                ...documentRevision as unknown as DocumentRevision,
-                              }}
-                              {... { autosaveEnabled, workspaceState }}
-                              initialValues={formInput}
-                              schema={schema}
-                            />
-                          )}
-                          {tabType === "TRAINING" &&
+                      return (
+                        <SMBox
+                          height={(_documentRevisionFormState?.expanded || isCreateUrl) ? getHeight() : "69vh"}
+                          key={index}
+                          overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
+                          <SMBox mt={1.25}>
+                            {tabType === "MIXED" && <>
+                              <DocumentRevisionFormPresenter
+                                {...formValues}
+                                releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                                {...{
+                                  documentRevisions,
+                                  documentRevision,
+                                  availableReferences,
+                                  showRevisionTypeChange,
+                                  proposedDocId,
+                                  setDocId,
+                                  doNotPrompt,
+                                  onDirtyFlagChange,
+                                  documentTypesById,
+                                  canChangeOwnerShip,
+                                  type,
+                                  isNewVersion,
+                                  bannerPortal,
+                                  showAdministrativeAndVoidChange,
+                                  pmFormId,
+                                  redlineActive,
+                                  isOutput,
+                                  lastSavedTimestamp,
+                                  isDisabled,
+                                  email,
+                                  isOwner,
+                                  mode,
+                                }}
+                              />
+                              {documentRevision && showTabContent &&  <FBWorkspace
+                                isPortal={false}
+                                document={{
+                                  ...formValues.values as unknown as DocumentRevision,
+                                  ...documentRevision as unknown as DocumentRevision,
+                                }}
+                                {... { autosaveEnabled, workspaceState }}
+                                initialValues={formInput}
+                                schema={schema}
+                              />}
+                            </>}
+                            {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
+                              <FBWorkspace
+                                isPortal={false}
+                                document={{
+                                  ...formValues.values as unknown as DocumentRevision,
+                                  ...documentRevision as unknown as DocumentRevision,
+                                }}
+                                {... { autosaveEnabled, workspaceState }}
+                                initialValues={formInput}
+                                schema={schema}
+                              />
+                            )}
+                            {tabType === "TRAINING" &&
                           _tabsState?.value === trainingTabIndex && (
-                            <FBTrainingInfoContainer
-                              documentRevisionId={documentRevision?.id}
-                            />
-                          )}
-                          {tabType === TabTypeOptions.TABS_MEQ &&
+                              <FBTrainingInfoContainer
+                                documentRevisionId={documentRevision?.id}
+                              />
+                            )}
+                            {tabType === TabTypeOptions.TABS_MEQ &&
                         <FBMaterialEqInfoContainer
                           documentRevisionId={documentRevision?.id}
                         />
-                          }
+                            }
+                          </SMBox>
                         </SMBox>
-                      </SMBox>;
+                      );
                     })}
                   </SMTabs>
                 )}

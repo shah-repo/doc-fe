@@ -38,10 +38,12 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
   const toggleBtn = () => {
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
+    _documentRevisionFormState?.setDescriptionFocused(!_documentRevisionFormState?.isDescriptionFocused);
     _documentRevisionFormState?.setExpanded(!_documentRevisionFormState?.expanded);
   };
   const onAway = () => {
     _documentRevisionFormState?.setExpanded(false);
+    _documentRevisionFormState?.setDescriptionFocused(false);
     _textEditorState?.setPreviewMode(true);
     showToggleButton && showToggleButton();
   };
@@ -78,6 +80,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                       <Editor
                         onFocus={() => {
                           _textEditorState?.setPreviewMode(false);
+                          _documentRevisionFormState?.setDescriptionFocused(true);
                           setTimeout(() => {
                             const moreThanTwoLines =
                                 Math.floor(_textEditorState?.editorReference.editorContainer.clientHeight / 24) > 2;

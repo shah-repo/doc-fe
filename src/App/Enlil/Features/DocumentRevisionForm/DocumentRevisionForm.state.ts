@@ -29,6 +29,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public formSchema: FBSchemaProps[] = [];
   @observable public expanded = false;
   @observable public isDesTextClamped = false;
+  @observable public isDescriptionFocused = false;
   @observable docInfo: DocumentInfo = {
     name: "",
     isQms: true,
@@ -97,6 +98,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setExpanded = (expand) => {
     set(this, "expanded", expand);
+  };
+
+  @action public setDescriptionFocused = (focused: boolean) => {
+    set(this, "isDescriptionFocused", focused);
   };
 
   @action public setIsDescTextClamped = (clamped: boolean) => {
