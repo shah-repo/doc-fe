@@ -564,6 +564,7 @@ context("Sorting test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -591,6 +592,7 @@ context("Sorting test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -604,6 +606,7 @@ context("Sorting test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -619,6 +622,7 @@ context("Sorting test", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -741,11 +745,13 @@ context("Sorting test", () => {
                           index: 0,
                           type: "poreceive",
                           label: "Receivable",
+                          tabId: "details",
                           name: "receivable-kdptzei2",
                           applicableOn: ["ON_STATE_TO_IN_REVIEW"],
                         },
                         {
                           label: "form.builder.approvals",
+                          tabId: "details",
                           type: "approvals",
                           deleteDisabled: true,
                           name: "fb-approvals-kn7fbu5l",
@@ -902,6 +908,7 @@ context("Sorting test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -929,6 +936,7 @@ context("Sorting test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -942,6 +950,7 @@ context("Sorting test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -957,6 +966,7 @@ context("Sorting test", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -1103,6 +1113,7 @@ context("Sorting test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -1130,6 +1141,7 @@ context("Sorting test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1143,6 +1155,7 @@ context("Sorting test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1158,6 +1171,7 @@ context("Sorting test", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -1412,6 +1426,7 @@ context("Sorting test", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1426,6 +1441,7 @@ context("Sorting test", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1440,6 +1456,7 @@ context("Sorting test", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1453,6 +1470,7 @@ context("Sorting test", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -1463,6 +1481,7 @@ context("Sorting test", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -1481,6 +1500,7 @@ context("Sorting test", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ksherq6d",

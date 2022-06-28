@@ -2,7 +2,11 @@ import { Dialog } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as DownloadHTMLIcon } from "../../../assets/images/download_html.svg";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
 import { PDF } from "../../../state/ducks/documentRevisions/types";
@@ -18,9 +22,10 @@ import useDialog from "../../hooks/useDialog";
 
 interface Props {
   pdf?: PDF;
+  renderAsButton?: boolean;
 }
 const DownloadHTML: React.FunctionComponent<Props> = ({
-  pdf,
+  pdf, renderAsButton,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
@@ -49,6 +54,19 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
 
   if (isNewLayout) {
     const isActive = async.asyncState.status === AsyncStatus.Active;
+
+    if (!renderAsButton) {
+      return (<StyledMenuListItem disabled={isActive} button alignItems="flex-start">
+        <StyledMenuListIcon><DownloadHTMLIcon/></StyledMenuListIcon>
+        <StyledMenuListItemText
+          data-cy="downloadHtml"
+          primary={<Text translation="common.download.html" />}
+          onClick={handleClick}
+        />
+      </StyledMenuListItem>
+      );
+    }
+
     return (
       <StyledButton
         color="primary"

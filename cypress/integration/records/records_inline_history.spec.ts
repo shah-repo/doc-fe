@@ -98,6 +98,12 @@ context("Record inline history Flow", () => {
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
+    });
+
+    context("Create document and release it", () => {
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
@@ -105,51 +111,42 @@ context("Record inline history Flow", () => {
       });
 
       it("Add textfield", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectTextField();
-        cy.fbAddLabelName({ name: "Textfield for inline" });
-        cy.fbAddField();
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add checkbox group", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbCheckboxGroupField();
-        cy.fbGroupName({ name: "CheckboxGroup for inline" });
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "CheckboxGroup for inline" });
         cy.fbGroupOptions("Red", "Green", "Blue");
         cy.fbAddField();
       });
 
       it("Add radio button group", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbRadioBtnGroupField();
-        cy.fbGroupName({ name: "RadioBtnGroup for inline" });
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+        cy.fbEnterNameValue({ name: "label", value: "RadioBtnGroup for inline" });
         cy.fbGroupOptions("One", "Two", "Three");
         cy.fbAddField();
       });
 
       it("Add Select field", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectField();
-        cy.fbGroupName({ name: "Select field for inline" });
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
+        cy.fbEnterNameValue({ name: "label", value: "Select field for inline" });
         cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
         cy.fbAddField();
       });
 
       it("Add inline approval", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.fbSelectInlineApproval();
-        });
-        cy.get("[name=\"label\"]").arrowType("Inline field");
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddField();
-      });
-    });
-
-    context("Create document and release it", () => {
-      it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-
       });
 
       it("Approve and release document", () => {
@@ -180,7 +177,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Enter description 'History Test Record description'", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "History Test Record description" });
+        cy.drEnterDocumentDescription({ description: "History Test Record description" });
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
@@ -257,8 +254,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
-          cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear();
-          cy.drEnterDocumentDescriptionWithWait({ description: "History Test Inline Record description" });
+          cy.drEnterDocumentDescription({ description: "History Test Inline Record description" });
         });
 
         it("Verify system asks for another approval afer changing section", () => {

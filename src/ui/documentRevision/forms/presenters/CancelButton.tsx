@@ -1,11 +1,12 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
+import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
+import { ReactComponent as CancelDraftIcon } from "../../../../assets/images/cancel_draft.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
@@ -19,11 +20,13 @@ import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus"
 interface Props {
   documentRevision: DocumentRevision;
   setShouldDisplay: (value: boolean) => void;
+  renderAsButton?: boolean;
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
   documentRevision,
   setShouldDisplay,
+  renderAsButton,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
@@ -51,10 +54,10 @@ const CancelButton: React.FunctionComponent<Props> = ({
         </Button>
       }
       {
-        (isNewLayout && canShowCancelButton) &&
+        (isNewLayout && canShowCancelButton && !renderAsButton) &&
        ( <StyledMenuListItem button alignItems="flex-start">
          <StyledMenuListIcon>
-           <VoidDocumentIcon />
+           <CancelDraftIcon />
          </StyledMenuListIcon>
          <StyledMenuListItemText
            id="cancelDraftButton"
@@ -64,6 +67,16 @@ const CancelButton: React.FunctionComponent<Props> = ({
          />
        </StyledMenuListItem>)
       }
+      {
+        (isNewLayout && canShowCancelButton && renderAsButton) &&
+        <StyledButton
+          color="primary"
+          id="cancelDraftButton"
+          data-cy="cancelDraftButton"
+          onClick={dialog.open}
+        >
+          <Text translation={"common.cancel.draft"} />
+        </StyledButton> }
       <AlertDialog
         confirmAction={handleCancelDraft}
         message={isRecord ? "record.cancel.draft.alert" : "document.revision.cancel.draft.alert"}

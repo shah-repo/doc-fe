@@ -51,6 +51,7 @@ export type DocumentRevisionFormProps =
   autosaveEnabled: boolean;
   mode: FBWorkspaceMode;
   workspaceState?: FBWorkspaceState;
+  isCreateUrl?: boolean;
 };
 
 export interface DocumentRevisionFormStateProps {

@@ -1,7 +1,7 @@
 import { Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
-import Select, { components, createFilter } from "react-select";
+import Select, { components, createFilter, StylesConfig } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
@@ -22,7 +22,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   isDisabled?: boolean;
 }
 
-export const selectStyles = {
+export const selectStyles: StylesConfig = {
   multiValue: (base) => ({
     ...base,
     background: Colors.light_blue,
@@ -34,9 +34,13 @@ export const selectStyles = {
       cursor: "pointer",
     },
   }),
-  control: (base) => ({
+  control: (base, state) => ({
     ...base,
-    minHeight: "40px",
+    "minHeight": "40px",
+    "boxShadow": "none",
+    "&:hover": {
+      background: !state.isFocused ? Colors.background_white : Colors.white,
+    },
   }),
   option: (base) => ({
     ...base,
@@ -44,7 +48,11 @@ export const selectStyles = {
   placeholder: (base) => ({
     ...base,
     letterSpacing: "normal",
-    color: Colors.spanish_gray,
+    color: Colors.lightest_grey2,
+  }),
+  menu: (provided) => ({
+    ...provided,
+    position: "relative",
   }),
 };
 

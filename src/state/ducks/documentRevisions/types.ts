@@ -177,6 +177,7 @@ export interface SmartReference {
   toDocumentId?: Nullable<string>;
   type: SmartReferenceType;
   active?: boolean;
+  stepIndex?: Nullable<number>;
 }
 
 export enum SmartReferenceType {
@@ -231,6 +232,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   parentEquipment?: Id;
   equipmentSection?: string;
   redline?: boolean;
+  tabId?: string;
 }
 
 export interface DocumentRevisionSetAction {

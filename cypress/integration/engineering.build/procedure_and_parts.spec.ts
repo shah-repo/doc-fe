@@ -363,6 +363,7 @@ context("Procedure and parts flow test", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -377,6 +378,7 @@ context("Procedure and parts flow test", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -391,6 +393,7 @@ context("Procedure and parts flow test", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -404,6 +407,7 @@ context("Procedure and parts flow test", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -414,6 +418,7 @@ context("Procedure and parts flow test", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -433,6 +438,7 @@ context("Procedure and parts flow test", () => {
               {
                 label: "form.builder.approvals",
                 type: "approvals",
+                tabId: "details",
                 deleteDisabled: true,
                 name: "fb-approvals-ksherq6d",
                 uniqueSchemaItem: true,
@@ -577,7 +583,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Check equipment status is 'Released'", () => {
-          cy.arVerifyStatus({ status: "RELEASED" });
+          cy.arVerifyStatus({ status: "Released" });
         });
       });
     });

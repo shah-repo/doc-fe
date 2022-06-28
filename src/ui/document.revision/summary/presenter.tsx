@@ -127,21 +127,19 @@ const Presenter: React.FunctionComponent<Props> = ({
       <SummaryInfo
         label={"record.released.by"}
         value={dataProp.owner.user.name}
+        dataCy={"releasedBy"}
       />
       <SummaryInfo
         label={"document.revision.released.date"}
         value={getFormattedDateString(dataProp.releasedAt, MomentFormats.MonthDateYear)}
+        dataCy={"releasedDate"}
       />
     </Box>
   );
 
   const contentRenderer = () => (
-    <Box>
-      <Grid
-        container={true}
-        spacing={4}
-        direction="column"
-      >
+    <Box minHeight={16} width="fit-content">
+      <Grid container>
         {
           isTrainingVisible && !isRecord &&
           <SummaryField

@@ -11,7 +11,6 @@ declare global {
       fbRemoveLastAddedItem(): Chainable<Subject>;
       fbSelectNavField(params: { field: string }): Chainable<Subject>;
       fbNavToTableOverview(): Chainable<Subject>;
-      fbNavToTableDetails(): Chainable<Subject>;
       fbSelectItemFromNewFieldList(params: { section: string; field: string }): Chainable<Subject>;
       fbEnterPOLabelName(params: { name: string }): Chainable<Subject>;
       fbAddNewFieldButton(): Chainable<Subject>;
@@ -46,8 +45,10 @@ declare global {
       fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
       fbEnterPlaceholder(params: { placeholder: string }): Chainable<Subject>;
       fbEnterLabel(params: { label: string }): Chainable<Subject>;
-      fbCheckFields(...list: string[]): Chainable<Subject>;
-      fbCheckFieldsDoesntExist(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsExistInputsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsExistApprovalsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsDoesntExistOnInputsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsDoesntExistOnApprovalsList(...list: string[]): Chainable<Subject>;
       fbEditHiddenBtn(): Chainable<Subject>;
       fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIf(params: { name: string; value: string | number }): Chainable<Subject>;
@@ -102,33 +103,29 @@ Cypress.Commands.add("fbAddNewFieldOption", () => {
 
 Cypress.Commands.add("fbAddNewField", () => {
   cy.unClick();
-  cy.get("button[data-cy=\"form.builder.add.field\"]").arrowClick();
+  cy.get("button[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
-  cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
-  cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
-  cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
   cy.get("[data-cy=\"editorConfig.approvers\"]").arrowClick();
   cy.get("[role=option]").contains(params.approverName).arrowClick();
-  cy.get("[role=dialog]>div>h2").arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("fbSelectNavField", (params: { field: string }) => {
   cy.get(".MuiButtonBase-root.MuiListItem-root.MuiListItem-button").contains(new RegExp(params.field, "g")).arrowClick();
-});
-
-Cypress.Commands.add("fbNavToTableDetails", () => {
-  cy.get("[data-cy=\"tabId.details\"]").contains("Details").arrowClick();
 });
 
 Cypress.Commands.add("fbNavToTableOverview", () => {
@@ -176,15 +173,35 @@ Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   });
 });
 
-Cypress.Commands.add("fbCheckFields", (...list: string[]) => {
+Cypress.Commands.add("fbCheckFieldsExistInputsList", (...list: string[]) => {
+  cy.get(`[data-cy="Inputs"]`).arrowClick();
+
   list.forEach((item) => {
-    cy.get(`[data-cy="form.builder.${item}"]`).should("exist");
+    cy.get(`[data-cy="${item}"]`).should("exist");
   });
 });
 
-Cypress.Commands.add("fbCheckFieldsDoesntExist", (...list: string[]) => {
+Cypress.Commands.add("fbCheckFieldsExistApprovalsList", (...list: string[]) => {
+  cy.get(`[data-cy="Approvals-btn"]`).arrowClick();
+
   list.forEach((item) => {
-    cy.get(`[data-cy="form.builder.${item}"]`).should("not.exist");
+    cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbCheckFieldsDoesntExistOnInputsList", (...list: string[]) => {
+  cy.get(`[data-cy="Inputs"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("not.exist");
+  });
+});
+
+Cypress.Commands.add("fbCheckFieldsDoesntExistOnApprovalsList", (...list: string[]) => {
+  cy.get(`[data-cy="Approvals-btn"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("not.exist");
   });
 });
 

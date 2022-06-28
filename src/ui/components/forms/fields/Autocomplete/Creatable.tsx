@@ -1,6 +1,5 @@
 import { Box, BoxProps, ClickAwayListener } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { isEmpty } from "lodash";
 import * as React from "react";
 import { useState } from "react";
 import { useIntl } from "react-intl";
@@ -43,7 +42,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   }, []);
   const [inputValue, setInputValue] = useState(formikValue);
   const [hover, setHover] = useState(false);
-  const [showOnlyText, setShowOnlyText] = useState(!isEmpty(inputValue));
+  const [showOnlyText, setShowOnlyText] = useState(true);
   const { submitForm } = useFormContext();
   const {
     form: { setFieldValue, setFieldTouched, touched },
@@ -58,8 +57,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     }
     setFieldValue(name, (value as any)?.value);
     setShowOnlyText(true);
-    setBoxClicked(false);
-    // submitForm();
   };
   const onInputChange = (value) => {
     if (!touched[name]) {
@@ -74,7 +71,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   };
 
   const onBlur = async () => {
-    // setClicked(true);
     if (formikValue !== inputValue) {
       // eslint-disable-next-line @typescript-eslint/await-thenable
       await setFieldValue(name, inputValue);
@@ -89,17 +85,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const onAway = () => {
     setHover(false);
     setShowOnlyText(true);
-    setBoxClicked(false);
   };
-
-  const [boxClicked, setBoxClicked] = React.useState(false);
-  const handleBoxClick = React.useCallback(
-    () => {
-      setShowOnlyText(false);
-      setBoxClicked(true);
-    },
-    []
-  );
 
   const intl = useIntl();
   const titlePlaceholder = intl.formatMessage({ id: "form.builder.enter.title" });
@@ -117,13 +103,13 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           fontWeight={600}
           fontSize={19}
           minHeight={32}
-          color={Colors.almost_black}
+          color={inputValue ? Colors.almost_black : Colors.lightest_grey2}
           padding="5.5px 11px"
-          bgcolor={hover ? Colors.platinum : Colors.alabaster}
+          bgcolor={hover ? Colors.whitest_grey : Colors.alabaster}
           borderRadius={4}
           onMouseEnter={() => { setHover(true); }}
           onMouseLeave={() => { setHover(false); }}
-          onClick={handleBoxClick}
+          onClick={() => { setShowOnlyText(false); }}
         >{inputValue || titlePlaceholder}
         </Box>}
           {!showOnlyText && <CreatableSelect
@@ -142,23 +128,24 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                   letterSpacing: "normal",
                 },
               }),
-              control: (base, state) => ({
+              control: (base) => ({
                 ...base,
                 fontSize: "19px",
                 fontWeight: 600,
                 lineHeight: "24px",
                 minHeight: "32px",
+                boxShadow: "none",
               }),
               menu: (provided) => ({
                 ...provided,
                 zIndex: 2,
               }),
             }}
-            autoFocus={boxClicked}
+            autoFocus={true}
             isClearable={Boolean(formikValue)}
             components={{ DropdownIndicator: null }}
             placeholder={!inputValue ?
-              <div style={{ color: Colors.almost_black }}>{titlePlaceholder}</div> : null}
+              <div style={{ color: Colors.lightest_grey2 }}>{titlePlaceholder}</div> : null}
             openMenuOnClick={false}
             openMenuOnFocus={false}
             createOptionPosition="first"

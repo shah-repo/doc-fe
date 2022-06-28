@@ -19,6 +19,7 @@ export default makeStyles((theme: Theme) =>
       "padding": "15px",
       "& .MuiFormHelperText-root": {
         lineHeight: "20px",
+        paddingLeft: "30px",
       },
     },
     gridItem: {

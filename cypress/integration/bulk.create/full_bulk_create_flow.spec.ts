@@ -124,6 +124,7 @@ context("Bulk create flow", () => {
                     {
                       name: "blc-textfield",
                       type: "textfield",
+                      tabId: "overview",
                       index: 0,
                       label: "BLC text field",
                       applicableOn: [
@@ -179,6 +180,7 @@ context("Bulk create flow", () => {
                   name: "blc-textfield",
                   type: "textfield",
                   index: 0,
+                  tabId: "overview",
                   label: "BLC text field",
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
@@ -288,6 +290,7 @@ context("Bulk create flow", () => {
                   type: "textfield",
                   index: 0,
                   label: "BLC text field",
+                  tabId: "overview",
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
@@ -334,6 +337,7 @@ context("Bulk create flow", () => {
                       type: "textfield",
                       index: 0,
                       label: "BLC text field",
+                      tabId: "overview",
                       applicableOn: [
                         "ON_STATE_TO_IN_REVIEW",
                       ],
@@ -401,6 +405,7 @@ context("Bulk create flow", () => {
                   type: "textfield",
                   index: 0,
                   label: "BLC text field",
+                  tabId: "overview",
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
@@ -468,6 +473,7 @@ context("Bulk create flow", () => {
                   type: "textfield",
                   index: 0,
                   label: "BLC text field",
+                  tabId: "overview",
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
@@ -537,24 +543,29 @@ context("Bulk create flow", () => {
       cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Select details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Button should have text 'Download Excel Template'", () => {
-      cy.get("[data-cy=\"Download Excel Template\"]").should("have.text", "Download Excel Template");
+      cy.get(`[id="sm-tabpanel-1" ] [data-cy="Download Excel Template"]`)
+        .should("have.text", "Download Excel Template");
     });
 
     it("The section component where the excel spreadsheet will be added is labeled 'Excel for Import'", () => {
-      cy.get("[id=\"fb-spreadsheet-for-import\"]").should("have.text", "EXCEL FOR IMPORT");
+      cy.get(`[id="sm-tabpanel-1" ] [id="fb-spreadsheet-for-import"]`).should("have.text", "EXCEL FOR IMPORT");
     });
 
     it("The Paragraph component with the instructions is labeled 'Upload excel with data for import'", () => {
-      cy.get("[data-cy=\"Upload excel with data for import\"]")
+      cy.get(`[id="sm-tabpanel-1" ] [data-cy="Upload excel with data for import"]`)
         .should("have.text", "Upload excel with data for import");
     });
 
     context("Create and release form", () => {
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
-
       it("Approve and release Bulk create form", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
@@ -588,6 +599,10 @@ context("Bulk create flow", () => {
 
     it("Select output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     context("Add form fields that will be used in bulk creation", () => {
@@ -768,9 +783,13 @@ context("Bulk create flow", () => {
         cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
       });
 
+      it("Select details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").click();
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").click();
           cy.unClick();
         });
       });
@@ -783,7 +802,7 @@ context("Bulk create flow", () => {
           "FM-00002 - rev 1 - Bulk create form",
           "FM-00003 - rev 1 - Document for bulk creation"];
 
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").click();
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]").click();
         cy.get("ul>li[role=option]").should("have.length", 5);
         cy.get("ul>li[role=option]").each(($document) => {
           expect($document.text()).to.be.oneOf(allowedDocuments);
@@ -793,15 +812,25 @@ context("Bulk create flow", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
+          .autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Document Type");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]")
+          .autocompleteSelect("Test Document Type");
       });
 
       it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {
@@ -814,6 +843,10 @@ context("Bulk create flow", () => {
     });
 
     context("Test downloaded excel", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Download excel template file", () => {
         SystemRequirement("REQ-4720");
         cy.excelDownloadTemplate({ saveFileName: excelTemplateSaveName });
@@ -852,7 +885,7 @@ context("Bulk create flow", () => {
       });
 
       it("Remove csv file", () => {
-        cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+        cy.get("[id=\"sm-tabpanel-1\" ] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]").parent().parent()
           .find("button").arrowClick({ force: true });
       });
 
@@ -861,7 +894,7 @@ context("Bulk create flow", () => {
       });
 
       it("Verify upload", () => {
-        cy.get("input[id=\"fb-attachment-field-fb-spreadsheet-for-import-file\"]")
+        cy.get("[id=\"sm-tabpanel-1\" ] input[id=\"fb-attachment-field-fb-spreadsheet-for-import-file\"]")
           .parent().parent().find("div:nth-child(3)")
           .should("contain.text", "fullBulkCreateFlow.xlsx");
       });

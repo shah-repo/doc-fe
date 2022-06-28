@@ -54,7 +54,8 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
               <Box key={item.details.title}>
                 <StyledTooltip title={item.details.title}>
                   <IconButton
-                    data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
+                    data-cy={item.details.dataCy !== undefined ?
+                      item.details.dataCy : `${item.type}-icon`}
                     ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
                     onClick={() => handleMenuIconClick(index)}
                     className={classes.iconButtonNew}
@@ -102,7 +103,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
         {sidebarList.map((item, index) =>
           item.details.shouldShow && <Box key={item.details.title}>
             <IconButton
-              data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
+              data-cy={item.details.dataCy !== undefined ? item.details.dataCy : `${item.type}-icon`}
               ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
               onClick={() => handleMenuIconClick(index)}
               className={classes.iconButton}

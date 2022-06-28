@@ -3,6 +3,8 @@ import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined"
 import React from "react";
 import { useDispatch } from "react-redux";
 import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -24,6 +26,7 @@ interface Props {
   docRevOwner: string;
   updatedAt?: string;
   currentDocumentType?: DocumentType;
+  renderAsButton?: boolean;
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -33,6 +36,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   docRevOwner,
   updatedAt,
   currentDocumentType,
+  renderAsButton,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const classes = styles();
@@ -90,14 +94,21 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   return (
     <>
       {isNewLayout ? (
-        <StyledButton
+        renderAsButton ? <StyledButton
           color="primary"
           onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
           id="ApproveAndRelease-button"
           data-cy="ApproveAndRelease-button"
         >
           <Text message={isObsolete ? "common.void" : label} />
-        </StyledButton>
+        </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+          <StyledMenuListItemText
+            onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
+            id="ApproveAndRelease-button"
+            data-cy="ApproveAndRelease-button"
+            primary={ <Text message={isObsolete ? "common.void" : label} />}
+          />
+        </StyledMenuListItem>
       ) : (
         <Button
           color="secondary"

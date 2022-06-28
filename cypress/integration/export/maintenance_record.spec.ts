@@ -125,6 +125,7 @@ context("Export maintenance record", () => {
                     type: "radiogroup",
                     index: 0,
                     label: "EQ Status",
+                    tabId: "overview",
                     rules: "required",
                     options: [
                       {
@@ -147,6 +148,7 @@ context("Export maintenance record", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Primary Owner",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as primary owner",
                     applicableOn: [
@@ -162,6 +164,7 @@ context("Export maintenance record", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Coordinator",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as coordinator",
                     applicableOn: [
@@ -181,6 +184,7 @@ context("Export maintenance record", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -196,6 +200,7 @@ context("Export maintenance record", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -261,6 +266,7 @@ context("Export maintenance record", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -272,6 +278,7 @@ context("Export maintenance record", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -286,6 +293,7 @@ context("Export maintenance record", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -300,6 +308,7 @@ context("Export maintenance record", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -312,6 +321,7 @@ context("Export maintenance record", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -322,6 +332,7 @@ context("Export maintenance record", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
@@ -334,6 +345,7 @@ context("Export maintenance record", () => {
                 name: "textfield-kn7fc209",
                 validationMode: "default",
                 label: "Section 1",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -347,6 +359,7 @@ context("Export maintenance record", () => {
                 rows: 1,
                 validationMode: "default",
                 label: "textfield 1",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -369,6 +382,7 @@ context("Export maintenance record", () => {
                 applicableValidationSchema: true,
                 editorProperties: [],
                 label: "Inline approval",
+                tabId: "details",
                 editorConfig: {
                   groups: [
                     group.body[0].id,
@@ -432,6 +446,7 @@ context("Export maintenance record", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -443,6 +458,7 @@ context("Export maintenance record", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -457,6 +473,7 @@ context("Export maintenance record", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -471,6 +488,7 @@ context("Export maintenance record", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -483,6 +501,7 @@ context("Export maintenance record", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -493,6 +512,7 @@ context("Export maintenance record", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
@@ -602,7 +622,7 @@ context("Export maintenance record", () => {
     });
 
     it("Check equipment status is 'Released'", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
   });
 

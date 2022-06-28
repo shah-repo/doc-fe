@@ -52,7 +52,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       color: Colors.dark_gray,
       fontSize: "1rem",
       fontFamily: "Sora, sans-serif;",
-      fontWeight: "bold",
+      fontWeight: 600,
     },
   },
   MuiButton: {
@@ -60,9 +60,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontSize: "0.75rem",
       borderRadius: 3,
       margin: appTheme.spacing(1),
-      fontWeight: "bold",
       fontFamily: "Sora, sans-serif;",
       textTransform: "capitalize",
+      fontWeight: 600,
     },
     contained: {
       boxShadow: "none",
@@ -100,22 +100,34 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiInputBase: {
     root: {
-      fontSize: "0.8rem",
-      fontFamily: "Sora, sans-serif;",
-    },
-    input: {
       "fontSize": "0.8rem",
+      "fontFamily": "Sora, sans-serif",
+      "backgroundColor": Colors.white,
+      "border": `1px solid ${Colors.mild_wind_blue}`,
       "borderRadius": "4px",
-      "&.Mui-disabled": {
-        backgroundColor: Colors.white,
+      "transition": appTheme.transitions.create("all"),
+      "&:not($focused):not($disabled):hover": {
+        backgroundColor: Colors.background_white,
+      },
+      "&$focused": {
+        borderColor: Colors.dodger_blue,
+      },
+      "&$disabled": {
+        backgroundColor: Colors.whitest_grey,
+      },
+      "& fieldset": {
+        border: "none",
       },
     },
   },
   MuiSelect: {
     root: {
-      fontSize: "0.8rem",
-      lineHeight: "1.2rem",
-      fontFamily: "Sora, sans-serif;",
+      "fontSize": "0.8rem",
+      "lineHeight": "1.2rem",
+      "fontFamily": "Sora, sans-serif;",
+      "&$disabled": {
+        backgroundColor: Colors.whitest_grey,
+      },
     },
     icon: {
       right: "10px",
@@ -123,6 +135,16 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     select: {
       paddingLeft: appTheme.spacing(0.5),
       borderRadius: "4px",
+    },
+  },
+  MuiRadio: {
+    root: {
+      "&:hover": {
+        background: "none !important",
+      },
+      "&:not($checked):not($disabled):hover circle": {
+        fill: Colors.background_white,
+      },
     },
   },
   MuiTooltip: {

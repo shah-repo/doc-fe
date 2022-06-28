@@ -133,6 +133,7 @@ context("Equipment maintenance test", () => {
                     type: "radiogroup",
                     index: 0,
                     label: "EQ Status",
+                    tabId: "overview",
                     rules: "required",
                     options: [
                       {
@@ -155,6 +156,7 @@ context("Equipment maintenance test", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Primary Owner",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as primary owner",
                     applicableOn: [
@@ -170,6 +172,7 @@ context("Equipment maintenance test", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Coordinator",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as coordinator",
                     applicableOn: [
@@ -189,6 +192,7 @@ context("Equipment maintenance test", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -204,6 +208,7 @@ context("Equipment maintenance test", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -274,6 +279,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_id",
@@ -288,6 +294,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_maintainer",
@@ -302,6 +309,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-equipment_due_date",
@@ -314,6 +322,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-requipment-maintenance-section",
@@ -327,6 +336,7 @@ context("Equipment maintenance test", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -334,6 +344,7 @@ context("Equipment maintenance test", () => {
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
                 uniqueSchemaItem: true,
+                tabId: "overview",
                 index: 5,
               },
             ],
@@ -440,7 +451,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check equipment status is 'Released'", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
 
     context("Navig to released 'Equipment maintenance document'", () => {

@@ -195,7 +195,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   return (
     <Field {...fieldProps} label={undefined}>
       <>
-        <Typography variant="h5" style={FBAutoCompleteStyles.labelProps}>
+        <Typography variant="h6" style={FBAutoCompleteStyles.labelProps}>
           <Text message={fieldProps.label} />
         </Typography>
       </>
@@ -213,7 +213,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                placeholder={intl.formatMessage({ id: "common.select.placeholder" })}
+                placeholder={value.length ? undefined : intl.formatMessage({ id: "common.select.placeholder" })}
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
@@ -227,7 +227,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 }}
                 inputProps={{
                   ...params.inputProps,
-                  style: { padding: "10.5px 10px" },
+                  style: { padding: "10.5px 10px", fontSize: "14px" },
                 }}
               />
             </Box>

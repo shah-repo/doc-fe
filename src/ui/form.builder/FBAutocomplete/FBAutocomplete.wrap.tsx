@@ -2,8 +2,9 @@ import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBAutocompleteProps, FBOptionValueType } from "..";
+import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps } from "..";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isTranslation } from "../../translations/types";
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
@@ -31,6 +32,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     withState,
     omitFormValue,
     disabled,
+    isDocumentLHRT,
     editorProperties,
     ...props
   }: T) => {
@@ -46,6 +48,12 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const intl = useIntl();
 
     const [modifiedOptions, setModifiedOptions] = useState(options);
+
+    const isDocumentLHR = checkIsDocumentLHR(workspaceState?.document?.document.documentType.groupOptions);
+    if (isDocumentLHR && !isEmpty(defaultValue?.approvals)) {
+      formState?.setApprovalMap({ [defaultValue?.id]: defaultValue?.approvals });
+    }
+    const schemaItem = find(workspaceState?.schema, (schemaItm) => schemaItm.name?.includes(name)) as FBSchemaProps;
 
     useEffect(() => {
       setModifiedOptions(options);
@@ -153,6 +161,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       disabled,
       includeQRScan,
       disabledOptions,
+      type: schemaItem?.type,
     });
   };
 

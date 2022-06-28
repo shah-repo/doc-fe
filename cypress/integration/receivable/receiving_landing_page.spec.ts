@@ -353,6 +353,7 @@ context("Receiving landing page test", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -367,6 +368,7 @@ context("Receiving landing page test", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -381,6 +383,7 @@ context("Receiving landing page test", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -394,6 +397,7 @@ context("Receiving landing page test", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -404,6 +408,7 @@ context("Receiving landing page test", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -478,6 +483,7 @@ context("Receiving landing page test", () => {
                 type: "select",
                 index: 0,
                 label: "PO Status",
+                tabId: "details",
                 options: [
                   {
                     text: "Open",
@@ -505,6 +511,7 @@ context("Receiving landing page test", () => {
                 type: "section",
                 index: 1,
                 label: "General Information",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -514,6 +521,7 @@ context("Receiving landing page test", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -537,6 +545,7 @@ context("Receiving landing page test", () => {
               {
                 name: "po-supplier-built-in",
                 type: "supplier",
+                tabId: "details",
                 index: 3,
                 label: "Supplier ",
                 applicableOn: [
@@ -552,6 +561,7 @@ context("Receiving landing page test", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Order Date",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -576,6 +586,7 @@ context("Receiving landing page test", () => {
                 type: "purchaseorder",
                 index: 5,
                 label: "Purchase Order",
+                tabId: "lineitems",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -589,6 +600,7 @@ context("Receiving landing page test", () => {
                 type: "approvals",
                 index: 6,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -857,11 +869,13 @@ context("Receiving landing page test", () => {
               index: 0,
               type: "poreceive",
               label: "Receivable",
+              tabId: "details",
               name: "receivable-test",
               applicableOn: ["ON_STATE_TO_IN_REVIEW"],
             },
             {
               label: "form.builder.approvals",
+              tabId: "overview",
               type: "poapprovals",
               deleteDisabled: false,
               name: "fb-po-approvals",

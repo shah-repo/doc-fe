@@ -271,6 +271,7 @@ context("Test Lots and Parts landing page", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -285,6 +286,7 @@ context("Test Lots and Parts landing page", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -299,6 +301,7 @@ context("Test Lots and Parts landing page", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -312,6 +315,7 @@ context("Test Lots and Parts landing page", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -322,6 +326,7 @@ context("Test Lots and Parts landing page", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -340,6 +345,7 @@ context("Test Lots and Parts landing page", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-",
@@ -1140,7 +1146,7 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify Part can be opened`, () => {
       cy.dlSelectFirstDocument();
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: "Released" });
     });
 
     it(`Verify Parts count`, () => {

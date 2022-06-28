@@ -147,6 +147,7 @@ context("Autosave on blur", () => {
                     validationAttribute: "PO Status",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "po-supplier-built-in",
@@ -160,6 +161,7 @@ context("Autosave on blur", () => {
                     validationAttribute: "Supplier",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "po-items-built-in",
@@ -173,6 +175,7 @@ context("Autosave on blur", () => {
                     validationAttribute: "Purchase Order",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "lineitems",
                   },
                   {
                     label: "form.builder.approvals",
@@ -181,6 +184,7 @@ context("Autosave on blur", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -305,6 +309,7 @@ context("Autosave on blur", () => {
                           label: "Receivable",
                           name: "receivable-kdptzei2",
                           applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                          tabId: "details",
                         }],
                       },
                     },
@@ -561,14 +566,6 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
       cy.fbEnterNameValue({ name: "label", value: "fb-receive-purchase-order" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
-    it("Add Approval Matrix", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Approval Matrix" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });

@@ -131,11 +131,13 @@ context("Check DAM enforcement rules for document types", () => {
                   index: 0,
                   type: "purchaseorder",
                   label: "PO",
+                  tabId: "details",
                   name: "po-kdpqvhc7",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
                 },
                 {
                   label: "form.builder.approvals",
+                  tabId: "details",
                   type: "poapprovals",
                   deleteDisabled: false,
                   name: "fb-po-approvals-kpmd2alc",
@@ -200,6 +202,7 @@ context("Check DAM enforcement rules for document types", () => {
               index: 0,
               type: "poApprovalMatrix",
               label: "POAM",
+              tabId: "details",
               name: "poam-keva19by",
               applicableOn: ["ON_STATE_TO_IN_REVIEW"],
             }],
@@ -258,6 +261,7 @@ context("Check DAM enforcement rules for document types", () => {
             schema: [
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kvjba97m",
@@ -574,7 +578,7 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Enter description 'POAM test'", () => {
         SystemRequirement("REQ-1290");
-        cy.drEnterDocumentDescriptionWithWait({ description: "PO enfocment test" });
+        cy.drEnterDocumentDescription({ description: "PO enfocment test" });
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -614,7 +618,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Fill document description", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "Suppliers address" });
+        cy.drEnterDocumentDescription({ description: "Suppliers address" });
       });
 
       it("Add approver to approvals", () => {

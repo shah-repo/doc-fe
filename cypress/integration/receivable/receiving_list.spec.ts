@@ -125,6 +125,7 @@ context("Receivable list test", () => {
                 schema: [{
                   index: 0,
                   type: "purchaseorder",
+                  tabId: "lineitems",
                   label: "PO",
                   name: "po-kdpqvhc7",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
@@ -249,11 +250,13 @@ context("Receivable list test", () => {
                           index: 0,
                           type: "poreceive",
                           label: "Receivable",
+                          tabId: "details",
                           name: "receivable-kdptzei2",
                           applicableOn: ["ON_STATE_TO_IN_REVIEW"],
                         },
                         {
                           label: "form.builder.approvals",
+                          tabId: "overview",
                           type: "approvals",
                           deleteDisabled: true,
                           name: "fb-approvals-kn7fbu5l",

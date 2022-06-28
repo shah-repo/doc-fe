@@ -209,9 +209,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       type: "section",
       index: 0,
       label: "Forced Retraining / One-Time Training",
-      applicableOn: [
-        "ON_STATE_TO_IN_REVIEW",
-      ],
+      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       validationMode: "default",
       omitFinalValidation: true,
       validationAttribute: "Forced Retraining / One-Time Training",
@@ -232,14 +230,10 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
         required_if_in: false,
       },
       placeholder: "Select documents for training",
-      applicableOn: [
-        "ON_STATE_TO_IN_REVIEW",
-      ],
+      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       deleteDisabled: false,
       validationMode: "visibility",
-      editorProperties: [
-        "multiple",
-      ],
+      editorProperties: ["multiple"],
       validationAttribute: "Documents to Train on",
       applicableValidationSchema: true,
       tabId: "details",
@@ -248,7 +242,8 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       name: "training-force-retraining-for-everyone",
       type: "radiogroup",
       index: 2,
-      label: "Force retraining (everyone will be retrained regardless of their current status)",
+      label:
+        "Force retraining (everyone will be retrained regardless of their current status)",
       rules: "required||",
       options: [
         {
@@ -264,9 +259,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
         required_if_in: false,
       },
       rulesObject: {},
-      applicableOn: [
-        "ON_STATE_TO_IN_REVIEW",
-      ],
+      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       deleteDisabled: false,
       validationMode: "default",
       validationAttribute:
@@ -279,9 +272,7 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       type: "section",
       index: 3,
       label: "Trainees Details",
-      applicableOn: [
-        "ON_STATE_TO_IN_REVIEW",
-      ],
+      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       validationMode: "default",
       omitFinalValidation: true,
       validationAttribute: "Trainees Details",
@@ -296,13 +287,9 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       multiple: true,
       optionId: "10",
       placeholder: "Select groups",
-      applicableOn: [
-        "ON_STATE_TO_IN_REVIEW",
-      ],
+      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       validationMode: "default",
-      editorProperties: [
-        "multiple",
-      ],
+      editorProperties: ["multiple"],
       validationAttribute: "Groups to Train",
       applicableValidationSchema: true,
       tabId: "details",
@@ -315,17 +302,24 @@ export const OneTimeTrainingTest: IdocumentTypeDto = {
       multiple: true,
       optionId: "13",
       placeholder: "Select users",
-      applicableOn: [
-        "ON_STATE_TO_IN_REVIEW",
-      ],
+      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       deleteDisabled: false,
       validationMode: "default",
-      editorProperties: [
-        "multiple",
-      ],
+      editorProperties: ["multiple"],
       validationAttribute: "Users to Train (if applicable)",
       applicableValidationSchema: true,
       tabId: "details",
+    },
+    {
+      index: 6,
+      name: "fb-attachment-built-in",
+      label: "Attachments",
+      type: "attachments",
+      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+      deleteDisabled: true,
+      deleteInFormDisabled: true,
+      applicableValidationSchema: true,
+      tabId: "overview",
     },
   ],
   category: Categories.TrainingCurriculums,

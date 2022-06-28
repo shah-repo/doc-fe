@@ -127,6 +127,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "radiogroup",
                     index: 0,
                     label: "EQ Status",
+                    tabId: "overview",
                     rules: "required",
                     options: [
                       {
@@ -149,6 +150,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Primary Owner",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as primary owner",
                     applicableOn: [
@@ -164,6 +166,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Coordinator",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as coordinator",
                     applicableOn: [
@@ -183,6 +186,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -198,6 +202,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -263,6 +268,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -274,6 +280,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -289,6 +296,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -304,6 +312,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -317,6 +326,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -328,6 +338,7 @@ context("Equipment maintenance for checking History in all states", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",
@@ -391,6 +402,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -402,6 +414,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -417,6 +430,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -432,6 +446,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -445,6 +460,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -456,6 +472,7 @@ context("Equipment maintenance for checking History in all states", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",

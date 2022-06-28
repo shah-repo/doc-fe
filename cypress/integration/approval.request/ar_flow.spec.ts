@@ -3,6 +3,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -211,33 +212,33 @@ context("Approval request form", () => {
     });
 
     it("Add Checkbox group", () => {
-      // cy.get("[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
-      cy.fbAddNewFieldWhenHidden();
+      cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
-      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.fbGroupOptions("1", "2", "3");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      // cy.get("[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
-      cy.fbAddNewFieldWhenHidden();
+      cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-TEXT FIELD" });
+      cy.fbEnterNameValue({ name: "label", value: "TEST FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).last().check();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.get(`input[type="checkbox"][value="3"]`).first().check();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").first().contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release document", () => {
@@ -246,14 +247,14 @@ context("Approval request form", () => {
   });
 
   context("Verify `Approval request form` title", () => {
-    it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
-      cy.get("[data-cy='HeaderInfoName']").should("have.text", approvalRequestFormName);
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get(`[data-cy="field-name"]`).should("have.text", approvalRequestFormName);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
-      cy.sendToEmail();
+      cy.sendToEmailFromHeader();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -481,8 +482,6 @@ context("Approval request form", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
-
     it("Checkbox option 2 checked", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
@@ -521,9 +520,9 @@ context("Approval request form", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status is 'In Review'", () => {
+    it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
         releasedFormId = $x.text();
       });
@@ -539,8 +538,8 @@ context("Approval request form", () => {
       cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "In Review" });
     });
 
-    it("Check document revision status is 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Check document revision status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
@@ -563,7 +562,7 @@ context("Approval request form", () => {
     it(`Verify reject notification`, () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", USERS[2].name)
-        .and("contain", "REJECTED")
+        .and("contain", STATUS_TYPES_LABEL.REJECTED)
         .and("contain", releasedFormId);
     });
 
@@ -573,11 +572,11 @@ context("Approval request form", () => {
     });
   });
 
-  context("Check doc Draft status and click on Send To Email", () => {
-    it("Check doc Draft status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "DRAFT" });
-      cy.get("[data-cy='HeaderInfoName']").should("have.text", approvalRequestTitle);
-      cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
+  context("Check doc status and click on Send To Email", () => {
+    it(`Check doc status as ${STATUS_TYPES_LABEL.DRAFT} and click on Send To Email`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      cy.get(`textarea[name="title"]`).should("have.text", approvalRequestTitle);
+      cy.get(`[data-cy="HeaderInfo-docId"]`).then(($x) => {
         releasedFormId = $x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
@@ -724,9 +723,9 @@ context("Approval request form", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status is 'In Review'", () => {
+    it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
-      cy.arVerifyStatus({ status: "IN_REVIEW" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
@@ -739,8 +738,8 @@ context("Approval request form", () => {
       cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "In Review" });
     });
 
-    it("Check document revision status is 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Check document revision status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
@@ -758,9 +757,9 @@ context("Approval request form", () => {
       cy.arApproveAR();
     });
 
-    it("Check approval request status is 'Approved'", () => {
+    it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-4050");
-      cy.arVerifyStatus({ status: "APPROVED" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 
@@ -773,9 +772,9 @@ context("Approval request form", () => {
       cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "Approved" });
     });
 
-    it("Check document revision status is 'Approved'", () => {
+    it(`Check document revision status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       SystemRequirement("REQ-4070");
-      cy.drCheckDocumentStatus({ status: "Approved" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Navigate to AR list", () => {
@@ -784,7 +783,7 @@ context("Approval request form", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.alClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "APPROVED" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Close AR and confirm pop-up for effective date", () => {
@@ -792,13 +791,13 @@ context("Approval request form", () => {
       cy.arCloseAR();
     });
 
-    it("Check approval request status is 'Closed'", () => {
+    it(`Check approval request status is ${STATUS_TYPES_LABEL.CLOSED}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-2710", "REQ-4050", "REQ-4310", "REQ-4300");
-      cy.arVerifyStatus({ status: "CLOSED" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.CLOSED });
     });
 
     it("Get document ID and Send To Email", () => {
-      cy.get("[data-cy='HeaderInfoName']").should("have.text", approvalRequestTitle);
+      cy.get(`[data-cy="field-name"]`).should("have.text", approvalRequestTitle);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
         releasedFormId = $x.text();
       });
@@ -992,9 +991,9 @@ context("Approval request form", () => {
       cy.arVoidAR();
     });
 
-    it("Verify AR status is 'Voided'", () => {
+    it(`Verify AR status is ${STATUS_TYPES_LABEL.VOIDED}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
-      cy.arVerifyStatus({ status: "VOIDED" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 });

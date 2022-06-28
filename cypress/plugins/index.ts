@@ -4,6 +4,7 @@ import path from "path";
 import { getEmails, GmailTesterOptions } from "../support/commands/imap/imap";
 import { pdfparser } from "../support/commands/pdfparser/pdfparser";
 import { unzip } from "../support/commands/unzip/unzip";
+import { parseXlsx } from "../support/commands/xlsx/xlsx";
 import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
 import { allowedCharacters } from "../utils/context/constants";
 
@@ -60,6 +61,7 @@ export default (on, config) => {
 
   on("task", {
     unzipFile: unzip,
+    parseXlsx,
     pdfparseFile: pdfparser,
   });
 

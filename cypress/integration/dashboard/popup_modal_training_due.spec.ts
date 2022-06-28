@@ -454,6 +454,7 @@ context("Email popup modal for training due", () => {
                 validationMode: "default",
                 validationAttribute: "Periodic Training",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-document-to-be-trained-on",
@@ -476,6 +477,7 @@ context("Email popup modal for training due", () => {
                 ],
                 validationAttribute: "Documents to Train on",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-refresh-training-periodically",
@@ -498,6 +500,7 @@ context("Email popup modal for training due", () => {
                 validationMode: "default",
                 validationAttribute: "Refresh/repeat training periodically?",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-validity",
@@ -519,6 +522,7 @@ context("Email popup modal for training due", () => {
                 validationMode: "visibility",
                 validationAttribute: "Training Frequency (in days)",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-details-section",
@@ -531,6 +535,7 @@ context("Email popup modal for training due", () => {
                 validationMode: "default",
                 validationAttribute: "Trainees Details",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-select-groups-to-train",
@@ -549,6 +554,7 @@ context("Email popup modal for training due", () => {
                 ],
                 validationAttribute: "Groups to Train",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-select-users-to-train",
@@ -567,6 +573,7 @@ context("Email popup modal for training due", () => {
                 ],
                 validationAttribute: "Users to Train (if applicable)",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -575,6 +582,7 @@ context("Email popup modal for training due", () => {
                 name: "fb-approvals-l0wcpa0v",
                 uniqueSchemaItem: true,
                 index: 7,
+                tabId: "overview",
               },
             ],
           },

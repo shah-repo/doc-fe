@@ -65,6 +65,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               className={`${classes.cancelButton} ${classes.buttonLabel}`}
               onClick={cancelAction}
               id="AlertDialog-cancelButton"
+              data-cy="AlertDialog-cancelButton"
             >
               <Text translation={cancelLabel} />
             </Button>
