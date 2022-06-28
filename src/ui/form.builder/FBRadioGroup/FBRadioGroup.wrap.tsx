@@ -40,7 +40,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
       return (
         <FormControlLabel
           key={`fb-${value}-${index}`}
-          control={<Radio {...{ disabled }} {...(controlValue && { checked: controlValue === value })} />}
+          control={<Radio disableRipple {...{ disabled }} {...(controlValue && { checked: controlValue === value })} />}
           {...{ value }}
           label={<Text {...{ message }} />}
         />
