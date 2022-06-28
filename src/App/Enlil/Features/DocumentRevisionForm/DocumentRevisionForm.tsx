@@ -111,7 +111,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
-  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "61vh" : "auto";
+  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "61vh" : "66vh";
 
   return (
     <SMForm

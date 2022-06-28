@@ -131,7 +131,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                 padding: "0 2px",
                 fontSize: "14px",
               }}>{viewMore}</Button> : (
-              !_textEditorState?.previewMode && !isTextClamped && _documentRevisionFormState?.expanded && <Button variant="text"
+              !_textEditorState?.previewMode && !isTextClamped &&
+              _documentRevisionFormState?.expanded && <Button variant="text"
                 onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
                 style={{
                   color: Colors.navy,
