@@ -40,18 +40,6 @@ body {
   z-index: 9999;
 }
 
-/* Check below div classes are really needed in Form, if so add specific class / id */
-div {
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-div::-webkit-scrollbar {
-  display: none;
-}
-
 .k-pager-numbers-wrap .k-pager-numbers .k-link {
   background-color: var(--white) !important;
   border-radius: 15px;

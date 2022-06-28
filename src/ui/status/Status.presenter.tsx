@@ -7,11 +7,13 @@ const API = Config.ApiEndpoint;
 const WORKER_API = Config.WorkerApiEndpoint;
 const STATUS_QUERY = "/status";
 const MICRO_STATUS_QUERY = "/micro/status";
+const DOC_EXPORT_QUERY = "/export/status";
 
 interface StatusState {
   backend: object;
   bgWorker: object;
   remoteJS: object;
+  docExport: object;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -22,7 +24,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
   // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   constructor(props) {
     super(props);
-    this.state =  { backend: {}, remoteJS: {}, bgWorker: {} };
+    this.state =  { backend: {}, remoteJS: {}, bgWorker: {}, docExport: {} };
   }
 
   toSnakeCase(str) {
@@ -60,6 +62,17 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
         },
         ({ response }) => {
           this.setState({ remoteJS: response.data });
+        },
+      );
+    fetch(API + DOC_EXPORT_QUERY)
+      .then((res) => res.text())
+      .then(
+        (result) => {
+          const dict = JSON.parse(result);
+          this.setState({ docExport: dict });
+        },
+        (error) => {
+          console.log(error);
         },
       );
   }
@@ -110,11 +123,12 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
     // if the line above is failing when you want to run `yarn start`,
     // copy src/data/buildInfo.json.example to src/data/buildInfo.json
     return (
-      <div style={{ padding: "10px", backgroundColor: "white", lineHeight: 1.2 }}>
+      <div style={{ padding: "10px", backgroundColor: "white", lineHeight: 1.2, overflowY: "scroll", height: "100vh" }}>
         { this.renderTable("Frontend", feStatusJson)}
         { this.renderTable("Backend", this.state.backend)}
         { this.renderTable("Background Worker Service", this.state.bgWorker)}
         { this.renderTable("Remote JS Validators", this.state.remoteJS)}
+        { this.renderTable("DOC-EXPORT", this.state.docExport)}
       </div>
     );
   }
