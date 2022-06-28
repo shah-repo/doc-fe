@@ -95,7 +95,7 @@ const emailOfUserToSignUp =
 
 const usageReportTomorrow = momentInPST().add("days", "2").format("YYYY-MM-DDThh:mm");
 
-interface StructureFromPerCompanyReport {
+export interface StructureFromPerCompanyReport {
   name: string;
   releasedCompleted: integer;
   draftPending: integer;
