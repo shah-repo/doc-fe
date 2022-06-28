@@ -2,7 +2,6 @@
 /* eslint-disable max-len */
 /* eslint-disable object-curly-spacing */
 /* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable cypress.eslint.rules/cy.pause */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -74,8 +73,6 @@ context("Export Engineering Build doc", () => {
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Material");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           EBDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Engineering Build Test");
-
-
           done();
         });
       });
@@ -376,7 +373,6 @@ context("Export Engineering Build doc", () => {
               },
             ],
           },
-
         },
         employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
@@ -960,7 +956,6 @@ context("Export Engineering Build doc", () => {
       it("Part Revision displays no values", () => {
         SystemRequirement("REQ-3020");
         cy.get("input[value=document]").should("not.be.checked");
-        // cy.get("input[value=document]").should("have.attr", "checked");
       });
 
       it("Part displays no values", () => {
@@ -1175,7 +1170,6 @@ context("Export Engineering Build doc", () => {
       it("Part Revision displays no values", () => {
         SystemRequirement("REQ-3020");
         cy.get("input[value=document]").should("not.be.checked");
-        // cy.get("input[value=document]").should("have.attr", "checked");
       });
 
       it("Verify part document is same", () => {
