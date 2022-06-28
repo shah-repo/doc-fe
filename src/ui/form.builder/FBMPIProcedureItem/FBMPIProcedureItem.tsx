@@ -23,7 +23,7 @@ import {
   FBProcedureItemOmitAction,
   FBProcedureItemType,
   FBProvider,
-  FBText,
+  FBText
 } from "..";
 import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/icon_add.svg";
 import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
@@ -238,7 +238,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       alignItems="center"
                                       mt={0.5}
                                     >
-                                      <WarningIcon width={14} height={14}/> &nbsp; OVERDUE
+                                      <WarningIcon width={14} height={14}/> &nbsp; OVERDUE &nbsp; &nbsp;
                                     </Box>
                                       }
                                     </>
