@@ -214,7 +214,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       },
       [`& .${FBClasses.nonOwner}`]: {
         [`& .Mui-disabled`]: {
-          backgroundColor: Colors.light_gray,
+          backgroundColor: Colors.whitest_grey,
         },
       },
       [`& .${FBClasses.inputPreview}`]: {
