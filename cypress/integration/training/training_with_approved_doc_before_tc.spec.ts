@@ -482,7 +482,7 @@ context("Training notifications for documents with approved and released revisio
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
     });
 
-    it(`Click training notification and check doc with STATUS_TYPES_LABEL.APPROVED status`, () => {
+    it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
       SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
@@ -496,10 +496,10 @@ context("Training notifications for documents with approved and released revisio
       cy.navigToDashboard();
     });
 
-    it("Click training notification and check doc with Released status", () => {
+    it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
       SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
     it("Button 'Complete training' should be visible", () => {

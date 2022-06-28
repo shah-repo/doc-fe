@@ -4,8 +4,10 @@
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -17,7 +19,8 @@ let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let developersGroup;
-let dateAfterEmailSouldArrive;
+let dateAfterEmailShouldArrive;
+let emailsFromInbox;
 
 
 context("Self training test", () => {
@@ -353,22 +356,43 @@ context("Self training test", () => {
     });
 
     it("Check if 'Send To Email' button is displayed", () => {
-      cy.get("button>span").should("contain.text", "Send To Email");
+      cy.get(`button[data-cy="exportToEmail"]`).should("contain.text", "Send To Email");
     });
 
     it("Click 'Send To Email'", () => {
-      dateAfterEmailSouldArrive = new Date();
-      cy.sendToEmail();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.sendToEmailFromHeader();
       cy.wait(5000);
     });
 
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document TRN-00001`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
     it("Check if 'Send To Email' button is working", () => {
-      cy.imapVerifyLastEmailContains(
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          userEmail: USERS[1].email,
-          content: "Your documents are ready for download. Link will expire in 4 hours.",
-          date: dateAfterEmailSouldArrive,
-        });
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download. Link will expire in 4 hours.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
     });
   });
 

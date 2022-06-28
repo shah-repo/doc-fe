@@ -327,7 +327,8 @@ context("Repeat Training without Training Curriculum", () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
       completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", completedDate);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name)
+        .and("contain", completedDate);
     });
   });
 
@@ -445,12 +446,6 @@ context("Repeat Training without Training Curriculum", () => {
 
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
-    it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
     });
 
     it("Click Submit for Approval", () => {
