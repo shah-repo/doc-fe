@@ -11,9 +11,10 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let adminEmployee;
+let firstEmployee;
 let secondEmployee;
+let thirdEmployee;
 let developersGroup;
 let asyncTasksGroup;
 let caGroup;
@@ -56,8 +57,14 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           adminEmployee = createdCompany.employees.find(
             (employee) => employee.user.email === USERS[1].email
           );
-          secondEmployee = createdCompany.employees.find(
+          firstEmployee = createdCompany.employees.find(
             (employee) => employee.user.email === USERS[2].email
+          );
+          secondEmployee = createdCompany.employees.find(
+            (employee) => employee.user.email === USERS[3].email
+          );
+          thirdEmployee = createdCompany.employees.find(
+            (employee) => employee.user.email === USERS[4].email
           );
           done();
         });
@@ -70,7 +77,6 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -92,7 +98,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
         payload: {
-          employees: [{ id: secondEmployee.id }],
+          employees: [{ id: adminEmployee.id }],
           tags: [
             ...developersGroup.body[0].tags,
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
@@ -322,18 +328,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -515,18 +511,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: firstEmployee.id });
     });
 
     it(`Verify training notification`, () => {
@@ -541,17 +527,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({
+        USER: USERS[3],
+        employeeId: secondEmployee.id,
       });
     });
 
@@ -567,18 +546,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[4], employeeId: thirdEmployee.id });
     });
 
     it(`Verify training notification`, () => {
@@ -593,18 +562,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     context("Use time tool to travel user back to future", () => {
@@ -699,17 +658,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-          password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({
-          name: createdCompany.name,
-          multiple: multipleCompanies,
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({
+          USER: USERS[2],
+          employeeId: firstEmployee.id,
         });
       });
 
@@ -726,17 +678,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[3].email,
-          password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({
-          name: createdCompany.name,
-          multiple: multipleCompanies,
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({
+          USER: USERS[3],
+          employeeId: secondEmployee.id,
         });
       });
 
@@ -753,17 +698,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[4].email,
-          password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({
-          name: createdCompany.name,
-          multiple: multipleCompanies,
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({
+          USER: USERS[4],
+          employeeId: thirdEmployee.id,
         });
       });
 
@@ -778,23 +716,18 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     context("Use time tool to travel user back to future", () => {
       it("Select 30 day to back in future", () => {
-        cy.trSetTimeTravelInDays({ days: 30 });
+        cy.trSetTimeTravelInDays({ days: 6 });
+        cy.setTimeTravelToComplete({
+          tasktype: "TIME_TRAVEL_COMPANY",
+          days: "6 days",
+          status: "COMPLETE",
+        });
       });
     });
   });
@@ -804,18 +737,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[4], employeeId: thirdEmployee.id });
     });
 
     it("Open assigned Training", () => {
@@ -832,18 +755,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     context("Check training notifications", () => {
@@ -858,9 +771,9 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it("Training notification show pending training of User 1 and 2", () => {
-        cy.get("[trainingstatus=\"OVERDUE\"]")
+        cy.get("[trainingstatus=\"DUE\"]")
           .eq(0)
-          .should("have.text", "OVERDUE")
+          .should("have.text", "DUE IN 7 DAYS")
           .arrowClick();
         cy.get("[class='MuiCollapse-wrapperInner']")
           .should("contain.text", USERS[2].name)
@@ -895,11 +808,11 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it(`Count for Due in 7 Days should be 0`, () => {
+      it(`Count for Due in 7 Days should be 2`, () => {
         cy.get("div[id=\"full-width-tabpanel-2\"]")
           .children()
           .find("li")
-          .should("have.length", 0);
+          .should("have.length", 2);
       });
 
       it(`Line item for User 3 should be removed from Due in 7 Days list`, () => {
@@ -913,7 +826,12 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
   context("Set the QA tool to Day 31", () => {
     context("Use time tool to travel user back to future", () => {
       it("Select 31 day to back in future", () => {
-        cy.trSetTimeTravelInDays({ days: 31 });
+        cy.trSetTimeTravelInDays({ days: 1 });
+        cy.setTimeTravelToComplete({
+          tasktype: "TIME_TRAVEL_COMPANY",
+          days: "a day",
+          status: "COMPLETE",
+        });
       });
     });
 
@@ -1004,17 +922,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           cy.authLogout();
         });
 
-        it("Logs user in", () => {
-          cy.authLogin({
-            email: USERS[2].email,
-            password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-          });
-        });
-
-        it("Selects company", () => {
-          cy.cmpSelectCompany({
-            name: createdCompany.name,
-            multiple: multipleCompanies,
+        it("Login user to dashboard", () => {
+          cy.authLoginToDashboard({
+            USER: USERS[2],
+            employeeId: firstEmployee.id,
           });
         });
 
@@ -1030,17 +941,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           cy.authLogout();
         });
 
-        it("Logs user in", () => {
-          cy.authLogin({
-            email: USERS[3].email,
-            password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-          });
-        });
-
-        it("Selects company", () => {
-          cy.cmpSelectCompany({
-            name: createdCompany.name,
-            multiple: multipleCompanies,
+        it("Login user to dashboard", () => {
+          cy.authLoginToDashboard({
+            USER: USERS[3],
+            employeeId: secondEmployee.id,
           });
         });
 
@@ -1056,23 +960,18 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     context("Use time tool to travel user back to future", () => {
       it("Select 40 day to back in future", () => {
-        cy.trSetTimeTravelInDays({ days: 40 });
+        cy.trSetTimeTravelInDays({ days: 9 });
+        cy.setTimeTravelToComplete({
+          tasktype: "TIME_TRAVEL_COMPANY",
+          days: "9 days",
+          status: "COMPLETE",
+        });
       });
     });
   });
@@ -1082,17 +981,10 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({
+        USER: USERS[3],
+        employeeId: secondEmployee.id,
       });
     });
 
@@ -1110,18 +1002,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({
-        name: createdCompany.name,
-        multiple: multipleCompanies,
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     context("Check training notifications", () => {
