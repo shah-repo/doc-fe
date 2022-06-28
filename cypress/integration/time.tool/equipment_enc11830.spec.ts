@@ -4,6 +4,7 @@
 
 import "moment-timezone";
 import moment from "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -440,30 +441,25 @@ context("Autocomplete 'Equipment' test", () => {
         cy.drSelectOutputDocumentType({ documentType: "Equipment" });
       });
 
-      it("Add autocomplete of 'Approvers' and set validation", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
-        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
-        cy.fbOpenValidation();
-        cy.fbFieldRequired();
-        cy.fbAddField();
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
       });
 
       it("Add select field and set validation ", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Select" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field" });
         cy.fbGroupOptions("option1", "option2");
-        cy.fbOpenValidation();
-        cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf({ name: "Autocomplete-Approvers", value: USERS[1].email });
         cy.fbAddField();
       });
 
       it("EQUIPMENT SECTIONS FOR PM", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
         cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
         cy.fbAddField();
@@ -471,10 +467,28 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("EQUIPMENT SECTIONS FOR CAL", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Calibration" });
         cy.get("input[value=\"calibration\"]").arrowClick();
         cy.fbAddField();
+      });
+
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add Autocomplete", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.fbAddNewFieldButton();
+        });
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -489,7 +503,7 @@ context("Autocomplete 'Equipment' test", () => {
       });
 
       it("Click create document", () => {
-        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.wait("@response").then((res) => {
           if (res.response) {
@@ -507,7 +521,7 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Verify form Draft status", () => {
     it("Verify form Draft status", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
     });
   });
@@ -520,7 +534,7 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Verify form Released status", () => {
     it("Verify form Released status", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
     });
   });
@@ -554,8 +568,8 @@ context("Autocomplete 'Equipment' test", () => {
       cy.unClick();
     });
 
-    it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
     });
 
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
@@ -566,10 +580,6 @@ context("Autocomplete 'Equipment' test", () => {
     it(`Select '${USERS[2].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
-    });
-
-    it("Autocomplete-Approvers", () => {
-      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -620,6 +630,22 @@ context("Autocomplete 'Equipment' test", () => {
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
+
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Select 'Active' as EQ status", () => {
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+    });
+
+    it("Autocomplete-Approvers", () => {
+      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
   });
 
   context("Approve and release document", () => {
@@ -631,7 +657,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify equipment Released status and header information", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
       cy.get("[id=\"HeaderInfo-docId\"]").should("have.text", equipmentDocId );
     });

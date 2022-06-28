@@ -316,6 +316,10 @@ context("Record inline approval dates flow", () => {
     });
 
     context("Fill first textfield and add inline approval", () => {
+      it("Navigate to details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter text 'First entry' in textfield for inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
@@ -407,6 +411,10 @@ context("Record inline approval dates flow", () => {
     });
 
     context("Fill second textfield and add inline approval", () => {
+      it("Navigate to details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter text 'First entry' in second textfield for inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy^=\"second-textfield-for-inline\"] input")

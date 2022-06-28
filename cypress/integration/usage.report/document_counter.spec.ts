@@ -11,7 +11,7 @@ import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { GeneralDocumentDocType } from "../../utils/constants/documentTypes/generalDocument";
-import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
+import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
@@ -95,7 +95,7 @@ const emailOfUserToSignUp =
 
 const usageReportTomorrow = momentInPST().add("days", "2").format("YYYY-MM-DDThh:mm");
 
-interface StructureFromPerCompanyReport {
+export interface StructureFromPerCompanyReport {
   name: string;
   releasedCompleted: integer;
   draftPending: integer;
@@ -220,7 +220,7 @@ context("Test usage report is correctly counting documents", () => {
               MPITest,
               GeneralDocumentDocType,
               EngineeringBuild,
-              LHRTTest,
+              LHRT,
               { ...TrainingCurriculum, documentTypeName: "Training Curriculum Test" },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -1465,62 +1465,41 @@ context("Test usage report is correctly counting documents", () => {
               formDocument: {
                 id: createdDAMForm.id,
               },
+              description: "<p>DAM</p>",
               formInput: {
-                "dam-built-in": [
-                  {
-                    id: "73223e1f-ef57-40a0-9eb0-a35434153010",
-                    docType: {
-                      id: "aed7d2ed-e998-4964-844e-70f8c40ef683",
-                      name: "Training Curriculum",
-                      group: "TRAINING_CURRICULUM",
-                      acronym: "TC-",
-                      category: "Training Curriculums",
-                      needsSignature: false,
-                      defaultTraining: false,
-                    },
-                    approvalRoles: {
-                      stage1: [
-                        false,
-                        false,
-                        false,
-                      ],
-                      stage2: [
-                        false,
-                        false,
-                        false,
-                      ],
-                      stage3: [
-                        false,
-                        false,
-                        false,
-                      ],
-                      admStage: [
-                        false,
-                        false,
-                        false,
-                      ],
-                    },
-                  },
-                ],
                 "dar-built-in": [
                   {
-                    name: "Role One",
-                    id: "4596e0ca-3daa-4f39-90af-2adda56605f2",
-                    index: 0,
+                    employees: [],
                     groups: [
                       {
                         id: group.body[0].id,
                       },
                     ],
-                    employees: [
-                      {
-                        id: adminEmployee.id,
-                      },
-                    ],
+                    name: "Test group",
+                    id: "44ada43e-de5d-4ac5-95b7-9e3dd949d1cd",
+                    index: 0,
+                  },
+                ],
+                "dam-built-in": [
+                  {
+                    id: "84ddcc0e-e1bd-4646-b1f2-837ad8e250cd",
+                    docType: {
+                      defaultTraining: false,
+                      needsSignature: false,
+                      acronym: "TT-",
+                      group: "OTHER",
+                      name: "Test Type",
+                      category: "record",
+                    },
+                    approvalRoles: {
+                      stage1: [],
+                      stage2: [],
+                      stage3: [],
+                      admStage: [],
+                    },
                   },
                 ],
               },
-              description: "<p>DAM</p>",
               document: {
                 docId: "DAM-00001",
                 documentType: {
@@ -2812,7 +2791,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "lhrstep",
                     index: 5,
                     label: "LHR Step",
-                    tabId: "procedure",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -4067,6 +4046,14 @@ context("Test usage report is correctly counting documents", () => {
     });
 
     context("Complete LHR step", () => {
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Open LHRs 1 dropdown", () => {
+        cy.get(`div[id="sm-tabpanel-1"] circle`).arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
