@@ -8,8 +8,7 @@ import {
   SmartReference,
 } from "../../../../../../state/ducks/documentRevisions/types";
 import {
-  isDocumentRevisionInDraft,
-  isDocumentRevisionReleased,
+  isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased,
 } from "../../../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
 import { BorderLinearProgress } from "./BorderLinearProgress";
@@ -29,7 +28,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
     let lhrstatus = "";
     if (stepLHRs && isDocumentRevisionReleased(status)) {
       lhrstatus = "complete";
-    } else if (stepLHRs && isDocumentRevisionInDraft(status)) {
+    } else if (stepLHRs && (isDocumentRevisionInDraft(status) || isDocumentRevisionInReview(status))) {
       lhrstatus = "inprogress";
     }
     return lhrstatus || status;
