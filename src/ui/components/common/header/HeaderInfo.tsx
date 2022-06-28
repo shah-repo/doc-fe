@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as BredCrumbArrow } from "../../../../assets/images/breadcrumb_arrow.svg";
 import { companySelectors } from "../../../../state/ducks/company";
 import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -12,6 +13,7 @@ import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisi
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
+import { DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
 import { checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
@@ -56,6 +58,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isStatusCanceled = isDocumentRevisionCanceled(status);
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
+  const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
   const navigationDetails = useSelector((state: ApplicationState) =>
     companySelectors.getNavigationDetails(
       state,
@@ -66,6 +69,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     let title;
     if (SM.isNewCRLayout) {
       title = intl.formatMessage({ id: "page.table.title.changeRequest" });
+    } else if (isTypeMpiOutput) {
+      title = DocTypeGroups.LHR;
     } else if (SM.isNewLayout) {
       title = intl.formatMessage({ id: "navigation.document.list" });
     }
@@ -83,7 +88,6 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     iconLink = "/navigation_icons/cr.svg";
   }
   const classes = styles({ iconLink });
-  const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
 
   const titleRenderer = (className: string) => {
     const stepRegex = /Step #[0-9]+/;
@@ -150,7 +154,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     <Grid container xs={6} className={classes.itemWrap} >
       <Grid item>
         <Grid item xs={12}>
-          <StyledBreadcrumb separator="›">
+          <StyledBreadcrumb separator={<BredCrumbArrow></BredCrumbArrow>}>
             <Typography className={classes.groupSection}>
               <Grid
                 container={true}
@@ -180,14 +184,16 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true} className={classes.minWidthSpace}>
-                  {titleRenderer(classes.breadcrumbId)}
+                  { !isTypeMpiOutput && titleRenderer(classes.breadcrumbId)}
                   {subtitle && (
                     <Typography
                       variant="subtitle1"
                       id="HeaderInfo-subtitle"
                       component="p"
                       className={classes.subTitleLink}
+                      style={{ display: "inline-flex" }}
                     >
+                      {!isTypeMpiOutput && <span className={classes.spaceLinePadding}> - </span>}
                       {subtitle}
                     </Typography>
                   )}
@@ -201,6 +207,16 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     dataCy="HeaderInfo-Rev"
                   />
                 </Grid>
+                { isTypeMpiOutput &&
+                  <>
+                    <Grid item={true} className={classes.arrowPadding}>
+                      <BredCrumbArrow></BredCrumbArrow>
+                    </Grid>&nbsp;
+                    <Typography className={classes.breadcrumbId}>
+                      { isTypeMpiOutput && titleRenderer(classes.breadcrumbId)}
+                    </Typography>
+                  </>
+                }
                 {isStatusVisible && <Grid item={true}>
                   <CustomLabelTooltip {...{ tooltipConfig }}>
                     <Chip
