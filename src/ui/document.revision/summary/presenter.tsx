@@ -138,12 +138,8 @@ const Presenter: React.FunctionComponent<Props> = ({
   );
 
   const contentRenderer = () => (
-    <Box style={{ minHeight: 16 }}>
-      <Grid
-        container={true}
-        spacing={4}
-        direction="column"
-      >
+    <Box minHeight={16} width="fit-content">
+      <Grid container>
         {
           isTrainingVisible && !isRecord &&
           <SummaryField
