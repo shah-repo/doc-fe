@@ -60,7 +60,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     user: getUserDetails(e)?.user,
   })));
   const classes = FBLHRStepStyles();
-  const stepLabel = `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`;
+  const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
+    : `LHR Step ${stepIndex}`;
   const [expand, setExpand] = React.useState(false);
   const getAvtarStyle = (initialColor) => ({
     width: "35px",
