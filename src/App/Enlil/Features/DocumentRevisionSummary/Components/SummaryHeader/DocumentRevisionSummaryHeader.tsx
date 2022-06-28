@@ -34,7 +34,8 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
           )}
         </Box>
         {isDescriptionVisible && (
-          <SummaryFieldWithHtml label={descriptionLabel} value={description} />
+          <SummaryFieldWithHtml label={descriptionLabel} value={description}
+            _documentRevisionFormState={_documentRevisionFormState} />
         )}
       </Box>
     )}

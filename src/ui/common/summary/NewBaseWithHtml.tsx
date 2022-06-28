@@ -16,6 +16,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   classes,
   labelProps,
   labelFont,
+  _documentRevisionFormState,
 }) => {
   const descriptionClasses = SMEditorStyles();
   const intl = useIntl();
@@ -29,13 +30,16 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   useEffect(() => {
     setEditor(convertHtmlToDraft(value));
     showToggleButton();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const toggleBtn = () => {
     setFlag(!flag);
     if (flag) {
+      _documentRevisionFormState?.setExpanded(false);
       setBtnText(viewMore);
     } else {
+      _documentRevisionFormState?.setExpanded(true);
       setBtnText(viewLess);
     }
   };
@@ -43,7 +47,9 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   const showToggleButton = () => {
     setTimeout(() => {
       const elm = document.querySelector(".rdw-editor-main");
-      setIsTextClamped(elm ? elm.scrollHeight > elm.clientHeight : false);
+      const isClamped = elm ? elm.scrollHeight > elm.clientHeight : false;
+      setIsTextClamped(isClamped);
+      _documentRevisionFormState?.setIsDescTextClamped(isClamped);
     }, 500);
   };
 

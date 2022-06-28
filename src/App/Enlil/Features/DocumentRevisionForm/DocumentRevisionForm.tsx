@@ -111,7 +111,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
-  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "64vh" : "67vh";
+  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "61vh" : "auto";
 
   return (
     <SMForm
@@ -157,17 +157,18 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   <SMTabs
                     onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                     tabs={tabLabels}
-                    boxProps={{ stretchY: "100%", px: 3.75, height: "100%" }}
+                    boxProps={{ px: 3.75 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
                       const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                       return (
                         <SMBox
-                          height={(_documentRevisionFormState?.expanded || isCreateUrl) ? getHeight() : "69vh"}
+                          height={(_documentRevisionFormState?.expanded || isCreateUrl) ? getHeight() :
+                            (_documentRevisionFormState?.isDesTextClamped ? "59vh" : "68vh")}
                           key={index}
                           overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
-                          <SMBox mt={1.25}>
+                          <SMBox>
                             {tabType === "MIXED" && <>
                               <DocumentRevisionFormPresenter
                                 {...formValues}

@@ -110,6 +110,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                           fontSize: 14,
                           lineHeight: "24px",
                           height: "auto",
+                          minHeight: "91px",
                         }}
                         toolbarClassName={classes.descriptionToolbarEditorClass}
                         editorClassName={_textEditorState?.previewMode ? classes.descriptionEditorClass :
