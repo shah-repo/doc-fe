@@ -500,7 +500,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Verify revision status is 'Revision 2  - Released'", () => {
-      cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
+      cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
