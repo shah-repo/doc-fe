@@ -44,8 +44,6 @@ const UserAvatarListItem: React.FunctionComponent<Props> = ({
   secondaryComponent,
   name,
 }) => {
-  // eslint-disable-next-line no-console
-  // console.log(user);
   const classes = styles({ initialColor: user?.initialColor });
   return (
     <>
