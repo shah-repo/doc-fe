@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
@@ -201,7 +202,7 @@ context("Regular Records test", () => {
 
   context("Add approvers to Record", () => {
     it("Open Record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.contains("RD-00003").arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -210,7 +211,7 @@ context("Regular Records test", () => {
 
     it("Add approver'", () => {
       cy.contains("Approvals").should("exist");
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("exist");
 
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
@@ -225,8 +226,8 @@ context("Regular Records test", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Status is 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 

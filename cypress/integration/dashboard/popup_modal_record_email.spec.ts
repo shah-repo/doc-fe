@@ -23,7 +23,7 @@ let fourthEmployee;
 let emailsFromInbox: IMAPEmail[];
 let adminEmployee;
 let adminSessionId;
-let doateOfSendToAll;
+let dateOfSendToAll;
 let developersGroup;
 
 const recordTitle = "Record document from newly created form";
@@ -343,7 +343,7 @@ context("Records email popup modal", () => {
 
       it("Click on 'EMAIL ALL'", () => {
         cy.get("button").contains("EMAIL ALL").arrowClick();
-        doateOfSendToAll = new Date();
+        dateOfSendToAll = new Date();
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
@@ -366,7 +366,7 @@ context("Records email popup modal", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        after: doateOfSendToAll,
+        after: dateOfSendToAll,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -384,7 +384,7 @@ context("Records email popup modal", () => {
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldNotBeReceived,
-        getEmailsSincedate: doateOfSendToAll,
+        getEmailsSincedate: dateOfSendToAll,
         assertNumberOfEmailsFoundInList: 0,
       });
     });
@@ -437,7 +437,7 @@ context("Records email popup modal", () => {
       cy.checkToastMessage({ exists: false });
     });
 
-    it("Check if Record has status 'Released'", () => {
+    it(`Check if Record has status ${STATUS_TYPES_LABEL.RELEASED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });

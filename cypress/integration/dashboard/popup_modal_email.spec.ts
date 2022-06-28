@@ -223,7 +223,7 @@ context("Approval request email popup modal", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status is 'IN_REVIEW'", () => {
+    it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
@@ -430,7 +430,7 @@ context("Approval request email popup modal", () => {
       cy.arApproveAR();
     });
 
-    it("Check if AR has status 'Approved'", () => {
+    it(`Check if AR has status ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });

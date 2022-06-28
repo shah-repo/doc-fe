@@ -670,7 +670,7 @@ context("Email popup modal for training due", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
-    it("Verify training status should be 'Draft'", () => {
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
@@ -688,7 +688,7 @@ context("Email popup modal for training due", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
@@ -748,25 +748,9 @@ context("Email popup modal for training due", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.wait(10000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.reload();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("tr.k-master-row").should("have.length", 1);
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", SQS_TYPES.TIME_TRAVEL_COMPANY);
-      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "a month");
-      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text",
-        `${SQS_TYPES.TRAINING_RECORDS_REFRESH}${SQS_TYPES.TRAINING_RECORDS_STATUS}`);
-      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
-      cy.wait(5000);
     });
   });
 
