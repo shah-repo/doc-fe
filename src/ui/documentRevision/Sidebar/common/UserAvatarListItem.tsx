@@ -1,6 +1,6 @@
 import { Avatar, createStyles, ListItem, ListItemAvatar, ListItemText, makeStyles, Theme, Typography } from "@material-ui/core";
 import React from "react";
-import { Owner } from "../../../../state/ducks/common/types";
+import { User } from "../../../../state/ducks/common/types";
 import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
 import Colors from "../../../layout/theme/utils/colors";
 
@@ -33,33 +33,36 @@ const styles = makeStyles((theme: Theme) =>
   }));
 
 interface Props {
-  owner: Owner;
+  user: User;
   secondaryComponent: JSX.Element;
   name: string | JSX.Element;
 }
 
+
 const UserAvatarListItem: React.FunctionComponent<Props> = ({
-  owner,
+  user,
   secondaryComponent,
   name,
 }) => {
-  const classes = styles({ initialColor: owner.user.initialColor });
+  // eslint-disable-next-line no-console
+  // console.log(user);
+  const classes = styles({ initialColor: user?.initialColor });
   return (
     <>
       <ListItem alignItems="flex-start" disableGutters className={classes.auditListItem}>
         <ListItemAvatar style={{ minWidth: 42 }}>
-          {owner.user.avatar ? (
+          {user?.avatar ? (
             <Avatar
               className={classes.avatar}
-              alt={owner.user.name}
-              src={owner.user.avatar || ""}
+              alt={user?.name}
+              src={user?.avatar || ""}
             />
           ) : (
             <Avatar
               className={classes.avatar}
-              style={{ background: owner.user.initialColor }}
+              style={{ background: user?.initialColor }}
             >
-              {getInitalsFromName(owner.user.name)}
+              {getInitalsFromName(user?.name)}
             </Avatar>
           )}
         </ListItemAvatar>
