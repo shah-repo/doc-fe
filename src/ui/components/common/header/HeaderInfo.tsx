@@ -223,10 +223,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       size="small"
                       className={`${classes.chip} ${
                         classes[
-                          FormHeaderStatusClassMapping[status || label || ""]
+                          FormHeaderStatusClassMapping[displayStatus || status || label || ""]
                         ]
                       }`}
-                      label={STATUS_TYPES_LABEL[status] || label}
+                      label={displayStatus || STATUS_TYPES_LABEL[status] || label}
                       data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>
