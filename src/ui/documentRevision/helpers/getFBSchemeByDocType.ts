@@ -61,7 +61,7 @@ export const getFBSchemeByDocType = (
         deleteDisabled: false,
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
-        tabId,
+        tabId: "details",  // ENC-12015 changing tabId to 'details'
         index: size(finalScheme),
       });
     } else {
