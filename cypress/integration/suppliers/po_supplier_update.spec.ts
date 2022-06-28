@@ -1,5 +1,6 @@
 import moment from "moment";
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -447,7 +448,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("reload page", () => {
@@ -531,7 +532,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("reload page", () => {
@@ -636,7 +637,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 3  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 3", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("reload page", () => {
@@ -695,7 +696,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 4  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 4", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("reload page", () => {
@@ -792,7 +793,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("Turn off autosave", () => {
@@ -869,7 +870,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 3  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 3", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("Turn off autosave", () => {
@@ -1053,7 +1054,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 4  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 4", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("Turn off autosave", () => {
@@ -1152,7 +1153,7 @@ context("Purchase Supplier Update", () => {
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Released" });
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 5  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 5", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("reload page", () => {

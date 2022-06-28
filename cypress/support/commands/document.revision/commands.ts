@@ -19,6 +19,7 @@ declare global {
       drClearDocumentTitle(): Chainable<Subject>;
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
+      drSelectSpecificationTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -58,7 +59,7 @@ declare global {
       checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
       checkToastMessageContains(params: { message: string }): Chainable<Subject>;
       drCheckApprovalsEnforcment(): Chainable<Subject>;
-      drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
+      drVerifyFirstDocumentRevisionList(params: { revision: string; status: string }): Chainable<Subject>;
       drApproveAndReleaseDocumentWithSelectingApprover(users: string[], params?: { toastifyExists: boolean }): Chainable<Subject>;
       drClickUpgradeForm(): Chainable<Subject>;
       drClickRevisionsSidePanel(): Chainable<Subject>;
@@ -188,12 +189,9 @@ Cypress.Commands.add("drClickDAMEditBtn", () => {
   cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
 });
 
-Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string}) => {
-  cy.get(" [data-cy=\"DocumentRevisionList-item\"]>a>div").first()
-    .then(($el) => {
-      const text = $el.text();
-      expect(text.replace(/\u00a0/g, " ")).to.contain(params.revision);
-    });
+Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string; status: string}) => {
+  cy.get(" [data-cy=\"HeaderInfo-Rev\"]").should("have.text", params.revision);
+  cy.get(" [data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
 });
 
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
@@ -229,6 +227,11 @@ Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion:
 
 Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.get("[data-cy=\"tabId.details\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectSpecificationTab", () => {
+  cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
