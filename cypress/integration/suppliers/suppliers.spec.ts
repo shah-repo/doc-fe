@@ -4,6 +4,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -839,7 +840,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Verify revision after update is equal to 2", () => {
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -1117,7 +1118,7 @@ context("Create company via API and create Suppliers document", () => {
         });
 
         it("Verify revision after update is equal to 2", () => {
-          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2.1  - Released" });
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2.1", status: STATUS_TYPES_LABEL.RELEASED });
         });
 
         it("Check doc status as Released and click on Send To Email", () => {
