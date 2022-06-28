@@ -58,7 +58,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
-  const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter((ref) =>
+  const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
       schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
@@ -80,8 +80,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }));
 
     smartReferencesFrom?.forEach((ele, i) => {
-      const obj = schema.filter((el) => ele.metadata.fieldId === el.name);
-      ele.stepIndex = obj[0].stepIndex;
+      const obj = schema.filter((el) => ele?.metadata?.fieldId === el.name);
+      ele.stepIndex = obj[0]?.stepIndex;
     });
   }
 
