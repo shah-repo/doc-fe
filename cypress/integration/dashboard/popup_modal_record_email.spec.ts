@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
@@ -437,7 +438,7 @@ context("Records email popup modal", () => {
     });
 
     it("Check if Record has status 'Released'", () => {
-      cy.arVerifyStatus({ status: "RELEASED" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 });

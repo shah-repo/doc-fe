@@ -5,6 +5,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -609,7 +610,7 @@ context("Email popup modal for training due", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
   });
@@ -670,7 +671,7 @@ context("Email popup modal for training due", () => {
     });
 
     it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "DRAFT" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -688,7 +689,7 @@ context("Email popup modal for training due", () => {
     });
 
     it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "IN REVIEW" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -747,9 +748,25 @@ context("Email popup modal for training due", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
-      cy.wait(5000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
+          CyRoutes.GetAvailableApprovers], () => {
+          cy.reload();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("tr.k-master-row").should("have.length", 1);
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", SQS_TYPES.TIME_TRAVEL_COMPANY);
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "a month");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text",
+        `${SQS_TYPES.TRAINING_RECORDS_REFRESH}${SQS_TYPES.TRAINING_RECORDS_STATUS}`);
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
+      cy.wait(5000);
     });
   });
 
@@ -797,7 +814,7 @@ context("Email popup modal for training due", () => {
     it("There should be 3 columns", () => {
       cy.contains("Overdue (2)").parent().parent().find(".MuiGrid-item").should("have.length", 3);
       cy.get("button[aria-label=close]").eq(0).arrowClick();
-      cy.wait(10000);
+      cy.wait(5000);
     });
   });
 

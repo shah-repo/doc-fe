@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -223,7 +224,7 @@ context("Approval request email popup modal", () => {
     });
 
     it("Verify AR status is 'IN_REVIEW'", () => {
-      cy.arVerifyStatus({ status: "IN REVIEW" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
@@ -430,7 +431,7 @@ context("Approval request email popup modal", () => {
     });
 
     it("Check if AR has status 'Approved'", () => {
-      cy.arVerifyStatus({ status: "APPROVED" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 });
