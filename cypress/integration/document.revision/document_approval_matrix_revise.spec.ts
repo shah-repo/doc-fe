@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -295,7 +296,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Verify revision status is 'Revision 1.1  - Draft'", () => {
-      cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1.1  - Draft" });
+      cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1.1", status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("'Approve and Release' the document", () => {
