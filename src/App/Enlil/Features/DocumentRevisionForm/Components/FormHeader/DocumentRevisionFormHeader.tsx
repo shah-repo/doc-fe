@@ -25,7 +25,7 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
           type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
             <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
         }
-        <Box paddingBottom={2}>
+        <Box paddingBottom={0.5}>
           <Title
             name="name"
             documentTypeId={_documentRevisionFormState?.documentTypeId}
