@@ -16,7 +16,7 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
     {() => (
       <Box
         id="SMHeaderTmpl"
-        paddingTop={_documentRevisionFormState?.documentRevision?.id ? 0.75 : 9.125}
+        paddingTop={0.75}
         paddingBottom={1.25}
         pl={2.75}
         pr={4.25}

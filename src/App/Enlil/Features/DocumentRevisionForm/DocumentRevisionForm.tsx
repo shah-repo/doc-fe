@@ -111,7 +111,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
-  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "67vh" : "72vh";
+  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "67vh" : "80vh";
 
   return (
     <SMForm
@@ -146,7 +146,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
               boxProps={{
                 overflow: (_documentRevisionFormState?.expanded ? "scroll" :
-                  (isCreateUrl && _documentRevisionFormState?.isDescriptionFocused ? "scroll" : "visible")),
+                  (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
+                    (_documentRevisionFormState?.isDescriptionFocused)) ? "scroll" : "visible")),
                 height: isCreateUrl ? "95vh" :  "86vh",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
@@ -165,7 +166,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       return (
                         <SMBox
                           height={(_documentRevisionFormState?.expanded || isCreateUrl) ? getHeight() :
-                            (_documentRevisionFormState?.isDesTextClamped ? "65vh" : "68vh")}
+                            ((_documentRevisionFormState?.isDesTextClamped || _documentRevisionFormState?.isDescriptionFocused) ? "65vh" : "70vh")}
                           key={index}
                           pb={(isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? 0 : 2}
                           overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>

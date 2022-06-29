@@ -142,9 +142,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                         schemaItem.tabId === tabId && !schemaItem.deleted);
 
                       return (
-                        <SMBox height={_documentRevisionFormState?.expanded ? "auto" :
-                          (_documentRevisionFormState?.isDesTextClamped ? "58vh" : "63vh")}
-                        overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
+                        <SMBox
+                          pb={_documentRevisionFormState?.isDesTextClamped ? 0 : 2.5}
+                          height={_documentRevisionFormState?.expanded ? "auto" :
+                            (_documentRevisionFormState?.isDesTextClamped ? "66vh" : "71vh")}
+                          overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
                           <SMBox>
                             {tabType === "MIXED" &&  <>
                               <SummaryPresenter
