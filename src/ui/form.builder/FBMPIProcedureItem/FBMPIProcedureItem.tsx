@@ -23,7 +23,7 @@ import {
   FBProcedureItemOmitAction,
   FBProcedureItemType,
   FBProvider,
-  FBText
+  FBText,
 } from "..";
 import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/icon_add.svg";
 import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
