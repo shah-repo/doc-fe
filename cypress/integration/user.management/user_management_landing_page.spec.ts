@@ -147,7 +147,7 @@ context("User management landing page", () => {
       });
 
       it("Verify filter for Active", () => {
-        cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Active");
+        cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Active").arrowClick();
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Active");

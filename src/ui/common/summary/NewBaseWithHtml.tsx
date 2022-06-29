@@ -1,19 +1,17 @@
-import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
 import { SMEditorStyles } from "../../../App/Shifamed/Components/SMTextEditor/SMTextEditor.styles";
 import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
-import Colors from "../../layout/theme/utils/colors";
-import styles from "./newStyles";
+import { styles } from "./newStyles";
 import { SummaryBaseProps } from "./types";
 
-type Props = SummaryBaseProps & WithStyles<typeof styles>;
+type Props = SummaryBaseProps;
 
 const BaseWithhtml: React.FunctionComponent<Props> = ({
   label,
   value,
-  classes,
   labelProps,
   labelFont,
   _documentRevisionFormState,
@@ -26,7 +24,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   const [editor, setEditor] = useState();
   const [btnText, setBtnText] = useState(viewMore);
   const [flag, setFlag] = useState(false);
-
+  const classes = styles(isTextClamped);
   useEffect(() => {
     setEditor(convertHtmlToDraft(value));
     showToggleButton();
@@ -62,18 +60,15 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
               readOnly={true}
               editorState={editor}
               toolbarHidden={true}
-              editorClassName={!flag ? descriptionClasses.descriptionEditorClass : ""}
+              editorClassName={!flag ? descriptionClasses.descriptionEditorClass :
+                descriptionClasses.descriptionSummaryEditorClass}
               editorStyle={{
                 lineHeight: "24px",
               }}
             />
           </Grid>
           <Grid item>
-            <Button variant="text" style={{
-              color: Colors.navy, padding: "0 2px", fontSize: "14px",
-              display: (!isTextClamped ? "none" : "inherit"),
-            }}
-            onClick={() => toggleBtn()}>{btnText}</Button>
+            <Button variant="text" className={classes.moreOrLess} onClick={() => toggleBtn()}>{btnText}</Button>
           </Grid>
         </Box>
       </Grid>
@@ -81,4 +76,4 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(BaseWithhtml);
+export default BaseWithhtml;

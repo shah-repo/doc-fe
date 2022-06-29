@@ -428,7 +428,7 @@ Cypress.Commands.add("arCloseARFromMenu", () => {
 
 Cypress.Commands.add("arVoidAR", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
-  cy.get("[id=\"void\"]").arrowClick();
+  cy.get("[data-cy=\"void-button\"]").arrowClick();
   cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });

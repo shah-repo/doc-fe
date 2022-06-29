@@ -3,6 +3,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -617,9 +618,10 @@ context("Approval request form", () => {
       cy.arSetTimeTravelInDays({ days: 9 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(20000);
     });
 
-    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+    it("Reload the page and Check status as COMPLETE", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
           CyRoutes.GetAvailableApprovers], () => {
@@ -631,7 +633,6 @@ context("Approval request form", () => {
       cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "9 days");
       cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
       cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
-      cy.wait(5000);
     });
 
     it("Check that the AR was CLOSED", () => {
@@ -647,7 +648,7 @@ context("Approval request form", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.drFilterDocListByDocIdAndName({ docId: "CP-00004", title: "New document for testing AR" });
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
     it("You should get a dashboard notification as CLOSED", () => {
@@ -666,9 +667,10 @@ context("Approval request form", () => {
       cy.arSetTimeTravelInDays({ days: 2 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(30000);
     });
 
-    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+    it("Reload the page and Check status as COMPLETE", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
           CyRoutes.GetAvailableApprovers], () => {
@@ -680,7 +682,6 @@ context("Approval request form", () => {
       cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "2 days");
       cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
       cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
-      cy.wait(5000);
     });
 
     it("Goto dashboard", () => {

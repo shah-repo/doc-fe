@@ -63,7 +63,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         <Box key={groupId} className={classes.changeContainer}>
           <UserAvatarListItem
             name={name}
-            owner={owner}
+            user={(owner && owner.user) || ownerUser || ownerThirdParty}
             secondaryComponent={
               <DateTime
                 data-cy={`audit-time-${key}`}

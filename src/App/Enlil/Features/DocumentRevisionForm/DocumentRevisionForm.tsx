@@ -58,7 +58,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
-  const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter((ref) =>
+  const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
       schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
@@ -80,8 +80,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }));
 
     smartReferencesFrom?.forEach((ele, i) => {
-      const obj = schema.filter((el) => ele.metadata.fieldId === el.name);
-      ele.stepIndex = obj[0].stepIndex;
+      const obj = schema.filter((el) => ele?.metadata?.fieldId === el.name);
+      ele.stepIndex = obj[0]?.stepIndex;
     });
   }
 
@@ -93,7 +93,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     } ];
   }
 
-  if (tabConfig && group === DOC_TYPE_GROUP.LHR) {
+  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
       tabId: TabTypeOptions.TABS_MEQ,
@@ -111,7 +111,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
-  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "61vh" : "66vh";
+  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "67vh" : "72vh";
 
   return (
     <SMForm
@@ -165,8 +165,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       return (
                         <SMBox
                           height={(_documentRevisionFormState?.expanded || isCreateUrl) ? getHeight() :
-                            (_documentRevisionFormState?.isDesTextClamped ? "59vh" : "68vh")}
+                            (_documentRevisionFormState?.isDesTextClamped ? "65vh" : "68vh")}
                           key={index}
+                          pb={(isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? 0 : 2}
                           overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
                           <SMBox>
                             {tabType === "MIXED" && <>
