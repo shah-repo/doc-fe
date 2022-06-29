@@ -238,7 +238,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       alignItems="center"
                                       mt={0.5}
                                     >
-                                      <WarningIcon width={14} height={14}/> &nbsp; OVERDUE
+                                      <WarningIcon width={14} height={14}/> &nbsp; OVERDUE &nbsp; &nbsp;
                                     </Box>
                                       }
                                     </>
