@@ -41,6 +41,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disableBackspace = false,
   disableChipDelete = false,
   type,
+  isCustomHeight,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -103,13 +104,14 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   variant="outlined"
                   InputProps={{
                     ...params.InputProps,
+                    ...{ style: { ...isCustomHeight } },
                     ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
                     ...(disabled && type === "lhrstep") && { endAdornment: null },
                   }}
                   inputProps={{
                     ...params.inputProps,
                     "style": {
-                      padding: "10.5px 0", ...inputStyle, marginRight: disabled ? "28px" : "0px",
+                      padding: "10.5px 0", ...inputStyle, marginRight: isCustomHeight ? "10px" : disabled  ? "28px" : "0px",
                       fontSize: 14,
                     },
                     "data-cy": props.name,
