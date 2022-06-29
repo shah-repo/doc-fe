@@ -28,12 +28,14 @@ export enum TrainingStatus {
   ASSIGNED = "ASSIGNED",
   DUE = "DUE",
   COMPLETED = "COMPLETED",
+  PENDING = "Pending"
 }
 export enum TrainingStatusLabels {
   OVERDUE = "OVERDUE",
   DUE = "DUE IN 7 DAYS",
   ASSIGNED = "ASSIGNED",
   COMPLETED = "COMPLETED",
+  PENDING = "Pending"
 }
 
 export enum LINE_ITEMS_STATUS_TYPES {
