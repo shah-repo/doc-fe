@@ -108,6 +108,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
       className="fontSizeSmall"
     ></RemoveCircle>
   );
+  const isDisabled = !isOutput || loading || !lhrBuildTypeExist || disabled;
 
   return (
     <FBProvider {...{ lhrStepState }}>
@@ -205,7 +206,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               />
             </Box>
             <FBButton
-              disabled={!isOutput || loading || !lhrBuildTypeExist || disabled}
+              disabled={isDisabled}
               label={
                 stepLHRs ? "form.builder.view.step" : "form.builder.start.step"
               }
@@ -213,15 +214,18 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               {...{ loading }}
               className={classes.button}
               style={
-                stepLHRs
-                  ? {
-                    background: Colors.light_blue,
-                    color: Colors.navy,
-                  }
-                  : {
-                    background: Colors.navy,
-                    color: Colors.white,
-                  }
+                isDisabled ? {
+                  background: Colors.whitest_grey,
+                }
+                  : stepLHRs
+                    ? {
+                      background: Colors.light_blue,
+                      color: Colors.navy,
+                    }
+                    : {
+                      background: Colors.navy,
+                      color: Colors.white,
+                    }
               }
             />
           </Box>
