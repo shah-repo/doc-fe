@@ -53,6 +53,7 @@ declare global {
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
+      saveBarShouldNotExist(): Chainable<Subject>;
       progressBarShouldNotExist(): Chainable<Subject>;
       progressBarShouldExist(): Chainable<Subject>;
       progressBarShouldAppear(): Chainable<Subject>;
@@ -118,7 +119,6 @@ export interface ICreateCompanyBootstrap {
   addresses?: string[];
   remoteValidatorBundleName: string;
   acctCodes?: string[];
-  scheduledForDeletion?: boolean;
 }
 
 Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
@@ -129,6 +129,10 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
     }
     return false;
   });
+});
+
+Cypress.Commands.add("saveBarShouldNotExist", () => {
+  cy.get(`[data-cy="Document-Save-Progress-Bar"]`, { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("progressBarShouldNotExist", () => {

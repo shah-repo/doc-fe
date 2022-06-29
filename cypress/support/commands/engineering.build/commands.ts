@@ -14,6 +14,7 @@ declare global {
       ebCheckIfPartIsInSummary(params: { partName: string }): Chainable<Subject>;
       ebVerifyNewRevisionCreated(): Chainable<Subject>;
       ebApprove(): Chainable<Subject>;
+      lhrApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
@@ -79,6 +80,18 @@ Cypress.Commands.add("ebApprove", () => {
   });
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrApprove", () => {
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.unClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  });
+  cy.checkToastMessage({ exists: false });
+  cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
