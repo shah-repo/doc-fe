@@ -132,7 +132,7 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
-
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
