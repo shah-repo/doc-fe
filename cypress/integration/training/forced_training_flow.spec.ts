@@ -457,12 +457,14 @@ context("Forced training flow", () => {
   context("Check training notification", () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
-      cy.get(".MuiTypography-root.MuiListItemText-primary")
-        .should("contain", "FM-00001").and("contain", "AR Form");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `FM-00001Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem: "FM-00001Rev 1 AR Form",
+      });
     });
   });
 
@@ -506,6 +508,10 @@ context("Forced training flow", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -524,9 +530,6 @@ context("Forced training flow", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
 
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls(

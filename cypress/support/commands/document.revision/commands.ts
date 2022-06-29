@@ -19,6 +19,7 @@ declare global {
       drClearDocumentTitle(): Chainable<Subject>;
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
+      drSelectSpecificationTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -58,7 +59,7 @@ declare global {
       checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
       checkToastMessageContains(params: { message: string }): Chainable<Subject>;
       drCheckApprovalsEnforcment(): Chainable<Subject>;
-      drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
+      drVerifyFirstDocumentRevisionList(params: { revision: string; status: string }): Chainable<Subject>;
       drApproveAndReleaseDocumentWithSelectingApprover(users: string[], params?: { toastifyExists: boolean }): Chainable<Subject>;
       drClickUpgradeForm(): Chainable<Subject>;
       drClickRevisionsSidePanel(): Chainable<Subject>;
@@ -188,12 +189,9 @@ Cypress.Commands.add("drClickDAMEditBtn", () => {
   cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
 });
 
-Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string}) => {
-  cy.get(" [data-cy=\"DocumentRevisionList-item\"]>a>div").first()
-    .then(($el) => {
-      const text = $el.text();
-      expect(text.replace(/\u00a0/g, " ")).to.contain(params.revision);
-    });
+Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string; status: string}) => {
+  cy.get(" [data-cy=\"HeaderInfo-Rev\"]").should("have.text", params.revision);
+  cy.get(" [data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
 });
 
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
@@ -232,6 +230,11 @@ Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drSelectSpecificationTab", () => {
+  cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
@@ -245,7 +248,7 @@ Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
-  cy.get("[data-cy=\"field-name\"]").arrowClick();
+  cy.get("[data-cy=\"field-name\"]").arrowClick().wait(500);
   cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
   cy.unClick();
 });
@@ -264,7 +267,7 @@ Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) 
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-  cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType(params.description);
+  cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType(params.description);
   cy.unClick();
 });
 

@@ -42,16 +42,16 @@ export const SignedCell = ({
   });
 
   const handleResendEmail = ({ user, id }: GetEmployeeResponse) => {
-    user?.locked
-      ? asyncResetPasswordEmail.start(
-        getSendPasswordResetEmailAction,
-        id,
-        asyncResetPasswordEmail
-      )
-      : asyncSignUpEmail.start(
+    !user?.confirmed
+      ? asyncSignUpEmail.start(
         getResendSignupEmailAction,
           user?.email,
           asyncSignUpEmail
+      )
+      : asyncResetPasswordEmail.start(
+        getSendPasswordResetEmailAction,
+        id,
+        asyncResetPasswordEmail
       );
   };
 
@@ -69,8 +69,10 @@ export const SignedCell = ({
           onClick={() => handleResendEmail(dataItem)}
         >
           <span className={classes.link}>
-            <Text translation={dataItem?.user?.locked ? "reset.password" :
-              "user.management.resend.signup.email"} />
+            <Text translation={!dataItem?.user?.confirmed ?
+              "user.management.resend.signup.email" :
+              "reset.password"
+            } />
           </span>
         </Link>
       )}
@@ -89,8 +91,8 @@ export const SignedCell = ({
           data={
             dataItem?.user?.confirmed && !dataItem?.user?.locked
               ? getTranslatedText("user.management.signed.up")
-              : dataItem?.user?.locked ? getTranslatedText("reset.password") :
-                getTranslatedText("user.management.resend.signup.email")
+              : !dataItem?.user?.confirmed ? getTranslatedText("user.management.resend.signup.email") :
+                getTranslatedText("reset.password")
           }
           childrenElement={getChildrenElement}
         />

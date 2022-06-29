@@ -138,6 +138,10 @@ context("NCO document type management with record doc type", () => {
       cy.drEnterDocumentDescription({ description: "New Company description" });
     });
 
+    it("Select 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it(`Enters company name '${newCompanyName}'`, () => {
       cy.get("[name^=company-name-]").arrowType(newCompanyName);
     });
@@ -184,7 +188,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });

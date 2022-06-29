@@ -18,7 +18,6 @@ import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
-import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
@@ -101,7 +100,6 @@ DocumentRevisionFormContainerProps
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
 
-  const availableReferences = useGetAvailableReferences(initialValues);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const isEditableSchema = checkIsDocumentEditableSchema(document?.documentType?.groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
@@ -229,7 +227,6 @@ DocumentRevisionFormContainerProps
         type,
         isDisabled,
         documentRevisions,
-        availableReferences,
         showRevisionTypeChange,
         proposedDocId,
         setDocId,
