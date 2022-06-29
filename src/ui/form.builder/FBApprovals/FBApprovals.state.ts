@@ -86,13 +86,22 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
-  ) => {
+    callback?: () => any
+    ) => {
     if (!id) { return; }
     this.transitionApi.set({
       url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
       body,
       method: "post",
+    }, (data, error) => { // Heck : for ENC-9083 added a callback
+      if (error) {
+        this.transitionApi.onError(error);
+      } else {
+        this.transitionApi.data = data;
+        this.transitionApi.onSuccess();
+        callback?.();
+      }
     });
   };
 }

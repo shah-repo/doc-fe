@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { AuditGroupType } from "../../../state/ducks/audit/types";
+import { Approval } from "../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
@@ -53,11 +54,12 @@ const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
     tooltipConfig,
   } = useDocumentStatus(documentTypeId, selectedDocument?.status);
   const versionNumber = selectedDocument?.displayRevision;
+  const approvals = selectedDocument?.approvals as Approval[]; // heck: for ENC-9083
   const schema = selectedDocument?.formDocument?.formTemplate?.schema as FBSchemaProps[];
 
   return  <CustomLabelTooltip {...{ tooltipConfig }}>
     <AuditPresenter
-      {...{ audit, versionNumber, isStatusVisible, schema }}
+      {...{ audit, approvals, versionNumber, isStatusVisible, schema}}
       statusLabel={statusLabel as string}
     />
   </CustomLabelTooltip>;
