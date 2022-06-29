@@ -163,8 +163,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 </Box>)}
             </Box>
           </Box>
+          <Box flexGrow={1}></Box>
           {stepLHRs?.redline && (
-            <Box position="relative" left="64%">
+            <Box pr={2}>
               <BorderColorIcon className={classes.borderColorIcon}></BorderColorIcon>
             </Box>
           )}
