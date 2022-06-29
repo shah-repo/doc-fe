@@ -1,6 +1,11 @@
+import React from "react";
 import { InputLabel, Theme } from "@material-ui/core";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
+import OutlinedInput, { OutlinedInputProps } from "@material-ui/core/OutlinedInput";
 import { createStyles, withStyles } from "@material-ui/core/styles";
+
+interface ModifiedOutlinedInputProps extends Omit<OutlinedInputProps, "labelWidth"> {
+  labelWidth?: OutlinedInputProps["labelWidth"];
+}
 
 export const InputField = withStyles((theme: Theme) =>
   createStyles({
@@ -18,7 +23,7 @@ export const InputField = withStyles((theme: Theme) =>
       flex: 1,
     },
   }),
-)(OutlinedInput);
+)(OutlinedInput as React.ComponentType<ModifiedOutlinedInputProps>);
 
 export const LabelField = withStyles((theme: Theme) =>
   createStyles({
