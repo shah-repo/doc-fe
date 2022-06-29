@@ -226,7 +226,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                           FormHeaderStatusClassMapping[displayStatus || status || label || ""]
                         ]
                       }`}
-                      label={displayStatus || STATUS_TYPES_LABEL[status] || label}
+                      label={(displayStatus || STATUS_TYPES_LABEL[status] || label).toUpperCase()}
                       data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>
