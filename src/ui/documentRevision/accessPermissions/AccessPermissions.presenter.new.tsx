@@ -326,7 +326,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       <Box width={203} height={40} fontFamily="Sora" pt={1.825}>
                         <Select
                           id="document.assing.to.sidebar"
-                          menuPlacement={"auto"}
+                          menuPlacement={"top"}
                           options={operatorsSelectOptions}
                           onChange={(e) => saveValueOperator(e)}
                           placeholder={intl.formatMessage({
