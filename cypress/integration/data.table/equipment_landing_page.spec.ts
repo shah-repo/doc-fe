@@ -1131,6 +1131,10 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
       cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
@@ -1139,6 +1143,10 @@ context("Equipment maintenance for checking History in all states", () => {
     it(`Select '${USERS[1].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+    });
+
+    it("Navigate to 'cal/pm history' tab", () => {
+      cy.drSelectCalPmHistoryTab();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {

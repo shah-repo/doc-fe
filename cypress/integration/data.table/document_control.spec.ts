@@ -773,6 +773,7 @@ context("Document list test", () => {
       });
 
       it("Check if revision is in alpha revision stage", () => {
+        cy.drClickRevisionsSidePanel();
         cy.recCheckRevisionStage({ stage: "Revision A" });
       });
     });

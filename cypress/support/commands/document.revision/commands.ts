@@ -20,6 +20,7 @@ declare global {
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
+      drSelectCalPmHistoryTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -232,6 +233,11 @@ Cypress.Commands.add("drSelectDetailsTab", () => {
 
 Cypress.Commands.add("drSelectSpecificationTab", () => {
   cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
+  cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -903,7 +909,7 @@ Cypress.Commands.add("drVerifyDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("drClickRevisionsSidePanel", () => {
-  cy.get(`button[data-cy="sss"]`).eq(1).arrowClick();
+  cy.get("[data-cy=\"note-icon\"]").arrowClick();
 });
 
 Cypress.Commands.add("drPatchDocType", (params: {
