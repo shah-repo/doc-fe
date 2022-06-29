@@ -131,7 +131,6 @@ context("Autosave on add and remove FB fields", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
-
     });
 
     it("Add Text Editor", () => {

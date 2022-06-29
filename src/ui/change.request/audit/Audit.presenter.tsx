@@ -35,7 +35,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           <UserAvatarListItem
             data-cy={`audit-${key}`}
             name={<div data-cy={`audit-owner-${key}`}>{name}</div>}
-            owner={owner}
+            user={(owner && owner.user) || ownerUser || ownerThirdParty}
             secondaryComponent={
               <DateTime
                 data-cy={`audit-${key}`}
