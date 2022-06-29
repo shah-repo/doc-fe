@@ -77,7 +77,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
           <DocRevActions {...{ isCreateDocumentDisabled }} />
         </Grid>
       </Grid>
-      <FormMessage asyncState={asyncState} />
+      <FormMessage asyncState={asyncState} data-cy="Document-Save-Progress-Bar" />
       <Observer>
         {() => (
           <>
@@ -85,7 +85,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
               workspaceState?.documentRevApi.loading ||
               _documentRevisionFormState?.loading) && (
               <Box width="100%" pt={1}>
-                <LinearProgress className={classes.linearProgress} />
+                <LinearProgress className={classes.linearProgress} data-cy="Document-Save-Progress-Bar" />
               </Box>
             )}
           </>

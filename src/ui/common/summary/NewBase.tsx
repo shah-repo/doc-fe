@@ -1,17 +1,19 @@
-import { Grid, Typography, WithStyles } from "@material-ui/core";
-import { withStyles } from "@material-ui/styles";
+import { Grid, Typography } from "@material-ui/core";
 import React from "react";
-import styles from "./newStyles";
+import { styles } from "./newStyles";
 import { SummaryBaseProps } from "./types";
 
-type Props = SummaryBaseProps & WithStyles<typeof styles>;
+type Props = SummaryBaseProps;
 
-const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-", classes }) => (
-  <Grid item={true} xs={12}>
-    <Typography id="field-name" data-cy="field-name" className={classes.title} variant="h5">
-      {value ? value : noValueOption}
-    </Typography>
-  </Grid>
-);
+const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-" }) => {
+  const classes = styles();
+  return (
+    <Grid item={true} xs={12}>
+      <Typography id="field-name" data-cy="field-name" className={classes.title} variant="h5">
+        {value ? value : noValueOption}
+      </Typography>
+    </Grid>
+  );
+};
 
-export default withStyles(styles)(Base);
+export default Base;

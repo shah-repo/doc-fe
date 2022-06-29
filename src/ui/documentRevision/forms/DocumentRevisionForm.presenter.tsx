@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, isEmpty } from "lodash";
 import { Observer, observer } from "mobx-react";
@@ -22,7 +22,6 @@ import { isOperator } from "../DocumentRevisionDisplay.container";
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
-import AvailableReferencesField from "./presenters/AvailableReferences";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
@@ -38,15 +37,12 @@ interface Props
 {
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
-  availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
   proposedDocId?: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   documentTypesById: DocumentTypeByIdState;
   canChangeOwnerShip: boolean;
   type?: DocumentCloneType;
-  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
-  isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
@@ -59,7 +55,6 @@ interface Props
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
-  availableReferences,
   showRevisionTypeChange,
   proposedDocId,
   values,
@@ -73,12 +68,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   setFieldValue,
   type,
-  isNewVersion = false,
   showAdministrativeAndVoidChange,
   pmFormId,
   releasedDocRev,
   redlineActive,
-  bannerPortal,
   mode,
   doNotPrompt,
   onDirtyFlagChange,
@@ -126,7 +119,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
-  const documentReferences = documentRevision?.referenceTo;
 
   useEffect(() => {
     if (!redlineActive) {
@@ -173,12 +165,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [isDocRevStatusDraft, values.document, values.name]);
 
   useEffect(() => {
-    if (!isSubmitting) {
-      return;
-    }
-  }, [isSubmitting]);
-
-  useEffect(() => {
     if (revisionChangeType) {
       _documentRevisionFormState?.setDocumentRevisionChangeType(revisionChangeType);
     }
@@ -198,143 +184,154 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [mode]);
 
   return (
-    <>
-      <FormWrapper
+    <FormWrapper
+      dirty={dirty}
+      initialValues={initialValues}
+      resetForm={resetForm}
+    >
+      <ScrollToError
+        isSubmitting={isSubmitting}
+        isValidating={isValidating}
+        errors={errors}
+      />
+      <PromptIfDirty
         dirty={dirty}
-        initialValues={initialValues}
-        resetForm={resetForm}
-      >
-        <ScrollToError
-          isSubmitting={isSubmitting}
-          isValidating={isValidating}
-          errors={errors}
-        />
-        <PromptIfDirty
-          dirty={dirty}
-
-          doNotPrompt={doNotPrompt}
-
-          onDirtyFlagChange={onDirtyFlagChange}
-        />
-        <DocumentTypeSelect
-          outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
-          isDisabled={isDisabledInput}
-          {...{
-            type,
-            isDocRevStatusDraft,
-            documentTypeId,
-          }}
-        />
-        <DocIdInput
-          document={values.document}
-          {...{
-            isDisabled,
-            documentTypesById,
-            setDocId,
-            documentTypeId,
-            type,
-          }}
-        />
-        {isEB && <FBEBPart name="childrenParts" />}
-        {isPart && documentRevision?.parentParts && (
-          <BuildsContainer
-            dataProp={flatten([documentRevision?.parentParts])}
-            label="common.part.of"
-            isDraft={isDocRevStatusDraft || isRevised}
+        doNotPrompt={doNotPrompt}
+        onDirtyFlagChange={onDirtyFlagChange}
+      />
+      <Grid container spacing={3} md={8} sm={12}>
+        <Grid item xs={6}>
+          <DocumentTypeSelect
+            outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
+            isDisabled={isDisabledInput}
+            {...{
+              type,
+              isDocRevStatusDraft,
+              documentTypeId,
+            }}
           />
+        </Grid>
+        <Grid item xs={6}>
+          <DocIdInput
+            document={values.document}
+            {...{
+              isDisabled,
+              documentTypesById,
+              setDocId,
+              documentTypeId,
+              type,
+            }}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          {/* hack for rerender revision stage */}
+          <Observer>
+            {() => (
+              <>
+                {_documentRevisionFormState?.forceRender &&
+                <RevisionStage {...{
+                  isDisabled,
+                  isDocRevFirstDraft,
+                  shouldShowRevStageForDocType,
+                  documentTypeId,
+                  defaultRevisionStage,
+                }}/>}
+                {!_documentRevisionFormState?.forceRender &&
+                <RevisionStage {...{
+                  isDisabled,
+                  isDocRevFirstDraft,
+                  shouldShowRevStageForDocType,
+                  documentTypeId,
+                  defaultRevisionStage,
+                }}/>}
+              </>
+            )}
+          </Observer>
+        </Grid>
+        <Grid item xs={6}>
+          <RetrainField
+            revisionChangeType={values.revisionChangeType}
+            isDisabled={isDisabledInput}
+            {...{ documentTypeId, isRecord }}
+          />
+        </Grid>
+        {isEB && (
+          <Grid item xs={12}>
+            <FBEBPart name="childrenParts" />
+          </Grid>
+        )}
+        {isPart && documentRevision?.parentParts && (
+          <Grid item xs={12}>
+            <BuildsContainer
+              dataProp={flatten([documentRevision?.parentParts])}
+              label="common.part.of"
+              isDraft={isDocRevStatusDraft || isRevised}
+            />
+          </Grid>
         )}
         {isEB && documentRevision?.parent && (
-          <BuildsContainer
-            dataProp={flatten([documentRevision.parent])}
-            label="common.previous.build"
-            docRevId={docRevId}
-            showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
-            isDraft={isDocRevStatusDraft || isRevised}
-          />
+          <Grid item xs={12}>
+            <BuildsContainer
+              dataProp={flatten([documentRevision.parent])}
+              label="common.previous.build"
+              docRevId={docRevId}
+              showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
+              isDraft={isDocRevStatusDraft || isRevised}
+            />
+          </Grid>
         )}
         {isEB && documentRevision?.children && (
-          <BuildsContainer
-            dataProp={documentRevision.children}
-            label="common.next.build"
-            isDraft={isDocRevStatusDraft || isRevised}
-          />
+          <Grid item xs={12}>
+            <BuildsContainer
+              dataProp={documentRevision.children}
+              label="common.next.build"
+              isDraft={isDocRevStatusDraft || isRevised}
+            />
+          </Grid>
         )}
-        {/* hack for rerender revision stage */}
-        <Observer>
-          {() => (
-            <>
-              {_documentRevisionFormState?.forceRender &&
-          <RevisionStage {...{
-            isDisabled,
-            isDocRevFirstDraft,
-            shouldShowRevStageForDocType,
-            documentTypeId,
-            defaultRevisionStage,
-          }}/>}
-              {!_documentRevisionFormState?.forceRender &&
-          <RevisionStage {...{
-            isDisabled,
-            isDocRevFirstDraft,
-            shouldShowRevStageForDocType,
-            documentTypeId,
-            defaultRevisionStage,
-          }}/>}
-            </>
-          )}
-        </Observer>
-        {type === "none" && <AvailableReferencesField
-          availableReferences={availableReferences}
-          documentReferences={documentReferences}
-          name="referenceTo"
-          label="documentRevision.form.references"
-          disabled={isDisabledInput}
-          documentGroupOptions={groupOptions}
-        />}
-        <RetrainField
-          revisionChangeType={values.revisionChangeType}
-          isDisabled={isDisabledInput}
-          {...{ documentTypeId, isRecord }}
-        />
-        {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
-        <RevisionTypeChange
-          isDisabled={isDisabledInput}
-          {...{
-            documentTypeId,
-            isDocRevFirstDraft,
-            showAdministrativeAndVoidChange,
-            isRecord,
-            releasedDocRev,
-            isAlphaReleased,
-          }}
-        />
-        }
-        {
-          (!values.status || type === "newOutput") &&
-          <DocumentSecurity documentTypeId={documentTypeId} />
-        }
-        {
-          _formState?.active && _formState.mode === "design" && hasOutput &&
-          <FBActiveNoOutput
-            docRevId={initialValues.id}
-            status={documentRevision?.status}
-            version={documentRevision?.version}
-            isDisabled={isDisabledInput}
-            outputDocs={values.outputDocumentTypes as OptionType[]}
-          />
-        }
-        {
-          _formState?.active && documentRevision &&
-          <Box>
-            {
-              values.id &&
-              <Box textAlign="right">
-                <GenerateHtmlPreview id={values.id} renderHTMLDefined={values.formDocument?.renderHTMLDefined} />
-              </Box>
-            }
-          </Box>
-        }
-      </FormWrapper>
-    </>
+        {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft && (
+          <Grid item xs={12}>
+            <RevisionTypeChange
+              isDisabled={isDisabledInput}
+              {...{
+                documentTypeId,
+                isDocRevFirstDraft,
+                showAdministrativeAndVoidChange,
+                isRecord,
+                releasedDocRev,
+                isAlphaReleased,
+              }}
+            />
+          </Grid>
+        )}
+        {(!values.status || type === "newOutput") && (
+          <Grid item xs={12}>
+            <DocumentSecurity documentTypeId={documentTypeId} />
+          </Grid>
+        )}
+        {_formState?.active && _formState.mode === "design" && hasOutput && (
+          <Grid item xs={12}>
+            <FBActiveNoOutput
+              docRevId={initialValues.id}
+              status={documentRevision?.status}
+              version={documentRevision?.version}
+              isDisabled={isDisabledInput}
+              outputDocs={values.outputDocumentTypes as OptionType[]}
+            />
+          </Grid>
+        )}
+        {_formState?.active && documentRevision && values.id && (
+          <Grid item xs={12}>
+            <Box textAlign="right">
+              <GenerateHtmlPreview
+                id={values.id}
+                renderHTMLDefined={values.formDocument?.renderHTMLDefined}
+              />
+            </Box>
+          </Grid>
+        )}
+      </Grid>
+    </FormWrapper>
   );
 };
 

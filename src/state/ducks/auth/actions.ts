@@ -172,6 +172,7 @@ const resetPassword = (
     method: "post",
     data: values,
     handlers,
+    includeAuthorization: false,
   });
 
 const loginWithCode = (
