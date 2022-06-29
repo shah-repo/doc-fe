@@ -457,8 +457,10 @@ context("Forced training flow", () => {
   context("Check training notification", () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
+      cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -552,6 +554,7 @@ context("Forced training flow", () => {
   context("Verify Training Records with 'Pending' on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.trClearFilters();
     });
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
