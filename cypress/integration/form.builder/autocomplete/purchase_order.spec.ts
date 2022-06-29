@@ -184,7 +184,7 @@ context("Autocomplete 'Purchase Order' test", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
 
-        it("Select 'Component Protocol' output document type", () => {
+        it("Select 'Clinical Protocol' output document type", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
         });
 
