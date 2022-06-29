@@ -57,6 +57,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
     <Box px={4.25} mt={1.875}>
       {(!isEmpty(completed) || !isEmpty(inprogress)) && (
         <BorderLinearProgress
+          data-cy="LHR-Step-Progress-Bar"
           variant="determinate"
           value={progressValue * 100}
         />
