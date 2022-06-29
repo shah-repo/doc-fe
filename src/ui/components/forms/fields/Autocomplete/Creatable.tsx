@@ -104,7 +104,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           fontSize={19}
           minHeight={32}
           color={inputValue ? Colors.almost_black : Colors.lightest_grey2}
-          padding="5.5px 11px"
+          padding="5.5px 8px"
           bgcolor={hover ? Colors.whitest_grey : Colors.alabaster}
           borderRadius={4}
           onMouseEnter={() => { setHover(true); }}
