@@ -150,7 +150,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             (isLHR && !documentRevision.changeRequest ? 0 : 2.5)}
                           height={_documentRevisionFormState?.expanded ? "auto" :
                             (_documentRevisionFormState?.isDesTextClamped ? "calc(100vh - 325px)" :
-                              (!documentRevision.changeRequest ? (!_documentRevisionFormState?.isLHRProgressBarVisible ?
+                              (!documentRevision.changeRequest ? (isLHR &&
+                                !_documentRevisionFormState?.isLHRProgressBarVisible ?
                                 "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 280px)"))}
                           overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
                           <SMBox>
