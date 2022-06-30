@@ -25,6 +25,7 @@ import UserGroups from "../groups/UserGroups";
 import HelloSignAccess from "../HelloSignAccess";
 import NavigationManagementContainer from "../navigation.management/NavigationManagement.container";
 import WhiteLabelingManagementContainer from "../whiteLabeling.management/WhiteLabelingManagement.container";
+import { Translation } from "../../../translations/types";
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -50,7 +51,7 @@ interface OwnProps {
   setUserInfo: (values: EmployeeEditRequestBody) => void;
   userId: string;
   isCurrentUser: boolean;
-  isUsernameEmpty: boolean;
+  usernameError: Translation | null;
   isDeveloper: boolean;
   canUpdateCompany: boolean;
 }
@@ -81,7 +82,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   userId,
   callbackUpdateWithUpload,
   isCurrentUser,
-  isUsernameEmpty,
+  usernameError,
   isDeveloper,
   canUpdateCompany,
 }) => {
@@ -189,7 +190,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
       </Button>
       <Button
         variant="contained"
-        disabled={isUsernameEmpty}
+        disabled={Boolean(usernameError)}
         style={{ width: "auto", color: "white", backgroundColor: "#6E09EA" }}
         onClick={() => {
           updateProfile();
