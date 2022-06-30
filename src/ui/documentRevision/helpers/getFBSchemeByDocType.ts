@@ -1,6 +1,6 @@
 import { find, get, map, size, some, union, unionBy } from "lodash";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentType, DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType, DocumentTypeByIdState, TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
 import { store as appStore } from "../../../state/store";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -58,8 +58,9 @@ export const getFBSchemeByDocType = (
   if (hasDirectApproval(outputTypesWithGroups)) {
     if (hasPO(outputTypesWithGroups)) {
 
-      const tabConfig = documentTypeSelectors.getTabConfiguration(appStore.getState(), outputTypesWithGroups[0].group);
-      const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.tabId);
+      const tabConfig: TabInfo[] = documentTypeSelectors.getTabConfiguration(
+        appStore.getState(), outputTypesWithGroups[0].group);
+      const tabLabel = get(tabConfig, "0.tabId", "details");
 
       finalScheme.push({
         label: "form.builder.approvals",
@@ -67,7 +68,7 @@ export const getFBSchemeByDocType = (
         deleteDisabled: false,
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
-        tabId: tabLabels[0] || "details",
+        tabId: tabLabel,
         index: size(finalScheme),
       });
     } else {

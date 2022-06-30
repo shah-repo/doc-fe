@@ -131,7 +131,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     switch (_formState?.mode) {
       case "design":
         formik.setFieldValue("formTemplate", {
-          outputDocumentTypes: (values?.outputDocumentTypes || [])
+          outputDocumentTypes: (values?.outputDocumentTypes ? [values?.outputDocumentTypes] : [])
             .map((outputDoc) => ({ id: outputDoc.value })),
           schema,
         });
