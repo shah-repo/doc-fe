@@ -147,7 +147,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 overflow: (_documentRevisionFormState?.expanded ? "scroll" :
                   (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
                     (_documentRevisionFormState?.isDescriptionFocused)) ? "scroll" : "visible")),
-                height: isCreateUrl ? "95vh" :  "86vh",
+                height: isCreateUrl ? "95vh" :  "calc(100vh - 130px)",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
@@ -164,7 +164,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                       return (
                         <SMBox
-                          height={(_documentRevisionFormState?.expanded || isCreateUrl) ? getHeight() :
+                          height={(_documentRevisionFormState?.isDescriptionFocused || isCreateUrl) ? getHeight() :
                             ((_documentRevisionFormState?.isDesTextClamped || _documentRevisionFormState?.isDescriptionFocused) ? "65vh" : "70vh")}
                           key={index}
                           pb={(isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? 0 : 2}
