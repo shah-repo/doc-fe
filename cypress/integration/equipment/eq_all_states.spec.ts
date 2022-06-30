@@ -1,3 +1,4 @@
+/* eslint-disable cypress.eslint.rules/cy.pause */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -1104,6 +1105,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
@@ -1130,6 +1132,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
@@ -1156,6 +1159,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
@@ -1169,6 +1173,7 @@ context("Equipment maintenance for checking History in all states", () => {
     context("Verify for IN REVIEW Numeric Equipment", () => {
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
@@ -1186,6 +1191,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
