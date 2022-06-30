@@ -79,6 +79,11 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "24px",
       cursor: "pointer",
     },
+    mpiTitle: {
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "24px",
+    },
     minWidthSpace: {
       minWidth: "50px",
     },

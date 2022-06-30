@@ -165,15 +165,24 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 <Grid item={true} className={classes.itemIcon}>
                   <div className={classes.icon} />
                 </Grid>
-                <Link
-                  underline="hover"
-                  onClick={returnToList}
-                  className={classes.link}
-                >
-                  <Grid item={true} className={classes.title}>
-                    {title}
-                  </Grid>
-                </Link>
+                {
+                  !isTypeMpiOutput && <Link
+                    underline="hover"
+                    onClick={returnToList}
+                    className={classes.link}
+                  >
+                    <Grid item={true} className={classes.title}>
+                      {title}
+                    </Grid>
+                  </Link>
+                }
+                {
+                  isTypeMpiOutput &&
+                    <Grid item={true} className={classes.mpiTitle}>
+                      {title}
+                    </Grid>
+                }
+
               </Grid>
             </Typography>
             <Typography data-cy="HeaderInfo" className={classes.breadcrumbId}>
@@ -226,7 +235,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                           FormHeaderStatusClassMapping[displayStatus || status || label || ""]
                         ]
                       }`}
-                      label={displayStatus || STATUS_TYPES_LABEL[status] || label}
+                      label={(displayStatus || STATUS_TYPES_LABEL[status] || label).toUpperCase()}
                       data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>

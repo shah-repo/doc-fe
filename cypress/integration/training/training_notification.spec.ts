@@ -4,6 +4,7 @@
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { LINE_ITEMS_STATUS_TYPES, STATUS_TYPES_LABEL, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
@@ -390,7 +391,7 @@ context("Training notification test", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedFormId = x.text(); });
     });
   });
@@ -425,6 +426,14 @@ context("Training notification test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -457,6 +466,16 @@ context("Training notification test", () => {
 
     it("Select Third User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {
@@ -628,7 +647,7 @@ context("Training notification test", () => {
 
     it(`Click training notification and check doc with Approved status`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
-      cy.arVerifyStatus({ status: "APPROVED" });
+      cy.arVerifyStatus({ status: LINE_ITEMS_STATUS_TYPES.APPROVED });
     });
 
     it("Navigate to Training Records", () => {
@@ -969,7 +988,7 @@ context("Training notification test", () => {
     });
 
     it("Filter list by status", () => {
-      cy.alFilterByStatus({ status: "APPROVED" });
+      cy.alFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.APPROVED });
     });
 
     it("Verify filter by TITLE", () => {
@@ -1052,9 +1071,9 @@ context("Training notification test", () => {
 
     it("Verify the time travel will appear in History list as 'Requested'", () => {
       cy.get("tr.k-master-row").should("have.length", 1);
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", SQS_TYPES.TIME_TRAVEL_COMPANY);
       cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
-      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.CLOSE_CR_BY_EFFECTIVE_DATE);
       cy.get(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
     });
 
@@ -1067,9 +1086,9 @@ context("Training notification test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("tr.k-master-row").should("have.length", 1);
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", SQS_TYPES.TIME_TRAVEL_COMPANY);
       cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
-      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.CLOSE_CR_BY_EFFECTIVE_DATE);
       cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
       cy.wait(5000);
     });
@@ -1115,13 +1134,13 @@ context("Training notification test", () => {
     });
   });
 
-  context("Check training notifications due for 7 days", () => {
+  context(`Check training notifications as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
   });
 
@@ -1142,8 +1161,8 @@ context("Training notification test", () => {
       cy.alVerifyFilterByTitle({ title: approvalRequestName });
     });
 
-    it("Verify filter by STATUS as CLOSED", () => {
-      cy.alVerifyFilterByStatus({ status: "CLOSED" });
+    it(`Verify filter by STATUS as ${LINE_ITEMS_STATUS_TYPES.CLOSED}`, () => {
+      cy.alVerifyFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.CLOSED });
     });
   });
 });

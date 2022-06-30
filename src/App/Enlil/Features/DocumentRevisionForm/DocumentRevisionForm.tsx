@@ -32,7 +32,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   isDisabled,
   formValues,
   documentRevisions,
-  availableReferences,
   showRevisionTypeChange,
   proposedDocId,
   doNotPrompt,
@@ -178,7 +177,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 {...{
                                   documentRevisions,
                                   documentRevision,
-                                  availableReferences,
                                   showRevisionTypeChange,
                                   proposedDocId,
                                   setDocId,

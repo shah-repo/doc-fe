@@ -248,7 +248,7 @@ Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
-  cy.get("[data-cy=\"field-name\"]").arrowClick();
+  cy.get("[data-cy=\"field-name\"]").arrowClick().wait(500);
   cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
   cy.unClick();
 });
@@ -267,7 +267,7 @@ Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) 
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-  cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType(params.description);
+  cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType(params.description);
   cy.unClick();
 });
 
@@ -903,7 +903,7 @@ Cypress.Commands.add("drVerifyDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("drClickRevisionsSidePanel", () => {
-  cy.get(`button[data-cy="sss"]`).eq(1).arrowClick();
+  cy.get(`button[data-cy="note-icon"]`).arrowClick();
 });
 
 Cypress.Commands.add("drPatchDocType", (params: {

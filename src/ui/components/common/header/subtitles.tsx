@@ -7,10 +7,15 @@ const LHR_SUBTITLE_PRECALC_KEY = "lshs_subtitle";
 
 const LABEL_LENGTH = 50;
 const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: string}) => any =
-  ({ label }) => (
-    <div>
+  ({ docRevId, documentId, label }) => (
+    <a
+      href={`/document_revision/${documentId}/version/${docRevId}`}
+      target={"_self"}
+      style={{ textDecoration: "none" }}
+      rel="noopener noreferrer">
       {label.length < LABEL_LENGTH ? label : `${label.substr(0, LABEL_LENGTH - 3)}...`}
-    </div>);
+    </a>
+  );
 
 const generateLHRSubtitle = (documentRevision: DocumentRevision) => <React.Fragment>
   {`${documentRevision.document?.lot?.lotId}`}
