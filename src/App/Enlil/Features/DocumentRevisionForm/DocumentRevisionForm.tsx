@@ -165,9 +165,17 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                       return (
                         <SMBox
-                          height={(_documentRevisionFormState?.isDescriptionFocused || isCreateUrl) ? getHeight() :
-                            ((_documentRevisionFormState?.isDesTextClamped || _documentRevisionFormState?.isDescriptionFocused) ?
-                              "calc(100vh - 310px)" : (isLHR && !documentRevision.changeRequest ? "calc(100vh - 256px)" : "calc(100vh - 307px)"))}
+                          height={
+                            (_documentRevisionFormState?.isDescriptionFocused ||
+                          isCreateUrl)
+                              ? getHeight()
+                              : (_documentRevisionFormState?.isDesTextClamped ||
+                              _documentRevisionFormState?.isDescriptionFocused)
+                                ? "calc(100vh - 310px)"
+                                : (isLHR && !documentRevision.changeRequest)
+                                  ? "calc(100vh - 256px)"
+                                  : "calc(100vh - 307px)"
+                          }
                           key={index}
                           pb={(isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? 0 : 2}
                           overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
