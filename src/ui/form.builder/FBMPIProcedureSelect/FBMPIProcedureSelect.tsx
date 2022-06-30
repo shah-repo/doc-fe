@@ -47,7 +47,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                   `${option.document.docId} | ${option.precalc?.lot_part || ""}`
                 }
                 inputPropStyleSize="small"
-                isCustomHeight = {{ height: 40 }}
+                customStyles = {{ height: 40 }}
                 inputStyle={{ padding: 0 }}
               />
               <FBQuantityUnitField gutter={false} {...{ initialValues, unitDisabled }} />

@@ -45,17 +45,13 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
         <FormControlLabel
           key={`fb-${value}-${index}`}
           control={
-            <Radio disableTouchRipple color="primary"
-              icon={
-                disabled ? (
-                  <DisabledUnCheckedRadioIcon />
-                ) : (
-                  <UnCheckedRadioIcon />
-                )
-              }
-              checkedIcon={
-                disabled ? <DisabledCheckedRadioIcon /> : <CheckedRadioIcon /> } {...{ disabled }}
-              {...(controlValue && { checked: controlValue === value })} />}
+            <Radio
+              disableTouchRipple color="primary"
+              icon={ disabled ? ( <DisabledUnCheckedRadioIcon /> ) : ( <UnCheckedRadioIcon /> ) }
+              checkedIcon={ disabled ? <DisabledCheckedRadioIcon /> : <CheckedRadioIcon /> }
+              {...{ disabled }}
+              {...(controlValue && { checked: controlValue === value })}
+            />}
           {...{ value }}
           label={<Text {...{ message }} />}
         />

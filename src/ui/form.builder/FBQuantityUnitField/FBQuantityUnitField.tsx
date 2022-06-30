@@ -25,7 +25,7 @@ const FBQuantityUnitField: React.FunctionComponent<FBQuantityUnitFieldProps> = (
         defaultValue={initialValues?.unit}
         disabled={unitDisabled}
         inputPropStyleSize="small"
-        isCustomHeight = {{ height: 40 }}
+        customStyles = {{ height: 40 }}
         inputStyle={{ padding: 0 }}
       />
     </Box>
