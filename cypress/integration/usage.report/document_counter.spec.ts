@@ -4101,15 +4101,15 @@ context("Test usage report is correctly counting documents", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.lhrSubmitForApproval();
       });
 
       it("Approve approval", () => {
-        cy.ebApprove();
+        cy.lhrApprove();
       });
     });
   });
