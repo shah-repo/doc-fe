@@ -180,7 +180,7 @@ DocumentRevisionFormContainerProps
   } else if (pmForm) {
     mode = "form";
   }
-
+  _formState?.setMode(mode);
   useEffect(() => {
     _formState?.setMode(mode);
   // eslint-disable-next-line react-hooks/exhaustive-deps
