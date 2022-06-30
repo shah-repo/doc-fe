@@ -111,7 +111,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   inputProps={{
                     ...params.inputProps,
                     "style": {
-                      padding: "10.5px 0", ...inputStyle, marginRight: isCustomHeight ? "10px" : disabled  ? "28px" : "0px",
+                      padding: "10.5px 0", ...inputStyle, marginRight: isCustomHeight ?
+                        "10px" : disabled  ? "28px" : "0px",
                       fontSize: 14,
                     },
                     "data-cy": props.name,
