@@ -139,7 +139,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         <SMTemplate
           templateBoxProps={{ stretchY: "100%" }}
           contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
-          boxProps={{ overflow: "scroll", height: isCreateUrl ? "calc(100vh - 48px)" :  "86vh" }}
+          boxProps={{ overflow: "auto", height: isCreateUrl ? "calc(100vh - 48px)" :  "86vh" }}
           header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
           lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
         >
@@ -153,7 +153,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                   const tabType = tabInfo.type;
                   const showTabContent = _tabsState?.tabID === tabInfo.tabId;
-                  return <SMBox height="auto" key={index} overflow={"auto"} {...{ onScroll }}>
+                  return <SMBox height="auto" key={index} {...{ onScroll }}>
                     <SMBox mt={2} stretchY="calc(100% - 40px)">
                       {tabType === "MIXED" && <>
                         <DocumentRevisionFormPresenter
