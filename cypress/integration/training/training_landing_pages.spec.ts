@@ -28,8 +28,8 @@ let clinicalProtocolDocumentType;
 let createdClinicalProtocolForm;
 let developersGroup;
 let createdClinicalProtocolForm2;
-const assignDate = moment().tz("America/Los_Angeles").format("l");
-const dueDate = moment().tz("America/Los_Angeles").add(1, "month").subtract(1, "days").format("l");
+const assignDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
+const dueDate = moment().tz("America/Los_Angeles").add(30, "days").format("M/D/YYYY");
 
 context("Test training records and training curriculum landing page", () => {
   before(() => {
@@ -762,12 +762,14 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     it(`Verify drag and drop TRN ID header on second slot`, () => {
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TRN-");
+      cy.get(`th>span>span>span[class="k-column-title"]`).eq(0).should("contain.text", "TRN ID");
+      cy.get(`th[aria-colindex="1"][role="columnheader"]>span>span`).contains("TRN ID");
+      cy.get(`th[aria-colindex="2"][role="columnheader"]>span>span`).contains("Doc ID");
       cy.dragAndDrop({
-        fromSelector: `th[aria-colindex="1"][role]>span>span`,
-        toSelector: `th[aria-colindex="2"][role]>span>span`,
+        fromSelector: `th[aria-colindex="1"][role="columnheader"]>span>span`,
+        toSelector: `th[aria-colindex="2"][role="columnheader"]>span>span`,
       });
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "FM-");
+      cy.get(`th>span>span>span[class="k-column-title"]`).eq(0).should("contain.text", "Doc ID");
     });
 
     it(`Column grouping should be displayed`, () => {

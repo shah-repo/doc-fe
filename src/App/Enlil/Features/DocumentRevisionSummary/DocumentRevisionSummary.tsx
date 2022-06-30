@@ -81,7 +81,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
     smartReferencesFrom?.forEach((ele, i) => {
       const obj = schema?.filter((el) => ele.metadata.fieldId === el.name);
-      ele.stepIndex = obj && obj[0].stepIndex;
+      ele.stepIndex = obj?.[0]?.stepIndex;
     });
   }
 

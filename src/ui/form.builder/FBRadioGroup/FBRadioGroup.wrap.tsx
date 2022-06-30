@@ -3,6 +3,10 @@ import { at, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBOption, FBRadioGroupProps } from "..";
+import { ReactComponent as CheckedRadioIcon } from "../../../assets/images/radio.svg";
+import { ReactComponent as DisabledCheckedRadioIcon } from "../../../assets/images/radio_checked_disabled.svg";
+import { ReactComponent as UnCheckedRadioIcon } from "../../../assets/images/unchecked_radio.svg";
+import { ReactComponent as DisabledUnCheckedRadioIcon } from "../../../assets/images/unchecked_radio_disabled.svg";
 import Text from "../../components/Text";
 import { isTranslation } from "../../translations/types";
 import { withFBOption } from "../FBOption/FBOption.wrap";
@@ -40,7 +44,14 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
       return (
         <FormControlLabel
           key={`fb-${value}-${index}`}
-          control={<Radio {...{ disabled }} {...(controlValue && { checked: controlValue === value })} />}
+          control={
+            <Radio
+              disableTouchRipple color="primary"
+              icon={ disabled ? ( <DisabledUnCheckedRadioIcon /> ) : ( <UnCheckedRadioIcon /> ) }
+              checkedIcon={ disabled ? <DisabledCheckedRadioIcon /> : <CheckedRadioIcon /> }
+              {...{ disabled }}
+              {...(controlValue && { checked: controlValue === value })}
+            />}
           {...{ value }}
           label={<Text {...{ message }} />}
         />
