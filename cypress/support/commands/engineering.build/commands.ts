@@ -16,6 +16,7 @@ declare global {
       ebApprove(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
+      ebClickCloneFromHeader(): Chainable<Subject>;
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
       ebWithdrawSubmisison(): Chainable<Subject>;
@@ -52,6 +53,18 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
 });
 
 Cypress.Commands.add("ebClickClone", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
+    cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
+  });
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebClickCloneFromHeader", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
