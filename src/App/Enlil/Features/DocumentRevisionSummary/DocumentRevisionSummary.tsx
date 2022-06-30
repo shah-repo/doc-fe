@@ -123,7 +123,10 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
               contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
-              boxProps={{ overflow: (_documentRevisionFormState?.expanded ? "scroll" : "visible"), height: "86vh" }}
+              boxProps={{
+                overflow: (_documentRevisionFormState?.expanded ? "scroll" : "visible"),
+                height: "calc(100vh - 130px)",
+              }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
@@ -143,9 +146,12 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
                       return (
                         <SMBox
-                          pb={_documentRevisionFormState?.isDesTextClamped ? 0 : 2.5}
+                          pb={_documentRevisionFormState?.isDesTextClamped ? 0 :
+                            (isLHR && !documentRevision.changeRequest ? 0 : 2.5)}
                           height={_documentRevisionFormState?.expanded ? "auto" :
-                            (_documentRevisionFormState?.isDesTextClamped ? "66vh" : "71vh")}
+                            (_documentRevisionFormState?.isDesTextClamped ? "calc(100vh - 325px)" :
+                              (!documentRevision.changeRequest ? (!_documentRevisionFormState?.isLHRProgressBarVisible ?
+                                "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 280px)"))}
                           overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
                           <SMBox>
                             {tabType === "MIXED" &&  <>

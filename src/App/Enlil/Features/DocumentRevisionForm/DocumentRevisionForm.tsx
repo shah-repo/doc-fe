@@ -110,7 +110,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
-  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? "67vh" : "80vh";
+  const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ?
+    "calc(100vh - 310px)" : "calc(100vh - 260px)";
 
   return (
     <SMForm
@@ -147,7 +148,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 overflow: (_documentRevisionFormState?.expanded ? "scroll" :
                   (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
                     (_documentRevisionFormState?.isDescriptionFocused)) ? "scroll" : "visible")),
-                height: isCreateUrl ? "95vh" :  "calc(100vh - 130px)",
+                height: isCreateUrl ? "calc(100vh - 100px)" :  "calc(100vh - 130px)",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
@@ -165,7 +166,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       return (
                         <SMBox
                           height={(_documentRevisionFormState?.isDescriptionFocused || isCreateUrl) ? getHeight() :
-                            ((_documentRevisionFormState?.isDesTextClamped || _documentRevisionFormState?.isDescriptionFocused) ? "65vh" : "70vh")}
+                            ((_documentRevisionFormState?.isDesTextClamped || _documentRevisionFormState?.isDescriptionFocused) ?
+                              "calc(100vh - 310px)" : (isLHR && !documentRevision.changeRequest ? "calc(100vh - 256px)" : "calc(100vh - 307px)"))}
                           key={index}
                           pb={(isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? 0 : 2}
                           overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
