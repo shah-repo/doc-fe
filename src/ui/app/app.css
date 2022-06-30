@@ -4,11 +4,6 @@
   scroll-behavior: inherit !important;
 }
 
- /* override browser form-filling and input highlight */
-input {
-  -webkit-background-clip: text !important;
-}
-
 :root {
   --navy: #011FBB;
   --almost_black: #080B11;
