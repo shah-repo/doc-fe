@@ -111,7 +111,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   }, [tabConfig]);
 
   const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ?
-    "calc(100vh - 310px)" : "calc(100vh - 260px)";
+    "calc(100vh - 310px)" : "auto";
 
   return (
     <SMForm
@@ -145,10 +145,10 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               templateBoxProps={{ stretchY: "100%" }}
               contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
               boxProps={{
-                overflow: (_documentRevisionFormState?.expanded ? "scroll" :
+                overflow: (_documentRevisionFormState?.expanded ? "auto" :
                   (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
-                    (_documentRevisionFormState?.isDescriptionFocused)) ? "scroll" : "visible")),
-                height: isCreateUrl ? "calc(100vh - 100px)" :  "calc(100vh - 130px)",
+                    (_documentRevisionFormState?.isDescriptionFocused)) ? "auto" : "")),
+                height: isCreateUrl ? "calc(100vh - 105px)" :  "calc(100vh - 130px)",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
@@ -178,7 +178,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           }
                           key={index}
                           pb={(isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ? 0 : 2}
-                          overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
+                          overflow={_documentRevisionFormState?.expanded ? "" : "auto"} {...{ onScroll }}>
                           <SMBox>
                             {tabType === "MIXED" && <>
                               <DocumentRevisionFormPresenter

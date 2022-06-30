@@ -124,7 +124,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
               templateBoxProps={{ stretchY: "100%" }}
               contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
               boxProps={{
-                overflow: (_documentRevisionFormState?.expanded ? "scroll" : "visible"),
+                overflow: (_documentRevisionFormState?.expanded ? "auto" : ""),
                 height: "calc(100vh - 130px)",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
@@ -153,7 +153,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                               (!documentRevision.changeRequest ? (isLHR &&
                                 !_documentRevisionFormState?.isLHRProgressBarVisible ?
                                 "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 280px)"))}
-                          overflow={_documentRevisionFormState?.expanded ? "auto" : "scroll"} {...{ onScroll }}>
+                          overflow="auto" {...{ onScroll }}>
                           <SMBox>
                             {tabType === "MIXED" &&  <>
                               <SummaryPresenter

@@ -1,7 +1,8 @@
 import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionFormHeaderProps } from "../../../../..";
+import { DocumentRevisionFormHeaderProps, SM } from "../../../../..";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../../../../ui/constants/urls";
 import Title from "../../../../../../ui/document.revision/form/title";
 import ChangeRequestLink from "../../../../../../ui/document.revision/summary/changeRequestLink";
 import Description from "../../../../../../ui/documentRevision/forms/presenters/Description";
@@ -16,7 +17,7 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
     {() => (
       <Box
         id="SMHeaderTmpl"
-        paddingTop={0.75}
+        paddingTop={SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) ? 2 : 0.75}
         paddingBottom={1.25}
         pl={2.75}
         pr={4.25}
