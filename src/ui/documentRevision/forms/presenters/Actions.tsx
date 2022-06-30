@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { get, isEqual, isUndefined, keys, omit } from "lodash";
+import { get, isArray, isEqual, isUndefined, keys, omit } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -131,7 +131,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     switch (_formState?.mode) {
       case "design":
         formik.setFieldValue("formTemplate", {
-          outputDocumentTypes: (values?.outputDocumentTypes ? [values?.outputDocumentTypes] : [])
+          outputDocumentTypes: (values?.outputDocumentTypes ?
+            isArray(values?.outputDocumentTypes) ? values?.outputDocumentTypes : [values?.outputDocumentTypes]
+            : [])
             .map((outputDoc) => ({ id: outputDoc.value })),
           schema,
         });
