@@ -57,6 +57,19 @@ export const RecordDocumentType: IdocumentTypeDto = {
   category: Categories.Record,
   group: DOC_TYPE_GROUP.RECORD,
   isQms: true,
+  schema: [{
+    index: 0,
+    name: ATTACHMENT_BUILT_IN_KEY,
+    label: "Attachments",
+    type: ATTACHMENTS,
+    applicableOn: [
+      ON_STATE_TO_IN_REVIEW,
+    ],
+    deleteDisabled: true,
+    deleteInFormDisabled: true,
+    applicableValidationSchema: true,
+    tabId: "overview",
+  }],
 };
 
 export const AdditionalType: IdocumentTypeDto =    {

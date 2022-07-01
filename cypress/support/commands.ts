@@ -272,25 +272,6 @@ Cypress.Commands.add("unClick", () => {
   cy.get("body").arrowClick( 10, 10, { force: true });
 });
 
-// Cypress.Commands.add("wrapWithWaitOnApiCalls", (names: CyRoutes[], callback: () => void) => {
-//   const functionRequestTimeout: number = 40 * 1000;
-//   const functionResponseTimeout: number = 40 * 1000;
-//   const aliasesToWait: string[] = [];
-
-//   names.forEach((name) => {
-//     const { requestConfig } = routes[name];
-//     cy.intercept(requestConfig).as(name);
-//   });
-
-//   names.forEach((name) => {
-//     aliasesToWait.push(`@${name}`);
-//   });
-
-//   callback();
-
-//   cy.wait(aliasesToWait, { responseTimeout: functionResponseTimeout, requestTimeout: functionRequestTimeout });
-// });
-
 Cypress.Commands.add(
   "wrapWithWaitOnApiCalls",
   (names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>) => {
@@ -377,39 +358,4 @@ Cypress.Commands.add("dragAndDropTopDown", (params: {fromSelector: string; toSel
     .realMouseMove(0, 200, { position: "bottom" })
     .realMouseUp();
 });
-
-// Cypress.Commands.overwrite("click", (originalFn, element, options) => {
-//   const state = cy.state("current").attributes.name;
-
-//   if (state === "click") {
-//     cy.wrap(element)
-//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-//       .then(() => originalFn(element, options));
-//   }
-//   else {
-//     return originalFn(element, options);
-//   }
-// });
-
-// Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
-//   const state = cy.state("current").attributes.name;
-
-//   if (state === "type") {
-//     cy.wrap(element)
-//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-//       .then(() => originalFn(element, text, options));
-//   }
-//   else {
-//     return originalFn(element, text, options);
-//   }
-// });
-
-// Cypress.Commands.add("type", { prevSubject: true }, (subject, thingToTypeIn: string, options?: any) => {
-//   cy.wrapWithWaitOnApiCalls([CyRoutes.PostFieldLocks], () => {
-//     cy.wrap(subject).arrowClick();
-//   });
-//   cy.wrapWithWaitOnApiCalls([CyRoutes.ExpireFieldLocks], () => {
-//     cy.wrap(subject).arrowType(thingToTypeIn, options).unClick();
-//   });
-// });
 
