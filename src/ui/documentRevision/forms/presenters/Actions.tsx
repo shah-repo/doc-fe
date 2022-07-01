@@ -158,7 +158,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                 "partType", "childForRevise"]));
         } else {
           const formValues = _formState?.getValues();
-          const formInputObj = formValues?.formInput ? formValues?.formInput : formValues;
+          const formInputObj = formValues?.formInput ?? formValues;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue("formInput",
             omit(formInputObj,
