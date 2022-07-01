@@ -16,6 +16,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   onBlur,
   editorRef,
   _textEditorState,
+  _documentRevisionFormState,
   _formState,
   boxProps,
   loading,
@@ -31,18 +32,19 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
 }) => {
   const classes = SMEditorStyles();
   const intl = useIntl();
-  const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
   const descriptionPlaceholder = intl.formatMessage({ id: "form.builder.enter.description" });
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
   const toggleBtn = () => {
-    setFlag(!flag);
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
+    _documentRevisionFormState?.setDescriptionFocused(!_documentRevisionFormState?.isDescriptionFocused);
+    _documentRevisionFormState?.setExpanded(!_documentRevisionFormState?.expanded);
   };
   const onAway = () => {
+    _documentRevisionFormState?.setExpanded(false);
+    _documentRevisionFormState?.setDescriptionFocused(false);
     _textEditorState?.setPreviewMode(true);
-    setFlag(true);
     showToggleButton && showToggleButton();
   };
   return  (
@@ -82,10 +84,11 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                       <Editor
                         onFocus={() => {
                           _textEditorState?.setPreviewMode(false);
+                          _documentRevisionFormState?.setDescriptionFocused(true);
                           setTimeout(() => {
                             const moreThanTwoLines =
                                 Math.floor(_textEditorState?.editorReference.editorContainer.clientHeight / 24) > 2;
-                            setFlag(!moreThanTwoLines);
+                            _documentRevisionFormState?.setExpanded(moreThanTwoLines);
                           });
                         }}
                         onChange={() => showToggleButton && showToggleButton()}
@@ -114,7 +117,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
             {isTextClamped ? <Button variant="text"
               onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
               className={classes.moreOrLess}>{viewMore}</Button> : (
-              !_textEditorState?.previewMode && !isTextClamped && !flag && <Button variant="text"
+              !_textEditorState?.previewMode && !isTextClamped &&
+              _documentRevisionFormState?.expanded && <Button variant="text"
                 onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
                 className={classes.moreOrLess}
               >{viewLess}</Button>)}
