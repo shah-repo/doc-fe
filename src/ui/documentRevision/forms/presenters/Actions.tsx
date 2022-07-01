@@ -53,6 +53,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     values,
     asyncState,
     canChangeOwnerShip,
+    mode,
     type,
   } = React.useContext(FormHeaderContext)!;
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
@@ -128,7 +129,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const workspaceSchema = _documentRevisionFormState?.schema;
     const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     const values = get(formik, "values") as DocumentRevision;
-    switch (_formState?.mode) {
+    switch (mode) {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values?.outputDocumentTypes ?
@@ -157,8 +158,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         } else {
-          const formValues = _formState?.getValues();
-          const formInputObj = formValues?.formInput ?? formValues;
+          const formInputObj = values?.formInput ?? values;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue("formInput",
             omit(formInputObj,
