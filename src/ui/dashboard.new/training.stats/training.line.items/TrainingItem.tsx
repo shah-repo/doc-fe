@@ -76,7 +76,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             {name}
           </Typography>
         </Grid>
-        <Grid item>
+        <Grid item className={classes.gridItems}>
           {isOverdue && (
             <Typography
               component="span"

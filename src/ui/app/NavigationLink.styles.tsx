@@ -9,7 +9,6 @@ export default makeStyles((theme: Theme) =>
       "&:hover": {
         color: Colors.white,
         backgroundColor: Colors.bright_grey,
-        borderBottom: "1px solid",
         borderImage: `linear-gradient(270deg, ${Colors.cerulean} 0.17%, ${Colors.peri_winkle_blue} 74.99%, ${Colors.navy} 109.83%)`,
         borderImageSlice: 1,
       },
