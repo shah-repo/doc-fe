@@ -1,10 +1,11 @@
 import { get } from "lodash";
+import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../../ui/constants/urls";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { FB, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
+import { FB, FBEditorState, FBFormState, FBProvider, FBSchemaProps, FBWorkspaceState } from "../../../../ui/form.builder";
 import FBLeftPanelState from "../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state";
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -23,6 +24,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     // MARK: @config
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const { _formState, _tabsState } = SM.useStores();
+    let updatedSchema: FBSchemaProps[] = _documentRevisionFormState?.schema;
     const leftPanelState = FB.useRef<FBLeftPanelState>(FBLeftPanelState);
     const editorState = FB.useRef<FBEditorState>(FBEditorState);
     const formState = FB.useRef<FBFormState>(FBFormState, {});
@@ -34,8 +36,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     });
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
-    console.log("_documentRevisionFormState", _documentRevisionFormState);
-    console.log("workspaceState", workspaceState);
 
     useEffect(() => {
       if (!document?.id) { return; }
@@ -100,6 +100,10 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onScroll = () => {};
 
+    useObserver(() => {
+      updatedSchema = _documentRevisionFormState?.schema || [];
+    });
+
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
         <FBProvider {...{ leftPanelState, editorState, formState, workspaceState }}>
@@ -112,7 +116,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               _tabsState,
               _formState,
               autosaveEnabled,
-              schema: _documentRevisionFormState?.schema,
+              schema: updatedSchema,
               workspaceState,
               isCreateUrl,
             }}
