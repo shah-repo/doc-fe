@@ -104,6 +104,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         validate={validator(required)}
         isDisabled={isDisabled}
         onChange={handleTypeChange}
+        portal={true}
       />
       {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
     </Box>
