@@ -34,6 +34,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     });
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
+    console.log("_documentRevisionFormState", _documentRevisionFormState);
+    console.log("workspaceState", workspaceState);
 
     useEffect(() => {
       if (!document?.id) { return; }

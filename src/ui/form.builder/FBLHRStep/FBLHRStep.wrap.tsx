@@ -4,6 +4,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
+import { DocumentRevisionFormState, SM } from "../../../App";
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { getHighestRevision, getLatesReferenceVersion } from "../../documentRevision/forms/transform";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
@@ -32,6 +33,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    const _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter( (ref) => ref.active
       && ref.type === SmartReferenceType.HiddenPiInstance
       && ref.metadata.fieldId === name);
@@ -74,15 +76,20 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (value) => {
+        debugger;
+        console.log(value);
         if (!stepLHRs) { // don't trigger if it is LHR/MPI hover toggle
           const editorConfig = !value ? omit(schemaItem?.editorConfig, "parameters") : schemaItem?.editorConfig;
           workspaceState?.setSchemaItem({
             ...schemaItem,
             editorConfig: {
               ...editorConfig,
-              value,
+              ...{ value },
             },
           });
+          // documentRevisionFormState
+          _documentRevisionFormState.setFBSchema(workspaceState?.schema);
+          // workspaceState?.resetSchema();
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
