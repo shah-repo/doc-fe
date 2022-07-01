@@ -57,7 +57,13 @@ const styles = makeStyles((theme) => ({
     height: 20,
   }),
   linkButton: {
-    padding: 0,
+    "padding": 0,
+    "fontSize": "14px",
+    "fontWeight": 400,
+    "color": Colors.navy,
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
   },
 }));
 
@@ -132,12 +138,13 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
       { (!isChangeRequestFormOnScreenContext && !isRecord) &&
       <Button
         color="primary"
+        disableRipple
         startIcon={<AttachFileIcon />}
         onClick={openDialog}
         id="AttachmentFieldPresenter-linkButton"
         className={classes.linkButton}
       >
-        Upload Files
+        <Text translation="common.upload.files" />
       </Button>
       }
 

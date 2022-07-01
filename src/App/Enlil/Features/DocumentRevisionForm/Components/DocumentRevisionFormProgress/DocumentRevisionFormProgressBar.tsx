@@ -11,6 +11,7 @@ import {
   isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased,
 } from "../../../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
+import SM from "../../../../../Shifamed/Utils/SM/SM";
 import { BorderLinearProgress } from "./BorderLinearProgress";
 
 interface Props {
@@ -21,6 +22,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
   smartReferencesFrom,
 }) => {
   const intl = useIntl();
+  const { _documentRevisionFormState } = SM.useStores();
   const [inprogress, setInprogress] = useState<number[]>([]);
   const [completed, setCompleted] = useState<number[]>([]);
   const getLHRStatus = (stepLHRs?: Nullable<DocumentRevision>) => {
@@ -45,6 +47,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
     });
     setInprogress(inProgress);
     setCompleted(complete);
+    _documentRevisionFormState?.setIsLHRProgressBarVisible(!isEmpty(inProgress) || !isEmpty(complete));
   };
 
   useEffect(() => {

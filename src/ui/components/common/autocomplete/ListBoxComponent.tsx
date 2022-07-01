@@ -41,6 +41,9 @@ const renderRow = (props: ListChildComponentProps) => {
       whiteSpace: "nowrap",
     },
   });
+  if (!_documentRevisionFormState?.leftPanelOpen) {
+    return listItem;
+  }
   return (
     <StyleTooltip
       ref={inputRef}

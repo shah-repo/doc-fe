@@ -52,7 +52,6 @@ export const selectStyles: StylesConfig = {
   }),
   menu: (provided) => ({
     ...provided,
-    position: "relative",
   }),
 };
 
@@ -103,6 +102,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
       <Select
         {...fieldProps.field}
         {...autocompleteProps}
+        menuPlacement="auto"
         options={options}
         onChange={onChange}
         styles={selectStyles}

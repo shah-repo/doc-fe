@@ -17,7 +17,7 @@ export const FBLHRStepStyles = makeStyles(() =>
       "border": 0,
       "&.Mui-disabled": {
         border: "none",
-        backgroundColor: Colors.gains_boro,
+        backgroundColor: Colors.whitest_grey,
         color: Colors.spanish_gray,
       },
       "&:hover": {
