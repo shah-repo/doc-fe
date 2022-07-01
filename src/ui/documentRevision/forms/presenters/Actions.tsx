@@ -157,9 +157,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         } else {
+          const formValues = _formState?.getValues();
+          const formInputObj = formValues?.formInput ? formValues?.formInput : formValues;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue("formInput",
-            omit(_formState?.getValues(),
+            omit(formInputObj,
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         }
