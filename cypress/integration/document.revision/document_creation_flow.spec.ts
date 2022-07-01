@@ -143,16 +143,6 @@ context("Document Creation Flow", () => {
       cy.drSetDocTypeId({ docId: "00999" });
     });
 
-    it("Select reference for document", () => {
-      SystemRequirement("REQ-0180");
-      cy.drSelectReferences( "AR Form");
-    });
-
-    it("Remove reference for document", () => {
-      SystemRequirement("REQ-0190");
-      cy.drRemoveReferences( 0 );
-    });
-
     it("'Training Required' should be unchecked initially", () => {
       cy.drIsTrainingRequired({ shouldBe: false });
     });
@@ -163,6 +153,24 @@ context("Document Creation Flow", () => {
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Select reference for document", () => {
+      SystemRequirement("REQ-0180");
+      cy.drSelectReferences( "AR Form");
+    });
+
+    it("Remove reference for document", () => {
+      SystemRequirement("REQ-0190");
+      cy.drRemoveReferences({ reference: "FM-00001" });
     });
 
     context("Uploads attachments", () => {
@@ -256,12 +264,6 @@ context("Document Creation Flow", () => {
         cy.get("[data-cy=\"field-securityGroups\"]")
           .contains("Enter the name of the user groups to access the document");
       });
-    });
-  });
-
-  context("Creates document", () => {
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
