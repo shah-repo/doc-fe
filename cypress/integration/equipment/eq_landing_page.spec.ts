@@ -1651,7 +1651,7 @@ context("NCO document type management", () => {
 
       it("Filter by Owner & Location", () => {
         SystemRequirement("REQ-2840");
-        cy.filterEquipByOwnerAndLocation({ owner: USERS[1].name, location: "IQC" });
+        cy.filterEquipByOwnerAndLocation({ owner: USERS[1].name, location: "Portable" });
       });
 
 
@@ -1660,7 +1660,7 @@ context("NCO document type management", () => {
       });
 
       it("Verify Location value", () => {
-        cy.get("tr.k-master-row").first().find("td").eq(8).contains("IQC");
+        cy.get("tr.k-master-row").first().find("td").eq(8).contains("Portable");
       });
     });
   });
