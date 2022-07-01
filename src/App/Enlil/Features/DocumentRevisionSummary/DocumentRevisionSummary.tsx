@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
@@ -186,6 +186,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                               />
                             )}
                             {tabType === TabTypeOptions.TABS_MEQ &&
+                            documentRevision.status !== DocumentRevisionStatus.Voided &&
                               <FBMaterialEqInfoContainer
                                 documentRevisionId={documentRevision?.id}
                               />
