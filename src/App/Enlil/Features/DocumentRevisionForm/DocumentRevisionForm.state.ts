@@ -2,7 +2,7 @@ import { action, computed, observable, set } from "mobx";
 import { DocumentInfo, DocumentRevisionFormStateProps, SMStore } from "../../..";
 import { Id } from "../../../../state/ducks/common/types";
 import { DocumentType, DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionDocument, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionDocument, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../../../ui/components/notifications";
 import { FBInputType, FBSchemaProps, FBWorkspaceMode } from "../../../../ui/form.builder";
 import { FBEndpoint } from "../../../../ui/form.builder/defaults/FBEndpoint";
@@ -188,7 +188,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // *TODO
   // Extend this to have one saving point for doc rev (static and fb)
   public save = (name: string, value: any) => {
-    if (this.documentRevision?.status === "RELEASED") { return; }
+    if (this.documentRevision?.status === DocumentRevisionStatus.Released) { return; }
     this.setDirty(true);
     if (!this.formAutosave) { return; }
     const { id } = this.documentRevision || {};
