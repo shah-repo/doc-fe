@@ -244,17 +244,17 @@ context("Record inline history Flow", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
           cy.unClick();
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostOrPatchDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
-            cy.unClick();
-            cy.progressBarShouldNotExist();
-          });
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.PostOrPatchDocRev, () => {
+              cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
+              cy.unClick();
+              cy.progressBarShouldNotExist();
+            });
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
           cy.drEnterDocumentDescription({ description: "History Test Inline Record description" });
+          cy.pause();
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -266,6 +266,7 @@ context("Record inline history Flow", () => {
 
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4400");
+          cy.pause();
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
           cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
@@ -357,6 +358,7 @@ context("Record inline history Flow", () => {
 
         it("Navigate to released document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
           });
         });
@@ -386,6 +388,7 @@ context("Record inline history Flow", () => {
       context("Check inline approval history on released Superseded document", () => {
         it("Navigate to Superseded document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).arrowClick();
           });
         });
