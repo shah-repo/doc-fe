@@ -171,18 +171,11 @@ context("Check Document History", () => {
 
     it("Change document type id to 'FM-00004'", () => {
       cy.drSetDocTypeId({ docId: documentId.value });
-    });
-
-    it("Select reference for document", () => {
-      cy.drSelectReferences( reference.value );
+      cy.pause();
     });
 
     it("Mark 'Training Required'", () => {
       cy.drClickTrainingRequired();
-    });
-
-    it("Uploads test_image.jpg", () => {
-      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
     });
 
     it(`Select user: ${sharedUser.name}`, () => {
@@ -210,6 +203,14 @@ context("Check Document History", () => {
   });
 
   context("Edit document attributes", () => {
+    it("Select reference for document", () => {
+      cy.drSelectReferences( reference.value );
+    });
+
+    it("Uploads test_image.jpg", () => {
+      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+    });
+
     it("edit the title", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });

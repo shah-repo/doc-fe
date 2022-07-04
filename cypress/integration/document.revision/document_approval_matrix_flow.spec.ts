@@ -202,6 +202,9 @@ context("Document Approval Matrix Flow", () => {
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
+      cy.get("[data-cy=\"form.builder.add.item\"]").last().arrowClick();
+      cy.pause();
     });
   });
 
@@ -213,6 +216,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Check Document types", () => {
+      cy.pause();
       SystemRequirement("REQ-0480");
       let exists = true;
       docTypes = docTypes || [];

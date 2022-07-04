@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -138,8 +139,8 @@ context("Document force required fields", () => {
   });
 
   context("Document in Draft without title and description", () => {
-    it("Check if document status is Draft after creating a document", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Check if document status is ${STATUS_TYPES_LABEL.DRAFT} after creating a document`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { docId = x.text(); });
     });
 
@@ -216,25 +217,30 @@ context("Document force required fields", () => {
   context("Revise the document and modify fields", () => {
     it("Click 'Revise Document' button", () => {
       cy.drClickReviseDocument();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("remove description", () => {
       cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-      cy.get("[data-cy=\"description\"]").first().clear();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
       cy.unClick();
     });
 
     it("remove title", () => {
-      cy.get("#Title-field").find("svg").arrowClick();
+      cy.get("[data-cy=\"field-name\"]").arrowClick().find("svg").arrowClick();
+      cy.unClick();
+      cy.pause();
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      // cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
   context("Verify user is forced to fill required fields", () => {
     it("Click on 'Approve and release' button", () => {
+      cy.pause();
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 
