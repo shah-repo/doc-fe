@@ -82,7 +82,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             freeSolo,
             filterOptions,
             disableClearable,
-            customStyles,
           }}
           PopperComponent={CustomPopper}
           options={modifiedOptions}
@@ -154,7 +153,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             freeSolo,
             filterOptions,
             disableClearable,
-            customStyles,
           }}
           PopperComponent={CustomPopper}
           options={modifiedOptions}
