@@ -1,4 +1,4 @@
-import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Box, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import { get } from "lodash";
 import * as React from "react";
@@ -17,6 +17,8 @@ import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus"
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 import RenderHtmlField from "./RenderHtmlField";
+import { FBProvider, FBDialog, FB, FBDialogState, FBForm } from "../../../form.builder";
+import Text from "../../../components/Text";
 
 interface Props {
   status: DocumentRevisionStatus;
@@ -88,26 +90,57 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     _documentRevisionFormState?.setFBSchema(scheme);
   };
 
+  const dialogState = FB.useRef<FBDialogState>(FBDialogState);
+  const handlePreview: React.MouseEventHandler<HTMLElement> = React.useCallback(
+    () => {
+      dialogState?.config({
+        open: true,
+        maxWidth: "md",
+        title: "form.builder.form.preview",
+        content: (
+          <Box mx={8}>
+            <FBForm
+              schema={_documentRevisionFormState?.schema}
+              initialValidation={true}
+              workspaceMode="form"
+            />
+          </Box>
+        ),
+      });
+    },
+    [dialogState, _documentRevisionFormState?.schema]
+  );
+
   return (
-    <Box>
-      <AutocompleteField
-        name="outputDocumentTypes"
-        label="document.output.type"
-        autocompleteProps={{
-          id: "formTemplate.outputDocumentTypes",
-          isMulti: false,
-          closeMenuOnSelect: true,
-          className: !outputDocEnabled ? classes.outputGrey : "",
-          isOptionDisabled: (option) => selectedValues?.length >= 1,
-        }}
-        options={outputDocumentTypeOptions}
-        validate={validator(required)}
-        isDisabled={isDisabled}
-        onChange={handleTypeChange}
-        portal={true}
-      />
-      {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
-    </Box>
+    <FBProvider dialogState={dialogState}>
+      <FBDialog />
+      <Box>
+        <AutocompleteField
+          name="outputDocumentTypes"
+          label="document.output.type"
+          autocompleteProps={{
+            id: "formTemplate.outputDocumentTypes",
+            isMulti: false,
+            closeMenuOnSelect: true,
+            className: !outputDocEnabled ? classes.outputGrey : "",
+            isOptionDisabled: () => selectedValues?.length >= 1,
+          }}
+          options={outputDocumentTypeOptions}
+          validate={validator(required)}
+          isDisabled={isDisabled}
+          onChange={handleTypeChange}
+          portal={true}
+        />
+        {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handlePreview}
+        >
+          <Text message="form.builder.form.preview" />
+        </Button>
+      </Box>
+    </FBProvider>
   );
 };
 
