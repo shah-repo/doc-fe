@@ -974,8 +974,8 @@ context("Record inline Flow", () => {
 
       it("Check system creates new major revision after inline approve", () => {
         SystemRequirement("REQ-1040");
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-          .contains("Revision 2");
+        cy.drClickRevisionsSidePanel();
+        cy.recCheckRevisionStage({ stage: "Revision 2" });
       });
 
       context("Change textfield and approve again", () => {
@@ -1066,9 +1066,11 @@ context("Record inline Flow", () => {
       context("Approve and Release document", () => {
         it("Approve and release it", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+            cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+            cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
           });
           cy.recApproveAndReleaseInlineRecord();
@@ -1106,8 +1108,7 @@ context("Record inline Flow", () => {
 
         it("Verify record is in alpha state", () => {
           SystemRequirement("REQ-1060");
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-            .contains("Revision A");
+          cy.recCheckRevisionStage({ stage: "Revision A" });
         });
 
         it(`Check doc status for ${STATUS_TYPES_LABEL.RELEASED} and click on Send To Email`, () => {
