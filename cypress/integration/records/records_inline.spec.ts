@@ -791,7 +791,8 @@ context("Record inline Flow", () => {
       });
 
       it("Check inline record creation default to numeric revision", () => {
-        cy.get(`div[data-cy="common.revision"]`).parent().should("contain.text", "Revision1");
+        cy.drClickRevisionsSidePanel();
+        cy.recCheckRevisionStage({ stage: "Revision 1" });
       });
 
       it("Check approve button is not disabled", () => {
