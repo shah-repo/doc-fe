@@ -10,7 +10,7 @@ import { documentRevisionsActions, documentRevisionsSelectors } from "../../../.
 import { Document, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
-import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
+import { CustomStyleTooltip } from "../../../dashboard.new/line.items/common/CustomStyleTooltip";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
 import FileIcon from "./icon";
@@ -102,8 +102,8 @@ AttachmentIconProps
         id="AttachmentIconPresenter-handleRemove"
       >
         {removeHover ? (
-          <StyleTooltip
-            title={<Text translation={"common.remove"} />}
+          <CustomStyleTooltip
+            title={<Text translation={"common.delete"} />}
             placement="top"
             arrow
             classes={{
@@ -111,7 +111,7 @@ AttachmentIconProps
             }}
           >
             <RemoveDocumentActive />
-          </StyleTooltip>
+          </CustomStyleTooltip>
         ) : (
           <RemoveDocument />
         )}
