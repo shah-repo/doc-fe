@@ -188,6 +188,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // *TODO
   // Extend this to have one saving point for doc rev (static and fb)
   public save = (name: string, value: any) => {
+    if (this.documentRevision?.status === "RELEASED") { return; }
     this.setDirty(true);
     if (!this.formAutosave) { return; }
     const { id } = this.documentRevision || {};
