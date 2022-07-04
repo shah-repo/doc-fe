@@ -86,6 +86,8 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     }
 
     function setSchemaProps(schema?: FBSchemaProps[]): FBSchemaProps[] | undefined {
+      const id = workspaceState?.schema?.find((item) => item.type === "poreceive")?.tabId;
+
       remove(schema || [], (item) => item?.type === "poapprovals");
       if (!schema) { return; }
       const prior: Partial<Record<FBInputType | "other", number>> = {
@@ -105,10 +107,17 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         if (last(reduced)?.type === "purchaseorder" && item.type !== "purchaseorder") {
           reduced.push({ type: "section", label: "form.builder.purchaseorder" });
         }
+
         reduced.push(setSchemaItem(item));
         return reduced;
       }, []);
-      return schema;
+
+      const modifiedTabIdSchema = schema.map((item) => ({
+        ...item, tabId: id,
+      })
+
+      );
+      return modifiedTabIdSchema;
     }
 
     onChange = (_ev, value: DocumentRevision) => {
