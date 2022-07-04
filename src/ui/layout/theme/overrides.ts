@@ -202,34 +202,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
           visibility: "hidden",
         },
       },
-      [`& .${FBClasses.nonOwner}`]: {
-        [`& not(.MuiAutocomplete-inputRoot).Mui-disabled`]: {
-          backgroundColor: Colors.whitest_grey,
-          color: Colors.almost_black,
-        },
-        [`& .MuiAutocomplete-inputRoot.Mui-disabled`]: {
-          backgroundColor: Colors.whitest_grey,
-          color: Colors.almost_black,
-          opacity: 0.7,
-        },
-      },
       [`& .${FBClasses.inputPreview}`]: {
-        [`& not(.MuiAutocomplete-inputRoot).Mui-disabled`]: {
-          color: `${appTheme.palette.text.primary} !important`,
-          backgroundColor: "unset",
-          paddingLeft: "2px",
-          fontSize: "1rem",
-          fontWeight: 400,
-          lineHeight: 1.33,
-        },
-        [`& .MuiAutocomplete-inputRoot.Mui-disabled`]: {
-          color: `${Colors.almost_black} !important`,
-          paddingLeft: "2px",
-          fontSize: "1rem",
-          fontWeight: 400,
-          lineHeight: 1.33,
-          opacity: 0.7,
-        },
         "& fieldset": {
           borderWidth: "0px!important",
         },
