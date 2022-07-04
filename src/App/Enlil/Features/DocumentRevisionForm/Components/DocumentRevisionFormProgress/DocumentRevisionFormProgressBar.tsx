@@ -47,7 +47,11 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
     });
     setInprogress(inProgress);
     setCompleted(complete);
-    _documentRevisionFormState?.setIsLHRProgressBarVisible(!isEmpty(inProgress) || !isEmpty(complete));
+    const flag = !isEmpty(inProgress) || !isEmpty(complete);
+    const oldvalue = _documentRevisionFormState?.isLHRProgressBarVisible;
+    if (flag !== oldvalue) {
+      _documentRevisionFormState?.setIsLHRProgressBarVisible(flag);
+    }
   };
 
   useEffect(() => {
