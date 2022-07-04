@@ -9,6 +9,8 @@ export default makeStyles((theme: Theme) =>
       "&:hover": {
         color: Colors.white,
         backgroundColor: Colors.bright_grey,
+        // borderBottom: "1px solid",
+        border: "solid 1px",
         borderImage: `linear-gradient(270deg, ${Colors.cerulean} 0.17%, ${Colors.peri_winkle_blue} 74.99%, ${Colors.navy} 109.83%)`,
         borderImageSlice: 1,
       },
@@ -23,6 +25,7 @@ export default makeStyles((theme: Theme) =>
     activeLink: {
       "backgroundColor": Colors.bright_grey,
       "color": Colors.white,
+      "border": "solid 1px",
       "& .MuiListItemText-primary": {
         fontWeight: "bold",
       },
