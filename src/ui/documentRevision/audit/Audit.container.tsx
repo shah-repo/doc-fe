@@ -59,7 +59,7 @@ const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
 
   return  <CustomLabelTooltip {...{ tooltipConfig }}>
     <AuditPresenter
-      {...{ audit, approvals, versionNumber, isStatusVisible, schema}}
+      {...{ audit, approvals, versionNumber, isStatusVisible, schema }}
       statusLabel={statusLabel as string}
     />
   </CustomLabelTooltip>;
