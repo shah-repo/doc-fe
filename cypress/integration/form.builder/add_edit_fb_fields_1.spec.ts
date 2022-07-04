@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -282,12 +283,6 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Add Approval Matrix", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Approval Matrix" });
-      cy.fbAddNewFieldButton();
-    });
-
     it("Add PO Approval Matrix", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
@@ -431,11 +426,6 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Edit Approval Matrix", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "Approval Roles" });
-      cy.fbAddNewFieldButton();
-    });
-
     it("Edit PO Approval Matrix", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-po-approval-matrix" });
       cy.fbEnterNameValue({ name: "label", value: "fb-po-approval-matrix1" });
@@ -540,10 +530,6 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("fb-receive-purchase-order1").should("exist");
     });
 
-    it("Verify Approval Matrix", () => {
-      cy.contains("Approval Roles").should("exist");
-    });
-
     it("Verify PO Approval Matrix", () => {
       cy.contains("fb-po-approval-matrix1").should("exist");
     });
@@ -573,8 +559,8 @@ context("Add and edit FB fields - Test 1", () => {
       });
     });
 
-    it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "New Document Revision" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -750,10 +736,6 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/LEVEL NAMELIMITSIGNATURE 1SIGNATURE 2SIGNATURE 3/);
 
-        expect(el).match(/APPROVAL ROLES/);
-
-        expect(el).match(/APPROVAL MATRIX/);
-
         // eslint-disable-next-line max-len
         expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);
 
@@ -883,8 +865,8 @@ context("Add and edit FB fields - Test 1", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "New Document Revision" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -1065,10 +1047,6 @@ context("Add and edit FB fields - Test 1", () => {
         expect(el).match(/FB-PO-APPROVAL-MATRIX1/);
 
         expect(el).match(/LEVEL NAMELIMITSIGNATURE 1SIGNATURE 2SIGNATURE 3/);
-
-        expect(el).match(/APPROVAL ROLES/);
-
-        expect(el).match(/APPROVAL MATRIX/);
 
         // eslint-disable-next-line max-len
         expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);

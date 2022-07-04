@@ -10,6 +10,10 @@ export interface SMTemplateProps {
    */
   header?: React.ReactNode;
   /**
+   * @cfg {Element} LHR step panel.
+   */
+  lhrSteps?: React.ReactNode;
+  /**
    * @cfg {Element} Bottom panel.
    */
   footer?: React.ReactNode;
@@ -45,4 +49,8 @@ export interface SMTemplateProps {
    * @cfg {BoxProps} Box props for template.
    */
   templateBoxProps?: SMBoxProps;
+  /**
+   * @cfg {BoxProps} Box props for template.
+   */
+  boxProps?: SMBoxProps;
 }

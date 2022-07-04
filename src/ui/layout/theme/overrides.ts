@@ -100,56 +100,50 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiInputBase: {
     root: {
-      "fontSize": "0.8rem",
-      "fontFamily": "Sora, sans-serif;",
-      "&$focused input": {
-        backgroundColor: Colors.white,
-        border: `1px solid ${Colors.dodger_blue}`,
-      },
-      "&.MuiAutocomplete-inputRoot": {
-        "transition": appTheme.transitions.create("all"),
-        "&:hover": {
-          backgroundColor: Colors.background_white,
-        },
-        "& fieldset, &:hover fieldset": {
-          border: `1px solid ${Colors.mild_wind_blue}`,
-        },
-        "&$focused": {
-          backgroundColor: Colors.white,
-        },
-        "&$focused input": {
-          border: "none",
-        },
-        "&$focused fieldset": {
-          border: `1px solid ${Colors.dodger_blue}`,
-        },
-      },
+      fontSize: "0.8rem",
+      fontFamily: "Sora, sans-serif",
+      borderRadius: "4px",
+      transition: appTheme.transitions.create("all"),
     },
-    input: {
-      "fontSize": "0.8rem",
-      "borderRadius": "4px",
-      "borderColor": Colors.mild_wind_blue,
-      "transition": appTheme.transitions.create("all"),
-      "&:hover": {
+  },
+  MuiOutlinedInput: {
+    root: {
+      "backgroundColor": Colors.white,
+      "border": `1px solid ${Colors.mild_wind_blue}`,
+      "&:not($focused):not($disabled):hover": {
         backgroundColor: Colors.background_white,
       },
-      "&.Mui-disabled": {
-        backgroundColor: Colors.white,
+      "&$focused": {
+        borderColor: Colors.dodger_blue,
       },
+      "&$disabled": {
+        backgroundColor: Colors.whitest_grey,
+      },
+      "& fieldset": {
+        border: "none",
+      },
+    },
+    notchedOutline: {
+      borderRadius: 4,
     },
   },
   MuiSelect: {
-    root: {
-      fontSize: "0.8rem",
-      lineHeight: "1.2rem",
-      fontFamily: "Sora, sans-serif;",
-    },
     icon: {
       right: "10px",
     },
     select: {
       paddingLeft: appTheme.spacing(0.5),
       borderRadius: "4px",
+    },
+  },
+  MuiRadio: {
+    root: {
+      "&:hover": {
+        background: "none !important",
+      },
+      "&:not($checked):not($disabled):hover circle": {
+        fill: Colors.background_white,
+      },
     },
   },
   MuiTooltip: {
@@ -189,15 +183,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       padding: appTheme.spacing(1),
     },
   },
-  MuiOutlinedInput: {
-    root: {
-      fontFamily: "Sora, sans-serif;",
-      backgroundColor: Colors.white,
-    },
-    notchedOutline: {
-      borderRadius: 4,
-    },
-  },
   MuiDialogActions: {
     root: {
       padding: appTheme.spacing(1, 0),
@@ -219,7 +204,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       },
       [`& .${FBClasses.nonOwner}`]: {
         [`& .Mui-disabled`]: {
-          backgroundColor: Colors.light_gray,
+          backgroundColor: Colors.whitest_grey,
         },
       },
       [`& .${FBClasses.inputPreview}`]: {

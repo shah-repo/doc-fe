@@ -1,97 +1,79 @@
-import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
-import { truncate } from "lodash";
+import { Box, Button, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
-import { convertHtmlEntities } from "../../../common/utils/helpers";
-import Colors from "../../layout/theme/utils/colors";
-import styles from "./newStyles";
+import { SMEditorStyles } from "../../../App/Shifamed/Components/SMTextEditor/SMTextEditor.styles";
+import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
+import { styles } from "./newStyles";
 import { SummaryBaseProps } from "./types";
 
-type Props = SummaryBaseProps & WithStyles<typeof styles>;
+type Props = SummaryBaseProps;
 
 const BaseWithhtml: React.FunctionComponent<Props> = ({
   label,
   value,
-  classes,
   labelProps,
   labelFont,
+  _documentRevisionFormState,
 }) => {
+  const descriptionClasses = SMEditorStyles();
   const intl = useIntl();
+  const [isTextClamped, setIsTextClamped] = useState(false);
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
-  const [editor, setEditor] = useState<string>("");
+  const [editor, setEditor] = useState();
   const [btnText, setBtnText] = useState(viewMore);
   const [flag, setFlag] = useState(false);
-  const editedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n|\n)/g, " ")) : "";
+  const classes = styles(isTextClamped);
   useEffect(() => {
-    getTruncatText();
-  }, []);
-
-  const completeText = () => {
-    setEditor(editedValue);
-  };
-
-  const getTruncatText = () => {
-    const truncatedText = truncate(editedValue, {
-      length: 100,
-      separator: " ",
-    });
-    setEditor(truncatedText);
-  };
+    setEditor(convertHtmlToDraft(value));
+    showToggleButton();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   const toggleBtn = () => {
     setFlag(!flag);
     if (flag) {
-      getTruncatText();
+      _documentRevisionFormState?.setExpanded(false);
       setBtnText(viewMore);
     } else {
-      completeText();
+      _documentRevisionFormState?.setExpanded(true);
       setBtnText(viewLess);
     }
+  };
+
+  const showToggleButton = () => {
+    setTimeout(() => {
+      const elm = document.querySelector(".rdw-editor-main");
+      const isClamped = elm ? elm.scrollHeight > elm.clientHeight : false;
+      setIsTextClamped(isClamped);
+      _documentRevisionFormState?.setIsDescTextClamped(isClamped);
+    }, 500);
   };
 
   return (
     <Grid item={true} xs={12}>
       <Grid item={true} xs={12} id="BaseWithhtml-editor" data-cy="BaseWithhtml-editor">
-        <Box
-          bgcolor={ "transparent"}
-          borderRadius={4}
-          display="flex"
-          style={{
-            gridArea: "1/1",
-          }}
-          overflow= "auto"
-          className={classes.descriptionContainer}
-        >
-          <span
-            style = { {
-              fontSize: "14px",
-              fontWeight: 400,
-              lineHeight: "25px",
-              color: Colors.almost_black,
-            }}
-            id="field-description"
-            data-cy="field-description"
-          >{editor?.trim()}
-            <span className={classes.btnStyle}
-              id="SummaryHeaderDecription-ViewMore-button"
-              data-cy="SummaryHeaderDecription-ViewMore-button"
-              style={{
-                marginTop: "-3px",
-                cursor: "pointer",
-                display: editedValue?.length < 100 ? "none" : "",
-                color: Colors.navy,
-                padding: "0 2px",
-                fontSize: "14px",
+        <Box borderRadius={4}>
+          <Grid item={true} xs={12} id="BaseWithhtml-editor" data-cy="BaseWithhtml-editor">
+            <Editor
+              readOnly={true}
+              editorState={editor}
+              toolbarHidden={true}
+              editorClassName={!flag ? descriptionClasses.descriptionEditorClass :
+                descriptionClasses.descriptionSummaryEditorClass}
+              editorStyle={{
+                lineHeight: "24px",
               }}
-              onClick={() => toggleBtn()}>
-              {btnText}
-            </span>
-          </span>
+            />
+          </Grid>
+          <Grid item>
+            <Button variant="text" className={classes.moreOrLess} onClick={() => toggleBtn()}>{btnText}</Button>
+          </Grid>
         </Box>
       </Grid>
     </Grid>
   );
 };
 
-export default withStyles(styles)(BaseWithhtml);
+export default BaseWithhtml;

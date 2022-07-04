@@ -589,6 +589,7 @@ export function KendoPanel<T extends { id?: string }>({
             <Button
               onClick={exportDAMDialog.open}
               variant="outlined"
+              data-cy="Export-Dam-Button"
               className={classes.exportBtn}
             >
               <Text translation={"common.export.dam.details"} />
@@ -596,6 +597,7 @@ export function KendoPanel<T extends { id?: string }>({
             <Button
               variant="outlined"
               onClick={addNewRowObject}
+              data-cy="Add-DocumentType-Button"
               className={ disabled ? classes.disabledAddBtn : classes.addBtn}
               {...{ disabled }}
             >

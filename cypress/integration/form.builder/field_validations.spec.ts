@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
@@ -96,6 +97,10 @@ context("Field validations test", () => {
 
     it("Select 'Test Document Type' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
+    });
+
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     context("Add normal textfield", () => {
@@ -231,7 +236,7 @@ context("Field validations test", () => {
       });
 
       it("Verify revision status is 'Revision 1  - Released'", () => {
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
   });

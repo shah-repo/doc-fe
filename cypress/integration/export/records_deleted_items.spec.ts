@@ -181,9 +181,13 @@ context("Export Record doc", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add textfield", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for inline" });
       cy.fbAddField();
     });

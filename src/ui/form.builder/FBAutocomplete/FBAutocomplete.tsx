@@ -40,10 +40,19 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disabledOptions = [],
   disableBackspace = false,
   disableChipDelete = false,
+  type,
+  customStyles,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
   const CustomPopper = (props) => <Popper {...props} placement="bottom-start" />;
+  const renderRefreshButton = (refresh, disabled) => (
+    <Box ml={-4} display="flex" alignItems="center">
+      <IconButton size="small" onClick={refresh} {...{ disabled }}>
+        <CachedIcon fontSize="small" />
+      </ IconButton>
+    </Box>
+  );
   return (
     <>
       {includeQRScan && (
@@ -95,23 +104,24 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   variant="outlined"
                   InputProps={{
                     ...params.InputProps,
+                    ...{ style: { ...customStyles } },
                     ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
+                    ...(disabled && type === "lhrstep") && { endAdornment: null },
                   }}
                   inputProps={{
                     ...params.inputProps,
-                    "style": { padding: "10.5px 0", ...inputStyle, marginRight: disabled ? "28px" : "0px" },
+                    "style": {
+                      padding: "10.5px 0", ...inputStyle, marginRight: customStyles ?
+                        "10px" : disabled  ? "28px" : "0px",
+                      fontSize: 14,
+                    },
                     "data-cy": props.name,
                   }}
                   size={inputPropStyleSize}
                 />
               </Box>
-              {refresh && (
-                <Box ml={-4} display="flex" alignItems="center">
-                  <IconButton size="small" onClick={refresh} {...{ disabled }}>
-                    <CachedIcon fontSize="small" />
-                  </ IconButton>
-                </Box>
-              )}
+              {(refresh && type !== "lhrstep") && renderRefreshButton(refresh, disabled)}
+              {(refresh && type === "lhrstep" && !disabled) && renderRefreshButton(refresh, disabled)}
             </Box>
           )}
           renderTags={(value, getTagProps) => (

@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import faker from "faker";
+import { LINE_ITEMS_STATUS_TYPES, STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -206,17 +207,12 @@ context("Approval request landing page test", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
-
-    // it.skip("Verify default filter status is draft or in review", () => {
-    //   // SystemRequirement("REQ-0780");
-    //   cy.alVerifyStartingFilter();
-    // });
   });
 
   context("Prepare approval request", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: "DRAFT" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
     });
 
     it("Add approvers to approval request on approver list", () => {
@@ -313,12 +309,12 @@ context("Approval request landing page test", () => {
       });
 
       it("Filter list by STATUS", () => {
-        cy.alFilterByStatus({ status: "CLOSED" });
+        cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.CLOSED });
       });
 
       it("Verify filter by STATUS", () => {
         SystemRequirement("REQ-0770", "REQ-0750");
-        cy.alVerifyFilterByStatus({ status: "CLOSED" });
+        cy.alVerifyFilterByStatus({ status: STATUS_TYPES_LABEL.CLOSED });
       });
 
       it("Verify approval counter on document list", () => {
@@ -333,7 +329,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Filter list by status", () => {
-        cy.alFilterByStatus({ status: "IN REVIEW" });
+        cy.alFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       });
 
       it("Filter list by approval request title", () => {
@@ -350,7 +346,7 @@ context("Approval request landing page test", () => {
 
       it("Verify filter by status", () => {
         SystemRequirement("REQ-0790");
-        cy.alVerifyFilterByStatus({ status: "IN REVIEW" });
+        cy.alVerifyFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       });
 
       it("Verify filter by document title", () => {

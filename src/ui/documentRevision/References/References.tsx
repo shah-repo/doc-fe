@@ -31,13 +31,13 @@ const References = ({
   const groupOptions = selectedDocument?.document.documentType.groupOptions;
   const isDisabledInput = initialValues && initialValues.id !== undefined && isCurrentUserOperator && !isOwner;
   return (
-    <Box margin={1.875} width={1}>
+    <Box margin={1.875} width={1} data-cy="generalInfo">
       <Typography className={classes.generalInfo}>
         <Text translation="common.general.info" />
       </Typography>
       <UserAvatarListItem
         name={owner.user.name}
-        owner={owner}
+        user={owner && owner.user}
         secondaryComponent={<Text translation="common.owner" />}
       />
       {edit && (
@@ -75,7 +75,7 @@ const References = ({
       </>
       <Box pt={2.5}>
         <Typography component="span" className={classes.releaseDate}>
-          <Text translation="documentRevision.form.release.date" />
+          <Text dataCy="releaseDate" translation="documentRevision.form.release.date" />
         </Typography>
         <Typography className={classes.released}>
           {releasedAt

@@ -186,6 +186,10 @@ context("Autocomplete 'Lots' test", () => {
         cy.drSelectOutputDocumentType({ documentType: "Component Specification Lot" });
       });
 
+      it("Click create a document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Add Text field with range", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
@@ -1275,8 +1279,12 @@ context("Autocomplete 'Lots' test", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
 
-        it("Select 'Component Protocol' output document type", () => {
+        it("Select 'Clinical Protocol' output document type", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+        });
+
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
 
         context("Add form fields", () => {

@@ -17,6 +17,12 @@ export const styles = makeStyles((theme: Theme) =>
       width: "8px",
       height: "8px",
     },
+    arrowPadding: {
+      padding: "0px 8px",
+    },
+    spaceLinePadding: {
+      padding: "0px 5px",
+    },
     statusIconReleased: {
       background: Colors.light_green,
     },
@@ -73,12 +79,17 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "24px",
       cursor: "pointer",
     },
+    mpiTitle: {
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "24px",
+    },
     minWidthSpace: {
       minWidth: "50px",
     },
     subTitleLink: {
       "fontWeight": 600,
-      "fontSize": "12px",
+      "fontSize": "14px",
       "color": Colors.white,
       "textDecoration": "none",
       "cursor": "pointer",

@@ -3,7 +3,7 @@ import draftToHtml from "draftjs-to-html";
 import { useFormikContext } from "formik";
 import htmlToDraft from "html-to-draftjs";
 import { map } from "lodash";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from "../../..";
 import { FB } from "../../../../ui/form.builder";
@@ -17,6 +17,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     onBlur,
     editorRef,
     _textEditorState,
+    showToggleButton,
     label,
     isPreview,
     formValue,
@@ -27,6 +28,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
   }: T) => {
     // MARK: @config
     const intl = useIntl();
+    const [isTextClamped, setIsTextClamped] = useState(false);
     const formik = useFormikContext();
     const { _formState, _documentRevisionFormState } = SM.useStores();
     const { workspaceState } = FB.useStores();
@@ -49,6 +51,15 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       ],
       inline: { options: ["bold", "italic", "underline", "monospace"] },
     });
+
+    showToggleButton = () => {
+      setTimeout(() => {
+        const elm = document.querySelector(".rdw-editor-main");
+        const isClamped = elm ? elm.scrollHeight > elm.clientHeight : false;
+        setIsTextClamped(isClamped);
+        _documentRevisionFormState?.setIsDescTextClamped(isClamped);
+      }, 500);
+    };
 
     useMemo(
       () => {
@@ -74,6 +85,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       (value) => {
         const editorState = htmlToEditorState(value);
         _textEditorState?.setEditorState(editorState);
+        showToggleButton && showToggleButton();
       }
     );
     // MARK: @helpers
@@ -123,6 +135,9 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       label,
       formValue,
       toolbar,
+      showToggleButton,
+      isTextClamped,
+      _documentRevisionFormState,
     });
   };
   Comp.displayName = "withSMTextEditor";

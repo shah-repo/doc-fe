@@ -28,12 +28,14 @@ export enum TrainingStatus {
   ASSIGNED = "ASSIGNED",
   DUE = "DUE",
   COMPLETED = "COMPLETED",
+  PENDING = "Pending"
 }
 export enum TrainingStatusLabels {
   OVERDUE = "OVERDUE",
   DUE = "DUE IN 7 DAYS",
   ASSIGNED = "ASSIGNED",
   COMPLETED = "COMPLETED",
+  PENDING = "Pending"
 }
 
 export enum LINE_ITEMS_STATUS_TYPES {
@@ -50,9 +52,15 @@ export enum STATUS_TYPES_LABEL {
   APPROVED = "APPROVED",
   RELEASED = "RELEASED",
   COMPLETED = "COMPLETED",
+  DRAFT = "DRAFT",
+  WIP = "WIP",
+  VOIDED = "VOIDED",
   REJECTED = "REJECTED",
   PENDING = "PENDING",
   CLOSED = "CLOSED",
+  IMPLEMENTATION = "IMPLEMENTATION",
+  PENDING_CHANGE = "PENDING CHANGE",
+  OBSOLETE = "OBSOLETE"
 }
 
 interface MyFeedsItems {

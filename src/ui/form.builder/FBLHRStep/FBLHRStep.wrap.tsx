@@ -88,6 +88,12 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => reaction(
+      () => formState?.approvalMap,
+      (value) => value && (lhrStepState?.setApproval(value))
+      /* eslint-disable-next-line react-hooks/exhaustive-deps */
+    ), []);
+
     // on LHRS create
     React.useEffect(() => reaction(
       () => lhrStepState.startMpiApi.data,
@@ -119,7 +125,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
       (data) => {
-        const parameters = schemaItem?.editorConfig.parameters;
+        const parameters = schemaItem?.editorConfig?.parameters;
         const dataValues = Array.from(data.values());
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
 

@@ -55,7 +55,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
   const onSubmit = () => void 0;
   return (
     <Grid>
-      { (mode === "preview" || mode === "design")  &&
+      { (mode === "preview")  &&
       <FormContext.Provider value={{ submitOnChange: false }}>
         <Formik
           initialValues={{ attachments: documentRevision?.attachments }}
@@ -72,7 +72,7 @@ const FBAttachment: React.FunctionComponent<FBAttachmentProps> = ({
       </FormContext.Provider>
       }
 
-      {mode === "form"  && <AttachmentsField
+      {(mode === "form" || mode === "design")  && <AttachmentsField
         isDisabled={isDisabledInput}
         labeld = {schemaLabel}
         isNewVersion={false}

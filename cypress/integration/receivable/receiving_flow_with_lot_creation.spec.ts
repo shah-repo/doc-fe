@@ -327,6 +327,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -341,6 +342,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -355,6 +357,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -368,6 +371,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -378,6 +382,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -465,6 +470,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -492,6 +498,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -505,6 +512,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -515,6 +523,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "poapprovals",
                     deleteDisabled: false,
                     name: "fb-po-approvals-kqqix31p",
@@ -572,12 +581,14 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                       index: 0,
                       type: "poreceive",
                       label: "Receivable",
+                      tabId: "details",
                       name: "receivable-kdptzei2",
                       applicableOn: ["ON_STATE_TO_IN_REVIEW"],
                     },
                     {
                       label: "form.builder.approvals",
                       type: "poapprovals",
+                      tabId: "details",
                       deleteDisabled: false,
                       name: "fb-po-approvals-kqqix31p",
                       uniqueSchemaItem: true,

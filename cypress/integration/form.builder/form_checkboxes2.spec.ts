@@ -103,15 +103,6 @@ context("Checkboxes test2", () => {
     });
 
     context("Add Fields with Checkboxes", () => {
-      it("Add Approval Matrix with checkboxes", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
-        cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Approval Matrix" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "Approval Roles" } );
-      });
-
       it("Add PO Approval Matrix with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
@@ -346,13 +337,6 @@ context("Checkboxes test2", () => {
   });
 
   context("Verify 'Deletion Disabled' checkbox property", () => {
-    it("Verify Approval Matrix with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "Approval Roles", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
-    });
-
     it("Verify PO Approval Matrix without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "poam-wo-ch", el: "remove-schema-item",
@@ -550,12 +534,6 @@ context("Checkboxes test2", () => {
   });
 
   context("Verify 'Revision Disabled' checkbox property", () => {
-    it("Verify Approval Matrix with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "Approval Roles" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "Approval Roles", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "Approval Roles", el: "remove-schema-item" });
-    });
-
     it("Verify PO Approval Matrix without 'Revision Disabled' checkbox", () => {
       cy.fbMouseOverByLabel({ label: "poam-wo-ch" } );
       cy.fbVerifyElementVisibileByLabel({ label: "poam-wo-ch", el: "edit-schema-item" });

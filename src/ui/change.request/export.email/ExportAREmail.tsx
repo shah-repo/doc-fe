@@ -3,6 +3,10 @@ import * as React from "react";
 import { useIntl } from "react-intl";
 import { SM } from "../../../App";
 import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { ReactComponent as SendToEmail } from "../../../assets/images/send_to_email.svg";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { toastError, toastSuccess } from "../../components/notifications";
 import Text from "../../components/Text";
@@ -11,10 +15,11 @@ import useAsync from "../../hooks/useAsync";
 
 interface Props {
   id: string;
+  renderAsButton?: boolean;
 }
 
 const ExportARToEmail: React.FunctionComponent<Props> = ({
-  id,
+  id, renderAsButton,
 }) => {
   const intl = useIntl();
   const exportTrainingRecordEmail = useActionCreator(changeRequestsActions.exportAR);
@@ -33,10 +38,22 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   };
 
   if (isNewLayout) {
+    if (!renderAsButton) {
+      return (<StyledMenuListItem button alignItems="flex-start">
+        <StyledMenuListIcon><SendToEmail /></StyledMenuListIcon>
+        <StyledMenuListItemText
+          data-cy="exportToEmail"
+          primary={<Text translation="common.send.to.email" />}
+          onClick={() => handleAREmail()}
+        />
+      </StyledMenuListItem>
+      );
+    }
     return (
       <StyledButton
         color="primary"
         style={{ margin: 0 }}
+        data-cy="exportToEmail"
         onClick={() => handleAREmail()}
       >
         <Text translation="common.send.to.email" />
@@ -48,6 +65,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
     <Button
       variant="outlined"
       color="secondary"
+      data-cy="exportToEmail"
       style={{ margin: 0 }}
       onClick={() => handleAREmail()}
     >

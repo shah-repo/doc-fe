@@ -375,12 +375,14 @@ context("LHRT Pending Change", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
+                tabId: "details",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
+                tabId: "details",
                 index: 1,
                 stepIndex: 1,
                 applicableOn: [
@@ -422,6 +424,7 @@ context("LHRT Pending Change", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -439,6 +442,7 @@ context("LHRT Pending Change", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -456,6 +460,7 @@ context("LHRT Pending Change", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -473,6 +478,7 @@ context("LHRT Pending Change", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],

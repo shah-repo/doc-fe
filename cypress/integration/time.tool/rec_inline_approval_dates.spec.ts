@@ -24,8 +24,8 @@ let adminEmployee;
 let asyncTasksGroup;
 let emailsFromInbox;
 let dateAfterEmailShouldArrive;
-const approvalNotificationToday = momentInPST().format("MMM DD, YYYY");
-const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM DD, YYYY");
+const approvalNotificationToday = momentInPST().format("MMM D, YYYY");
+const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM D, YYYY");
 
 context("Record inline approval dates flow", () => {
   before(() => {
@@ -152,6 +152,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 0,
                     type: "textfield",
+                    tabId: "details",
                     name: "textfield-for-inline-l39qj0uv",
                     hidden: false,
                     outputDisabled: false,
@@ -172,6 +173,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 1,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "inline-field-l39qj2f2",
                     hidden: false,
                     outputDisabled: false,
@@ -195,6 +197,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 2,
                     type: "textfield",
+                    tabId: "details",
                     name: "second-textfield-for-inline-l39qj3i5",
                     hidden: false,
                     outputDisabled: false,
@@ -215,6 +218,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 3,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "second-inline-field-l39qj5nh",
                     hidden: false,
                     outputDisabled: false,
@@ -312,6 +316,10 @@ context("Record inline approval dates flow", () => {
     });
 
     context("Fill first textfield and add inline approval", () => {
+      it("Navigate to details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter text 'First entry' in textfield for inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
@@ -403,6 +411,10 @@ context("Record inline approval dates flow", () => {
     });
 
     context("Fill second textfield and add inline approval", () => {
+      it("Navigate to details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter text 'First entry' in second textfield for inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy^=\"second-textfield-for-inline\"] input")

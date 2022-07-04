@@ -6,6 +6,7 @@ enum Colors {
   alabaster = "#F9FBFF",
   lily_white="#F8F9F9",
   water="#EEF3FF",
+  titan_white="#EBEFF7",
   // black
   black = "#000",
   almost_black = "#080B11", // font_black
@@ -31,6 +32,7 @@ enum Colors {
   link_water = "#ccd4d9",
   platinum_grey = "#E2E2E2",
   cultured="#f6f7f7",
+  light_athens_gray ="#E9EBF0",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -50,6 +52,7 @@ enum Colors {
   mild_wind_blue="#CCD4D9",
   topaz="#03C0C1",
   clear_blue="#2684FF",
+  light_cream_blue = "#EEF1F9",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -61,6 +64,7 @@ enum Colors {
   trinary_red = "#F14822",
   mandy = "#EB4770",
   dawn="#A2A2A2",
+  seashell="#FCF0ED",
   // purple
   deep_purple = "#29064C",
   purple = "#99c",

@@ -279,9 +279,9 @@ export function KendoPanel<T>({
           status:
             el?.user?.confirmed && !el?.user?.locked
               ? getTranslatedText("user.management.signed.up")
-              : el?.user?.locked
-                ? getTranslatedText("reset.password")
-                : getTranslatedText("user.management.resend.signup.email"),
+              : !el?.user?.confirmed
+                ? getTranslatedText("user.management.resend.signup.email")
+                : getTranslatedText("reset.password"),
           activeStatus: el?.active
             ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
             : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),

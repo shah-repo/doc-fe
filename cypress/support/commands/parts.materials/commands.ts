@@ -23,8 +23,10 @@ declare global {
       pmAddFreeTextEquipment(params: {equipment: string}): Chainable<Subject>;
       pmUploadAttachment(params: {fileName: string }): Chainable<Subject>;
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      lhrAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       pmDeleteApproverFromApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
+      lhrSubmitForApproval(): Chainable<Subject>;
       ptClickCreateNewPart(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
       ptSelectPartFormFromMultiSelect(params: {partForm: string}): Chainable<Subject>;
@@ -127,12 +129,22 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
 
-  cy.get(`[data-cy^="fb-approvals"]`).parent().find(`button[aria-label="Open"]`)
-    .arrowClick();
+  cy.get(`[data-cy^="fb-approvals"]`).parent().find(`button[aria-label="Open"]`).arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
 
+Cypress.Commands.add("lhrAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+
+  cy.get(`[data-cy^="fb-approvals"]`).parent().find(`button[aria-label="Open"]`).arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
+  });
+  cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -166,6 +178,14 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrSubmitForApproval", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  });
+  cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 

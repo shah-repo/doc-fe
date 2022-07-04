@@ -7,10 +7,13 @@ import { ReactComponent as MoreVerticalIcon } from "../../../../assets/images/mo
 import { styles } from "./Menu.styles";
 
 interface Props {
-  children: any[];
+  children: any;
 }
 
 const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
+  if (!children.length) {
+    children = [children];
+  }
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const items = children.filter((item) => item.props?.shouldDisplay || item.props?.shouldDisplay === undefined);

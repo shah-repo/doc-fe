@@ -27,6 +27,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public disabledAction = false;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
+  @observable public expanded = false;
+  @observable public isLHRProgressBarVisible = false;
+  @observable public isDesTextClamped = false;
+  @observable public isDescriptionFocused = false;
   @observable docInfo: DocumentInfo = {
     name: "",
     isQms: true,
@@ -91,6 +95,22 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // MARK: @actions
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
     set(this, "revisionChangeType", revisionChangeType);
+  };
+
+  @action public setIsLHRProgressBarVisible = (visible: boolean) => {
+    set(this, "isLHRProgressBarVisible", visible);
+  };
+
+  @action public setExpanded = (expand) => {
+    set(this, "expanded", expand);
+  };
+
+  @action public setDescriptionFocused = (focused: boolean) => {
+    set(this, "isDescriptionFocused", focused);
+  };
+
+  @action public setIsDescTextClamped = (clamped: boolean) => {
+    set(this, "isDesTextClamped", clamped);
   };
 
   @action public setViewMore = (flag: boolean) => {

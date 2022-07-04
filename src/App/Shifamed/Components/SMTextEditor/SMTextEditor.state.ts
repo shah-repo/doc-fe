@@ -5,11 +5,12 @@ import { SMTextEditorStateProps } from "../../..";
 export default class SMTextEditorState implements SMTextEditorStateProps {
 
   // MARK: @config
-  public editorReference?: HTMLInputElement;
+  public editorReference?: any;
 
   // MARK: @observables
   @observable public editorState?: EditorState;
   @observable public masked?: boolean = true;
+  @observable public previewMode?: boolean = true;
 
   // MARK: @api
 
@@ -24,6 +25,9 @@ export default class SMTextEditorState implements SMTextEditorStateProps {
 
   @action public setMasked = (masked?: boolean) =>
     set(this, "masked", masked);
+
+  @action public setPreviewMode = (previewMode?: boolean) =>
+    set(this, "previewMode", previewMode);
 
   // MARK: @helpers
 }

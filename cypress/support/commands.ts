@@ -34,6 +34,7 @@ declare global {
       unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
       pdfparseFile(params: { directory: string; fileName: string}): Promise<Result>;
       sendToEmail(): Chainable<Subject>;
+      sendToEmailFromHeader(): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
@@ -52,6 +53,7 @@ declare global {
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
+      saveBarShouldNotExist(): Chainable<Subject>;
       progressBarShouldNotExist(): Chainable<Subject>;
       progressBarShouldExist(): Chainable<Subject>;
       progressBarShouldAppear(): Chainable<Subject>;
@@ -117,7 +119,6 @@ export interface ICreateCompanyBootstrap {
   addresses?: string[];
   remoteValidatorBundleName: string;
   acctCodes?: string[];
-  scheduledForDeletion?: boolean;
 }
 
 Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
@@ -128,6 +129,10 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
     }
     return false;
   });
+});
+
+Cypress.Commands.add("saveBarShouldNotExist", () => {
+  cy.get(`[data-cy="Document-Save-Progress-Bar"]`, { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("progressBarShouldNotExist", () => {
@@ -213,7 +218,13 @@ Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: str
 });
 
 Cypress.Commands.add("sendToEmail", () => {
-  cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
+  cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+  cy.get("div.Toastify__toast-container").should("exist");
+});
+
+Cypress.Commands.add("sendToEmailFromHeader", () => {
+  cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
   cy.get("div.Toastify__toast-container").should("exist");
 });
 
@@ -260,25 +271,6 @@ Cypress.Commands.add("selectCompany", (params: { name: string }) => {
 Cypress.Commands.add("unClick", () => {
   cy.get("body").arrowClick( 10, 10, { force: true });
 });
-
-// Cypress.Commands.add("wrapWithWaitOnApiCalls", (names: CyRoutes[], callback: () => void) => {
-//   const functionRequestTimeout: number = 40 * 1000;
-//   const functionResponseTimeout: number = 40 * 1000;
-//   const aliasesToWait: string[] = [];
-
-//   names.forEach((name) => {
-//     const { requestConfig } = routes[name];
-//     cy.intercept(requestConfig).as(name);
-//   });
-
-//   names.forEach((name) => {
-//     aliasesToWait.push(`@${name}`);
-//   });
-
-//   callback();
-
-//   cy.wait(aliasesToWait, { responseTimeout: functionResponseTimeout, requestTimeout: functionRequestTimeout });
-// });
 
 Cypress.Commands.add(
   "wrapWithWaitOnApiCalls",
@@ -366,39 +358,4 @@ Cypress.Commands.add("dragAndDropTopDown", (params: {fromSelector: string; toSel
     .realMouseMove(0, 200, { position: "bottom" })
     .realMouseUp();
 });
-
-// Cypress.Commands.overwrite("click", (originalFn, element, options) => {
-//   const state = cy.state("current").attributes.name;
-
-//   if (state === "click") {
-//     cy.wrap(element)
-//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-//       .then(() => originalFn(element, options));
-//   }
-//   else {
-//     return originalFn(element, options);
-//   }
-// });
-
-// Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
-//   const state = cy.state("current").attributes.name;
-
-//   if (state === "type") {
-//     cy.wrap(element)
-//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-//       .then(() => originalFn(element, text, options));
-//   }
-//   else {
-//     return originalFn(element, text, options);
-//   }
-// });
-
-// Cypress.Commands.add("type", { prevSubject: true }, (subject, thingToTypeIn: string, options?: any) => {
-//   cy.wrapWithWaitOnApiCalls([CyRoutes.PostFieldLocks], () => {
-//     cy.wrap(subject).arrowClick();
-//   });
-//   cy.wrapWithWaitOnApiCalls([CyRoutes.ExpireFieldLocks], () => {
-//     cy.wrap(subject).arrowType(thingToTypeIn, options).unClick();
-//   });
-// });
 

@@ -3,6 +3,9 @@ import { IdocumentTypeDto } from "../../../support/commands";
 
 const CPName = "Clinical Protocol";
 const CPAcronym = "CP-";
+const ATTACHMENT_BUILT_IN_KEY = "fb-attachment-built-in";
+const ATTACHMENTS = "attachments";
+const ON_STATE_TO_IN_REVIEW = "ON_STATE_TO_IN_REVIEW";
 
 export const ClinicalProtocolNotRedline: IdocumentTypeDto = {
   documentTypeName: CPName,
@@ -17,6 +20,19 @@ export const ClinicalProtocolDocType: IdocumentTypeDto = {
   group: DOC_TYPE_GROUP.OTHER,
   isQms: true,
   canRedLine: true,
+  schema: [{
+    index: 0,
+    name: ATTACHMENT_BUILT_IN_KEY,
+    label: "Attachments",
+    type: ATTACHMENTS,
+    applicableOn: [
+      ON_STATE_TO_IN_REVIEW,
+    ],
+    deleteDisabled: true,
+    deleteInFormDisabled: true,
+    applicableValidationSchema: true,
+    tabId: "overview",
+  }],
 };
 
 export const ClinicalProtocolPrivatePoolDocType: IdocumentTypeDto = {

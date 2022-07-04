@@ -177,6 +177,7 @@ export interface SmartReference {
   toDocumentId?: Nullable<string>;
   type: SmartReferenceType;
   active?: boolean;
+  stepIndex?: Nullable<number>;
 }
 
 export enum SmartReferenceType {

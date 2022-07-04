@@ -191,6 +191,7 @@ context("Export Record doc", () => {
                 schema: [
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
@@ -203,6 +204,7 @@ context("Export Record doc", () => {
                     name: "textfield-kn7fc209",
                     validationMode: "default",
                     label: "Section 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -216,6 +218,7 @@ context("Export Record doc", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -238,6 +241,7 @@ context("Export Record doc", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "details",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -250,6 +254,7 @@ context("Export Record doc", () => {
                     name: "textfield-kn7fc208",
                     validationMode: "default",
                     label: "Section 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -263,6 +268,7 @@ context("Export Record doc", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -285,6 +291,7 @@ context("Export Record doc", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "details",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -358,6 +365,7 @@ context("Export Record doc", () => {
                 schema: [
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",

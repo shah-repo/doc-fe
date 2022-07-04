@@ -228,6 +228,7 @@ context("Test LHR landing page", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
+                tabId: "details",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
@@ -235,6 +236,7 @@ context("Test LHR landing page", () => {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
+                tabId: "details",
                 stepIndex: 1,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -269,6 +271,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -286,6 +289,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -303,6 +307,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -320,6 +325,7 @@ context("Test LHR landing page", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -387,6 +393,7 @@ context("Test LHR landing page", () => {
                 type: "partsselection",
                 index: 0,
                 label: "Part to be Manufactured",
+                tabId: "overview",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
                 editorConfig: {
@@ -398,6 +405,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 1,
                 label: "Initial Quantity",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -411,6 +419,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 2,
                 label: "End Quantity",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -425,6 +434,7 @@ context("Test LHR landing page", () => {
                 type: "radiogroup",
                 index: 3,
                 label: "Build Type",
+                tabId: "overview",
                 options: [
                   {
                     text: "R&D",
@@ -449,6 +459,7 @@ context("Test LHR landing page", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Due Date",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -461,6 +472,7 @@ context("Test LHR landing page", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -474,6 +486,7 @@ context("Test LHR landing page", () => {
               {
                 label: "form.builder.approvals",
                 type: "approvals",
+                tabId: "overview",
                 deleteDisabled: true,
                 name: "fb-approvals-kvateryo",
                 uniqueSchemaItem: true,

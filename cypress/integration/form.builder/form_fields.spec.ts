@@ -96,6 +96,10 @@ context("FORM Field test", () => {
       cy.unClick();
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Create FORM document with Form fields", () => {
       it("Add TextField", () => {
         SystemRequirement("FB-0020", "FB-0030");
@@ -245,13 +249,6 @@ context("FORM Field test", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
         cy.fbEnterNameValue({ name: "label", value: "fb-receive-purchase-order" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-      });
-
-      it("Add Approval Matrix", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Approval Matrix" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
       });
@@ -540,12 +537,6 @@ context("FORM Field test", () => {
         cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Verify Approval Matrix attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "Approval Roles" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbClickButton({ el: "dialog-close" });
-      });
-
       it("Verify PO Approval Matrix attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-po-approval-matrix" });
         cy.fbVerifyNameValue({ name: "label", value: "fb-po-approval-matrix" });
@@ -780,7 +771,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter description", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "test description" });
+        cy.drEnterDocumentDescription({ description: "test description" });
       });
 
       it("Enter Quantity field value", () => {

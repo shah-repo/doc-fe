@@ -42,6 +42,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         {...{ label }}
       />
       <FBAutocompleteAsync
+        placeholder="form.builder.start.typing.list"
         label="form.builder.approvals"
         name={`fb-approvals-${name}`}
         optionId={FBAutocompleteAsyncOption.availableApprovers}
