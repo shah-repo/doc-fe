@@ -282,7 +282,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(params.documentType);
   cy.wait(1500);
-  cy.get(`[data-cy="field-outputDocumentTypes"] div[id^="react-select"]`).contains(params.documentType).arrowClick();
+  cy.get(`div[id^="react-select"]`).contains(params.documentType).arrowClick();
   cy.unClick();
 });
 
