@@ -53,6 +53,58 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       </ IconButton>
     </Box>
   );
+
+  const renderAutoCompleteInput = (params) => (<Box display="flex">
+    <Box width="100%">
+      <TextField
+        {...params}
+        {...!params.InputProps.startAdornment && { placeholder }}
+        onChange={onInputChange}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          const key = event.keyCode || event.charCode;
+          if (key === 8 && disableBackspace) {
+            event.stopPropagation();
+          }
+        }}
+        fullWidth
+        variant="outlined"
+        InputProps={{
+          ...params.InputProps,
+          ...{ style: { ...customStyles } },
+          ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
+          ...(disabled && type === "lhrstep") && { endAdornment: null },
+        }}
+        inputProps={{
+          ...params.inputProps,
+          "style": {
+            padding: "10.5px 0", ...inputStyle, marginRight: customStyles ?
+              "10px" : disabled  ? "28px" : "0px",
+            fontSize: 14,
+          },
+          "data-cy": props.name,
+        }}
+        size={inputPropStyleSize}
+      />
+    </Box>
+    {(refresh && type !== "lhrstep") && renderRefreshButton(refresh, disabled)}
+    {(refresh && type === "lhrstep" && !disabled) && renderRefreshButton(refresh, disabled)}
+  </Box>);
+
+  const renderAutoCompleteTags = (value, getTagProps) => <FBMapWrapper<any[]> collection={value}>
+    {(option, index) => {
+      const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
+        (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
+      const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
+      return (
+        <StyledChip
+          key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
+          label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
+          style={{ minHeight: "32px", height: "auto" }}
+          {...getTagProps({ index })}
+          disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
+        />
+      ); }}
+  </FBMapWrapper>;
   return (
     <>
       {includeQRScan && (
@@ -87,60 +139,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           options={modifiedOptions}
           onInputChange={debounceFilterInput}
           ListboxComponent={groupByKey ? undefined : ListBoxComponent }
-          renderInput={(params: RenderInputParams) => (
-            <Box display="flex">
-              <Box width="100%">
-                <TextField
-                  {...params}
-                  {...!params.InputProps.startAdornment && { placeholder }}
-                  onChange={onInputChange}
-                  onKeyDown={(event: React.KeyboardEvent) => {
-                    const key = event.keyCode || event.charCode;
-                    if (key === 8 && disableBackspace) {
-                      event.stopPropagation();
-                    }
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  InputProps={{
-                    ...params.InputProps,
-                    ...{ style: { ...customStyles } },
-                    ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
-                    ...(disabled && type === "lhrstep") && { endAdornment: null },
-                  }}
-                  inputProps={{
-                    ...params.inputProps,
-                    "style": {
-                      padding: "10.5px 0", ...inputStyle, marginRight: customStyles ?
-                        "10px" : disabled  ? "28px" : "0px",
-                      fontSize: 14,
-                    },
-                    "data-cy": props.name,
-                  }}
-                  size={inputPropStyleSize}
-                />
-              </Box>
-              {(refresh && type !== "lhrstep") && renderRefreshButton(refresh, disabled)}
-              {(refresh && type === "lhrstep" && !disabled) && renderRefreshButton(refresh, disabled)}
-            </Box>
-          )}
-          renderTags={(value, getTagProps) => (
-            <FBMapWrapper<any[]> collection={value}>
-              {(option, index) => {
-                const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
-                  (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
-                const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
-                return (
-                  <StyledChip
-                    key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-                    label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
-                    style={{ minHeight: "32px", height: "auto" }}
-                    {...getTagProps({ index })}
-                    disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
-                  />
-                ); }}
-            </FBMapWrapper>
-          )}
+          renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
+          renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
         /> : <StyledAutoComplete
           {...{
             getOptionDisabled,
@@ -158,60 +158,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           options={modifiedOptions}
           onInputChange={debounceFilterInput}
           ListboxComponent={groupByKey ? undefined : ListBoxComponent }
-          renderInput={(params: RenderInputParams) => (
-            <Box display="flex">
-              <Box width="100%">
-                <TextField
-                  {...params}
-                  {...!params.InputProps.startAdornment && { placeholder }}
-                  onChange={onInputChange}
-                  onKeyDown={(event: React.KeyboardEvent) => {
-                    const key = event.keyCode || event.charCode;
-                    if (key === 8 && disableBackspace) {
-                      event.stopPropagation();
-                    }
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  InputProps={{
-                    ...params.InputProps,
-                    ...{ style: { ...customStyles } },
-                    ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
-                    ...(disabled && type === "lhrstep") && { endAdornment: null },
-                  }}
-                  inputProps={{
-                    ...params.inputProps,
-                    "style": {
-                      padding: "10.5px 0", ...inputStyle, marginRight: customStyles ?
-                        "10px" : disabled  ? "28px" : "0px",
-                      fontSize: 14,
-                    },
-                    "data-cy": props.name,
-                  }}
-                  size={inputPropStyleSize}
-                />
-              </Box>
-              {(refresh && type !== "lhrstep") && renderRefreshButton(refresh, disabled)}
-              {(refresh && type === "lhrstep" && !disabled) && renderRefreshButton(refresh, disabled)}
-            </Box>
-          )}
-          renderTags={(value, getTagProps) => (
-            <FBMapWrapper<any[]> collection={value}>
-              {(option, index) => {
-                const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
-                  (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
-                const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
-                return (
-                  <StyledChip
-                    key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-                    label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
-                    style={{ minHeight: "32px", height: "auto" }}
-                    {...getTagProps({ index })}
-                    disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
-                  />
-                ); }}
-            </FBMapWrapper>
-          )}
+          renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
+          renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
         />}
       </FBInput>
     </>
