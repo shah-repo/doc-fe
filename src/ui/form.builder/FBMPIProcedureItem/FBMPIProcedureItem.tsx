@@ -168,7 +168,10 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                         mr={1}
                                         mb={1}
                                         p={0.5}
-                                        style={{ float: "left" }}
+                                        style={{
+                                          float: "left",
+                                          backgroundColor: Colors.whitest_grey,
+                                        }}
                                       >
                                         <FBText
                                           locale={`form.builder.mpi.part.selection.${type}`}
@@ -179,8 +182,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             unit: selection.unit || "",
                                           }}
                                           boxProps={{
-                                            color: Colors.black,
-                                            fontWeight: type === "equipment" ? "bold" : "regular",
+                                            color: Colors.almost_black,
                                             pr: 1,
                                           }}
                                         />
