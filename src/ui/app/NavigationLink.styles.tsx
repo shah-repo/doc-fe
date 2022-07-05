@@ -6,11 +6,11 @@ export default makeStyles((theme: Theme) =>
     link: {
       "color": Colors.white,
       "backgroundColor": Colors.mirage,
+      "border-bottom": "1px solid transparent",
       "&:hover": {
         color: Colors.white,
         backgroundColor: Colors.bright_grey,
-        // borderBottom: "1px solid",
-        border: "solid 1px",
+        borderBottom: "1px solid",
         borderImage: `linear-gradient(270deg, ${Colors.cerulean} 0.17%, ${Colors.peri_winkle_blue} 74.99%, ${Colors.navy} 109.83%)`,
         borderImageSlice: 1,
       },
@@ -25,7 +25,6 @@ export default makeStyles((theme: Theme) =>
     activeLink: {
       "backgroundColor": Colors.bright_grey,
       "color": Colors.white,
-      "border": "solid 1px",
       "& .MuiListItemText-primary": {
         fontWeight: "bold",
       },
@@ -51,6 +50,7 @@ export default makeStyles((theme: Theme) =>
       paddingBottom: 4,
       marginTop: 5,
       fontSize: "11px",
+      borderbottom: "1px solid transparent",
     },
     icon: ({ iconLink }) => ({
       "width": 20,
