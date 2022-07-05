@@ -504,6 +504,7 @@
   "documentRevision.audit.docHistory": "Doc History",
   "documentRevision.audit.approvals.approver": "Approver Added",
   "documentRevision.audit.approvals.status.STRING_EDITED": "Approval Status Updated",
+  "documentRevision.audit.approvals.status.ARRAY_DELETED": "Approver Removed",
   "documentRevision.audit.name.STRING_EDITED": "Name changed",
   "documentRevision.audit.description.STRING_EDITED": "Description changed",
   "documentRevision.audit.attachments.ARRAY_NEW": "Attachment added",
@@ -1307,6 +1308,6 @@
   "tabId.changedetails": "Change Details",
   "tabId.general": "General",
   "tabId.training": "Training",
-  "tabId.calpmhistory":"Cal/PM History",
+  "tabId.calpmhistory": "Cal/PM History",
   "common.load.more": "Load More"
 }

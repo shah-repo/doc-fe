@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import striptags from "striptags";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { ApprovalStatus } from "../../../state/ducks/common/types";
+import { Approval, ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { AsyncStatus } from "../../../state/types";
 import AuditFactory from "../../components/AuditFactory";
@@ -19,6 +19,7 @@ import { styles } from "./Audit.presenter.styles.new";
 
 interface OwnProps {
   audit: AuditGroupType;
+  approvals: Approval[];
   statusLabel: string;
   versionNumber: string;
   isStatusVisible: boolean;
@@ -29,6 +30,7 @@ type AuditPresenterProps = OwnProps;
 
 const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
+  approvals,
   statusLabel,
   versionNumber,
   isStatusVisible,
@@ -45,11 +47,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty, index } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
-      if (audit[groupId].filter((change) =>
-        change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
-      ).length === 0) {
-        return null;
-      }
 
       if (change.field.includes("-built-in")) {
         return null;
@@ -276,7 +273,19 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
       } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
-        return;
+        // TODO: (in BE) since BE cannot make correct data for removing approvers.
+        const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
+        if (removedApproverById) {
+          change = {
+            ...change,
+            approvalStatus: change.nextValue as string,
+            type: "ARRAY_DELETED",
+            nextValue: {
+              ...removedApproverById.approver,
+            },
+          };
+        }
+        deletedReferences.push(change);
       } else if (change.field === "schema" && change.type === "ARRAY_NEW") {
         return;
       } else {
@@ -393,10 +402,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
-        <>
+        <Typography variant="subtitle1" className={classes.auditKey}>
           <Text dataCy={`change-key-${parentGroupKey}-${parentIndex}`}
             message={`documentRevision.audit.${field}.${type}`} />
-        </>
+        </Typography>
         {auditGroup.map((change, index) => (
           <div
             key={change.groupId + `-${index}`}
