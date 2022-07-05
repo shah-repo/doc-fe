@@ -38,7 +38,7 @@ const Header: React.FunctionComponent<Props> = ({
         alignContent="center"
       >
         <Grid item={true} zeroMinWidth>
-          <Typography noWrap className={classes.toolbarTitle}>
+          <Typography  className={classes.toolbarTitle}>
             <Text translation="header.welcome.back" />
             ,&nbsp;
             <b className={classes.toolbarTitleName}>{name}!</b>
