@@ -54,7 +54,7 @@ const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
     tooltipConfig,
   } = useDocumentStatus(documentTypeId, selectedDocument?.status);
   const versionNumber = selectedDocument?.displayRevision;
-  const approvals = selectedDocument?.approvals as Approval[]; // heck: for ENC-9083
+  const approvals = selectedDocument?.approvals as Approval[];
   const schema = selectedDocument?.formDocument?.formTemplate?.schema as FBSchemaProps[];
 
   return  <CustomLabelTooltip {...{ tooltipConfig }}>

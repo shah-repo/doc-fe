@@ -176,8 +176,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       map(ids, (approver) => {
         const approval = find(approvalsState?.getApprovals, (a) => a.approver?.id === approver);
         approvalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
-          // 9083 : for ENC-9083
-          const { id } = workspaceState || {};
+          const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
         });
       });

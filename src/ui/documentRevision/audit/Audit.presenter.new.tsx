@@ -273,7 +273,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
       } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
-        // 9083 : for ENC-9083 since BE cannot make correct data for removing approvers
+        // TODO: (in BE) since BE cannot make correct data for removing approvers.
         const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
         if (removedApproverById) {
           change = {

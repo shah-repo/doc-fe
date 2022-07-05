@@ -94,7 +94,7 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
       urlValues: { id, transition },
       body,
       method: "post",
-    }, (data, error) => { // 9083 : for ENC-9083
+    }, (data, error) => {
       if (error) {
         return this.transitionApi.onError(error);
       }
