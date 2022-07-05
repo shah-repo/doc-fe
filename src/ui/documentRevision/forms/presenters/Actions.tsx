@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { get, isArray, isEqual, isUndefined, keys, omit } from "lodash";
+import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,6 +53,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     values,
     asyncState,
     canChangeOwnerShip,
+    mode,
     type,
   } = React.useContext(FormHeaderContext)!;
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
@@ -128,7 +129,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const workspaceSchema = _documentRevisionFormState?.schema;
     const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     const values = get(formik, "values") as DocumentRevision;
-    switch (_formState?.mode) {
+    const updatedMode = mode === "none" ? _formState?.mode : mode;
+    switch (updatedMode) {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values?.outputDocumentTypes ?
@@ -157,9 +159,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         } else {
+          const formInputObj = isEmpty(_formState?.getValues()) ? values?.formInput ?? values : _formState?.getValues();
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue("formInput",
-            omit(_formState?.getValues(),
+            omit(formInputObj,
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         }
