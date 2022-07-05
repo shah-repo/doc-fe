@@ -559,3 +559,8 @@ export interface DocRevQueryParam {
   fields: "name,document.docId";
   status: DocumentRevisionStatus[];
 }
+
+export enum tabIdByInternalType {
+  PAPER_LHR = "details",
+  LOT = "details",
+}

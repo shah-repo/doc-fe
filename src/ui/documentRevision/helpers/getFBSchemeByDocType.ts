@@ -1,6 +1,6 @@
 import { find, get, map, size, some, union, unionBy } from "lodash";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentType, DocumentTypeByIdState, TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
 import { store as appStore } from "../../../state/store";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -78,7 +78,7 @@ export const getFBSchemeByDocType = (
         deleteDisabled: true,
         name: `fb-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
-        tabId,
+        tabId: tabIdByInternalType[outputTypesWithGroups[0].group] || tabId,
         index: size(finalScheme),
       });
     }
