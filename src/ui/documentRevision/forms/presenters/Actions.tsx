@@ -91,7 +91,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       setIsApproved(isInlineFormApproved( documentRevision, _formState, validSchema));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_formState, schema, _formState?.Validator]);
+  }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
