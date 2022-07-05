@@ -171,6 +171,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         break;
       default:
         formik.setFieldValue("formTemplate", undefined);
+        formik.setFieldValue("formDocument", undefined);
     }
   }
   const onFormClick = () => {

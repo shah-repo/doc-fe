@@ -36,8 +36,8 @@ let createdTrainingCurriculumFormDocument;
 let developersGroup;
 const FIRST_USER = USERS[1];
 
-const approvalNotificationToday = momentInPST().format("MMM DD, YYYY");
-const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM DD, YYYY");
+const approvalNotificationToday = momentInPST().format("MMM D, YYYY");
+const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM D, YYYY");
 
 context("Approval dates for AR and approval block", () => {
   before(() => {

@@ -24,8 +24,8 @@ let adminEmployee;
 let asyncTasksGroup;
 let emailsFromInbox;
 let dateAfterEmailShouldArrive;
-const approvalNotificationToday = momentInPST().format("MMM DD, YYYY");
-const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM DD, YYYY");
+const approvalNotificationToday = momentInPST().format("MMM D, YYYY");
+const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM D, YYYY");
 
 context("Record inline approval dates flow", () => {
   before(() => {

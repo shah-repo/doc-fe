@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
@@ -201,16 +202,9 @@ context("Record inline Flow", () => {
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
-    });
 
-    context("Create document", () => {
-      it("Click create document after filling document", () => {
+      it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
-      });
-
-      it("Verify approvals field is automatically added", () => {
-        SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Add textfield", () => {
@@ -221,7 +215,7 @@ context("Record inline Flow", () => {
       });
 
       it("Add inline approval", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
@@ -231,7 +225,7 @@ context("Record inline Flow", () => {
       });
 
       it("Add Checkbox group", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
         cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
         cy.fbGroupOptions("1", "2", "3");
@@ -241,7 +235,7 @@ context("Record inline Flow", () => {
       });
 
       it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.fbOpenValidation();
@@ -252,14 +246,14 @@ context("Record inline Flow", () => {
       });
 
       it("Add second textfield", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Second textfield for inline" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add second inline approval", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Second inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
@@ -273,17 +267,16 @@ context("Record inline Flow", () => {
         cy.progressBarShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
+    });
 
-      it(`Drag and drop approval block to last`, () => {
-        cy.get("[data-cy=\"form.builder.approvals\"]").first().contains("Approvals").arrowClick();
-        cy.dragAndDropTopDown({
-          fromSelector: ".MuiBox-root>div>ul>li:eq(0)",
-          toSelector: ".MuiBox-root>div>ul>li:eq(-1)",
-        });
+    context("Create document", () => {
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it("Verify form Draft status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+      it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.arCheckTitleInEditableAndMatches({ name: "Inline Form Document Revision" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
@@ -496,8 +489,8 @@ context("Record inline Flow", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
 
-      it("Verify form Released status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: "Inline Form Document Revision" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
@@ -798,9 +791,8 @@ context("Record inline Flow", () => {
       });
 
       it("Check inline record creation default to numeric revision", () => {
-        SystemRequirement("REQ-1020");
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-          .contains("Revision 1");
+        cy.drClickRevisionsSidePanel();
+        cy.recCheckRevisionStage({ stage: "Revision 1" });
       });
 
       it("Check approve button is not disabled", () => {
@@ -813,8 +805,8 @@ context("Record inline Flow", () => {
         });
       });
 
-      it("Check doc status for WIP and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "WIP" });
+      it(`Check doc status for ${STATUS_TYPES_LABEL.WIP} and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
         cy.arCheckTitleInEditableAndMatches({ name: "Record Document Revision" });
         cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
           recDocId = $docIdElement.text();
@@ -967,7 +959,7 @@ context("Record inline Flow", () => {
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("button[data-cy=\"fb-control-btn\"]").first().contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
@@ -983,8 +975,8 @@ context("Record inline Flow", () => {
 
       it("Check system creates new major revision after inline approve", () => {
         SystemRequirement("REQ-1040");
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-          .contains("Revision 2");
+        cy.drClickRevisionsSidePanel();
+        cy.recCheckRevisionStage({ stage: "Revision 2" });
       });
 
       context("Change textfield and approve again", () => {
@@ -1075,9 +1067,11 @@ context("Record inline Flow", () => {
       context("Approve and Release document", () => {
         it("Approve and release it", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+            cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+            cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
           });
           cy.recApproveAndReleaseInlineRecord();
@@ -1115,12 +1109,11 @@ context("Record inline Flow", () => {
 
         it("Verify record is in alpha state", () => {
           SystemRequirement("REQ-1060");
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-            .contains("Revision A");
+          cy.recCheckRevisionStage({ stage: "Revision A" });
         });
 
-        it("Check doc status for Released and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+        it(`Check doc status for ${STATUS_TYPES_LABEL.RELEASED} and click on Send To Email`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           cy.arCheckTitleInEditableAndMatches({ name: "Record Document Revision" });
           cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
             recDocId = $docIdElement.text();

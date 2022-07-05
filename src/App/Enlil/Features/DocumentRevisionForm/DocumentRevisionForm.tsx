@@ -128,6 +128,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       }
     >
       <SMTemplate
+        boxProps={{ className: "hide-scroll" }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
@@ -147,7 +148,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               boxProps={{
                 overflow: (_documentRevisionFormState?.expanded ? "auto" :
                   (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
-                    (_documentRevisionFormState?.isDescriptionFocused)) ? "auto" : "")),
+                    (_documentRevisionFormState?.isDescriptionFocused) || isCreateUrl) ? "auto" : "")),
                 height: isCreateUrl ? "calc(100vh - 105px)" :  "calc(100vh - 130px)",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}

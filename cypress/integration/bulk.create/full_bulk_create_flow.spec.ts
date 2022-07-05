@@ -608,7 +608,7 @@ context("Bulk create flow", () => {
     context("Add form fields that will be used in bulk creation", () => {
       context("Add text field", () => {
         it("Click add button", () => {
-          cy.fbAddNewField();
+          cy.fbAddNewFieldWhenHidden();
         });
 
         it("Select text field", () => {

@@ -4,6 +4,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
@@ -251,33 +252,35 @@ context("Records flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Add Checkbox group", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-        cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-        cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-        cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("1", "2", "3");
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+        cy.fbAddNewFieldButton();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
         cy.get(`input[name="validators.required_if_in"]`).check();
         cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-        cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get(`input[type="checkbox"][value="3"]`).first().check();
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -294,8 +297,8 @@ context("Records flow", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      it("Verify form Draft status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+      it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.arCheckTitleInEditableAndMatches({ name: "Lot History Record" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
@@ -475,8 +478,8 @@ context("Records flow", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
 
-      it("Verify form Released status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: "Lot History Record" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
@@ -690,14 +693,14 @@ context("Records flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Verify approvals field is automatically added", () => {
-        SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
-
       context("Creates document and releases it", () => {
         it("Click create document after filling document", () => {
           cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Verify approvals field is automatically added", () => {
+          SystemRequirement("REQ-0980");
+          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
         it("Approve and Release document", () => {
@@ -737,6 +740,7 @@ context("Records flow", () => {
 
     it("Check if revision is in alpha revision stage", () => {
       SystemRequirement("REQ-1030");
+      cy.drClickRevisionsSidePanel();
       cy.recCheckRevisionStage({ stage: "Revision A" });
     });
   });
@@ -749,7 +753,6 @@ context("Records flow", () => {
 
     it("Upload attachement picture 'image.jpg'", () => {
       cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
-      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -758,15 +761,15 @@ context("Records flow", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
-    it("Add first Approver'", () => {
+    it(`Add first Approver as ${USERS[1].name}`, () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Add 2nd Approver'", () => {
+    it(`Add 2nd Approver as ${USERS[3].name}`, () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
     });
 
-    it("Remove first Approver'", () => {
+    it(`Remove first Approver as ${USERS[1].name}`, () => {
       cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick();
     });
 
@@ -788,7 +791,7 @@ context("Records flow", () => {
     });
 
     it("Get the document Id", () => {
-      cy.arVerifyStatus({ status: "IN REVIEW" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
@@ -798,7 +801,7 @@ context("Records flow", () => {
       cy.authLogout();
     });
 
-    it("Login user to dashboard", () => {
+    it(`Login user ${USERS[3].name} as to dashboard`, () => {
       cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
     });
 
@@ -1001,14 +1004,14 @@ context("Records flow", () => {
       cy.ebApprove();
     });
 
-    it("Check doc Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Approval Record title" });
       cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
-      cy.sendToEmail();
+      cy.sendToEmailFromHeader();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -1152,7 +1155,7 @@ context("Records flow", () => {
 
     it("Check if approved date exists", () => {
       SystemRequirement("REQ-1010");
-      cy.get("[id=\"Presenter-FBWorkspace\"]").contains(currentDate);
+      cy.get("[data-cy^=\"approve\"]").contains(currentDate);
     });
 
     context("Check for Landing page columns and values", () => {
@@ -1167,11 +1170,11 @@ context("Records flow", () => {
       it("Check for Landing page default columns", () => {
         SystemRequirement("REQ-2740");
         cy.filterCheckHeaderValues("ID",
-          "Revision", "State",
-          "Title",
-          "Owner",
-          "Released Date",
-          "Form ID");
+          "REVISION", "STATE",
+          "TITLE",
+          "OWNER",
+          "RELEASED DATE",
+          "FORM ID");
       });
     });
 
