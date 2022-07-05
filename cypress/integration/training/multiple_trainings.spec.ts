@@ -1464,6 +1464,85 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
   });
 
+  context("Check dashboard and training tab for company admin", () => {
+    it("In dashboard, 3 tabs should be present", () => {
+      cy.get("[role=\"tablist\"]").eq(0).find("button").should("have.length", 3);
+      cy.get("[role=\"tablist\"]").eq(0).find("button").eq(0).should("contain.text", "My Feed");
+      cy.get("[role=\"tablist\"]").eq(0).find("button").eq(1).should("contain.text", "Trainings");
+      cy.get("[role=\"tablist\"]").eq(0).find("button").eq(2).should("contain.text", "Recent");
+    });
+
+    it("In dashboard, training outstanding chart should be present", () => {
+      cy.get("#training-chart canvas").should("be.exist");
+    });
+
+    it("In dashboard, user view should have 3 tabs", () => {
+      cy.get("[role=\"tablist\"]").eq(1).find("button").should("have.length", 3);
+      cy.get("[role=\"tablist\"]").eq(1).find("button").eq(0).should("contain.text", "ALL");
+      cy.get("[role=\"tablist\"]").eq(1).find("button").eq(1).should("contain.text", "Overdue");
+      cy.get("[role=\"tablist\"]").eq(1).find("button").eq(2).should("contain.text", "DUE IN 7 DAYS");
+    });
+
+    it("Training tab should have separate line item for Overdue & Due", () => {
+      cy.contains("Trainings").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").should("have.length", 2);
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0).should("contain.text", "OVERDUE");
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(1).should("contain.text", "DUE IN 7 DAYS");
+    });
+
+    it("Check line item format in training tab", () => {
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .find(".MuiListItemIcon-root svg").should("be.exist");
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .find(".MuiGrid-container").eq(0)
+        .should("contain.text", "Training on")
+        .and("contain.text", "FM-00002")
+        .and("contain.text", "OVERDUE")
+        .and("contain.text", "released doc1");
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .find(".MuiGrid-container").eq(1)
+        .should("contain.text", `${USERS[3].name}`);
+    });
+
+    it("Click on 'All' tab should display all training items", () => {
+      cy.get("#full-width-tabpanel-0 ul li").should("have.length", 2);
+    });
+
+    it("Click on 'Due' tab should display due training items", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
+        cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
+      });
+      cy.get("#full-width-tabpanel-2 ul li").should("have.length", 1);
+    });
+
+    it("Click on 'Overdue' tab should display Overdue training items", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
+        cy.get("button[aria-controls=\"full-width-tabpanel-2\"]").arrowClick();
+      });
+      cy.get("#full-width-tabpanel-1 ul li").should("have.length", 1);
+    });
+
+    it("Check training item format", () => {
+      cy.get("#full-width-tabpanel-1 li").eq(0)
+        .should("contain.text", "At")
+        .and("contain.text", "Athena")
+        .and("contain.text", "Overdue")
+        .and("contain.text", "FM-00002")
+        .and("contain.text", "released doc1")
+        .and("contain.text", "Due date");
+    });
+
+    it("On hover line item, Pin button should display", () => {
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .realHover().wait(1000);
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .find("svg").eq(2).realHover().wait(1000);
+      cy.get("[id^=mui-tooltip-]").should("have.text", "Pin this item");
+    });
+  });
+
   context(`Complete Overdue training for ${USERS[3].name}`, () => {
     it(`Login user as ${USERS[3].name}`, () => {
       cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
