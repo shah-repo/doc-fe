@@ -57,12 +57,16 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiButton: {
     root: {
-      fontSize: "0.75rem",
-      borderRadius: 3,
-      margin: appTheme.spacing(1),
-      fontFamily: "Sora, sans-serif;",
-      textTransform: "capitalize",
-      fontWeight: 600,
+      "fontSize": "0.75rem",
+      "borderRadius": 3,
+      "margin": appTheme.spacing(1),
+      "fontFamily": "Sora, sans-serif;",
+      "textTransform": "capitalize",
+      "fontWeight": 600,
+      "&$disabled": {
+        backgroundColor: Colors.dawn,
+        color: Colors.white,
+      },
     },
     contained: {
       boxShadow: "none",

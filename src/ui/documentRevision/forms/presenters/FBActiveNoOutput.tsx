@@ -1,4 +1,4 @@
-import { Box, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Box, Button, Grid, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import { get } from "lodash";
 import * as React from "react";
@@ -19,6 +19,8 @@ import { getActiveDocumentTypes } from "../transform";
 import RenderHtmlField from "./RenderHtmlField";
 import { FBProvider, FBDialog, FB, FBDialogState, FBForm } from "../../../form.builder";
 import Text from "../../../components/Text";
+import { ReactComponent as PreviewIcon } from "../../../../assets/images/preview.svg";
+import Colors from "../../../layout/theme/utils/colors";
 
 interface Props {
   status: DocumentRevisionStatus;
@@ -33,6 +35,22 @@ const styles = makeStyles((theme: Theme) =>
     outputGrey: {
       color: `${theme.palette.text.disabled}`,
     },
+    previewColumn: {
+      flex: "0 0 auto",
+    },
+    previewButton: {
+      "height": 40,
+      "padding": "10px 20px",
+      "margin": "0 0 20px 0",
+      "borderRadius": 100,
+      "color": Colors.white,
+      "&, &:hover": {
+        backgroundColor: Colors.navy,
+      },
+      "& svg": {
+        marginRight: 10,
+      },
+    },
   }),
 );
 const FBActiveNoOutput: React.FunctionComponent<Props> = ({
@@ -45,6 +63,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const classes = styles();
   const formik = useFormikContext();
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
+  const revisionFormSchema = _documentRevisionFormState?.schema;
   const [selectedValues, setSelectedValues] = React.useState<any>([]);
 
   const disabled: boolean = (docRevId !== undefined) || isDisabled;
@@ -83,7 +102,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     const scheme = getFBSchemeByDocType(
       formValue,
       documentTypesById,
-      _documentRevisionFormState?.schema,
+      revisionFormSchema,
       _tabsState?.tabID,
     );
 
@@ -91,7 +110,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   };
 
   const dialogState = FB.useRef<FBDialogState>(FBDialogState);
-  const handlePreview: React.MouseEventHandler<HTMLElement> = React.useCallback(
+  const handlePreview: React.MouseEventHandler = React.useCallback(
     () => {
       dialogState?.config({
         open: true,
@@ -100,7 +119,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         content: (
           <Box mx={8}>
             <FBForm
-              schema={_documentRevisionFormState?.schema}
+              schema={revisionFormSchema}
               initialValidation={true}
               workspaceMode="form"
             />
@@ -108,37 +127,45 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         ),
       });
     },
-    [dialogState, _documentRevisionFormState?.schema]
+    [dialogState, revisionFormSchema]
   );
 
   return (
     <FBProvider dialogState={dialogState}>
       <FBDialog />
       <Box>
-        <AutocompleteField
-          name="outputDocumentTypes"
-          label="document.output.type"
-          autocompleteProps={{
-            id: "formTemplate.outputDocumentTypes",
-            isMulti: false,
-            closeMenuOnSelect: true,
-            className: !outputDocEnabled ? classes.outputGrey : "",
-            isOptionDisabled: () => selectedValues?.length >= 1,
-          }}
-          options={outputDocumentTypeOptions}
-          validate={validator(required)}
-          isDisabled={isDisabled}
-          onChange={handleTypeChange}
-          portal={true}
-        />
+        <Grid container spacing={2} alignItems="flex-end">
+          <Grid item xs>
+            <AutocompleteField
+              name="outputDocumentTypes"
+              label="document.output.type"
+              autocompleteProps={{
+                id: "formTemplate.outputDocumentTypes",
+                isMulti: false,
+                closeMenuOnSelect: true,
+                className: !outputDocEnabled ? classes.outputGrey : "",
+                isOptionDisabled: () => selectedValues?.length >= 1,
+              }}
+              options={outputDocumentTypeOptions}
+              validate={validator(required)}
+              isDisabled={isDisabled}
+              onChange={handleTypeChange}
+              portal={true}
+            />
+          </Grid>
+          <Grid item xs className={classes.previewColumn}>
+            <Button
+              className={classes.previewButton}
+              color="primary"
+              onClick={handlePreview}
+              disabled={!revisionFormSchema}
+            >
+              <PreviewIcon />
+              <Text message="form.builder.layout.preview" />
+            </Button>
+          </Grid>
+        </Grid>
         {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handlePreview}
-        >
-          <Text message="form.builder.form.preview" />
-        </Button>
       </Box>
     </FBProvider>
   );
