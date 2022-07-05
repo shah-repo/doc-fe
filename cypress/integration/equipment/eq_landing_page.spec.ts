@@ -150,7 +150,7 @@ context("NCO document type management", () => {
     });
 
     it("Navigate to Details tab", () => {
-      cy.get("[data-cy=\"tabId.details\"]").arrowClick();
+      cy.drSelectDetailsTab();
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {
@@ -1035,7 +1035,7 @@ context("NCO document type management", () => {
     });
 
     it("Navigate To specification", () => {
-      cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+      cy.drSelectSpecificationTab();
     });
 
     it("Select Primary Owner", () => {
@@ -1049,7 +1049,7 @@ context("NCO document type management", () => {
     });
 
     it("Navigate To calpmhistory", () => {
-      cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+      cy.drSelectcalpmHistoryTab();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1097,7 +1097,7 @@ context("NCO document type management", () => {
     });
 
     it("Navigate To overview", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+      cy.drSelectOverviewTab();
     });
 
     it("Select Portable Location", () => {
@@ -1127,7 +1127,7 @@ context("NCO document type management", () => {
       });
 
       it("Navigate To specification", () => {
-        cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+        cy.drSelectSpecificationTab();
       });
 
       it("Change Primary Owner", () => {
@@ -1213,7 +1213,7 @@ context("NCO document type management", () => {
       });
 
       it("Navigate To specification", () => {
-        cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+        cy.drSelectSpecificationTab();
       });
 
       it("Change Primary Owner", () => {
@@ -1228,7 +1228,7 @@ context("NCO document type management", () => {
       });
 
       it("Navigate To overview", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+        cy.drSelectOverviewTab();
       });
 
       it("Change Location to Portable", () => {
@@ -1529,7 +1529,7 @@ context("NCO document type management", () => {
       });
 
       it("Navigate To specification", () => {
-        cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+        cy.drSelectSpecificationTab();
       });
 
       it("Change Primary Owner", () => {
@@ -1617,7 +1617,7 @@ context("NCO document type management", () => {
       });
 
       it("Navigate To specification", () => {
-        cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+        cy.drSelectSpecificationTab();
       });
 
       it("Change Primary Owner", () => {

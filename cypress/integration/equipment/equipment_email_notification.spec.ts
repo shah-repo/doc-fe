@@ -405,7 +405,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+        cy.drSelectcalpmHistoryTab();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -596,7 +596,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+        cy.drSelectcalpmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {
@@ -638,7 +638,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To specification", () => {
-        cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+        cy.drSelectSpecificationTab();
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
@@ -656,7 +656,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+        cy.drSelectcalpmHistoryTab();
       });
 
 
@@ -839,7 +839,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+        cy.drSelectcalpmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {
@@ -881,7 +881,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To specification", () => {
-        cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+        cy.drSelectSpecificationTab();
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
@@ -900,7 +900,7 @@ context("Test Equipment maintenance email notifications", () => {
 
 
       it("Navigate To calpmhistory", () => {
-        cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+        cy.drSelectcalpmHistoryTab();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1082,7 +1082,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+        cy.drSelectcalpmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {
@@ -1124,7 +1124,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To specification", () => {
-        cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+        cy.drSelectSpecificationTab();
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
@@ -1142,7 +1142,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+        cy.drSelectcalpmHistoryTab();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1324,7 +1324,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+        cy.drSelectcalpmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {
