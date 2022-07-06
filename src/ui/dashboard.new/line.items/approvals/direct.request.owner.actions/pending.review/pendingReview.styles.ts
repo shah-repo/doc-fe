@@ -26,6 +26,9 @@ export const styles = makeStyles((theme: Theme) =>
     attachmentIcon: {
       paddingTop: "2px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     collapsedList: {
       backgroundColor: Colors.sky_blue,
     },

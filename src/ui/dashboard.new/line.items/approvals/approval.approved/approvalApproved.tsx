@@ -140,6 +140,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
         onMouseEnter={onMouseHoverListItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         className={classes.listItem}
+        disableRipple
       >
         {open ? (
           <CollapseIcon className={classes.icon} onClick={handleClick} />
