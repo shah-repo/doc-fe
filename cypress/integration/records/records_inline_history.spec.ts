@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { HistoryTestRecord } from "../../utils/constants/documentTypes/testTypes";
@@ -216,19 +217,20 @@ context("Record inline history Flow", () => {
       it("Select approver for first inline", () => {
         SystemRequirement("REQ-4340");
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
+          cy.get("input[data-cy*=\"fb-ia-inline-field\"]").arrowClick().wait(1000);
           cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
+          cy.unClick();
         });
       });
 
       it("Save record", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("button[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
@@ -254,7 +256,14 @@ context("Record inline history Flow", () => {
 
         it("Enter description 'History Test Inline Record description'", () => {
           cy.drEnterDocumentDescription({ description: "History Test Inline Record description" });
-          cy.pause();
+        });
+
+        it("Select approver for first inline", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+            cy.get("input[data-cy*=\"fb-ia-inline-field\"]").arrowClick().wait(1000);
+            cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
+            cy.unClick();
+          });
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -264,16 +273,18 @@ context("Record inline history Flow", () => {
             .should("have.text", "Inline approval pending");
         });
 
+        it("Save record", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4400");
-          cy.pause();
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+          cy.get("button[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
           cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostApprovalsApprove,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-          });
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.PostApprovalsApprove, () => {
+              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+            });
           cy.checkToastMessage({ exists: false });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -320,6 +331,13 @@ context("Record inline history Flow", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
         });
 
+        it("Check history entry", () => {
+          SystemRequirement("REQ-1630");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+            cy.drSelectHistoryTab();
+          });
+        });
+
         it("Count number of elements in approval history", () => {
           cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 6);
         });
@@ -336,8 +354,8 @@ context("Record inline history Flow", () => {
           );
         });
 
-        it("Check record status is in 'Draft'", () => {
-          cy.drCheckDocumentStatus({ status: "Draft" });
+        it(`Check record status is in ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
       });
 
