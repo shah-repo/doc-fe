@@ -20,6 +20,7 @@ declare global {
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
+      drSelectProcedureTab(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -243,6 +244,11 @@ Cypress.Commands.add("drSelectSpecificationTab", () => {
 
 Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectProcedureTab", () => {
+  cy.get("[data-cy=\"tabId.procedure\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
