@@ -56,7 +56,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       setInputValue((value as any)?.value);
     }
     setFieldValue(name, (value as any)?.value);
-    setShowOnlyText(true);
   };
   const onInputChange = (value) => {
     if (!touched[name]) {
@@ -75,7 +74,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       // eslint-disable-next-line @typescript-eslint/await-thenable
       await setFieldValue(name, inputValue);
     }
-    setShowOnlyText(false);
+    setShowOnlyText(true);
+    if (formikValue === inputValue) { return; }
     submitForm();
   };
 

@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
@@ -9,6 +10,10 @@ import { CyRoutes } from "../../support/routes";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
+
+const ATTACHMENT_BUILT_IN_KEY = "fb-attachment-built-in";
+const ATTACHMENTS = "attachments";
+const ON_STATE_TO_IN_REVIEW = "ON_STATE_TO_IN_REVIEW";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -404,12 +409,25 @@ context("Create receivable test", () => {
                             },
                             {
                               index: 1,
+                              name: ATTACHMENT_BUILT_IN_KEY,
+                              label: "Attachments",
+                              type: ATTACHMENTS,
+                              applicableOn: [
+                                ON_STATE_TO_IN_REVIEW,
+                              ],
+                              deleteDisabled: true,
+                              deleteInFormDisabled: true,
+                              applicableValidationSchema: true,
+                              tabId: "overview",
+                            },
+                            {
+                              index: 2,
                               type: "textfield",
                               name: "text-field-ke04ztn7",
                               rows: 1,
                               editorProperties: [],
                               label: "Text field",
-                              tabId: "details",
+                              tabId: "overview",
                               placeholder: "Enter text",
                               applicableOn: [
                                 "ON_STATE_TO_IN_REVIEW",
@@ -422,7 +440,7 @@ context("Create receivable test", () => {
                               deleteDisabled: false,
                               name: "fb-po-approvals-kqqix31p",
                               uniqueSchemaItem: true,
-                              index: 2,
+                              index: 3,
                             }],
                           },
                         },
@@ -476,6 +494,10 @@ context("Create receivable test", () => {
 
     context("Fill out receivable document form", () => {
       context("Check list of open PO-s", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Check there is two open PO-s available to select", () => {
           SystemRequirement("REQ-1790");
           cy.recCheckNumberOfAvailablePo({ numberOfOpenPOs: 2 });
@@ -525,7 +547,12 @@ context("Create receivable test", () => {
           cy.get("[data-cy=description]").eq(1).should("contain.text", "office cleaning");
         });
       });
+
       context("Verify receivable creation", () => {
+        it("Navigate to Overview tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
         it("Verify adding attachments", () => {
           SystemRequirement("REQ-1980");
           cy.atchUploadAttachment({ fileName: "test.docx" });
@@ -576,8 +603,8 @@ context("Create receivable test", () => {
           cy.ebApprove();
         });
 
-        it("Verify receivable status is 'Current'", () => {
-          cy.drCheckDocumentStatus({ status: "Current" });
+        it(`Verify receivable status is ${STATUS_TYPES_LABEL.CURRENT}`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.CURRENT });
         });
       });
     });

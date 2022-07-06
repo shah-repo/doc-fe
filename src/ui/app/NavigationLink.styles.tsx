@@ -6,6 +6,7 @@ export default makeStyles((theme: Theme) =>
     link: {
       "color": Colors.white,
       "backgroundColor": Colors.mirage,
+      "border-bottom": "1px solid transparent",
       "&:hover": {
         color: Colors.white,
         backgroundColor: Colors.bright_grey,
@@ -49,6 +50,7 @@ export default makeStyles((theme: Theme) =>
       paddingBottom: 4,
       marginTop: 5,
       fontSize: "11px",
+      borderbottom: "1px solid transparent",
     },
     icon: ({ iconLink }) => ({
       "width": 20,

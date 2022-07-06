@@ -94,11 +94,11 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("Add item").arrowClick();
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
 });
 
 Cypress.Commands.add("poCreateNew", () => {

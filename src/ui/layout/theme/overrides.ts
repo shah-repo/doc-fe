@@ -202,20 +202,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
           visibility: "hidden",
         },
       },
-      [`& .${FBClasses.nonOwner}`]: {
-        [`& .Mui-disabled`]: {
-          backgroundColor: Colors.whitest_grey,
-        },
-      },
       [`& .${FBClasses.inputPreview}`]: {
-        [`& .Mui-disabled`]: {
-          color: `${appTheme.palette.text.primary} !important`,
-          backgroundColor: "unset",
-          paddingLeft: "2px",
-          fontSize: "1rem",
-          fontWeight: 400,
-          lineHeight: 1.33,
-        },
         "& fieldset": {
           borderWidth: "0px!important",
         },
