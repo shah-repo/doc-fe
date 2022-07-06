@@ -843,17 +843,4 @@ export const purchaseOrderDefaultSchema: any = [
     deleteDisabled: false,
     uniqueSchemaItem: true,
   },
-  {
-    name: "fb-attachment-built-in",
-    type: "attachments",
-    index: 39,
-    label: "Supporting Documents",
-    tabId: "lineitems",
-    applicableOn: [
-      "ON_STATE_TO_IN_REVIEW",
-    ],
-    deleteDisabled: true,
-    deleteInFormDisabled: true,
-    applicableValidationSchema: true,
-  },
 ];

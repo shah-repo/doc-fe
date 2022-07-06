@@ -76,7 +76,6 @@ export type FBInputType =
   | "poapprovals"
   | "lhrbuild"
   | "purchaseordersummary"
-  | "attachments"
   | "downloadsheet";
 
 export type FBInputProps =
