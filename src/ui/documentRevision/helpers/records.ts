@@ -37,7 +37,7 @@ const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision
   if (
     documentRevision?.version > 1 &&
     isEmpty(fieldApprovals) &&
-    Boolean(formState?.getValue(fieldName))
+    Boolean(formState?.getValues()?.formInput?.[fieldName])
   ) {
     return some(fieldApprovals, (approval) => approval.status === ApprovalStatus.Approved)
     || !fieldApprovals?.length;
