@@ -19,6 +19,7 @@ declare global {
       drClearDocumentTitle(): Chainable<Subject>;
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
+      drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -227,6 +228,11 @@ Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion:
 
 Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.get("[data-cy=\"tabId.details\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectLineItems", () => {
+  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
