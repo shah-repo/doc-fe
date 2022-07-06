@@ -836,7 +836,7 @@ context("Owner submits LHR for approval", () => {
     });
   });
 
-  context("Operator should edit LHR fields", () => {
+  context("Operator should be able to edit LHR fields", () => {
     it("Log out user", () => {
       cy.authLogout();
     });
@@ -873,6 +873,246 @@ context("Owner submits LHR for approval", () => {
         .find(".MuiChip-deletable").should("contain.text", USERS[2].name);
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
         .find(".MuiChip-deletable").should("contain.text", USERS[3].name);
+    });
+
+    it(`Remove ${USERS[3].name} approver`, () => {
+      cy.contains(USERS[3].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+    });
+
+    it(`Add ${USERS[1].name} approver`, () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.unClick();
+    });
+  });
+
+  context(`User ${USERS[3].name} should not be able to edit LHR approval block`, () => {
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+
+    it(`Log in as User 3 (${USERS[3].name})`, () => {
+      cy.authLogin({
+        email: USERS[3].email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: newCompanyName, multiple: true });
+    });
+
+    it("Visit LHR", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+      ], () => {
+        cy.visit(lhrUrl);
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Confirm 'Approval block' is disabled for user 3", () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("be.disabled");
+    });
+  });
+
+  context(`User ${USERS[1].name} should be able to edit LHR approval block and submit for approval`, () => {
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+
+    it(`Log in as User 1 (${USERS[1].name})`, () => {
+      cy.authLogin({
+        email: USERS[1].email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: newCompanyName, multiple: true });
+    });
+
+    it("Visit LHR", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+      ], () => {
+        cy.visit(lhrUrl);
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify 2 approvers should exist", () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
+        .find(".MuiChip-deletable").should("have.length", 2);
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
+        .find(".MuiChip-deletable").should("contain.text", USERS[2].name);
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
+        .find(".MuiChip-deletable").should("contain.text", USERS[1].name);
+    });
+
+    it(`User 1 can add ${USERS[3].name} approver`, () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[3].email });
+      cy.unClick();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Click 'START MPI'", () => {
+      cy.mpiStartStep({ stepNumber: 1 });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Enter 'Start quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
+    });
+
+    it("Enter 'Accepted quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.drSaveDocumentWithoutaudit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Complete step", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve step", () => {
+      cy.ebApprove();
+    });
+
+    it("visit the LHR", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+      ], () => {
+        cy.visit(lhrUrl);
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`User 1 can remove ${USERS[3].name} approver`, () => {
+      cy.contains(USERS[3].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+  });
+
+  context(`Operator ${USERS[2].name} can't withdraw LHR`, () => {
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+
+    it(`Log in as User 2 (${USERS[2].name})`, () => {
+      cy.authLogin({
+        email: USERS[2].email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: newCompanyName, multiple: true });
+    });
+
+    it("Visit LHR", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+      ], () => {
+        cy.visit(lhrUrl);
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Withdraw Submission' button", () => {
+      cy.get("[data-cy=\"document.revision.withdraw.alert\"]").should("not.exist");
+    });
+  });
+
+  context(`User ${USERS[1].name} approves LHR`, () => {
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+
+    it(`Log in as User 1 (${USERS[1].name})`, () => {
+      cy.authLogin({
+        email: USERS[1].email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: newCompanyName, multiple: true });
+    });
+
+    it("Visit LHR", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+      ], () => {
+        cy.visit(lhrUrl);
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Approve LHR", () => {
+      cy.ebApprove();
+    });
+  });
+
+  context(`User ${USERS[2].name} approves LHR`, () => {
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+
+    it(`Log in as User 2 (${USERS[2].name})`, () => {
+      cy.authLogin({
+        email: USERS[2].email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: newCompanyName, multiple: true });
+    });
+
+    it("Visit LHR", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+      ], () => {
+        cy.visit(lhrUrl);
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Approve LHR", () => {
+      cy.ebApprove();
+    });
+
+    it("Check status of LHR is Released", () => {
+      cy.poCheckStatus("Released");
     });
   });
 });
