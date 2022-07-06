@@ -694,6 +694,7 @@
   "form.builder.field.config": "Field Config",
   "form.builder.validation": "Set Rules",
   "form.builder.form.preview": "Form Preview",
+  "form.builder.layout.preview": "Preview Layout",
   "form.builder.predefined.validation": "Predefined Validation",
   "form.builder.custom.validation": "Custom Validation",
   "form.builder.validation.mode": "Validation Mode",
