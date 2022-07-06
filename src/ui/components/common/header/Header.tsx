@@ -4,7 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
 import { SM } from "../../../../App";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
-import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
+// import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 import Colors from "../../../layout/theme/utils/colors";
 import { headerBackgroundStyles } from "./Header.background.styles";
@@ -18,12 +18,11 @@ const styles = makeStyles((theme: Theme) =>
     },
     appbar: {
       backgroundColor: Colors.white,
-      position: "fixed",
+      position: "sticky",
       top: "45px",
       zIndex: theme.zIndex.drawer + 1,
     },
     toolbar: {
-      marginLeft: DRAWER_WIDTH,
       borderBottom: `1px solid ${Colors.medium_gray}`,
       minHeight: "60px",
     },

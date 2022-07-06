@@ -57,12 +57,16 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiButton: {
     root: {
-      fontSize: "0.75rem",
-      borderRadius: 3,
-      margin: appTheme.spacing(1),
-      fontFamily: "Sora, sans-serif;",
-      textTransform: "capitalize",
-      fontWeight: 600,
+      "fontSize": "0.75rem",
+      "borderRadius": 3,
+      "margin": appTheme.spacing(1),
+      "fontFamily": "Sora, sans-serif;",
+      "textTransform": "capitalize",
+      "fontWeight": 600,
+      "&$disabled": {
+        backgroundColor: Colors.dawn,
+        color: Colors.white,
+      },
     },
     contained: {
       boxShadow: "none",
@@ -202,20 +206,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
           visibility: "hidden",
         },
       },
-      [`& .${FBClasses.nonOwner}`]: {
-        [`& .Mui-disabled`]: {
-          backgroundColor: Colors.light_gray,
-        },
-      },
       [`& .${FBClasses.inputPreview}`]: {
-        [`& .Mui-disabled`]: {
-          color: `${appTheme.palette.text.primary} !important`,
-          backgroundColor: "unset",
-          paddingLeft: "2px",
-          fontSize: "1rem",
-          fontWeight: 400,
-          lineHeight: 1.33,
-        },
         "& fieldset": {
           borderWidth: "0px!important",
         },

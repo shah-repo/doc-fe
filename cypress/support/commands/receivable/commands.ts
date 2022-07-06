@@ -145,7 +145,7 @@ Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: i
 });
 
 Cypress.Commands.add("recSelectPo", (params: {poTitle: string}) => {
-  cy.get("[data-cy*=receivable]").arrowClick();
+  cy.get(`input[data-cy^="porec-receivable"]`).arrowClick();
   cy.get("ul>li[role=option]").contains(params.poTitle).arrowClick();
 });
 

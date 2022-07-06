@@ -20,6 +20,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   onClick?: (value: any) => void;
   onChange?: (value: ValueType<OptionType>) => void;
   isDisabled?: boolean;
+  portal?: boolean;
 }
 
 export const selectStyles: StylesConfig = {
@@ -52,7 +53,7 @@ export const selectStyles: StylesConfig = {
   }),
   menu: (provided) => ({
     ...provided,
-    position: "relative",
+    zIndex: 2,
   }),
 };
 
@@ -71,6 +72,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   autocompleteProps,
   options,
   isDisabled = false,
+  portal,
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
@@ -103,6 +105,8 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
       <Select
         {...fieldProps.field}
         {...autocompleteProps}
+        menuPlacement={portal ? "top" : "auto"}
+        menuPortalTarget={portal ? document.querySelector("body") : null}
         options={options}
         onChange={onChange}
         styles={selectStyles}

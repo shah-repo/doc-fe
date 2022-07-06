@@ -19,8 +19,9 @@ declare global {
       drClearDocumentTitle(): Chainable<Subject>;
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
-      drSelectcalpmHistoryTab(): Chainable<Subject>;
+      drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
+      drSelectCalPmHistoryTab(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -97,7 +98,7 @@ declare global {
       drAPIApproveAndRelease(params: { documentId: string; payload: IApproveAndReleasePayload; employeeId: string; sessionId: string }): Chainable<Subject>;
       drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
       drSelectReferences(...list: string[]): Chainable<Subject>;
-      drRemoveReferences(...list: int[]): Chainable<Subject>;
+      drRemoveReferences(params: {reference: string}): Chainable<Subject>;
       drSelectReleasedVersionOfDocument(params: { docVersion: int }): Chainable<Subject>;
       drAdministrativeRevisionLevel(): Chainable<Subject>;
       drAddApprover(params: { name: string }): Chainable<Subject>;
@@ -231,8 +232,18 @@ Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drSelectLineItems", () => {
+  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectSpecificationTab", () => {
   cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
+  cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -241,16 +252,10 @@ Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("drSelectcalpmHistoryTab", () => {
-  cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
-  cy.listLoadingElementShouldNotExist();
-});
-
-Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
-  list.forEach((item) => {
-    cy.get("[class=\"circle_remove\"]").eq(item).arrowClick({ force: true });
-  });
-  cy.get("[data-cy=field-referenceTo] h5").arrowClick();
+Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {
+  cy.get("div[data-tag-index]").contains(params.reference)
+    .parent().parent().parent()
+    .find("svg").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
@@ -289,7 +294,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(params.documentType);
   cy.wait(1500);
-  cy.get(`[data-cy="field-outputDocumentTypes"] div[id^="react-select"]`).contains(params.documentType).arrowClick();
+  cy.get(`div[id^="react-select"]`).contains(params.documentType).arrowClick();
   cy.unClick();
 });
 
@@ -575,6 +580,7 @@ Cypress.Commands.add("drClickReviseDocument", () => {
   cy.get("[data-cy=\"updateRecord\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {

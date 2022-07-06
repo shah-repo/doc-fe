@@ -32,6 +32,7 @@ export interface FormHeaderContext {
   canChangeOwnerShip: boolean;
   values: DocumentRevisionFormValues;
   isDisabled: boolean;
+  mode: FBWorkspaceMode;
   asyncState: AsyncState;
   type?: DocumentCloneType;
   lastSavedTimestamp?: string;
@@ -180,7 +181,6 @@ DocumentRevisionFormContainerProps
   } else if (pmForm) {
     mode = "form";
   }
-
   useEffect(() => {
     _formState?.setMode(mode);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -199,6 +199,7 @@ DocumentRevisionFormContainerProps
     isDisabled,
     asyncState,
     type,
+    mode,
     lastSavedTimestamp,
   });
 

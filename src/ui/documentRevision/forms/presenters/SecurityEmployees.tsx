@@ -6,7 +6,11 @@ import { changeRequestsSelectors } from "../../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../../state/reducers";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 
-const SecurityEmployees: React.FunctionComponent = () => {
+interface Props {
+  portal?: boolean;
+}
+
+const SecurityEmployees: React.FunctionComponent<Props> = ({ portal }) => {
   const intl = useIntl();
   const availableApprovers = useSelector((state: ApplicationState) => {
     const currentUserId = authSelectors.currentUserId(state);
@@ -29,6 +33,7 @@ const SecurityEmployees: React.FunctionComponent = () => {
         }),
       }}
       options={availableApprovers}
+      portal={portal}
     />
   );
 };
