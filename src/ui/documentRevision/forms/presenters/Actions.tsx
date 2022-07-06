@@ -19,6 +19,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
@@ -53,6 +54,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     values,
     asyncState,
     canChangeOwnerShip,
+    mode,
     type,
   } = React.useContext(FormHeaderContext)!;
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
@@ -90,7 +92,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       setIsApproved(isInlineFormApproved( documentRevision, _formState, validSchema));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_formState, schema, _formState?.Validator]);
+  }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
@@ -128,7 +130,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const workspaceSchema = _documentRevisionFormState?.schema;
     const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     const values = get(formik, "values") as DocumentRevision;
-    switch (_formState?.mode) {
+    const updatedMode = mode === "none" ? _formState?.mode : mode;
+    switch (updatedMode) {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values?.outputDocumentTypes ?
@@ -157,9 +160,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         } else {
+          const formStateContext = FBFormStateContext as any;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue("formInput",
-            omit(_formState?.getValues(),
+            omit(formStateContext?._currentValue,
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         }

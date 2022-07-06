@@ -37,6 +37,10 @@ export const styles = makeStyles(() =>
     contentSection: {
       marginTop: "2%",
     },
+    gridItems: {
+      display: "flex",
+      alignItems: "center",
+    },
     date: {
       fontWeight: "normal",
       fontSize: "12px",
@@ -53,6 +57,7 @@ export const styles = makeStyles(() =>
     },
     avatarSection: {
       display: "flex",
+      maxWidth: "70%",
     },
     margin5: {
       marginRight: "5px",
