@@ -472,7 +472,7 @@ context("Test LHR landing page", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
-                tabId: "procedure",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],

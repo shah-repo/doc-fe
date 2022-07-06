@@ -14,6 +14,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
+import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
@@ -112,6 +113,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
 
@@ -253,6 +255,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             revisionChangeType={values.revisionChangeType}
             isDisabled={isDisabledInput}
             {...{ documentTypeId, isRecord }}
+          />
+          <AttachmentsField
+            isDisabled={isDisabledInput}
+            isNewVersion={false}
+            docRevId = {docRevId}
+            isAttachmentEmpty = {isAttachmentEmpty}
+            containsRedline = {false}
+            docRevStatus = {documentRevision?.status}
+            documentRevision={documentRevision}
+            documentTypeId={documentTypeId || ""}
           />
         </Grid>
         {isEB && (
