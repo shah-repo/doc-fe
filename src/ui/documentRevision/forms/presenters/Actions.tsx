@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from "lodash";
+import { get, isArray, isEqual, isUndefined, keys, omit } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
@@ -159,10 +160,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         } else {
-          const formInputObj = isEmpty(_formState?.getValues()) ? values?.formInput ?? values : _formState?.getValues();
+          const formStateContext = FBFormStateContext as any;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue("formInput",
-            omit(formInputObj,
+            omit(formStateContext?._currentValue,
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         }
