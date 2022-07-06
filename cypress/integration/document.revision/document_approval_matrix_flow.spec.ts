@@ -202,13 +202,12 @@ context("Document Approval Matrix Flow", () => {
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
       cy.drCreateNewDocumentFromForm();
-      cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
-      cy.get("[data-cy=\"form.builder.add.item\"]").last().arrowClick();
-      cy.pause();
+      // cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
+      // cy.drAddApprovalMatrixItem();
     });
   });
 
-  context("Check Document Types are present in DAM", () => {
+  xcontext("Check Document Types are present in DAM", () => {
     it("Approval Matrix document types", () => {
       cy.get(`[data-cy="documentTypeApprovalMatrix"]`).each(($el) => {
         DAMDocumentTypes.push($el.get(0).innerText);
@@ -216,7 +215,6 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Check Document types", () => {
-      cy.pause();
       SystemRequirement("REQ-0480");
       let exists = true;
       docTypes = docTypes || [];
@@ -240,11 +238,14 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Add New Role: Role One", () => {
+    it("Open approval roles tab", () => {
+      cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+    });
+
     it("Open 'Add Role' dialog", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drAddAnotherRoleBtn();
       });
-
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -267,7 +268,8 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Document Type", () => {
     it("Click on 'Add Item' button", () => {
-      cy.drOpenCloseSidebarDrawer();
+      cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
+      // cy.drOpenCloseSidebarDrawer();
       cy.drAddApprovalMatrixItem();
     });
 
@@ -296,6 +298,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Mark 'Approvals Numeric' for ${roleOne}`, () => {
+      cy.pause();
       cy.drAMCheckRole({ stage: "stage1", index: 0 });
     });
 
