@@ -205,9 +205,7 @@ Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-    cy.get("tr.k-master-row").contains(params.item).arrowClick();
-  });
+  cy.get("tr.k-master-row").contains(params.item).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -228,7 +226,7 @@ Cypress.Commands.add("poConvertedToDollarsMessage", () => {
 
 Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[class=\"MuiList-root MuiList-padding\"] > div > a > div").contains(item).should("exist");
+    cy.get("[data-cy=\"HeaderInfo\"]").contains(item).should("exist");
   });
 });
 
