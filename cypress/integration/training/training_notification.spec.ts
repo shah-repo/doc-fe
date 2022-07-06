@@ -504,20 +504,20 @@ context("Training notification test", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[1].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
     });
 
-    it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[2].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
     });
 
-    it(`${USERS[3].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[3].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[3].name }).wait(500);
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
@@ -545,8 +545,12 @@ context("Training notification test", () => {
   });
 
   context("Check for training text inside dialog box and complete training", () => {
+    it("Check if 'Send To Email' button is displayed", () => {
+      cy.sendToEmail();
+    });
+
     it("Check for training complete and check training ID, Title", () => {
-      cy.get("[data-cy=training-complete]").click();
+      cy.get("button[data-cy=\"training-complete\"]").contains("Complete training").arrowClick();
       cy.get("form>div").should("contain.text", "TRN ID");
       cy.get("form>div>div:nth-child(1)").should("contain.text", "TRN-00001");
       cy.get("form>div>div:nth-child(1)").should("be.visible");
@@ -570,15 +574,9 @@ context("Training notification test", () => {
       cy.get("[role='dialog']").contains(USERS[1].name).should("be.visible");
     });
 
-    it("Check if 'Send To Email' button is displayed", () => {
-      cy.get("button>span").should("contain.text", "Send To Email");
-      cy.get("[role='dialog']>button").arrowClick();
-    });
-
     it("Click on acknowladge", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy=training-complete]").click();
           cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
           cy.progressBarShouldAppear();
@@ -654,7 +652,7 @@ context("Training notification test", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[1].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -676,7 +674,7 @@ context("Training notification test", () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      cy.sendToEmail();
+      cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -804,7 +802,7 @@ context("Training notification test", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
+    it(`${USERS[1].name} with timestamp on 'COMPLETED ON' column should be present`, () => {
       cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
@@ -823,7 +821,7 @@ context("Training notification test", () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      cy.sendToEmail();
+      cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -951,8 +949,8 @@ context("Training notification test", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Verify Assign Date is Today", () => {
-      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("Assign Date").arrowClick();
+    it("Verify ASSIGN DATE is Today", () => {
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("ASSIGN DATE").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
       cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
@@ -964,8 +962,8 @@ context("Training notification test", () => {
         .should("have.text", `${assignDate}`);
     });
 
-    it("Verify Due Date is 30 days from Now", () => {
-      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("Due date").arrowClick();
+    it("Verify DUE DATE is 30 days from Now", () => {
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("DUE DATE").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
       cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
@@ -1094,7 +1092,7 @@ context("Training notification test", () => {
     });
   });
 
-  context("Verify Assign Date and Due Date are adjusted accordingly", () => {
+  context("Verify ASSIGN DATE and Due Date are adjusted accordingly", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
     });
@@ -1106,8 +1104,8 @@ context("Training notification test", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Verify Assign Date is adjusted by 23 days", { retries: 3 }, () => {
-      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("Assign Date").arrowClick();
+    it("Verify ASSIGN DATE is adjusted by 23 days", { retries: 3 }, () => {
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("ASSIGN DATE").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
       cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
@@ -1120,8 +1118,8 @@ context("Training notification test", () => {
       cy.wait(3000);
     });
 
-    it("Verify Due Date is adjusted by 23 days", () => {
-      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("Due date").arrowClick();
+    it("Verify DUE DATE is adjusted by 23 days", () => {
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("DUE DATE").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
       cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
@@ -1144,7 +1142,7 @@ context("Training notification test", () => {
     });
   });
 
-  context("Verify the AR in Close State", () => {
+  context("Verify the AR in CLOSED State", () => {
     it("Navigate to ar list", () => {
       cy.navigToApprovalRequestList();
     });

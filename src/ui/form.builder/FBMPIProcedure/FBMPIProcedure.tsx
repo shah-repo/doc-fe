@@ -25,7 +25,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   <FBInput {...props } {...{ name }} type="mpiprocedure">
     <Box
       pb={3}
-      mt={-2.7}
+      mt={1.75}
       color={Colors.hint_gray}
       borderBottom={1}
     >

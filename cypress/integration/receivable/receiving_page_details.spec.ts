@@ -1,6 +1,7 @@
 import moment from "moment";
 import "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -755,7 +756,19 @@ context("Receivable test with Page Details", () => {
         cy.drEnterDocumentDescription({ description: "New Purchase Order" });
       });
 
+      it("Enters description 'New Purchase Order Description'", () => {
+        cy.drEnterDocumentDescription({ description: "New Purchase Order" });
+      });
+
+      it("Click 'Save the document", () => {
+        cy.recClickCreateDocumentWithApiCall();
+      });
+
       context("Create first line item on PO", () => {
+        it("Navigate to Lineitem tab", () => {
+          cy.drSelectLineItems();
+        });
+
         it("Click on 'Add item' button", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.poAddNewFieldItem();
@@ -857,9 +870,19 @@ context("Receivable test with Page Details", () => {
         it("Click on 'Add' inside PO dialog box", () => {
           cy.poAddPOButtonClick();
         });
+
+        it("Save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.drClickCreateDocumentWithoutApiCall();
+          });
+        });
       });
 
       context("Approve Purchase Order document", () => {
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Add an Approval", () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         });
@@ -912,6 +935,10 @@ context("Receivable test with Page Details", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
     context("Add field 'Receive Purchase Order'", () => {
       it("Click add new field", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
@@ -935,12 +962,11 @@ context("Receivable test with Page Details", () => {
     context("Add 'TextField' Radiobutton group and Checkbox group", () => {
       it("Click add new field and select 'TextField'", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectTextField();
-        cy.fbAddLabelName({ name: TEXTFIELD_LABEL });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: TEXTFIELD_LABEL });
         cy.fbOpenValidation();
         cy.fbFieldRequired();
-        cy.fbAddField();
-        cy.progressBarShouldNotExist();
+        cy.fbAddNewFieldButton();
       });
 
       it("Click add new field and select 'Radio Button group'", () => {
@@ -969,16 +995,8 @@ context("Receivable test with Page Details", () => {
 
     context("Save and release form", () => {
       it("Click create document", () => {
-        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }, (req) => {
-          req.reply((res) => {
-            if (res.body !== "") {
-              const response = res.body;
-              receivingName = response.formTemplate.schema[1].name;
-            }
-          });
-        }).as("response");
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait("@response", { requestTimeout: 20000, responseTimeout: 20000 });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Approve and release document", () => {
@@ -1038,7 +1056,7 @@ context("Receivable test with Page Details", () => {
 
   context("Verify `Receiving document` status and send email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "WIP" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
@@ -1246,7 +1264,7 @@ context("Receivable test with Page Details", () => {
 
   context("Verify `Receiving document` status and send email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "WIP" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
@@ -1624,7 +1642,7 @@ context("Receivable test with Page Details", () => {
 
   context("While in “Pending Approval” state, send to email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "PENDING_APPROVAL" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
@@ -1805,7 +1823,7 @@ context("Receivable test with Page Details", () => {
 
   context("After “Released” state, send to email", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });

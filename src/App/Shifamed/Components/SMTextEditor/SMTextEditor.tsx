@@ -6,7 +6,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
 import { SMTextEditorProps } from "../../..";
 import Colors from "../../../../ui/layout/theme/utils/colors";
-import { SMEditorStyles } from "./SMTextEditor.styles";
+import { editorStyles, SMEditorStyles } from "./SMTextEditor.styles";
 import { withSMTextEditor } from "./SMTextEditor.wrap";
 
 
@@ -16,6 +16,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   onBlur,
   editorRef,
   _textEditorState,
+  _documentRevisionFormState,
   _formState,
   boxProps,
   loading,
@@ -31,18 +32,19 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
 }) => {
   const classes = SMEditorStyles();
   const intl = useIntl();
-  const [flag, setFlag] = useState(true);
   const [hover, setHover] = useState(false);
   const descriptionPlaceholder = intl.formatMessage({ id: "form.builder.enter.description" });
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
   const toggleBtn = () => {
-    setFlag(!flag);
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
+    _documentRevisionFormState?.setDescriptionFocused(!_documentRevisionFormState?.isDescriptionFocused);
+    _documentRevisionFormState?.setExpanded(!_documentRevisionFormState?.expanded);
   };
   const onAway = () => {
+    _documentRevisionFormState?.setExpanded(false);
+    _documentRevisionFormState?.setDescriptionFocused(false);
     _textEditorState?.setPreviewMode(true);
-    setFlag(true);
     showToggleButton && showToggleButton();
   };
   return  (
@@ -56,16 +58,20 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     >
       <Observer>
         {() => (
-          <Box>
+          <Box
+            bgcolor={hover && _textEditorState?.previewMode ? Colors.whitest_grey : "transparent"}
+            borderRadius={4}
+            paddingTop={_textEditorState?.previewMode ? 0.5 : 0}
+            paddingBottom={_textEditorState?.previewMode ? 0.5 : 0}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+          >
             <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseDown">
               <Box
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
                 bgcolor={hover ? Colors.whitest_grey : "transparent"}
                 style={{ display: "grid" }}
-                minHeight= {_textEditorState?.masked ? 30 : 80}
-                onMouseEnter={() => setHover(true)}
-                onMouseLeave={() => setHover(false)}
               >
                 <Box
                   style={{ gridArea: "1/1" }}
@@ -78,10 +84,11 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                       <Editor
                         onFocus={() => {
                           _textEditorState?.setPreviewMode(false);
+                          _documentRevisionFormState?.setDescriptionFocused(true);
                           setTimeout(() => {
                             const moreThanTwoLines =
                                 Math.floor(_textEditorState?.editorReference.editorContainer.clientHeight / 24) > 2;
-                            setFlag(!moreThanTwoLines);
+                            _documentRevisionFormState?.setExpanded(moreThanTwoLines);
                           });
                         }}
                         onChange={() => showToggleButton && showToggleButton()}
@@ -93,21 +100,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         }}
                         readOnly={disabled}
                         toolbarHidden={_textEditorState?.previewMode}
-                        toolbarStyle={{
-                          border: "none",
-                          borderBottom: `1px solid ${Colors.hint_gray}`,
-                          position: "sticky",
-                          top: 0,
-                          zIndex: 1000,
-                        }}
-                        editorStyle={{
-                          padding: "0 11px",
-                          width: "100%",
-                          fontWeight: 400,
-                          fontSize: 14,
-                          lineHeight: "24px",
-                          height: "auto",
-                        }}
+                        toolbarStyle={editorStyles.toolbarStyle}
+                        editorStyle={editorStyles.editorStyle}
                         toolbarClassName={classes.descriptionToolbarEditorClass}
                         editorClassName={_textEditorState?.previewMode ? classes.descriptionEditorClass :
                           classes.descriptionMainEditorClass}
@@ -122,18 +116,11 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
             </ClickAwayListener>
             {isTextClamped ? <Button variant="text"
               onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
-              style={{
-                color: Colors.navy,
-                padding: "0 2px",
-                fontSize: "14px",
-              }}>{viewMore}</Button> : (
-              !_textEditorState?.previewMode && !isTextClamped && !flag && <Button variant="text"
+              className={classes.moreOrLess}>{viewMore}</Button> : (
+              !_textEditorState?.previewMode && !isTextClamped &&
+              _documentRevisionFormState?.expanded && <Button variant="text"
                 onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
-                style={{
-                  color: Colors.navy,
-                  padding: "0 2px",
-                  fontSize: "14px",
-                }}
+                className={classes.moreOrLess}
               >{viewLess}</Button>)}
           </Box>
         )}</Observer>

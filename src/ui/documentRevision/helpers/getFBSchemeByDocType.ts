@@ -1,6 +1,8 @@
 import { find, get, map, size, some, union, unionBy } from "lodash";
-import { DocumentType, DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
+import { store as appStore } from "../../../state/store";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FB, FBSchemaProps } from "../../form.builder";
 import { checkIsDocumentDirectApproved, checkIsDocumentPO } from "./checkDocumentGroup";
@@ -55,13 +57,18 @@ export const getFBSchemeByDocType = (
 
   if (hasDirectApproval(outputTypesWithGroups)) {
     if (hasPO(outputTypesWithGroups)) {
+
+      const tabConfig: TabInfo[] = documentTypeSelectors.getTabConfiguration(
+        appStore.getState(), outputTypesWithGroups[0].group);
+      const tabLabel = get(tabConfig, "0.tabId", "details");
+
       finalScheme.push({
         label: "form.builder.approvals",
         type: "poapprovals",
         deleteDisabled: false,
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
-        tabId,
+        tabId: tabLabel,
         index: size(finalScheme),
       });
     } else {
@@ -71,7 +78,7 @@ export const getFBSchemeByDocType = (
         deleteDisabled: true,
         name: `fb-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
-        tabId,
+        tabId: tabIdByInternalType[outputTypesWithGroups[0].group] || tabId,
         index: size(finalScheme),
       });
     }

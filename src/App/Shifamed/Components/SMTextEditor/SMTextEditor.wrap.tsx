@@ -55,7 +55,9 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     showToggleButton = () => {
       setTimeout(() => {
         const elm = document.querySelector(".rdw-editor-main");
-        setIsTextClamped(elm ? elm.scrollHeight > elm.clientHeight : false);
+        const isClamped = elm ? elm.scrollHeight > elm.clientHeight : false;
+        setIsTextClamped(isClamped);
+        _documentRevisionFormState?.setIsDescTextClamped(isClamped);
       }, 500);
     };
 
@@ -135,6 +137,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       toolbar,
       showToggleButton,
       isTextClamped,
+      _documentRevisionFormState,
     });
   };
   Comp.displayName = "withSMTextEditor";

@@ -4,6 +4,20 @@
   scroll-behavior: inherit !important;
 }
 
+/* use "hide-scroll" class to hide scrollbars but keep functionality */
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scroll::-webkit-scrollbar,
+.hide-scroll div::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scroll,
+.hide-scroll div {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}
+
 :root {
   --navy: #011FBB;
   --almost_black: #080B11;

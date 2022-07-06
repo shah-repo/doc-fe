@@ -76,7 +76,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     setSelectedValues(value ?? []);
     const formValue = {
       ...formik.values as Partial<DocumentRevision>,
-      outputDocumentTypes: value as OptionType[],
+      outputDocumentTypes: [value] as OptionType[],
     };
     const scheme = getFBSchemeByDocType(
       formValue,
@@ -95,8 +95,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         label="document.output.type"
         autocompleteProps={{
           id: "formTemplate.outputDocumentTypes",
-          isMulti: true,
-          closeMenuOnSelect: false,
+          isMulti: false,
+          closeMenuOnSelect: true,
           className: !outputDocEnabled ? classes.outputGrey : "",
           isOptionDisabled: (option) => selectedValues?.length >= 1,
         }}
@@ -104,6 +104,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         validate={validator(required)}
         isDisabled={isDisabled}
         onChange={handleTypeChange}
+        portal={true}
       />
       {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
     </Box>

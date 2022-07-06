@@ -4,7 +4,6 @@ import Colors from "../../layout/theme/utils/colors";
 export const styles = {
   inputPropStyle: {
     minHeight: 40,
-    background: Colors.white,
     borderRadius: 3,
     padding: "0 80px 0 6px",
   },

@@ -1,4 +1,23 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../../../ui/layout/theme/utils/colors";
+
+export const editorStyles = {
+  toolbarStyle: {
+    border: "none",
+    borderBottom: `1px solid ${Colors.hint_gray}`,
+    position: "sticky",
+    top: 0,
+    zIndex: 1000,
+  },
+  editorStyle: {
+    padding: "0 8px",
+    width: "100%",
+    fontWeight: 400,
+    fontSize: 14,
+    lineHeight: "24px",
+    height: "auto",
+  },
+};
 
 export const SMEditorStyles = makeStyles(() =>
   createStyles({
@@ -7,6 +26,9 @@ export const SMEditorStyles = makeStyles(() =>
       "-webkit-line-clamp": 2,
       "-webkit-box-orient": "vertical",
       "overflow": "hidden !important",
+      "& .public-DraftStyleDefault-block": {
+        margin: "0px !important",
+      },
     },
     descriptionToolbarEditorClass: {
       marginBottom: "0px !important",
@@ -20,5 +42,20 @@ export const SMEditorStyles = makeStyles(() =>
       borderBottom: "1px solid #2684FF !important",
       borderRight: "1px solid #2684FF !important",
       borderRadius: "0px 0px 4px 4px",
+    },
+    descriptionSummaryEditorClass: {
+      "& .public-DraftStyleDefault-block": {
+        margin: "0px !important",
+      },
+    },
+    moreOrLess: {
+      "color": Colors.dodger_blue,
+      "padding": "0",
+      "fontSize": "14px",
+      "margin": "0px 9px",
+      "textTransform": "lowercase",
+      "&:hover": {
+        background: "unset",
+      },
     },
   }));

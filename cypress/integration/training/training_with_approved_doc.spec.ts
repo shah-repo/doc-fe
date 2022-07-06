@@ -791,7 +791,7 @@ context("Training notifications for documents with approved and released revisio
       cy.trClearFilters();
       cy.trLandingPageOwner({ owner: "1" });
       cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.contains("Completed On").arrowClick().wait(500);
+      cy.contains("COMPLETED ON").arrowClick().wait(500);
       cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
         .and("contain", USERS[1].name).and("not.contain", "Pending");
@@ -855,6 +855,10 @@ context("Training notifications for documents with approved and released revisio
       });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Change frequency to 10 days", () => {
       cy.get("[name=training-validity]").clear().arrowType("10");
     });
@@ -864,6 +868,10 @@ context("Training notifications for documents with approved and released revisio
         CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {

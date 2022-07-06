@@ -19,6 +19,7 @@ declare global {
       fbSelectTextField(): Chainable<Subject>;
       fbAddNewFieldWhenHidden(): Chainable<Subject>;
       fbAddNewFieldWhenHiddenLastPlace(): Chainable<Subject>;
+      fbAddNewFieldWhenHidden2ndLastPlace(): Chainable<Subject>;
       fbCheckboxGroupField(): Chainable<Subject>;
       fbRadioBtnGroupField(): Chainable<Subject>;
       fbGroupName(params: { name: string }): Chainable<Subject>;
@@ -112,6 +113,10 @@ Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
 
 Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
   cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
+});
+
+Cypress.Commands.add("fbAddNewFieldWhenHidden2ndLastPlace", () => {
+  cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
@@ -271,7 +276,7 @@ Cypress.Commands.add("fbOpenValidation", () =>  cy.get("button[data-cy^=\"fb-edi
 
 Cypress.Commands.add("fbFieldRequired", () =>  cy.get("span[data-cy=\"fb-control-required\"]").arrowClick());
 
-Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").arrowClick());
+Cypress.Commands.add("fbAddField", () => cy.get("button[data-cy=\"fb-editor-actions-add\"]").arrowClick());
 
 Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }));
 

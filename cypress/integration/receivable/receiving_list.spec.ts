@@ -3,6 +3,7 @@
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -478,13 +479,13 @@ context("Receivable list test", () => {
 
     it("Check if ID and date time are recorded when approving", () => {
       SystemRequirement("REQ-2050", "REQ-2060");
-      cy.get("[id=\"Presenter-FBWorkspace\"]>div>div>div").eq(6).should("contain", USERS[1].name)
+      cy.get("[data-cy^=\"approved\"]").should("contain", USERS[1].name)
         .and("contain", "APPROVED")
         .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
     });
 
     it("Verify status", () => {
-      cy.drCheckDocumentStatus({ status: "Current" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.CURRENT });
     });
   });
 

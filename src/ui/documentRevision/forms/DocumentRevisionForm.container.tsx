@@ -18,7 +18,6 @@ import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
-import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
@@ -33,6 +32,7 @@ export interface FormHeaderContext {
   canChangeOwnerShip: boolean;
   values: DocumentRevisionFormValues;
   isDisabled: boolean;
+  mode: FBWorkspaceMode;
   asyncState: AsyncState;
   type?: DocumentCloneType;
   lastSavedTimestamp?: string;
@@ -101,7 +101,6 @@ DocumentRevisionFormContainerProps
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
 
-  const availableReferences = useGetAvailableReferences(initialValues);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const isEditableSchema = checkIsDocumentEditableSchema(document?.documentType?.groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
@@ -182,7 +181,6 @@ DocumentRevisionFormContainerProps
   } else if (pmForm) {
     mode = "form";
   }
-
   useEffect(() => {
     _formState?.setMode(mode);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -201,6 +199,7 @@ DocumentRevisionFormContainerProps
     isDisabled,
     asyncState,
     type,
+    mode,
     lastSavedTimestamp,
   });
 
@@ -229,7 +228,6 @@ DocumentRevisionFormContainerProps
         type,
         isDisabled,
         documentRevisions,
-        availableReferences,
         showRevisionTypeChange,
         proposedDocId,
         setDocId,
