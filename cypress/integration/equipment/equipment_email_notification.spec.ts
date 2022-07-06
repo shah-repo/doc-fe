@@ -5,6 +5,7 @@
 import faker from "faker";
 import moment from "moment";
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -405,7 +406,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.drSelectcalpmHistoryTab();
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -520,7 +521,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "RELEASED" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -596,7 +597,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.drSelectcalpmHistoryTab();
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {
@@ -656,7 +657,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.drSelectcalpmHistoryTab();
+        cy.drSelectCalPmHistoryTab();
       });
 
 
@@ -763,7 +764,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "RELEASED" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -839,7 +840,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.drSelectcalpmHistoryTab();
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {
@@ -900,7 +901,7 @@ context("Test Equipment maintenance email notifications", () => {
 
 
       it("Navigate To calpmhistory", () => {
-        cy.drSelectcalpmHistoryTab();
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1006,7 +1007,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "RELEASED" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -1082,7 +1083,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.drSelectcalpmHistoryTab();
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {
@@ -1142,7 +1143,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.drSelectcalpmHistoryTab();
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1248,7 +1249,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "RELEASED" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -1324,7 +1325,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Navigate To calpmhistory", () => {
-        cy.drSelectcalpmHistoryTab();
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {

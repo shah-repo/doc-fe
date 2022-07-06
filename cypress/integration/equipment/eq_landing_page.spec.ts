@@ -1040,8 +1040,7 @@ context("NCO document type management", () => {
 
     it("Select Primary Owner", () => {
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      cy.drSelectPrimaryOwner({ approver: USERS[1].email });
     });
 
     it("Save document", () => {
@@ -1049,7 +1048,7 @@ context("NCO document type management", () => {
     });
 
     it("Navigate To calpmhistory", () => {
-      cy.drSelectcalpmHistoryTab();
+      cy.drSelectCalPmHistoryTab();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1133,8 +1132,7 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
-        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+        cy.drSelectPrimaryOwner({ approver: USERS[2].email });
       });
 
       it("Save document", () => {
@@ -1219,8 +1217,7 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
-        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+        cy.drSelectPrimaryOwner({ approver: USERS[1].email });
       });
 
       it("Save document", () => {
@@ -1535,8 +1532,7 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
-        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+        cy.drSelectPrimaryOwner({ approver: USERS[2].email });
       });
 
       it("Save document", () => {
@@ -1623,8 +1619,7 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
-        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+        cy.drSelectPrimaryOwner({ approver: USERS[1].email });
       });
 
       it("Save document", () => {
