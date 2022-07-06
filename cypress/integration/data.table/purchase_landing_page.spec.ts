@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -545,7 +546,7 @@ context("Purchase Order Landing Page", () => {
     });
 
     it("Check status of PO should be Draft", () => {
-      cy.poCheckStatus("Draft" );
+      cy.poCheckStatus(STATUS_TYPES_LABEL.DRAFT);
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {
@@ -756,10 +757,10 @@ context("Purchase Order Landing Page", () => {
       cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "1");
       cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "N/A");
       cy.get(`[aria-colindex="4"] input`).should("have.attr", "value", "N/A");
-      cy.get(`[aria-colindex="5"] input`).arrowType("N/A");
-      cy.get(`[aria-colindex="6"] input`).arrowType("N/A");
-      cy.get(`[aria-colindex="7"] input`).arrowType("Giovanni Reynolds");
-      cy.get(`[aria-colindex="8"] input`).arrowType("N/A");
+      cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "N/A");
+      cy.get(`[aria-colindex="6"] input`).should("have.attr", "value", "N/A");
+      cy.get(`[aria-colindex="7"] input`).should("have.attr", "value", "Giovanni Reynolds");
+      cy.get(`[aria-colindex="8"] input`).should("have.attr", "value", "N/A");
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared'", () => {

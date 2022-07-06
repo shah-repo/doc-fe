@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -646,7 +647,7 @@ context("Test Engineering Build landing page", () => {
 
     it(`Verify EB can be opened`, () => {
       cy.dlSelectFirstDocument();
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
     it(`Verify EB count`, () => {
