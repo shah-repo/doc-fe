@@ -195,12 +195,12 @@ context("Document list test", () => {
     it("Verify that the Document List filter to display released documents when starting a new Enlil session", () => {
       cy.dlVerifyFilterByStatus({ status: "Released" });
     });
+  });
 
-    context("Verify most recent edited document is first on list", () => {
-      it("Verify first document is: " + documentRevisionName, () => {
-        cy.dlVerifyFilterByDocTitle({ docTitle: documentRevisionName });
-        cy.dlClearFilters();
-      });
+  context("Verify most recent edited document is first on list", () => {
+    it("Verify first document is: " + documentRevisionName, () => {
+      cy.dlVerifyFilterByDocTitle({ docTitle: documentRevisionName });
+      cy.dlClearFilters();
     });
   });
 
@@ -683,19 +683,19 @@ context("Document list test", () => {
         it("Select 'Numeric' revision stage", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
+      });
 
-        context("Creates document and releases it", () => {
-          it("Click create document after filling document", () => {
-            cy.drClickCreateDocumentWithApiCall();
-          });
+      context("Creates document and releases it", () => {
+        it("Click create document after filling document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
 
-          it("Verify approvals field is automatically added", () => {
-            cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-          });
+        it("Verify approvals field is automatically added", () => {
+          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        });
 
-          it("Approve and Release document", () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+        it("Approve and Release document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -731,19 +731,19 @@ context("Document list test", () => {
         it("Select 'Numeric' revision stage", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
+      });
 
-        context("Creates document and releases it", () => {
-          it("Click create document after filling document", () => {
-            cy.drClickCreateDocumentWithApiCall();
-          });
+      context("Creates document and releases it", () => {
+        it("Click create document after filling document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
 
-          it("Verify approvals field is automatically added", () => {
-            cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-          });
+        it("Verify approvals field is automatically added", () => {
+          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        });
 
-          it("Approve and Release document", () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+        it("Approve and Release document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -760,16 +760,7 @@ context("Document list test", () => {
 
     context("Create new record without inline approval form and check if they are in alpha revision", () => {
       it("Select 'Approval Record' form", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.DocPreview,
-          CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-          cy.get("div[id^=react-select]").contains("Record Document").arrowClick();
-          cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowType("Record");
-          cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").contains("Approval Record").arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document", recordForm: "Approval Record" });
       });
 
       it("Check if revision is in alpha revision stage", () => {
