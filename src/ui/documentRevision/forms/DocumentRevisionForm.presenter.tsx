@@ -256,6 +256,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDisabled={isDisabledInput}
             {...{ documentTypeId, isRecord }}
           />
+        </Grid>
+        <Grid item xs={12}>
           <AttachmentsField
             isDisabled={isDisabledInput}
             isNewVersion={false}
