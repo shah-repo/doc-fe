@@ -44,7 +44,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const dispatch = useDispatch();
     const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
-    const isStarter = (["design", "formDesign"].includes(workspaceState?.mode || "")) &&
+    const isStarterRequired =  () => (["design", "formDesign"].includes(workspaceState?.mode || "")) &&
       !size(schema?.find((item) => item.tabId === _tabsState?.tabID && !item.deleted));
     autosave = _formState?.autosave || false;
 
@@ -188,7 +188,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       autosave,
       includeProcedureDiff,
       _tabsState,
-      isStarter,
+      isStarterRequired,
     });
   };
 
