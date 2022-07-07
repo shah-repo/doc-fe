@@ -109,7 +109,7 @@ Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
 });
 
 Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType: string; recordForms: string[]}) => {
-  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick().wait(1000);
 
   cy.get("div[id^=react-select]").contains(params.recordType).arrowClick();
   cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowClick();
