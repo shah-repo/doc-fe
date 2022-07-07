@@ -33,9 +33,8 @@ const styles = makeStyles((theme: Theme) =>
 interface Props{
   status?: DocumentRevisionStatus;
   displayStatus?: DocumentRevisionStatus;
-  fromSummary?: boolean;
 }
-const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus, fromSummary }) => {
+const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
   const classes = styles();
   const headerBackgroundClasses = headerBackgroundStyles();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);

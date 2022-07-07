@@ -21,7 +21,6 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   const headerRenderer = () => <Header
     displayStatus={documentRevision.displayStatus}
     status={documentRevision.status}
-    fromSummary={true}
   >
     <HeaderInfo
       revisionStage={documentRevision.revisionStage}
