@@ -658,7 +658,15 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.drEnterDocumentDescription({ description: "New Purchase Order Description" });
     });
 
+    it("Click 'Save the document", () => {
+      cy.recClickCreateDocumentWithApiCall();
+    });
+
     context("Create first line item on PO", () => {
+      it("Navigate to Lineitem tab", () => {
+        cy.drSelectLineItems();
+      });
+
       it("Click on 'Add item' button", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
           cy.poAddNewFieldItem();
@@ -718,6 +726,16 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
       it("Click on 'Add' inside PO dialog box", () => {
         cy.poAddPOButtonClick();
+      });
+
+      it("Save document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
+      });
+
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Add an Approval", () => {
@@ -787,6 +805,10 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "RC-00002");
     });
 
+    it("Click on 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select PO Receivable from dropdown for 'RC-00002'", () => {
       SystemRequirement("REQ-1830");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -824,6 +846,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Save' button", () => {
+      cy.pause();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy='form.builder.save']").arrowClick();
       });
@@ -957,6 +980,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Save PO", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click 'Submit for Approval' button", () => {
