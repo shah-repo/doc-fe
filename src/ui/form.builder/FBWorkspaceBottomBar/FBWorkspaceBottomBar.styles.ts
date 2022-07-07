@@ -4,11 +4,12 @@ import Colors from "../../layout/theme/utils/colors";
 export default makeStyles(() =>
   createStyles({
     formOptionsBox: {
-      width: "235px",
+      width: "260px",
       height: "46px",
       background: Colors.almost_black,
       borderRadius: "10px",
       padding: "0 15px",
+      textAlign: "center",
     },
     formOptionsText: {
       fontFamily: "Sora",

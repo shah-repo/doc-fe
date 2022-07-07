@@ -16,6 +16,7 @@ const styles = () => ({
   // Tooltip displays over every other element on top of it
   popper: {
     zIndex: 1,
+    display: "none",
   },
 });
 
