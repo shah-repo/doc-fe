@@ -17,7 +17,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   includeProcedureDiff,
   isPortal,
   _tabsState,
-  isStarter,
+  isStarterRequired,
 }) => (
   <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
     <FBSnackbar autoHideDuration={6000}/>
@@ -37,7 +37,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                       )}
                       <FBWorkspaceMemo
                         {...{ includeTransport, workspaceState }}
-                        isStarter={isStarter}
+                        isStarter={isStarterRequired?.()}
                         mode={workspaceState?.mode}
                         schema={workspaceState?.schema}
                       />
@@ -50,7 +50,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                       )}
                       <FBWorkspaceMemo
                         {...{ schema, includeTransport, workspaceState }}
-                        isStarter={isStarter}
+                        isStarter={isStarterRequired?.()}
                         mode={workspaceState?.mode}
                         schema={workspaceState?.schema}
                       />
