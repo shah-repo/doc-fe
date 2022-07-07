@@ -168,7 +168,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                 "partType", "childForRevise"]));
         }
         if (isOutputSchema()) {
-          formik.setFieldValue("schema", isEmpty(schema) && !isEmpty(values.schema) ? values.schema : schema);
+          formik.setFieldValue("schema", isEmpty(schema) ? values.schema : schema);
         }
         break;
       default:
