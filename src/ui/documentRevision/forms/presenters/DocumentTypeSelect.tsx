@@ -166,7 +166,6 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         _formState?.setValue("schema", predefinedSchema);
       } else {
         _formState?.setValue("formTemplate.schema", predefinedSchema);
-        _documentRevisionFormState?.setFBSchema(type.schema);
       }
     }
   };
