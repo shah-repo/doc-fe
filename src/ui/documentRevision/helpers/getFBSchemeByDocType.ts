@@ -1,4 +1,4 @@
-import { find, get, map, some, union, unionBy } from "lodash";
+import { find, get, isEmpty, map, maxBy, some, union, unionBy } from "lodash";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
@@ -42,7 +42,7 @@ export const getFBSchemeByDocType = (
   const tplType = get(formValue, "document.documentType.id") || "";
   const documentTypes = union([tplType], outputTypes);
 
-  const finalScheme = documentTypes.reduce((scheme, typeId) => {
+  const finalScheme: FBSchemaProps[] = documentTypes.reduce((scheme, typeId) => {
     const rec = documentTypesById[typeId];
     // If type has scheme
     if (!rec.schema) { return scheme; }
@@ -54,8 +54,8 @@ export const getFBSchemeByDocType = (
 
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
-
-  const indexLast = Math.max(...finalScheme.map((e) => e.index));
+  let indexLast;
+  !isEmpty(finalScheme) ? indexLast = maxBy(finalScheme, "index")?.index : indexLast = 0;
   if (hasDirectApproval(outputTypesWithGroups)) {
     if (hasPO(outputTypesWithGroups)) {
 
