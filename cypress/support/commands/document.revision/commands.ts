@@ -23,7 +23,7 @@ declare global {
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
-      drSelectPrimaryOwner(params: { approver: string; noWait?: bool }): Chainable<Subject>;
+      drSelectPrimaryOwner(params: { owner: string; noWait?: bool }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -254,9 +254,9 @@ Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("drSelectPrimaryOwner", (params: { approver: string; noWait?: bool }) => {
+Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: bool }) => {
   cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-  cy.get("ul>li[role=\"option\"]").contains(params.approver).arrowClick();
+  cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick();
 });
 
 Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {
