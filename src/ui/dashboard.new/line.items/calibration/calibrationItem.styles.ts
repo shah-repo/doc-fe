@@ -9,6 +9,9 @@ export const styles = makeStyles(() =>
     listItemIcon: {
       paddingLeft: "10px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     actionIcons: {
       display: "flex",
       flexDirection: "row",
