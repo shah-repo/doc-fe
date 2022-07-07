@@ -18,13 +18,17 @@ const styles = makeStyles((theme: Theme) =>
     },
     appbar: {
       backgroundColor: Colors.white,
-      position: "sticky",
-      top: "45px",
+      top: "38px",
       zIndex: theme.zIndex.drawer + 1,
     },
     toolbar: {
       borderBottom: `1px solid ${Colors.medium_gray}`,
-      minHeight: "60px",
+      minHeight: "84px",
+      padding: "10px",
+      display: "flex",
+      justifyContent: "flex-end",
+      position: "fixed",
+      width: "85.7%",
     },
   },
   ));
@@ -46,7 +50,8 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
         py={1.25}
         px={1.25}
         alignContent="center"
-        marginTop={fromSummary || SM.isNewCRLayout ? 6 : 0}
+        position="fixed"
+        width="calc(100% - 240px)"
       >
         <Grid
           container={true}

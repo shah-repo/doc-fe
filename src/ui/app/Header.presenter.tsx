@@ -24,36 +24,32 @@ const Header: React.FunctionComponent<Props> = ({
 
   if (SM.isNewLayout || SM.isNewCRLayout) {
     return (
-      <Box
-        height={48}
-        className={classes.newAppBar}
-        display="flex"
-        alignContent="center"
-        alignItems="center"
-      >
-        {<Box className={classes.newLogo} />}
-        <Grid container={true} alignItems="flex-end" justify="flex-end">
-          <Grid item>
-            {canToggleCustomLabels && (
-              <FormControlLabel
-                control={
-                  <Switch
-                    name="toggleCustomLabels"
-                    checked={customLabelsValue}
-                    onChange={toggleCustomLabels}
-                  />
-                }
-                label={
-                  <Text translation="form.builder.header.control.label" />
-                }
-              />
-            )}
+      <AppBar position="fixed" color="primary" className={classes.appBar}>
+        <Toolbar className={classes.toolbar}>
+          {<Box className={classes.newLogo} />}
+          <Grid container={true} alignItems="flex-end" justify="flex-end">
+            <Grid item>
+              {canToggleCustomLabels && (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      name="toggleCustomLabels"
+                      checked={customLabelsValue}
+                      onChange={toggleCustomLabels}
+                    />
+                  }
+                  label={
+                    <Text translation="form.builder.header.control.label" />
+                  }
+                />
+              )}
+            </Grid>
+            <Grid item>
+              <AutosaveToggle />
+            </Grid>
           </Grid>
-          <Grid item>
-            <AutosaveToggle />
-          </Grid>
-        </Grid>
-      </Box>
+        </Toolbar>
+      </AppBar>
     );
   }
   return (
