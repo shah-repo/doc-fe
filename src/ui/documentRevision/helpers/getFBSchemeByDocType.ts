@@ -1,4 +1,4 @@
-import { find, get, map, size, some, union, unionBy } from "lodash";
+import { find, get, map, some, union, unionBy } from "lodash";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
@@ -55,6 +55,7 @@ export const getFBSchemeByDocType = (
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
 
+  const indexLast = Math.max(...finalScheme.map((e) => e.index));
   if (hasDirectApproval(outputTypesWithGroups)) {
     if (hasPO(outputTypesWithGroups)) {
 
@@ -69,7 +70,7 @@ export const getFBSchemeByDocType = (
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
         tabId: tabLabel,
-        index: size(finalScheme + 1),
+        index: indexLast + 1,
       });
     } else {
       finalScheme.push({
@@ -79,7 +80,7 @@ export const getFBSchemeByDocType = (
         name: `fb-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
         tabId: tabIdByInternalType[outputTypesWithGroups[0].group] || tabId,
-        index: size(finalScheme + 1),
+        index: indexLast + 1,
       });
     }
   }
