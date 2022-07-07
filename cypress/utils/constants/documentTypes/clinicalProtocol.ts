@@ -9,19 +9,6 @@ export const ClinicalProtocolNotRedline: IdocumentTypeDto = {
   documentTypeAcronym: CPAcronym,
   group: DOC_TYPE_GROUP.OTHER,
   isQms: true,
-  schema: [{
-    index: 0,
-    name: ATTACHMENT_BUILT_IN_KEY,
-    label: "Attachments",
-    type: ATTACHMENTS,
-    applicableOn: [
-      ON_STATE_TO_IN_REVIEW,
-    ],
-    deleteDisabled: true,
-    deleteInFormDisabled: true,
-    applicableValidationSchema: true,
-    tabId: "overview",
-  }],
 };
 
 export const ClinicalProtocolDocType: IdocumentTypeDto = {
