@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable max-len */
 import { int } from "aws-sdk/clients/datapipeline";
+import { bool } from "aws-sdk/clients/signer";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { encodeString } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
@@ -21,6 +22,8 @@ declare global {
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
+      drSelectCalPmHistoryTab(): Chainable<Subject>;
+      drSelectPrimaryOwner(params: { owner: string; noWait?: bool }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -241,9 +244,19 @@ Cypress.Commands.add("drSelectSpecificationTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
+  cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: bool }) => {
+  cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
+  cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick();
 });
 
 Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {

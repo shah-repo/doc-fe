@@ -6,6 +6,9 @@ export const styles = makeStyles((theme: Theme) =>
     inline: {
       display: "inline",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     listItemIcon: {
       paddingLeft: "10px",
     },

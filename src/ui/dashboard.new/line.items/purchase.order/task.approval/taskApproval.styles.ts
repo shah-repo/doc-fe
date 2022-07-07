@@ -30,6 +30,9 @@ export const styles = makeStyles(() =>
     listItem: {
       paddingLeft: "1px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     linkText: {
       fontSize: "14px",
       fontWeight: 400,
