@@ -26,6 +26,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     listItem: {
       paddingLeft: "1px",
+      cursor: "unset",
     },
     actionIcons: {
       /* Action Icons */

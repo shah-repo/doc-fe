@@ -11,6 +11,9 @@ export const styles = makeStyles(() =>
       fontWeight: 400,
       letterSpacing: 0,
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     typographyBold: {
       fontSize: "14px",
       fontWeight: 600,

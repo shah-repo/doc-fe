@@ -9,6 +9,9 @@ export const styles = makeStyles((theme: Theme) =>
     listItemIcon: {
       paddingLeft: "10px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     link: {
       "color": Colors.black,
       "textDecoration": "none",
