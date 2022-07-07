@@ -85,6 +85,8 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
         style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onMouseEnter={onMouseHoverListItem}
+        className={classes.buttoncursor}
+        disableRipple
       >
         <ListItemIcon>{getDocIcon(docTypeGroup)}</ListItemIcon>
         <ListItemText

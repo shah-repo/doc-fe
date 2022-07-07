@@ -118,6 +118,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
         button
         onMouseEnter={onMouseHoverListItem}
         className={classes.listItem}
+        disableRipple
       >
         {open ? (
           <CollapseIcon className={classes.icon} onClick={handleClick} />

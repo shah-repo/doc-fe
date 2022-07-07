@@ -74,7 +74,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   };
   return (
     <>
-      <StyledListItem button onMouseEnter={onMouseHoverListItem}>
+      <StyledListItem button onMouseEnter={onMouseHoverListItem} className={classes.buttoncursor} disableRipple>
         <ListItemIcon>
           <EQIcon height={30} width={30} />
         </ListItemIcon>
