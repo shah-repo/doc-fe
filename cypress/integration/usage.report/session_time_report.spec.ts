@@ -8,6 +8,7 @@ import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { emailDateOffset, fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
+import { AdministrativeDocumentDocType } from "../../utils/constants/documentTypes/administrative";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { GeneralDocumentDocType } from "../../utils/constants/documentTypes/generalDocument";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
@@ -30,7 +31,6 @@ let group;
 let inlineRecordForm;
 let recordForm;
 let adminEmployee;
-let adminEmployee2;
 let loginResponse;
 let createdCompany;
 let createdCompany2;
@@ -41,51 +41,29 @@ let createdSupplierFormDocument;
 let supplierDocumentType;
 let createdSupplierDocument;
 let createdPOFormDocument;
-let createdARFormDocument;
 let createdReceivingForm;
 let purchaseOrderDocumentType;
 let receivingDocumentType;
-let ebDocumentType;
-let createdEBform;
-let createdPartFormDocument;
 let partDocumentType;
 let lotDocumentType;
-let createdPOAMform;
-let damDocumentType;
-let createdDAMForm;
-let createdDAMDocument;
 let createdPartDocument;
-let createdDraftPart;
 let releasedequipmentDocument;
-let approvalForVoidedSupplier;
-let createdMPIDocument;
-let MPIDocumentType;
 let generalDocumentType;
+let maintenanceRecordDocumentType;
 let createdGeneralDocument;
 let createdARDocument;
-let createdLotsFormDocument;
-let CSLDocumentType;
 let createdPODocument;
-let createdPODocument3;
 let createdRelesedReceivable;
 let EBDocumentType;
 let administrativeDocumentType;
 let LHRtDocumentType;
 let createdLHRtDocument;
 let LHRDocumentType;
-let trainingCurriculumDocumentType;
-let createdTrainingCurriculumFormDocument;
 let createdARForm;
-let createdARForGD;
-let createdRecordForm;
-let createdRecordForm2;
+let createdPMForm;
+let createdCalibrationForm;
 let createdReleasedRecord;
-let createdVoidedRecord;
-let createdInReviewRecord;
 let createdEBRecord;
-let lhrDocUrl;
-let createdLot;
-let createdTrainingCurriculumRecord;
 
 const todaysDate = momentInPST();
 const todaysDateFormated = momentInPST().format("L");
@@ -93,8 +71,6 @@ const usageReportXlsxFileName = "Usage_report_" + fileTimeFormat + ".xlsx";
 const usageReportXlsxFileNameAndPath = "cypress/downloads/" + usageReportXlsxFileName;
 const perCompanyReportJsonFileName = "Per_company_report_" + fileTimeFormat + ".json";
 const perCompanyReportJsonFileNameAndPath = "cypress/downloads/" + perCompanyReportJsonFileName;
-const userReportJsonFileName = "user_report_" + fileTimeFormat + ".json";
-const userReportJsonFileNameAndPath = "cypress/downloads/" + userReportJsonFileName;
 const sessionReportJsonFileName = "session_report_" + fileTimeFormat + ".json";
 const sessionReportJsonFileNameAndPath = "cypress/downloads/" + sessionReportJsonFileName;
 
@@ -172,12 +148,12 @@ const numberOfCreatedDocsForComany1: StructureFromPerCompanyReport[] = [
   },
   {
     name: "Documents",
-    releasedCompleted: 11,
+    releasedCompleted: 13,
     draftPending: 8,
   },
   {
     name: "Approval Requests",
-    releasedCompleted: 25,
+    releasedCompleted: 27,
     draftPending: 0,
   },
   {
@@ -282,6 +258,7 @@ context("Test usage report is correctly counting documents", () => {
               GeneralDocumentDocType,
               EngineeringBuild,
               LHRTTest,
+              AdministrativeDocumentDocType,
               { ...TrainingCurriculum, documentTypeName: "Training Curriculum Test" },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -299,18 +276,15 @@ context("Test usage report is correctly counting documents", () => {
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           receivingDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
-          ebDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Engineering Build");
-          administrativeDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Administrative");
+          administrativeDocumentType =
+                    cmpFilterDocumentTypeIdByName(createdCompany, AdministrativeDocumentDocType.documentTypeName);
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           lotDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots");
-          damDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Document Approval Matrix");
-          MPIDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           generalDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, GeneralDocumentDocType.documentTypeName);
-          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
           EBDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Engineering Build Test");
           LHRtDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "LHR template");
           LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record");
-          trainingCurriculumDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Training Curriculum Test");
+          maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           done();
         });
       });
@@ -330,7 +304,6 @@ context("Test usage report is correctly counting documents", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany2 = response;
-          adminEmployee2 = createdCompany2.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -711,7 +684,7 @@ context("Test usage report is correctly counting documents", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Maintenance and Calibration form</p>",
+              description: "<p>Equipment form</p>",
               document: {
                 docId: "FM-00004",
                 documentType: {
@@ -727,7 +700,7 @@ context("Test usage report is correctly counting documents", () => {
                   ],
                 },
               },
-              name: "Maintenance and calibration form document",
+              name: "Equipment form document",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -788,44 +761,6 @@ context("Test usage report is correctly counting documents", () => {
                     validationAttribute: "Coordinator",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
-                  },
-                  {
-                    index: 3,
-                    type: "eqmaintenance",
-                    name: "pm-ki5wtk5l",
-                    editorConfig: {
-                      type: "preventativeMaintenance",
-                    },
-                    editorProperties: [],
-                    label: "Preventative Maintenance",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    applicableValidationSchema: true,
-                    validationAttribute: "PM",
-                  },
-                  {
-                    index: 4,
-                    type: "eqmaintenance",
-                    name: "calibration-ki5wtyj0",
-                    editorConfig: {
-                      type: "calibration",
-                    },
-                    editorProperties: [],
-                    label: "Calibration",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    applicableValidationSchema: true,
-                    validationAttribute: "Calibration",
-                  },
-                  {
-                    label: "form.builder.approvals",
-                    type: "approvals",
-                    deleteDisabled: true,
-                    name: "fb-approvals-kycyk1n8",
-                    uniqueSchemaItem: true,
-                    index: 5,
                   },
                 ],
               },
@@ -1406,10 +1341,18 @@ context("Test usage report is correctly counting documents", () => {
                 },
               },
               name: "Released Equipment",
+              formDocument: {
+                id: createdEquipmentFormDocument.id,
+              },
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
               revisionStage: 1,
+              formInput: {
+                "fb-default-eq-status": "Active",
+                "fb-primary-owner-eq": adminEmployee.id,
+                "fb-coordinator-eq": adminEmployee.id,
+              },
             },
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
@@ -1450,10 +1393,18 @@ context("Test usage report is correctly counting documents", () => {
                 },
               },
               name: "Draft Equipment",
+              formDocument: {
+                id: createdEquipmentFormDocument.id,
+              },
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
               revisionStage: 1,
+              formInput: {
+                "fb-default-eq-status": "Active",
+                "fb-primary-owner-eq": adminEmployee.id,
+                "fb-coordinator-eq": adminEmployee.id,
+              },
             },
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
@@ -1535,6 +1486,8 @@ context("Test usage report is correctly counting documents", () => {
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
               revisionStage: 1,
+              formDocument: { id: createdSupplierFormDocument.id },
+              formInput: {},
             },
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
@@ -1761,6 +1714,9 @@ context("Test usage report is correctly counting documents", () => {
                 },
               },
               name: "API Released record",
+              formDocument: {
+                id: recordForm.id,
+              },
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -1805,6 +1761,9 @@ context("Test usage report is correctly counting documents", () => {
                 },
               },
               name: "API Draft record",
+              formDocument: {
+                id: recordForm.id,
+              },
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -1881,7 +1840,7 @@ context("Test usage report is correctly counting documents", () => {
               document: {
                 docId: "ADM-00002",
                 documentType: {
-                  id: generalDocumentType[0].id,
+                  id: administrativeDocumentType[0].id,
                 },
                 securityList: {
                   operators: [],
@@ -1919,7 +1878,7 @@ context("Test usage report is correctly counting documents", () => {
     });
 
     context("Day 1 User 2 Spent Time Tracking", () => {
-      it("[API]Create LHRt document", (done: any) => {
+      it("[API]Create LHRT document in Draft", (done: any) => {
         cy.grpGetGroupByName({
           sessionId: loginResponse.sessionId,
           employeeId: secondEmployee.id,
@@ -2107,7 +2066,7 @@ context("Test usage report is correctly counting documents", () => {
         });
       });
 
-      it("[API]Create Draft Equipment document", (done: any) => {
+      it("[API]Create Equipment document in Draft", (done: any) => {
         cy.drCreateDocumentRevision({
           payload: {
             attachments: [],
@@ -2138,7 +2097,7 @@ context("Test usage report is correctly counting documents", () => {
         }).then(() => done());
       });
 
-      it("[API]Create Draft record", (done: any) => {
+      it("[API]Create Regular Record in Draft", (done: any) => {
         cy.drCreateDocumentRevision({
           payload: {
             attachments: [],
@@ -2169,7 +2128,7 @@ context("Test usage report is correctly counting documents", () => {
         }).then(() => done());
       });
 
-      it("[API]Create Draft record inline", (done: any) => {
+      it("[API]Create Record inline in Draft", (done: any) => {
         cy.drCreateDocumentRevision({
           payload: {
             attachments: [],
@@ -2206,7 +2165,7 @@ context("Test usage report is correctly counting documents", () => {
       });
 
 
-      it("[API]Create released record", (done: any) => {
+      it("[API]Create Regular released record", (done: any) => {
         cy.drCreateDocumentRevision({
           payload: {
             attachments: [],
@@ -2438,6 +2397,262 @@ context("Test usage report is correctly counting documents", () => {
           });
         });
       });
+
+      it("[API]Create PM form", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>PM form</p>",
+            document: {
+              docId: "FM-00025",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Preventative Maintenance form",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [{
+                id: maintenanceRecordDocumentType[0].id,
+              }],
+              schema: [
+                {
+                  name: "fb-maintenance-details-section",
+                  type: "section",
+                  index: 0,
+                  label: "Maintenance Details",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "equipment_id",
+                  type: "autocomplete",
+                  index: 1,
+                  label: "Equipment",
+                  rules: "required",
+                  optionId: "20",
+                  placeholder: "[Select revision here]",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "equipment_maintainer",
+                  type: "autocomplete",
+                  index: 2,
+                  label: "Maintainer",
+                  rules: "required",
+                  optionId: "13",
+                  placeholder: "[Select name here]",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "fb-equipment_due_date",
+                  type: "datepicker",
+                  index: 3,
+                  label: "Completion Date",
+                  rules: "required",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "fb-requipment-maintenance-section",
+                  type: "textfield",
+                  index: 4,
+                  label: "Equipment Maintenance Section",
+                  rules: "required",
+                  hidden: true,
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  label: "form.builder.approvals",
+                  type: "approvals",
+                  deleteDisabled: true,
+                  name: "fb-approvals-kybkhbpt",
+                  uniqueSchemaItem: true,
+                  index: 5,
+                },
+              ],
+            },
+
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdPMForm = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdPMForm.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+            },
+            employeeId: secondEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => done());
+        });
+      });
+
+      it("[API]Create Calibration form", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Calibration form</p>",
+            document: {
+              docId: "FM-00026",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Calibration form",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [{
+                id: maintenanceRecordDocumentType[0].id,
+              }],
+              schema: [
+                {
+                  name: "fb-maintenance-details-section",
+                  type: "section",
+                  index: 0,
+                  label: "Maintenance Details",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "equipment_id",
+                  type: "autocomplete",
+                  index: 1,
+                  label: "Equipment",
+                  rules: "required",
+                  optionId: "20",
+                  placeholder: "[Select revision here]",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "equipment_maintainer",
+                  type: "autocomplete",
+                  index: 2,
+                  label: "Maintainer",
+                  rules: "required",
+                  optionId: "13",
+                  placeholder: "[Select name here]",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "fb-equipment_due_date",
+                  type: "datepicker",
+                  index: 3,
+                  label: "Completion Date",
+                  rules: "required",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "fb-requipment-maintenance-section",
+                  type: "textfield",
+                  index: 4,
+                  label: "Equipment Maintenance Section",
+                  rules: "required",
+                  hidden: true,
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  deleteInFormDisabled: true,
+                },
+                {
+                  label: "form.builder.approvals",
+                  type: "approvals",
+                  deleteDisabled: true,
+                  name: "fb-approvals-kybkhbpt",
+                  uniqueSchemaItem: true,
+                  index: 5,
+                },
+              ],
+            },
+
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCalibrationForm = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdCalibrationForm.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+            },
+            employeeId: secondEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => done());
+        });
+      });
     });
   });
 
@@ -2532,9 +2747,6 @@ context("Test usage report is correctly counting documents", () => {
                 retrain: false,
                 revisionChangeType: RevisionChangeType.NextRevision,
                 revisionStage: 1,
-                formDocument: {
-                  id: inlineRecordForm.id,
-                },
               },
               employeeId: thirdEmplyee.id as unknown as string,
               sessionId: loginResponse.sessionId as unknown as string,
@@ -3515,8 +3727,6 @@ context("Test usage report is correctly counting documents", () => {
     });
 
     it("Verify data from usage report", () => {
-      console.log(numberOfDocsFromUsageReportForCompany1);
-      console.log(numberOfCreatedDocsForComany1);
       assert.deepEqual(numberOfDocsFromUsageReportForCompany1, numberOfCreatedDocsForComany1);
     });
   });
@@ -3543,8 +3753,6 @@ context("Test usage report is correctly counting documents", () => {
     });
 
     it("Verify data from usage report", () => {
-      console.log(numberOfDocsFromUsageReportForCompany2);
-      console.log(numberOfCreatedDocsForComany2);
       assert.deepEqual(numberOfDocsFromUsageReportForCompany2, numberOfCreatedDocsForComany2);
     });
   });
