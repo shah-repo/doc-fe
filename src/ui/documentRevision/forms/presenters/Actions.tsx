@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { get, isArray, isEqual, isUndefined, keys, omit } from "lodash";
+import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -168,7 +168,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                 "partType", "childForRevise"]));
         }
         if (isOutputSchema()) {
-          formik.setFieldValue("schema", schema);
+          formik.setFieldValue("schema", isEmpty(schema) ? values.schema : schema);
         }
         break;
       default:
