@@ -1,5 +1,5 @@
 
-import { differenceBy, filter, isEmpty, map } from "lodash";
+import { differenceBy, filter, isEmpty, map, size } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -176,6 +176,10 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    const isStarterRequired = () => (["design", "formDesign"].includes(workspaceState?.mode || "")) &&
+      !size(schema?.find((item) => item.tabId === _tabsState?.tabID && !item.deleted));
+
+
     return Component({
       ...(props as T),
       schema,
@@ -186,6 +190,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       autosave,
       includeProcedureDiff,
       _tabsState,
+      isStarterRequired,
     });
   };
 
