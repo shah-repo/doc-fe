@@ -381,7 +381,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.get("[data-cy=\"common.Numeric\"]").first().arrowClick();
+      cy.get("label").contains("Numeric").first().arrowClick();
     });
 
     it("Click create document", () => {
@@ -651,6 +652,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click create document", () => {
+      cy.pause();
       cy.drClickCreateDocumentWithApiCall();
     });
 
