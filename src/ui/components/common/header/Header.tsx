@@ -27,8 +27,6 @@ const styles = makeStyles((theme: Theme) =>
       padding: "10px",
       display: "flex",
       justifyContent: "flex-end",
-      position: "fixed",
-      width: "85.7%",
     },
   },
   ));
@@ -43,30 +41,25 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
-      <Box
-        minHeight={84}
-        borderColor={Colors.medium_gray}
-        bgcolor={Colors.alabaster}
-        py={1.25}
-        px={1.25}
-        alignContent="center"
-        position="fixed"
-        width="calc(100% - 240px)"
-      >
-        <Grid
-          container={true}
-          className={`${classes.headerSection} ${
-            headerBackgroundClasses[
-              FormHeaderStatusClassMapping[
-                displayStatus || status || ""
-              ]
-            ]
-          }`}
-          alignItems="center"
-        >
-          {children}
-        </Grid>
-      </Box>
+      <AppBar color="primary" className={classes.appbar}>
+        <Toolbar className={classes.toolbar}>
+          <Box width="calc(100% - 240px)">
+            <Grid
+              container={true}
+              className={`${classes.headerSection} ${
+                headerBackgroundClasses[
+                  FormHeaderStatusClassMapping[
+                    displayStatus || status || ""
+                  ]
+                ]
+              }`}
+              alignItems="center"
+            >
+              {children}
+            </Grid>
+          </Box>
+        </Toolbar>
+      </AppBar>
     );
   }
 
