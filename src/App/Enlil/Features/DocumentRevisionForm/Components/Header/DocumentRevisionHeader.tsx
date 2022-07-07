@@ -14,7 +14,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
   documentRevisionId,
   shouldShowUpgrade,
 }) =>  (
-  <Box bgcolor="red" width="86%">
+  <Box bgcolor="red">
     <RedlineBanner {...{ bannerPortal }}/>
     <UpgradeToLatestContainer
       type="banner"

@@ -15,8 +15,6 @@ const styles = makeStyles((theme: Theme) =>
     headerSection: {
       minHeight: "64px",
       borderRadius: "6px",
-      position: "fixed",
-      width: "84.4%",
     },
     appbar: {
       backgroundColor: Colors.white,
