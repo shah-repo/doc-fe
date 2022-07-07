@@ -59,7 +59,7 @@ export const toDocumentRevisionFormValues = (
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
-    formInput: documentRevision.formInput || {},
+    formInput: documentRevision.formInput,
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
