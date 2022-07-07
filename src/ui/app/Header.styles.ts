@@ -8,7 +8,10 @@ export default (theme: Theme) =>
     newAppBar: {
       background: `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 16.91%, #011FBB 85.48%)`,
       color: Colors.white,
-      position: "inherit",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
     },
     appBar: {
       background: `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 16.91%, #011FBB 85.48%)`,

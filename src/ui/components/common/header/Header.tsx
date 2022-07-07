@@ -15,6 +15,8 @@ const styles = makeStyles((theme: Theme) =>
     headerSection: {
       minHeight: "64px",
       borderRadius: "6px",
+      position: "fixed",
+      width: "84.4%",
     },
     appbar: {
       backgroundColor: Colors.white,
@@ -31,20 +33,22 @@ const styles = makeStyles((theme: Theme) =>
 interface Props{
   status?: DocumentRevisionStatus;
   displayStatus?: DocumentRevisionStatus;
+  fromSummary?: boolean;
 }
-const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
+const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus, fromSummary }) => {
   const classes = styles();
   const headerBackgroundClasses = headerBackgroundStyles();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
       <Box
-        minHeight={60}
+        minHeight={84}
         borderColor={Colors.medium_gray}
         bgcolor={Colors.alabaster}
         py={1.25}
         px={1.25}
         alignContent="center"
+        marginTop={fromSummary ? 6 : 0}
       >
         <Grid
           container={true}

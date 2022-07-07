@@ -10,7 +10,7 @@ export const editorStyles = {
     zIndex: 1000,
   },
   editorStyle: {
-    padding: "0 8px",
+    padding: "0 4px",
     width: "100%",
     fontWeight: 400,
     fontSize: 14,

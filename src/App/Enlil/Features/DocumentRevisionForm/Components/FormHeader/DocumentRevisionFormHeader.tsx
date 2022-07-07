@@ -18,9 +18,9 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
     {() => (
       <Box
         id="SMHeaderTmpl"
-        paddingTop={SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) ? 2 : 0.75}
+        paddingTop={SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) ? 2 : 0}
         paddingBottom={1.25}
-        pl={2.75}
+        pl={3.75}
         pr={4.25}
       >
         {
