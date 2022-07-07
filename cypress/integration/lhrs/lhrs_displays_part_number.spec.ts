@@ -303,6 +303,14 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       cy.drEnterDocumentTitle( { name: "CSL with part number and CS reference" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -324,9 +332,19 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       it(`Verify '${CSPartDocumentTitle}' is selected for 'Part Number'`, () => {
         cy.get("[data-cy=\"lot_part\"]").should("have.attr", "value", `CS-02001 - rev 1 - ${CSPartDocumentTitle}`);
       });
+
+      it("Save document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
+      });
     });
 
     context("Release CSL", () => {
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
       });
