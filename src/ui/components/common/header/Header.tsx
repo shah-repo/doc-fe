@@ -48,7 +48,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
         py={1.25}
         px={1.25}
         alignContent="center"
-        marginTop={fromSummary ? 6 : 0}
+        marginTop={fromSummary || SM.isNewCRLayout ? 6 : 0}
       >
         <Grid
           container={true}
