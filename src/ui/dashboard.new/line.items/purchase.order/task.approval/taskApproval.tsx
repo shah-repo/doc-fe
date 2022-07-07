@@ -149,7 +149,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <StyledListItem button onMouseEnter={onMouseHoverListItem}>
+      <StyledListItem button onMouseEnter={onMouseHoverListItem} className={classes.buttoncursor} disableRipple>
         <ListItemAvatar>
           {docRevOwnerAvatar ? (
             <Avatar

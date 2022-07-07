@@ -15,7 +15,6 @@ import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixFiel
 import FBApprovalMatrixFieldRoles from "../FBApprovalMatrixField/FBApprovalMatrixFieldRoles";
 import FBApprovals from "../FBApprovals/FBApprovals";
 import FBApprovers from "../FBApprovers/FBApprovers";
-import FBAttachment from "../FBAttachment/FBAttachment";
 import FBBlankTplForm from "../FBBlankTplForm/FBBlankTplForm";
 import FBButton from "../FBButton/FBButton";
 import FBCheckbox from "../FBCheckbox/FBCheckbox";
@@ -93,7 +92,6 @@ class FBSchemaState {
     radio: FBRadio,
     radiogroup: FBRadioGroup,
     fileupload: FBFileUpload,
-    attachments: FBAttachment,
     zipattachment: FBZIPUpload,
     blanktplform: FBBlankTplForm,
     schemaselect: FBSchemaSelect,

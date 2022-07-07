@@ -69,7 +69,7 @@ export const getFBSchemeByDocType = (
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
         tabId: tabLabel,
-        index: size(finalScheme),
+        index: size(finalScheme + 1),
       });
     } else {
       finalScheme.push({
@@ -79,7 +79,7 @@ export const getFBSchemeByDocType = (
         name: `fb-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
         tabId: tabIdByInternalType[outputTypesWithGroups[0].group] || tabId,
-        index: size(finalScheme),
+        index: size(finalScheme + 1),
       });
     }
   }

@@ -114,6 +114,8 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onMouseEnter={onMouseHoverListItem}
+        className={classes.buttoncursor}
+        disableRipple
       >
         <ListItemIcon>{getDocIcon(docTypeGroup)}</ListItemIcon>
         <ListItemText

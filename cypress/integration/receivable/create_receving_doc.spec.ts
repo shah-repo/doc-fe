@@ -11,10 +11,6 @@ import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseO
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const ATTACHMENT_BUILT_IN_KEY = "fb-attachment-built-in";
-const ATTACHMENTS = "attachments";
-const ON_STATE_TO_IN_REVIEW = "ON_STATE_TO_IN_REVIEW";
-
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
@@ -409,19 +405,6 @@ context("Create receivable test", () => {
                             },
                             {
                               index: 1,
-                              name: ATTACHMENT_BUILT_IN_KEY,
-                              label: "Attachments",
-                              type: ATTACHMENTS,
-                              applicableOn: [
-                                ON_STATE_TO_IN_REVIEW,
-                              ],
-                              deleteDisabled: true,
-                              deleteInFormDisabled: true,
-                              applicableValidationSchema: true,
-                              tabId: "overview",
-                            },
-                            {
-                              index: 2,
                               type: "textfield",
                               name: "text-field-ke04ztn7",
                               rows: 1,
@@ -440,7 +423,7 @@ context("Create receivable test", () => {
                               deleteDisabled: false,
                               name: "fb-po-approvals-kqqix31p",
                               uniqueSchemaItem: true,
-                              index: 3,
+                              index: 2,
                             }],
                           },
                         },
