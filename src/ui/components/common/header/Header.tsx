@@ -6,7 +6,6 @@ import { SM } from "../../../../App";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 // import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
-import Colors from "../../../layout/theme/utils/colors";
 import { headerBackgroundStyles } from "./Header.background.styles";
 import { FormHeaderStatusClassMapping } from "./Helpers";
 
@@ -17,12 +16,10 @@ const styles = makeStyles((theme: Theme) =>
       borderRadius: "6px",
     },
     appbar: {
-      backgroundColor: Colors.white,
       top: "38px",
       zIndex: theme.zIndex.drawer + 1,
     },
     toolbar: {
-      borderBottom: `1px solid ${Colors.medium_gray}`,
       minHeight: "84px",
       padding: "10px",
       display: "flex",
