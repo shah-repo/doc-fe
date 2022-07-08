@@ -1,6 +1,7 @@
 import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import { Observer } from "mobx-react";
 import React from "react";
 import { SM } from "../../../../App";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
@@ -16,7 +17,7 @@ const styles = makeStyles((theme: Theme) =>
       borderRadius: "6px",
     },
     appbar: {
-      top: "38px",
+      top: "48px",
       zIndex: theme.zIndex.drawer + 1,
     },
     toolbar: {
@@ -35,25 +36,30 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
   const classes = styles();
   const headerBackgroundClasses = headerBackgroundStyles();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
+  const { _documentRevisionFormState } = SM.useStores();
   if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
       <AppBar color="primary" className={classes.appbar}>
         <Toolbar className={classes.toolbar}>
-          <Box width="calc(100% - 240px)">
-            <Grid
-              container={true}
-              className={`${classes.headerSection} ${
-                headerBackgroundClasses[
-                  FormHeaderStatusClassMapping[
-                    displayStatus || status || ""
-                  ]
-                ]
-              }`}
-              alignItems="center"
-            >
-              {children}
-            </Grid>
-          </Box>
+          <Observer>
+            {() => (
+              <Box width={_documentRevisionFormState?.leftPanelOpen ? "calc(100% - 540px)" : "calc(100% - 240px)"}>
+                <Grid
+                  container={true}
+                  className={`${classes.headerSection} ${
+                    headerBackgroundClasses[
+                      FormHeaderStatusClassMapping[
+                        displayStatus || status || ""
+                      ]
+                    ]
+                  }`}
+                  alignItems="center"
+                >
+                  {children}
+                </Grid>
+              </Box>
+            )}
+          </Observer>
         </Toolbar>
       </AppBar>
     );

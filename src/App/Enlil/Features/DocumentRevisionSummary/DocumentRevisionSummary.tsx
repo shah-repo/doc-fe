@@ -99,7 +99,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       headerBoxProps={{ maxHeight: "30%", paddingTop: "38px" }}
       contentBoxProps={{
         minHeight: "calc(100% - 30%)", height: "100%",
-        bgcolor: Colors.alabaster, paddingTop: "84px",
+        bgcolor: Colors.alabaster, paddingTop: "94px",
       }}
       values={documentRevision}
       header= {

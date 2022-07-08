@@ -22,7 +22,7 @@ export default (theme: Theme) =>
     newLogo: {
       backgroundRepeat: "no-repeat",
       backgroundImage: `url(${EnlilLogo})`,
-      left: "61%",
+      left: "53%",
       right: "20%",
       position: "absolute",
       paddingTop: "48px",
@@ -46,7 +46,7 @@ export default (theme: Theme) =>
     toolbar: {
       marginLeft: DRAWER_WIDTH,
       borderBottom: `1px solid ${Colors.medium_gray}`,
-      minHeight: "40px",
+      minHeight: "48px",
     },
     headerButton: {
       "boxShadow": "none",
