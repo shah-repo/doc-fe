@@ -160,6 +160,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         button
         className={classes.listItem}
         onMouseEnter={onMouseHoverListItem}
+        disableRipple
       >
         {open ? (
           <CollapseIcon className={classes.icon} onClick={handleClick} />

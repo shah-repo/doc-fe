@@ -108,7 +108,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
       className="fontSizeSmall"
     ></RemoveCircle>
   );
-  const isDisabled = !isOutput || loading || !lhrBuildTypeExist || disabled;
+  const isDisabled = !isOutput || loading || !lhrBuildTypeExist;
 
   return (
     <FBProvider {...{ lhrStepState }}>

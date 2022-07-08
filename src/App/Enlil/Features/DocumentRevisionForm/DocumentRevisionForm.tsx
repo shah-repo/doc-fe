@@ -92,7 +92,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     } ];
   }
 
-  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP)) {
+  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
+    .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
       tabId: TabTypeOptions.TABS_MEQ,
@@ -151,7 +152,10 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                     (_documentRevisionFormState?.isDescriptionFocused) || isCreateUrl) ? "auto" : "")),
                 height: isCreateUrl ? "calc(100vh - 105px)" :  "calc(100vh - 130px)",
               }}
-              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
+              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
+                type={type}
+                documentTypeId={formValues.values.document?.documentType?.id}
+              />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
               <Observer>
