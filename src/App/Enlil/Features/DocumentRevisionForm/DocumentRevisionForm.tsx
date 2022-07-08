@@ -13,6 +13,7 @@ import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
+import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
@@ -112,13 +113,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   }, [tabConfig]);
 
   const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ?
-    "calc(100vh - 310px)" : "auto";
+    "calc(100vh - 315px)" : "auto";
 
   return (
     <SMForm
-      templateBoxProps={{ stretchY: "100%" }}
-      headerBoxProps={{ maxHeight: "30%" }}
-      contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
+      templateBoxProps={{ stretchY: "100%", marginTop: "38px", width: "100%" }}
+      contentBoxProps={{
+        minHeight: "calc(100% - 30%)", height: "100%",
+        bgcolor: Colors.alabaster, paddingTop: isCreateUrl ? "73px" : "94px",
+      }}
       values={formValues.values}
       leftSidebar={DocumentRevisionLeftPanel}
       header= {
