@@ -393,6 +393,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
                 validationMode: "default",
                 validationAttribute: "Periodic Training",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-document-to-be-trained-on",
@@ -415,6 +416,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
                 ],
                 validationAttribute: "Documents to Train on",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-refresh-training-periodically",
@@ -437,6 +439,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
                 validationMode: "default",
                 validationAttribute: "Refresh/repeat training periodically?",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-validity",
@@ -458,6 +461,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
                 validationMode: "visibility",
                 validationAttribute: "Training Frequency (in days)",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-details-section",
@@ -470,6 +474,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
                 validationMode: "default",
                 validationAttribute: "Trainees Details",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-select-groups-to-train",
@@ -488,6 +493,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
                 ],
                 validationAttribute: "Groups to Train",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "training-select-users-to-train",
@@ -506,6 +512,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
                 ],
                 validationAttribute: "Users to Train (if applicable)",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -514,6 +521,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
                 name: "fb-approvals-l0wcpa0v",
                 uniqueSchemaItem: true,
                 index: 7,
+                tabId: "overview",
               },
             ],
           },
