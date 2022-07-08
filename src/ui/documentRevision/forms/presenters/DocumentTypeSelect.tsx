@@ -170,7 +170,6 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
           _documentRevisionFormState?.setFBSchema(predefinedSchema);
         }
       }
-
     }
   };
 
