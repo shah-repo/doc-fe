@@ -257,18 +257,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             {...{ documentTypeId, isRecord }}
           />
         </Grid>
-        <Grid item xs={12}>
-          <AttachmentsField
-            isDisabled={isDisabledInput}
-            isNewVersion={false}
-            docRevId = {docRevId}
-            isAttachmentEmpty = {isAttachmentEmpty}
-            containsRedline = {false}
-            docRevStatus = {documentRevision?.status}
-            documentRevision={documentRevision}
-            documentTypeId={documentTypeId || ""}
-          />
-        </Grid>
         {isEB && (
           <Grid item xs={12}>
             <FBEBPart name="childrenParts" />
@@ -324,15 +312,29 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Grid>
         )}
         {_formState?.active && _formState.mode === "design" && hasOutput && (
-          <Grid item xs={12}>
-            <FBActiveNoOutput
-              docRevId={initialValues.id}
-              status={documentRevision?.status}
-              version={documentRevision?.version}
-              isDisabled={isDisabledInput}
-              outputDocs={values.outputDocumentTypes as OptionType[]}
-            />
-          </Grid>
+          <>
+            <Grid item xs={12}>
+              <AttachmentsField
+                isDisabled={isDisabledInput}
+                isNewVersion={false}
+                docRevId={docRevId}
+                isAttachmentEmpty={isAttachmentEmpty}
+                containsRedline={false}
+                docRevStatus={documentRevision?.status}
+                documentRevision={documentRevision}
+                documentTypeId={documentTypeId || ""}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FBActiveNoOutput
+                docRevId={initialValues.id}
+                status={documentRevision?.status}
+                version={documentRevision?.version}
+                isDisabled={isDisabledInput}
+                outputDocs={values.outputDocumentTypes as OptionType[]}
+              />
+            </Grid>
+          </>
         )}
         {_formState?.active && documentRevision && values.id && (
           <Grid item xs={12}>
