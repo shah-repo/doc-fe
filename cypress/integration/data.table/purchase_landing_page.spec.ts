@@ -475,13 +475,13 @@ context("Purchase Order Landing Page", () => {
 
     it("Verify all columns are present", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "PO #");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Revision");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "PO Status");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Supplier");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Part Number");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Amount");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Requestor");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Issue Date");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "REVISION");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "PO STATUS");
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "SUPPLIER");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "PART NUMBER");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "AMOUNT");
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "REQUESTOR");
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "ISSUE DATE");
     });
 
     it(`Verify drag and drop`, () => {
@@ -575,17 +575,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
-        cy.contains("Revision").eq(0).click();
+        cy.contains("REVISION").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
       });
 
       it("Revision should be in descending order", () => {
-        cy.contains("Revision").eq(0).click();
+        cy.contains("REVISION").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
       });
@@ -593,17 +593,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'PO Status'", () => {
       it("PO Status should be in ascending order", () => {
-        cy.contains("PO Status").eq(0).click();
+        cy.contains("PO STATUS").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("PO STATUS").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
       });
 
       it("PO Status should be in descending order", () => {
-        cy.contains("PO Status").eq(0).click();
+        cy.contains("PO STATUS").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("PO STATUS").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
       });
@@ -611,17 +611,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Supplier'", () => {
       it("Supplier should be in ascending order", () => {
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.get("[aria-colindex]").contains("SUPPLIER").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.get("[aria-colindex]").contains("SUPPLIER").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
       });
 
       it("Supplier should be in descending order", () => {
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.get("[aria-colindex]").contains("SUPPLIER").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.get("[aria-colindex]").contains("SUPPLIER").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
       });
@@ -629,17 +629,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Part Number'", () => {
       it("Part Number should be in ascending order", () => {
-        cy.contains("Part Number").eq(0).click();
+        cy.contains("PART NUMBER").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("PART NUMBER").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
       });
 
       it("Part Number should be in descending order", () => {
-        cy.contains("Part Number").eq(0).click();
+        cy.contains("PART NUMBER").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("PART NUMBER").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
       });
@@ -647,17 +647,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Amount'", () => {
       it("Amount should be in ascending order", () => {
-        cy.contains("Amount").eq(0).click();
+        cy.contains("AMOUNT").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("AMOUNT").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 8 });
       });
 
       it("Amount should be in descending order", () => {
-        cy.contains("Amount").eq(0).click();
+        cy.contains("AMOUNT").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("AMOUNT").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 8 });
       });
@@ -665,17 +665,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Requestor'", () => {
       it("Requestor should be in ascending order", () => {
-        cy.contains("Requestor").eq(0).click();
+        cy.contains("REQUESTOR").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("REQUESTOR").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
       });
 
       it("Requestor should be in descending order", () => {
-        cy.contains("Requestor").eq(0).click();
+        cy.contains("REQUESTOR").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("REQUESTOR").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
       });
@@ -683,17 +683,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Issue Date'", () => {
       it("Issue Date should be in ascending order", () => {
-        cy.contains("Issue Date").eq(0).click();
+        cy.contains("ISSUE DATE").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("ISSUE DATE").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
       });
 
       it("Issue Date should be in descending order", () => {
-        cy.contains("Issue Date").eq(0).click();
+        cy.contains("ISSUE DATE").eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("ISSUE DATE").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
       });
