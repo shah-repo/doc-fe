@@ -59,7 +59,7 @@ export const toDocumentRevisionFormValues = (
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
-    formInput: documentRevision.formInput || {},
+    formInput: documentRevision.formInput,
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
@@ -84,6 +84,9 @@ export const toDocumentRevisionFormValues = (
       outputDocumentTypes: get(documentRevision, "formTemplate.outputDocumentTypes", [])
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     };
+  }
+  if (documentRevision.document?.docId.includes("BLC-")) {
+    values.formInput = documentRevision.formInput || {};
   }
 
   const isDocumentRecord = checkIsDocumentRecord(documentRevision?.document.documentType.groupOptions);
