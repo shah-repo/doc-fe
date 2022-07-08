@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -571,8 +572,8 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
 
     it("Doc2 with Approved status", () => {
@@ -586,7 +587,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
       cy.drClickCreateDocumentWithApiCall();
-      cy.get("#HeaderInfo-docId").then((x) => { approvedDoc2Id = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { approvedDoc2Id = x.text(); });
       cy.navigToApprovalRequestList();
       cy.cmpClickCreateApprovalRequest();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });
@@ -601,7 +602,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.arSaveApiCall();
       cy.arClickSendToReview();
       cy.arApproveAR();
-      cy.drCheckDocumentStatus({ status: "Approved" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Doc3 with Released status & second revision", () => {
@@ -618,13 +619,13 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.drClickReviseDocument();
       cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc3Id = x.text(); });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc3Id = x.text(); });
     });
   });
 
@@ -662,6 +663,14 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document 'released doc1' & 'approved doc2' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(releasedDoc1Id);
       cy.unClick();
@@ -682,12 +691,22 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -700,8 +719,8 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -833,6 +852,14 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document 'released doc3' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(releasedDoc3Id);
       cy.unClick();
@@ -851,12 +878,22 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -869,8 +906,8 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -951,8 +988,8 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc4Id = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc4Id = x.text(); });
     });
 
     it("Navigate to document list", () => {
