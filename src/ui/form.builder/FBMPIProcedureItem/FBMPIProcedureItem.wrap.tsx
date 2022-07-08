@@ -111,8 +111,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             ...ref?.metadata,
             refId: ref?.id,
             overrideDocId: ref?.toDocRev?.document.docId,
-            pmDueDate: ref.toDocRev?.precalc.pm_due_date,
-            calDueDate: ref.toDocRev?.precalc.cali_due_date,
+            pmDueDate: ref.toDocRev?.precalc?.pm_due_date,
+            calDueDate: ref.toDocRev?.precalc?.cali_due_date,
           });
         }
         return selected;
