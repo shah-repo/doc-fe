@@ -7,6 +7,7 @@ import { SM } from "../../../../App";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 // import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import Colors from "../../../layout/theme/utils/colors";
 import { headerBackgroundStyles } from "./Header.background.styles";
 import { FormHeaderStatusClassMapping } from "./Helpers";
 
@@ -17,15 +18,17 @@ const styles = makeStyles((theme: Theme) =>
       borderRadius: "6px",
     },
     appbar: {
-      top: "48px",
+      top: "47px",
       zIndex: theme.zIndex.drawer + 1,
     },
-    toolbar: {
-      minHeight: "84px",
-      padding: "10px",
+    toolbar: (createUrl) => ({
+      minHeight: createUrl ? "" : "84px",
+      padding: createUrl ? "" : "10px",
       display: "flex",
       justifyContent: "flex-end",
-    },
+      borderBottom: createUrl ? `1px solid ${Colors.medium_gray}` : "",
+      background: Colors.alabaster,
+    }),
   },
   ));
 interface Props{
@@ -33,9 +36,9 @@ interface Props{
   displayStatus?: DocumentRevisionStatus;
 }
 const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
-  const classes = styles();
   const headerBackgroundClasses = headerBackgroundStyles();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
+  const classes = styles(isCreateUrl);
   const { _documentRevisionFormState } = SM.useStores();
   if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (

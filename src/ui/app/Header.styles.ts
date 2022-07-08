@@ -41,9 +41,12 @@ export default (theme: Theme) =>
       color: theme.palette.primary.main,
     },
     toolbar: {
-      marginLeft: DRAWER_WIDTH,
-      borderBottom: `1px solid ${Colors.medium_gray}`,
-      minHeight: "48px",
+      "marginLeft": DRAWER_WIDTH,
+      "borderBottom": `1px solid ${Colors.medium_gray}`,
+      "minHeight": "40px",
+      "&.formBuilder": {
+        minHeight: "48px",
+      },
     },
     headerButton: {
       "boxShadow": "none",

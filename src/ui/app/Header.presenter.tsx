@@ -25,7 +25,7 @@ const Header: React.FunctionComponent<Props> = ({
   if (SM.isNewLayout || SM.isNewCRLayout) {
     return (
       <AppBar position="fixed" color="primary" className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
+        <Toolbar className={`${classes.toolbar} formBuilder`}>
           {<Box className={classes.newLogo} />}
           <Grid container={true} alignItems="flex-end" justify="flex-end">
             <Grid item>
