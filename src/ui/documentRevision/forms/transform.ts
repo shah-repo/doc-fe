@@ -85,7 +85,7 @@ export const toDocumentRevisionFormValues = (
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     };
   }
-  if (documentRevision.document?.docId.includes("BLC-")) {
+  if (documentRevision.document?.docId.startsWith("BLC-")) {
     values.formInput = documentRevision.formInput || {};
   }
 
