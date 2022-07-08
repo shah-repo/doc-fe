@@ -92,7 +92,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     } ];
   }
 
-  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP)) {
+  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
+    .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
       tabId: TabTypeOptions.TABS_MEQ,
