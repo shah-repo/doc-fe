@@ -272,7 +272,8 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drClearDocumentTitle", () => {
-  cy.get("[data-cy=\"field-name\"] svg").arrowClick();
+  cy.get("div[data-cy=\"field-name\"]").arrowClick();
+  cy.get("div[data-cy=\"field-name\"]").find("svg").arrowClick();
 });
 
 Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
