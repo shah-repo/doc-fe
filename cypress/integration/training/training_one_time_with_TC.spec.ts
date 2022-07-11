@@ -357,16 +357,20 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.unClick();
     });
 
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Upload logo picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add Checkbox group", () => {
-      cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
       cy.fbGroupOptions("1", "2", "3");
@@ -378,9 +382,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "TEST FIELD" });
+      cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
