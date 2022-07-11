@@ -1,4 +1,3 @@
-import { truncate } from "lodash";
 import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, useContext, useEffect, useRef } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
 import { SM } from "../../../../App";
@@ -28,10 +27,7 @@ const renderRow = (props: ListChildComponentProps) => {
     ...data[index],
     props: {
       ...data[index].props,
-      children: _documentRevisionFormState?.leftPanelOpen ? truncate(data[index].props.children, {
-        length: 28,
-        omission: " ...",
-      }) : data[index].props.children,
+      children: data[index].props.children,
     },
   };
   const listItem = cloneElement(tooltipItem, {
