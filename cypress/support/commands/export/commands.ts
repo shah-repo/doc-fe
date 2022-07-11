@@ -88,7 +88,6 @@ Cypress.Commands.add("inlineApproval", () => {
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.PostApprovalsApprove,
-    CyRoutes.GetDocAggregatedAudit,
     CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });

@@ -14,6 +14,9 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.white,
       textTransform: "uppercase",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
     },

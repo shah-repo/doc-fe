@@ -178,7 +178,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   };
   return (
     <>
-      <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
+      <StyledListItem button onMouseEnter={onMouseHoverItemListItem} className={classes.buttoncursor} disableRipple>
         <ListItemIcon className={classes.listItemIcon}>
           <TrainingIcon height={30} width={30} />
         </ListItemIcon>

@@ -191,6 +191,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
         button
         onMouseEnter={onMouseHoverListItem}
         className={classes.listItem}
+        disableRipple
       >
         {type === ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED &&
         open ? (

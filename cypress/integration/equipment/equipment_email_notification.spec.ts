@@ -5,6 +5,7 @@
 import faker from "faker";
 import moment from "moment";
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -399,6 +400,15 @@ context("Test Equipment maintenance email notifications", () => {
         cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
 
+      it("Save document", () => {
+        cy.unClick();
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Navigate To calpmhistory", () => {
+        cy.drSelectCalPmHistoryTab();
+      });
+
       it("Select document 'Yes' for preventative maintenance required", () => {
         cy.get("[value=\"Yes\"]").eq(0).arrowClick();
       });
@@ -511,7 +521,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -586,6 +596,10 @@ context("Test Equipment maintenance email notifications", () => {
         cy.equipReloadDocument();
       });
 
+      it("Navigate To calpmhistory", () => {
+        cy.drSelectCalPmHistoryTab();
+      });
+
       it("Verify maintenance record is present", () => {
         cy.get("[data-cy=\"maintenanceHistory\"]>div")
           .eq(0)
@@ -620,6 +634,14 @@ context("Test Equipment maintenance email notifications", () => {
         cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
 
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Navigate To specification", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
         cy.get("[name=fb-primary-owner-eq]").arrowClick();
         cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
@@ -629,6 +651,15 @@ context("Test Equipment maintenance email notifications", () => {
         cy.get("[name=fb-coordinator-eq]").arrowClick();
         cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
       });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Navigate To calpmhistory", () => {
+        cy.drSelectCalPmHistoryTab();
+      });
+
 
       it("Select document 'Yes' for preventative maintenance required", () => {
         cy.get("[value=\"Yes\"]").eq(0).arrowClick();
@@ -733,7 +764,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -808,6 +839,10 @@ context("Test Equipment maintenance email notifications", () => {
         cy.equipReloadDocument();
       });
 
+      it("Navigate To calpmhistory", () => {
+        cy.drSelectCalPmHistoryTab();
+      });
+
       it("Verify maintenance record is present", () => {
         cy.get("[data-cy=\"maintenanceHistory\"]>div")
           .eq(0)
@@ -842,6 +877,14 @@ context("Test Equipment maintenance email notifications", () => {
         cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
 
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Navigate To specification", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
         cy.get("[name=fb-primary-owner-eq]").arrowClick();
         cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
@@ -852,9 +895,17 @@ context("Test Equipment maintenance email notifications", () => {
         cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
       });
 
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+
+      it("Navigate To calpmhistory", () => {
+        cy.drSelectCalPmHistoryTab();
+      });
+
       it("Select document 'Yes' for preventative maintenance required", () => {
         cy.get("[value=\"Yes\"]").eq(0).arrowClick();
-
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
@@ -956,7 +1007,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -1031,6 +1082,10 @@ context("Test Equipment maintenance email notifications", () => {
         cy.equipReloadDocument();
       });
 
+      it("Navigate To calpmhistory", () => {
+        cy.drSelectCalPmHistoryTab();
+      });
+
       it("Verify maintenance record is present", () => {
         cy.get("[data-cy=\"maintenanceHistory\"]>div")
           .eq(0)
@@ -1065,6 +1120,14 @@ context("Test Equipment maintenance email notifications", () => {
         cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
 
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Navigate To specification", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
         cy.get("[name=fb-primary-owner-eq]").arrowClick();
         cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
@@ -1073,6 +1136,14 @@ context("Test Equipment maintenance email notifications", () => {
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
         cy.get("[name=fb-coordinator-eq]").arrowClick();
         cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Navigate To calpmhistory", () => {
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1178,7 +1249,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -1251,6 +1322,10 @@ context("Test Equipment maintenance email notifications", () => {
 
       it("Reload Equipment document ", () => {
         cy.equipReloadDocument();
+      });
+
+      it("Navigate To calpmhistory", () => {
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Verify maintenance record is present", () => {

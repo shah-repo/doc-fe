@@ -285,10 +285,15 @@ context("Records Inline approval email popup modal", () => {
 
     it("Click on Create New button", () => {
       cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.wait(5000);
     });
 
     it("Enter title", () => {
-      cy.drEnterDocumentTitle( { name: "Record inline form" });
+      cy.drEnterDocumentTitle({ name: "Record inline form" });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Enter text in textfield", () => {
@@ -340,7 +345,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(10000);
+        cy.wait(5000);
       });
     });
   });
@@ -394,6 +399,10 @@ context("Records Inline approval email popup modal", () => {
       cy.imapGetRecordRequestLink({ userEmail: FIRST_USER.email });
     });
 
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve Record", () => {
       cy.inlineApproval();
     });
@@ -409,7 +418,7 @@ context("Records Inline approval email popup modal", () => {
     });
   });
 
-  context("Open record and and second approver", () => {
+  context("Open record and add second approver", () => {
     it("Open record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
         cy.contains("Record inline form").arrowClick();
@@ -417,11 +426,17 @@ context("Records Inline approval email popup modal", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      cy.drClickRevisionsSidePanel();
+
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
         cy.contains("Revision 2").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Add inline approver for last section", () => {
@@ -460,7 +475,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(10000);
+        cy.wait(5000);
       });
     });
   });
@@ -514,6 +529,10 @@ context("Records Inline approval email popup modal", () => {
       cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email });
     });
 
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve Record", () => {
       cy.inlineApproval();
     });
@@ -544,4 +563,3 @@ context("Records Inline approval email popup modal", () => {
 });
 
 export { };
-

@@ -11,15 +11,16 @@ import { withDocumentRevisionFormHeader } from "./DocumentRevisionFormHeader.wra
 const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHeaderProps> = ({
   _documentRevisionFormState,
   isDisabledInput,
+  documentTypeId,
   type,
 }) =>  (
   <Observer>
     {() => (
       <Box
         id="SMHeaderTmpl"
-        paddingTop={SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) ? 2 : 0.75}
+        paddingTop={SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) ? 2 : 0}
         paddingBottom={1.25}
-        pl={2.75}
+        pl={3.75}
         pr={4.25}
       >
         {
@@ -29,13 +30,13 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
         <Box paddingBottom={1.25}>
           <Title
             name="name"
-            documentTypeId={_documentRevisionFormState?.documentTypeId}
+            documentTypeId={documentTypeId}
             disabled={isDisabledInput}
           />
         </Box>
         <Description
           isQms={_documentRevisionFormState?.docInfo.isQms || false}
-          documentTypeId={_documentRevisionFormState?.documentTypeId}
+          documentTypeId={documentTypeId}
           isDisabled={isDisabledInput}
         />
       </Box>

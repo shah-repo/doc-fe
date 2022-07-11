@@ -89,6 +89,8 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
         style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onMouseEnter={onMouseHoverListItem}
+        className={classes.buttoncursor}
+        disableRipple
       >
         <ListItemAvatar>
           {approverAvatar ? (
