@@ -650,16 +650,16 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Checkbox option 2 checked", () => {
       cy.get(`input[type="checkbox"]`).eq(2).check();
     });
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
     });
 
     it("Select document to be trained on", () => {

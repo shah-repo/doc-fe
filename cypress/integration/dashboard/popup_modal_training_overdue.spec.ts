@@ -35,10 +35,9 @@ let asyncTasksGroup;
 let releasedDoc1Id;
 let caGroup;
 let emailsFromInbox: IMAPEmail[];
+let dateAfterEmailShouldArrive;
 
 const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
 context("Email popup modal for training due", () => {
   before(() => {
@@ -748,9 +747,18 @@ context("Email popup modal for training due", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
-      cy.wait(10000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wait(5000);
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
+        .should("contain.text", "COMPLETE");
     });
   });
 
@@ -793,12 +801,12 @@ context("Email popup modal for training due", () => {
     it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
       cy.contains("EMAIL SENT TO ALL").should("exist");
       cy.get("button[aria-label=close]").eq(1).arrowClick();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
     });
 
     it("There should be 3 columns", () => {
       cy.contains("Overdue (2)").parent().parent().find(".MuiGrid-item").should("have.length", 3);
       cy.get("button[aria-label=close]").eq(0).arrowClick();
-      cy.wait(5000);
     });
   });
 
@@ -876,6 +884,7 @@ context("Email popup modal for training due", () => {
     it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
       cy.contains("EMAIL SENT TO ALL").should("exist");
       cy.get("button[aria-label=close]").eq(1).arrowClick();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
     });
   });
 
@@ -918,7 +927,7 @@ context("Email popup modal for training due", () => {
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 2,
+        assertNumberOfEmailsFoundInList: 1,
       });
     });
 

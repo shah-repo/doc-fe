@@ -24,6 +24,15 @@ let createdPartDocument;
 let EBDocumentType;
 let developersGroup;
 
+const ebId = "EB ID";
+const rev = "REVISION";
+const state = "STATE";
+const title = "TITLE";
+const owner = "OWNER";
+const relDate = "RELEASED DATE";
+const formId = "FORM ID";
+const partId = "PART ID";
+
 context("Test Engineering Build landing page", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -594,14 +603,14 @@ context("Test Engineering Build landing page", () => {
     });
 
     it("Verify all columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "EB ID");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Revision");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "State");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Title");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Owner");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Released Date");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Form ID");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Part ID");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${ebId}`);
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${rev}`);
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${state}`);
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${title}`);
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${owner}`);
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${relDate}`);
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", `${formId}`);
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", `${partId}`);
     });
 
     it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
@@ -739,32 +748,32 @@ context("Test Engineering Build landing page", () => {
 
     context("Verify hide and freeze", () => {
       it("Verify hide on State", () => {
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${state}`);
         cy.get(`th[aria-colindex="3"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${state}`);
       });
 
       it("Verify unhide on State", () => {
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${state}`);
         cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
-        cy.get("ul>li[role=menuitem]").contains("STATE").parents("li").find("svg").arrowClick();
+        cy.get("ul>li[role=menuitem]").contains(`${state}`).parents("li").find("svg").arrowClick();
         cy.get("body").type("{esc}");
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${state}`);
       });
 
       it("Verify freeze on State", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${state}`);
         cy.get(`th[aria-colindex="3"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${state}`);
       });
 
       it("Verify un-freeze on State", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${state}`);
         cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${state}`);
       });
     });
 
