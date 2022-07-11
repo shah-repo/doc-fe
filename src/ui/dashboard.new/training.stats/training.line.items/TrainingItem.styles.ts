@@ -57,7 +57,7 @@ export const styles = makeStyles(() =>
     },
     avatarSection: {
       display: "flex",
-      maxWidth: "70%",
+      maxWidth: "60%",
     },
     margin5: {
       marginRight: "5px",

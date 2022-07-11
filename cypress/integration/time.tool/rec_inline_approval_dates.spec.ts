@@ -328,12 +328,11 @@ context("Record inline approval dates flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.listLoadingElementShouldNotExist();
-          cy.get("[name*=\"fb-ia-inline-field\"] input")
-            .autocompleteSelect(USERS[1].email);
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+          cy.get("input[data-cy*=\"fb-ia-inline-field\"]").arrowClick().wait(1000);
+          cy.get("ul>li[role=option]").contains(USERS[1].email).arrowClick();
+          cy.unClick();
         });
-        cy.cmpExitDropdown();
       });
 
       context("Request for approval and send notification to email", () => {
@@ -424,12 +423,11 @@ context("Record inline approval dates flow", () => {
       });
 
       it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-              .autocompleteSelect(USERS[2].email);
-          });
-        cy.cmpExitDropdown();
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+          cy.get("input[data-cy*=\"fb-ia-second-inline-field\"]").arrowClick().wait(1000);
+          cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
+          cy.unClick();
+        });
       });
 
       context("Request for approval and send notification to email", () => {

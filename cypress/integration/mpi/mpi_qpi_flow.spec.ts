@@ -380,9 +380,7 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release MPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify MPI state should be 'In Review'", () => {
@@ -501,9 +499,7 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release MPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify MPI state should be 'In Review'", () => {
@@ -690,9 +686,7 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release QPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify QPI state should be 'In Review'", () => {
@@ -809,9 +803,7 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release QPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify QPI state should be 'In Review'", () => {
