@@ -14,6 +14,8 @@ const ADMIN_USER = USERS[33];
 const FIRST_USER = USERS[34];
 const SECOND_USER = USERS[35];
 const THIRD_USER = USERS[36];
+const recordTitle = "Record document from newly created form";
+const dateOffset = (5 * 1000);
 
 let createdCompany;
 let loginResponse;
@@ -23,14 +25,8 @@ let fourthEmployee;
 let emailsFromInbox: IMAPEmail[];
 let adminEmployee;
 let adminSessionId;
-let dateOfSendToAll;
 let developersGroup;
-
-const recordTitle = "Record document from newly created form";
-
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+let dateAfterEmailShouldArrive;
 
 context("Records email popup modal", () => {
   before(() => {
@@ -251,7 +247,7 @@ context("Records email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(10000);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -343,13 +339,13 @@ context("Records email popup modal", () => {
 
       it("Click on 'EMAIL ALL'", () => {
         cy.get("button").contains("EMAIL ALL").arrowClick();
-        dateOfSendToAll = new Date();
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -366,7 +362,7 @@ context("Records email popup modal", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        after: dateOfSendToAll,
+        after: dateAfterEmailShouldArrive,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -384,7 +380,7 @@ context("Records email popup modal", () => {
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldNotBeReceived,
-        getEmailsSincedate: dateOfSendToAll,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 0,
       });
     });
