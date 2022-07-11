@@ -277,12 +277,12 @@ context("Records test with Inline approval", () => {
 
     it("The owner should have a notification that Record rev 1 is for approval of User 2", () => {
       cy.navigToDashboard();
-      cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
-        .and("contain.text", "IN REVIEW")
+        .and("contain.text", `${STATUS_TYPES_LABEL.IN_REVIEW}`)
         .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
         .and("contain.text", `${USERS[2].name}`);
     });
@@ -430,10 +430,10 @@ context("Records test with Inline approval", () => {
     });
 
     it("There should be a notification that rev A is released", () => {
-      cy.contains("RELEASED").eq(0).parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.RELEASED}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
-        .and("contains.text", "RELEASED");
+        .and("contains.text", `${STATUS_TYPES_LABEL.RELEASED}`);
 
       cy.contains("Rev A Record title").parent()
         .should("have.text", "Rev A Record title");
@@ -481,12 +481,12 @@ context("Records test with Inline approval", () => {
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 2 users", () => {
-      cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
-        .and("contain.text", "IN REVIEW")
+        .and("contain.text", `${STATUS_TYPES_LABEL.IN_REVIEW}`)
         .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
         .should("contain.text", `${USERS[1].name}`)
         .and("contain.text", `${USERS[2].name}`);
@@ -527,12 +527,12 @@ context("Records test with Inline approval", () => {
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 1 user", () => {
-      cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
-        .and("contain.text", "IN REVIEW")
+        .and("contain.text", `${STATUS_TYPES_LABEL.IN_REVIEW}`)
         .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
         .should("contain.text", `${USERS[1].name}`);
     });
@@ -552,7 +552,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Record notification should change to Released", () => {
-      cy.contains("RELEASED").parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.RELEASED}`).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title");
     });
