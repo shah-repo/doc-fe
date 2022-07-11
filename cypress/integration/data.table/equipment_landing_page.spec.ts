@@ -1182,7 +1182,7 @@ context("Equipment maintenance for checking History in all states", () => {
     });
   });
 
-  context("Sort 'ID'", () => {
+  context(`Sort ${id}`, () => {
     it("ID should be in ascending order", () => {
       cy.navigToEquipment();
       cy.contains(`${id}`).eq(0).click();

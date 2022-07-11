@@ -309,7 +309,6 @@ context("Suppliers landing page", () => {
         cy.contains(`${supplierLevel}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 7 });
-        cy.pause();
       });
 
       it("Supplier Level should be in descending order", () => {
