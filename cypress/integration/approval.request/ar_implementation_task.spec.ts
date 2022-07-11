@@ -445,6 +445,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wait(5000);
       cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -455,7 +456,6 @@ context("Approval request implementation tasks", () => {
         .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
       cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
         .should("contain.text", "COMPLETE");
-      cy.wait(5000);
     });
   });
 
@@ -562,6 +562,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wait(5000);
       cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -572,7 +573,6 @@ context("Approval request implementation tasks", () => {
         .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
       cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
         .should("contain.text", "COMPLETE");
-      cy.wait(5000);
     });
   });
 

@@ -311,7 +311,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
         )}
-        {_formState?.active && _formState.mode === "design" && hasOutput && (
+        {_formState?.active && ["design", "form"].includes(_formState.mode) && (
           <>
             <Grid item xs={12}>
               <AttachmentsField
@@ -325,6 +325,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 documentTypeId={documentTypeId || ""}
               />
             </Grid>
+            {hasOutput &&
             <Grid item xs={12}>
               <FBActiveNoOutput
                 docRevId={initialValues.id}
@@ -333,7 +334,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 isDisabled={isDisabledInput}
                 outputDocs={values.outputDocumentTypes as OptionType[]}
               />
-            </Grid>
+            </Grid>}
           </>
         )}
         {_formState?.active && documentRevision && values.id && (

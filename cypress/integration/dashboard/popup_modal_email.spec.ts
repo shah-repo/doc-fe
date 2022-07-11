@@ -15,6 +15,9 @@ const ADMIN_USER = USERS[29];
 const FIRST_USER = USERS[30];
 const SECOND_USER = USERS[31];
 const THIRD_USER = USERS[32];
+const documentRevisionName = "New document for testing AR";
+const approvalRequestTitle = "Approval request from newly created form";
+const dateOffset = (5 * 1000);
 
 let createdCompany;
 let loginResponse;
@@ -24,15 +27,7 @@ let fourthEmployee;
 let emailsFromInbox: IMAPEmail[];
 let clinicalProtocolDocumentType;
 let group;
-let doateOfSendToAll;
-
-const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Approval request from newly created form";
-
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+let dateAfterEmailShouldArrive;
 
 context("Approval request email popup modal", () => {
   before(() => {
@@ -258,6 +253,7 @@ context("Approval request email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -346,13 +342,13 @@ context("Approval request email popup modal", () => {
       it("Click on 'EMAIL ALL'", () => {
         SystemRequirement("REQ-5090");
         cy.get("button").contains("EMAIL ALL").arrowClick();
-        doateOfSendToAll = new Date();
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -369,7 +365,7 @@ context("Approval request email popup modal", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        after: doateOfSendToAll,
+        after: dateAfterEmailShouldArrive,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -387,7 +383,7 @@ context("Approval request email popup modal", () => {
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldNotBeReceived,
-        getEmailsSincedate: doateOfSendToAll,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 0,
       });
     });
