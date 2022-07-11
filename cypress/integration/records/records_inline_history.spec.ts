@@ -112,14 +112,14 @@ context("Record inline history Flow", () => {
       });
 
       it("Add textfield", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add checkbox group", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
         cy.fbEnterNameValue({ name: "label", value: "CheckboxGroup for inline" });
         cy.fbGroupOptions("Red", "Green", "Blue");
@@ -127,7 +127,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Add radio button group", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
         cy.fbEnterNameValue({ name: "label", value: "RadioBtnGroup for inline" });
         cy.fbGroupOptions("One", "Two", "Three");
@@ -135,7 +135,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Add Select field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field for inline" });
         cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
@@ -143,7 +143,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Add inline approval", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
@@ -398,8 +398,8 @@ context("Record inline history Flow", () => {
           );
         });
 
-        it("Check record status is in 'Last Signed'", () => {
-          cy.drCheckDocumentStatus({ status: "Last Signed" });
+        it(`Check record status is in ${STATUS_TYPES_LABEL.LAST_SIGNED}`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.LAST_SIGNED });
         });
       });
 
@@ -424,8 +424,8 @@ context("Record inline history Flow", () => {
           );
         });
 
-        it("Check record status is in 'Superseded'", () => {
-          cy.drCheckDocumentStatus({ status: "Superseded" });
+        it(`Check record status is in ${STATUS_TYPES_LABEL.SUPERSEDED}`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.SUPERSEDED });
         });
       });
     });
