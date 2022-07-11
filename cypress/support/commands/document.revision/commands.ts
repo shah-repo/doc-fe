@@ -853,7 +853,7 @@ Cypress.Commands.add("drSelectGroup", (...groups: string[]) => {
 Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
   groups.forEach((group) => {
     cy.get("div")
-      .contains("Start typing to invite groups")
+      .contains("Search groups")
       .click();
     cy.get("[id^=react-select]").contains(group).arrowClick();
     cy.get(`[data-cy="add-user"]`).eq(1).arrowClick();

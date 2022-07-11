@@ -13,7 +13,7 @@ export const QPITest: IdocumentTypeDto = {
       label: "form.builder.mpiprocedure",
       deleteDisabled: false,
       deleteInFormDisabled: true,
-      tabId: "procedure",
+      tabId: "details",
     },
     {
       name: "mpi-procedure-built-in",
@@ -26,7 +26,7 @@ export const QPITest: IdocumentTypeDto = {
       deleteDisabled: false,
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "procedure",
+      tabId: "details",
     },
     {
       name: "approvals-built-in",
@@ -41,7 +41,7 @@ export const QPITest: IdocumentTypeDto = {
       validationAttribute: "Approvals",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "overview",
+      tabId: "details",
     },
   ],
 };

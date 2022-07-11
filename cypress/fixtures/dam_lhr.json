@@ -114,7 +114,8 @@
                  "index": 0,
                  "label": "form.builder.mpiprocedure",
                  "deleteDisabled": false,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "mpi-procedure-built-in",
@@ -124,7 +125,8 @@
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": false,
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "details"
              },
              {
                  "name": "approvals-built-in",
@@ -136,7 +138,8 @@
                  "uniqueSchemaItem": true,
                  "validationAttribute": "Approvals",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "details"
              }],
              "fieldsConfig": null
          },
@@ -298,7 +301,8 @@
                  "deleteDisabled": true,
                  "formValuesRules":
                  {},
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "overview"
              }],
              "fieldsConfig":
              {
@@ -683,7 +687,8 @@
                  "label": "Approval Request Details",
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "changedetails"
              },
              {
                  "name": "documentRevisions",
@@ -698,7 +703,8 @@
                  },
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "documents"
              },
              {
                  "name": "target-date-approvers",
@@ -707,14 +713,16 @@
                  "label": "Approvers",
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "changedetails"
              },
              {
                  "name": "approvers",
                  "type": "approvers",
                  "index": 3,
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "changedetails"
              }],
              "fieldsConfig": null
          },
@@ -1335,7 +1343,8 @@
                  "label": "Maintenance Details",
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "equipment_id",
@@ -1350,7 +1359,8 @@
                  "validationMode": "default",
                  "formValuesRules":
                  {},
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "equipment_maintainer",
@@ -1363,7 +1373,8 @@
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
                  "validationMode": "default",
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "fb-equipment_due_date",
@@ -1374,7 +1385,8 @@
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
                  "validationMode": "default",
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "fb-requipment-maintenance-section",
@@ -1386,7 +1398,8 @@
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
                  "validationMode": "default",
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              }],
              "fieldsConfig":
              {
@@ -1901,7 +1914,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Make vs Buy",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "primary-supplier",
@@ -1920,7 +1934,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Primary Supplier",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "other-suppliers",
@@ -1939,7 +1954,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Other Suppliers",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "unit-of-measure",
@@ -2058,7 +2074,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Unit of measure",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "traceability-required",
@@ -2076,7 +2093,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Traceability required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "serialized",
@@ -2099,7 +2117,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Serialized",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "select-serialization",
@@ -2122,7 +2141,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Select serialization",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "iqc-required",
@@ -2140,7 +2160,8 @@
                  "editorProperties": [],
                  "validationAttribute": "IQC Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "limited-shelf-life",
@@ -2158,7 +2179,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Limited Shelf Life",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "fai-required",
@@ -2176,7 +2198,8 @@
                  "editorProperties": [],
                  "validationAttribute": "FAI Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              }],
              "fieldsConfig": null
          },
@@ -2749,7 +2772,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Make vs Buy",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "primary-supplier",
@@ -2768,7 +2792,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Primary Supplier",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "other-suppliers",
@@ -2787,7 +2812,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Other Suppliers",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "unit-of-measure",
@@ -2906,7 +2932,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Unit of measure",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "traceability-required",
@@ -2924,7 +2951,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Traceability required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "serialized",
@@ -2947,7 +2975,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Serialized",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "select-serialization",
@@ -2970,7 +2999,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Select serialization",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "iqc-required",
@@ -2988,7 +3018,8 @@
                  "editorProperties": [],
                  "validationAttribute": "IQC Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "limited-shelf-life",
@@ -3006,7 +3037,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Limited Shelf Life",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "fai-required",
@@ -3024,7 +3056,8 @@
                  "editorProperties": [],
                  "validationAttribute": "FAI Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              }],
              "fieldsConfig": null
          },
@@ -3191,7 +3224,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Make vs Buy",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "primary-supplier",
@@ -3210,7 +3244,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Primary Supplier",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "other-suppliers",
@@ -3229,7 +3264,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Other Suppliers",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "unit-of-measure",
@@ -3348,7 +3384,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Unit of measure",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "traceability-required",
@@ -3366,7 +3403,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Traceability required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "serialized",
@@ -3389,7 +3427,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Serialized",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "select-serialization",
@@ -3412,7 +3451,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Select serialization",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "iqc-required",
@@ -3430,7 +3470,8 @@
                  "editorProperties": [],
                  "validationAttribute": "IQC Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "limited-shelf-life",
@@ -3448,7 +3489,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Limited Shelf Life",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "fai-required",
@@ -3466,7 +3508,8 @@
                  "editorProperties": [],
                  "validationAttribute": "FAI Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              }],
              "fieldsConfig": null
          },
@@ -3731,7 +3774,8 @@
                  "index": 0,
                  "label": "Part to be Manufactured",
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "overview"
              },
              {
                  "name": "lhr_initial_quantity",
@@ -3742,7 +3786,8 @@
                  "deleteDisabled": true,
                  "validationAttribute": "Initial Quantity",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "overview"
              },
              {
                  "name": "lhr-build-type",
@@ -3763,7 +3808,8 @@
                  "validationMode": "default",
                  "validationAttribute": "Build Type",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "overview"
              },
              {
                  "name": "lhr-due-date",
@@ -3773,7 +3819,8 @@
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "validationMode": "default",
                  "validationAttribute": "Due Date",
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "overview"
              },
              {
                  "name": "fb-lhrstep-section-built-in",
@@ -3782,7 +3829,8 @@
                  "label": "form.builder.step",
                  "stepIndex": 1,
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "overview"
              },
              {
                  "name": "lhrstep-built-in",
@@ -3790,7 +3838,8 @@
                  "index": 5,
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "validationMode": "default",
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "details"
              }],
              "fieldsConfig":
              {
@@ -4175,7 +4224,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Quantity Received",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "details"
              },
              {
                  "name": "lot_part",
@@ -4185,7 +4235,8 @@
                  "optionId": "21",
                  "placeholder": "Select the appropriate part for this lot",
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              }],
              "fieldsConfig":
              {
@@ -4334,7 +4385,8 @@
                     "index": 0,
                     "label": "form.builder.mpiprocedure",
                     "deleteDisabled": false,
-                    "deleteInFormDisabled": true
+                    "deleteInFormDisabled": true,
+                    "tabId": "details"
                   },
                   {
                     "name": "mpi-procedure-built-in",
@@ -4344,7 +4396,8 @@
                     "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                     "deleteDisabled": false,
                     "deleteInFormDisabled": false,
-                    "applicableValidationSchema": true
+                    "applicableValidationSchema": true,
+                    "tabId": "details"
                   },
                   {
                     "name": "lhrs-start-quantity",
@@ -4356,7 +4409,8 @@
                     "editorProperties": [],
                     "validationAttribute": "Start quantity",
                     "deleteInFormDisabled": true,
-                    "applicableValidationSchema": true
+                    "applicableValidationSchema": true,
+                    "tabId": "details"
                   },
                   {
                     "name": "lhrs-accepted-quantity",
@@ -4368,7 +4422,8 @@
                     "editorProperties": [],
                     "validationAttribute": "Accepted quantity",
                     "deleteInFormDisabled": true,
-                    "applicableValidationSchema": true
+                    "applicableValidationSchema": true,
+                    "tabId": "details"
                   },
                   {
                     "name": "lhrs-rejected-quantity",
@@ -4380,7 +4435,8 @@
                     "editorProperties": [],
                     "validationAttribute": "Rejected quantity",
                     "deleteInFormDisabled": true,
-                    "applicableValidationSchema": true
+                    "applicableValidationSchema": true,
+                    "tabId": "details"
                   },
                   {
                     "name": "approvals-built-in",
@@ -4392,7 +4448,8 @@
                     "uniqueSchemaItem": true,
                     "validationAttribute": "Approvals",
                     "deleteInFormDisabled": true,
-                    "applicableValidationSchema": true
+                    "applicableValidationSchema": true,
+                    "tabId": "details"
                   }],
              "fieldsConfig": null
          },
@@ -4451,7 +4508,8 @@
                  "label": "Maintenance Details",
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "equipment_id",
@@ -4466,7 +4524,8 @@
                  "validationMode": "default",
                  "formValuesRules":
                  {},
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "equipment_maintainer",
@@ -4479,7 +4538,8 @@
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
                  "validationMode": "default",
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "fb-equipment_due_date",
@@ -4490,7 +4550,8 @@
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
                  "validationMode": "default",
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              },
              {
                  "name": "fb-requipment-maintenance-section",
@@ -4502,7 +4563,8 @@
                  "applicableOn": ["ON_STATE_TO_IN_REVIEW"],
                  "deleteDisabled": true,
                  "validationMode": "default",
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "details"
              }],
              "fieldsConfig":
              {
@@ -5197,7 +5259,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Make vs Buy",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "primary-supplier",
@@ -5216,7 +5279,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Primary Supplier",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "other-suppliers",
@@ -5235,7 +5299,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Other Suppliers",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "unit-of-measure",
@@ -5354,7 +5419,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Unit of measure",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "traceability-required",
@@ -5372,7 +5438,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Traceability required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "serialized",
@@ -5395,7 +5462,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Serialized",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "select-serialization",
@@ -5418,7 +5486,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Select serialization",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "iqc-required",
@@ -5436,7 +5505,8 @@
                  "editorProperties": [],
                  "validationAttribute": "IQC Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "limited-shelf-life",
@@ -5454,7 +5524,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Limited Shelf Life",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "fai-required",
@@ -5472,7 +5543,8 @@
                  "editorProperties": [],
                  "validationAttribute": "FAI Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              }],
              "fieldsConfig": null
          },
@@ -5830,7 +5902,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Make vs Buy",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "primary-supplier",
@@ -5849,7 +5922,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Primary Supplier",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "other-suppliers",
@@ -5868,7 +5942,8 @@
                  "omitFinalValidation": true,
                  "validationAttribute": "Other Suppliers",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "unit-of-measure",
@@ -5987,7 +6062,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Unit of measure",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "traceability-required",
@@ -6005,7 +6081,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Traceability required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "serialized",
@@ -6028,7 +6105,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Serialized",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "select-serialization",
@@ -6051,7 +6129,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Select serialization",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "iqc-required",
@@ -6069,7 +6148,8 @@
                  "editorProperties": [],
                  "validationAttribute": "IQC Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "limited-shelf-life",
@@ -6087,7 +6167,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Limited Shelf Life",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "fai-required",
@@ -6105,7 +6186,8 @@
                  "editorProperties": [],
                  "validationAttribute": "FAI Required",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              }],
              "fieldsConfig": null
          },
@@ -6176,7 +6258,8 @@
                  "deleteDisabled": true,
                  "formValuesRules":
                  {},
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "overview"
              },
              {
                  "name": "fb-primary-owner-eq",
@@ -6192,7 +6275,8 @@
                  {},
                  "validationAttribute": "Primary Owner",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              },
              {
                  "name": "fb-coordinator-eq",
@@ -6208,7 +6292,8 @@
                  {},
                  "validationAttribute": "Coordinator",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "specification"
              }],
              "fieldsConfig":
              {
@@ -6558,7 +6643,8 @@
                  "deleteDisabled": true,
                  "formValuesRules":
                  {},
-                 "deleteInFormDisabled": true
+                 "deleteInFormDisabled": true,
+                 "tabId": "overview"
              }],
              "fieldsConfig":
              {
@@ -6662,7 +6748,8 @@
                  "editorProperties": [],
                  "validationAttribute": "Quantity Received",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "details"
              },
              {
                  "name": "100-inspection-override",
@@ -6680,7 +6767,8 @@
                  "editorProperties": [],
                  "validationAttribute": "100% Inspection Override",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "details"
              },
              {
                  "name": "approvers",
@@ -6692,7 +6780,8 @@
                  "uniqueSchemaItem": true,
                  "validationAttribute": "Approvers",
                  "deleteInFormDisabled": true,
-                 "applicableValidationSchema": true
+                 "applicableValidationSchema": true,
+                 "tabId": "details"
              }],
              "fieldsConfig":
              {

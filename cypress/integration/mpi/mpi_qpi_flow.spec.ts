@@ -314,7 +314,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "Released" });
+            cy.arVerifyStatus({ status: "RELEASED" });
           });
         });
       });
@@ -620,7 +620,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "Released" });
+            cy.arVerifyStatus({ status: "RELEASED" });
           });
         });
       });

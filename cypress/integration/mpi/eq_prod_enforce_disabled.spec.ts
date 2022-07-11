@@ -1217,7 +1217,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
                 validationMode: "default",
                 applicableValidationSchema: true,
                 stepIndex: 1,
-                tabId: "procedure",
+                tabId: "details",
                 editorConfig: {
                   value: createdMPIDocument.id,
                 },
