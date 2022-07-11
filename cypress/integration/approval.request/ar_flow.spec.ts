@@ -244,7 +244,6 @@ context("Approval request form", () => {
     });
 
     it("Click create document", () => {
-      cy.pause();
       cy.drClickCreateDocumentWithApiCall();
     });
 
