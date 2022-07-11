@@ -16,6 +16,8 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
+const dateOffset = (5 * 1000);
+const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
 
 let employeeLoginFirst;
 let recordDocumentType;
@@ -29,11 +31,7 @@ let loginResponse;
 let secondEmployee;
 let thirdEmployee;
 let emailsFromInbox: IMAPEmail[];
-
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
+let dateAfterEmailShouldArrive;
 
 context("Records Inline approval email popup modal", () => {
   before(() => {
@@ -285,10 +283,15 @@ context("Records Inline approval email popup modal", () => {
 
     it("Click on Create New button", () => {
       cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.wait(5000);
     });
 
     it("Enter title", () => {
-      cy.drEnterDocumentTitle( { name: "Record inline form" });
+      cy.drEnterDocumentTitle({ name: "Record inline form" });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Enter text in textfield", () => {
@@ -340,7 +343,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(10000);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -394,6 +397,10 @@ context("Records Inline approval email popup modal", () => {
       cy.imapGetRecordRequestLink({ userEmail: FIRST_USER.email });
     });
 
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve Record", () => {
       cy.inlineApproval();
     });
@@ -409,7 +416,7 @@ context("Records Inline approval email popup modal", () => {
     });
   });
 
-  context("Open record and and second approver", () => {
+  context("Open record and add second approver", () => {
     it("Open record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
         cy.contains("Record inline form").arrowClick();
@@ -417,11 +424,17 @@ context("Records Inline approval email popup modal", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      cy.drClickRevisionsSidePanel();
+
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
         cy.contains("Revision 2").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Add inline approver for last section", () => {
@@ -460,7 +473,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(10000);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -514,6 +527,10 @@ context("Records Inline approval email popup modal", () => {
       cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email });
     });
 
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve Record", () => {
       cy.inlineApproval();
     });
@@ -544,4 +561,3 @@ context("Records Inline approval email popup modal", () => {
 });
 
 export { };
-
