@@ -2,9 +2,8 @@ import { get } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { withResizeDetector } from "react-resize-detector";
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixTableProps, FBApprovalMatrixTableState } from "..";
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixTableProps, FBApprovalMatrixTableState, FBDAMFields } from "..";
 import FBApprovalMatrixTableClasses from "./FBApprovalMatrixTable.styles";
-import { FBDAMFields } from "./FBApprovalMatrixTable.types";
 
 export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
   Component: React.FunctionComponent<T>
