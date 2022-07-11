@@ -42,9 +42,8 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
 
     // MARK: @observer
     useObserver(() => {
-      approvalData = approvalMatrixFieldState?.data as FBApprovalMatrixFieldData;
       approvalData = {
-        ...approvalData,
+        ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
         approvalRoles: approvalData?.approvalRoles || damRoles,
       };
     });
