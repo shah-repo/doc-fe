@@ -45,7 +45,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
       approvalData = approvalMatrixFieldState?.data as FBApprovalMatrixFieldData;
       approvalData = {
         ...approvalData,
-        approvalRoles: approvalData.approvalRoles || damRoles,
+        approvalRoles: approvalData?.approvalRoles || damRoles,
       };
     });
 
