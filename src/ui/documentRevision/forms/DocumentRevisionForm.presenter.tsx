@@ -311,7 +311,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
         )}
-        {_formState?.active && (_formState.mode === "design" || "form") && (
+        {_formState?.active && ["design", "form"].includes(_formState.mode) && (
           <>
             <Grid item xs={12}>
               <AttachmentsField
