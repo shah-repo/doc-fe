@@ -236,10 +236,6 @@ context("Mpi/Qpi test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Upload logo picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-      });
-
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
@@ -270,6 +266,11 @@ context("Mpi/Qpi test", () => {
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Close the sidebar", () => {
+        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-label']")
+          .eq(1).arrowClick();
       });
 
       context("Fill step #1", () => {

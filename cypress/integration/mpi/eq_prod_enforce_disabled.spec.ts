@@ -1569,6 +1569,10 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
