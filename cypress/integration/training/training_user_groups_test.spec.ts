@@ -303,13 +303,43 @@ context("Training user groups test", () => {
       cy.cmpClickCreateNewDocument();
     });
 
+    it("Enter document title 'test training form title'", () => {
+      cy.drEnterDocumentTitle({ name: "test training form title" });
+    });
+
+    it("Enter document description 'test training description'", () => {
+      cy.drEnterDocumentDescription({ description: "test training description" });
+    });
+
     it("Select 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Select 'One-Time Training test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "One-Time Training test" });
       cy.unClick();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    it(`Check status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Check if 'One-Time Training test' has all predefined fields", () => {
@@ -324,14 +354,53 @@ context("Training user groups test", () => {
         .should("contain.text", "Groups to Train");
       cy.get("[data-cy=\"Users to Train (if applicable)\"]")
         .should("contain.text", "Users to Train (if applicable)");
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Check if 'One-Time Training test' has approval predefined field", () => {
       cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+    });
+  });
+
+  context("Create Training Curriculum form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'test training form title'", () => {
+      cy.drEnterDocumentTitle({ name: "test training form title" });
+    });
+
+    it("Enter document description 'test training description'", () => {
+      cy.drEnterDocumentDescription({ description: "test training description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Select 'Training Curriculum test' output document type", () => {
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowClick();
-      cy.get("[id='formTemplate.outputDocumentTypes']>div>div>div>div:nth-child(2)").arrowClick();
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Check if 'Training Curriculum test' has all predefined fields", () => {
@@ -347,6 +416,13 @@ context("Training user groups test", () => {
         .should("contain.text", "Groups to Train");
       cy.get("[data-cy=\"Users to Train (if applicable)\"]")
         .should("contain.text", "Users to Train (if applicable)");
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Check if 'Training Curriculum test' has approval predefined field", () => {
       cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
     });
   });
@@ -385,8 +461,8 @@ context("Training user groups test", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[id='PreviewControlsContainer-revise']").arrowClick();
       cy.wait(2000);
-      cy.get("[id='Title-field']>div>div:nth-child(2)").arrowClick();
-      cy.get("[id=\"Title-field\"]").arrowType("revised form with new released revision");
+      cy.drClearDocumentTitle();
+      cy.drEnterDocumentTitle({ name: "revised form with new released revision" });
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();

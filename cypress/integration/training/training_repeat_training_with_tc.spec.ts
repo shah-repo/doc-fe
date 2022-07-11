@@ -379,16 +379,20 @@ context("Repeat Training with Training Curriculum", () => {
       cy.unClick();
     });
 
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Upload logo picture 'image.jpg'", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Add Radio Button group", () => {

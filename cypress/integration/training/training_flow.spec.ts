@@ -360,9 +360,7 @@ context("Training Flow test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
       cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-      });
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
@@ -376,9 +374,7 @@ context("Training Flow test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
       cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-      });
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
       cy.authLogout();
       cy.authLogin({ email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
@@ -721,11 +717,11 @@ context("Training Flow test", () => {
 
   context("Check columns on Training Curriculums page", () => {
     it("Check default columns on landing page", () => {
-      cy.trVerifyElementByColumnName({ name: "Training Curriculum ID" });
-      cy.trVerifyElementByColumnName({ name: "Title" });
-      cy.trVerifyElementByColumnName({ name: "Owner" });
-      cy.trVerifyElementByColumnName({ name: "State" });
-      cy.trVerifyElementByColumnName({ name: "Group" });
+      cy.trVerifyElementByColumnName({ name: "TRAINING CURRICULUM ID" });
+      cy.trVerifyElementByColumnName({ name: "TITLE" });
+      cy.trVerifyElementByColumnName({ name: "OWNER" });
+      cy.trVerifyElementByColumnName({ name: "STATE" });
+      cy.trVerifyElementByColumnName({ name: "GROUP" });
     });
   });
 

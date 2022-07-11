@@ -156,6 +156,7 @@ context("'Equipment' test with time tool", () => {
                     type: "section",
                     index: 0,
                     label: "Maintenance Details",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -167,6 +168,7 @@ context("'Equipment' test with time tool", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Equipment",
+                    tabId: "details",
                     rules: "required",
                     optionId: "20",
                     placeholder: "[Select revision here]",
@@ -182,6 +184,7 @@ context("'Equipment' test with time tool", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Maintainer",
+                    tabId: "details",
                     rules: "required",
                     optionId: "13",
                     placeholder: "[Select name here]",
@@ -197,6 +200,7 @@ context("'Equipment' test with time tool", () => {
                     type: "datepicker",
                     index: 3,
                     label: "Completion Date",
+                    tabId: "details",
                     rules: "required",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -210,6 +214,7 @@ context("'Equipment' test with time tool", () => {
                     type: "textfield",
                     index: 4,
                     label: "Equipment Maintenance Section",
+                    tabId: "details",
                     rules: "required",
                     hidden: true,
                     applicableOn: [
@@ -221,6 +226,7 @@ context("'Equipment' test with time tool", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-kybkhbpt",
@@ -285,6 +291,7 @@ context("'Equipment' test with time tool", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -296,6 +303,7 @@ context("'Equipment' test with time tool", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -311,6 +319,7 @@ context("'Equipment' test with time tool", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -326,6 +335,7 @@ context("'Equipment' test with time tool", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -339,6 +349,7 @@ context("'Equipment' test with time tool", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -350,6 +361,7 @@ context("'Equipment' test with time tool", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",

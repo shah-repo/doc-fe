@@ -20,6 +20,7 @@ declare global {
       drClearDocumentTitle(): Chainable<Subject>;
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
+      drSelectDocumentTab(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
@@ -234,6 +235,11 @@ Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drSelectDocumentTab", () => {
+  cy.get("[data-cy=\"tabId.documents\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectLineItems", () => {
   cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
@@ -272,7 +278,8 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drClearDocumentTitle", () => {
-  cy.get("[data-cy=\"field-name\"] svg").arrowClick();
+  cy.get("div[data-cy=\"field-name\"]").arrowClick();
+  cy.get("div[data-cy=\"field-name\"]").find("svg").arrowClick();
 });
 
 Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
