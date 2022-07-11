@@ -695,6 +695,8 @@ context("Groups on Training Curriculum landing page", () => {
       cy.navigToDashboard();
       cy.wait(30 * 1000);
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("button[data-cy=clearFilter]").arrowClick();
       cy.trLandingPageName({ name: "user training title" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "user training title").and("contain", "N/A");
@@ -703,11 +705,11 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Check columns on Training Curriculums page", () => {
     it("Check default columns on landing page", () => {
-      cy.trVerifyElementByColumnName({ name: "Training Curriculum ID" });
-      cy.trVerifyElementByColumnName({ name: "Title" });
-      cy.trVerifyElementByColumnName({ name: "Owner" });
-      cy.trVerifyElementByColumnName({ name: "State" });
-      cy.trVerifyElementByColumnName({ name: "Group" });
+      cy.trVerifyElementByColumnName({ name: "TRAINING CURRICULUM ID" });
+      cy.trVerifyElementByColumnName({ name: "TITLE" });
+      cy.trVerifyElementByColumnName({ name: "OWNER" });
+      cy.trVerifyElementByColumnName({ name: "STATE" });
+      cy.trVerifyElementByColumnName({ name: "GROUP" });
     });
 
     it("Check filters on Training Curriculums page", () => {

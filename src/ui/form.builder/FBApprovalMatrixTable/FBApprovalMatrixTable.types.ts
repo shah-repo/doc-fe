@@ -38,3 +38,8 @@ export enum FBDocTypeGroup {
   DAM = "DAM",
   PART_LOT = "PART_LOT"
 }
+
+export enum FBDAMFields {
+  DAR = "dar-built-in",
+  DAM = "dam-built-in"
+}

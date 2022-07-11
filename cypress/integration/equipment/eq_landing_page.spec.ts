@@ -1,3 +1,4 @@
+/* eslint-disable cypress.eslint.rules/cy.pause */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -148,6 +149,10 @@ context("NCO document type management", () => {
       cy.drEnterDocumentDescription({ description: "New Company description" });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it(`Enters company name '${newCompanyName}'`, () => {
       cy.get("[name^=company-name-]").arrowType(newCompanyName);
     });
@@ -193,9 +198,7 @@ context("NCO document type management", () => {
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Log out user", () => {
@@ -288,6 +291,7 @@ context("NCO document type management", () => {
                     "ON_STATE_TO_IN_REVIEW",
                   ],
                   deleteDisabled: true,
+                  tabId: "overview",
                   deleteInFormDisabled: true,
                 },
                 {
@@ -304,6 +308,7 @@ context("NCO document type management", () => {
                   validationAttribute: "Primary Owner",
                   deleteInFormDisabled: true,
                   applicableValidationSchema: true,
+                  tabId: "specification",
                 },
                 {
                   name: "fb-coordinator-eq",
@@ -319,6 +324,7 @@ context("NCO document type management", () => {
                   validationAttribute: "Coordinator",
                   deleteInFormDisabled: true,
                   applicableValidationSchema: true,
+                  tabId: "specification",
                 },
                 {
                   index: 3,
@@ -334,6 +340,7 @@ context("NCO document type management", () => {
                   ],
                   applicableValidationSchema: true,
                   validationAttribute: "PM",
+                  tabId: "calpmhistory",
                 },
                 {
                   index: 4,
@@ -349,10 +356,12 @@ context("NCO document type management", () => {
                   ],
                   applicableValidationSchema: true,
                   validationAttribute: "Calibration",
+                  tabId: "calpmhistory",
                 },
                 {
                   name: "location-kngiboz9",
                   type: "select",
+                  tabId: "overview",
                   index: 5,
                   label: "Location:",
                   options: [
@@ -446,6 +455,7 @@ context("NCO document type management", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -457,6 +467,7 @@ context("NCO document type management", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -472,6 +483,7 @@ context("NCO document type management", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -487,6 +499,7 @@ context("NCO document type management", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -500,6 +513,7 @@ context("NCO document type management", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -511,6 +525,7 @@ context("NCO document type management", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",
@@ -570,6 +585,7 @@ context("NCO document type management", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -581,6 +597,7 @@ context("NCO document type management", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -596,6 +613,7 @@ context("NCO document type management", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -611,6 +629,7 @@ context("NCO document type management", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -624,6 +643,7 @@ context("NCO document type management", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -635,6 +655,7 @@ context("NCO document type management", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",
@@ -972,12 +993,12 @@ context("NCO document type management", () => {
 
     it("Verify Owner title column", () => {
       SystemRequirement("REQ-2840");
-      cy.get("[class='k-column-title']").eq(4).should("have.text", "Owner");
+      cy.get("[class='k-column-title']").eq(4).should("have.text", "OWNER");
     });
 
     it("Verify Owner title column", () => {
       SystemRequirement("REQ-2840");
-      cy.get("[class='k-column-title']").eq(8).should("have.text", "Location");
+      cy.get("[class='k-column-title']").eq(8).should("have.text", "LOCATION");
     });
 
     it("Filter by Owner & Location", () => {
@@ -1013,14 +1034,21 @@ context("NCO document type management", () => {
       cy.drEnterDocumentDescription({ description: "Equipment maintenance Manual" });
     });
 
-    it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+    it("Navigate To specification", () => {
+      cy.drSelectSpecificationTab();
     });
 
     it("Select Primary Owner", () => {
-      // cy.get("[data-cy='fb-primary-owner-eq']").arrowType(USERS[1].name);
-      cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.drSelectPrimaryOwner({ owner: USERS[1].name });
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate To calpmhistory", () => {
+      cy.drSelectCalPmHistoryTab();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1063,9 +1091,21 @@ context("NCO document type management", () => {
       cy.unClick();
     });
 
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate To overview", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Portable Location", () => {
       cy.get("[id*=select-location]").eq(0).arrowClick();
       cy.get("ul>li[data-value='Portable']").arrowClick();
+    });
+
+    it("Select 'Active' as EQ status", () => {
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
     it("Save document", () => {
@@ -1085,13 +1125,14 @@ context("NCO document type management", () => {
         cy.dlSelectFirstDocument();
       });
 
+      it("Navigate To specification", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it("Change Primary Owner", () => {
-        cy.get("[aria-label='Open']").eq(1).arrowClick();
-        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
-        cy.get("[name='fb-primary-owner-eq']>div>div>button>span>svg").arrowClick();
-        cy.wait(1500);
-        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
+        cy.drSelectPrimaryOwner({ owner: USERS[2].name });
       });
 
       it("Save document", () => {
@@ -1128,6 +1169,11 @@ context("NCO document type management", () => {
 
       it("Click on Equipment list", () => {
         cy.navigToEquipmentList();
+        cy.dlClearFilters();
+      });
+
+      it("Filter equipment by title", () => {
+        cy.get("[class=\"k-textbox\"]").eq(2).arrowType("Manual Equipment");
       });
 
       it("Verify Location value", () => {
@@ -1164,13 +1210,22 @@ context("NCO document type management", () => {
         cy.drClickReviseDocument();
       });
 
+      it("Navigate To specification", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it("Change Primary Owner", () => {
-        cy.get("[aria-label='Open']").eq(1).arrowClick();
-        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
-        cy.get("[name='fb-primary-owner-eq']>div>div>button>span>svg").arrowClick();
-        cy.wait(1500);
-        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
+        cy.drSelectPrimaryOwner({ owner: USERS[1].name });
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
+      it("Navigate To overview", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Change Location to Portable", () => {
@@ -1184,6 +1239,12 @@ context("NCO document type management", () => {
 
       it("Click on Equipment list", () => {
         cy.navigToEquipmentList();
+        cy.dlClearFilters();
+      });
+
+      it("Filter by Owner & Location", () => {
+        SystemRequirement("REQ-2840");
+        cy.filterEquipByOwnerAndLocation({ owner: USERS[1].name, location: "Portable" });
       });
 
       it("Verify Owner name", () => {
@@ -1252,6 +1313,7 @@ context("NCO document type management", () => {
                     type: "radiogroup",
                     index: 0,
                     label: "EQ Status",
+                    tabId: "overview",
                     rules: "required",
                     options: [
                       {
@@ -1274,6 +1336,7 @@ context("NCO document type management", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "TL Owner",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as primary owner",
                     applicableOn: [
@@ -1289,6 +1352,7 @@ context("NCO document type management", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Coordinator",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as coordinator",
                     applicableOn: [
@@ -1308,6 +1372,7 @@ context("NCO document type management", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1323,6 +1388,7 @@ context("NCO document type management", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1332,6 +1398,7 @@ context("NCO document type management", () => {
                   {
                     name: "location-kngiboz9",
                     type: "select",
+                    tabId: "overview",
                     index: 5,
                     label: "Location:",
                     options: [
@@ -1458,13 +1525,14 @@ context("NCO document type management", () => {
         cy.dlSelectFirstDocument();
       });
 
+      it("Navigate To specification", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it("Change Primary Owner", () => {
-        cy.get("[aria-label='Open']").eq(1).arrowClick();
-        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
-        cy.get("[name='fb-primary-owner-eq']>div>div>button>span>svg").arrowClick();
-        cy.wait(1500);
-        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
+        cy.drSelectPrimaryOwner({ owner: USERS[2].name });
       });
 
       it("Save document", () => {
@@ -1473,6 +1541,12 @@ context("NCO document type management", () => {
 
       it("Click on Equipment list", () => {
         cy.navigToEquipmentList();
+        cy.dlClearFilters();
+      });
+
+      it("Filter by Owner & Location", () => {
+        SystemRequirement("REQ-2840");
+        cy.filterEquipByOwnerAndLocation({ owner: USERS[2].name, location: "Portable" });
       });
 
       it("Verify Owner name", () => {
@@ -1496,6 +1570,12 @@ context("NCO document type management", () => {
 
       it("Click on Equipment list", () => {
         cy.navigToEquipmentList();
+        cy.dlClearFilters();
+      });
+
+      it("Filter by Owner & Location", () => {
+        SystemRequirement("REQ-2840");
+        cy.filterEquipByOwnerAndLocation({ owner: USERS[2].name, location: "IQC" });
       });
 
       it("Verify Location value", () => {
@@ -1532,13 +1612,22 @@ context("NCO document type management", () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
 
+      it("Navigate To specification", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it("Change Primary Owner", () => {
-        cy.get("[aria-label='Open']").eq(1).arrowClick();
-        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall']").eq(0).arrowClick();
-        cy.get("[name='fb-primary-owner-eq']>div>div>button>span>svg").arrowClick();
-        cy.wait(1500);
-        cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
+        cy.drSelectPrimaryOwner({ owner: USERS[1].name });
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
+      it("Navigate To overview", () => {
+        cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
       });
 
       it("Change Location to Portable", () => {
@@ -1552,7 +1641,14 @@ context("NCO document type management", () => {
 
       it("Click on Equipment list", () => {
         cy.navigToEquipmentList();
+        cy.dlClearFilters();
       });
+
+      it("Filter by Owner & Location", () => {
+        SystemRequirement("REQ-2840");
+        cy.filterEquipByOwnerAndLocation({ owner: USERS[1].name, location: "Portable" });
+      });
+
 
       it("Verify Owner name", () => {
         cy.get("tr.k-master-row").first().find("td").eq(4).contains(USERS[1].name);
@@ -1566,4 +1662,3 @@ context("NCO document type management", () => {
 
 });
 
-export { };

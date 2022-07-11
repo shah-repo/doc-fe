@@ -168,7 +168,6 @@ Cypress.Commands.add("equipClickCreateNew", () => {
 Cypress.Commands.add("equipReloadDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
-    CyRoutes.GetAutocompleteOptions,
     CyRoutes.DocPreview], () => {
     cy.reload();
   });
