@@ -37,32 +37,30 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
             <>{inputState?.includeNotes && <FBNotes {...{ name }} />}</>
           )}
         </Observer>
-        {/* //TODO: find better solution than that to fix Chrome autocompleteon issue */}
-        <form autoComplete="cc-name">
-          <FormControl fullWidth {...{ error }} >
-            <Box display="flex" flexDirection="row">
-              <Observer>
-                {() => (
-                  <>
-                    {formState?.locked.get(name || "")?.locked && (
-                      <FBTooltip title={lockOwnerName}>
-                        <Box mt={-0.5} pr={0.5}>
-                          <LockIcon fontSize="small" color="error" style={{ float: "right" }} />
-                        </Box>
-                      </FBTooltip>
-                    )}
-                  </>
-                )}
-              </Observer>
-              {!includes(FBInputState.omitLabel, type) && label && (
-                <FBLabel {...{ error, label, loading, labelProps }} />
+
+        <FormControl fullWidth {...{ error }} >
+          <Box display="flex" flexDirection="row">
+            <Observer>
+              {() => (
+                <>
+                  {formState?.locked.get(name || "")?.locked && (
+                    <FBTooltip title={lockOwnerName}>
+                      <Box mt={-0.5} pr={0.5}>
+                        <LockIcon fontSize="small" color="error" style={{ float: "right" }} />
+                      </Box>
+                    </FBTooltip>
+                  )}
+                </>
               )}
-            </Box>
+            </Observer>
+            {!includes(FBInputState.omitLabel, type) && label && (
+              <FBLabel {...{ error, label, loading, labelProps }} />
+            )}
+          </Box>
 
-            {children}
-          </FormControl>
+          {children}
+        </FormControl>
 
-        </form>
         {!isEmpty(helperText) && showErrorMsg && (
           <FormHelperText {...{ error }}>
             <Text message={helperText as string} />
