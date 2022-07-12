@@ -14,6 +14,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
+import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
@@ -112,6 +113,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
 
@@ -309,16 +311,31 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
         )}
-        {_formState?.active && _formState.mode === "design" && hasOutput && (
-          <Grid item xs={12}>
-            <FBActiveNoOutput
-              docRevId={initialValues.id}
-              status={documentRevision?.status}
-              version={documentRevision?.version}
-              isDisabled={isDisabledInput}
-              outputDocs={values.outputDocumentTypes as OptionType[]}
-            />
-          </Grid>
+        {_formState?.active && ["design", "form"].includes(_formState.mode) && (
+          <>
+            <Grid item xs={12}>
+              <AttachmentsField
+                isDisabled={isDisabledInput}
+                isNewVersion={false}
+                docRevId={docRevId}
+                isAttachmentEmpty={isAttachmentEmpty}
+                containsRedline={false}
+                docRevStatus={documentRevision?.status}
+                documentRevision={documentRevision}
+                documentTypeId={documentTypeId || ""}
+              />
+            </Grid>
+            {hasOutput &&
+            <Grid item xs={12}>
+              <FBActiveNoOutput
+                docRevId={initialValues.id}
+                status={documentRevision?.status}
+                version={documentRevision?.version}
+                isDisabled={isDisabledInput}
+                outputDocs={values.outputDocumentTypes as OptionType[]}
+              />
+            </Grid>}
+          </>
         )}
         {_formState?.active && documentRevision && values.id && (
           <Grid item xs={12}>

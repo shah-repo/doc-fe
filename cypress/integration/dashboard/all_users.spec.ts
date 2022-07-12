@@ -640,9 +640,19 @@ context("All regular users on new dashboard", () => {
 
         cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
       });
+
+      it("Save PO", () => {
+        cy.poSaveDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
     });
 
     context("Add purchase order item", () => {
+      it("Open line items tab", () => {
+        cy.drSelectLineItems();
+      });
+
       it("Click on 'Add item' button to add item without Part Number", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
       });
@@ -676,9 +686,19 @@ context("All regular users on new dashboard", () => {
       it("Click on 'Add' inside PO dialog box", () => {
         cy.poAddPOButtonClick();
       });
+
+      it("Save PO", () => {
+        cy.poSaveDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
     });
 
     context("Finish PO", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter 'Nothing to comment' inside PO dialog box", () => {
         cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
         cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
@@ -697,13 +717,10 @@ context("All regular users on new dashboard", () => {
         });
       });
 
-      it("Save PO document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
-
+      it("Save PO", () => {
+        cy.poSaveDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'Submit for Approval' button", () => {
@@ -711,7 +728,6 @@ context("All regular users on new dashboard", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
       });
-
     });
   });
 

@@ -19,7 +19,7 @@ export default (theme: Theme) =>
     newLogo: {
       backgroundRepeat: "no-repeat",
       backgroundImage: `url(${EnlilLogo})`,
-      left: "61%",
+      left: "53%",
       right: "20%",
       position: "absolute",
       paddingTop: "48px",
@@ -41,9 +41,12 @@ export default (theme: Theme) =>
       color: theme.palette.primary.main,
     },
     toolbar: {
-      marginLeft: DRAWER_WIDTH,
-      borderBottom: `1px solid ${Colors.medium_gray}`,
-      minHeight: "40px",
+      "marginLeft": DRAWER_WIDTH,
+      "borderBottom": `1px solid ${Colors.medium_gray}`,
+      "minHeight": "40px",
+      "&.formBuilder": {
+        minHeight: "48px",
+      },
     },
     headerButton: {
       "boxShadow": "none",

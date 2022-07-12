@@ -943,7 +943,7 @@ context("Training notification test", () => {
     });
 
     it("Clear filters", () => {
-      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1076,6 +1076,7 @@ context("Training notification test", () => {
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
           CyRoutes.GetAvailableApprovers], () => {
@@ -1088,7 +1089,6 @@ context("Training notification test", () => {
       cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
       cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.CLOSE_CR_BY_EFFECTIVE_DATE);
       cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
-      cy.wait(5000);
     });
   });
 
@@ -1098,7 +1098,7 @@ context("Training notification test", () => {
     });
 
     it("Clear filters", () => {
-      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1115,7 +1115,6 @@ context("Training notification test", () => {
       cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
       cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
         .should("have.text", `${adjAssignDate}`);
-      cy.wait(3000);
     });
 
     it("Verify DUE DATE is adjusted by 23 days", () => {
@@ -1148,7 +1147,7 @@ context("Training notification test", () => {
     });
 
     it("Clear filters", () => {
-      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.trClearFilters();
     });
 
     it(`Verify AR ID as ${aRID}`, () => {

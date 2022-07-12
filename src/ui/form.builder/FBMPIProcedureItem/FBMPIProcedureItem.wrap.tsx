@@ -122,6 +122,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     function onClose() {
       formState?.unlockField(`${name}.${type}`);
+      dialogState?.closeDialog();
     }
 
     // MARK: @methods

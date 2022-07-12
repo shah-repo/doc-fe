@@ -19,6 +19,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
@@ -91,7 +92,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       setIsApproved(isInlineFormApproved( documentRevision, _formState, validSchema));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_formState, schema, _formState?.Validator]);
+  }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
@@ -159,15 +160,15 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         } else {
-          const formInputObj = isEmpty(_formState?.getValues()) ? values?.formInput ?? values : _formState?.getValues();
+          const formStateContext = FBFormStateContext as any;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue("formInput",
-            omit(formInputObj,
+            omit(formStateContext?._currentValue,
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 "partType", "childForRevise"]));
         }
         if (isOutputSchema()) {
-          formik.setFieldValue("schema", schema);
+          formik.setFieldValue("schema", isEmpty(schema) ? values.schema : schema);
         }
         break;
       default:

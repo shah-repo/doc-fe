@@ -13,6 +13,7 @@ import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
+import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
@@ -92,7 +93,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     } ];
   }
 
-  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP)) {
+  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
+    .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
       tabId: TabTypeOptions.TABS_MEQ,
@@ -111,13 +113,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   }, [tabConfig]);
 
   const getHeight = () => (isCreateUrl && _documentRevisionFormState?.isDesTextClamped) ?
-    "calc(100vh - 310px)" : "auto";
+    "calc(100vh - 315px)" : "auto";
 
   return (
     <SMForm
-      templateBoxProps={{ stretchY: "100%" }}
-      headerBoxProps={{ maxHeight: "30%" }}
-      contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
+      templateBoxProps={{ stretchY: "100%", marginTop: "38px", width: "100%" }}
+      contentBoxProps={{
+        minHeight: "calc(100% - 30%)", height: "100%",
+        bgcolor: Colors.alabaster, paddingTop: isCreateUrl ? "73px" : "94px",
+      }}
       values={formValues.values}
       leftSidebar={DocumentRevisionLeftPanel}
       header= {
@@ -151,7 +155,10 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                     (_documentRevisionFormState?.isDescriptionFocused) || isCreateUrl) ? "auto" : "")),
                 height: isCreateUrl ? "calc(100vh - 105px)" :  "calc(100vh - 130px)",
               }}
-              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader type={type}/>}
+              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
+                type={type}
+                documentTypeId={formValues.values.document?.documentType?.id}
+              />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
               <Observer>

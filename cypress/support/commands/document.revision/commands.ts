@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable max-len */
 import { int } from "aws-sdk/clients/datapipeline";
+import { bool } from "aws-sdk/clients/signer";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { encodeString } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
@@ -19,7 +20,11 @@ declare global {
       drClearDocumentTitle(): Chainable<Subject>;
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
+      drSelectDocumentTab(): Chainable<Subject>;
+      drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
+      drSelectCalPmHistoryTab(): Chainable<Subject>;
+      drSelectPrimaryOwner(params: { owner: string; noWait?: bool }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -230,14 +235,34 @@ Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drSelectDocumentTab", () => {
+  cy.get("[data-cy=\"tabId.documents\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectLineItems", () => {
+  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectSpecificationTab", () => {
   cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
+  cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: bool }) => {
+  cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
+  cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick();
 });
 
 Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {
@@ -253,7 +278,8 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drClearDocumentTitle", () => {
-  cy.get("[data-cy=\"field-name\"] svg").arrowClick();
+  cy.get("div[data-cy=\"field-name\"]").arrowClick();
+  cy.get("div[data-cy=\"field-name\"]").find("svg").arrowClick();
 });
 
 Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {

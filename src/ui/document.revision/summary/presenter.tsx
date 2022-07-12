@@ -4,6 +4,7 @@ import { flatten, omit, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
@@ -24,6 +25,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { Translation } from "../../translations/types";
+import Attachment from "./attachment";
 import BuildsContainer from "./builds.container";
 import styles from "./styles";
 import CompleteTraining from "./training/complete.training";
@@ -100,6 +102,14 @@ const Presenter: React.FunctionComponent<Props> = ({
       {...{ trainingRecords, id, document, docDetails }}
     />
   );
+  const containsRedline = (): boolean => {
+    for (const attachment of attachments) {
+      if (attachment.lineType === LINE_TYPES.RED_LINE) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   const getDocumentById = useActionCreator(documentsActions.getDocumentById);
   const docByIdAsync = useAsync({
@@ -174,6 +184,11 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
+        {attachments && <Attachment
+          isAttachmentEmpty={attachments.length < 1}
+          docRevId = {id}
+          containsRedline = {containsRedline()}
+          docRevStatus={status}/>}
         {renderTrainingControl}
         {renderSelfTaughtTraining}
       </Grid>
