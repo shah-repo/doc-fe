@@ -31,7 +31,7 @@ const References = ({
   const groupOptions = selectedDocument?.document.documentType.groupOptions;
   const isDisabledInput = initialValues && initialValues.id !== undefined && isCurrentUserOperator && !isOwner;
   return (
-    <Box margin={1.875} width={1} data-cy="generalInfo">
+    <Box margin={1.875} width={1} data-cy="generalInfo" height="calc(100vh - 225px)" overflow="auto">
       <Typography className={classes.generalInfo}>
         <Text translation="common.general.info" />
       </Typography>
