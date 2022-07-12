@@ -146,8 +146,7 @@ DocumentRevisionFormContainerProps
         initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions, pmForm, FBStore.refreshData]);
-
+  }, [canUpdateHTML, initialValues, groupOptions, pmForm, FBStore?.refreshData]);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useObserver(() => {
