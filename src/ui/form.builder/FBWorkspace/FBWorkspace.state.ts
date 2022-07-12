@@ -234,7 +234,7 @@ class FBWorkspaceState extends FBSchemaState {
           this.loadAudit = true;
         }
         this.documentRevApi.onSuccess();
-        FBDataStore.refreshData = data;
+        FBDataStore.setRefreshData(data);
         this.loading = false;
       }
     });
