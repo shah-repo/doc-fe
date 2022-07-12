@@ -38,7 +38,6 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
           )}
         </Observer>
         // ToDo: find better solution than that to fix Chrome autocompleteon issue
-        // rel https://shifamed.atlassian.net/browse/ENC-12190
         <form autoComplete="cc-name">
           <FormControl fullWidth {...{ error }} >
             <Box display="flex" flexDirection="row">
