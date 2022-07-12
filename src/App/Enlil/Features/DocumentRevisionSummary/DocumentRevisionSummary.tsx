@@ -47,13 +47,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
-  if (documentRevision.retrain && tabConfig) {
-    tabConfig = [...tabConfig, {
-      labelId: "tabId.training",
-      tabId: "training",
-      type: "TRAINING",
-    }];
-  }
   if (tabConfig &&  [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
@@ -62,6 +55,14 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       type: TabTypeOptions.TABS_MEQ,
     }];
   }
+  if (documentRevision.retrain && tabConfig) {
+    tabConfig = [...tabConfig, {
+      labelId: "tabId.training",
+      tabId: "training",
+      type: "TRAINING",
+    }];
+  }
+
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
@@ -184,18 +185,18 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                   "formPreview" : "preview"}
                               />
                             )}
-                            {tabType === "TRAINING" &&
-                                _tabsState?.value === trainingTabIndex && (
-                              <FBTrainingInfoContainer
-                                documentRevisionId={documentRevision?.id}
-                              />
-                            )}
                             {tabType === TabTypeOptions.TABS_MEQ &&
                             documentRevision.status !== DocumentRevisionStatus.Voided &&
                               <FBMaterialEqInfoContainer
                                 documentRevisionId={documentRevision?.id}
                               />
                             }
+                            {tabType === "TRAINING" &&
+                                _tabsState?.value === trainingTabIndex && (
+                              <FBTrainingInfoContainer
+                                documentRevisionId={documentRevision?.id}
+                              />
+                            )}
                           </SMBox>
                         </SMBox>
                       );
