@@ -233,6 +233,7 @@ class FBWorkspaceState extends FBSchemaState {
           this.loadAudit = true;
         }
         this.documentRevApi.onSuccess();
+        FBStore.setRefreshData(data);
         this.loading = false;
       }
     });

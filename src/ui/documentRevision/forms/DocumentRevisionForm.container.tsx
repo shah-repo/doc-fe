@@ -1,6 +1,7 @@
 import { Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, isEmpty } from "lodash";
+import { useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionForm, SMFormHOCProps } from "../../../App";
@@ -18,6 +19,7 @@ import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
+import FBStore from "../../form.builder/FBStore/FBStore";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
@@ -144,7 +146,13 @@ DocumentRevisionFormContainerProps
         initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions, pmForm]);
+  }, [canUpdateHTML, initialValues, groupOptions, pmForm, FBStore.refreshData]);
+
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useObserver(() => {
+    cleanInitialValues.formInput = FBStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
+  });
 
   useEffect(() => {
     if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {
