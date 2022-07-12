@@ -152,6 +152,10 @@ DocumentRevisionFormContainerProps
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
   });
 
+  useEffect(() => () => {
+    FBDataStore.setRefreshData(undefined);
+  }, []);
+
   useEffect(() => {
     if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {
       loadDocumentProposedId(documentType?.id as string);
