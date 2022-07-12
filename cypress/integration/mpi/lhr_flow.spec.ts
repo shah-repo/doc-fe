@@ -91,7 +91,7 @@ context("LHR flow", () => {
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
-          mpiDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions");
+          mpiDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
           done();
@@ -1059,7 +1059,7 @@ context("LHR flow", () => {
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
         SystemRequirement("REQ-0560");
-        cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions" });
+        cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
       });
 
       it("Select 'Numeric' revision stage", () => {
