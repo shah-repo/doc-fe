@@ -148,7 +148,6 @@ DocumentRevisionFormContainerProps
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canUpdateHTML, initialValues, groupOptions, pmForm, FBStore?.refreshData]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useObserver(() => {
     cleanInitialValues.formInput = FBStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
   });
