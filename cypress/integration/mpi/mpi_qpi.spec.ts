@@ -269,8 +269,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Close the sidebar", () => {
-        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-label']")
-          .eq(1).arrowClick();
+        cy.contains("Form Builder Library").parent().find("button").arrowClick({ force: true });
       });
 
       context("Fill step #1", () => {
@@ -317,7 +316,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check doc Draft status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Draft" });
+          cy.drCheckDocumentStatus({ status: "DRAFT" });
           cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
 
           cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
@@ -396,8 +395,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Verify attached image.jpg file length more than 500 bytes", () => {
-          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-            downloadFile.replace(".zip", ""), "image.jpg");
+          const attachedFile = path.join("cypress/fixtures", "image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
 
@@ -461,6 +459,8 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
 
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
+            expect(el).match(/Start quantity/);
             expect(el).match(/Draft/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -480,12 +480,10 @@ context("Mpi/Qpi test", () => {
             RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
-            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-
-            expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
+            expect(el).match(/Accepted quantity\nRejected quantity/);
 
 
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -522,10 +520,6 @@ context("Mpi/Qpi test", () => {
       });
 
       context("Release MPI", () => {
-        it("Upload attachment 'image.jpg'", () => {
-          cy.atchUploadAttachment({ fileName: "image.jpg" });
-        });
-
         it("Approve and release MPI document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
             cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -533,7 +527,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check MPI doc released status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.drCheckDocumentStatus({ status: "RELEASED" });
           cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "MPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             MPIDocId = $docIdElement.text();
@@ -616,8 +610,7 @@ context("Mpi/Qpi test", () => {
     });
 
     it("Verify attached file length more than 500 bytes", () => {
-      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "image.jpg");
+      const attachedFile = path.join("cypress/fixtures", "image.jpg");
       cy.readFile(attachedFile).its("length").should("be.gt", 500);
     });
 
@@ -681,6 +674,8 @@ context("Mpi/Qpi test", () => {
 
         expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
 
+        expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
+        expect(el).match(/Start quantity/);
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -700,11 +695,9 @@ context("Mpi/Qpi test", () => {
         RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
+        expect(el).match(/Accepted quantity\nRejected quantity/);
 
-        expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
-
-        expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+        expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -772,14 +765,14 @@ context("Mpi/Qpi test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Upload logo picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Add Checkbox group", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
         cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
         cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
         cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
@@ -791,21 +784,21 @@ context("Mpi/Qpi test", () => {
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
         cy.get(`input[name="validators.required_if_in"]`).check();
         cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-        cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get(`input[type="checkbox"][value="3"]`).check({ force: true });
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Close the sidebar", () => {
+        cy.contains("Form Builder Library").parent().find("button").arrowClick({ force: true });
       });
 
       context("Fill step #1", () => {
@@ -854,7 +847,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check QPI doc Draft status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Draft" });
+          cy.drCheckDocumentStatus({ status: "DRAFT" });
           cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             QPIDocId = $docIdElement.text();
@@ -932,8 +925,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Verify attached file length more than 500 bytes", () => {
-          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-            downloadFile.replace(".zip", ""), "image.jpg");
+          const attachedFile = path.join("cypress/fixtures", "image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
 
@@ -997,6 +989,8 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
 
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
+
             expect(el).match(/Draft/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1016,9 +1010,8 @@ context("Mpi/Qpi test", () => {
             RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
-            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
 
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -1060,7 +1053,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check QPI doc released status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.drCheckDocumentStatus({ status: "RELEASED" });
           cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             QPIDocId = $docIdElement.text();
@@ -1141,8 +1134,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Verify attached file length more than 500 bytes", () => {
-          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-            downloadFile.replace(".zip", ""), "image.jpg");
+          const attachedFile = path.join("cypress/fixtures", "image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
 
@@ -1206,6 +1198,7 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
 
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
             expect(el).match(/Released/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1225,9 +1218,7 @@ context("Mpi/Qpi test", () => {
             RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
-            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Released/);
 

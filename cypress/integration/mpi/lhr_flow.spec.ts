@@ -992,6 +992,10 @@ context("LHR flow", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -1014,11 +1018,6 @@ context("LHR flow", () => {
       cy.poAddDateRequired();
     });
 
-    it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-
-    });
-
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       cy.unClick();
@@ -1028,12 +1027,16 @@ context("LHR flow", () => {
       cy.pmSubmitForApproval();
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve record", () => {
       cy.ebApprove();
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
     });
   });
 
@@ -1133,12 +1136,9 @@ context("LHR flow", () => {
 
       context("Fill step #2", () => {
         it("Add step #2", () => {
-          SystemRequirement("REQ-3060");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddStep();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PI Procedure" });
+          cy.fbAddNewFieldButton();
         });
 
         it("Add attachment", () => {
