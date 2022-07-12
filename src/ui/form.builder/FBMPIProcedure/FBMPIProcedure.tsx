@@ -34,11 +34,14 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
         {!isPreview && (
           <Box display="flex" flexDirection="row-reverse" mt={3.125}>
             <CloneIcon
+              data-cy="form.builder.clone.step"
               onClick={() => handleAdd?.()}
               {...{ disabled }}
-              style={{ marginLeft: "5px" }}
+              style={{ marginLeft: "5px", cursor: "pointer" }}
             />
             <AddNewIcon
+              data-cy="form.builder.add.step"
+              style={{ cursor: "pointer" }}
               onClick={() => handleAdd?.(true)}
               {...{ disabled }}
             />

@@ -37,7 +37,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
             <>{inputState?.includeNotes && <FBNotes {...{ name }} />}</>
           )}
         </Observer>
-        // ToDo: find better solution than that to fix Chrome autocompleteon issue
+        {/* //TODO: find better solution than that to fix Chrome autocompleteon issue */}
         <form autoComplete="cc-name">
           <FormControl fullWidth {...{ error }} >
             <Box display="flex" flexDirection="row">
