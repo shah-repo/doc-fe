@@ -30,39 +30,52 @@ interface Props {
   isField: boolean;
   isUploading: boolean;
 }
-const styles = makeStyles((theme) => ({
-  dialogPaper: {
-    overflowY: "unset",
-  },
-  dialogContent: {
-    overflowY: "unset",
-    maxWidth: 400,
-  },
-  root: ({ isField }: AttachmentStyleProps) => ({
-    padding: isField ? theme.spacing(2, 1) : 0,
-  }),
-  link: ({ isField }: AttachmentStyleProps) => ({
-    display: isField ? "flex" : "block",
-  }),
-  input: {
-    display: "none",
-  },
-  icon: ({ isField }: AttachmentStyleProps) => ({
-    display: isField ? "inherited" : "none",
-    marginRight: theme.spacing(0.5),
-    width: 20,
-    height: 20,
-  }),
-  linkButton: {
+
+
+const styles = makeStyles((theme) => {
+  const linkStyle = {
     "padding": 0,
-    "fontSize": "14px",
-    "fontWeight": 400,
+    "fontSize": theme.typography.fontSize,
     "color": Colors.navy,
+    "textTransform": "capitalize" as const,
+    "fontWeight": 400,
+    "cursor": "pointer",
     "&:hover": {
       backgroundColor: "transparent",
+      textDecoration: "none" as const,
     },
-  },
-}));
+  };
+
+  return {
+    dialogPaper: {
+      overflowY: "unset",
+    },
+    dialogContent: {
+      overflowY: "unset",
+      maxWidth: 400,
+    },
+    root: ({ isField }: AttachmentStyleProps) => ({
+      padding: isField ? theme.spacing(1, 0.5) : 0,
+    }),
+    link: ({ isField }: AttachmentStyleProps) => ({
+      display: isField ? "flex" : "block",
+      alignItems: isField ? "center" : "",
+      ...linkStyle,
+    }),
+    input: {
+      display: "none",
+    },
+    icon: ({ isField }: AttachmentStyleProps) => ({
+      display: isField ? "inherited" : "none",
+      marginRight: theme.spacing(1),
+      width: 20,
+      height: 20,
+    }),
+    linkButton: {
+      ...linkStyle,
+    },
+  };
+});
 
 
 const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
@@ -124,6 +137,7 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
               variant="button"
               className={classes.link}
               id="AttachmentFieldPresenter-downloadAllButton"
+              color="primary"
             >
               <AttachFile className={classes.icon} />
               <Text translation="common.upload.files" />
