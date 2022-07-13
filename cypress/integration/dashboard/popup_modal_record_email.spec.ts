@@ -27,6 +27,7 @@ let adminEmployee;
 let adminSessionId;
 let developersGroup;
 let dateAfterEmailShouldArrive;
+let getEmailSetting;
 
 context("Records email popup modal", () => {
   before(() => {
@@ -264,9 +265,12 @@ context("Records email popup modal", () => {
 
   context("Verify email for pending training notification and approve Record", () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -297,7 +301,14 @@ context("Records email popup modal", () => {
     });
 
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: SECOND_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
     });
 
     it("Approve Record", () => {
@@ -360,9 +371,12 @@ context("Records email popup modal", () => {
     });
 
     it("Get emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -391,14 +405,21 @@ context("Records email popup modal", () => {
       cy.authLogout();
     });
 
-    it("Login user to dashboard", () => {
+    it(`Login as user ${THIRD_USER} to dashboard`, () => {
       cy.authLoginToDashboard({ USER: THIRD_USER, employeeId: fourthEmployee.id });
     });
   });
 
   context("Verify email for pending training notification and approve Record", () => {
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: THIRD_USER.email });
+      getEmailSetting =  {
+        to: THIRD_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Record RD-00003 Record document from newly created form in review",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: THIRD_USER.email, options: getEmailSetting });
     });
 
     it("Approve Record", () => {
@@ -416,12 +437,19 @@ context("Records email popup modal", () => {
       cy.authLogout();
     });
 
-    it("Login user to dashboard", () => {
+    it(`Login user as ${FIRST_USER} to dashboard`, () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
     });
 
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: SECOND_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
     });
 
     it("Approve Record", () => {
