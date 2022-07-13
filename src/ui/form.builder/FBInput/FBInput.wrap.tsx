@@ -113,7 +113,7 @@ export const withFBInput = <T extends FBInputProps>(
         feedbackDetails.error = formState?.errorValidation && showErrorMsg && !isUndefined(errorName);
         feedbackDetails.helperText = errorName;
       });
-      return () => disposeAutorun();
+      return disposeAutorun;
     }, []);
 
     value = inputState?.value;
@@ -159,13 +159,13 @@ export const withFBInput = <T extends FBInputProps>(
     }
 
     if (
-      (isOutput || workspaceState?.mode !== "design") &&
+      (isOutput || formState?.workspaceMode !== "design") &&
       !["formPreview", "preview"].includes(
-        workspaceState?.mode as FBWorkspaceMode
+        formState?.workspaceMode as FBWorkspaceMode
       )
     ) {
       const isUnderMode = (
-        !helperText && (
+        !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
           validationValue === "" ||
           (isArray(validationValue) && size(validationValue) === 0)

@@ -11,7 +11,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   dialogState,
   snackbarState,
   schema,
-  mode = "none",
+  mode,
   initialValues,
   includeTransport,
   includeProcedureDiff,
@@ -22,7 +22,10 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
     <FBSnackbar autoHideDuration={6000}/>
     <FBDialog />
-    <FBForm {...{ initialValues }} workspaceMode={mode} initialValidation={true} includeLocking={true}>
+    {/* The workspaceMode of the form should be what is passed in Or
+    by default be the mode in which the workspace is, instead of being 'none' */}
+    <FBForm {...{ initialValues }} workspaceMode={mode || workspaceState?.mode || "none"} initialValidation={true}
+      includeLocking={true}>
       <FBLock>
         {children}
         <Observer>
