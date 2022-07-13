@@ -3,8 +3,8 @@ import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBInput, FBMapWrapper, FBMPIProcedureItem, FBMPIProcedureProps, FBProcedureItemType, FBProvider, FBTextEditor } from "..";
 import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
-import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/icon_add.svg";
-import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/icon_clone.svg";
+import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/add_filled.svg";
+import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/clone_filled.svg";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedure } from "./FBMPIProcedure.wrap";
 
