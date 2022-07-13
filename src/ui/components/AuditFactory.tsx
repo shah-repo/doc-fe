@@ -74,13 +74,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       fileupload() { return (<AuditAttachment audit={audit} />); },
       checkboxgroup() {
-        let arrayValue: string[] = [];
+        const arrayValue: string[] = [];
         try {
-          arrayValue = JSON.parse(auditValue);
+          arrayValue.push(JSON.parse(auditValue));
         } catch {
           arrayValue.push(auditValue);
         }
-        return (<div>{arrayValue.join(", ")}</div>);
+        return (<div>{arrayValue?.join(", ")}</div>);
       },
       procedure() {
         if (audit.field === "fileUploadCandidate") {
