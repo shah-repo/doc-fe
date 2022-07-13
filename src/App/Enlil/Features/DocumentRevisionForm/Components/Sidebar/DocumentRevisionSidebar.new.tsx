@@ -24,7 +24,7 @@ import Colors from "../../../../../../ui/layout/theme/utils/colors";
 import { styles, tooltipStyles } from "./DocumentRevisionSidebar.new.styles";
 import { withDocumentRevisionSidebarWrap } from "./DocumentRevisionSidebar.wrap";
 
-const StyledTooltip = (props: TooltipProps) => {
+export const StyledTooltip = (props: TooltipProps) => {
   const classes = tooltipStyles();
   return <FBTooltip arrow placement="left" classes={classes} {...props} />;
 };
@@ -74,6 +74,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                     <SMText label="common.maximize" />
                   )
                 }
+                placement="right"
               >
                 <IconButton
                   onClick={handleRightPanelToggle}
