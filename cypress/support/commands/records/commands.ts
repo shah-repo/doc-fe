@@ -19,6 +19,7 @@ declare global {
       inspecSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       recCheckRevisionStage(params: {stage: string}): Chainable<Subject>;
       recFilterRecordListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
+      recFilterRecordListByIdAndStatus(params: { id: string; status: string }): Chainable<Subject>;
       equipClickCreateNew(): Chainable<Subject>;
       recFilterByTitle(params: {revision: string }): Chainable<Subject>;
       recFilterByStatus(params: {status: string }): Chainable<Subject>;
@@ -98,6 +99,20 @@ Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: str
   cy.unClick();
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("tr.k-master-row").contains(params.title).arrowClick();
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("recFilterRecordListByIdAndStatus", (params: { id: string; status: string }) => {
+  cy.get("#clearFilter").arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.id).wait(500);
+  cy.unClick();
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.unClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get("tr.k-master-row").contains(params.id).arrowClick();
   cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });

@@ -229,7 +229,6 @@ context("Document force required fields", () => {
     it("remove title", () => {
       cy.get("[data-cy=\"field-name\"]").arrowClick().find("svg").arrowClick();
       cy.unClick();
-      cy.pause();
     });
 
     it("Click 'Save' button", () => {
@@ -240,7 +239,6 @@ context("Document force required fields", () => {
 
   context("Verify user is forced to fill required fields", () => {
     it("Click on 'Approve and release' button", () => {
-      cy.pause();
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 

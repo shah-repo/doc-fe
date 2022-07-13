@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -193,14 +194,12 @@ context("Document Operators Access Test", () => {
 
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-
     });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
-
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
@@ -232,7 +231,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Select 'Text Field' field", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field'", () => {
@@ -248,7 +247,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Select 'Text Field' field", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field'", () => {
@@ -258,7 +257,6 @@ context("Document Operators Access Test", () => {
     it("Add 'Text Field' field", () => {
       cy.fbAddNewFieldButton();
     });
-
 
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
@@ -273,11 +271,15 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
-      cy.get("[data-cy='permission-icon']").arrowClick();
+      cy.drSelectPermissionTab();
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
       cy.drAssignDocumentTo({ username: USERS[3].name });
+    });
+
+    it("Click on sidebar permission icon to add Operators", () => {
+      cy.drSelectPermissionTab();
     });
 
     it(`Select '${USERS[4].name}' to Assign document to`, () => {
@@ -344,7 +346,6 @@ context("Document Operators Access Test", () => {
       cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
   });
-
 
   context(`Fill textbox field with operator '${USERS[4].name}'`, () => {
     it("Navigates to records", () => {
@@ -474,7 +475,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Verify status is released", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 });

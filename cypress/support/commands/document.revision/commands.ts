@@ -371,6 +371,7 @@ Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
@@ -604,7 +605,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true });
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy='add-user'").eq(2).arrowClick();
   });
   cy.progressBarShouldNotExist();
