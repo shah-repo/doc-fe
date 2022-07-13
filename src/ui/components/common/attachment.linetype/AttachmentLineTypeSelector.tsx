@@ -40,9 +40,6 @@ const styles = makeStyles((theme) => ({
   },
   root: ({ isField }: AttachmentStyleProps) => ({
     padding: isField ? theme.spacing(2, 1) : 0,
-    backgroundColor: isField ? Colors.white : "transparent",
-    borderRadius: isField ? "4px" : "none",
-    border: isField ? `1px solid ${Colors.medium_gray}` : "none",
   }),
   link: ({ isField }: AttachmentStyleProps) => ({
     display: isField ? "flex" : "block",
@@ -109,47 +106,46 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      { (isChangeRequestFormOnScreenContext || isRecord) &&
-         <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
-           <input
-             accept="*"
-             className={classes.input}
-             id={`${name}-button-file`}
-             multiple={multiple}
-             type="file"
-             onChange={onChange(LINE_TYPES.CLEAN_COPY, false)}
-             onBlur={onChange(LINE_TYPES.CLEAN_COPY, false)}
-             disabled={disabled}
-           />
-           <label htmlFor={`${name}-button-file`}>
-             <Link
-               component="span"
-               variant="button"
-               className={classes.link}
-               id="AttachmentFieldPresenter-downloadAllButton"
-             >
-               <AttachFile className={classes.icon} />
-               <Text translation="common.upload.files" />
-             </Link>
-           </label>
-         </Box>
+      {(isChangeRequestFormOnScreenContext || isRecord) &&
+        <Box className={classes.root} id="AttachmentFieldPresenter-field">
+          <input
+            accept="*"
+            className={classes.input}
+            id={`${name}-button-file`}
+            multiple={multiple}
+            type="file"
+            onChange={onChange(LINE_TYPES.CLEAN_COPY, false)}
+            onBlur={onChange(LINE_TYPES.CLEAN_COPY, false)}
+            disabled={disabled}
+          />
+          <label htmlFor={`${name}-button-file`}>
+            <Link
+              component="span"
+              variant="button"
+              className={classes.link}
+              id="AttachmentFieldPresenter-downloadAllButton"
+            >
+              <AttachFile className={classes.icon} />
+              <Text translation="common.upload.files" />
+            </Link>
+          </label>
+        </Box>
       }
 
-      { (!isChangeRequestFormOnScreenContext && !isRecord) &&
-      <Button
-        color="primary"
-        disableRipple
-        startIcon={<AttachFileIcon />}
-        onClick={openDialog}
-        id="AttachmentFieldPresenter-linkButton"
-        className={classes.linkButton}
-      >
-        <Text translation="common.upload.files" />
-      </Button>
+      {(!isChangeRequestFormOnScreenContext && !isRecord) &&
+        <Button
+          color="primary"
+          disableRipple
+          startIcon={<AttachFileIcon />}
+          onClick={openDialog}
+          id="AttachmentFieldPresenter-linkButton"
+          className={classes.linkButton}
+        >
+          <Text translation="common.upload.files" />
+        </Button>
       }
 
-      {
-        dialog.isOpen &&
+      {dialog.isOpen &&
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
