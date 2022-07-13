@@ -17,9 +17,10 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
 import FBDataStore from "../../form.builder/FBStore/FBDataStore";
+import useDidMount from "../../hooks/useDidMount";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
@@ -90,6 +91,7 @@ DocumentRevisionFormContainerProps
   pmForm,
   lastSavedTimestamp,
 }) => {
+  const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
   const docId = initialValues.document?.docId;
   const documentType = initialValues.document?.documentType;
@@ -150,10 +152,21 @@ DocumentRevisionFormContainerProps
 
   useObserver(() => {
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
+    if (didMount) {
+      if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
+        documentRevision.approvals = FBDataStore.poApprovals;
+      }
+    }
   });
 
-  useEffect(() => () => {
-    FBDataStore.setRefreshData(undefined);
+  useEffect(() => {
+    if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
+      FBDataStore.setPoApprovals(documentRevision.approvals);
+    }
+    return () => {
+      FBDataStore.setRefreshData(undefined);
+      FBDataStore.setPoApprovals([]);
+    };
   }, []);
 
   useEffect(() => {
