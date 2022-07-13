@@ -74,7 +74,6 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                     <SMText label="common.maximize" />
                   )
                 }
-                placement="right"
               >
                 <IconButton
                   onClick={handleRightPanelToggle}
