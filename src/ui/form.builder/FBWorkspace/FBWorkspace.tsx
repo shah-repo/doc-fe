@@ -1,7 +1,7 @@
 import { Portal } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { FBDialog, FBFieldName, FBForm, FBLock, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceProps } from "..";
+import { FBDialog, FBFieldName, FBForm, FBLock, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceModeOptions, FBWorkspaceProps } from "..";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -24,8 +24,9 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
     <FBDialog />
     {/* The workspaceMode of the form should be what is passed in Or
     by default be the mode in which the workspace is, instead of being 'none' */}
-    <FBForm {...{ initialValues }} workspaceMode={mode || workspaceState?.mode || "none"} initialValidation={true}
-      includeLocking={true}>
+    <FBForm {...{ initialValues }}
+      workspaceMode={mode || workspaceState?.mode || FBWorkspaceModeOptions.NONE}
+      initialValidation={true} includeLocking={true}>
       <FBLock>
         {children}
         <Observer>
