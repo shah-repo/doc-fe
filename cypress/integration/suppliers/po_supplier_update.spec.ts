@@ -991,6 +991,10 @@ context("Purchase Supplier Update", () => {
         cy.poAddPOButtonClick();
       });
 
+      it("clicks on 'Save' button", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Click on 'Details' tab", () => {
         cy.drSelectDetailsTab();
       });
