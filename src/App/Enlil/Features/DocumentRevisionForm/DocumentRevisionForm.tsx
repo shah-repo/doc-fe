@@ -85,14 +85,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     });
   }
 
-  if (formValues.values?.retrain) {
-    tabConfig = tabConfig && [...tabConfig, {
-      labelId: "tabId.training",
-      tabId: "training",
-      type: "TRAINING",
-    } ];
-  }
-
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
@@ -101,6 +93,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       type: TabTypeOptions.TABS_MEQ,
     }];
   }
+
+  if (formValues.values?.retrain) {
+    tabConfig = tabConfig && [...tabConfig, {
+      labelId: "tabId.training",
+      tabId: "training",
+      type: "TRAINING",
+    } ];
+  }
+
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
@@ -239,17 +240,17 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 schema={schema}
                               />
                             )}
+                            {tabType === TabTypeOptions.TABS_MEQ &&
+                        <FBMaterialEqInfoContainer
+                          documentRevisionId={documentRevision?.id}
+                        />
+                            }
                             {tabType === "TRAINING" &&
                           _tabsState?.value === trainingTabIndex && (
                               <FBTrainingInfoContainer
                                 documentRevisionId={documentRevision?.id}
                               />
                             )}
-                            {tabType === TabTypeOptions.TABS_MEQ &&
-                        <FBMaterialEqInfoContainer
-                          documentRevisionId={documentRevision?.id}
-                        />
-                            }
                           </SMBox>
                         </SMBox>
                       );
