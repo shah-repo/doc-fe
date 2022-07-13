@@ -555,14 +555,8 @@ context("Autosave on add and remove FB fields", () => {
       });
     });
 
-    it("Remove Step", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.fbRemoveLastAddedItem();
-      });
-    });
-
     it("Remove Approvals", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbRemoveLastAddedItem();
       });
     });
@@ -620,6 +614,7 @@ context("Autosave on add and remove FB fields", () => {
         cy.fbRemoveLastAddedItem();
       });
     });
+
   });
 });
 

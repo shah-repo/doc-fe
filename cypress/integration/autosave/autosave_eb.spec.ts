@@ -169,12 +169,14 @@ context("Autosave EB test", () => {
       });
 
       it("Add EB Procedure", () => {
+        cy.drSelectProcedureTab();
         cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.fbAddNewFieldButton();
       });
 
       it("Verify that Approvals field is automatically added", () => {
+        cy.drSelectOverviewTab();
         cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
