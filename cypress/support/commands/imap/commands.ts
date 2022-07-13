@@ -22,7 +22,7 @@ declare global {
       imapVerifyLastEmailDoesNotContain(params: {userEmail: string; content: string}): Chainable;
       imapVerifyNumberOfEmailsReceivedSince(params: {userEmail: string; emailCount: integer; date: Date}): Chainable;
       imapGetActivationLink(params: {userEmail: string}): Chainable;
-      imapGetApprovalRequestLink(params: {userEmail: string }): Chainable;
+      imapGetApprovalRequestLink(params: {userEmail: string; options?: GmailTesterOptions}): Chainable;
       imapGetRecordRequestLink(params: {userEmail: string }): Chainable;
       imapVerifyLastEmailContains(params: {userEmail: string; content: string; date: Date}): Chainable;
       imapVerifyEmailsInList(params: {
@@ -88,7 +88,7 @@ Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => 
   });
 });
 
-Cypress.Commands.add("imapGetApprovalRequestLink", (params: { userEmail: string }) => {
+Cypress.Commands.add("imapGetApprovalRequestLink", (params: {userEmail: string; options?: GmailTesterOptions}) => {
   cy.imapGetMails({ userEmail: params.userEmail, options: { after: new Date(Date.now() - 300 * 1000) } }).then((emails) => {
     const emailText = emails[0].body.html;
     const startingPosition = emailText.search("/change_request/");
