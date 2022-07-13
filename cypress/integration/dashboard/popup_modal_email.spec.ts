@@ -28,6 +28,7 @@ let emailsFromInbox: IMAPEmail[];
 let clinicalProtocolDocumentType;
 let group;
 let dateAfterEmailShouldArrive;
+let getEmailSetting;
 
 context("Approval request email popup modal", () => {
   before(() => {
@@ -239,7 +240,8 @@ context("Approval request email popup modal", () => {
 
       it("Check if pop-up modal has pending with all the approvers", () => {
         cy.get("h2").should("contain.text", "PENDING (3)");
-        cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", FIRST_USER.name)
+        cy.get("[class='MuiCollapse-wrapperInner']")
+          .should("contain.text", FIRST_USER.name)
           .and("contain.text", SECOND_USER.name)
           .and("contain.text", THIRD_USER.name);
         cy.get("h2").should("contain.text", "APPROVED (0)");
@@ -270,9 +272,10 @@ context("Approval request email popup modal", () => {
 
   context("Verify email for pending training notification and approve AR", () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -366,9 +369,13 @@ context("Approval request email popup modal", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      cy.imapGetMails({
+        userEmail: SECOND_USER.email,
+        options: getEmailSetting,
+      }).then((emails) => {
         emailsFromInbox = emails;
       });
     });
@@ -377,7 +384,9 @@ context("Approval request email popup modal", () => {
       const emailsThatShouldNotBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: SECOND_USER.email,
-          contains: ["Can you please approve my\r\n                                      request:)"],
+          contains: ["Can you please approve my\r\n                                      request:)",
+          ],
+
         },
       ];
       cy.imapVerifyEmailsInList({
