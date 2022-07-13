@@ -13,6 +13,7 @@ import { store } from "../../../state/store";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import useDidMount from "../../hooks/useDidMount";
 import Colors from "../../layout/theme/utils/colors";
+import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
@@ -169,7 +170,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // On add approver
     React.useEffect(() => reaction(
       () => poApprovalsState?.approvalApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        FBDataStore.setPoApprovals(data);
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -179,6 +183,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const filteredApprovals: FBInlineApprovalBody[] = compact(map(poApprovalsState.approvals, (approval) =>
           approval.approverId === data?.approverId ? data : approval
         ));
+        FBDataStore.setPoApprovals(data);
         poApprovalsState.setApprovals(getApprovals(filteredApprovals));
         if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();
@@ -221,6 +226,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           formState?.getInputState(name)?.setRender();
         }
       }
+      return () => {
+        FBDataStore.setPoApprovals([]);
+      };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

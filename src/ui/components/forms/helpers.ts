@@ -36,7 +36,7 @@ const getDiff = (transformedValues, transformedInitialValues) => {
       diff[key] = value;
     }
     if (key === "referenceTo" && diff[key]) {
-      diff[key] = diff[key]?.filter((referenceValue, referenceKey) => !isEmpty(referenceKey));
+      diff[key] = diff[key]?.filter((referenceValue) => !isEmpty(referenceValue));
     }
   }
   return diff;
