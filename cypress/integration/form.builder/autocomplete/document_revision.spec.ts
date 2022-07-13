@@ -221,7 +221,7 @@ context("Autocomplete 'Document Revision' test", () => {
         });
 
         it("Verify count of 'Document Revisions' in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", (arDocCount + 1));
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", (arDocCount + 2));
         });
 
         it(`Select ${documentRevisionTitle}`, () => {
