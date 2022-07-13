@@ -1368,7 +1368,10 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get(`[name^="fb-approvals-fb-approvals"]`).arrowClick().wait(500);
+      cy.get(`[name^="fb-approvals-fb-approvals"]`)
+        .autocompleteSelect(USERS[1].email);
+      cy.unClick();
     });
 
     it("Save PO", () => {
@@ -1390,7 +1393,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
-      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+      cy.get("tr[data-grid-row-index=\"0\"]").should("contain", "PRT-00005 - 1");
     });
 
     it("Navigate to created one", () => {
@@ -1406,7 +1409,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
-      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+      cy.get("tr[data-grid-row-index=\"0\"]").should("contain", "PRT-00005 - 1");
     });
 
     it("Verify export button exists", () => {
