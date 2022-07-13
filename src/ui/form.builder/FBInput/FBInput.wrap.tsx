@@ -113,7 +113,7 @@ export const withFBInput = <T extends FBInputProps>(
         feedbackDetails.error = formState?.errorValidation && showErrorMsg && !isUndefined(errorName);
         feedbackDetails.helperText = errorName;
       });
-      return () => disposeAutorun();
+      return disposeAutorun;
     }, []);
 
     value = inputState?.value;
