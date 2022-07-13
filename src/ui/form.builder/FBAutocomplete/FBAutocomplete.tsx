@@ -1,4 +1,4 @@
-import { Box, IconButton, Popper, TextField, Typography } from "@material-ui/core";
+import { Box, IconButton, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
@@ -45,7 +45,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
-  const CustomPopper = (props) => <Popper {...props} placement="bottom-start" />;
   const renderRefreshButton = (refresh, disabled) => (
     <Box ml={-4} display="flex" alignItems="center">
       <IconButton size="small" onClick={refresh} {...{ disabled }}>
@@ -135,7 +134,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             filterOptions,
             disableClearable,
           }}
-          PopperComponent={CustomPopper}
           options={modifiedOptions}
           onInputChange={debounceFilterInput}
           ListboxComponent={groupByKey ? undefined : ListBoxComponent }
@@ -154,7 +152,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             filterOptions,
             disableClearable,
           }}
-          PopperComponent={CustomPopper}
           options={modifiedOptions}
           onInputChange={debounceFilterInput}
           ListboxComponent={groupByKey ? undefined : ListBoxComponent }
