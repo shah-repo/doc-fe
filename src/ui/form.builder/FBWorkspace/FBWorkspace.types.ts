@@ -13,6 +13,15 @@ export type FBWorkspaceMode =
 | "preview"
 | "formDesign";
 
+export enum FBWorkspaceModeOptions {
+  NONE = "none",
+  DESIGN = "design",
+  FORM = "form",
+  FORMPREVIEW = "formPreview",
+  PREVIEW = "preview",
+  FORMDESIGN = "formDesign"
+}
+
 export type FBWorkspaceProps =
 & Pick<FBFormProps, "initialValues" | "children">
 & Pick<SMProviderProps, "_tabsState">
