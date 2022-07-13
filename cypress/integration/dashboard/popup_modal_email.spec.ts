@@ -276,6 +276,8 @@ context("Approval request email popup modal", () => {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
         subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -295,8 +297,6 @@ context("Approval request email popup modal", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log(emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -306,7 +306,14 @@ context("Approval request email popup modal", () => {
     });
 
     it("Get emails and visit AR approval url", () => {
-      cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: SECOND_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
     });
 
     it("Approve AR", () => {
@@ -410,7 +417,14 @@ context("Approval request email popup modal", () => {
 
   context("Verify email for pending training notification and approve AR", () => {
     it("Get emails and visit AR approval url", () => {
-      cy.imapGetApprovalRequestLink({ userEmail: THIRD_USER.email });
+      getEmailSetting =  {
+        to: THIRD_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetApprovalRequestLink({ userEmail: THIRD_USER.email, options: getEmailSetting });
     });
 
     it("Approve AR", () => {
@@ -428,7 +442,14 @@ context("Approval request email popup modal", () => {
     });
 
     it("Get emails and visit AR approval url", () => {
-      cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: SECOND_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
     });
 
     it("Approve AR", () => {
