@@ -8,6 +8,7 @@ import { DocumentRevisionForm, SMFormHOCProps } from "../../../App";
 import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
+import { Approval } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
@@ -154,7 +155,7 @@ DocumentRevisionFormContainerProps
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     if (didMount) {
       if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
-        documentRevision.approvals = FBDataStore.poApprovals;
+        documentRevision.approvals = FBDataStore.poApprovals as Approval[];
       }
     }
   });
