@@ -24,10 +24,10 @@ export const styles = makeStyles(() =>
       alignItems: "center",
       marginLeft: "5px",
       color: Colors.almost_black,
-      "text-overflow": "ellipsis",
+      textOverflow: "ellipsis",
       overflow: "hidden",
-      "white-space": "nowrap",
-      "margin-top": "7px",
+      whiteSpace: "nowrap",
+      marginTop: "7px",
     },
     docIdAndTitle: {
       "fontWeight": 600,
