@@ -56,7 +56,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
           footer={SM.isNewLayout ? <WatermarkFooterContainer /> : null}
           templateBoxProps={{ stretchY: "100%", bgcolor: Colors.light_gray }}
           headerBoxProps={{ maxHeight: "20%" }}
-          contentBoxProps={{ minHeight: "80%", height: "100%", overflow: SM.isPageDetail ? "auto" : "" }}
+          contentBoxProps={{ minHeight: "80%", height: "100%", overflow: SM.isScrollEnabled ? "auto" : "" }}
         >
           <Switch>
             <Route
