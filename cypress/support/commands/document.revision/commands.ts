@@ -393,7 +393,7 @@ Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", ()
 });
 
 Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+  cy.get("[data-cy=\"transition.action.cancel\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -565,9 +565,10 @@ Cypress.Commands.add("drCancelDraftFromMenu", () => {
 });
 
 Cypress.Commands.add("drClickUpgradeForm", () => {
-  cy.get("[data-cy=\"formUpgradeButton\"]").arrowClick();
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
+  cy.get("#UpgradeToLatest-upgrade").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.UpgradeToReleasedForm, () => {
-    cy.get("[id=\"UpgradeToLatest-proceed\"]").arrowClick();
+    cy.get("#UpgradeToLatest-proceed").arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

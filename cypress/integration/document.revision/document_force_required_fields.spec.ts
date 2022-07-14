@@ -217,7 +217,7 @@ context("Document force required fields", () => {
   context("Revise the document and modify fields", () => {
     it("Click 'Revise Document' button", () => {
       cy.drClickReviseDocument();
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("remove description", () => {
@@ -232,8 +232,7 @@ context("Document force required fields", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      // cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
