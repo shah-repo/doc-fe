@@ -158,7 +158,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             (_documentRevisionFormState?.isDesTextClamped ? "calc(100vh - 325px)" :
                               (!documentRevision.changeRequest ? (isLHR &&
                                 !_documentRevisionFormState?.isLHRProgressBarVisible ?
-                                "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 280px)"))}
+                                "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 330px)"))}
                           overflow="auto" {...{ onScroll }}>
                           <SMBox id="Presenter-FBWorkspace">
                             {tabType === "MIXED" &&  <>

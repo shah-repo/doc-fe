@@ -11,7 +11,6 @@ import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/
 import { AsyncState } from "../../../state/types";
 import Sidebar from "../../common/components/Sidebar";
 import styles from "../../common/style/styles";
-import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
 import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
 import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
@@ -71,12 +70,12 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       <AssessmentFormPresenter
         asyncState={asyncState}
         changeRequest={changeRequest}
+        chosenForm={chosenForm}
         doNotPrompt={doNotPrompt}
         sidebar={changeRequest && <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />}
         {...props}
         {...{ FBContainer }}
       />
-      <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument} />
     </FBWorkspace>
 
   );
