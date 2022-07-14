@@ -271,9 +271,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         partOf: { id },
         signatureGroupName: groupName,
       }, () => {
-        const { id } = workspaceState || {};
-        if (!id) { return; }
-        dispatch(documentRevisionsActions.loadAudit(id));
+        const id  = workspaceState?.id;
+        if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
       }));
     };
 

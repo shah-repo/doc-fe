@@ -123,7 +123,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       }
       this.approvalApi.data = data;
       this.approvalApi.onSuccess();
-        callback?.();
+      callback?.();
     });
   };
 
