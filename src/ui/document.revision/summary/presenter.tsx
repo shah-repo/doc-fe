@@ -148,7 +148,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   );
 
   const contentRenderer = () => (
-    <Box minHeight={16} width="fit-content">
+    <Box minHeight={16}>
       <Grid container>
         {
           isTrainingVisible && !isRecord &&
