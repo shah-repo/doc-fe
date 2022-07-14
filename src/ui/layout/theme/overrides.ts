@@ -79,6 +79,12 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
       contained: {
         boxShadow: "none",
       },
+      text: {
+        "&$disabled": {
+          backgroundColor: "transparent",
+          color: Colors.dawn,
+        },
+      },
     },
     MuiFab: {
       root: {
