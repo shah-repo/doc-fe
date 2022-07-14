@@ -1,12 +1,16 @@
 import { Theme } from "@material-ui/core";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { Overrides } from "@material-ui/core/styles/overrides";
 import { WhiteLabelingColors } from "../../../state/ducks/company/types";
 import { FBClasses } from "../../form.builder/defaults/layout";
-import { muiSelectMenuPaperClassName } from "./props";
 import Colors from "./utils/colors";
 
 export default function themeOverrides(appTheme: Theme, customColors: WhiteLabelingColors): Overrides {
   const outlinedInputBorder = `1px solid ${Colors.mild_wind_blue}`;
+  const popoverPaper: CSSProperties = {
+    border: "none !important",
+    outline: outlinedInputBorder,
+  };
 
   return {
     MuiAppBar: {
@@ -150,12 +154,13 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
         borderRadius: "4px",
       },
     },
-    MuiPaper: {
-      root: {
-        [`&.${muiSelectMenuPaperClassName}`]: {
-          outline: outlinedInputBorder,
-        },
-      },
+    MuiPopover: {
+      paper: popoverPaper,
+    },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore @todo: remove after upgrading MUI/lab https://v4.mui.com/components/about-the-lab/#typescript
+    MuiAutocomplete: {
+      paper: popoverPaper,
     },
     MuiRadio: {
       root: {
