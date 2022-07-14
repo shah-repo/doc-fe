@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
@@ -250,8 +251,8 @@ context("Autocomplete 'Lots' test", () => {
     });
 
     context("Verify `Lots document` status and send email", () => {
-      it("Verify form Draft status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+      it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.arCheckTitleInEditableAndMatches({ name: lotsTitle });
         cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
           formId = $formIdElement.text();
@@ -489,8 +490,8 @@ context("Autocomplete 'Lots' test", () => {
     });
 
     context("Verify `Lots document` status and send email", () => {
-      it("Verify form Draft status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: lotsTitle });
         cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
           formId = $formIdElement.text();
@@ -1079,8 +1080,8 @@ context("Autocomplete 'Lots' test", () => {
     });
 
     context("Verify `Lots document` status and send email", () => {
-      it("Verify document Released status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Verify document ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: lotsTitle });
         cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
           formId = $formIdElement.text();
