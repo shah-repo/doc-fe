@@ -56,4 +56,7 @@ export default class SM {
   public static get isNewCRLayout(): boolean {
     return SM.pathname.includes("change_request/");
   }
+  public static get isScrollEnabled(): boolean {
+    return ["/page_details_management"].includes(SM.pathname);
+  }
 }

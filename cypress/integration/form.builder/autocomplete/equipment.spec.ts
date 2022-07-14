@@ -5,6 +5,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
@@ -481,9 +482,9 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify form Draft status and click on Send To Email", () => {
-    it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+  context(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+    it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -768,9 +769,9 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify form Released status and click on Send To Email", () => {
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+  context(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+    it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -1150,8 +1151,8 @@ context("Autocomplete 'Equipment' test", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -1399,9 +1400,9 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify document Released status and click on Send To Email", () => {
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+  context(`Verify document ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+    it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -1880,9 +1881,9 @@ context("Autocomplete 'Equipment' test", () => {
     });
   });
 
-  context("Verify equipment Released status and click on Send To Email", () => {
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+  context(`Verify equipment ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+    it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();

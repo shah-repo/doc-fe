@@ -1,7 +1,7 @@
 import { Portal } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { FBDialog, FBFieldName, FBForm, FBLock, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceProps } from "..";
+import { FBDialog, FBFieldName, FBForm, FBLock, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceModeOptions, FBWorkspaceProps } from "..";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -11,17 +11,22 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   dialogState,
   snackbarState,
   schema,
-  mode = "none",
+  mode,
   initialValues,
   includeTransport,
   includeProcedureDiff,
   isPortal,
   _tabsState,
+  isStarterRequired,
 }) => (
   <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
     <FBSnackbar autoHideDuration={6000}/>
     <FBDialog />
-    <FBForm {...{ initialValues }} workspaceMode={mode} initialValidation={true} includeLocking={true}>
+    {/* The workspaceMode of the form should be what is passed in Or
+    by default be the mode in which the workspace is, instead of being 'none' */}
+    <FBForm {...{ initialValues }}
+      workspaceMode={mode || workspaceState?.mode || FBWorkspaceModeOptions.NONE}
+      initialValidation={true} includeLocking={true}>
       <FBLock>
         {children}
         <Observer>
@@ -36,7 +41,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                       )}
                       <FBWorkspaceMemo
                         {...{ includeTransport, workspaceState }}
-                        isStarter={workspaceState?.isStarter}
+                        isStarter={isStarterRequired?.()}
                         mode={workspaceState?.mode}
                         schema={workspaceState?.schema}
                       />
@@ -49,7 +54,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                       )}
                       <FBWorkspaceMemo
                         {...{ schema, includeTransport, workspaceState }}
-                        isStarter={workspaceState?.isStarter}
+                        isStarter={isStarterRequired?.()}
                         mode={workspaceState?.mode}
                         schema={workspaceState?.schema}
                       />

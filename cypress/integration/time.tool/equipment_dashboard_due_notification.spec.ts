@@ -156,6 +156,7 @@ context("'Equipment' test with time tool", () => {
                     type: "section",
                     index: 0,
                     label: "Maintenance Details",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -167,6 +168,7 @@ context("'Equipment' test with time tool", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Equipment",
+                    tabId: "details",
                     rules: "required",
                     optionId: "20",
                     placeholder: "[Select revision here]",
@@ -182,6 +184,7 @@ context("'Equipment' test with time tool", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Maintainer",
+                    tabId: "details",
                     rules: "required",
                     optionId: "13",
                     placeholder: "[Select name here]",
@@ -197,6 +200,7 @@ context("'Equipment' test with time tool", () => {
                     type: "datepicker",
                     index: 3,
                     label: "Completion Date",
+                    tabId: "details",
                     rules: "required",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -210,6 +214,7 @@ context("'Equipment' test with time tool", () => {
                     type: "textfield",
                     index: 4,
                     label: "Equipment Maintenance Section",
+                    tabId: "details",
                     rules: "required",
                     hidden: true,
                     applicableOn: [
@@ -221,6 +226,7 @@ context("'Equipment' test with time tool", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-kybkhbpt",
@@ -285,6 +291,7 @@ context("'Equipment' test with time tool", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -296,6 +303,7 @@ context("'Equipment' test with time tool", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -311,6 +319,7 @@ context("'Equipment' test with time tool", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -326,6 +335,7 @@ context("'Equipment' test with time tool", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -339,6 +349,7 @@ context("'Equipment' test with time tool", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -350,6 +361,7 @@ context("'Equipment' test with time tool", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",
@@ -413,9 +425,13 @@ context("'Equipment' test with time tool", () => {
       cy.drSelectOutputDocumentType({ documentType: "Equipment" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("EQUIPMENT SECTIONS FOR PM", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
       cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
       cy.fbAddField();
@@ -423,14 +439,14 @@ context("'Equipment' test with time tool", () => {
 
     it("EQUIPMENT SECTIONS FOR CAL", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "Calibration" });
       cy.get("input[value=\"calibration\"]").arrowClick();
       cy.fbAddField();
     });
 
     it("Click create document", () => {
-      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.wait("@response").then((res) => {
         if (res.response) {
@@ -472,6 +488,14 @@ context("'Equipment' test with time tool", () => {
       cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
       cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
@@ -480,6 +504,14 @@ context("'Equipment' test with time tool", () => {
     it(`Select '${USERS[2].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -562,8 +594,7 @@ context("'Equipment' test with time tool", () => {
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaField.name}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
@@ -583,6 +614,14 @@ context("'Equipment' test with time tool", () => {
 
     it("Select revision stage 'Numeric'", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -606,7 +645,15 @@ context("'Equipment' test with time tool", () => {
     });
 
     it("Create 'Calibration document' and approve", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add an Approval", () => {
@@ -637,8 +684,7 @@ context("'Equipment' test with time tool", () => {
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaField.name}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
@@ -654,6 +700,14 @@ context("'Equipment' test with time tool", () => {
 
     it("Select revision stage 'Numeric'", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -690,7 +744,11 @@ context("'Equipment' test with time tool", () => {
     });
 
     it("Create 'Preventative Maintenance' and approve it", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add an Approval", () => {

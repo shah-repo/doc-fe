@@ -1,5 +1,6 @@
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -438,6 +439,14 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Verify training options document types", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").arrowClick();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "AR Form");
@@ -471,6 +480,16 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       );
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Click on 'Overview' tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
@@ -479,12 +498,9 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
 
-    it("Check doc Draft status", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Draft");
-      cy.get("#HeaderInfo-name").should(
-        "have.text",
-        "Training Dashboard Notification"
-      );
+    it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      cy.drVerifyTitle({ title: "Training Dashboard Notification" });
     });
   });
 
@@ -497,12 +513,9 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.trApproveTraining();
     });
 
-    it("Check doc Released status", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should(
-        "have.text",
-        "Training Dashboard Notification"
-      );
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.drVerifyTitle({ title: "Training Dashboard Notification" });
     });
   });
 

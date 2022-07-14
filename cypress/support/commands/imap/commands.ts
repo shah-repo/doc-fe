@@ -22,8 +22,8 @@ declare global {
       imapVerifyLastEmailDoesNotContain(params: {userEmail: string; content: string}): Chainable;
       imapVerifyNumberOfEmailsReceivedSince(params: {userEmail: string; emailCount: integer; date: Date}): Chainable;
       imapGetActivationLink(params: {userEmail: string}): Chainable;
-      imapGetApprovalRequestLink(params: {userEmail: string }): Chainable;
-      imapGetRecordRequestLink(params: {userEmail: string }): Chainable;
+      imapGetApprovalRequestLink(params: {userEmail: string; options?: GmailTesterOptions}): Chainable;
+      imapGetRecordRequestLink(params: {userEmail: string; options?: GmailTesterOptions}): Chainable;
       imapVerifyLastEmailContains(params: {userEmail: string; content: string; date: Date}): Chainable;
       imapVerifyEmailsInList(params: {
         receivedEmails: IMAPEmail[];
@@ -88,25 +88,27 @@ Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => 
   });
 });
 
-Cypress.Commands.add("imapGetApprovalRequestLink", (params: { userEmail: string }) => {
-  cy.imapGetMails({ userEmail: params.userEmail, options: { after: new Date(Date.now() - 300 * 1000) } }).then((emails) => {
-    const emailText = emails[0].body.html;
-    const startingPosition = emailText.search("/change_request/");
-    const endingPosition = emailText.search(`/preview"`);
-    const urlToAR = emailText.substring(startingPosition, endingPosition);
-    cy.visit(CONFIG.FE_URL + decodeHTMLEntities(`${urlToAR}/preview`));
-  });
+Cypress.Commands.add("imapGetApprovalRequestLink", (params: {userEmail: string; options?: GmailTesterOptions}) => {
+  cy.imapGetMails({ userEmail: params.userEmail, options: { after: new Date(Date.now() - 300 * 1000) } })
+    .then((emails) => {
+      const emailText = emails[0].body.html;
+      const startingPosition = emailText.search("/change_request/");
+      const endingPosition = emailText.search(`/preview"`);
+      const urlToAR = emailText.substring(startingPosition, endingPosition);
+      cy.visit(CONFIG.FE_URL + decodeHTMLEntities(`${urlToAR}/preview`));
+    });
 });
 
-Cypress.Commands.add("imapGetRecordRequestLink", (params: { userEmail: string }) => {
-  cy.imapGetMails({ userEmail: params.userEmail, options: { after: new Date(Date.now() - 300 * 1000) } }).then((emails) => {
-    const emailText = emails[0].body.html;
-    const filteredExtraSpaceEmailText = emailText.replace(/\s+/g, " ").trim();
-    const startingPosition = filteredExtraSpaceEmailText.search("/document_revision/");
-    const endingPosition = filteredExtraSpaceEmailText.search(`" target`);
-    const urlToAR = filteredExtraSpaceEmailText.substring(startingPosition, endingPosition);
-    cy.visit(CONFIG.FE_URL + decodeHTMLEntities(urlToAR));
-  });
+Cypress.Commands.add("imapGetRecordRequestLink", (params: { userEmail: string; options?: GmailTesterOptions}) => {
+  cy.imapGetMails({ userEmail: params.userEmail, options: { after: new Date(Date.now() - 300 * 1000) } })
+    .then((emails) => {
+      const emailText = emails[0].body.html;
+      const filteredExtraSpaceEmailText = emailText.replace(/\s+/g, " ").trim();
+      const startingPosition = filteredExtraSpaceEmailText.search("/document_revision/");
+      const endingPosition = filteredExtraSpaceEmailText.search(`" target`);
+      const urlToAR = filteredExtraSpaceEmailText.substring(startingPosition, endingPosition);
+      cy.visit(CONFIG.FE_URL + decodeHTMLEntities(urlToAR));
+    });
 });
 
 Cypress.Commands.add("imapVerifyLastEmailDoesNotContain", (params: { userEmail: string; content: string}) => {
@@ -167,7 +169,10 @@ Cypress.Commands.add("imapNavigToPasswordResetLink", (params: { userEmail: strin
 });
 
 Cypress.Commands.add("imapVerifyNoPasswordResetEmail", (params: { userEmail: string; fromDate: Date}) => {
-  cy.imapGetMailsNoValidation({ userEmail: params.userEmail, options: { after: params.fromDate, max_wait_time_sec: 30 } })
+  cy.imapGetMailsNoValidation({
+    userEmail: params.userEmail,
+    options: { after: params.fromDate, max_wait_time_sec: 30 },
+  })
     .then((emails) => {
       if (emails) { assert.fail("Password reset found"); }
     });

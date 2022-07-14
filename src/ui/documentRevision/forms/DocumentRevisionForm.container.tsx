@@ -1,12 +1,14 @@
 import { Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, isEmpty } from "lodash";
+import { useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionForm, SMFormHOCProps } from "../../../App";
 import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
+import { Approval } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
@@ -16,8 +18,10 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
+import FBDataStore from "../../form.builder/FBStore/FBDataStore";
+import useDidMount from "../../hooks/useDidMount";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
@@ -88,6 +92,7 @@ DocumentRevisionFormContainerProps
   pmForm,
   lastSavedTimestamp,
 }) => {
+  const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
   const docId = initialValues.document?.docId;
   const documentType = initialValues.document?.documentType;
@@ -144,7 +149,26 @@ DocumentRevisionFormContainerProps
         initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions, pmForm]);
+  }, [canUpdateHTML, initialValues, groupOptions, pmForm, FBDataStore?.refreshData]);
+
+  useObserver(() => {
+    cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
+    if (didMount) {
+      if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
+        documentRevision.approvals = FBDataStore.poApprovals as Approval[];
+      }
+    }
+  });
+
+  useEffect(() => {
+    if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
+      FBDataStore.setPoApprovals(documentRevision.approvals);
+    }
+    return () => {
+      FBDataStore.setRefreshData(undefined);
+      FBDataStore.setPoApprovals([]);
+    };
+  }, []);
 
   useEffect(() => {
     if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {

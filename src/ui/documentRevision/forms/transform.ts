@@ -1,5 +1,5 @@
-import { get, maxBy, pick } from "lodash";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { get, isEmpty, maxBy, pick } from "lodash";
+import { DocumentType, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference } from "../../../state/ducks/documentRevisions/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
@@ -59,7 +59,7 @@ export const toDocumentRevisionFormValues = (
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
-    formInput: documentRevision.formInput || {},
+    formInput: documentRevision.formInput,
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
@@ -84,6 +84,9 @@ export const toDocumentRevisionFormValues = (
       outputDocumentTypes: get(documentRevision, "formTemplate.outputDocumentTypes", [])
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     };
+  }
+  if (documentRevision.document.documentType.group === DOC_TYPE_GROUP.BULK_CREATE) {
+    values.formInput = documentRevision.formInput || {};
   }
 
   const isDocumentRecord = checkIsDocumentRecord(documentRevision?.document.documentType.groupOptions);
@@ -166,6 +169,11 @@ export const toNewVersionRequestBody = (
         },
       };
       newValues.document.documentType = { id: get(values, "document.documentType.id") };
+      const equipmentId = get(values, "parentEquipment.id");
+      if (!isEmpty(equipmentId)) {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        newValues.formInput = { ...newValues.formInput, equipment_id: equipmentId };
+      }
     }
   }
 

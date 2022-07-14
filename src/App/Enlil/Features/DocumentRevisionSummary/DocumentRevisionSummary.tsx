@@ -47,6 +47,14 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
+  if (tabConfig &&  [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = [ ...tabConfig, {
+      labelId: "tabId.materialsandequipment",
+      tabId: TabTypeOptions.TABS_MEQ,
+      type: TabTypeOptions.TABS_MEQ,
+    }];
+  }
   if (documentRevision.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
       labelId: "tabId.training",
@@ -54,13 +62,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       type: "TRAINING",
     }];
   }
-  if (tabConfig &&  [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = [ ...tabConfig, {
-      labelId: "tabId.materialsandequipment",
-      tabId: TabTypeOptions.TABS_MEQ,
-      type: TabTypeOptions.TABS_MEQ,
-    }];
-  }
+
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
@@ -96,8 +98,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
-      headerBoxProps={{ maxHeight: "30%" }}
-      contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%", bgcolor: Colors.alabaster }}
+      headerBoxProps={{ maxHeight: "30%", paddingTop: "38px" }}
+      contentBoxProps={{
+        minHeight: "calc(100% - 30%)", height: "100%",
+        bgcolor: Colors.alabaster, paddingTop: "94px",
+      }}
       values={documentRevision}
       header= {
         <SummaryHeader
@@ -180,18 +185,18 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                   "formPreview" : "preview"}
                               />
                             )}
-                            {tabType === "TRAINING" &&
-                                _tabsState?.value === trainingTabIndex && (
-                              <FBTrainingInfoContainer
-                                documentRevisionId={documentRevision?.id}
-                              />
-                            )}
                             {tabType === TabTypeOptions.TABS_MEQ &&
                             documentRevision.status !== DocumentRevisionStatus.Voided &&
                               <FBMaterialEqInfoContainer
                                 documentRevisionId={documentRevision?.id}
                               />
                             }
+                            {tabType === "TRAINING" &&
+                                _tabsState?.value === trainingTabIndex && (
+                              <FBTrainingInfoContainer
+                                documentRevisionId={documentRevision?.id}
+                              />
+                            )}
                           </SMBox>
                         </SMBox>
                       );

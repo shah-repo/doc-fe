@@ -13,6 +13,15 @@ export type FBWorkspaceMode =
 | "preview"
 | "formDesign";
 
+export enum FBWorkspaceModeOptions {
+  NONE = "none",
+  DESIGN = "design",
+  FORM = "form",
+  FORMPREVIEW = "formPreview",
+  PREVIEW = "preview",
+  FORMDESIGN = "formDesign"
+}
+
 export type FBWorkspaceProps =
 & Pick<FBFormProps, "initialValues" | "children">
 & Pick<SMProviderProps, "_tabsState">
@@ -32,6 +41,7 @@ export type FBWorkspaceProps =
   includeProcedureDiff?: boolean;
   // Temp portal flag. This will be removed once the RichTextEditor double mounting is fixed
   isPortal?: boolean;
+  isStarterRequired?: () => boolean;
 };
 
 export interface FBWorkspaceExternalState {

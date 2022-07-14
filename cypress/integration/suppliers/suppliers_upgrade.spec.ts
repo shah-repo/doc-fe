@@ -323,6 +323,10 @@ context("Test upgradability of old supplier form and record", () => {
       });
 
       context("Add approvals field to form", () => {
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Click add new field", () => {
           cy.fbAddNewFieldWhenHiddenLastPlace();
         });
@@ -345,6 +349,10 @@ context("Test upgradability of old supplier form and record", () => {
 
         it("Approve and release form", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
         });
 
         it("Verify approvals block is present", () => {
@@ -371,6 +379,10 @@ context("Test upgradability of old supplier form and record", () => {
         cy.drClickUpgradeForm();
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Verify approvals block is present", () => {
         cy.get("input[data-cy^=\"fb-approvals-approvals\"]").should("exist");
       });
@@ -382,6 +394,10 @@ context("Test upgradability of old supplier form and record", () => {
 
         it("Submit for approval", () => {
           cy.pmSubmitForApproval();
+        });
+
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
         });
 
         it("Approve supplier document", () => {
@@ -418,6 +434,10 @@ context("Test upgradability of old supplier form and record", () => {
           cy.drClickUpgradeForm();
         });
 
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Verify approvals block is present", () => {
           cy.get("input[data-cy^=\"fb-approvals-approvals\"]").should("exist");
         });
@@ -430,6 +450,10 @@ context("Test upgradability of old supplier form and record", () => {
 
         it("Submit for approval", () => {
           cy.pmSubmitForApproval();
+        });
+
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
         });
 
         it("Approve supplier document", () => {

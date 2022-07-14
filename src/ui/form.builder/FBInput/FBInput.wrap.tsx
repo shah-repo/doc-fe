@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Dictionary, find, findIndex, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
+import { autorun, reaction } from "mobx";
+import { useLocalStore, useObserver } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceMode, OmitInputClones } from "..";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
 import { SM } from "../../../App";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
@@ -89,6 +89,10 @@ export const withFBInput = <T extends FBInputProps>(
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
 
+    const feedbackDetails = useLocalStore(() => ({
+      error, helperText,
+    }));
+
     useEffect(() => {
       includeNotes =
       (includeNotes || editorProperties?.includes("includeNotes")) &&
@@ -103,8 +107,15 @@ export const withFBInput = <T extends FBInputProps>(
       formState.validate();
     });
 
-    helperText = formState?.errors.get(name) || helperText;
-    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
+    useEffect(() => {
+      const disposeAutorun = autorun(() => {
+        const errorName: string = formState?.errors.get(name) || "";
+        feedbackDetails.error = formState?.errorValidation && showErrorMsg && !isUndefined(errorName);
+        feedbackDetails.helperText = errorName;
+      });
+      return disposeAutorun;
+    }, []);
+
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
@@ -148,13 +159,13 @@ export const withFBInput = <T extends FBInputProps>(
     }
 
     if (
-      (isOutput || workspaceState?.mode !== "design") &&
-      !["formPreview", "preview"].includes(
-        workspaceState?.mode as FBWorkspaceMode
+      (isOutput || formState?.workspaceMode !== FBWorkspaceModeOptions.DESIGN) &&
+      ![FBWorkspaceModeOptions.FORMPREVIEW, FBWorkspaceModeOptions.PREVIEW].includes(
+        formState?.workspaceMode as FBWorkspaceModeOptions
       )
     ) {
       const isUnderMode = (
-        !helperText && (
+        !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
           validationValue === "" ||
           (isArray(validationValue) && size(validationValue) === 0)
@@ -313,13 +324,13 @@ export const withFBInput = <T extends FBInputProps>(
       includeContext,
       isInputOwner,
       validationMode,
-      helperText,
+      helperText: feedbackDetails.helperText,
       children,
       disabled,
       defaultValue,
       type,
       name,
-      error,
+      error: feedbackDetails.error,
       inputState,
       editorProperties,
       hidden,

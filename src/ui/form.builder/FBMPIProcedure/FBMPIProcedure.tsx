@@ -2,8 +2,9 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBInput, FBMapWrapper, FBMPIProcedureItem, FBMPIProcedureProps, FBProcedureItemType, FBProvider, FBTextEditor } from "..";
-import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/icon_add.svg";
-import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/icon_clone.svg";
+import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
+import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/add_filled.svg";
+import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/clone_filled.svg";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedure } from "./FBMPIProcedure.wrap";
 
@@ -33,15 +34,22 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
         {/* TODO: As per design editor title and button should be in line */}
         {!isPreview && (
           <Box display="flex" flexDirection="row-reverse" mt={3.125}>
-            <CloneIcon
-              onClick={() => handleAdd?.()}
-              {...{ disabled }}
-              style={{ marginLeft: "5px" }}
-            />
-            <AddNewIcon
-              onClick={() => handleAdd?.(true)}
-              {...{ disabled }}
-            />
+            <StyledTooltip placement="top" title="form.builder.clone.step">
+              <CloneIcon
+                data-cy="form.builder.clone.step"
+                onClick={() => handleAdd?.(true)}
+                {...{ disabled }}
+                style={{ marginLeft: "5px", cursor: "pointer" }}
+              />
+            </StyledTooltip>
+            <StyledTooltip placement="top" title="form.builder.add.step">
+              <AddNewIcon
+                data-cy="form.builder.add.step"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleAdd?.()}
+                {...{ disabled }}
+              />
+            </StyledTooltip>
           </Box>
         )}
         <FBTextEditor
@@ -56,6 +64,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           }}
           boxProps={{ style: { color: Colors.black } }}
           withState
+          removeborder
         />
         <Box
           display="flex"
