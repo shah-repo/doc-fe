@@ -1,8 +1,8 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../layout/theme/utils/colors";
 import { DRAWER_WIDTH } from "./Navigation.styles";
 
-export default (theme: Theme) =>
+export const styles = makeStyles(() =>
   createStyles({
     newContent: {
       "position": "absolute",
@@ -15,16 +15,16 @@ export default (theme: Theme) =>
         display: "none",
       },
     },
-    content: {
+    content: (formDocument: boolean) => ({
       "position": "fixed",
       "left": DRAWER_WIDTH,
-      "top": 46,
+      "top": formDocument ? 46 : 40,
       "bottom": 0,
       "right": 0,
-      "backgroundColor": Colors.white,
+      "backgroundColor": Colors.light_gray,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
         display: "none",
       },
-    },
-  });
+    }),
+  }));
