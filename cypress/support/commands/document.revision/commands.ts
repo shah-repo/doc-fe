@@ -231,7 +231,7 @@ Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion:
 });
 
 Cypress.Commands.add("drSelectDetailsTab", () => {
-  cy.get("[data-cy=\"tabId.details\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.details\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
