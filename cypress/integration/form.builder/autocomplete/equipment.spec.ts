@@ -438,6 +438,21 @@ context("Autocomplete 'Equipment' test", () => {
         cy.fbAddField();
       });
 
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select references", () => {
+        cy.drSelectReferences( "FM-00004" );
+        cy.drSelectReferences( "FM-00005" );
+        cy.unClick();
+      });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it("EQUIPMENT SECTIONS FOR PM", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
@@ -454,19 +469,8 @@ context("Autocomplete 'Equipment' test", () => {
         cy.fbAddField();
       });
 
-      it("Upload attachement picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Select references", () => {
-        cy.drSelectReferences( "FM-00004" );
-        cy.drSelectReferences( "FM-00005" );
-        cy.unClick();
-      });
-
       it("Click create document", () => {
-        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.wait("@response").then((res) => {
           if (res.response) {
@@ -633,7 +637,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
+        expect(el).match(/Autocomplete-Approvers\nSelect field\nPrimary Owner\nCoordinator/);
 
         expect(el).match(/Draft/);
 
@@ -924,7 +928,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
+        expect(el).match(/Autocomplete-Approvers\nSelect field\nPrimary Owner\nCoordinator/);
 
         expect(el).match(/Released/);
 
@@ -1088,6 +1092,18 @@ context("Autocomplete 'Equipment' test", () => {
       cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
+    it("Autocomplete-Approvers", () => {
+      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
       cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
@@ -1096,10 +1112,6 @@ context("Autocomplete 'Equipment' test", () => {
     it(`Select '${USERS[2].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
-    });
-
-    it("Autocomplete-Approvers", () => {
-      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1296,16 +1308,16 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
         expect(el).match(tmpRegex);
 
+        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select field/);
+
         tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
         expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
-        expect(el).match(tmpRegex);
-
-        expect(el).not.match(/Select field/);
 
         expect(el).match(/Draft/);
 
@@ -1549,16 +1561,16 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
         expect(el).match(tmpRegex);
 
+        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select field/);
+
         tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
         expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
-        expect(el).match(tmpRegex);
-
-        expect(el).not.match(/Select field/);
 
         expect(el).match(/Released/);
 
@@ -1661,14 +1673,17 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Fill new calbration form", () => {
+    it("Switch to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
     it("Click 'NEW CAL' on calibration section", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaFieldName}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
@@ -1688,6 +1703,14 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select revision stage 'Numeric'", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -1712,7 +1735,15 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Create 'Calibration document' and approve", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add an Approval", () => {
@@ -1743,8 +1774,7 @@ context("Autocomplete 'Equipment' test", () => {
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
@@ -1760,6 +1790,14 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select revision stage 'Numeric'", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -1783,7 +1821,15 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Create 'Preventative Maintenance' and approve it", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add an Approval", () => {
@@ -1814,8 +1860,7 @@ context("Autocomplete 'Equipment' test", () => {
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
@@ -1831,6 +1876,14 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select revision stage 'Numeric'", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -1854,7 +1907,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Create 'Second Preventative Maintenance'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
     });
   });
 
@@ -1869,6 +1922,10 @@ context("Autocomplete 'Equipment' test", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
     });
 
     it("Verify history for pm", () => {
@@ -2030,16 +2087,16 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
         expect(el).match(tmpRegex);
 
+        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select field/);
+
         tmpRegex = new RegExp(`Primary Owner\n${USERS[1].name}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Coordinator\n${USERS[2].name}`, "gi");
         expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Autocomplete-Approvers\n${USERS[2].name}.*@.*`, "gi");
-        expect(el).match(tmpRegex);
-
-        expect(el).not.match(/Select field/);
 
         expect(el).match(/Released/);
 
