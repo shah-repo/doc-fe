@@ -170,9 +170,15 @@ context("Autosave EB test", () => {
 
       it("Add EB Procedure", () => {
         cy.drSelectProcedureTab();
-        cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
+        cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
-        cy.fbAddNewFieldButton();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.fbAddNewFieldButton();
+        });
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Verify that Approvals field is automatically added", () => {
@@ -200,6 +206,7 @@ context("Autosave EB test", () => {
     });
 
     it("Fill step #1 description and check autosave", () => {
+      cy.drSelectProcedureTab();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
       });
@@ -274,6 +281,7 @@ context("Autosave EB test", () => {
 
   context("Add/remove approver and check autosave", () => {
     it("Add first Approver'", () => {
+      cy.drSelectOverviewTab();
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
