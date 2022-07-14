@@ -36,7 +36,12 @@ const getDiff = (transformedValues, transformedInitialValues) => {
       diff[key] = value;
     }
     if (key === "referenceTo" && diff[key]) {
-      diff[key] = diff[key]?.filter((referenceValue) => !isEmpty(referenceValue));
+      diff[key] = diff[key]?.filter((referenceValue) => {
+        const isDataEmpty = isEmpty(referenceValue);
+        return isDataEmpty
+          ? !isDataEmpty
+          : !isEmpty( Object.values(referenceValue).filter((datakeys) => !isEmpty(datakeys)));
+      });
     }
   }
   return diff;
