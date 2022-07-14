@@ -56,6 +56,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           }}
           boxProps={{ style: { color: Colors.black } }}
           withState
+          removeborder
         />
         <Box
           display="flex"
