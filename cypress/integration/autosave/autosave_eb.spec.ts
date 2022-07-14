@@ -177,10 +177,6 @@ context("Autosave EB test", () => {
         });
       });
 
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
       it("Verify that Approvals field is automatically added", () => {
         cy.drSelectOverviewTab();
         cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
@@ -287,10 +283,10 @@ context("Autosave EB test", () => {
 
     it("Add second Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.reload();
     });
 
     it("check approvers after reload page", () => {
-      cy.reload();
       cy.get(".MuiAutocomplete-tag").eq(0)
         .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
       cy.get(".MuiAutocomplete-tag").eq(1)
@@ -299,10 +295,10 @@ context("Autosave EB test", () => {
 
     it("Remove second Approver'", () => {
       cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
+      cy.reload();
     });
 
     it("check approvers after reload page", () => {
-      cy.reload();
       cy.get(".MuiAutocomplete-tag").eq(0)
         .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get(".MuiAutocomplete-tag").eq(1)
