@@ -14,7 +14,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
   documentRevisionId,
   shouldShowUpgrade,
 }) =>  (
-  <Box bgcolor="red" minHeight={84}>
+  <Box bgcolor="red" minHeight={documentRevisionId ? 84 : 64}>
     <RedlineBanner {...{ bannerPortal }}/>
     <UpgradeToLatestContainer
       type="banner"

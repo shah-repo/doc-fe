@@ -121,7 +121,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
       contentBoxProps={{
         minHeight: "calc(100% - 30%)",
-        bgcolor: Colors.alabaster, paddingTop: isCreateUrl ? "73px" : "0px",
+        bgcolor: Colors.alabaster,
       }}
       values={formValues.values}
       leftSidebar={DocumentRevisionLeftPanel}

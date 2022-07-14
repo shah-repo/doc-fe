@@ -7,7 +7,7 @@ export default (theme: Theme) =>
     newContent: {
       "position": "absolute",
       "left": DRAWER_WIDTH,
-      "bottom": 0,
+      "bottom": 13,
       "right": 0,
       "backgroundColor": Colors.alabaster,
       "scrollbarWidth": "none",
@@ -16,12 +16,11 @@ export default (theme: Theme) =>
       },
     },
     content: {
-      "position": "absolute",
+      "position": "fixed",
       "left": DRAWER_WIDTH,
       "top": 46,
       "bottom": 0,
       "right": 0,
-      "overflow": "auto",
       "backgroundColor": Colors.white,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
