@@ -169,12 +169,16 @@ context("Autosave EB test", () => {
       });
 
       it("Add EB Procedure", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
+        cy.drSelectProcedureTab();
+        cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
-        cy.fbAddNewFieldButton();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.fbAddNewFieldButton();
+        });
       });
 
       it("Verify that Approvals field is automatically added", () => {
+        cy.drSelectOverviewTab();
         cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
@@ -198,6 +202,7 @@ context("Autosave EB test", () => {
     });
 
     it("Fill step #1 description and check autosave", () => {
+      cy.drSelectProcedureTab();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
       });
@@ -272,15 +277,16 @@ context("Autosave EB test", () => {
 
   context("Add/remove approver and check autosave", () => {
     it("Add first Approver'", () => {
+      cy.drSelectOverviewTab();
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Add second Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.reload();
     });
 
     it("check approvers after reload page", () => {
-      cy.reload();
       cy.get(".MuiAutocomplete-tag").eq(0)
         .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
       cy.get(".MuiAutocomplete-tag").eq(1)
@@ -289,10 +295,10 @@ context("Autosave EB test", () => {
 
     it("Remove second Approver'", () => {
       cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
+      cy.reload();
     });
 
     it("check approvers after reload page", () => {
-      cy.reload();
       cy.get(".MuiAutocomplete-tag").eq(0)
         .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get(".MuiAutocomplete-tag").eq(1)
