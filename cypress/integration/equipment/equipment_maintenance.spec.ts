@@ -708,6 +708,10 @@ context("Equipment maintenance test", () => {
           });
         });
 
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
         it("Add an Approval", () => {
           cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
         });
