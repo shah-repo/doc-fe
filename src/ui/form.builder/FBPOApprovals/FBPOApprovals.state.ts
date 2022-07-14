@@ -111,7 +111,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   public addApproval = (
     approval: Partial<FBInlineApprovalBody>,
-    callback?: () => any
+    callback?: () => void
   ) => {
     this.approvalApi.set({
       url: FBEndpoint.Approvals,
@@ -119,12 +119,11 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       method: "post",
     }, (data, error) => {
       if (error) {
-        this.approvalApi.onError(error);
-      } else {
-        this.approvalApi.data = data;
-        this.approvalApi.onSuccess();
-        callback?.();
+        return this.approvalApi.onError(error);
       }
+      this.approvalApi.data = data;
+      this.approvalApi.onSuccess();
+        callback?.();
     });
   };
 
