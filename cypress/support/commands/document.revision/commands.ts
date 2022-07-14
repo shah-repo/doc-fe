@@ -111,6 +111,8 @@ declare global {
       drSelectHistoryTab(): Chainable<Subject>;
       drOpenCloseSidebarDrawer(): Chainable<Subject>;
       drSelectPermissionTab(): Chainable<Subject>;
+      drSelectApprovalRolesTab(): Chainable<Subject>;
+      drSelectMatrixDetailsTab(): Chainable<Subject>;
       drVerifyDocumentOWner(params: {owner: string}): Chainable<Subject>;
       drChangeOwnerByAdmin(params: {employee: string}): Chainable<Subject>;
       drSelectUser(...users: string[]): Chainable<Subject>;
@@ -788,6 +790,14 @@ Cypress.Commands.add("drOpenCloseSidebarDrawer", () => {
 
 Cypress.Commands.add("drSelectPermissionTab", () => {
   cy.get("[data-cy=\"permission-icon\"]").arrowClick();
+});
+
+Cypress.Commands.add("drSelectApprovalRolesTab", () => {
+  cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+});
+
+Cypress.Commands.add("drSelectMatrixDetailsTab", () => {
+  cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
 });
 
 Cypress.Commands.add("drSelectUser", (...users: string[]) => {

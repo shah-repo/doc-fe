@@ -166,7 +166,7 @@ context("Document Creation Flow", () => {
 
     it("Remove reference for document", () => {
       SystemRequirement("REQ-0190");
-      cy.drRemoveReferences( 0 );
+      cy.drRemoveReferences({ reference: "FM-00001" });
     });
 
     it("'Training Required' should be unchecked initially", () => {
