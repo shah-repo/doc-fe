@@ -18,6 +18,8 @@ import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionSummaryWrap } from "./DocumentRevisionSummary.wrap";
+import cx from "classnames";
+import styles from "./styles";
 
 const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryProps> = ({
   onTabChange,
@@ -29,6 +31,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
 }) => {
+  const classes = styles();
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const groupOptions = documentRevision?.document.documentType.groupOptions;
@@ -81,7 +84,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       }),
     }));
 
-    smartReferencesFrom?.forEach((ele, i) => {
+    smartReferencesFrom?.forEach((ele) => {
       const obj = schema?.filter((el) => ele.metadata.fieldId === el.name);
       ele.stepIndex = obj?.[0]?.stepIndex;
     });
@@ -112,7 +115,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       }
     >
       <SMTemplate
-        boxProps={{ className: "hide-scroll" }}
+        boxProps={{ className: cx(classes.content, "hide-scroll") }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
@@ -128,11 +131,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
-              boxProps={{
-                overflow: (_documentRevisionFormState?.expanded ? "auto" : ""),
-                height: "calc(100vh - 130px)",
-              }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
@@ -154,11 +152,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                         <SMBox
                           pb={_documentRevisionFormState?.isDesTextClamped ? 0 :
                             (isLHR && !documentRevision.changeRequest ? 0 : 2.5)}
-                          height={_documentRevisionFormState?.expanded ? "auto" :
-                            (_documentRevisionFormState?.isDesTextClamped ? "calc(100vh - 325px)" :
-                              (!documentRevision.changeRequest ? (isLHR &&
-                                !_documentRevisionFormState?.isLHRProgressBarVisible ?
-                                "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 280px)"))}
                           overflow="auto" {...{ onScroll }}>
                           <SMBox id="Presenter-FBWorkspace">
                             {tabType === "MIXED" &&  <>
