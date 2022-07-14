@@ -240,7 +240,6 @@ Cypress.Commands.add("drSelectProcedureTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
-
 Cypress.Commands.add("drSelectDocumentTab", () => {
   cy.get("[data-cy=\"tabId.documents\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();

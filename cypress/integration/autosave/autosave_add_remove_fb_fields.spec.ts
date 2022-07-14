@@ -614,7 +614,6 @@ context("Autosave on add and remove FB fields", () => {
         cy.fbRemoveLastAddedItem();
       });
     });
-
   });
 });
 
