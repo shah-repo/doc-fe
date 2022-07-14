@@ -581,7 +581,6 @@ context("Autocomplete 'Lots' test", () => {
           expect(cdata.numpages).eq(2);
           expect(cdata.text).match(/Page 1 of 2/);
           expect(cdata.text).match(/Page 2 of 2/);
-          // expect(cdata.text).match(/Page 3 of 3/);
           tmpRegex = new RegExp( "\\n\\n");
           const arr = cdata.text.split(tmpRegex);
           arr.forEach((element) => {
