@@ -108,15 +108,31 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
   @action public setDidMount = (mount: boolean) =>
     set(this, "didMountPhase", mount);
 
-  public addApproval = (approval: Partial<FBInlineApprovalBody>) => {
-    this.approvalApi.setBody(approval);
-    this.approvalApi.post();
+
+  public addApproval = (
+    approval: Partial<FBInlineApprovalBody>,
+    callback?: () => any
+  ) => {
+    this.approvalApi.set({
+      url: FBEndpoint.Approvals,
+      body: approval,
+      method: "post",
+    }, (data, error) => {
+      if (error) {
+        this.approvalApi.onError(error);
+      } else {
+        this.approvalApi.data = data;
+        this.approvalApi.onSuccess();
+        callback?.();
+      }
+    });
   };
 
   public applyTransition = (
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
+    callback?: () => void
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
@@ -124,6 +140,13 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       urlValues: { id, transition },
       body,
       method: "post",
+    }, (data, error) => {
+      if (error) {
+        return this.transitionApi.onError(error);
+      }
+      this.transitionApi.data = data;
+      this.transitionApi.onSuccess();
+      callback?.();
     });
   };
 }
