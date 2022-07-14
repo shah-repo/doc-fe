@@ -884,7 +884,11 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Add an Approval", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+          cy.get("input[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get("input[data-cy=\"fb-approvals-approvals-built-in\"]").autocompleteSelect(USERS[1].name);
+          });
+          cy.unClick();
         });
 
         it("Save PO", () => {
@@ -1249,8 +1253,8 @@ context("Receivable test with Page Details", () => {
 
   context("Add two approver and then remove one", () => {
     it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.poAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.poAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("remove one approver", () => {
