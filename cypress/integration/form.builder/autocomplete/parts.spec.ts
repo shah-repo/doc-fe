@@ -3,6 +3,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
@@ -156,8 +157,8 @@ context("Autocomplete 'Parts' test", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Check doc Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "New Part Form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         partsFormId = $docIdElement.text();
@@ -369,8 +370,8 @@ context("Autocomplete 'Parts' test", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Check doc Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "New Part Form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         partsFormId = $docIdElement.text();
@@ -641,7 +642,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Extract document Id", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.arCheckTitleInEditableAndMatches({ name: "Parts document title" });
         cy.drGetDocIdElementFromUI().should("contain.text", "PRT-").then(($docIdElement: JQuery<HTMLElement>) => {
           partsDocId = $docIdElement.text();
@@ -837,8 +838,8 @@ context("Autocomplete 'Parts' test", () => {
         cy.drGetDocIdElementFromUI().then(($part) => { partsID = $part.text(); });
       });
 
-      it("Check doc Released status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: "Parts document title" });
         cy.drGetDocIdElementFromUI().should("contain.text", "PRT-").then(($docIdElement: JQuery<HTMLElement>) => {
           partsDocId = $docIdElement.text();
