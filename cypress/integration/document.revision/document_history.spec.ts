@@ -171,7 +171,6 @@ context("Check Document History", () => {
 
     it("Change document type id to 'FM-00004'", () => {
       cy.drSetDocTypeId({ docId: documentId.value });
-      cy.pause();
     });
 
     it("Mark 'Training Required'", () => {
@@ -228,9 +227,7 @@ context("Check Document History", () => {
     });
 
     it("Remove reference for document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drRemoveReferences(0);
-      });
+      cy.drRemoveReferences({ reference: "FM-00001" });
       cy.progressBarShouldNotExist();
     });
 

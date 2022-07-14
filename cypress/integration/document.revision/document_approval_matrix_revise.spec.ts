@@ -132,6 +132,10 @@ context("Document Approval Matrix Revise", () => {
   });
 
   context("Add New Role: Role One", () => {
+    it("Open approval roles tab", () => {
+      cy.drSelectApprovalRolesTab();
+    });
+
     it("Open 'Add Role' dialog", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drAddAnotherRoleBtn();
@@ -156,8 +160,11 @@ context("Document Approval Matrix Revise", () => {
   });
 
   context("Add New Document Type", () => {
+    it("Open matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
     it("Click on 'Add Item' button", () => {
-      cy.drOpenCloseSidebarDrawer();
       cy.drAddApprovalMatrixItem();
     });
 

@@ -573,12 +573,11 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Checkbox option 2 checked", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
-
   });
 
   context(`Add New Role: ${roleOne}`, () => {
     it("Open approval roles tab", () => {
-      cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+      cy.drSelectApprovalRolesTab();
     });
 
     it("Open 'Add Role' dialog", () => {
@@ -637,8 +636,11 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Add New Document Type", () => {
+    it("Open matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
     it("Click on 'Add Item' button", () => {
-      cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
       cy.drAddApprovalMatrixItem();
     });
 
