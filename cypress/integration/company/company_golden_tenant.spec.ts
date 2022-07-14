@@ -174,6 +174,10 @@ context("Create company with golden tenant", () => {
       cy.drEnterDocumentDescription({ description: "New Seed description" });
     });
 
+    it("Click on 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enters document title 'First document'", () => {
       cy.get("[data-cy^=document-title-]").arrowType("First document");
     });
@@ -240,6 +244,10 @@ context("Create company with golden tenant", () => {
       cy.drEnterDocumentDescription({ description: "New Seed description 2" });
     });
 
+    it("Click on 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enters document title 'Second document'", () => {
       cy.get("[data-cy^=document-title-]").arrowType("Second document");
     });
@@ -298,6 +306,10 @@ context("Create company with golden tenant", () => {
       cy.drEnterDocumentDescription({ description: "New Company description" });
     });
 
+    it("Click on 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it(`Enters company name '${newCompanyName}'`, () => {
       SystemRequirement("REQ-3500");
       cy.get("[name^=company-name-]").arrowType(newCompanyName);
@@ -346,7 +358,7 @@ context("Create company with golden tenant", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "email must be an email" });
       cy.closeAllAlertMessages();
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+      cy.get("[data-cy=\"transition.action.cancel\"]").arrowClick();
       cy.get("[data-cy=\"remove-incorrect_users.csv\"]").arrowClick({ force: true });
     });
 
@@ -356,7 +368,7 @@ context("Create company with golden tenant", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "has to be either CSV or JSON file!" });
       cy.closeAllAlertMessages();
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+      cy.get("[data-cy=\"transition.action.cancel\"]").arrowClick();
       cy.get("[data-cy=\"remove-test.docx\"]").arrowClick({ force: true });
     });
 
@@ -396,7 +408,7 @@ context("Create company with golden tenant", () => {
       cy.checkToastMessageContains({ message: "User email: enlil1.testmail+cy2@gmail.com is not users.csv" });
       cy.checkToastMessageContains({ message: "Group name: QA1 is not in default NCO groups list" });
       cy.closeAllAlertMessages();
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+      cy.get("[data-cy=\"transition.action.cancel\"]").arrowClick();
       cy.get("[data-cy=\"remove-incorrect_dam.json\"]").arrowClick({ force: true });
     });
 
