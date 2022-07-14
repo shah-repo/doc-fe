@@ -30,7 +30,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   return (
     <Box
       bgcolor={isPreview ? "transparent" : "white"}
-      border={removeborder ? "none"  : isPreview ? 0 : 1}
+      border={removeborder ? "none" : isPreview ? 0 : 1}
       borderColor={Colors.hint_gray}
       borderRadius={4}
       style={{ display: "grid", borderRadius: 3, borderColor: Colors.gray_goose }}
@@ -79,7 +79,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       >
         <Box
           {...!disabled && { onClick: () => handleMask?.(false) }}
-          bgcolor={removeborder ? "#f9fbff"  :  isPreview ? "transparent" : "white"}
+          bgcolor={removeborder ? `${Colors.alabaster}` : isPreview ? "transparent" : "white"}
           borderRadius={4}
           zIndex={1000}
           display="flex"
