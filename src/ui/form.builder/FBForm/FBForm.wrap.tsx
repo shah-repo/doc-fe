@@ -2,6 +2,7 @@ import { has } from "lodash";
 import React, { useEffect } from "react";
 import { FB, FBFormProps, FBFormState } from "..";
 import { SM } from "../../../App";
+import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export let FBFormStateContext = React.createContext<any>({});
 export const withFBForm = <T extends FBFormProps>(
@@ -28,7 +29,8 @@ export const withFBForm = <T extends FBFormProps>(
       workspaceState,
     }));
 
-    const isReceivableType = _documentRevisionFormState?.document?.documentType?.documentTypeName === "Receivable";
+    const isReceivableType =
+        checkIsDocumentReceivable(_documentRevisionFormState?.document?.documentType?.groupOptions);
     if (!(isReceivableType && has(initialValues, "po-items-built-in"))) {
       FBFormStateContext = React.createContext<any>(formState?.getValues());
     }

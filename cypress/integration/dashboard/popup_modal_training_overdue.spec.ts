@@ -36,6 +36,7 @@ let releasedDoc1Id;
 let caGroup;
 let emailsFromInbox: IMAPEmail[];
 let dateAfterEmailShouldArrive;
+let getEmailSetting;
 
 const dateOffset = (5 * 1000);
 
@@ -644,8 +645,8 @@ context("Email popup modal for training due", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Open details tab", () => {
@@ -681,6 +682,20 @@ context("Email popup modal for training due", () => {
 
     it("Click on 'Overview' tab", () => {
       cy.drSelectOverviewTab();
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
@@ -812,9 +827,12 @@ context("Email popup modal for training due", () => {
 
   context(`Verify email for pending training notification to ${USERS[1].name}`, () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Your training is overdue",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -848,7 +866,14 @@ context("Email popup modal for training due", () => {
     });
 
     it("Get emails and visit training page", () => {
-      cy.imapGetRecordRequestLink({ userEmail: USERS[1].email });
+      getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Your training is overdue",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: USERS[1].email, options: getEmailSetting });
     });
 
     it("click complete training button", () => {
@@ -896,9 +921,12 @@ context("Email popup modal for training due", () => {
 
   context(`Verify email for pending training notification to ${USERS[2].name}`, () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Your training is overdue",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -932,7 +960,14 @@ context("Email popup modal for training due", () => {
     });
 
     it("Get emails and visit training page", () => {
-      cy.imapGetRecordRequestLink({ userEmail: USERS[2].email });
+      getEmailSetting =  {
+        to: USERS[2].email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Your training is overdue",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: USERS[2].email, options: getEmailSetting });
     });
 
     it("click complete training button", () => {
