@@ -115,7 +115,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       }
     >
       <SMTemplate
-        boxProps={{ className: cx(classes.content, "hide-scroll") }}
+        boxProps={{ className: cx(classes.container, "hide-scroll") }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
@@ -130,6 +130,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         <Observer>
           {() => (
             <SMTemplate
+              contentBoxProps={{ className: classes.content }}
               templateBoxProps={{ stretchY: "100%" }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
@@ -149,48 +150,43 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                         schemaItem.tabId === tabId && !schemaItem.deleted);
 
                       return (
-                        <SMBox
-                          pb={_documentRevisionFormState?.isDesTextClamped ? 0 :
-                            (isLHR && !documentRevision.changeRequest ? 0 : 2.5)}
-                          overflow="auto" {...{ onScroll }}>
-                          <SMBox id="Presenter-FBWorkspace">
-                            {tabType === "MIXED" &&  <>
-                              <SummaryPresenter
-                                dataProp={documentRevision}
-                                canChangeOwnerShip={canChangeOwnerShip}
-                                canShowCreateVersionButton={true}
-                              />
-                              {!isEmpty(availableSchema) && <FBWorkspace
-                                document={documentRevision}
-                                initialValues={documentRevision.formInput}
-                                schema={tabSchema}
-                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                  "formPreview" : "preview"}
-                              />
-                              }
-                            </>}
-                            {tabType === "DYNAMIC" && isFB && (
-                              <FBWorkspace
-                                document={documentRevision}
-                                initialValues={documentRevision.formInput}
-                                schema={tabSchema}
-                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                  "formPreview" : "preview"}
-                              />
-                            )}
-                            {tabType === TabTypeOptions.TABS_MEQ &&
-                            documentRevision.status !== DocumentRevisionStatus.Voided &&
-                              <FBMaterialEqInfoContainer
-                                documentRevisionId={documentRevision?.id}
-                              />
+                        <SMBox onScroll={onScroll} id="Presenter-FBWorkspace">
+                          {tabType === "MIXED" &&  <>
+                            <SummaryPresenter
+                              dataProp={documentRevision}
+                              canChangeOwnerShip={canChangeOwnerShip}
+                              canShowCreateVersionButton={true}
+                            />
+                            {!isEmpty(availableSchema) && <FBWorkspace
+                              document={documentRevision}
+                              initialValues={documentRevision.formInput}
+                              schema={tabSchema}
+                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                                "formPreview" : "preview"}
+                            />
                             }
-                            {tabType === "TRAINING" &&
-                                _tabsState?.value === trainingTabIndex && (
-                              <FBTrainingInfoContainer
-                                documentRevisionId={documentRevision?.id}
-                              />
-                            )}
-                          </SMBox>
+                          </>}
+                          {tabType === "DYNAMIC" && isFB && (
+                            <FBWorkspace
+                              document={documentRevision}
+                              initialValues={documentRevision.formInput}
+                              schema={tabSchema}
+                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                                "formPreview" : "preview"}
+                            />
+                          )}
+                          {tabType === TabTypeOptions.TABS_MEQ &&
+                          documentRevision.status !== DocumentRevisionStatus.Voided &&
+                          <FBMaterialEqInfoContainer
+                            documentRevisionId={documentRevision?.id}
+                          />
+                          }
+                          {tabType === "TRAINING" &&
+                          _tabsState?.value === trainingTabIndex && (
+                            <FBTrainingInfoContainer
+                              documentRevisionId={documentRevision?.id}
+                            />
+                          )}
                         </SMBox>
                       );
                     })}

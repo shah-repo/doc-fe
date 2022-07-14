@@ -1,10 +1,12 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 
-export default makeStyles((theme: Theme) =>
+export default makeStyles((theme) =>
   createStyles({
-    content: {
+    container: {
       overflowY: "auto",
-      marginBottom: theme.spacing(4),
+    },
+    content: {
+      paddingBottom: theme.spacing(8),
     },
   })
 );
