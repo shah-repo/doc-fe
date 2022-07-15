@@ -95,7 +95,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
-
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
