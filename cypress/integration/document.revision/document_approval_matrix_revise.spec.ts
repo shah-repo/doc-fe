@@ -133,7 +133,9 @@ context("Document Approval Matrix Revise", () => {
 
   context("Add New Role: Role One", () => {
     it("Open approval roles tab", () => {
-      cy.drSelectApprovalRolesTab();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drSelectApprovalRolesTab();
+      });
     });
 
     it("Open 'Add Role' dialog", () => {
