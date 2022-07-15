@@ -149,6 +149,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                       const tabSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId);
                       const availableSchema = schema?.filter((schemaItem) =>
                         schemaItem.tabId === tabId && !schemaItem.deleted);
+
                       return (
                         <SMBox
                           pb={_documentRevisionFormState?.isDesTextClamped ? 0 :
