@@ -11,7 +11,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
+import { FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
@@ -61,8 +61,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   if (documentRevision.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
       labelId: "tabId.training",
-      tabId: "training",
-      type: "TRAINING",
+      tabId: TabTypeOptions.TRAINING,
+      type: TabTypeOptions.TRAINING,
     }];
   }
 
@@ -151,7 +151,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
                       return (
                         <SMBox onScroll={onScroll} id="Presenter-FBWorkspace">
-                          {tabType === "MIXED" &&  <>
+                          {tabType === TabTypeOptions.MIXED &&  <>
                             <SummaryPresenter
                               dataProp={documentRevision}
                               canChangeOwnerShip={canChangeOwnerShip}
@@ -162,17 +162,17 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                               initialValues={documentRevision.formInput}
                               schema={tabSchema}
                               mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                "formPreview" : "preview"}
+                                FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                             />
                             }
                           </>}
-                          {tabType === "DYNAMIC" && isFB && (
+                          {tabType === TabTypeOptions.DYNAMIC && isFB && (
                             <FBWorkspace
                               document={documentRevision}
                               initialValues={documentRevision.formInput}
                               schema={tabSchema}
                               mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                "formPreview" : "preview"}
+                                FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                             />
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ &&
@@ -181,7 +181,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             documentRevisionId={documentRevision?.id}
                           />
                           }
-                          {tabType === "TRAINING" &&
+                          {tabType === TabTypeOptions.TRAINING &&
                           _tabsState?.value === trainingTabIndex && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
