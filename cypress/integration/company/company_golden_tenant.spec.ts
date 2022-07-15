@@ -683,7 +683,6 @@ context("Create company with golden tenant", () => {
 
   context("Check group management", () => {
     it("Navigates to Group management", () => {
-      cy.pause();
       cy.grpNavigateToGroupManagement();
     });
 
