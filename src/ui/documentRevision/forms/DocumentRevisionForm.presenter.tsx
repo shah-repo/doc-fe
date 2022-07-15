@@ -116,7 +116,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
-  // const documentTypesById = useSelector(documentTypeSelectors.byId);
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
@@ -321,7 +320,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
         )}
-        {_formState?.active && ["design", "form"].includes(_formState.mode) &&  (
+        {_formState?.active && ["design", "form"].includes(_formState.mode) && (
           <>
             { isAttachmentRequired() && <Grid item xs={12}>
               <AttachmentsField
