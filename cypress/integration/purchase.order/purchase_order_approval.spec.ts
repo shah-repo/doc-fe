@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -481,7 +482,7 @@ context("PO approval test", () => {
 
     it("Verify rejected PO status, should be 'Draft'", () => {
       SystemRequirement("REQ-0020", "REQ-0570", "REQ-1570");
-      cy.poVerifyStatus({ status: "DRAFT" });
+      cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 });
