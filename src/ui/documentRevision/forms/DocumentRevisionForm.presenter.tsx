@@ -185,13 +185,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [mode]);
 
   const isAttachmentRequired = () => {
-    let flag = true;
     const type = documentTypesById[documentTypeId];
     const docId = _documentRevisionFormState?.documentRevision?.id;
-    if (!docId && ["DYNAMIC_FORM", "PI"].includes(type.group)) {
-      flag = false;
-    }
-    return flag;
+    return docId || !["DYNAMIC_FORM", "PI"].includes(type.group);
   };
 
   return (
