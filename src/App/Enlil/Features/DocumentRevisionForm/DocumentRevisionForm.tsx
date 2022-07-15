@@ -120,7 +120,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
       contentBoxProps={{
-        minHeight: "calc(100% - 30%)",
+        minHeight: "calc(70%)",
         bgcolor: Colors.alabaster,
       }}
       values={formValues.values}

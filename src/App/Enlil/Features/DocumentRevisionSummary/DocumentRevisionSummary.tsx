@@ -100,7 +100,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       templateBoxProps={{ stretchY: "100%" }}
       headerBoxProps={{ maxHeight: "30%", minHeight: 84 }}
       contentBoxProps={{
-        minHeight: "calc(100% - 30%)", height: "100%",
+        minHeight: "calc(70%)", height: "100%",
         bgcolor: Colors.alabaster,
       }}
       values={documentRevision}
