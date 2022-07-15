@@ -18,8 +18,6 @@ import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionSummaryWrap } from "./DocumentRevisionSummary.wrap";
-import cx from "classnames";
-import styles from "./styles";
 
 const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryProps> = ({
   onTabChange,
@@ -31,7 +29,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
 }) => {
-  const classes = styles();
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const groupOptions = documentRevision?.document.documentType.groupOptions;
@@ -115,7 +112,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       }
     >
       <SMTemplate
-        boxProps={{ className: cx(classes.container, "hide-scroll") }}
+        boxProps={{ className: "hide-scroll" }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
@@ -130,7 +127,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         <Observer>
           {() => (
             <SMTemplate
-              contentBoxProps={{ className: classes.content }}
               templateBoxProps={{ stretchY: "100%" }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
