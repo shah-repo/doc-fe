@@ -1,11 +1,11 @@
-/* eslint-disable max-len */
-/* eslint-disable cypress.eslint.rules/cy.pause */
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -187,7 +187,9 @@ context("Equipment maintenance and calibration", () => {
         cy.wait("@response").then((res) => {
           if (res.response) {
             const response = res.response.body;
+            // eslint-disable-next-line max-len
             pmSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Preventative Maintenance");
+            // eslint-disable-next-line max-len
             calibrationSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Calibration");
           }
         });
@@ -274,7 +276,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify form draft status and Send To Email", () => {
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "DRAFT" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative Maintenance form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         pMFormId = $docIdElement.text();
@@ -473,7 +475,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative Maintenance form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         pMFormId = $docIdElement.text();
@@ -742,7 +744,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "DRAFT" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         calFormId = $docIdElement.text();
@@ -945,7 +947,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify form released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         calFormId = $docIdElement.text();
@@ -1339,7 +1341,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Extract document Id", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         pMDocId = $docIdElement.text();
@@ -1399,7 +1401,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Check doc WIP status and click on Send To Email", () => {
     it("Check doc WIP status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         pMDocId = $docIdElement.text();
@@ -1618,13 +1620,13 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
   context("Check doc Released status and click on Send To Email", () => {
     it("Check doc released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         pMDocId = $docIdElement.text();
@@ -1876,7 +1878,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Extract document Id", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         calDocId = $docIdElement.text();
@@ -1936,7 +1938,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Check doc WIP status and click on Send To Email", () => {
     it("Check doc WIP status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         calDocId = $docIdElement.text();
@@ -2155,13 +2157,13 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
   context("Check doc Released status and click on Send To Email", () => {
     it("Check doc released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         calDocId = $docIdElement.text();

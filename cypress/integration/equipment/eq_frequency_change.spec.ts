@@ -1,4 +1,4 @@
-/* eslint-disable cypress.eslint.rules/cy.pause */
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -1092,7 +1092,6 @@ context("Equipment due date calculation while changing frequency", () => {
 
         it("Verify status is 'Released'", () => {
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-          // cy.drCheckDocumentStatus({ status: "Released" });
         });
       });
 
@@ -1352,7 +1351,6 @@ context("Equipment due date calculation while changing frequency", () => {
 
           it("Verify status is 'Released'", () => {
             cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-            // cy.drCheckDocumentStatus({ status: "Released" });
           });
         });
 

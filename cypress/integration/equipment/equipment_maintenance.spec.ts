@@ -1,4 +1,4 @@
-/* eslint-disable cypress.eslint.rules/cy.pause */
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -865,7 +865,7 @@ context("Equipment maintenance test", () => {
 
           it("Verify status is 'Released'", () => {
             SystemRequirement("REQ-2900");
-            cy.drCheckDocumentStatus({ status: "RELEASED" });
+            cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           });
         });
       });
