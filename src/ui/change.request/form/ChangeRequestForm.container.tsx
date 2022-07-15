@@ -72,7 +72,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
         changeRequest={changeRequest}
         chosenForm={chosenForm}
         doNotPrompt={doNotPrompt}
-        sidebar={changeRequest && <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />}
+        sidebar={changeRequest && <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} fromEdit={true} />}
         {...props}
         {...{ FBContainer }}
       />
