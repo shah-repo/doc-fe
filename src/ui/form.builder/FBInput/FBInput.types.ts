@@ -117,7 +117,7 @@ export type FBInputProps =
     isInputOwner?: boolean;
     designDisabled?: boolean;
     tabId?: string;
-    removeborder?: boolean;
+    removeBorder?: boolean;
 
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.

@@ -13,7 +13,8 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
 }) => (
   <div id={`${FBFieldName.MPIProcedureId}-${name}`}>
     <FBProvider {...{ textEditorState }}>
-      <FBInput {...props} {...{ name, disabled }} type="texteditor" labelProps={FBFontStyle.labelProps}>
+      <FBInput {...props} {...{ name, disabled }} type="texteditor"
+        labelProps={props.removeBorder ? FBFontStyle.labelMediumProps : FBFontStyle.labelProps}>
         <FBTextEditorChild {...props} {...{ name, disabled }} />
       </FBInput>
     </FBProvider>

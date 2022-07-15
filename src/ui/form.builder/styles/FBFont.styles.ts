@@ -10,4 +10,10 @@ export const FBFontStyle =  {
     color: Colors.almost_black,
     lineHeight: "15px",
   },
+  labelMediumProps: {
+    fontWeight: 600,
+    fontSize: 14,
+    color: Colors.almost_black,
+    lineHeight: "15px",
+  },
 };
