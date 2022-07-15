@@ -21,7 +21,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   disabled,
   masked,
   name,
-  removeborder = false,
+  removeBorder = false,
 }) => {
   // hack for adding empty lines in preview mode
   // so there is no additional growing blank space on the bottom of editor
@@ -30,7 +30,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   return (
     <Box
       bgcolor={isPreview ? "transparent" : "white"}
-      border={removeborder ? "none" : isPreview ? 0 : 1}
+      border={removeBorder ? "none" : isPreview ? 0 : 1}
       borderColor={Colors.hint_gray}
       borderRadius={4}
       style={{ display: "grid", borderRadius: 3, borderColor: Colors.gray_goose }}
@@ -79,13 +79,14 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       >
         <Box
           {...!disabled && { onClick: () => handleMask?.(false) }}
-          bgcolor={removeborder ? `${Colors.alabaster}` : isPreview ? "transparent" : "white"}
+          bgcolor={removeBorder ? `${Colors.alabaster}` : isPreview ? "transparent" : "white"}
           borderRadius={4}
           zIndex={1000}
           display="flex"
           style={{
             gridArea: "1/1",
             cursor: !disabled ? "text" : "inherit",
+            padding: removeBorder ? "3px 12px" : "",
           }}
           p={isPreview ? 0 : 1.5}
         >
