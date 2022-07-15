@@ -1,4 +1,4 @@
-import { map, sortBy, union } from "lodash";
+import { isEmpty, map, sortBy, union } from "lodash";
 import { action, observable, set } from "mobx";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixItem, FBApprovalRole } from "..";
@@ -12,7 +12,10 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
   public constructor({ formValue, outputRevision, isOutput }: FBApprovalMatrixConstructor) {
     super();
     if (!isOutput) { return; }
-    if (!formValue || outputRevision) {
+    const isFormEmpty =  isEmpty(formValue) || !(formValue && Boolean(
+      Object.values(formValue).find((dataKeys) => !isEmpty(dataKeys))
+    ));
+    if (isFormEmpty || outputRevision) {
       this.fetch();
       return;
     }
