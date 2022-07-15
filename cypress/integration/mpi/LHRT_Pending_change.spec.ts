@@ -700,6 +700,12 @@ context("LHRT Pending Change", () => {
         cy.drSelectDetailsTab();
       });
 
+      it("Click 'LHR Step'", () => {
+        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd']")
+          .eq(0)
+          .arrowClick();
+      });
+
       it("Select MPI document for step #1 in LHRt", () => {
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
           $el.trigger("click");
