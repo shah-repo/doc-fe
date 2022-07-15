@@ -191,6 +191,14 @@ context("Autocomplete 'Lots' test", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Add Text field with range", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
@@ -235,10 +243,6 @@ context("Autocomplete 'Lots' test", () => {
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
         cy.fbSelectCheckboxValue("Y");
         cy.fbAddNewFieldButton();
-      });
-
-      it("Upload attachement picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Add a reference ", () => {
@@ -360,21 +364,17 @@ context("Autocomplete 'Lots' test", () => {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
             fileName: `${formId}-1-Lots-title.pdf`,
           }).then((cdata) => {
-          expect(cdata.numpages).eq(3);
-          expect(cdata.text).match(/Page 1 of 3/);
-          expect(cdata.text).match(/Page 2 of 3/);
-          expect(cdata.text).match(/Page 3 of 3/);
+          expect(cdata.numpages).eq(2);
+          expect(cdata.text).match(/Page 1 of 2/);
+          expect(cdata.text).match(/Page 2 of 2/);
           tmpRegex = new RegExp( "\\n\\n");
           const arr = cdata.text.split(tmpRegex);
           arr.forEach((element) => {
-            if (element.includes("Page 1 of 3")) {
+            if (element.includes("Page 1 of 2")) {
               pages[0] = element;
             }
-            if (element.includes("Page 2 of 3")) {
+            if (element.includes("Page 2 of 2")) {
               pages[1] = element;
-            }
-            if (element.includes("Page 3 of 3")) {
-              pages[2] = element;
             }
           });
         });
@@ -382,7 +382,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Verify page 1 in document", () => {
         const el = pages[0];
-        if (el.includes("Page 1 of 3")) {
+        if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
 
@@ -426,7 +426,7 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 1 of 3/);
+          expect(el).match(/Page 1 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -435,9 +435,11 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Verify page 2 in document", () => {
         const el = pages[1];
-        if (el.includes("Page 2 of 3")) {
+        if (el.includes("Page 2 of 2")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
+
+          expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
           expect(el).match(/Draft/);
 
@@ -447,32 +449,7 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 2 of 3/);
-
-          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(el).not.match(tmpRegex);
-        }
-      });
-
-      it("Verify page 3 in document", () => {
-        const el = pages[2];
-        if (el.includes("Page 3 of 3")) {
-          tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Approval History/);
-
-          expect(el).match(/AR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-
-          expect(el).match(/Draft/);
-
-          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-          expect(el).match(tmpRegex);
-
-          tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Page 3 of 3/);
+          expect(el).match(/Page 2 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -484,7 +461,6 @@ context("Autocomplete 'Lots' test", () => {
       it("Approve and release FORM document", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
         });
       });
     });
@@ -602,21 +578,17 @@ context("Autocomplete 'Lots' test", () => {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
             fileName: `${formId}-1-Lots-title.pdf`,
           }).then((cdata) => {
-          expect(cdata.numpages).eq(3);
-          expect(cdata.text).match(/Page 1 of 3/);
-          expect(cdata.text).match(/Page 2 of 3/);
-          expect(cdata.text).match(/Page 3 of 3/);
+          expect(cdata.numpages).eq(2);
+          expect(cdata.text).match(/Page 1 of 2/);
+          expect(cdata.text).match(/Page 2 of 2/);
           tmpRegex = new RegExp( "\\n\\n");
           const arr = cdata.text.split(tmpRegex);
           arr.forEach((element) => {
-            if (element.includes("Page 1 of 3")) {
+            if (element.includes("Page 1 of 2")) {
               pages[0] = element;
             }
-            if (element.includes("Page 2 of 3")) {
+            if (element.includes("Page 2 of 2")) {
               pages[1] = element;
-            }
-            if (element.includes("Page 3 of 3")) {
-              pages[2] = element;
             }
           });
         });
@@ -624,7 +596,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Verify page 1 in document", () => {
         const el = pages[0];
-        if (el.includes("Page 1 of 3")) {
+        if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
 
@@ -669,7 +641,7 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 1 of 3/);
+          expect(el).match(/Page 1 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -678,28 +650,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Verify page 2 in document", () => {
         const el = pages[1];
-        if (el.includes("Page 2 of 3")) {
-          tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Released/);
-
-          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-          expect(el).match(tmpRegex);
-
-          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/Page 2 of 3/);
-
-          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(el).not.match(tmpRegex);
-        }
-      });
-
-      it("Verify page 3 in document", () => {
-        const el = pages[2];
-        if (el.includes("Page 3 of 3")) {
+        if (el.includes("Page 2 of 2")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
 
@@ -718,7 +669,7 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 3 of 3/);
+          expect(el).match(/Page 2 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -749,6 +700,10 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Enter quantity received", () => {
@@ -785,7 +740,11 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Create document", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+      });
+
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add two approvers", () => {
@@ -1003,7 +962,7 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp(`fb-radiobutton-group\n(.*)X(.*)Y(.*)Z`);
           expect(el).match(tmpRegex);
 
-          expect(el).match(/fb-text-editor\nSome text for Text editor/);
+          expect(el).match(/fb-text-editor/);
 
           expect(el).not.match(/fb-text-field/);
 
@@ -1228,7 +1187,7 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp(`fb-radiobutton-group\n(.*)X(.*)Y(.*)Z`);
           expect(el).match(tmpRegex);
 
-          expect(el).match(/fb-text-editor\nSome text for Text editor/);
+          expect(el).match(/fb-text-editor/);
 
           expect(el).not.match(/fb-text-field/);
 
