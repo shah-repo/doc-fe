@@ -116,7 +116,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
-
+  // const documentTypesById = useSelector(documentTypeSelectors.byId);
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
@@ -184,6 +184,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     workspaceState?.setMode(mode);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
+
+  const isAttachmentRequired = () => {
+    let flag = true;
+    const type = documentTypesById[documentTypeId];
+    const docId = _documentRevisionFormState?.documentRevision?.id;
+    if (!docId && ["DYNAMIC_FORM", "PI"].includes(type.group)) {
+      flag = false;
+    }
+    return flag;
+  };
 
   return (
     <FormWrapper
@@ -311,9 +321,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
         )}
-        {_formState?.active && ["design", "form"].includes(_formState.mode) && (
+        {_formState?.active && ["design", "form"].includes(_formState.mode) &&  (
           <>
-            <Grid item xs={12}>
+            { isAttachmentRequired() && <Grid item xs={12}>
               <AttachmentsField
                 isDisabled={isDisabledInput}
                 isNewVersion={false}
@@ -325,6 +335,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 documentTypeId={documentTypeId || ""}
               />
             </Grid>
+            }
             {hasOutput &&
             <Grid item xs={12}>
               <FBActiveNoOutput
