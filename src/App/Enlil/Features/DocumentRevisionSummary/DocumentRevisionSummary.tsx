@@ -95,6 +95,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
@@ -149,7 +150,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                       const tabSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId);
                       const availableSchema = schema?.filter((schemaItem) =>
                         schemaItem.tabId === tabId && !schemaItem.deleted);
-
                       return (
                         <SMBox
                           pb={_documentRevisionFormState?.isDesTextClamped ? 0 :
@@ -160,7 +160,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 !_documentRevisionFormState?.isLHRProgressBarVisible ?
                                 "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 280px)"))}
                           overflow="auto" {...{ onScroll }}>
-                          <SMBox id="Presenter-FBWorkspace" style={{ overflowX: "hidden" }}>
+                          <SMBox id="Presenter-FBWorkspace"
+                            style={{ width: "calc(100% - 8px)" }}>
                             {tabType === "MIXED" &&  <>
                               <SummaryPresenter
                                 dataProp={documentRevision}
