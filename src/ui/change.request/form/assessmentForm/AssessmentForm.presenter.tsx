@@ -65,7 +65,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     <div className={classes.container}>
       <FormHeader {...{ changeRequest, asyncState }}/>
       <Box width="100%" height="100%" display="flex" marginTop={1.25}>
-        <Box width="100%" px="34px" height="87vh" overflow="auto" className="hide-scroll">
+        <Box width="100%" px="34px" height="calc(100vh - 132px)" overflow="auto" className="hide-scroll">
           <FormWrapper
             dirty={dirty}
             resetForm={resetForm}
