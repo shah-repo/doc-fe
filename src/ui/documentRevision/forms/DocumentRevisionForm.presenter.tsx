@@ -7,7 +7,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -187,7 +187,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAttachmentRequired = () => {
     const type = documentTypesById[documentTypeId];
     const docId = _documentRevisionFormState?.documentRevision?.id;
-    return docId || !["DYNAMIC_FORM", "PI"].includes(type.group);
+    return docId || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
   };
 
   return (
