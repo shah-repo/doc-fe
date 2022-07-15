@@ -29,7 +29,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   const formattedFormValue = formValue.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" );
   return (
     <Box
-      bgcolor={isPreview ? "transparent" : "white"}
+      bgcolor={isPreview ? "transparent" : `${Colors.white}`}
       border={removeBorder ? "none" : isPreview ? 0 : 1}
       borderColor={Colors.hint_gray}
       borderRadius={4}
@@ -79,7 +79,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       >
         <Box
           {...!disabled && { onClick: () => handleMask?.(false) }}
-          bgcolor={removeBorder ? `${Colors.alabaster}` : isPreview ? "transparent" : "white"}
+          bgcolor={removeBorder ? `${Colors.alabaster}` : isPreview ? "transparent" : `${Colors.white}`}
           borderRadius={4}
           zIndex={1000}
           display="flex"
