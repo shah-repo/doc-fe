@@ -12,7 +12,7 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
   public constructor({ formValue, outputRevision, isOutput }: FBApprovalMatrixConstructor) {
     super();
     if (!isOutput) { return; }
-    const isFormEmpty =  isEmpty(formValue) || !(formValue && Boolean(
+    const isFormEmpty = isEmpty(formValue) || !(formValue && Boolean(
       Object.values(formValue).find((dataKeys) => !isEmpty(dataKeys))
     ));
     if (isFormEmpty || outputRevision) {
