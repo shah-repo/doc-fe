@@ -297,6 +297,7 @@ context("Autosave LHR", () => {
 
       context("Select created MPI in LHR template", () => {
         it("Select MPI document for step #1 in LHRt", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
           });
@@ -374,10 +375,10 @@ context("Autosave LHR", () => {
 
     it("Remove second Approver'", () => {
       cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
+      cy.reload();
     });
 
     it("check approvers after reload page", () => {
-      cy.reload();
       cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
         .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
@@ -406,6 +407,7 @@ context("Autosave LHR", () => {
       });
 
       it("Click 'START MPI'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         cy.mpiStartStep({ stepNumber: 1 });
       });
 

@@ -62,9 +62,9 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             locale: "form.builder.step.number",
             values: { number: stepIndex },
           }}
-          boxProps={{ style: { color: Colors.black } }}
+          boxProps={{ style: { color: Colors.black, fontSize: 14 } }}
           withState
-          removeborder
+          removeBorder
         />
         <Box
           display="flex"
