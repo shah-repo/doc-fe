@@ -159,8 +159,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 !_documentRevisionFormState?.isLHRProgressBarVisible ?
                                 "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 280px)"))}
                           overflow="auto" {...{ onScroll }}>
-                          <SMBox id="Presenter-FBWorkspace"
-                            style={{ width: "calc(100% - 8px)" }}>
+                          <SMBox id="Presenter-FBWorkspace">
                             {tabType === "MIXED" &&  <>
                               <SummaryPresenter
                                 dataProp={documentRevision}
