@@ -208,6 +208,14 @@ context("PO approval test", () => {
       cy.drEnterDocumentDescription({ description: "New POAM description" });
     });
 
+    it("Navigate to MatrixDetails tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Click on 'Add Item'", () => {
       cy.poAddNewFieldItem();
     });
@@ -266,6 +274,10 @@ context("PO approval test", () => {
       cy.poClickCreatePO();
     });
 
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
+    });
+
     it("Click on 'Add item' button", () => {
       cy.poAddNewFieldItem();
     });
@@ -306,6 +318,10 @@ context("PO approval test", () => {
       cy.drEnterDocumentDescription({ description: "POAM testing description" });
     });
 
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add required order date", () => {
       cy.poAddDateRequired();
     });
@@ -315,9 +331,7 @@ context("PO approval test", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Check if error message says that approvers are not present", () => {
@@ -365,6 +379,10 @@ context("PO approval test", () => {
       cy.drEnterDocumentDescription({ description: "POAM test" });
     });
 
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
+    });
+
     it("Click on 'Add item' button", () => {
       cy.poAddNewFieldItem();
     });
@@ -405,6 +423,10 @@ context("PO approval test", () => {
       cy.poSaveDocument();
     });
 
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -435,6 +457,8 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Reject' PO and enter confirmation password", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dashToggleMoreDetailsForListItemNumber({ listItemNumb: 0 });
       cy.dashRejectApprovalForListItem({ listItem: `${USERS[2].name}needs your approval forPO-00001` });
     });
@@ -457,10 +481,8 @@ context("PO approval test", () => {
 
     it("Verify rejected PO status, should be 'Draft'", () => {
       SystemRequirement("REQ-0020", "REQ-0570", "REQ-1570");
-      cy.poVerifyStatus({ status: "Draft" });
+      cy.poVerifyStatus({ status: "DRAFT" });
     });
   });
 });
-
-export { };
 
