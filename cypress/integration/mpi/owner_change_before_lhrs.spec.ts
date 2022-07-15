@@ -486,7 +486,7 @@ context("Change owner before starting LHRs", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
-                tabId: "procedure",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -811,6 +811,15 @@ context("Change owner before starting LHRs", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.pause();
+      });
+
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
       });
     });
 

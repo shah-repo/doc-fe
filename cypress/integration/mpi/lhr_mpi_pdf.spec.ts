@@ -1253,7 +1253,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
       cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         lhrDocId = $docIdElement.text();
@@ -1434,6 +1434,8 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Equipment\nB: Equipment one/);
 
+        expect(el).match(/Select field/);
+
         expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
 
         expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
@@ -1444,7 +1446,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/ET-00007 - Equipment two/);
 
-        expect(el).match(/Select field\nTEXT FIELD/);
+        expect(el).match(/fb-textfield/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 
@@ -1490,30 +1492,6 @@ context("Autosave LHR", () => {
     });
   });
 
-  context("Add parameter materials and equipment", () => {
-    it("Add material parameter", () => {
-      cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
-        .eq(0).arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Material one").arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"quantity\"]").arrowType("0.6");
-      cy.unClick();
-      cy.get("[data-cy=\"unit\"]").autocompleteSelect("Day(s)");
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-    });
-
-    it("Add equipment parameter", () => {
-      cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
-        .eq(1).arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains("Equipment one").arrowClick();
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-    });
-  });
-
   context("Release LHRt", () => {
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
@@ -1524,7 +1502,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
       cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         lhrDocId = $docIdElement.text();
@@ -1701,7 +1679,11 @@ context("Autosave LHR", () => {
       if (el.includes("Page 2 of 3")) {
         expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
 
-        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 0.6 days/);
+        expect(el).match(/Materials\nA: Material one/);
+
+        expect(el).match(/Equipment\nB: Equipment one/);
+
+        expect(el).match(/Select field/);
 
         expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
 
@@ -1713,7 +1695,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/ET-00007 - Equipment two/);
 
-        expect(el).match(/Select field\nTEXT FIELD/);
+        expect(el).match(/fb-textfield/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 

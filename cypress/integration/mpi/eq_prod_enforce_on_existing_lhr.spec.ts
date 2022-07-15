@@ -1398,7 +1398,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 editorConfig: {
                   value: createdMPIDocument.id,
                 },
-                tabId: "overview",
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -1693,6 +1693,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -1764,6 +1772,10 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     it("Select first LHR", () => {
       cy.dlSelectFirstDocument();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
     });
 
     it("Click View step", () => {

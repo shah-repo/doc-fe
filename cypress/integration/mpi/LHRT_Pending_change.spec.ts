@@ -696,6 +696,10 @@ context("LHRT Pending Change", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("CS-00005 - Part document").arrowClick();
     });
     context("Select a different MPI", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Select MPI document for step #1 in LHRt", () => {
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
           $el.trigger("click");

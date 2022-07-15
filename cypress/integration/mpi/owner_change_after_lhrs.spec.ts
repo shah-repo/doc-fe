@@ -484,7 +484,7 @@ context("Change owner after starting LHRs", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
-                tabId: "procedure",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -789,6 +789,10 @@ context("Change owner after starting LHRs", () => {
     });
 
     context("Start LHRs", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
         cy.mpiStartStep({ stepNumber: 1 });

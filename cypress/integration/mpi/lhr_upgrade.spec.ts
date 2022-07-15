@@ -229,7 +229,11 @@ context("LHR Upgrade", () => {
 
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
-          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Part document' to step #1", () => {
@@ -304,6 +308,10 @@ context("LHR Upgrade", () => {
       });
 
       context("Select created MPI in LHR template", () => {
+        it("Select Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
@@ -406,6 +414,10 @@ context("LHR Upgrade", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhrDocUrl);
         });
+      });
+
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Click 'START MPI'", () => {

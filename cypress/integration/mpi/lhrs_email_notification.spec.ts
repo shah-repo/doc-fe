@@ -482,7 +482,7 @@ context("LHRs email notifications", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
-                tabId: "procedure",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -761,6 +761,7 @@ context("LHRs email notifications", () => {
 
     it("Enter into LHR created with API", () => {
       cy.dlSelectFirstDocument();
+      cy.pause();
     });
 
     context("Enter LHR atributes", () => {
@@ -787,6 +788,10 @@ context("LHRs email notifications", () => {
     });
 
     context("Start LHRs", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
         cy.mpiStartStep({ stepNumber: 1 });

@@ -799,6 +799,10 @@ context("LHR Build type flow", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -821,11 +825,6 @@ context("LHR Build type flow", () => {
       cy.poAddDateRequired();
     });
 
-    it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-
-    });
-
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
@@ -840,7 +839,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
     });
   });
 

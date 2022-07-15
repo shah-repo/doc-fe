@@ -219,6 +219,10 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Approve and release document - create company", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
