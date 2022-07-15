@@ -63,9 +63,11 @@ export const styles = makeStyles(() =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
+      cursor: "pointer",
     },
     actionIcon: {
       paddingLeft: "10px",
+      cursor: "pointer",
     },
     viewTooltipText: {
       fontWeight: "bold",

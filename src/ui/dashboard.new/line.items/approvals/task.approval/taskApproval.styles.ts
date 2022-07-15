@@ -8,6 +8,7 @@ export const styles = makeStyles(() =>
     },
     actionIcon: {
       paddingLeft: "10px",
+      cursor: "pointer",
     },
     link: {
       color: Colors.black,
@@ -51,6 +52,7 @@ export const styles = makeStyles(() =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
+      cursor: "pointer",
     },
     typography: {
       fontSize: "14px",

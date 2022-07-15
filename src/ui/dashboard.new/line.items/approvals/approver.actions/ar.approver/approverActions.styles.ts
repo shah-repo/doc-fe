@@ -53,9 +53,11 @@ export const styles = makeStyles((theme: Theme) =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
+      cursor: "pointer",
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
+      cursor: "pointer",
     },
     typography: {
       "fontSize": "14px",
