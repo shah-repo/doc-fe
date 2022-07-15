@@ -26,7 +26,7 @@ interface Props
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
   sidebar?: ReactNode;
-  chosenForm: FBDocumentRevisionProps | undefined;
+  chosenForm?: FBDocumentRevisionProps;
 }
 
 export let formIdContext = React.createContext<string | undefined>(undefined);
