@@ -811,7 +811,6 @@ context("Change owner before starting LHRs", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.pause();
       });
 
       it("Select Details tab", () => {

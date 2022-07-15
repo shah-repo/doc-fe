@@ -701,6 +701,7 @@ context("LHRT Pending Change", () => {
       });
 
       it("Click 'LHR Step'", () => {
+        // eslint-disable-next-line max-len
         cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd']")
           .eq(0)
           .arrowClick();

@@ -761,7 +761,6 @@ context("LHRs email notifications", () => {
 
     it("Enter into LHR created with API", () => {
       cy.dlSelectFirstDocument();
-      cy.pause();
     });
 
     context("Enter LHR atributes", () => {
