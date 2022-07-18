@@ -25,6 +25,7 @@ declare global {
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
+      drSelectMatrixDetailsTab(): Chainable<Subject>;
       drSelectPrimaryOwner(params: { owner: string; noWait?: bool }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -265,6 +266,11 @@ Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
 
 Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectMatrixDetailsTab", () => {
+  cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
