@@ -254,6 +254,8 @@ context("Password expire reset flow", () => {
         });
 
         it("Enter password", () => {
+          cy.get("[data-cy=\"email\"]").arrowType(emailOfUserToSignUp);
+          cy.get("[data-cy=\"currentPassword\"]").arrowType(previousPassword);
           cy.get(`[name="newPassword"]`).arrowType(newPassword);
         });
 
@@ -262,7 +264,7 @@ context("Password expire reset flow", () => {
         });
 
         it(`Click "RESET PASSWORD"`, () => {
-          cy.get("#ResetPassword-resetPassword").arrowClick();
+          cy.get("[data-cy=\"resetButtonSubmit\"]").arrowClick();
         });
 
         it("Verify password change notification", () => {
@@ -351,6 +353,8 @@ context("Password expire reset flow", () => {
         });
 
         it("Enter password", () => {
+          cy.get("[data-cy=\"email\"]").arrowType(emailOfUserToSignUp);
+          cy.get("[data-cy=\"currentPassword\"]").arrowType(previousPassword);
           cy.get(`input[name="newPassword"]`).arrowType( newPassword );
         });
 
@@ -358,8 +362,8 @@ context("Password expire reset flow", () => {
           cy.get(`input[name="newPasswordConfirmation"]`).arrowType( newPassword );
         });
 
-        it("Click 'SIGN IN'", () => {
-          cy.get(`button[id="ResetPassword-resetPassword"]`).arrowClick();
+        it(`Click "RESET PASSWORD"`, () => {
+          cy.get("[data-cy=\"resetButtonSubmit\"]").arrowClick();
         });
 
         it("Password Reset Successfully should be displayed", () => {

@@ -398,10 +398,10 @@ context("Multiple consecutive logins", () => {
       cy.authLogin({ email: emailOfAdminUserToSignUp, password: newPassword });
     });
 
-    it("Check that notification 'scheduled for deletion' is shown", () => {
-      cy.get("body").should("contain.text", "This company tenant is scheduled to be deleted. If there are" +
-        " concerns about this tenant being deleted, please reach out toenlil-feedback@shifamed.com");
-    });
+    // it("Check that notification 'scheduled for deletion' is shown", () => {
+    //   cy.get("body").should("contain.text", "This company tenant is scheduled to be deleted. If there are" +
+    //     " concerns about this tenant being deleted, please reach out toenlil-feedback@shifamed.com");
+    // });
 
     it("Verify admin user is loged in", () => {
       cy.navigListExistsCheck( NavigationItems.DASHBOARD, NavigationItems.DOCUMENT_CONTROL);
