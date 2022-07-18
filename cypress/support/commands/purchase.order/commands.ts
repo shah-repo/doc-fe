@@ -186,7 +186,7 @@ Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains(params.number).should("exist");
+  cy.get("[class*=\"MuiTableCell-root MuiTableCell-body FBTotal-root\"]").contains(params.number).should("exist");
 });
 
 Cypress.Commands.add("poCheckTotalAmount", (params: {number: string}) => {
@@ -220,13 +220,13 @@ Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: strin
 });
 
 Cypress.Commands.add("poCheckMessageForConversionSite", () => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "Exchange rate according to ");
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "fixer.io");
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "as of");
+  cy.get("[name=\"po-items-built-in\"]").contains("Exchange rate according to ").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("fixer.io").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("as of").should("exist");
 });
 
 Cypress.Commands.add("poConvertedToDollarsMessage", () => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("Total in US dollars:").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("Total in US dollars:").should("exist");
 });
 
 Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
@@ -236,13 +236,12 @@ Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poCheckIfFormPopUpIsActive", (params: {type: string; list: string[]}) => {
-  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+  cy.get("[data-cy=\"field-selectType\"]").arrowClick();
   cy.get("[id^=\"react-select\"]").contains(params.type).arrowClick();
-  cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowClick();
+  cy.get("[data-cy=\"field-selectForm\"]").arrowClick();
   params.list.forEach((item) => {
     cy.get("[id^=react-select]").contains(item).should("exist");
   });
-  cy.get("[data-cy=field-selectType]>div:nth-child(1)").arrowClick();
 });
 
 Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
