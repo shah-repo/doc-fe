@@ -406,7 +406,7 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev?: boolean }) => {
   let routesToWait;
   if (params && params.requiredApproversDocRev) {
-    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
+    routesToWait = [CyRoutes.PostOrPatchDocRev];
   }
   else {
     routesToWait = [CyRoutes.PostOrPatchDocRev];
@@ -571,6 +571,7 @@ Cypress.Commands.add("drCancelDraftFromMenu", () => {
 });
 
 Cypress.Commands.add("drClickUpgradeForm", () => {
+  cy.get("[data-cy=\"upgradeNextRevisionStage\"]").arrowClick();
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
   cy.get("#UpgradeToLatest-upgrade").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.UpgradeToReleasedForm, () => {
