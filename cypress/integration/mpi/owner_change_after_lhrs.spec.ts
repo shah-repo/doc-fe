@@ -793,6 +793,10 @@ context("Change owner after starting LHRs", () => {
         cy.drSelectDetailsTab();
       });
 
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
         cy.mpiStartStep({ stepNumber: 1 });
@@ -805,6 +809,10 @@ context("Change owner after starting LHRs", () => {
       it(`Assign operator '${USERS[2].name}'`, () => {
         SystemRequirement("REQ-3200");
         cy.drAssignDocumentTo({ username: USERS[2].name });
+      });
+
+      it("Click on sidebar permission icon to add Operators", () => {
+        cy.get("[data-cy='permission-icon']").arrowClick();
       });
 
       it(`Assign operator '${USERS[3].name}'`, () => {
@@ -830,7 +838,6 @@ context("Change owner after starting LHRs", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
         cy.get("a").contains("LHR-00004").arrowClick();
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
