@@ -39,9 +39,32 @@ const styles = makeStyles((theme: Theme) =>
       fontSize: theme.spacing(2.5),
       fontWeight: "bold",
       backgroundColor: Colors.light_gray,
+      cursor: "pointer",
     },
     cell: {
       padding: theme.spacing(0),
+    },
+    containingBox: {
+      "overflow": "auto",
+      "height": "76vh",
+      "&::-webkit-scrollbar": {
+        backgroundColor: "transparent",
+        width: "4px",
+        height: "6px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "transparent",
+      },
+      "&:hover::-webkit-scrollbar-thumb": {
+        backgroundColor: Colors.gray,
+      },
+    },
+    thead: {
+      "& th": {
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
+      },
     },
   },
   ));
@@ -53,9 +76,9 @@ function Row(props: { row: PageDetails }) {
 
   return (
     <React.Fragment>
-      <TableRow className={classes.row}>
+      <TableRow className={classes.row} onClick={() => setOpen(!open)}>
         <TableCell >
-          <IconButton size="small" onClick={() => setOpen(!open)}>
+          <IconButton size="small">
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
@@ -94,19 +117,21 @@ export const PageDetailsManagementContainer: React.FunctionComponent = () => {
           <Text translation={"common.add.page.details"} />
         </Button>
       </Box>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell className={classes.header}>
-              <Text translation={"page.details"} />
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sortBy(pageDetails, "category").map((row) => <Row key={row.category} row={row} />)}
-        </TableBody>
-      </Table>
+      <Box width="100%" className={classes.containingBox}>
+        <Table>
+          <TableHead className={classes.thead}>
+            <TableRow>
+              <TableCell />
+              <TableCell className={classes.header}>
+                <Text translation={"page.details"} />
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {sortBy(pageDetails, "category").map((row) => <Row key={row.category} row={row} />)}
+          </TableBody>
+        </Table>
+      </Box>
       <PageDetailsForm {...{ dialog }}/>
     </Box>
 
