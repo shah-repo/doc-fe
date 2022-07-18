@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -497,11 +498,19 @@ context("Export Part Lot", () => {
     });
 
     it("Click on Create New button", () => {
-      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Enter title", () => {
       cy.drEnterDocumentTitle( { name: "CSL inline form" });
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Enter quantity received", () => {
@@ -517,13 +526,13 @@ context("Export Part Lot", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
   context("CSL with WIP status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-1-CSL-inline-form" });
+      cy.exportVerifyEmail({ pdfStatus: "WIP", filename: "-1-CSL-inline-form", status: STATUS_TYPES_LABEL.WIP });
     });
   });
 
@@ -546,6 +555,10 @@ context("Export Part Lot", () => {
         cy.inlineApproval();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Select Last Signed", () => {
         cy.contains("Last Signed").arrowClick();
         cy.progressBarShouldNotExist();
@@ -553,15 +566,26 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-CSL-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Last Signed", filename: "-1-CSL-inline-form",
+          status: STATUS_TYPES_LABEL.LAST_SIGNED,
+        });
       });
     });
   });
 
   context("CSL with Archive status", () => {
     context("Add CSL with Archive", () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status CSL", () => {
         cy.contains("WIP").arrowClick();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Update section", () => {
@@ -569,17 +593,31 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+        cy.wait(2000);
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
       });
 
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Approve inline approval", () => {
         cy.inlineApproval();
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Select Archive", () => {
@@ -589,17 +627,28 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Archive", filename: "-1-CSL-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Archive", filename: "-1-CSL-inline-form",
+          status: STATUS_TYPES_LABEL.ARCHIVE,
+        });
       });
     });
   });
 
   context("CSL with Released status", () => {
     context("Add CSL with Released", () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status CSL", () => {
         cy.contains("WIP").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Fill section", () => {
@@ -625,11 +674,14 @@ context("Export Part Lot", () => {
 
       it("Finalize and release button click'", () => {
         cy.reload();
-        cy.recApproveAndReleaseInlineRecord();
+        cy.recFinalizeAndReleaseRecord();
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-A-CSL-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Released", filename: "-A-CSL-inline-form",
+          status: STATUS_TYPES_LABEL.RELEASED,
+        });
       });
     });
   });
@@ -649,7 +701,10 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1-CSL-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Canceled", filename: "-A-1-CSL-inline-form",
+          status: STATUS_TYPES_LABEL.CANCELED,
+        });
       });
     });
   });
@@ -671,11 +726,15 @@ context("Export Part Lot", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
         cy.drEnterDocumentTitle( { name: "CSL form" });
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Enter quantity received", () => {
@@ -687,7 +746,7 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -707,7 +766,7 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "In Review", filename: "-A-CSL-form" });
+        cy.exportVerifyEmail({ pdfStatus: "In Review", filename: "-A-CSL-form", status: STATUS_TYPES_LABEL.IN_REVIEW });
       });
     });
   });
@@ -729,7 +788,7 @@ context("Export Part Lot", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
@@ -738,6 +797,10 @@ context("Export Part Lot", () => {
 
       it("Upload logo picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Enter quantity received", () => {
@@ -749,7 +812,7 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -761,7 +824,7 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Voided", filename: "-A-Void" });
+        cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-A-Void", status: STATUS_TYPES_LABEL.VOIDED });
       });
     });
   });
