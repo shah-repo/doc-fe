@@ -170,7 +170,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                         p={0.5}
                                         style={{
                                           float: "left",
-                                          // backgroundColor: Colors.whitest_grey,
+                                          backgroundColor: Colors.whitest_grey,
                                         }}
                                       >
                                         <FBText
