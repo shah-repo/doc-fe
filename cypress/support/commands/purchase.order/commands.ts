@@ -63,6 +63,7 @@ declare global {
       poCheckTax(params: {number: string}): Chainable<Subject>;
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
+      poApprove(): Chainable<Subject>;
     }
   }
 }
@@ -373,3 +374,12 @@ Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
   cy.progressBarShouldNotExist();
 });
 
+Cypress.Commands.add("poApprove", () => {
+  cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
