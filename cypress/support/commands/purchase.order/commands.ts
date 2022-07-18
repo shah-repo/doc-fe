@@ -186,7 +186,7 @@ Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains(params.number).should("exist");
+  cy.get("[class*=\"MuiTableCell-root MuiTableCell-body FBTotal-root\"]").contains(params.number).should("exist");
 });
 
 Cypress.Commands.add("poCheckTotalAmount", (params: {number: string}) => {
