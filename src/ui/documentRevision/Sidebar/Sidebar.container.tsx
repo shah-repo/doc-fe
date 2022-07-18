@@ -53,7 +53,7 @@ const SidebarContainer: React.FunctionComponent<
     }
     setIndex(index);
     setTab?.(index);
-    localStorage.setItem("sideBarTabIndex", index.toString());
+    localStorage.setItem("sideBarTabIndex", String(index));
   };
 
   return (
