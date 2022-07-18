@@ -2,13 +2,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 
 let createdCompany;
 let loginResponse;
@@ -315,7 +315,10 @@ context("Export for Approval Request", () => {
 
   context(`AR with ${STATUS_TYPES_LABEL.DRAFT} status`, () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.DRAFT, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.DRAFT, type: "approval request" });
+      cy.exportVerifyEmail({
+        status: STATUS_TYPES_LABEL.DRAFT, filename: "-AR-title",
+        pdfStatus: STATUS_TYPES_LABEL.DRAFT, type: "approval request",
+      });
     });
   });
 
@@ -327,7 +330,8 @@ context("Export for Approval Request", () => {
 
       it("Verify export", () => {
         cy.exportVerifyEmail({
-          status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-AR-title", pdfStatus: "In Review", type: "approval request",
+          status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-AR-title",
+          pdfStatus: "In Review", type: "approval request",
         });
       });
     });
@@ -349,7 +353,8 @@ context("Export for Approval Request", () => {
 
       it("Verify export", () => {
         cy.exportVerifyEmail({
-          status: STATUS_TYPES_LABEL.APPROVED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.APPROVED, type: "approval request",
+          status: STATUS_TYPES_LABEL.APPROVED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.APPROVED,
+          type: "approval request",
         });
       });
     });
@@ -370,7 +375,8 @@ context("Export for Approval Request", () => {
 
       it("Verify export", () => {
         cy.exportVerifyEmail({
-          status: STATUS_TYPES_LABEL.CLOSED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.CLOSED, type: "approval request",
+          status: STATUS_TYPES_LABEL.CLOSED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.CLOSED,
+          type: "approval request",
         });
       });
     });
@@ -420,7 +426,8 @@ context("Export for Approval Request", () => {
 
       it("Verify export", () => {
         cy.exportVerifyEmail({
-          status: STATUS_TYPES_LABEL.VOIDED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.VOIDED, type: "approval request",
+          status: STATUS_TYPES_LABEL.VOIDED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.VOIDED,
+          type: "approval request",
         });
       });
     });

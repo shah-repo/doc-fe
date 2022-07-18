@@ -575,7 +575,9 @@ context("Export for LHR", () => {
 
   context(`LHR with ${STATUS_TYPES_LABEL.WIP} status and LHRS with ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
     it("Select 'Details' tab", () => {
-      cy.drSelectDetailsTab();
+      cy.contains("Details").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'START MPI'", () => {

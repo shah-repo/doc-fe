@@ -2,11 +2,11 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 
 let createdCompany;
 let loginResponse;
@@ -195,7 +195,10 @@ context("Export Equipment doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-Equipment-form", pdfStatus: "Released" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-Equipment-form",
+          pdfStatus: "Released",
+        });
       });
     });
   });
@@ -209,7 +212,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ pdfStatus: "Obsolete", filename: "-OBS-Equipment-form", status: STATUS_TYPES_LABEL.OBSOLETE });
+      cy.exportVerifyEmail({
+        pdfStatus: "Obsolete", filename: "-OBS-Equipment-form",
+        status: STATUS_TYPES_LABEL.OBSOLETE,
+      });
     });
   });
 
@@ -225,7 +231,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ pdfStatus: "Superseded", filename: "-1-Equipment-form", status: STATUS_TYPES_LABEL.SUPERSEDED });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-Equipment-form",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
@@ -355,7 +364,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ pdfStatus: "Pending Change", filename: "-1-Equipment-form", status: STATUS_TYPES_LABEL.PENDING_CHANGE });
+      cy.exportVerifyEmail({
+        pdfStatus: "Pending Change", filename: "-1-Equipment-form",
+        status: STATUS_TYPES_LABEL.PENDING_CHANGE,
+      });
     });
   });
 
@@ -377,7 +389,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ pdfStatus: "In Review", filename: "-1-Equipment-form", status: STATUS_TYPES_LABEL.IN_REVIEW });
+      cy.exportVerifyEmail({
+        pdfStatus: "In Review", filename: "-1-Equipment-form",
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+      });
     });
   });
 
@@ -399,7 +414,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ pdfStatus: "Approved", filename: "-1-Equipment-form", status: STATUS_TYPES_LABEL.APPROVED });
+      cy.exportVerifyEmail({
+        pdfStatus: "Approved", filename: "-1-Equipment-form",
+        status: STATUS_TYPES_LABEL.APPROVED,
+      });
     });
   });
 

@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -301,6 +302,12 @@ context("Export Engineering Build doc", () => {
       cy.drEnterDocumentTitle( { name: "EB inline form" });
     });
 
+    it("Select 'Procedure' tab", () => {
+      cy.get("[data-cy=\"tabId.procedure\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Enter text in textfield", () => {
       cy.get("[name^=\"textfield1\"]").arrowType("Test one");
     });
@@ -310,14 +317,14 @@ context("Export Engineering Build doc", () => {
     });
   });
 
-  context("EB with WIP status", () => {
+  context(`EB with ${STATUS_TYPES_LABEL.WIP} status`, () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-1-EB-inline-form" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-1-EB-inline-form", pdfStatus: "WIP" });
     });
   });
 
-  context("EB with Last Signed status", () => {
-    context("Add EB with Last Signed", () => {
+  context(`EB with ${STATUS_TYPES_LABEL.LAST_SIGNED} status`, () => {
+    context(`Add EB with ${STATUS_TYPES_LABEL.LAST_SIGNED}`, () => {
       it("Add inline approver", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
@@ -335,6 +342,10 @@ context("Export Engineering Build doc", () => {
         cy.inlineApproval();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Select Last Signed", () => {
         cy.contains("Last Signed").arrowClick();
         cy.progressBarShouldNotExist();
@@ -343,15 +354,26 @@ context("Export Engineering Build doc", () => {
 
       it("Verify export", () => {
         SystemRequirement("REQ-3800");
-        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-EB-inline-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.LAST_SIGNED, filename: "-1-EB-inline-form",
+          pdfStatus: "Last Signed",
+        });
       });
     });
   });
 
-  context("EB with Archive status", () => {
-    context("Add EB with Archive", () => {
+  context(`EB with ${STATUS_TYPES_LABEL.ARCHIVE} status`, () => {
+    context(`Add EB with ${STATUS_TYPES_LABEL.ARCHIVE}`, () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status EB", () => {
         cy.contains("WIP").arrowClick();
+      });
+
+      it("Select 'Procedure' tab", () => {
+        cy.drSelectProcedureTab();
       });
 
       it("Update section", () => {
@@ -364,12 +386,25 @@ context("Export Engineering Build doc", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Select 'Procedure' tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Click Request Approval button", () => {
+        cy.contains("Request approval").should("exist");
         cy.contains("Request approval").arrowClick();
+      });
+
+      it("Select 'Procedure' tab", () => {
+        cy.drSelectProcedureTab();
       });
 
       it("Approve inline approval", () => {
         cy.inlineApproval();
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Select Archive", () => {
@@ -379,13 +414,20 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Archive", filename: "-1-EB-inline-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.ARCHIVE, filename: "-1-EB-inline-form",
+          pdfStatus: "Archive",
+        });
       });
     });
   });
 
-  context("EB with Released status", () => {
-    context("Add EB with Released", () => {
+  context(`EB with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
+    context(`Add EB with ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status EB", () => {
         cy.contains("WIP").arrowClick();
         cy.progressBarShouldNotExist();
@@ -396,17 +438,20 @@ context("Export Engineering Build doc", () => {
         cy.reload();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.recApproveAndReleaseInlineRecord();
+        cy.recFinalizeAndReleaseRecord();
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-A-EB-inline-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.RELEASED, filename: "-A-EB-inline-form",
+          pdfStatus: "Released",
+        });
       });
     });
   });
 
-  context("EB with Canceled status", () => {
-    context("Add EB with Canceled", () => {
+  context(`EB with ${STATUS_TYPES_LABEL.CANCELED} status`, () => {
+    context(`Add EB with ${STATUS_TYPES_LABEL.CANCELED}`, () => {
       it("Click Update EB", () => {
         cy.drClickReviseDocument();
       });
@@ -420,12 +465,15 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1-EB-inline-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.CANCELED, filename: "-A-1-EB-inline-form",
+          pdfStatus: "Canceled",
+        });
       });
     });
   });
 
-  context("EB with In Review status", () => {
+  context(`EB with ${STATUS_TYPES_LABEL.IN_REVIEW} status`, () => {
     context("Create a EB from form", () => {
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
@@ -454,7 +502,7 @@ context("Export Engineering Build doc", () => {
       });
     });
 
-    context("Add EB with In Review", () => {
+    context(`Add EB with ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       it("Add inline approver", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       });
@@ -470,12 +518,12 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "In Review", filename: "-A-EB-form" });
+        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-A-EB-form", pdfStatus: "In Review" });
       });
     });
   });
 
-  context("EB with Voided status", () => {
+  context(`EB with ${STATUS_TYPES_LABEL.VOIDED} status`, () => {
     context("Create a EB from form", () => {
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
@@ -516,7 +564,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Voided", filename: "-A-Void" });
+        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.VOIDED, filename: "-A-Void", pdfStatus: "Voided" });
       });
     });
   });
