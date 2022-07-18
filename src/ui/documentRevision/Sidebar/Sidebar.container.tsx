@@ -1,4 +1,3 @@
-import { parseInt } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import FBStore from "../../form.builder/FBStore/FBStore";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
@@ -29,7 +28,7 @@ const SidebarContainer: React.FunctionComponent<
   useEffect(() => {
     const index = localStorage.getItem("sideBarTabIndex");
     if (index) {
-      setIndex(parseInt(index));
+      setIndex(Number(index));
     }
   }, []);
 
