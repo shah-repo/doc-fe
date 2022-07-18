@@ -34,7 +34,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       borderColor={Colors.hint_gray}
       borderRadius={4}
       style={{ display: "grid", borderRadius: 3, borderColor: Colors.gray_goose }}
-      // minHeight={isPreview ? "auto" : 160}
+      minHeight={removeBorder ? "none" : isPreview ? "auto" : 160}
       onKeyDown={(e) => onKeyDown?.(e as unknown as KeyboardEvent)}
     >
       <Box
