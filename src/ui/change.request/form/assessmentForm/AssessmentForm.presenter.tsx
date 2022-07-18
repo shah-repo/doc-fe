@@ -2,6 +2,7 @@ import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React, { ReactNode, useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
+import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncState } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/RichTextEditor";
@@ -10,6 +11,7 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
+import DocumentRevisionOutputInfo from "../../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useDidMount from "../../../hooks/useDidMount";
 import { ChangeRequestFormValues } from "../types";
@@ -24,6 +26,7 @@ interface Props
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
   sidebar?: ReactNode;
+  chosenForm?: FBDocumentRevisionProps;
 }
 
 export let formIdContext = React.createContext<string | undefined>(undefined);
@@ -41,6 +44,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   values,
   FBContainer,
   doNotPrompt,
+  chosenForm,
   sidebar,
 }) => {
   const formContext = useFormContext();
@@ -60,8 +64,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <FormHeader {...{ changeRequest, asyncState }}/>
-      <Box width="100%" height="100%" display="flex">
-        <Box width="100%" px="34px" height="80vh" overflow="auto" className="hide-scroll">
+      <Box width="100%" height="100%" display="flex" marginTop={1.25}>
+        <Box width="100%" px="34px" height="calc(100vh - 132px)" overflow="auto" className="hide-scroll">
           <FormWrapper
             dirty={dirty}
             resetForm={resetForm}
@@ -92,6 +96,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
                 labelProps={AutoCompleteStyles.labelStyle}
               />
               <div ref={FBContainer} />
+              <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument} />
             </Box>
           </FormWrapper>
         </Box>
