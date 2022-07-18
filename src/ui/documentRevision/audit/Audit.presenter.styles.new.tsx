@@ -50,5 +50,20 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightBold,
       marginLeft: theme.spacing(1),
     },
+    revisionList: {
+      "height": "80vh",
+      "overflow": "hidden",
+      "overflowY": "auto",
+      "&::-webkit-scrollbar": {
+        backgroundColor: "transparent",
+        width: "4px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "transparent",
+      },
+      "&:hover::-webkit-scrollbar-thumb": {
+        backgroundColor: Colors.gray,
+      },
+    },
   }),
 );
