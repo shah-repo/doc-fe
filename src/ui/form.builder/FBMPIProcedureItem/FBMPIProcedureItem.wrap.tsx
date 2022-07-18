@@ -99,7 +99,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       if (!date) {
         return;
       }
-      return Date.parse(date) < Date.parse(new Date().toLocaleString());
+      return Date.parse(date) < Date.parse(new Date().toString());
     };
 
     const setFilteredParts = (data) => {
