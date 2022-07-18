@@ -677,7 +677,7 @@ context("Export maintenance record", () => {
   context("Maintenance Record with WIP status", () => {
     it("Verify export", () => {
       cy.exportVerifyEmail({
-        pdfStatus: "WIP", filename: "-1-Maintenance-Record-inline-form",
+        pdfStatus: STATUS_TYPES_LABEL.WIP, filename: "-1-Maintenance-Record-inline-form",
         status: STATUS_TYPES_LABEL.WIP,
       });
     });

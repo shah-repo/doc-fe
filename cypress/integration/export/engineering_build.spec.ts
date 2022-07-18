@@ -319,7 +319,10 @@ context("Export Engineering Build doc", () => {
 
   context(`EB with ${STATUS_TYPES_LABEL.WIP} status`, () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-1-EB-inline-form", pdfStatus: "WIP" });
+      cy.exportVerifyEmail({
+        status: STATUS_TYPES_LABEL.WIP, filename: "-1-EB-inline-form",
+        pdfStatus: STATUS_TYPES_LABEL.WIP,
+      });
     });
   });
 

@@ -236,7 +236,7 @@ Cypress.Commands.add("recFinalizeAndReleaseRecord", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
 
   cy.wrapWithWaitOnApiCalls([ CyRoutes.ReleaseDocRevWithoutAr ],
-  () => {
-    cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-  });
+    () => {
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+    });
 });

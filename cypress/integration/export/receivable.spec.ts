@@ -832,7 +832,10 @@ context("Export Receivable doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL, filename: "-A", pdfStatus: "Pending Approval" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.PENDING_APPROVAL, filename: "-A",
+          pdfStatus: "Pending Approval",
+        });
       });
     });
   });
