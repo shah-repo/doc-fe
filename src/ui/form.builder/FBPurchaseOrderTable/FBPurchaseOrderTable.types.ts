@@ -10,7 +10,7 @@ export type FBPurchaseOrderTableProps =
   handleCurrencyChange?: (ev, value) => void;
   handleDelete?: (index: number) => (e: any) => void;
   reCalculateValueOnBlur?: () => void;
-  classes?: Record<"root" | "table", string>;
+  classes?: Record<"root" | "table" | "containingBox", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
   loading?: boolean;

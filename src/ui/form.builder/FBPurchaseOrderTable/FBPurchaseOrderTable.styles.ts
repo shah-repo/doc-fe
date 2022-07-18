@@ -38,6 +38,12 @@ const FBPurchaseOrderClasses = makeStyles({
       whiteSpace: "nowrap",
     },
   },
+  containingBox: {
+    "overflow": "auto",
+    "&:hover::-webkit-scrollbar-thumb": {
+      backgroundColor: `${Colors.gray} !important`,
+    },
+  },
 });
 
 export default FBPurchaseOrderClasses;

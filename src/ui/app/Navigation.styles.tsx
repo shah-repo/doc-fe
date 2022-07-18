@@ -42,7 +42,7 @@ export default (theme: Theme) =>
         backgroundColor: "transparent",
       },
       "&:hover::-webkit-scrollbar-thumb": {
-        backgroundColor: "#999",
+        backgroundColor: Colors.gray,
       },
     },
   });
