@@ -4,6 +4,7 @@
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -1029,6 +1030,7 @@ context("Autosave LHR", () => {
     });
 
     it("Select Details tab", () => {
+      cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
@@ -1037,7 +1039,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -1172,6 +1174,10 @@ context("Autosave LHR", () => {
         cy.fbAddNewFieldButton();
       });
 
+      it("Close the sidebar", () => {
+        cy.contains("Form Builder Library").parent().find("button").arrowClick({ force: true });
+      });
+
       it("Select Overview tab", () => {
         cy.drSelectOverviewTab();
       });
@@ -1190,6 +1196,7 @@ context("Autosave LHR", () => {
       });
 
       it("Select MPI document for step #1 in LHRt", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
           $el.trigger("click");
         });
@@ -1218,6 +1225,7 @@ context("Autosave LHR", () => {
       });
 
       it("Select MPI document created with API for step #2 in LHRt", () => {
+        cy.get("[data-cy=\"LHR Step 2\"]").arrowClick();
         cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
           $el.trigger("click");
         });

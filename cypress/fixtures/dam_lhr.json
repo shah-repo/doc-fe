@@ -3948,7 +3948,7 @@
              "acronym": "LHRT-",
              "name": "Lot History Record Template",
              "defaultTraining": false,
-             "group": "FORM",
+             "group": "LHRT",
              "needsSignature": true,
              "isQms": true,
              "startingNumber": 1,
