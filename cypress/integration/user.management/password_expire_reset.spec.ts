@@ -253,9 +253,12 @@ context("Password expire reset flow", () => {
           cy.get("div.Toastify__toast-body>div>a").arrowClick();
         });
 
-        it("Enter password", () => {
+        it("Enter email and current password", () => {
           cy.get("[data-cy=\"email\"]").arrowType(emailOfUserToSignUp);
           cy.get("[data-cy=\"currentPassword\"]").arrowType(previousPassword);
+        });
+
+        it("Enter password", () => {
           cy.get(`[name="newPassword"]`).arrowType(newPassword);
         });
 
@@ -352,9 +355,12 @@ context("Password expire reset flow", () => {
           cy.imapNavigToPasswordResetLink({ userEmail: emailOfUserToSignUp, fromDate: searchMailFromDate });
         });
 
-        it("Enter password", () => {
+        it("Enter email and current password", () => {
           cy.get("[data-cy=\"email\"]").arrowType(emailOfUserToSignUp);
           cy.get("[data-cy=\"currentPassword\"]").arrowType(previousPassword);
+        });
+
+        it("Enter password", () => {
           cy.get(`input[name="newPassword"]`).arrowType( newPassword );
         });
 
