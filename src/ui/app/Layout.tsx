@@ -41,7 +41,7 @@ const Layout: React.FunctionComponent = () => {
     <SocketsContainer />
     <WatermarkFooterContainer />
     {(
-      <main className={window.location.pathname === "/" ? classes.newContent : classes.content}>
+      <main className={SM.isHomeURL ? classes.newContent : classes.content}>
         <DataFetcherContainer />
         <Switch>
           <Route
