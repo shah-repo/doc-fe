@@ -95,7 +95,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
               </Box>
             )
             : (
-              <List>
+              <List className={classes.list}>
                 {
                   navigationItems.map((link: NavigationItem) => (
                     <NavigationLinkContainer

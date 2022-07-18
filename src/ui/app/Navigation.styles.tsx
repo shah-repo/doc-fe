@@ -13,6 +13,7 @@ export default (theme: Theme) =>
       width: DRAWER_WIDTH,
       background: Colors.mirage,
       zIndex: theme.zIndex.drawer + 2,
+      overflow: "hidden",
     },
     toolbar: {
       backgroundColor: Colors.mirage,
@@ -27,5 +28,21 @@ export default (theme: Theme) =>
     headerLink: {
       textDecoration: "none",
       color: theme.palette.common.white,
+    },
+    list: {
+      "height": "72vh",
+      "overflow": "hidden",
+      "overflowY": "auto",
+      "&::-webkit-scrollbar": {
+        backgroundColor: "transparent",
+        width: "4px",
+        height: "6px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "transparent",
+      },
+      "&:hover::-webkit-scrollbar-thumb": {
+        backgroundColor: "#999",
+      },
     },
   });
