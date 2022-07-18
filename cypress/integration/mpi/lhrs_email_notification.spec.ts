@@ -791,6 +791,10 @@ context("LHRs email notifications", () => {
         cy.drSelectDetailsTab();
       });
 
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
         cy.mpiStartStep({ stepNumber: 1 });
