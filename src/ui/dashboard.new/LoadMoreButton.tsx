@@ -18,6 +18,7 @@ const styles = makeStyles(() =>
       "color": Colors.navy,
       "margin": 0,
       "margin-top": 2,
+      "verticalAlign": "baseline",
       "&:hover": {
         backgroundColor: "transparent",
       },
@@ -36,6 +37,7 @@ export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = fals
   return (
     <Box style={{ float: position }} mt={5}>
       <Button
+        variant="text"
         onClick={() => onLoadMore()}
         className={classes.loadMoreButton}
         disableRipple
@@ -46,5 +48,5 @@ export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = fals
       </Button>
       <LoadMore fill={disable ? Colors.hint_gray : Colors.navy}/>
     </Box>
-  )
-  ; };
+  );
+};

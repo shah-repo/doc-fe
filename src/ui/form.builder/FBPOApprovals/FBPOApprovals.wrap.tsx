@@ -4,8 +4,10 @@ import { compact, concat, difference, filter, find, includes, isEmpty, map, minB
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
@@ -57,6 +59,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const didMount = useDidMount();
     let availableApprovers: string[] = [];
     const hasPOItems = useRef(false);
+    const dispatch = useDispatch();
+
 
     isIncluded = (group: FBRequiredApprover): boolean =>
       (includes(map(poApprovalsState?.checkedGroups, "id"), group.id));
@@ -274,6 +278,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         fieldId: name,
         partOf: { id },
         signatureGroupName: groupName,
+      }, () => {
+        const id  = workspaceState?.id;
+        if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
       }));
     };
 
@@ -284,7 +291,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       map(ids, (approver) => {
         const approval = find(poApprovalsState?.getApprovals, (a) => a.approver?.id === approver);
         poApprovalsState?.removeCheckedGroups(approval?.signatureGroupName);
-        poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id);
+        poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
+          const id  = workspaceState?.id;
+          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+        });
       });
     };
 

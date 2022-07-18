@@ -7,7 +7,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -116,7 +116,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
-
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
@@ -185,6 +184,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  const isAttachmentRequired = () => {
+    const type = documentTypesById[documentTypeId];
+    const docId = _documentRevisionFormState?.documentRevision?.id;
+    return docId || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
+  };
+
   return (
     <FormWrapper
       dirty={dirty}
@@ -201,7 +206,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
       />
-      <Grid container spacing={3} md={8} sm={12}>
+      <Grid container spacing={3} md={12} sm={12}>
         <Grid item xs={6}>
           <DocumentTypeSelect
             outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
@@ -313,7 +318,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {_formState?.active && ["design", "form"].includes(_formState.mode) && (
           <>
-            <Grid item xs={12}>
+            { isAttachmentRequired() && <Grid item xs={12}>
               <AttachmentsField
                 isDisabled={isDisabledInput}
                 isNewVersion={false}
@@ -325,6 +330,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 documentTypeId={documentTypeId || ""}
               />
             </Grid>
+            }
             {hasOutput &&
             <Grid item xs={12}>
               <FBActiveNoOutput

@@ -24,9 +24,11 @@ export const styles = makeStyles(() =>
       right: "0px",
       top: "0px",
       background: Colors.sky_blue,
+      cursor: "pointer",
     },
     actionIcon: {
       paddingLeft: "10px",
+      cursor: "pointer",
     },
     link: {
       color: Colors.black,
