@@ -34,6 +34,8 @@ declare global {
         materialDocName: string;
         quantity: integerType;
         unit: string;}): Chainable<Subject>;
+      lhrClickReviseDocument(): Chainable<Subject>;
+      lhrClickSaveDocument(): Chainable<Subject>;
     }
   }
 }
@@ -193,3 +195,18 @@ Cypress.Commands.add("pmToggleChangesFromPrevBuild", () => {
   cy.get("[name=\"fb-procedure-diff\"]").arrowClick();
 });
 
+Cypress.Commands.add("lhrClickReviseDocument", () => {
+  cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrClickSaveDocument", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+  cy.checkToastMessage({ exists: false });
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
