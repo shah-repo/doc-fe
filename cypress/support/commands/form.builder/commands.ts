@@ -281,7 +281,7 @@ Cypress.Commands.add("fbAddField", () => cy.get("button[data-cy=\"fb-editor-acti
 Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }));
 
 Cypress.Commands.add("fbEnterNameValue", (params: { name: string; value: string }) => {
-  cy.get(`input[name="${params.name}"]`).clear().arrowType(params.value).arrowClick();
+  cy.get(`input[name^="${params.name}"]`).clear().arrowType(params.value).arrowClick();
 });
 
 Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string }) => {
