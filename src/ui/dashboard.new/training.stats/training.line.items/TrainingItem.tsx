@@ -3,12 +3,12 @@ import {
   Grid,
   ListItem,
   ListItemText,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import {
   getFormattedDateString,
-  MomentFormats
+  MomentFormats,
 } from "../../../../common/utils/date";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
