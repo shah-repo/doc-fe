@@ -51,7 +51,6 @@ context("Mpi Template", () => {
             documentTypes: [
               {
                 ...LotHistoryRecordTest,
-                schema: [],
               },
               MPITest,
               LHRTTest,
@@ -422,8 +421,31 @@ context("Mpi Template", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      it("Select Details tab", () => {
-        cy.drSelectDetailsTab();
+      it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Material one");
+        cy.get("ul>li[role=option]").contains("Material one").arrowClick();
+      });
+
+      context("Select created MPI in LHR template", () => {
+        it("Select Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+        });
+
+        it("Select MPI document for step #1 in LHRt", () => {
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+            $el.trigger("click");
+          });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
       });
 
       context("Add FB components", () => {

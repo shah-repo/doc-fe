@@ -597,7 +597,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRevOwner, () => {
     cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
   });
-  cy.progressBarShouldNotExist();
+  // cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
