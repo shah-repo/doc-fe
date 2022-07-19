@@ -126,7 +126,7 @@ export default makeStyles((theme: Theme) =>
     references: {
       "overflow": "hidden",
       "&:hover": {
-        overflowY: "scroll",
+        overflowY: "auto",
       },
     },
   })
