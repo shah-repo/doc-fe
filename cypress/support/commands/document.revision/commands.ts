@@ -457,7 +457,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
-  cy.progressBarShouldNotExist();
+  // cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
