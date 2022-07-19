@@ -307,7 +307,6 @@ context("Password expire flow", () => {
       it("Click reset password for user", () => {
         cy.usrFilterByEmail({ email: emailOfUserToSignUp });
         cy.contains("Reset Password").arrowClick();
-        searchMailFromDate =  new Date(new Date().getTime() - emailDateOffset);
       });
 
       it("Get email to unlock account", () => {
