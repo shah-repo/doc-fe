@@ -228,7 +228,7 @@ Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {
 
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ReleaseDocRevWithoutAr,
-    CyRoutes.GetDocAggregatedAudit],
+    CyRoutes.GetRequiredApproversDocRev],
   () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   });
