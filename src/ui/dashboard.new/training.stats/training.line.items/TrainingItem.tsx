@@ -3,12 +3,12 @@ import {
   Grid,
   ListItem,
   ListItemText,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import {
   getFormattedDateString,
-  MomentFormats,
+  MomentFormats
 } from "../../../../common/utils/date";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
@@ -76,7 +76,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             {name}
           </Typography>
         </Grid>
-        <Grid  className={classes.gridItems}>
+        <Grid item  className={classes.gridItems}>
           {isOverdue && (
             <Typography
               component="span"
