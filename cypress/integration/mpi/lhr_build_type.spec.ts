@@ -938,18 +938,15 @@ context("LHR Build type flow", () => {
 
       context("Enable notes in LHR step", () => {
         it("Click edit on LHR step", () => {
-          cy.pause();
           cy.drSelectDetailsTab();
           cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         });
 
         it("Check 'Include Notes' checkbox", () => {
-          cy.pause();
           cy.get("input[value=\"includeNotes\"]").check();
         });
 
         it("Save changes made to field", () => {
-          cy.pause();
           cy.get("[data-cy=\"common.add\"]").arrowClick();
         });
       });
