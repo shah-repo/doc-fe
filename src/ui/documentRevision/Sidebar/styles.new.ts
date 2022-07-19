@@ -123,5 +123,11 @@ export default makeStyles((theme: Theme) =>
       color: Colors.navy,
       fontSize: "14px",
     },
+    references: {
+      "overflow": "hidden",
+      "&:hover": {
+        overflowY: "auto",
+      },
+    },
   })
 );

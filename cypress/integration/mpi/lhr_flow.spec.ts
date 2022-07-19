@@ -992,6 +992,10 @@ context("LHR flow", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -1014,11 +1018,6 @@ context("LHR flow", () => {
       cy.poAddDateRequired();
     });
 
-    it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-
-    });
-
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       cy.unClick();
@@ -1028,12 +1027,16 @@ context("LHR flow", () => {
       cy.pmSubmitForApproval();
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve record", () => {
       cy.ebApprove();
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
     });
   });
 
@@ -1133,12 +1136,9 @@ context("LHR flow", () => {
 
       context("Fill step #2", () => {
         it("Add step #2", () => {
-          SystemRequirement("REQ-3060");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddStep();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PI Procedure" });
+          cy.fbAddNewFieldButton();
         });
 
         it("Add attachment", () => {
@@ -1325,6 +1325,14 @@ context("LHR flow", () => {
       });
 
       context("Select created MPI in LHR template", () => {
+        it("Select Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+        });
+
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
@@ -1354,6 +1362,8 @@ context("LHR flow", () => {
         });
 
         it("Select MPI document created with API for step #2 in LHRt", () => {
+          cy.get("[data-cy=\"LHR Step 2\"]").arrowClick();
+
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
@@ -1406,6 +1416,10 @@ context("LHR flow", () => {
       });
 
       context("Add parameter materials and equipment", () => {
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+        });
+
         it("Add material parameter", () => {
           cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
             .eq(0).arrowClick();
@@ -1453,7 +1467,7 @@ context("LHR flow", () => {
 
     it("Verify LHR title", () => {
       SystemRequirement("REQ-3310");
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDateSuffix + "02");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "LHR-00004");
     });
 
@@ -1465,7 +1479,7 @@ context("LHR flow", () => {
 
     it("Check lot number", () => {
       SystemRequirement("REQ-3180");
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDateSuffix + "02");
     });
 
     it("Enter initial quantity", () => {
@@ -1503,7 +1517,7 @@ context("LHR flow", () => {
         lhrDocUrl = url;
       });
       SystemRequirement("REQ-3180");
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDateSuffix + "02RD");
     });
 
     context("Complete first step in LHR", () => {

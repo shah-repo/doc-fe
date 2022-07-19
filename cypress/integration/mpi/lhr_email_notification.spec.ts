@@ -257,6 +257,10 @@ context("LHRs email notifications", () => {
       });
 
       context("Select created MPI in LHR template", () => {
+        it("Select Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("[data-cy=\"lhrstep-built-in\"]").arrowType(MPIDocumentTitle);
           cy.get(dataCyOptions).contains(MPIDocumentTitle).arrowClick();
