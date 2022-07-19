@@ -5,7 +5,7 @@ import faker from "faker";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { momentInPST } from "../../utils/constants/dateHandler";
+import { emailDateOffset, momentInPST } from "../../utils/constants/dateHandler";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -16,7 +16,6 @@ let employeeLoginFirst;
 let adminLoginResponse;
 let adminSessionId;
 let asyncTasksGroup;
-let newEmployeId;
 let searchMailFromDate;
 let emailsFromInbox;
 const newPassword = "Tester123#!";
@@ -119,15 +118,11 @@ context("Password expire flow", () => {
 
       context("Create new user", () => {
         it("Clicks the save button", () => {
-          cy.intercept({ method: "POST", pathname: "/api/v1/employees" }).as("postEmployee");
-          cy.get("button>span>svg>path").eq(1).arrowClick();
-          cy.wait("@postEmployee", { requestTimeout: 40000, responseTimeout: 40000 }).then((res) => {
-            if (res.response) {
-              const response = res.response.body;
-              newEmployeId = response.id;
-            }
-          });
-          cy.landingPageLoadingElementShouldNotExist();
+          cy.usrClickSaveButton();
+        });
+
+        it("Logout user", () => {
+          cy.authLogout();
         });
       });
     });
@@ -135,7 +130,6 @@ context("Password expire flow", () => {
     context("Activate new user", () => {
       it("Verify activation email", () => {
         cy.imapGetActivationLink({ userEmail: emailOfUserToSignUp });
-        cy.log(newEmployeId);
       });
 
       it("Enter password", () => {
@@ -287,7 +281,7 @@ context("Password expire flow", () => {
 
       it(`Click "RESET MY PASSWORD" button`, () => {
         cy.usrClickResetMyPasswordButton();
-        searchMailFromDate =  new Date();
+        searchMailFromDate =  new Date(new Date().getTime() - emailDateOffset);
       });
 
       it("Verify no password reset email has arrived", () => {
@@ -313,7 +307,6 @@ context("Password expire flow", () => {
       it("Click reset password for user", () => {
         cy.usrFilterByEmail({ email: emailOfUserToSignUp });
         cy.contains("Reset Password").arrowClick();
-        cy.wait(10000);
       });
 
       it("Get email to unlock account", () => {
