@@ -1599,6 +1599,8 @@ context("Receivable test with Page Details", () => {
 
     it("Navigate to receiving", () => {
       cy.navigToReceivableList();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify Receipt ID", () => {
