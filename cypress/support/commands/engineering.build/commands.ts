@@ -29,8 +29,8 @@ Cypress.Commands.add("ebEnterPartName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("ebEnterPartDescription", (params: { description: string }) => {
-  cy.xpath("//div[@data-cy=\"description\"]/../div[2]").arrowClick();
-  cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear().arrowType(params.description);
+  cy.xpath("//div[@data-cy=\"description\"]/../div[2]").eq(1).arrowClick();
+  cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").eq(1).clear().arrowType(params.description);
   cy.get("[data-cy=\"form.builder.field.description\"]>div").arrowClick();
 });
 
@@ -45,7 +45,7 @@ Cypress.Commands.add("ebCheckIfPartIsInSummary", (params: {partName: string}) =>
 });
 
 Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
-  cy.get(" [data-cy=\"DocumentRevisionList-item\"]>a>div").first()
+  cy.get("[data-cy=\"revision\"]").eq(0)
     .then(($el) => {
       const text = $el.text();
       expect(text.replace(/\u00a0/g, " ")).to.contain("Revision 2  - Draft");
@@ -53,7 +53,7 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
 });
 
 Cypress.Commands.add("ebClickClone", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+  cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
     cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
