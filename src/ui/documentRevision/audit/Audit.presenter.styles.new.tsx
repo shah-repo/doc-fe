@@ -50,10 +50,5 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightBold,
       marginLeft: theme.spacing(1),
     },
-    revisionList: {
-      height: "80vh",
-      overflow: "hidden",
-      overflowY: "auto",
-    },
   }),
 );
