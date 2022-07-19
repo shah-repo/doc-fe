@@ -14,7 +14,6 @@ let employeeLoginFirst;
 let adminLoginResponse;
 let adminSessionId;
 let asyncTasksGroup;
-let newEmployeId;
 let searchMailFromDate;
 
 const newPasswordsUI = [
@@ -136,15 +135,7 @@ context("Password expire reset flow", () => {
 
       context("Create new user", () => {
         it("Clicks the save button", () => {
-          cy.intercept({ method: "POST", pathname: "/api/v1/employees" }).as("postEmployee");
-          cy.get("button>span>svg>path").eq(1).arrowClick();
-          cy.wait("@postEmployee").then((res) => {
-            if (res.response) {
-              const response = res.response.body;
-              newEmployeId = response.id;
-            }
-          });
-          cy.landingPageLoadingElementShouldNotExist();
+          cy.usrClickSaveButton();
         });
 
         it("Logout", () => {
@@ -156,7 +147,6 @@ context("Password expire reset flow", () => {
     context("Activate new user", () => {
       it("Verify activation email", () => {
         cy.imapGetActivationLink({ userEmail: emailOfUserToSignUp });
-        cy.log(newEmployeId);
       });
 
       it("Enter password", () => {
