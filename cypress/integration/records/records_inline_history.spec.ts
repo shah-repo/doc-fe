@@ -217,20 +217,19 @@ context("Record inline history Flow", () => {
       it("Select approver for first inline", () => {
         SystemRequirement("REQ-4340");
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("input[data-cy*=\"fb-ia-inline-field\"]").arrowClick().wait(1000);
+          cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
-          cy.unClick();
         });
       });
 
       it("Save record", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
-        cy.get("button[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
@@ -246,24 +245,17 @@ context("Record inline history Flow", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
           cy.unClick();
-          cy.wrapWithWaitOnApiCall(
-            CyRoutes.PostOrPatchDocRev, () => {
-              cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
-              cy.unClick();
-              cy.progressBarShouldNotExist();
-            });
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
+            cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
+            cy.unClick();
+            cy.progressBarShouldNotExist();
+          });
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
           cy.drEnterDocumentDescription({ description: "History Test Inline Record description" });
-        });
-
-        it("Select approver for first inline", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-            cy.get("input[data-cy*=\"fb-ia-inline-field\"]").arrowClick().wait(1000);
-            cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
-            cy.unClick();
-          });
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -273,18 +265,15 @@ context("Record inline history Flow", () => {
             .should("have.text", "Inline approval pending");
         });
 
-        it("Save record", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4400");
-          cy.get("button[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
           cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCall(
-            CyRoutes.PostApprovalsApprove, () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            });
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostApprovalsApprove,
+            CyRoutes.SessionDetails], () => {
+            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          });
           cy.checkToastMessage({ exists: false });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -329,13 +318,6 @@ context("Record inline history Flow", () => {
 
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
-        it("Check history entry", () => {
-          SystemRequirement("REQ-1630");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-          });
         });
 
         it("Count number of elements in approval history", () => {
