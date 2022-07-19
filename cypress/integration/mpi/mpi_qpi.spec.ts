@@ -241,6 +241,10 @@ context("Mpi/Qpi test", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
       it("Add Checkbox group", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
@@ -396,7 +400,8 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Verify attached image.jpg file length more than 500 bytes", () => {
-          const attachedFile = path.join("cypress/fixtures", "image.jpg");
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
 
@@ -610,8 +615,9 @@ context("Mpi/Qpi test", () => {
         });
     });
 
-    it("Verify attached file length more than 500 bytes", () => {
-      const attachedFile = path.join("cypress/fixtures", "image.jpg");
+    it("Verify attached image.jpg file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
       cy.readFile(attachedFile).its("length").should("be.gt", 500);
     });
 
@@ -770,6 +776,10 @@ context("Mpi/Qpi test", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
       it("Add Checkbox group", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
@@ -926,7 +936,8 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Verify attached file length more than 500 bytes", () => {
-          const attachedFile = path.join("cypress/fixtures", "image.jpg");
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
 
@@ -1135,7 +1146,8 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Verify attached file length more than 500 bytes", () => {
-          const attachedFile = path.join("cypress/fixtures", "image.jpg");
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
 
