@@ -434,8 +434,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           }
         </Typography>
       </Box>}
-      <List className={[classes.revisionList, "containingBoxScrollbar"].join(" ")}
-        disablePadding>{audit && renderAuditGroup()}</List>
+      <List disablePadding>{audit && renderAuditGroup()}</List>
     </div>
   );
 };
