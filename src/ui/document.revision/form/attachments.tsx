@@ -50,7 +50,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box marginBottom="30px">
+    <Box>
       <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
         <Typography variant="h6" style = {classes.attachmentHeadText}>
           <Text message={label}/>

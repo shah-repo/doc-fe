@@ -803,7 +803,7 @@ context("Autosave on blur", () => {
     });
 
     it("Add PO service item and check for autosave", () => {
-      cy.get("[data-cy='form.builder.add.item']").eq(3).arrowClick();
+      cy.get("[data-cy='fb-control-btn']").eq(-1).arrowClick();
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
           cy.poSelectOption({ optionName: "service" });
@@ -864,7 +864,7 @@ context("Autosave on blur", () => {
     });
 
     it("Add Procedure step description and check for autosave", () => {
-      cy.get("[data-cy$=\".description\"]>div>div>div>div>div[contenteditable]").eq(1)
+      cy.get("[data-cy$=\"description\"]>div>div>div>div>div[contenteditable]").eq(1)
         .click({ force: true }).arrowType("Step One description", { force: true });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.unClick();
@@ -926,7 +926,7 @@ context("Autosave on blur", () => {
         "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
       ).last().click();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostTasks], () => {
-        cy.get("button[data-cy=\"fb-control-btn\"]").eq(8).arrowClick({ force: true });
+        cy.get("[data-cy=\"fb-control-btn\"]").eq(-2).arrowClick();
       });
     });
 

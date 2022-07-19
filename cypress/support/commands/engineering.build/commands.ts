@@ -85,7 +85,7 @@ Cypress.Commands.add("ebSelectFirstDocument", () => {
 });
 
 Cypress.Commands.add("ebApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {

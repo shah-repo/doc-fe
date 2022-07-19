@@ -6,7 +6,11 @@ export default makeStyles((theme: Theme) =>
     root: {
       background: Colors.alabaster,
       display: "flex",
-      height: "100%",
+      height: "calc(100vh - 125px)",
+      padding: "0px",
+      maxWidth: "100%",
+      margin: "0px",
+      marginTop: "76px",
     },
     appFrame: ({ isDrawerOpen }) => ( {
       flexGrow: 1,

@@ -37,7 +37,8 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
             <>{inputState?.includeNotes && <FBNotes {...{ name }} />}</>
           )}
         </Observer>
-        <FormControl fullWidth {...{ error }}>
+
+        <FormControl fullWidth {...{ error }} >
           <Box display="flex" flexDirection="row">
             <Observer>
               {() => (
@@ -59,6 +60,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
 
           {children}
         </FormControl>
+
         {!isEmpty(helperText) && showErrorMsg && (
           <FormHelperText {...{ error }}>
             <Text message={helperText as string} />

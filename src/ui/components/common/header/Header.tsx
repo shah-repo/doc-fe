@@ -1,6 +1,7 @@
 import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import { Observer } from "mobx-react";
 import React from "react";
 import { SM } from "../../../../App";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
@@ -17,15 +18,17 @@ const styles = makeStyles((theme: Theme) =>
       borderRadius: "6px",
     },
     appbar: {
-      backgroundColor: Colors.white,
-      position: "sticky",
-      top: "45px",
+      top: "48px",
       zIndex: theme.zIndex.drawer + 1,
     },
-    toolbar: {
-      borderBottom: `1px solid ${Colors.medium_gray}`,
-      minHeight: "60px",
-    },
+    toolbar: (createUrl) => ({
+      minHeight: createUrl ? "" : "84px",
+      padding: createUrl ? "" : "10px",
+      display: "flex",
+      justifyContent: "flex-end",
+      borderBottom: createUrl ? `1px solid ${Colors.medium_gray}` : "",
+      background: Colors.alabaster,
+    }),
   },
   ));
 interface Props{
@@ -33,33 +36,35 @@ interface Props{
   displayStatus?: DocumentRevisionStatus;
 }
 const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
-  const classes = styles();
   const headerBackgroundClasses = headerBackgroundStyles();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
+  const classes = styles(isCreateUrl);
+  const { _documentRevisionFormState } = SM.useStores();
   if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
-      <Box
-        minHeight={60}
-        borderColor={Colors.medium_gray}
-        bgcolor={Colors.alabaster}
-        py={1.25}
-        px={1.25}
-        alignContent="center"
-      >
-        <Grid
-          container={true}
-          className={`${classes.headerSection} ${
-            headerBackgroundClasses[
-              FormHeaderStatusClassMapping[
-                displayStatus || status || ""
-              ]
-            ]
-          }`}
-          alignItems="center"
-        >
-          {children}
-        </Grid>
-      </Box>
+      <AppBar color="primary" className={classes.appbar}>
+        <Toolbar className={classes.toolbar}>
+          <Observer>
+            {() => (
+              <Box width={_documentRevisionFormState?.leftPanelOpen ? "calc(100% - 540px)" : "calc(100% - 240px)"}>
+                <Grid
+                  container={true}
+                  className={`${classes.headerSection} ${
+                    headerBackgroundClasses[
+                      FormHeaderStatusClassMapping[
+                        displayStatus || status || ""
+                      ]
+                    ]
+                  }`}
+                  alignItems="center"
+                >
+                  {children}
+                </Grid>
+              </Box>
+            )}
+          </Observer>
+        </Toolbar>
+      </AppBar>
     );
   }
 

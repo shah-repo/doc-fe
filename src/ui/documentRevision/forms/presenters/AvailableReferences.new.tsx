@@ -213,6 +213,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: "0px 30px 0px 9px", height: value.length ? "100%" : "40px" },
+                  startAdornment: (
+                    <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                      {params.InputProps.startAdornment}
+                    </div>
+                  ),
                   endAdornment: (
                     <>
                       { open && loading && (

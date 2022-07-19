@@ -20,10 +20,14 @@ export const styles = makeStyles(() =>
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",
-      display: "flex",
+      display: "inline",
       alignItems: "center",
       marginLeft: "5px",
       color: Colors.almost_black,
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      marginTop: "7px",
     },
     docIdAndTitle: {
       "fontWeight": 600,
@@ -57,7 +61,7 @@ export const styles = makeStyles(() =>
     },
     avatarSection: {
       display: "flex",
-      maxWidth: "70%",
+      maxWidth: "60%",
     },
     margin5: {
       marginRight: "5px",
