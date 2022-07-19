@@ -65,7 +65,7 @@ Cypress.Commands.add("ebClickClone", () => {
 
 Cypress.Commands.add("ebClickCloneFromHeader", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+  cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
     cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
