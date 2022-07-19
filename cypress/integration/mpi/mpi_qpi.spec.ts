@@ -4,6 +4,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -316,7 +317,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check doc Draft status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "DRAFT" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
           cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
 
           cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
@@ -527,7 +528,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check MPI doc released status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "RELEASED" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "MPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             MPIDocId = $docIdElement.text();
@@ -847,7 +848,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check QPI doc Draft status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "DRAFT" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
           cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             QPIDocId = $docIdElement.text();
@@ -1053,7 +1054,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check QPI doc released status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "RELEASED" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             QPIDocId = $docIdElement.text();

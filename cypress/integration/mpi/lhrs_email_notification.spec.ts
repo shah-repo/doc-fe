@@ -5,6 +5,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -814,7 +815,7 @@ context("LHRs email notifications", () => {
       });
 
       it("Verify status is WIP", () => {
-        cy.drCheckDocumentStatus({ status: "WIP" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
         cy.url().then((url: any) => {
           lhrs1DocUrl = url;
         });
