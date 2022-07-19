@@ -128,7 +128,10 @@ export enum DOC_TYPE_GROUP_OPTION {
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 
 export enum TabTypeOptions {
-  TABS_MEQ = "MEQ"
+  TABS_MEQ = "MEQ",
+  DYNAMIC = "DYNAMIC",
+  TRAINING = "TRAINING",
+  MIXED = "MIXED",
 }
 
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts

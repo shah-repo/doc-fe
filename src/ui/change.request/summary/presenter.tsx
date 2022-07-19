@@ -53,7 +53,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box height="80vh" overflow="auto" className="hide-scroll">
+    <Box height="calc(100vh - 122px)" overflow="auto" className="hide-scroll">
       <Grid container={true} spacing={4} direction="column" className={classes.container}>
         {canEdit && <FormProgress asyncState={asyncState} />}
         {canEdit && <FormMessage asyncState={asyncState} />}

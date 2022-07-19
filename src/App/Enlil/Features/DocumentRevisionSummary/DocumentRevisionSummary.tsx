@@ -11,7 +11,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
+import { FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
@@ -58,8 +58,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   if (documentRevision.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
       labelId: "tabId.training",
-      tabId: "training",
-      type: "TRAINING",
+      tabId: TabTypeOptions.TRAINING,
+      type: TabTypeOptions.TRAINING,
     }];
   }
 
@@ -81,7 +81,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       }),
     }));
 
-    smartReferencesFrom?.forEach((ele, i) => {
+    smartReferencesFrom?.forEach((ele) => {
       const obj = schema?.filter((el) => ele.metadata.fieldId === el.name);
       ele.stepIndex = obj?.[0]?.stepIndex;
     });
@@ -98,10 +98,10 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
-      headerBoxProps={{ maxHeight: "30%", paddingTop: "38px" }}
+      headerBoxProps={{ maxHeight: "30%", minHeight: 84 }}
       contentBoxProps={{
-        minHeight: "calc(100% - 30%)", height: "100%",
-        bgcolor: Colors.alabaster, paddingTop: "94px",
+        minHeight: "calc(70%)", height: "100%",
+        bgcolor: Colors.alabaster,
       }}
       values={documentRevision}
       header= {
@@ -128,11 +128,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
-              boxProps={{
-                overflow: (_documentRevisionFormState?.expanded ? "auto" : ""),
-                height: "calc(100vh - 130px)",
-              }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
@@ -151,53 +146,43 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                         schemaItem.tabId === tabId && !schemaItem.deleted);
 
                       return (
-                        <SMBox
-                          pb={_documentRevisionFormState?.isDesTextClamped ? 0 :
-                            (isLHR && !documentRevision.changeRequest ? 0 : 2.5)}
-                          height={_documentRevisionFormState?.expanded ? "auto" :
-                            (_documentRevisionFormState?.isDesTextClamped ? "calc(100vh - 325px)" :
-                              (!documentRevision.changeRequest ? (isLHR &&
-                                !_documentRevisionFormState?.isLHRProgressBarVisible ?
-                                "calc(100vh - 203px)" : "calc(100vh - 255px)") : "calc(100vh - 280px)"))}
-                          overflow="auto" {...{ onScroll }}>
-                          <SMBox id="Presenter-FBWorkspace">
-                            {tabType === "MIXED" &&  <>
-                              <SummaryPresenter
-                                dataProp={documentRevision}
-                                canChangeOwnerShip={canChangeOwnerShip}
-                                canShowCreateVersionButton={true}
-                              />
-                              {!isEmpty(availableSchema) && <FBWorkspace
-                                document={documentRevision}
-                                initialValues={documentRevision.formInput}
-                                schema={tabSchema}
-                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                  "formPreview" : "preview"}
-                              />
-                              }
-                            </>}
-                            {tabType === "DYNAMIC" && isFB && (
-                              <FBWorkspace
-                                document={documentRevision}
-                                initialValues={documentRevision.formInput}
-                                schema={tabSchema}
-                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                  "formPreview" : "preview"}
-                              />
-                            )}
-                            {tabType === TabTypeOptions.TABS_MEQ &&
-                            documentRevision.status !== DocumentRevisionStatus.Voided &&
-                              <FBMaterialEqInfoContainer
-                                documentRevisionId={documentRevision?.id}
-                              />
+                        <SMBox onScroll={onScroll} id="Presenter-FBWorkspace">
+                          {tabType === TabTypeOptions.MIXED &&  <>
+                            <SummaryPresenter
+                              dataProp={documentRevision}
+                              canChangeOwnerShip={canChangeOwnerShip}
+                              canShowCreateVersionButton={true}
+                            />
+                            {!isEmpty(availableSchema) && <FBWorkspace
+                              document={documentRevision}
+                              initialValues={documentRevision.formInput}
+                              schema={tabSchema}
+                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                                FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
+                            />
                             }
-                            {tabType === "TRAINING" &&
-                                _tabsState?.value === trainingTabIndex && (
-                              <FBTrainingInfoContainer
-                                documentRevisionId={documentRevision?.id}
-                              />
-                            )}
-                          </SMBox>
+                          </>}
+                          {tabType === TabTypeOptions.DYNAMIC && isFB && (
+                            <FBWorkspace
+                              document={documentRevision}
+                              initialValues={documentRevision.formInput}
+                              schema={tabSchema}
+                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                                FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
+                            />
+                          )}
+                          {tabType === TabTypeOptions.TABS_MEQ &&
+                          documentRevision.status !== DocumentRevisionStatus.Voided &&
+                          <FBMaterialEqInfoContainer
+                            documentRevisionId={documentRevision?.id}
+                          />
+                          }
+                          {tabType === TabTypeOptions.TRAINING &&
+                          _tabsState?.value === trainingTabIndex && (
+                            <FBTrainingInfoContainer
+                              documentRevisionId={documentRevision?.id}
+                            />
+                          )}
                         </SMBox>
                       );
                     })}

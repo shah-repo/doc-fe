@@ -114,7 +114,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       ],
       validationMode: "default",
       applicableValidationSchema: true,
-      tabId: "overview",
+      tabId: "details",
     },
   ],
 };

@@ -203,8 +203,18 @@ context("Record inline Flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Add textfield", () => {
@@ -215,7 +225,7 @@ context("Record inline Flow", () => {
       });
 
       it("Add inline approval", () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
@@ -225,7 +235,7 @@ context("Record inline Flow", () => {
       });
 
       it("Add Checkbox group", () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
         cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
         cy.fbGroupOptions("1", "2", "3");
@@ -235,7 +245,7 @@ context("Record inline Flow", () => {
       });
 
       it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.fbOpenValidation();
@@ -246,26 +256,20 @@ context("Record inline Flow", () => {
       });
 
       it("Add second textfield", () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Second textfield for inline" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add second inline approval", () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Second inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddField();
-      });
-
-      it("Upload attachement picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-        cy.progressBarShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -728,6 +732,10 @@ context("Record inline Flow", () => {
         cy.landingPageLoadingElementShouldNotExist();
       });
 
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Checkbox option 1 checked", () => {
         cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
@@ -958,6 +966,11 @@ context("Record inline Flow", () => {
     });
 
     context("Approve Inline Approval", () => {
+      it("Navigate to details tab", () => {
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.drSelectDetailsTab();
+      });
+
       it("Approve first Inline Approval", () => {
         cy.get("button[data-cy=\"fb-control-btn\"]").first().contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
