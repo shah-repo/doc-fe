@@ -113,7 +113,6 @@ context("Autocomplete 'Approval Roles' test", () => {
       it("Approve and release FORM document", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          // cy.fbClickButton({ el: "updateRecord" });
         });
       });
     });
@@ -129,6 +128,18 @@ context("Autocomplete 'Approval Roles' test", () => {
 
       it("Enter description 'test description'", () => {
         cy.drEnterDocumentDescription({ description: "test description" });
+      });
+
+      it("Navigate to Matrix Details tab", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.drSelectMatrixDetailsTab();
+        });
+      });
+
+      it("Navigate to Approval Roles tab", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.drSelectApprovalRolesTab();
+        });
       });
 
       it("Click on 'Add Another Role' button", () => {
