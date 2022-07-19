@@ -191,7 +191,14 @@ context("Send PO Owner an email notification when a PO is approved", () => {
         cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+        cy.unClick();
+      });
+
       it("Go to Purchase Order module", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.navigToPurchaseOrder();
       });
 
@@ -223,11 +230,19 @@ context("Send PO Owner an email notification when a PO is approved", () => {
           cy.get("input[name^=ordered]").parent().find("button").arrowClick();
           cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
         });
+
+        it("Clicks Save button", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
       });
 
       context("Add purchase order item", () => {
+        it("navigate to Line Items", () => {
+          cy.drSelectLineItems();
+        });
+
         it("Click on 'Add item' button to add item without Part Number", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+          cy.poAddNewFieldItem();
         });
 
         it("Enter Quantity Ordered", () => {
@@ -271,8 +286,11 @@ context("Send PO Owner an email notification when a PO is approved", () => {
   });
 
   context("Submit PO for Approval", () => {
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add an Approval", () => {
-      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[2].name);
       });

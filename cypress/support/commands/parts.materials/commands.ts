@@ -34,6 +34,8 @@ declare global {
         materialDocName: string;
         quantity: integerType;
         unit: string;}): Chainable<Subject>;
+      lhrClickReviseDocument(): Chainable<Subject>;
+      lhrClickSaveDocument(): Chainable<Subject>;
     }
   }
 }
@@ -128,8 +130,7 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
-
-  cy.get(`[data-cy^="fb-approvals"]`).parent().find(`button[aria-label="Open"]`).arrowClick();
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
@@ -174,7 +175,7 @@ Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: stri
 });
 
 Cypress.Commands.add("pmSubmitForApproval", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();
@@ -193,3 +194,18 @@ Cypress.Commands.add("pmToggleChangesFromPrevBuild", () => {
   cy.get("[name=\"fb-procedure-diff\"]").arrowClick();
 });
 
+Cypress.Commands.add("lhrClickReviseDocument", () => {
+  cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrClickSaveDocument", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+  cy.checkToastMessage({ exists: false });
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});

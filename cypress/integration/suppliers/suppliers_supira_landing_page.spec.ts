@@ -22,14 +22,14 @@ let secondEmployee;
 let group;
 
 const COLUMN_HEADERS = [
-  "Supplier ID",
-  "Supplier Name",
-  "Risk Classification",
-  "Supplier Use Status",
-  "State",
-  "Owner",
-  "Approval ID",
-  "Supplier Use",
+  "SUPPLIER ID",
+  "SUPPLIER NAME",
+  "RISK CLASSIFICATION",
+  "SUPPLIER USE STATUS",
+  "STATE",
+  "OWNER",
+  "APPROVAL ID",
+  "SUPPLIER USE",
 ];
 
 context("Test Supplier Landing Page for Supira", () => {

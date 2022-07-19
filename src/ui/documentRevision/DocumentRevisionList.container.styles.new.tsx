@@ -9,7 +9,6 @@ export const styles = makeStyles((theme: Theme) =>
     linkContainer: {
       boxShadow: `inset 0px 1px 1px -1px ${Colors.gray_goose}, inset 0px -1px 1px 0px ${Colors.gray_goose}`,
       padding: theme.spacing(1.875),
-      width: theme.spacing(29.125),
       flexGrow: 1,
     },
     activeLinkBox: {

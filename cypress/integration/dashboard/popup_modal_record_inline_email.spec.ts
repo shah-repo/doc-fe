@@ -16,6 +16,8 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
+const dateOffset = (5 * 1000);
+const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
 
 let employeeLoginFirst;
 let recordDocumentType;
@@ -29,11 +31,8 @@ let loginResponse;
 let secondEmployee;
 let thirdEmployee;
 let emailsFromInbox: IMAPEmail[];
-
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
+let dateAfterEmailShouldArrive;
+let getEmailSetting;
 
 context("Records Inline approval email popup modal", () => {
   before(() => {
@@ -345,7 +344,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(5000);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -362,9 +361,12 @@ context("Records Inline approval email popup modal", () => {
 
   context("Verify email for pending notification and approve Record", () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -396,7 +398,14 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: FIRST_USER.email });
+      getEmailSetting =  {
+        to: FIRST_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: FIRST_USER.email, options: getEmailSetting });
     });
 
     it("Open details tab", () => {
@@ -475,7 +484,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(5000);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -492,9 +501,12 @@ context("Records Inline approval email popup modal", () => {
 
   context("Verify email for pending notification and approve Record", () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -515,8 +527,6 @@ context("Records Inline approval email popup modal", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log("emailsFromInbox", emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -526,7 +536,14 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: SECOND_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
     });
 
     it("Open details tab", () => {

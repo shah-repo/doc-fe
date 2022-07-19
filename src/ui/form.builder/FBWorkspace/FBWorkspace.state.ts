@@ -9,6 +9,7 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
+import FBDataStore from "../FBStore/FBDataStore";
 import FBStore from "../FBStore/FBStore";
 
 class FBWorkspaceState extends FBSchemaState {
@@ -233,6 +234,7 @@ class FBWorkspaceState extends FBSchemaState {
           this.loadAudit = true;
         }
         this.documentRevApi.onSuccess();
+        FBDataStore.setRefreshData(data);
         this.loading = false;
       }
     });

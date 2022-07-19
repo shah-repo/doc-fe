@@ -379,10 +379,6 @@ context("Repeat Training with Training Curriculum", () => {
       cy.unClick();
     });
 
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Upload logo picture 'image.jpg'", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
@@ -391,8 +387,16 @@ context("Repeat Training with Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add Radio Button group", () => {
-      cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "Radio BTN req" });
       cy.fbGroupOptions("1", "2", "3");
@@ -400,7 +404,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Add Select Field", () => {
-      cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "Select" });
       cy.fbGroupOptions("1", "2", "3");
@@ -675,17 +679,13 @@ context("Repeat Training with Training Curriculum", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("radio button group option 3 checked", () => {
       cy.get("[data-cy=\"Radio BTN req\"]").arrowClick();
       cy.get("label").contains("3").arrowClick();
-    });
-
-    it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
     });
 
     it("Verify training options document types", () => {
@@ -715,8 +715,8 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
     });
 
-    it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Navigate to Overview tab", () => {

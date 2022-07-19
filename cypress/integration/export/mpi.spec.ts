@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -221,7 +222,7 @@ context("Export MPI", () => {
 
   context("MPI with Draft status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({ pdfStatus: "Draft", filename: "-1-MPI-document", status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 
@@ -231,7 +232,7 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Released", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({ pdfStatus: "Released", filename: "-1-MPI-document", status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -244,11 +245,18 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Obsolete", filename: "-OBS-MPI-document" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Obsolete", filename: "-OBS-MPI-document",
+        status: STATUS_TYPES_LABEL.OBSOLETE,
+      });
     });
   });
 
   context("MPI with Superseded status", () => {
+    it("Select Revision", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -256,7 +264,10 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-MPI-document",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
@@ -281,10 +292,6 @@ context("Export MPI", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
 
-    it("Upload logo picture 'image.jpg'", () => {
-      cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
-    });
-
     it("Select 'Manufacturing Process Instructions Test' document type", () => {
       cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
     });
@@ -304,7 +311,7 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-1-Void" });
+      cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-1-Void", status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 
@@ -390,7 +397,10 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Pending Change", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Pending Change", filename: "-1-MPI-document",
+        status: STATUS_TYPES_LABEL.PENDING_CHANGE,
+      });
     });
   });
 
@@ -412,7 +422,10 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({
+        pdfStatus: "In Review", filename: "-1-MPI-document",
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+      });
     });
   });
 
@@ -434,7 +447,7 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Approved", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({ pdfStatus: "Approved", filename: "-1-MPI-document", status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 
