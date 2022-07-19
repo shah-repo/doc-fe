@@ -17,7 +17,7 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
-import { useDocumentTypeSelect } from "../../hooks/docCustomization/useCustomization";
+import { useDocId, useDocumentTypeSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -122,6 +122,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const { isVisible } = useDocumentTypeSelect(documentTypeId);
+  const isDocIdVisible = useDocId(documentTypeId).isVisible;
 
   useEffect(() => {
     if (!redlineActive) {
@@ -221,18 +222,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
         </Grid>
         }
-        {isVisible && <Grid item xs={6}>
-          <DocIdInput
-            document={values.document}
-            {...{
-              isDisabled,
-              documentTypesById,
-              setDocId,
-              documentTypeId,
-              type,
-            }}
-          />
-        </Grid>
+        {console.log(isDocIdVisible)}
+        {
+          isDocIdVisible && <Grid item xs={6}>
+            <DocIdInput
+              document={values.document}
+              {...{
+                isDisabled,
+                documentTypesById,
+                setDocId,
+                documentTypeId,
+                type,
+              }}
+            />
+          </Grid>
         }
         <Grid item xs={6}>
           {/* hack for rerender revision stage */}
