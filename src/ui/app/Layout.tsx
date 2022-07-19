@@ -31,6 +31,7 @@ import SocketsContainer from "./sockets/container";
 
 const Layout: React.FunctionComponent = () => {
   const formDocument = SM.isNewCRLayout || SM.isNewLayout;
+  const pageLevelScroll =   { overflow: SM.isScrollEnabled ? "auto" : "" };
   const classes = styles(formDocument);
   return (<div>
     <RemoteValidatorsLoader />
@@ -41,7 +42,7 @@ const Layout: React.FunctionComponent = () => {
     <SocketsContainer />
     <WatermarkFooterContainer />
     {(
-      <main className={SM.isHomeURL ? classes.newContent : classes.content}>
+      <main className={SM.isHomeURL ? classes.newContent : classes.content} style={pageLevelScroll}>
         <DataFetcherContainer />
         <Switch>
           <Route
