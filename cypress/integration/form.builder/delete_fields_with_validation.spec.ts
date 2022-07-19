@@ -136,10 +136,11 @@ context("Field validations test", () => {
 
       it(`Select required if radio button field`, () => {
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(`Radio buttons`);
+        cy.unClick();
       });
 
       it(`Click value option1`, () => {
-        cy.get("div[role=dialog] [value=option1]").arrowClick();
+        cy.get("input[value=option1]").first().arrowClick();
       });
 
       it("Click add to add text field 1 to form", () => {
@@ -196,10 +197,11 @@ context("Field validations test", () => {
 
       it(`Select required if in Checkbox field`, () => {
         cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect(`Checkbox field`);
+        cy.unClick();
       });
 
       it(`Click value option1`, () => {
-        cy.get("div[role=dialog] [value=option1]").arrowClick();
+        cy.get("input[value=option1]").first().arrowClick();
       });
 
       it("Click add to add text field 2 to form", () => {

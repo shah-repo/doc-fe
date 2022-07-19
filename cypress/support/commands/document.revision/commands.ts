@@ -25,7 +25,6 @@ declare global {
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
-      drSelectMatrixDetailsTab(): Chainable<Subject>;
       drSelectPrimaryOwner(params: { owner: string; noWait?: bool }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -269,11 +268,6 @@ Cypress.Commands.add("drSelectOverviewTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("drSelectMatrixDetailsTab", () => {
-  cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
-  cy.listLoadingElementShouldNotExist();
-});
-
 Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: bool }) => {
   cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
   cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick();
@@ -412,7 +406,7 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev?: boolean }) => {
   let routesToWait;
   if (params && params.requiredApproversDocRev) {
-    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
+    routesToWait = [CyRoutes.PostOrPatchDocRev];
   }
   else {
     routesToWait = [CyRoutes.PostOrPatchDocRev];
@@ -577,6 +571,7 @@ Cypress.Commands.add("drCancelDraftFromMenu", () => {
 });
 
 Cypress.Commands.add("drClickUpgradeForm", () => {
+  cy.get("[data-cy=\"upgradeNextRevisionStage\"]").arrowClick();
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
   cy.get("#UpgradeToLatest-upgrade").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.UpgradeToReleasedForm, () => {

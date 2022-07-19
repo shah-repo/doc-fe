@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { pdfFooterDate } from "../../utils/constants/dateHandler";
 import { DesignDocument } from "../../utils/constants/documentTypes/testTypes";
@@ -100,10 +101,6 @@ context("Export internal doc - Design Document", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Upload attachment 'image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
-    });
-
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -125,7 +122,7 @@ context("Export internal doc - Design Document", () => {
 
   context("Check pdf email and get content", () => {
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Released", filename: "-1-DD-doc" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-DD-doc" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -161,8 +158,6 @@ context("Export internal doc - Design Document", () => {
         expect(el).match(/Description\nDD document description/);
 
         expect(el).match(/Attachments/);
-
-        expect(el).match(/image.jpg/);
 
         expect(el).match(/Released/);
 
