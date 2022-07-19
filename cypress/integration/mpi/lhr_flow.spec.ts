@@ -1467,7 +1467,6 @@ context("LHR flow", () => {
 
     it("Verify LHR title", () => {
       SystemRequirement("REQ-3310");
-      cy.pause();
       cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDateSuffix + "02");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "LHR-00004");
     });
@@ -1567,7 +1566,6 @@ context("LHR flow", () => {
 
         it("Verify LHRs title", () => {
           SystemRequirement("REQ-3320");
-          cy.pause();
           cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
             .should("have.text", "LOT #" + lotDateSuffix + "02RD | LHR-00004 | CS-00005.1 Part document");
         });
@@ -1592,7 +1590,6 @@ context("LHR flow", () => {
 
         it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
           cy.listLoadingElementShouldNotExist();
-          cy.pause();
           cy.get("input[data-cy=usedOverride]").arrowClick();
           cy.get("ul>li[role=option]").contains(`LOT #${lotDateSuffix}01`).arrowClick();
         });

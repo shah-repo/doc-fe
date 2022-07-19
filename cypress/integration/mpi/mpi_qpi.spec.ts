@@ -465,8 +465,6 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
 
-            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-            expect(el).match(/Start quantity/);
             expect(el).match(/Draft/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -486,7 +484,8 @@ context("Mpi/Qpi test", () => {
             RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
-            expect(el).match(/Accepted quantity\nRejected quantity/);
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
+            expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
 
             expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
@@ -681,8 +680,6 @@ context("Mpi/Qpi test", () => {
 
         expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
 
-        expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-        expect(el).match(/Start quantity/);
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -702,7 +699,8 @@ context("Mpi/Qpi test", () => {
         RegExp( `Manufacturing Process Instructions Test\n${MPIDocId}, Revision 1\nMPI DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Accepted quantity\nRejected quantity/);
+        expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
+        expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
         expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
 
@@ -1001,8 +999,6 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
 
-            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-
             expect(el).match(/Draft/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1022,7 +1018,7 @@ context("Mpi/Qpi test", () => {
             RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
-
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
             expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Draft/);
@@ -1211,7 +1207,6 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
 
-            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
             expect(el).match(/Released/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1231,6 +1226,7 @@ context("Mpi/Qpi test", () => {
             RegExp( `Quantity Process Instructions Test\n${QPIDocId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
             expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Released/);
