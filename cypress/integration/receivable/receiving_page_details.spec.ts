@@ -1253,8 +1253,8 @@ context("Receivable test with Page Details", () => {
 
   context("Add two approver and then remove one", () => {
     it("Add approver", () => {
-      cy.poAddApproverOnApproverList({ approver: USERS[2].name });
-      cy.poAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("remove one approver", () => {
@@ -1599,8 +1599,6 @@ context("Receivable test with Page Details", () => {
 
     it("Navigate to receiving", () => {
       cy.navigToReceivableList();
-      cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
     });
 
     it("Verify Receipt ID", () => {
