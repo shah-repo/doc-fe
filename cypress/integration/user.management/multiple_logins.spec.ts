@@ -72,7 +72,6 @@ context("Multiple consecutive logins", () => {
       it("Clicks the save button", () => {
         cy.usrClickSaveButton();
         cy.checkToastMessage({ exists: false });
-        cy.wait(10000);
       });
 
       it("Verify activation email", () => {
@@ -128,7 +127,6 @@ context("Multiple consecutive logins", () => {
       it("Clicks the save button", () => {
         cy.usrClickSaveButton();
         cy.checkToastMessage({ exists: false });
-        cy.wait(10000);
       });
 
       it("Verify activation email", () => {
@@ -166,6 +164,7 @@ context("Multiple consecutive logins", () => {
         cy.authLoginWithInvalidPassword({ email: emailOfUserToSignUp, password: "tester123" });
         cy.authSubmitLoginError({ show: true, message: "Incorrect username or password." });
         cy.authLoginWithInvalidPassword({ email: emailOfUserToSignUp, password: "tester123" });
+        cy.wait(5000);
       });
     });
 
@@ -196,7 +195,6 @@ context("Multiple consecutive logins", () => {
       it("click reset password for user", () => {
         cy.usrFilterByEmail({ email: emailOfUserToSignUp });
         cy.contains("Reset Password").arrowClick();
-        cy.wait(10000);
       });
 
       it("Get email to unlock account", () => {
@@ -295,6 +293,7 @@ context("Multiple consecutive logins", () => {
         cy.authLoginWithInvalidPassword({ email: emailOfAdminUserToSignUp, password: "tester123" });
         cy.authSubmitLoginError({ show: true, message: "Incorrect username or password." });
         cy.authLoginWithInvalidPassword({ email: emailOfAdminUserToSignUp, password: "tester123" });
+        cy.wait(5000);
       });
     });
 
@@ -324,7 +323,6 @@ context("Multiple consecutive logins", () => {
       it("click reset password for user", () => {
         cy.usrFilterByEmail({ email: emailOfAdminUserToSignUp });
         cy.contains("Reset Password").arrowClick();
-        cy.wait(10000);
       });
 
       it("Get email to unlock account", () => {
@@ -396,11 +394,6 @@ context("Multiple consecutive logins", () => {
 
     it("Login admin user with correct password", () => {
       cy.authLogin({ email: emailOfAdminUserToSignUp, password: newPassword });
-    });
-
-    it("Check that notification 'scheduled for deletion' is shown", () => {
-      cy.get("body").should("contain.text", "This company tenant is scheduled to be deleted. If there are" +
-        " concerns about this tenant being deleted, please reach out toenlil-feedback@shifamed.com");
     });
 
     it("Verify admin user is loged in", () => {
