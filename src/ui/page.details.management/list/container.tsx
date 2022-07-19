@@ -45,19 +45,8 @@ const styles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0),
     },
     containingBox: {
-      "overflow": "auto",
-      "height": "76vh",
-      "&::-webkit-scrollbar": {
-        backgroundColor: "transparent",
-        width: "4px",
-        height: "6px",
-      },
-      "&::-webkit-scrollbar-thumb": {
-        backgroundColor: "transparent",
-      },
-      "&:hover::-webkit-scrollbar-thumb": {
-        backgroundColor: Colors.gray,
-      },
+      overflow: "auto",
+      height: "76vh",
     },
     thead: {
       "& th": {
@@ -117,7 +106,7 @@ export const PageDetailsManagementContainer: React.FunctionComponent = () => {
           <Text translation={"common.add.page.details"} />
         </Button>
       </Box>
-      <Box width="100%" className={classes.containingBox}>
+      <Box width="100%" className={["containingBoxScrollbar", classes.containingBox].join(" ")}>
         <Table>
           <TableHead className={classes.thead}>
             <TableRow>

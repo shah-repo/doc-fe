@@ -9,7 +9,7 @@
 .hide-scroll::-webkit-scrollbar,
 .hide-scroll div::-webkit-scrollbar {
   background-color: transparent;
-  width: 6px;
+  width: 4px;
   height: 6px;
 }
 
@@ -386,4 +386,19 @@ td#kendo-expandable-column[role="gridcell"] {
 .Toastify__toast-container,
 .Toastify__close-button {
   font-family: 'Sora';
+}
+
+
+.containingBoxScrollbar::-webkit-scrollbar {
+  background-color: transparent;
+  width: 4px;
+  height: 6px;
+}
+
+.containingBoxScrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.containingBoxScrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--font_gray);
 }

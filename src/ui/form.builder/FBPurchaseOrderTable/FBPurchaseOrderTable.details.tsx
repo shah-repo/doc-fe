@@ -25,7 +25,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
   const intl = useIntl();
   const cellStyle = FBTableCellStyles();
   return (
-    <Box width="100%" className={classes?.containingBox}>
+    <Box width="100%" overflow="auto" className={"containingBoxScrollbar"}>
       <Table className={classes?.table}>
         <TableHead>
           <TableRow>

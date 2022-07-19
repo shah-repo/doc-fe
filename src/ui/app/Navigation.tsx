@@ -95,7 +95,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
               </Box>
             )
             : (
-              <List className={classes.list}>
+              <List className={[classes.list, "containingBoxScrollbar"].join(" ")}>
                 {
                   navigationItems.map((link: NavigationItem) => (
                     <NavigationLinkContainer

@@ -30,19 +30,8 @@ export default (theme: Theme) =>
       color: theme.palette.common.white,
     },
     list: {
-      "height": "72vh",
-      "overflow": "hidden",
-      "overflowY": "auto",
-      "&::-webkit-scrollbar": {
-        backgroundColor: "transparent",
-        width: "4px",
-        height: "6px",
-      },
-      "&::-webkit-scrollbar-thumb": {
-        backgroundColor: "transparent",
-      },
-      "&:hover::-webkit-scrollbar-thumb": {
-        backgroundColor: Colors.gray,
-      },
+      height: "72vh",
+      overflow: "hidden",
+      overflowY: "auto",
     },
   });
