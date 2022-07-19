@@ -85,9 +85,9 @@ Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
 
 Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
-  cy.get("[name^=\"fb-approvals-fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
+  cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("[name^=\"fb-approvals-fb-approvals\"]").autocompleteSelect(params.approver).wait(500);
+    cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(params.approver).wait(500);
   });
   cy.unClick();
 
