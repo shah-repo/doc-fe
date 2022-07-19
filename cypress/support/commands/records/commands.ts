@@ -122,12 +122,13 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
 });
 
 Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+  cy.landingPageLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick().wait(500);
 
-    cy.get("div[id^=react-select]").contains(params.recordType).arrowClick();
+    cy.get("div[id^=react-select]").contains(params.recordType).arrowClick().wait(500);
     if (params.recordForm) {
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").autocompleteSelect(params.recordForm);
     }
