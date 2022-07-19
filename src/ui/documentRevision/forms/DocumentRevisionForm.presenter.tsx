@@ -222,7 +222,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
         </Grid>
         }
-        {console.log(isDocIdVisible)}
         {
           isDocIdVisible && <Grid item xs={6}>
             <DocIdInput
