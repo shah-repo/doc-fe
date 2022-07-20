@@ -1,4 +1,4 @@
-import { filter, includes, isEmpty, map, range, size } from "lodash";
+import { filter, includes, isEmpty, range, size } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from "..";
@@ -59,30 +59,32 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       if (workspaceMode === FBWorkspaceModeOptions.DESIGN || workspaceMode === FBWorkspaceModeOptions.FORMDESIGN) {
         return <FBSortable />;
       }
-      return map(schema, (schemaItem, index, ro) => {
-        const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
-        const { disabled, outputDisabled } = schemaItem || {};
-        const reviseDisabled = schemaItem.editorProperties?.includes("reviseDisabled");
-        if (schemaItem.deleted || schemaItem.hidden ||
-          (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
-        return controlRenderer({
-          autosave: isUnderWorkspace && workspaceState?.autosave,
-          ...schemaItem,
-          ...(includes(FBEditorState.pickStepIndex, schemaItem.type)) && {
-            stepIndex: size(filter(ro.slice(0, index + 1), (step) =>
-              !step.deleted && includes(FBEditorState.pickStepIndex, step.type))),
-          },
-          disabled: (
-            disabled ||
-            workspaceMode === FBWorkspaceModeOptions.PREVIEW ||
-            workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW ||
-            isApproved({ ...schemaItem, index }) ||
-            (reviseDisabled && outputRevision) ||
-            (outputDisabled && isOutput && !isEmpty(id))
-          ),
-          index,
+
+      return schema
+        ?.filter((item) => !item.deleted && !item.hidden && item.tabId === _tabsState?.tabID)
+        .map((schemaItem, index, ro) => {
+          const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
+          const { disabled, outputDisabled } = schemaItem || {};
+          const reviseDisabled = schemaItem.editorProperties?.includes("reviseDisabled");
+
+          return controlRenderer({
+            autosave: isUnderWorkspace && workspaceState?.autosave,
+            ...schemaItem,
+            ...(includes(FBEditorState.pickStepIndex, schemaItem.type)) && {
+              stepIndex: size(filter(ro.slice(0, index + 1), (step) =>
+                !step.deleted && includes(FBEditorState.pickStepIndex, step.type))),
+            },
+            disabled: (
+              disabled ||
+              workspaceMode === FBWorkspaceModeOptions.PREVIEW ||
+              workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW ||
+              isApproved({ ...schemaItem, index }) ||
+              (reviseDisabled && outputRevision) ||
+              (outputDisabled && isOutput && !isEmpty(id))
+            ),
+            index,
+          });
         });
-      });
     }
 
     useObserver(() => {
