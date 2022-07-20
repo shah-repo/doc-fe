@@ -31,6 +31,7 @@ let createdPOFormDocument;
 let receivingName;
 let receivePageDetailsId;
 let receivingDocumentType;
+let receivingDocumentTypeNew;
 let oldReceivingForm;
 let releasedFormId;
 let dateAfterEmailShouldArrive;
@@ -99,6 +100,7 @@ context("Receivable test with Page Details", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           receivingDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
+          receivingDocumentTypeNew = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable test");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
@@ -725,6 +727,8 @@ context("Receivable test with Page Details", () => {
     context("Create Purchase Order document with three Products", () => {
       it("Click on 'Purchase Order' on sidebar", () => {
         cy.navigToPurchaseOrder();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'Create PO' button", () => {
@@ -907,104 +911,184 @@ context("Receivable test with Page Details", () => {
   });
 
   context("Create receiving form", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
-    it("Clicks on 'create a document' button", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it("Enters title 'New Receivable Form'", () => {
-      cy.drEnterDocumentTitle({ name: "New Receivable Form" });
-    });
-
-    it("Enters description 'New Recivable description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Recivable description" });
-    });
-
-    it("Selects 'Form' document type from dropdown", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Receivable test" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-    });
-
-    context("Add field 'Receive Purchase Order'", () => {
-      it("Click add new field", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-      });
-
-      it("Select Receive Purchase Order from given fields", () => {
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
-      });
-
-      it("Enter label Receive", () => {
-        cy.fbEnterNameValue({ name: "label", value: "Receivable" });
-      });
-
-      it("Click add field", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-    });
-
-    context("Add 'TextField' Radiobutton group and Checkbox group", () => {
-      it("Click add new field and select 'TextField'", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-        cy.fbEnterNameValue({ name: "label", value: TEXTFIELD_LABEL });
-        cy.fbOpenValidation();
-        cy.fbFieldRequired();
-        cy.fbAddNewFieldButton();
-      });
-
-      it("Click add new field and select 'Radio Button group'", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: FIELD_RADIO_BUTTON_GROUP });
-        cy.fbEnterNameValue({ name: "label", value: RADIO_BUTTON_GROUP_LABEL });
-        cy.fbGroupOptions("1", "2", "3");
-        cy.fbOpenValidation();
-        cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf({ name: TEXTFIELD_LABEL, value: RBG_REQUIRED_IF_VALUE });
-        cy.fbAddNewFieldButton();
-      });
-
-      it("Click add new field and select 'Checkbox group'", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: FIELD_CHECKBOX_GROUP });
-        cy.fbEnterNameValue({ name: "label", value: CHECKBOX_LABEL });
-        cy.fbGroupOptions("1", "2", "3");
-        cy.fbOpenValidation();
-        cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf({ name: TEXTFIELD_LABEL, value: CHECKBOX_REQUIRED_IF_VALUE });
-        cy.fbAddNewFieldButton();
-      });
-    });
-
-
-    context("Save and release form", () => {
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-        cy.landingPageLoadingElementShouldNotExist();
-      });
-
-      it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    it("[API]Create receiving form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>New Recivable description</p>",
+          document: {
+            docId: "FM-00002",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "New Receivable Form",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: receivingDocumentTypeNew[0].id,
+            }],
+            schema: [
+              {
+                name: "fb-approvals-l5tbfe6o",
+                type: "approvals",
+                index: 0,
+                label: "form.builder.approvals",
+                tabId: "overview",
+                deleteDisabled: true,
+                uniqueSchemaItem: true,
+              },
+              {
+                index: 1,
+                type: "poreceive",
+                name: "receivable-l5tbfgkl",
+                hidden: false,
+                outputDisabled: false,
+                deleted: false,
+                deleteInFormDisabled: false,
+                validationMode: "default",
+                validationAttribute: "Receivable",
+                rules: "",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                applicableValidationSchema: true,
+                editorProperties: [],
+                label: "Receivable",
+                tabId: "overview",
+              },
+              {
+                index: 2,
+                type: "textfield",
+                name: "text-field-l5tbfi74",
+                hidden: false,
+                outputDisabled: false,
+                deleted: false,
+                deleteInFormDisabled: false,
+                validationMode: "default",
+                validationAttribute: "TEXT FIELD",
+                rules: "required",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                applicableValidationSchema: true,
+                editorProperties: [],
+                placeholder: "",
+                rows: 1,
+                label: "TEXT FIELD",
+                validators: {
+                  required: true,
+                },
+                tabId: "overview",
+              },
+              {
+                index: 3,
+                type: "radiogroup",
+                name: "radio-group-l5tbfnrn",
+                hidden: false,
+                outputDisabled: false,
+                deleted: false,
+                deleteInFormDisabled: false,
+                validationMode: "visibility",
+                validationAttribute: "radioGroup",
+                rules: "required_if:text-field-l5tbfi74,X",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                applicableValidationSchema: true,
+                editorProperties: [],
+                options: [
+                  {
+                    value: "1",
+                    text: "1",
+                  },
+                  {
+                    value: "2",
+                    text: "2",
+                  },
+                  {
+                    value: "3",
+                    text: "3",
+                  },
+                ],
+                label: "radioGroup",
+                validators: {
+                  required_if: {
+                    name: "text-field-l5tbfi74",
+                    value: "X",
+                  },
+                },
+                tabId: "overview",
+              },
+              {
+                index: 4,
+                type: "checkboxgroup",
+                name: "checkbox-group-l5tbftgw",
+                hidden: false,
+                outputDisabled: false,
+                deleted: false,
+                deleteInFormDisabled: false,
+                validationMode: "visibility",
+                validationAttribute: "checkboxGroup",
+                rules: "required_if:text-field-l5tbfi74,Y",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                applicableValidationSchema: true,
+                editorProperties: [],
+                options: [
+                  {
+                    value: "1",
+                    text: "1",
+                  },
+                  {
+                    value: "2",
+                    text: "2",
+                  },
+                  {
+                    value: "3",
+                    text: "3",
+                  },
+                ],
+                label: "checkboxGroup",
+                validators: {
+                  required_if: {
+                    name: "text-field-l5tbfi74",
+                    value: "Y",
+                  },
+                },
+                tabId: "overview",
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        oldReceivingForm = response;
+        cy.drAPIApproveAndRelease({
+          documentId: oldReceivingForm.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done() );
       });
     });
   });
@@ -1024,6 +1108,8 @@ context("Receivable test with Page Details", () => {
 
     it("Upload logo picture image.jpg", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Setting Text area value Y", () => {
@@ -1530,7 +1616,7 @@ context("Receivable test with Page Details", () => {
                 valuePath: "precalc.po-docId-in-receiving",
                 sourcePath: [
                   `formInput.${receivingName}`,
-                  "formInput.receiving-ku6t73ty",
+                  "formInput.receivable-l5tbfgkl",
                 ],
                 showOnAndroid: true,
               },
@@ -1549,7 +1635,7 @@ context("Receivable test with Page Details", () => {
                 valuePath: "precalc.po-suppliers-in-receiving",
                 sourcePath: [
                   `formInput.${receivingName}`,
-                  "formInput.receiving-ku6t73ty",
+                  "formInput.receivable-l5tbfgkl",
                 ],
                 showOnAndroid: true,
               },
@@ -1561,7 +1647,7 @@ context("Receivable test with Page Details", () => {
                 valuePath: "precalc.part_number_rev",
                 sourcePath: [
                   `formInput.${receivingName}`,
-                  "formInput.receiving-ku6t73ty",
+                  "formInput.receivable-l5tbfgkl",
                 ],
                 showOnAndroid: true,
               },
@@ -1573,7 +1659,7 @@ context("Receivable test with Page Details", () => {
                 valuePath: "precalc.po-status-in-receiving",
                 sourcePath: [
                   `formInput.${receivingName}`,
-                  "formInput.receiving-ku6t73ty",
+                  "formInput.receivable-l5tbfgkl",
                 ],
                 showOnAndroid: true,
               },
@@ -2049,6 +2135,10 @@ context("Receivable test with Page Details", () => {
 
     it("Select 'Receivable' form", () => {
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Receivable" });
+    });
+
+    it("Click on 'Details' tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Search for API PO document and select it", () => {
