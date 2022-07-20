@@ -123,7 +123,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const { isVisible } = useDocumentTypeSelect(documentTypeId);
   const isDocIdVisible = useDocId(documentTypeId).isVisible;
-  const isRevisionVisible  = useRevisionStageSelect(documentTypeId);
+  const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
 
   useEffect(() => {
     if (!redlineActive) {
