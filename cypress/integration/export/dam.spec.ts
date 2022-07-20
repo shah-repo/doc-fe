@@ -243,7 +243,10 @@ context("Export DAM", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.PENDING_CHANGE, filename: "-2-DAM-doc", pdfStatus: "Pending Change" });
+      cy.exportVerifyEmail({
+        status: STATUS_TYPES_LABEL.PENDING_CHANGE, filename: "-2-DAM-doc",
+        pdfStatus: "Pending Change",
+      });
     });
   });
 
