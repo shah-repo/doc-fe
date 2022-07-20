@@ -12,8 +12,9 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
   name,
   cellHeight,
 }) =>  (
-  <Box display="flex" flexDirection="row">
-    <Box width="65%">
+  <Box display="flex" flexDirection="row" className={classes?.tableRoot}>
+    {/* TODO remove inline styles */}
+    <Box width="65%" style={{ zIndex: 2 }}>
       <FBApprovalMatrixTableInfo {...{ classes, approvalData, mode, name, cellHeight }} />
     </Box>
     {approvalRoles && !isEmpty(approvalRoles) && (
