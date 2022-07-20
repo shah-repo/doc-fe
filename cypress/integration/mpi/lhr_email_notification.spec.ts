@@ -261,6 +261,10 @@ context("LHRs email notifications", () => {
           cy.drSelectDetailsTab();
         });
 
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+        });
+
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("[data-cy=\"lhrstep-built-in\"]").arrowType(MPIDocumentTitle);
           cy.get(dataCyOptions).contains(MPIDocumentTitle).arrowClick();
@@ -313,6 +317,13 @@ context("LHRs email notifications", () => {
     });
 
     context("Start and Release LHRs #1", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+      });
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -403,6 +414,14 @@ context("LHRs email notifications", () => {
     });
 
     context("Start and Release LHRs #1", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -502,6 +521,14 @@ context("LHRs email notifications", () => {
     });
 
     context("Start and Release LHRs #1", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -658,6 +685,7 @@ context("LHRs email notifications", () => {
 
       ["C", "B", "A"].forEach((lhrName) => {
         it(`Click approve for the LHR ${lhrName}`, () => {
+          cy.wait(2000);
           cy.wrapWithWaitOnApiCalls(
             [CyRoutes.PostApprovalsApprove], () => {
               cy.contains("needs your approval for").eq(0).trigger("mouseover");
@@ -682,6 +710,7 @@ context("LHRs email notifications", () => {
 
       ["C", "B", "A"].forEach((lhrName) => {
         it(`Click approve for the LHR ${lhrName}`, () => {
+          cy.wait(2000);
           cy.wrapWithWaitOnApiCalls(
             [CyRoutes.PostApprovalsApprove], () => {
               cy.contains("needs your approval for").eq(0).trigger("mouseover");
