@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -293,6 +294,10 @@ context("Document form upgrade", () => {
         cy.drEnterDocumentDescription( { description: "Test record form upgrade" });
       });
 
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter text in old textfield", () => {
         cy.get("[name^=\"old-textfield\"]").arrowType("Test one");
       });
@@ -479,7 +484,7 @@ context("Document form upgrade", () => {
       });
 
       it("Verify released upgraded document", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.get("div[name^=\"new-textfield\"]").should("have.text", "Test two");
       });
     });
@@ -492,9 +497,7 @@ context("Document form upgrade", () => {
 
     it("Select Record", () => {
       cy.dlFilterByDocId({ docId: "RD-00002" });
-
       cy.dlSelectFirstDocument();
-
     });
 
     it("Click on upgrade to new form", () => {
@@ -506,8 +509,16 @@ context("Document form upgrade", () => {
         cy.get("input[data-cy=\"formUpgradeButton\"]").should("not.exist");
       });
 
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Verify existing fields", () => {
         cy.get("input[name^=\"old-textfield\"]").should("have.value", "Test one");
+      });
+
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Verify newly added fields", () => {
@@ -539,7 +550,7 @@ context("Document form upgrade", () => {
 
       context("Verify released upgraded record", () => {
         it("Verify status", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         });
 
         it("Verify added textfield", () => {
@@ -556,6 +567,10 @@ context("Document form upgrade", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
     });
 
     it("Check that A.1 version was created", () => {

@@ -358,6 +358,12 @@ context("Check DAM enforcement rules for document types", () => {
   });
 
   context("Add New Role: Role One", () => {
+    it("Open approval roles tab", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drSelectApprovalRolesTab();
+      });
+    });
+
     it("Open 'Add Role' dialog", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.drAddAnotherRoleBtn();
@@ -373,13 +379,21 @@ context("Check DAM enforcement rules for document types", () => {
     });
 
     it("Save role", () => {
-      cy.drAddApprovalRole();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drAddApprovalRole();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Select 'Role One' is needed for 'Approvals Numeric' on all document types", () => {
+    it("Navigate to matrix details tab", () => {
+      cy.cmpTurnOffAutosave();
+      cy.drSelectMatrixDetailsTab();
+    });
+
     it("Click edit DAM", () => {
-      cy.drOpenCloseSidebarDrawer();
       cy.drClickDAMEditBtn();
     });
 
