@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import FBStore from "../../form.builder/FBStore/FBStore";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { SIDE_BAR_TAB_INDEX } from "./constants";
 import SidebarPresenter from "./Sidebar.presenter.new";
 import { Sidebar } from "./types.new";
 
@@ -26,7 +27,7 @@ const SidebarContainer: React.FunctionComponent<
   }, [indexNumber, sidebarList]);
 
   useEffect(() => {
-    const index = localStorage.getItem("sideBarTabIndex");
+    const index = localStorage.getItem(SIDE_BAR_TAB_INDEX);
     if (index) {
       setIndex(Number(index));
     }
@@ -53,7 +54,7 @@ const SidebarContainer: React.FunctionComponent<
     }
     setIndex(index);
     setTab?.(index);
-    localStorage.setItem("sideBarTabIndex", String(index));
+    localStorage.setItem(SIDE_BAR_TAB_INDEX, String(index));
   };
 
   return (
