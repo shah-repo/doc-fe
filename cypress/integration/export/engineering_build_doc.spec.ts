@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -401,13 +402,11 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Add Procedure1", () => {
-      cy.fbClickAddNewHiddenBtn();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Procedure2", () => {
-      cy.fbClickAddNewHiddenBtn();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.fbAddNewFieldButton();
     });
@@ -429,7 +428,7 @@ context("Export Engineering Build doc", () => {
 
   context("Check pdf email and get content", () => {
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Draft", filename: "-1-EB-form" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.DRAFT, filename: "-1-EB-form" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -487,7 +486,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/fb-checkbox-group/);
         expect(el).match(/MATERIALS/);
 
-        expect(el).match(/Draft/);
+        expect(el).match(STATUS_TYPES_LABEL.DRAFT);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -512,7 +511,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Description/);
         expect(el).match(/Attachments/);
 
-        expect(el).match(/Draft/);
+        expect(el).match(STATUS_TYPES_LABEL.DRAFT);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -539,7 +538,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Attachments/);
         expect(el).match(/Materials/);
 
-        expect(el).match(/Draft/);
+        expect(el).match(STATUS_TYPES_LABEL.DRAFT);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -560,7 +559,7 @@ context("Export Engineering Build doc", () => {
 
         expect(el).match(/Equipment/);
 
-        expect(el).match(/Draft/);
+        expect(el).match(STATUS_TYPES_LABEL.DRAFT);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -581,7 +580,7 @@ context("Export Engineering Build doc", () => {
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
-        expect(el).match(/Draft/);
+        expect(el).match(STATUS_TYPES_LABEL.DRAFT);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -603,7 +602,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Released", filename: "-1-EB-form" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-EB-form" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -659,7 +658,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/fb-checkbox-group/);
         expect(el).match(/MATERIALS/);
 
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -684,7 +683,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Description/);
         expect(el).match(/Attachments/);
 
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -711,7 +710,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Attachments/);
         expect(el).match(/Materials/);
 
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -731,7 +730,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(tmpRegex);
 
         expect(el).match(/Equipment/);
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -752,7 +751,7 @@ context("Export Engineering Build doc", () => {
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -776,6 +775,7 @@ context("Export Engineering Build doc", () => {
 
     it("Enter title 'EB doc'", () => {
       cy.drEnterDocumentTitle({ name: "EB doc" });
+      cy.unClick();
     });
 
     it("Enter description 'EB doc description'", () => {
@@ -948,7 +948,7 @@ context("Export Engineering Build doc", () => {
 
   context("Verify pdf content", () => {
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "WIP", filename: "-A-EB-doc" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.WIP, filename: "-A-EB-doc" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -994,7 +994,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/test.docx/);
         expect(el).match(/fb-textfield\ntextfield/);
 
-        expect(el).match(/WIP/);
+        expect(el).match(STATUS_TYPES_LABEL.WIP);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1026,7 +1026,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/test_image.jpg/);
         expect(el).match(/Materials\nMT-00004 - Materials document | ? | Qty: 2 each/);
 
-        expect(el).match(/WIP/);
+        expect(el).match(STATUS_TYPES_LABEL.WIP);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1058,7 +1058,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/STEP #3/);
         expect(el).match(/Attachments\nNone\nMaterials\nNone\nEquipment\nNone/);
 
-        expect(el).match(/WIP/);
+        expect(el).match(STATUS_TYPES_LABEL.WIP);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1080,7 +1080,7 @@ context("Export Engineering Build doc", () => {
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/WIP/);
+        expect(el).match(STATUS_TYPES_LABEL.WIP);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1200,7 +1200,7 @@ context("Export Engineering Build doc", () => {
 
   context("Verify pdf content", () => {
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Released", filename: "-A-EB-doc" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-A-EB-doc" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -1246,7 +1246,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/test.docx/);
         expect(el).match(/fb-textfield\ntextfield/);
 
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1278,7 +1278,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/test_image.jpg/);
         expect(el).match(/Materials\nMT-00004 - Materials document | ? | Qty: 2 each/);
 
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1310,7 +1310,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/STEP #3/);
         expect(el).match(/Step #3 description/);
         expect(el).match(/Attachments/);
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1335,7 +1335,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/dummy.pdf/);
         expect(el).match(/Materials\nMT-00005 - Part document | ? | Qty: 4 each/);
         expect(el).match(/Equipment\nET-00003 - Equipment document/);
-        expect(el).match(/Released/);
+        expect(el).match(STATUS_TYPES_LABEL.RELEASED);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);

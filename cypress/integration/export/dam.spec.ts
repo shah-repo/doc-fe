@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -121,7 +122,7 @@ context("Export DAM", () => {
     });
   });
 
-  context("DAM with Voided status", () => {
+  context(`DAM with ${STATUS_TYPES_LABEL.VOIDED} status`, () => {
 
     it("Upload logo picture 'image.jpg'", () => {
       cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
@@ -134,11 +135,11 @@ context("Export DAM", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-1-Void" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.VOIDED, filename: "-1-Void", pdfStatus: "Voided" });
     });
   });
 
-  context("DAM with Draft status", () => {
+  context(`DAM with ${STATUS_TYPES_LABEL.DRAFT} status`, () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -165,21 +166,29 @@ context("Export DAM", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-DAM-doc" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.DRAFT, filename: "-1-DAM-doc", pdfStatus: "Draft" });
+    });
+
+    it("navigate to matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
-  context("DAM with Released status", () => {
+  context(`DAM with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
     it("Approve and release the form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Released", filename: "-1-DAM-doc" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-DAM-doc", pdfStatus: "Released" });
     });
   });
 
-  context("DAM with Pending Change status", () => {
+  context(`DAM with ${STATUS_TYPES_LABEL.PENDING_CHANGE} status`, () => {
     it("Revise document", () => {
       cy.drClickReviseDocument();
       cy.drClickCreateDocumentWithoutApiCall();
@@ -234,11 +243,11 @@ context("Export DAM", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Pending Change", filename: "-2-DAM-doc" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.PENDING_CHANGE, filename: "-2-DAM-doc", pdfStatus: "Pending Change" });
     });
   });
 
-  context("DAM with In Review status", () => {
+  context(`DAM with ${STATUS_TYPES_LABEL.IN_REVIEW} status`, () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
       cy.progressBarShouldNotExist();
@@ -256,11 +265,11 @@ context("Export DAM", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-2-DAM-doc" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-2-DAM-doc", pdfStatus: "In Review" });
     });
   });
 
-  context("DAM with Approved status", () => {
+  context("DAM with ${STATUS_TYPES_LABEL.APPROVED} status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
       cy.progressBarShouldNotExist();
@@ -278,7 +287,7 @@ context("Export DAM", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Approved", filename: "-2-DAM-doc" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.APPROVED, filename: "-2-DAM-doc", pdfStatus: "Approved" });
     });
   });
 
