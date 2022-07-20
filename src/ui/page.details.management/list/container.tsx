@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import cx from "classnames";
 import { sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -106,7 +107,7 @@ export const PageDetailsManagementContainer: React.FunctionComponent = () => {
           <Text translation={"common.add.page.details"} />
         </Button>
       </Box>
-      <Box width="100%" className={["containingBoxScrollbar", classes.containingBox].join(" ")}>
+      <Box width="100%" className={cx(classes.containingBox, "containingBoxScrollbar")}>
         <Table>
           <TableHead className={classes.thead}>
             <TableRow>
