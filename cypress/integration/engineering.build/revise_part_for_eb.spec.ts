@@ -281,18 +281,16 @@ context("Revise Part from EB and release cloned EB test", () => {
     context("Clone EB", () => {
       it("Click Clone EB button", () => {
         cy.ebClickCloneFromHeader();
-        cy.pause();
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childrenParts\"]").arrowClick();
-        cy.get("[data-cy=\"childrenParts\"]").eq(0).contains("PRT-00004 - rev 1 - Test Part");
+        cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
+        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - Test Part");
       });
     });
 
     context("Select First EB and release it", () => {
       it("Navigate to records list", () => {
-        cy.pause();
         cy.navigToRecords();
       });
 
