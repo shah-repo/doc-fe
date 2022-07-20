@@ -7,7 +7,7 @@ export const reactQuillEmptyString = "<p><br></p>";
 export type Validator = (value: any) => Translation | undefined;
 
 export const required: Validator = (value) => {
-  if (value === undefined || value === null || value === "" || value === reactQuillEmptyString || isEmpty(value)) {
+  if (value === reactQuillEmptyString || isEmpty(value)) {
     return "validators.required";
   }
 };
