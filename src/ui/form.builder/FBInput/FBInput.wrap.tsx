@@ -103,9 +103,7 @@ export const withFBInput = <T extends FBInputProps>(
     }, []);
 
     useObserver(() => {
-      console.log("validate ::", formState);
       if (!formState) { return; }
-      console.log("validate ::", formState);
       formState.validate();
     });
 
