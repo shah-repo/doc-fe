@@ -11,7 +11,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
   name,
 }) => (
   <Table className={classes?.tableStatus}>
-    <TableHead >
+    <TableHead>
       <TableRow style={{ height: "30px" }}>
         <FBMapWrapper<string[]> collection={values(FBApprovalMatrixTableRoleHead)}>
           {(head: string, index) => (
