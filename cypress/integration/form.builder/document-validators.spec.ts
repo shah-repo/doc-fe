@@ -236,15 +236,14 @@ context("Validators tests", () => {
     });
 
     it("Shows error 'required’ below 'document type' field", () => {
-      cy.get("[data-cy=\"field-document.documentType.id\"] .MuiFormHelperText-root.Mui-error")
+      cy.get("[data-cy=\"field-document.documentType.id\"]").find(".MuiFormHelperText-root.Mui-error")
         .should("have.text", "Required");
     });
 
     it("Shows error 'required’ below 'document ID' field", () => {
-      cy.get("[data-cy=\"field-document.docId\"] .MuiFormHelperText-root.Mui-error")
+      cy.get("[data-cy=\"field-document.docId\"]").find(".MuiFormHelperText-root.Mui-error")
         .should("have.text", "Required");
     });
-
   });
 
   context("Fills in Title, Description and Document Type", () => {
@@ -267,7 +266,7 @@ context("Validators tests", () => {
     });
 
     it("Shows error 'at least one required' below 'Output Document Type' field", () => {
-      cy.get("[data-cy=\"field-outputDocumentTypes\"] .MuiFormHelperText-root.Mui-error")
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").find(".MuiFormHelperText-root.Mui-error")
         .should("have.text", "At least one input required");
     });
   });
