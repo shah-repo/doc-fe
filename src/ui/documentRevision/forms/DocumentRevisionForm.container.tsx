@@ -107,7 +107,7 @@ DocumentRevisionFormContainerProps
   const redlineActive = useSelector(companySelectors.getRedlineActive);
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
-  const isEditableSchema = checkIsDocumentEditableSchema(document?.documentType?.groupOptions);
+  const isEditableSchema = checkIsDocumentEditableSchema(initialValues.document?.documentType?.groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   document = document || ({} as Document);
