@@ -120,6 +120,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
           <Box mx={8}>
             <FBForm
               schema={revisionFormSchema}
+              showAllTabs={true}
               initialValidation={true}
               workspaceMode={FBWorkspaceModeOptions.PREVIEW}
             />

@@ -12,6 +12,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     workspaceMode,
     schemaState,
     schema,
+    showAllTabs,
     ...props
   }: T) => {
 
@@ -71,15 +72,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       }
 
       return schema
-        ?.filter((item) => {
-          const deletedOrHidden = item.deleted || item.hidden;
-
-          if (workspaceMode === FBWorkspaceModeOptions.PREVIEW) {
-            return !deletedOrHidden;
-          }
-
-          return !deletedOrHidden && item.tabId === _tabsState?.tabID;
-        })
+        ?.filter((item) => !item.deleted && !item.hidden && (showAllTabs || item.tabId === _tabsState?.tabID))
         .map((schemaItem, index, ro) => {
           const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
           const { disabled, outputDisabled } = schemaItem || {};
