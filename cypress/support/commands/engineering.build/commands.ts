@@ -92,7 +92,7 @@ Cypress.Commands.add("ebApprove", () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
-  cy.progressBarShouldNotExist();
+  // cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 

@@ -126,13 +126,14 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType:
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick().wait(500);
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick().wait(2000);
 
-    cy.get("div[id^=react-select]").contains(params.recordType).arrowClick().wait(500);
+    cy.get("div[id^=react-select]").contains(params.recordType).arrowClick().wait(2000);
     if (params.recordForm) {
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").autocompleteSelect(params.recordForm);
     }
   });
+  cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -227,7 +228,7 @@ Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {
 
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ReleaseDocRevWithoutAr,
-    CyRoutes.GetDocAggregatedAudit],
+    CyRoutes.GetRequiredApproversDocRev],
   () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   });

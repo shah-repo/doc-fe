@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -228,7 +229,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.arVerifyStatus({ status: "DRAFT" });
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1 and check autosave", () => {
@@ -314,7 +315,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "Released" });
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           });
         });
       });
@@ -357,7 +358,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.arVerifyStatus({ status: "DRAFT" });
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
@@ -385,7 +386,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "IN REVIEW" });
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -435,7 +436,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify MPI state should be Approved", () => {
         SystemRequirement("REQ-3050");
-        cy.arVerifyStatus({ status: "APPROVED" });
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
       });
     });
   });
@@ -476,7 +477,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.arVerifyStatus({ status: "DRAFT" });
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
@@ -504,7 +505,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "IN REVIEW" });
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -549,7 +550,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify MPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.arVerifyStatus({ status: "PENDING CHANGE" });
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_CHANGE });
       });
     });
   });
@@ -590,7 +591,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.arVerifyStatus({ status: "DRAFT" });
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
@@ -620,7 +621,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "Released" });
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           });
         });
       });
@@ -663,7 +664,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.arVerifyStatus({ status: "DRAFT" });
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
@@ -691,7 +692,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "IN REVIEW" });
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -739,7 +740,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Approved", () => {
         SystemRequirement("REQ-3050");
-        cy.arVerifyStatus({ status: "APPROVED" });
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
       });
     });
   });
@@ -780,7 +781,7 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.arVerifyStatus({ status: "DRAFT" });
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
@@ -808,7 +809,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: "IN REVIEW" });
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -853,7 +854,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.arVerifyStatus({ status: "PENDING CHANGE" });
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_CHANGE });
       });
     });
   });
