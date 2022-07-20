@@ -56,12 +56,30 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     }
 
     function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
-      if (workspaceMode === FBWorkspaceModeOptions.DESIGN || workspaceMode === FBWorkspaceModeOptions.FORMDESIGN) {
+      const isDesignOrFormDesign = [
+        FBWorkspaceModeOptions.DESIGN,
+        FBWorkspaceModeOptions.FORMDESIGN,
+      ].includes(workspaceMode as FBWorkspaceModeOptions);
+
+      const isPreviewOrFormPreview = [
+        FBWorkspaceModeOptions.PREVIEW,
+        FBWorkspaceModeOptions.FORMPREVIEW,
+      ].includes(workspaceMode as FBWorkspaceModeOptions);
+
+      if (isDesignOrFormDesign) {
         return <FBSortable />;
       }
 
       return schema
-        ?.filter((item) => !item.deleted && !item.hidden && item.tabId === _tabsState?.tabID)
+        ?.filter((item) => {
+          const deletedOrHidden = item.deleted || item.hidden;
+
+          if (workspaceMode === FBWorkspaceModeOptions.PREVIEW) {
+            return !deletedOrHidden;
+          }
+
+          return !deletedOrHidden && item.tabId === _tabsState?.tabID;
+        })
         .map((schemaItem, index, ro) => {
           const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
           const { disabled, outputDisabled } = schemaItem || {};
@@ -76,8 +94,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
             },
             disabled: (
               disabled ||
-              workspaceMode === FBWorkspaceModeOptions.PREVIEW ||
-              workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW ||
+              isPreviewOrFormPreview ||
               isApproved({ ...schemaItem, index }) ||
               (reviseDisabled && outputRevision) ||
               (outputDisabled && isOutput && !isEmpty(id))
