@@ -8,6 +8,7 @@ export const styles = makeStyles(() =>
       fontSize: "12px",
       color: Colors.latest_yellow_varient,
       letterSpacing: 0,
+      marginLeft: "5%",
     },
     typographyOverdue: {
       fontWeight: 700,
@@ -15,6 +16,7 @@ export const styles = makeStyles(() =>
       color: Colors.latest_red_varient,
       textTransform: "uppercase",
       letterSpacing: 0,
+      marginLeft: "5%",
     },
     name: {
       fontWeight: "bold",
@@ -61,7 +63,7 @@ export const styles = makeStyles(() =>
     },
     avatarSection: {
       display: "flex",
-      maxWidth: "60%",
+
     },
     margin5: {
       marginRight: "5px",

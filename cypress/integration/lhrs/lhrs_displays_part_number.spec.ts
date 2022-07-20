@@ -303,8 +303,17 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       cy.drEnterDocumentTitle( { name: "CSL with part number and CS reference" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").arrowType("12");
+      cy.get("input[name=\"lot_quantity\"]").clear().arrowType("12").wait(2000);
+      cy.unClick();
     });
 
     it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
@@ -324,9 +333,19 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       it(`Verify '${CSPartDocumentTitle}' is selected for 'Part Number'`, () => {
         cy.get("[data-cy=\"lot_part\"]").should("have.attr", "value", `CS-02001 - rev 1 - ${CSPartDocumentTitle}`);
       });
+
+      it("Save document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
+      });
     });
 
     context("Release CSL", () => {
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
       });
@@ -447,6 +466,14 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       });
 
       context("Select created MPI in LHR template", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").scrollIntoView().arrowClick();
+        });
+
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
@@ -500,6 +527,14 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
   });
 
   context("Start LHRs #1", () => {
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").scrollIntoView().arrowClick();
+    });
+
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
     });
@@ -568,13 +603,20 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         cy.drEnterDocumentTitle( { name: "CSL (revised EFM-10605) with part number and CS reference" });
       });
 
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter quantity received", () => {
         cy.get("[name=\"lot_quantity\"]").arrowType("12");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
         cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
         cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.unClick();
       });
 
       it("Click create document", () => {
@@ -592,6 +634,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       });
 
       context("Release CSL", () => {
+        it("Navigate to Overview tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
         it("Add an Approval", () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
         });
@@ -626,6 +672,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -689,6 +737,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
       it("Select 'LHRt' document type", () => {
         cy.drSelectDocumentType({ documentType: "LHR Template" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -713,6 +763,14 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       });
 
       context("Select created MPI in LHR template", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").scrollIntoView().arrowClick();
+        });
+
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
@@ -766,6 +824,14 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
   });
 
   context("Start LHRs #1", () => {
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").scrollIntoView().arrowClick();
+    });
+
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
     });
@@ -784,6 +850,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     it("Select quantity in lot dialog", () => {
       cy.get("input[name=\"quantity\"]").arrowType("5");
+      cy.unClick();
     });
 
     it("Click 'SAVE' on select lot dialog", () => {

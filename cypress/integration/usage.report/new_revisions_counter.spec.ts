@@ -208,7 +208,7 @@ context("Usage report document counter for new revisions", () => {
       });
     });
 
-    it.skip("[API]Get group", (done: any) => {
+    it("[API]Get group", (done: any) => {
       cy.grpGetGroupByName({
         groupName: "Developers",
         sessionId: loginResponse.sessionId,
@@ -219,7 +219,7 @@ context("Usage report document counter for new revisions", () => {
       });
     });
 
-    it.skip("[API]Patch group", () => {
+    it("[API]Patch group", () => {
       cy.grpPatchGroup({
         groupId: developersGroup.body[0].id,
         sessionId: loginResponse.sessionId,

@@ -5,6 +5,7 @@
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -1398,7 +1399,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 editorConfig: {
                   value: createdMPIDocument.id,
                 },
-                tabId: "overview",
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -1693,6 +1694,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -1764,6 +1773,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     it("Select first LHR", () => {
       cy.dlSelectFirstDocument();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy^=\"LHR Step 1\"]").arrowClick();
     });
 
     it("Click View step", () => {
@@ -1883,6 +1900,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Approve step", () => {
+      cy.wait(3000);
       cy.ebApprove();
     });
   });
@@ -1890,12 +1908,6 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
   context("Revise LHRs", () => {
     it("Click Revise on LHRs #1", () => {
       cy.drClickReviseDocument();
-    });
-
-    it("Update step #1 description", () => {
-      cy.cmpTurnOffAutosave();
-      cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
-      cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
     });
 
     it("Click save document", () => {
@@ -1915,6 +1927,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Approve step", () => {
+      cy.wait(3000);
       cy.ebApprove();
     });
   });
@@ -1941,11 +1954,12 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Approve LHR", () => {
+      cy.wait(3000);
       cy.ebApprove();
     });
 
     it("Verify status is Released", () => {
-      cy.arVerifyStatus({ status: "Released" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 });

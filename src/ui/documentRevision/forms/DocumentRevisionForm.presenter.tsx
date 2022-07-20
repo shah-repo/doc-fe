@@ -17,6 +17,7 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
+import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -120,6 +121,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
+  const { isVisible } = useDocumentTypeSelect(documentTypeId);
+  const isDocIdVisible = useDocId(documentTypeId).isVisible;
+  const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
 
   useEffect(() => {
     if (!redlineActive) {
@@ -207,7 +211,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         onDirtyFlagChange={onDirtyFlagChange}
       />
       <Grid container spacing={3} md={12} sm={12}>
-        <Grid item xs={6}>
+        {isVisible && <Grid item xs={6}>
           <DocumentTypeSelect
             outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
             isDisabled={isDisabledInput}
@@ -218,19 +222,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             }}
           />
         </Grid>
-        <Grid item xs={6}>
-          <DocIdInput
-            document={values.document}
-            {...{
-              isDisabled,
-              documentTypesById,
-              setDocId,
-              documentTypeId,
-              type,
-            }}
-          />
-        </Grid>
-        <Grid item xs={6}>
+        }
+        {
+          isDocIdVisible && <Grid item xs={6}>
+            <DocIdInput
+              document={values.document}
+              {...{
+                isDisabled,
+                documentTypesById,
+                setDocId,
+                documentTypeId,
+                type,
+              }}
+            />
+          </Grid>
+        }
+        {isRevisionVisible && shouldShowRevStageForDocType && <Grid item xs={6}>
           {/* hack for rerender revision stage */}
           <Observer>
             {() => (
@@ -255,6 +262,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             )}
           </Observer>
         </Grid>
+        }
         <Grid item xs={6}>
           <RetrainField
             revisionChangeType={values.revisionChangeType}

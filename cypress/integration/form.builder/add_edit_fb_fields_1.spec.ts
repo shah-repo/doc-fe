@@ -18,7 +18,7 @@ let employeeLoginFirst;
 let formId;
 let arId;
 let emailsFromInbox;
-const pages = ["", "", "", "", ""];
+const pages = ["", "", "", "", "", ""];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -249,7 +249,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Step", () => {
-      cy.fbClickAddNewHiddenBtn();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Step" });
       cy.fbEnterNameValue({ name: "label", value: "fb-step" });
       cy.fbAddNewFieldButton();
@@ -546,6 +546,7 @@ context("Add and edit FB fields - Test 1", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify EB Procedure", () => {
@@ -657,29 +658,33 @@ context("Add and edit FB fields - Test 1", () => {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${formId}-1-New-Document-Revision.pdf`,
         }).then((cdata) => {
-        expect(cdata.numpages).eq(5);
-        expect(cdata.text).match(/Page 1 of 5/);
-        expect(cdata.text).match(/Page 2 of 5/);
-        expect(cdata.text).match(/Page 3 of 5/);
-        expect(cdata.text).match(/Page 4 of 5/);
-        expect(cdata.text).match(/Page 5 of 5/);
+        expect(cdata.numpages).eq(6);
+        expect(cdata.text).match(/Page 1 of 6/);
+        expect(cdata.text).match(/Page 2 of 6/);
+        expect(cdata.text).match(/Page 3 of 6/);
+        expect(cdata.text).match(/Page 4 of 6/);
+        expect(cdata.text).match(/Page 5 of 6/);
+        expect(cdata.text).match(/Page 6 of 6/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
         arr.forEach((element) => {
-          if (element.includes("Page 1 of 5")) {
+          if (element.includes("Page 1 of 6")) {
             pages[0] = element;
           }
-          if (element.includes("Page 2 of 5")) {
+          if (element.includes("Page 2 of 6")) {
             pages[1] = element;
           }
-          if (element.includes("Page 3 of 5")) {
+          if (element.includes("Page 3 of 6")) {
             pages[2] = element;
           }
-          if (element.includes("Page 4 of 5")) {
+          if (element.includes("Page 4 of 6")) {
             pages[3] = element;
           }
-          if (element.includes("Page 5 of 5")) {
+          if (element.includes("Page 5 of 6")) {
             pages[4] = element;
+          }
+          if (element.includes("Page 6 of 6")) {
+            pages[5] = element;
           }
         });
       });
@@ -687,7 +692,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 1 in document", () => {
       const el = pages[0];
-      if (el.includes("Page 1 of 5")) {
+      if (el.includes("Page 1 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
@@ -705,9 +710,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/STEP #1\nDescription/);
 
-        expect(el).match(/Attachments\nMaterials\nEquipment/);
-
-        expect(el).match(/fb-instructions1/);
+        expect(el).match(/Attachments\nMaterials/);
 
         expect(el).match(/Draft/);
 
@@ -717,7 +720,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 5/);
+        expect(el).match(/Page 1 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -726,9 +729,13 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 2 in document", () => {
       const el = pages[1];
-      if (el.includes("Page 2 of 5")) {
+      if (el.includes("Page 2 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment/);
+
+        expect(el).match(/fb-instructions1/);
 
         expect(el).match(/video.mp4/);
 
@@ -747,7 +754,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 5/);
+        expect(el).match(/Page 2 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -756,7 +763,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 3 in document", () => {
       const el = pages[2];
-      if (el.includes("Page 3 of 5")) {
+      if (el.includes("Page 3 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
@@ -791,7 +798,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 5/);
+        expect(el).match(/Page 3 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -800,7 +807,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 4 in document", () => {
       const el = pages[3];
-      if (el.includes("Page 4 of 5")) {
+      if (el.includes("Page 4 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
@@ -817,7 +824,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/FB-SECTION1/);
 
-        expect(el).match(/FB-STEP #1/);
+        expect(el).match(/FB-STEP #2/);
 
         expect(el).match(/fb-evidence/);
 
@@ -829,7 +836,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 4 of 5/);
+        expect(el).match(/Page 4 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -838,7 +845,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 5 in document", () => {
       const el = pages[4];
-      if (el.includes("Page 5 of 5")) {
+      if (el.includes("Page 5 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
@@ -852,7 +859,30 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 5 of 5/);
+        expect(el).match(/Page 5 of 6/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 6 in document", () => {
+      const el = pages[5];
+      if (el.includes("Page 6 of 6")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 6 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1015,7 +1045,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/fb-textfield1/);
 
-        expect(el).match(/STEP #1\nDescription/);
+        expect(el).match(/STEP #2\nDescription/);
 
         expect(el).match(/Attachments\nMaterials\nEquipment/);
 
@@ -1129,7 +1159,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/FB-SECTION1/);
 
-        expect(el).match(/FB-STEP #1/);
+        expect(el).match(/FB-STEP #2/);
 
         expect(el).match(/fb-evidence/);
 

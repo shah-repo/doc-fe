@@ -189,10 +189,6 @@ context("LHR Upgrade", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create MPI document", () => {
@@ -229,7 +225,11 @@ context("LHR Upgrade", () => {
 
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
-          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Part document' to step #1", () => {
@@ -304,6 +304,14 @@ context("LHR Upgrade", () => {
       });
 
       context("Select created MPI in LHR template", () => {
+        it("Select Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+        });
+
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
@@ -408,6 +416,14 @@ context("LHR Upgrade", () => {
         });
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -485,6 +501,14 @@ context("LHR Upgrade", () => {
     it("Verfiy banner should not be present", () => {
       SystemRequirement("REQ-3450");
       cy.get("input[data-cy=\"formUpgradeButton\"]").should("not.exist");
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1 - Rev A\"]").arrowClick();
     });
 
     it("LHR should hold first version of MPI", () => {

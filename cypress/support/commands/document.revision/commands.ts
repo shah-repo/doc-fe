@@ -457,7 +457,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
-  cy.progressBarShouldNotExist();
+  // cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -597,7 +597,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRevOwner, () => {
     cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
   });
-  cy.progressBarShouldNotExist();
+  // cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -853,7 +853,7 @@ Cypress.Commands.add("drSelectGroup", (...groups: string[]) => {
 Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
   groups.forEach((group) => {
     cy.get("div")
-      .contains("Start typing to invite groups")
+      .contains("Search groups")
       .click();
     cy.get("[id^=react-select]").contains(group).arrowClick();
     cy.get(`[data-cy="add-user"]`).eq(1).arrowClick();
