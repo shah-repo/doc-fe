@@ -185,7 +185,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   context("Verify `Draft DAM request form` title", () => {
     it("Check doc Released status and click on Send To Email", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      // cy.get("[data-cy='HeaderInfoName']").should("have.text", "Form DAM");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
@@ -279,7 +278,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Verify PDF file content", () => {
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content for draft DAM request form", () => {
       cy.pdfparseFile(
         {
@@ -368,7 +367,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   context("Verify `Released DAM request form` title", () => {
     it("Check doc Released status and click on Send To Email", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-      // cy.get("[data-cy='HeaderInfoName']").should("have.text", "Form DAM");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
@@ -465,7 +463,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Verify PDF file content", () => {
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content for released DAM request form", () => {
       cy.pdfparseFile(
         {
@@ -756,7 +754,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Check doc Draft status and click on Send To Email", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      // cy.get("[data-cy='HeaderInfoName']").should("have.text", `${DAMDocument}`);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
         releasedFormId = x.text();
       });
@@ -845,7 +842,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Verify PDF file content draft document", () => {
+  context("Verify PDF file content draft document", () => {
     it("Extract texts from PDF file content draft document", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -989,8 +986,12 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Navigate to matrix details tab", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
-        cy.drClickReviseDocument();
+        cy.drSelectMatrixDetailsTab();
       });
       cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
@@ -1005,7 +1006,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Check revised doc released status and click on Send To Email", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-      // cy.get("[data-cy='HeaderInfoName']").should("have.text", `${DAMDocument}`);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
         releasedFormId = x.text();
       });
@@ -1097,7 +1097,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Verify PDF file content release document", () => {
+  context("Verify PDF file content release document", () => {
     it("Extract texts from PDF file content release document", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -1356,7 +1356,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
-
     });
 
     it("Add first approver to approval request on approver list", () => {
@@ -1376,7 +1375,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Check approval request document draft status and click on Send To Email", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      // cy.get("[data-cy='HeaderInfoName']").should("have.text", `${ARDocument}`);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
         releasedFormId = x.text();
       });
@@ -1452,7 +1450,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Verify PDF file content document", () => {
+  context("Verify PDF file content document", () => {
     it("Extract texts from PDF file content document", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -1530,7 +1528,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Check AR status in review and click on Send To Email", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
-      // cy.get("[data-cy='HeaderInfoName']").should("have.text", `${ARDocument}`);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
         releasedFormId = x.text();
       });
@@ -1605,7 +1602,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Verify PDF file content document", () => {
+  context("Verify PDF file content document", () => {
     it("Extract texts from PDF file content document", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -1783,7 +1780,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Check Approval Request closed status and click on Send To Email", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.CLOSED });
-      // cy.get("[data-cy='HeaderInfoName']").should("have.text", `${ARDocument}`);
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
         releasedFormId = x.text();
       });

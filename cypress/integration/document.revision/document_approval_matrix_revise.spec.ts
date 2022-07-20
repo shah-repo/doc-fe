@@ -163,6 +163,7 @@ context("Document Approval Matrix Revise", () => {
 
   context("Add New Document Type", () => {
     it("Open matrix details tab", () => {
+      cy.cmpTurnOffAutosave();
       cy.drSelectMatrixDetailsTab();
     });
 
@@ -191,11 +192,11 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateSupplierWithApiCall();
     });
   });
 
@@ -280,8 +281,12 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Navigate to matrix details tab", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
-        cy.drClickReviseDocument();
+        cy.drSelectMatrixDetailsTab();
       });
       cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
@@ -395,8 +400,12 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Navigate to matrix details tab", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
-        cy.drClickReviseDocument();
+        cy.drSelectMatrixDetailsTab();
       });
       cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
