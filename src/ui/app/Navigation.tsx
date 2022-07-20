@@ -96,7 +96,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
               </Box>
             )
             : (
-              <List className={cx(classes.list, "containingBoxScrollbar")}>
+              <List className={cx(classes.list, "containing-box-scrollbar")}>
                 {
                   navigationItems.map((link: NavigationItem) => (
                     <NavigationLinkContainer

@@ -107,7 +107,7 @@ export const PageDetailsManagementContainer: React.FunctionComponent = () => {
           <Text translation={"common.add.page.details"} />
         </Button>
       </Box>
-      <Box width="100%" className={cx(classes.containingBox, "containingBoxScrollbar")}>
+      <Box width="100%" className={cx(classes.containingBox, "containing-box-scrollbar")}>
         <Table>
           <TableHead className={classes.thead}>
             <TableRow>

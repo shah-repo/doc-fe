@@ -389,16 +389,16 @@ td#kendo-expandable-column[role="gridcell"] {
 }
 
 
-.containingBoxScrollbar::-webkit-scrollbar {
+.containing-box-scrollbar::-webkit-scrollbar {
   background-color: transparent;
   width: 4px;
   height: 6px;
 }
 
-.containingBoxScrollbar::-webkit-scrollbar-thumb {
+.containing-box-scrollbar::-webkit-scrollbar-thumb {
   background-color: transparent;
 }
 
-.containingBoxScrollbar:hover::-webkit-scrollbar-thumb {
+.containing-box-scrollbar:hover::-webkit-scrollbar-thumb {
   background-color: var(--font_gray);
 }
