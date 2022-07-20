@@ -1,7 +1,7 @@
 import { filter, includes, isEmpty, map, range, size } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable } from "..";
+import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from "..";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
 import FormBuilderDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 
@@ -56,7 +56,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     }
 
     function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
-      if (workspaceMode === "design" || workspaceMode === "formDesign") {
+      if (workspaceMode === FBWorkspaceModeOptions.DESIGN || workspaceMode === FBWorkspaceModeOptions.FORMDESIGN) {
         return <FBSortable />;
       }
       return map(schema, (schemaItem, index, ro) => {
@@ -74,8 +74,8 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
           },
           disabled: (
             disabled ||
-            workspaceMode === "preview" ||
-            workspaceMode === "formPreview" ||
+            workspaceMode === FBWorkspaceModeOptions.PREVIEW ||
+            workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW ||
             isApproved({ ...schemaItem, index }) ||
             (reviseDisabled && outputRevision) ||
             (outputDisabled && isOutput && !isEmpty(id))
