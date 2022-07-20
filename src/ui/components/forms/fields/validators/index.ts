@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import * as Yup from "yup";
 import { Translation } from "../../../../translations/types";
 
@@ -6,7 +7,7 @@ export const reactQuillEmptyString = "<p><br></p>";
 export type Validator = (value: any) => Translation | undefined;
 
 export const required: Validator = (value) => {
-  if (value === undefined || value === null || value === "" || value === reactQuillEmptyString) {
+  if (value === undefined || value === null || value === "" || value === reactQuillEmptyString || isEmpty(value)) {
     return "validators.required";
   }
 };
