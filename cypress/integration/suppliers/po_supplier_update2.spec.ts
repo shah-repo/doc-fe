@@ -892,9 +892,17 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
         cy.drEnterDocumentDescription({ description: "Test description1" });
         cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Submit for Approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Approve PO", () => {
         cy.ebApprove();
       });
 
