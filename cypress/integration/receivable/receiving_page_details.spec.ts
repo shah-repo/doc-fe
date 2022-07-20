@@ -44,14 +44,11 @@ let CSLDocumentType;
 let createdLotsFormDocument;
 let lotId;
 
-const pages = ["", "", ""];
+const pages = ["", "", "", ""];
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 const TEXTFIELD_LABEL = "TEXT FIELD";
-const FIELD_RADIO_BUTTON_GROUP = "Radio Button group";
 const RADIO_BUTTON_GROUP_LABEL = "radioGroup";
-const RBG_REQUIRED_IF_VALUE = "X";
-const FIELD_CHECKBOX_GROUP = "Checkbox group";
 const CHECKBOX_LABEL = "checkboxGroup";
 const CHECKBOX_REQUIRED_IF_VALUE = "Y";
 
@@ -1025,6 +1022,7 @@ context("Receivable test with Page Details", () => {
                 ],
                 label: "radioGroup",
                 validators: {
+                  // eslint-disable-next-line @typescript-eslint/camelcase
                   required_if: {
                     name: "text-field-l5tbfi74",
                     value: "X",
@@ -1064,6 +1062,7 @@ context("Receivable test with Page Details", () => {
                 ],
                 label: "checkboxGroup",
                 validators: {
+                  // eslint-disable-next-line @typescript-eslint/camelcase
                   required_if: {
                     name: "text-field-l5tbfi74",
                     value: "Y",
