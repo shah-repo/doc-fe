@@ -4,6 +4,7 @@
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -742,7 +743,7 @@ context("Autosave LHR", () => {
               },
               {
                 label: "form.builder.approvals",
-                tabId: "overview",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ksherq6d",
@@ -992,6 +993,10 @@ context("Autosave LHR", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -1015,11 +1020,6 @@ context("Autosave LHR", () => {
       cy.get("button.MuiPickersDay-current").arrowClick();
     });
 
-    it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-
-    });
-
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       cy.unClick();
@@ -1029,12 +1029,17 @@ context("Autosave LHR", () => {
       cy.pmSubmitForApproval();
     });
 
+    it("Select Details tab", () => {
+      cy.wait(2000);
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve record", () => {
       cy.ebApprove();
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -1137,12 +1142,20 @@ context("Autosave LHR", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
       });
 
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Add Select field", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field" });
         cy.fbGroupOptions("option1", "option2", "option3");
@@ -1153,22 +1166,20 @@ context("Autosave LHR", () => {
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectTextField();
-        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
-        cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
-        cy.get("input[value^=\"visibility\"]").check();
-        cy.get(`input[name="validators.required_if"]`).check();
-        cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Select field" );
-        cy.unClick();
-        cy.get(`[id="mui-component-select-validators.required_if.value"]`).arrowClick();
-        cy.get(`[data-value="includeNone"]`).arrowClick();
-        cy.unClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+        cy.fbEnterNameValue({ name: "rows", value: 2 });
         cy.fbAddNewFieldButton();
       });
 
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Close the sidebar", () => {
+        cy.contains("Form Builder Library").parent().find("button").arrowClick({ force: true });
+      });
+
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
@@ -1180,7 +1191,12 @@ context("Autosave LHR", () => {
     });
 
     context("Select created MPI in LHR template", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Select MPI document for step #1 in LHRt", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
           $el.trigger("click");
         });
@@ -1191,6 +1207,10 @@ context("Autosave LHR", () => {
     });
 
     context("Add another step with different MPI on document ", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Add LHR step", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-4).arrowClick({ force: true });
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
@@ -1205,6 +1225,7 @@ context("Autosave LHR", () => {
       });
 
       it("Select MPI document created with API for step #2 in LHRt", () => {
+        cy.get("[data-cy=\"LHR Step 2\"]").arrowClick();
         cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
           $el.trigger("click");
         });
@@ -1240,7 +1261,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
       cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         lhrDocId = $docIdElement.text();
@@ -1421,6 +1442,8 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Equipment\nB: Equipment one/);
 
+        expect(el).match(/Select field/);
+
         expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
 
         expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
@@ -1431,7 +1454,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/ET-00007 - Equipment two/);
 
-        expect(el).match(/Select field\nTEXT FIELD/);
+        expect(el).match(/fb-textfield/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 
@@ -1477,30 +1500,6 @@ context("Autosave LHR", () => {
     });
   });
 
-  context("Add parameter materials and equipment", () => {
-    it("Add material parameter", () => {
-      cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
-        .eq(0).arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Material one").arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"quantity\"]").arrowType("0.6");
-      cy.unClick();
-      cy.get("[data-cy=\"unit\"]").autocompleteSelect("Day(s)");
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-    });
-
-    it("Add equipment parameter", () => {
-      cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
-        .eq(1).arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains("Equipment one").arrowClick();
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-    });
-  });
-
   context("Release LHRt", () => {
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
@@ -1511,7 +1510,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
       cy.arCheckTitleInEditableAndMatches({ name: "LHRt document" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         lhrDocId = $docIdElement.text();
@@ -1688,7 +1687,11 @@ context("Autosave LHR", () => {
       if (el.includes("Page 2 of 3")) {
         expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
 
-        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 0.6 days/);
+        expect(el).match(/Materials\nA: Material one/);
+
+        expect(el).match(/Equipment\nB: Equipment one/);
+
+        expect(el).match(/Select field/);
 
         expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
 
@@ -1700,7 +1703,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/ET-00007 - Equipment two/);
 
-        expect(el).match(/Select field\nTEXT FIELD/);
+        expect(el).match(/fb-textfield/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 

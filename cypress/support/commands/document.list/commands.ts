@@ -195,6 +195,5 @@ Cypress.Commands.add("dlSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
     cy.get("tr.k-master-row").first().arrowClick();
   });
-  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

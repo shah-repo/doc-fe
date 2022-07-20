@@ -158,6 +158,10 @@ context("DAM approvals in LHR", () => {
         cy.drCreateNewDocumentFromForm();
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enters title 'New Company'", () => {
         cy.drEnterDocumentTitle({ name: "New Company" });
       });
@@ -213,6 +217,10 @@ context("DAM approvals in LHR", () => {
           });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Approve and release document - create company", () => {
@@ -417,11 +425,13 @@ context("DAM approvals in LHR", () => {
                 label: "form.builder.mpiprocedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
+                tabId: "details",
                 stepIndex: 1,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -467,6 +477,7 @@ context("DAM approvals in LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
+                tabId: "details",
               },
               {
                 name: "lhrs-accepted-quantity",
@@ -484,6 +495,7 @@ context("DAM approvals in LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
+                tabId: "details",
               },
               {
                 name: "lhrs-rejected-quantity",
@@ -501,6 +513,7 @@ context("DAM approvals in LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
+                tabId: "details",
               },
               {
                 name: "approvals-built-in",
@@ -515,6 +528,7 @@ context("DAM approvals in LHR", () => {
                 validationAttribute: "Approvals",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "details",
               },
             ],
           },
@@ -579,6 +593,7 @@ context("DAM approvals in LHR", () => {
                 editorConfig: {
                   id: createdPartDocument.documentId,
                 },
+                tabId: "details",
               },
               {
                 name: "lhr_initial_quantity",
@@ -592,6 +607,7 @@ context("DAM approvals in LHR", () => {
                 validationAttribute: "Initial Quantity",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "lhr-end-quantity",
@@ -606,6 +622,7 @@ context("DAM approvals in LHR", () => {
                 validationAttribute: "End Quantity",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "lhr-build-type",
@@ -630,6 +647,7 @@ context("DAM approvals in LHR", () => {
                 validationAttribute: "Build Type",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "lhr-due-date",
@@ -642,6 +660,7 @@ context("DAM approvals in LHR", () => {
                 validationMode: "default",
                 validationAttribute: "Due Date",
                 applicableValidationSchema: true,
+                tabId: "details",
               },
               {
                 name: "lhrstep-built-in",
@@ -657,6 +676,7 @@ context("DAM approvals in LHR", () => {
                 editorConfig: {
                   value: createdMPIDocument.id,
                 },
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -665,6 +685,7 @@ context("DAM approvals in LHR", () => {
                 name: "fb-approvals-kvateryo",
                 uniqueSchemaItem: true,
                 index: 6,
+                tabId: "details",
               },
             ],
           },
@@ -716,8 +737,8 @@ context("DAM approvals in LHR", () => {
         cy.navigToDocumentList();
         cy.dlClearFilters();
         cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Draft" });
-        cy.get("#Title-field").eq(0).contains("Document Approval Matrix");
-        cy.drCheckDocumentStatus({ status: "Draft" });
+        // cy.get("#Title-field").eq(0).contains("Document Approval Matrix");
+        cy.drCheckDocumentStatus({ status: "DRAFT" });
       });
 
       it("Approve and release DAM document", () => {
@@ -734,6 +755,10 @@ context("DAM approvals in LHR", () => {
 
       it("Click create new button", () => {
         cy.recCreateRecordFromLandingPage();
+      });
+
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Enter initial quantity", () => {

@@ -5,6 +5,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -486,7 +487,7 @@ context("Change owner before starting LHRs", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
-                tabId: "procedure",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -812,9 +813,17 @@ context("Change owner before starting LHRs", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
     });
 
     context("Start LHRs", () => {
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
         cy.mpiStartStep({ stepNumber: 1 });
@@ -829,6 +838,10 @@ context("Change owner before starting LHRs", () => {
         cy.drAssignDocumentTo({ username: USERS[2].name });
       });
 
+      it("Click on sidebar permission icon to add Operators", () => {
+        cy.get("[data-cy='permission-icon']").arrowClick();
+      });
+
       it(`Assign operator '${USERS[3].name}'`, () => {
         SystemRequirement("REQ-3200");
         cy.drAssignDocumentTo({ username: USERS[3].name });
@@ -839,7 +852,7 @@ context("Change owner before starting LHRs", () => {
       });
 
       it("Verify status is WIP", () => {
-        cy.drCheckDocumentStatus({ status: "WIP" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
         cy.url().then((url: any) => {
           lhrs1DocUrl = url;
         });
