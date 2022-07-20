@@ -4,7 +4,6 @@
 
 import moment from "moment";
 import "moment-timezone";
-import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -507,7 +506,6 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.drSelectDetailsTab();
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
 
@@ -528,10 +526,6 @@ context("Procedure and parts flow test", () => {
       cy.poAddDateRequired();
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-    });
-
     it("Create 'Preventative maintenance document'", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
 
@@ -546,20 +540,12 @@ context("Procedure and parts flow test", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-    });
-
-    it("Navigate to details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
     it("Approve record", () => {
       cy.ebApprove();
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.drCheckDocumentStatus({ status: "Released" });
     });
   });
 
@@ -597,7 +583,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Check equipment status is 'Released'", () => {
-          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+          cy.arVerifyStatus({ status: "Released" });
         });
       });
     });
@@ -670,18 +656,18 @@ context("Procedure and parts flow test", () => {
       it("Selects 'Engineering Build' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
       });
+
+      it("Add procedure field", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectCustomFieldToAdd({ name: "Procedure" });
+        cy.get("[value=\"copyableValue\"]").check();
+        cy.fbAddField();
+      });
     });
 
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
-      });
-
-      it("Add procedure field", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
-        cy.get("[value=\"copyableValue\"]").check();
-        cy.fbAddField();
       });
 
       it("Approve and release document", () => {
@@ -712,7 +698,7 @@ context("Procedure and parts flow test", () => {
 
       it("Verify step can be added", () => {
         SystemRequirement("REQ-2970");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
@@ -720,7 +706,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Remove step", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
         });
         cy.progressBarShouldNotExist();
@@ -732,7 +718,7 @@ context("Procedure and parts flow test", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectTextField();
         cy.fbAddLabelName({ name: "Textfield for eb test" });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.fbAddField();
         });
         cy.progressBarShouldNotExist();
@@ -1214,4 +1200,3 @@ context("Procedure and parts flow test", () => {
 });
 
 export { };
-
