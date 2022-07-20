@@ -337,7 +337,7 @@ Cypress.Commands.add("fbVerifyCheckboxName", (...list: string[]) => {
 });
 
 Cypress.Commands.add("fbClickButton", (params: { el: string }) => {
-  cy.get(`[data-cy="${params.el}"]`).arrowClick();
+  cy.get(`button[data-cy="${params.el}"]`).arrowClick();
 });
 
 Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
@@ -351,11 +351,11 @@ Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
 });
 
 Cypress.Commands.add("fbVerifyElementVisibile", (params: { name: string; el: string }) => {
-  cy.get(`input[name^="${params.name}"`).parentsUntil("li").find(`[data-cy=${params.el}]`).should("be.visible");
+  cy.get(`[name^="${params.name}"`).parentsUntil("li").find(`[data-cy=${params.el}]`).should("be.visible");
 });
 
 Cypress.Commands.add("fbVerifyElementNotVisibile", (params: { name: string; el: string }) => {
-  cy.get(`input[name^="${params.name}"`).parentsUntil("li").find(`[data-cy=${params.el}]`).should("not.be.visible");
+  cy.get(`[name^="${params.name}"`).parentsUntil("li").find(`[data-cy=${params.el}]`).should("not.be.visible");
 });
 
 Cypress.Commands.add("fbVerifyElementVisibileByLabel", (params: { label: string; el: string }) => {
@@ -367,7 +367,8 @@ Cypress.Commands.add("fbVerifyElementNotVisibileByLabel", (params: { label: stri
 });
 
 Cypress.Commands.add("fbVerifyElementClass", (params: { name: string; el: string; class: string }) => {
-  cy.get(`input[name^="${params.name}"`).parentsUntil("li").find(`[data-cy=${params.el}]`).should("have.class", params.class);
+  cy.get(`[name^="${params.name}"`).parentsUntil("li").find(`svg[data-cy=${params.el}]`)
+    .should("have.class", params.class);
 });
 
 Cypress.Commands.add("fbVerifyElementClassByLabel", (params: { label: string; el: string; class: string }) => {

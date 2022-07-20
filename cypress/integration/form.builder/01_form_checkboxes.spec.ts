@@ -529,341 +529,376 @@ context("Checkboxes test", () => {
       it("Click save document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
+
+      it("Approve and release FORM document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+  });
+
+  context("Create a new document", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filters form by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: "eb-title", status: "Released" });
+    });
+
+    it("Click to Create document", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Enter eb document title 'eb-doc-title'", () => {
+      cy.drEnterDocumentTitle({ name: "eb-doc-title" });
+    });
+
+    it("Enter document description 'eb document description'", () => {
+      cy.drEnterDocumentDescription({ description: "eb description" });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
   context("Verify 'Deletion Disabled' checkbox property", () => {
     it("Verify TextField without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClass({ name: "textfield-wo-ch-", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+      cy.fbVerifyElementClass({
+        name: "textfield-wo-ch-", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
     });
 
     it("Verify TextField with 'Deletion Disabled' checkbox", () => {
       SystemRequirement("FB-0180");
       cy.fbVerifyElementClass({
         name: "textfield-wi-ch-", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Checkbox Group without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "cbg-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Checkbox Group with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "cbg-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Autocomplete without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "ac-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Autocomplete with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "ac-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Text Editor without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "te-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Text Editor with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "te-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Date picker without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "dp-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Date picker with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "dp-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Hyperlink without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "hl-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Hyperlink with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "hl-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Select Field without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "sf-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Select Field with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "sf-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Radio Button group without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "rbg-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Radio Button group with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "rbg-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify File Upload without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "fu-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify File Upload with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "fu-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Quantity without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "q-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Quantity with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "q-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Timer without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "t-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Timer with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "t-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify PO Approval Matrix without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "poam-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify PO Approval Matrix with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "poam-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Instructions Media upload without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "imu-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Instructions Media upload with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "imu-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Evidence Media upload without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "emu-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Evidence Media upload with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "emu-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Procedure without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "Step #1", el: "remove-schema-item", class:
-        "MuiSvgIcon-colorDisabled",
+        "schema-delete-disabled",
       });
     });
 
     it("Verify Procedure with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "Step #2", el: "remove-schema-item", class:
-        "MuiSvgIcon-colorError",
+        "schema-delete-enabled",
       });
     });
 
     it("Verify Text field with range without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "twr-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Text field with range with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "twr-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Equipment without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "eq-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Equipment with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "eq-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Inline Approval without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "ia-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Inline Approval with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "ia-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Request Approval without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "ra-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Request Approval with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "ra-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Checkpoint without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "cp-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Checkpoint with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "cp-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Create a Label without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "cl-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Create a Label with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "cl-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Implementation Task without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "it-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Implementation Task with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "it-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify MPI without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "mpi-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify MPI with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "mpi-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
 
     it("Verify Select Document(s) without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "sd-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
+        class: "schema-delete-enabled",
       });
     });
 
     it("Verify Select Document(s) with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "sd-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
+        class: "schema-delete-disabled",
       });
     });
   });
@@ -883,7 +918,7 @@ context("Checkboxes test", () => {
 
     it("Verify Autocomplete with 'Multi Select' checkbox", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy^=\"ac-wi-ch-\"]")
+        .find("input[data-cy^=\"ac-wi-ch-\"]")
         .click()
         .type("{downarrow}{enter}")
         .click()
@@ -952,15 +987,17 @@ context("Checkboxes test", () => {
     });
   });
 
-  context("Create & Approve Document", () => {
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+  context("Approve Document", () => {
+    it("Add approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
     });
 
-    it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve and release document", () => {
+      cy.ebApprove();
     });
 
     it("Click on revise", () => {
