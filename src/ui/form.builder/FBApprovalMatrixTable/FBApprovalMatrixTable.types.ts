@@ -7,7 +7,7 @@ export type FBApprovalMatrixTableProps =
   cellHeight?: (height: number, index: number) => number;
   approvalData?: FBApprovalMatrixFieldData;
   mode?: FBApprovalMatrixFieldMode;
-  classes?: Record<"tableRoot" | "tableInfo" | "tableStatus", string>;
+  classes?: Record<"tableRoot" | "tableInfo" | "tableStatus" | "statusScroller", string>;
   width?: number;
 };
 
