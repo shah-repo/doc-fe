@@ -826,6 +826,10 @@ context("Autocomplete test", () => {
       cy.drSelectReferences( "Part document" );
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -860,10 +864,14 @@ context("Autocomplete test", () => {
       cy.pmSubmitForApproval();
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
@@ -913,7 +921,6 @@ context("Autocomplete test", () => {
     it("Approve and release FORM document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        // cy.fbClickButton({ el: "updateRecord" });
       });
     });
 
@@ -929,16 +936,29 @@ context("Autocomplete test", () => {
       cy.drEnterDocumentDescription({ description: "test description" });
     });
 
+    // The following one step below is added as a work around for ENC-12360
+    // This step will be removed when the defect is fixed
+    it("Navigate to Approval roles tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Navigate to Approval roles tab", () => {
+      cy.drSelectApprovalRolesTab();
+    });
+
     it("Click on 'Add Another Role' button", () => {
       cy.get("button[data-cy=\"form.builder.add.another.role\"]").arrowClick();
     });
 
     it("Enter Approval Role " + approvalRoleName, () => {
-      cy.get("[data-cy=\"name\"]").arrowType(approvalRoleName);
+      cy.get("[data-cy=\"name\"]").scrollIntoView().arrowType(approvalRoleName).wait(500);
+      cy.unClick();
     });
 
     it("Click on 'Add' button", () => {
-      cy.get("button[data-cy=\"common.add\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.get("button[data-cy=\"common.add\"]").arrowClick();
+      });
     });
 
     it("Click on 'Create Document' button", () => {
@@ -980,9 +1000,13 @@ context("Autocomplete test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Select 'Component Protocol' output document type", () => {
+    it("Select 'Clinical Protocol' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     context("Add Autocomplete fields", () => {
@@ -1090,13 +1114,14 @@ context("Autocomplete test", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Approve and release FORM document", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
         });
+        cy.fbClickButton({ el: "updateRecord" });
       });
     });
   });

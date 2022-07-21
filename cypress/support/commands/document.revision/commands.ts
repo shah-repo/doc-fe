@@ -815,7 +815,13 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 });
 
 Cypress.Commands.add("drSelectApprovalRolesTab", () => {
-  cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetFieldLocks,
+    CyRoutes.PostOrPatchDocRev,
+  ],
+  () => {
+    cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+  });
 });
 
 Cypress.Commands.add("drSelectMatrixDetailsTab", () => {
