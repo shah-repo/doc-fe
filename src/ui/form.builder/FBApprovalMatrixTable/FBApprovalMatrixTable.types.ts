@@ -1,3 +1,4 @@
+import { UIEvent } from "react";
 import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps, FBProviderProps } from "..";
 
 export type FBApprovalMatrixTableProps =
@@ -9,6 +10,8 @@ export type FBApprovalMatrixTableProps =
   mode?: FBApprovalMatrixFieldMode;
   classes?: Record<"tableRoot" | "tableInfo" | "tableStatus" | "statusScroller", string>;
   width?: number;
+  statusRef?: React.Ref<HTMLElement>;
+  syncScroll: (event: UIEvent<HTMLElement>) => void;
 };
 
 export enum FBApprovalMatrixTableRoleHead {

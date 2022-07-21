@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { UIEvent, useRef } from "react";
 import { withResizeDetector } from "react-resize-detector";
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixTableProps, FBApprovalMatrixTableState, FBDAMFields } from "..";
 import FBApprovalMatrixTableClasses from "./FBApprovalMatrixTable.styles";
@@ -23,6 +23,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     const { approvalMatrixFieldState, workspaceState } = FB.useStores();
     const { formInput } = workspaceState || {};
     const damRoles = get(formInput, FBDAMFields.DAR, []);
+    const statusRef = useRef<HTMLDivElement>(null);
     classes = FBApprovalMatrixTableClasses();
     approvalMatrixTableState = FB.useRef(FBApprovalMatrixTableState);
 
@@ -40,6 +41,14 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
       return approvalMatrixTableState.cellHeight[index];
     };
 
+    const syncScroll = (event: UIEvent<HTMLElement>) => {
+      const { scrollLeft } = event.currentTarget;
+
+      if (statusRef.current) {
+        statusRef.current.scrollLeft = scrollLeft;
+      }
+    };
+
     // MARK: @observer
     useObserver(() => {
       approvalData = {
@@ -55,6 +64,8 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
       classes,
       mode,
       name,
+      statusRef,
+      syncScroll,
     });
   };
 

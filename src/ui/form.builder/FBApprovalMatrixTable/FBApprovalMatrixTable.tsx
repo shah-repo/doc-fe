@@ -11,6 +11,8 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
   mode,
   name,
   cellHeight,
+  statusRef,
+  syncScroll,
 }) =>  (
   <Box display="flex" flexDirection="row" className={classes?.tableRoot}>
     {/* TODO remove inline styles */}
@@ -18,11 +20,21 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
       <FBApprovalMatrixTableInfo {...{ classes, approvalData, mode, name, cellHeight }} />
     </Box>
     {approvalRoles && !isEmpty(approvalRoles) && (
-      <Box width="35%" style={{ overflowX: "auto", overflowY: "hidden" }}>
-        <Box width="500%">
-          <FBApprovalMatrixTableStatus {...{ classes, approvalData, mode, name, cellHeight }} />
+      <>
+        {/* Mui box has missing ref prop, this is workaround to assing ref to it */}
+        <Box width="35%" style={{ overflow: "hidden" }} {...{ ref: statusRef }}>
+          <Box width="500%">
+            <FBApprovalMatrixTableStatus {...{ classes, approvalData, mode, name, cellHeight }} />
+          </Box>
         </Box>
-      </Box>
+        <Box
+          width="35%"
+          className={classes?.statusScroller}
+          onScroll={syncScroll}
+        >
+          <Box width="500%" />
+        </Box>
+      </>
     )}
   </Box>
 );

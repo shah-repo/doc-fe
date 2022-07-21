@@ -3,7 +3,7 @@ import { get, keys, values } from "lodash";
 import React from "react";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableProps, FBApprovalMatrixTableRoleHead, FBApprovalRole, FBCheckbox, FBMapWrapper, FBTableCell } from "..";
 
-const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
+const FBApprovalMatrixTableStatus: React.FunctionComponent<Omit<FBApprovalMatrixTableProps, "syncScroll">> = ({
   cellHeight,
   approvalData: { approvalRoles = [], approvalMatrix = [] } = {},
   mode,
