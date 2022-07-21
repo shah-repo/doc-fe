@@ -109,7 +109,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     useEffect(() => {
       const disposeAutorun = autorun(() => {
-        const errorName: string = formState?.errors.get(name) || "";
+        const errorName = formState?.errors.get(name) || helperText;
         feedbackDetails.error = formState?.errorValidation && showErrorMsg && !isUndefined(errorName);
         feedbackDetails.helperText = errorName;
       });
