@@ -245,6 +245,10 @@ context("Mpi/Qpi test", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Add Checkbox group", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
@@ -488,7 +492,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
 
-            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
+            expect(el).match(/Checkbox\nfb-TEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -702,7 +706,7 @@ context("Mpi/Qpi test", () => {
         expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
         expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
-        expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
+        expect(el).match(/Checkbox\nfb-TEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -776,6 +780,10 @@ context("Mpi/Qpi test", () => {
 
       it("Upload logo picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
       });
 
       it("Add Checkbox group", () => {
@@ -1019,7 +1027,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
+            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -1227,7 +1235,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
+            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
 
             expect(el).match(/Released/);
 
