@@ -55,7 +55,8 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       if (isEmpty(approvalMatrix)) { return; }
       approvalMatrix[approvalMatrix.length - 1] = {
         ...last(approvalMatrix) as FBApprovalMatrixItem,
-        approvalRoles: last(approvalMatrix)?.approvalRoles || {
+        // eslint-disable-next-line dot-notation
+        approvalRoles: approvalMatrixValues["approvalMatrix"][approvalMatrix.length - 1].approvalRoles || {
           stage1: [],
           stage2: [],
           stage3: [],
