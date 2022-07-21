@@ -9,7 +9,6 @@ import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/cli
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-let docId;
 let loginResponse;
 let createdCompany;
 let secondEmployee;
@@ -581,12 +580,6 @@ field is empty: Add text field`, () => {
   context("Store DocId, Save document And 'Approve & Release Document", () => {
     it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Store Document Id", () => {
-      cy.get(`[data-cy="HeaderInfo-docId"]`).then(($x) => {
-        docId = $x.text();
-      });
     });
 
     it("Approve and Release", () => {
