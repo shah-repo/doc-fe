@@ -21,6 +21,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   disabled,
   masked,
   name,
+  removeBorder = false,
 }) => {
   // hack for adding empty lines in preview mode
   // so there is no additional growing blank space on the bottom of editor
@@ -28,12 +29,12 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   const formattedFormValue = formValue.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" );
   return (
     <Box
-      bgcolor={isPreview ? "transparent" : "white"}
-      border={isPreview ? 0 : 1}
+      bgcolor={isPreview ? "transparent" : Colors.white}
+      border={removeBorder ? "none" : isPreview ? 0 : 1}
       borderColor={Colors.hint_gray}
       borderRadius={4}
       style={{ display: "grid", borderRadius: 3, borderColor: Colors.gray_goose }}
-      minHeight={isPreview ? "auto" : 160}
+      minHeight={removeBorder ? "none" : isPreview ? "auto" : 160}
       onKeyDown={(e) => onKeyDown?.(e as unknown as KeyboardEvent)}
     >
       <Box
@@ -42,7 +43,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
         borderRadius={4}
         data-cy={name}
       >
-        <Editor
+        {!removeBorder && <Editor
           onBlur={(ev) => onBlur?.(ev)}
           {...{ editorRef, editorState, onEditorStateChange, toolbar }}
           {...!isEmpty(options) && {
@@ -66,7 +67,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
           }}
           // fix for extra lines when pasting multiline content
           stripPastedStyles={true}
-        />
+        />}
       </Box>
       <FBConditionalWrapper
         condition={!isUndefined(masked)}
@@ -78,13 +79,14 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       >
         <Box
           {...!disabled && { onClick: () => handleMask?.(false) }}
-          bgcolor={isPreview ? "transparent" : "white"}
+          bgcolor={removeBorder ? Colors.alabaster : isPreview ? "transparent" : Colors.white}
           borderRadius={4}
           zIndex={1000}
           display="flex"
           style={{
             gridArea: "1/1",
             cursor: !disabled ? "text" : "inherit",
+            padding: removeBorder ? "3px 12px" : "",
           }}
           p={isPreview ? 0 : 1.5}
         >
@@ -93,6 +95,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
             dangerouslySetInnerHTML={{ __html: formattedFormValue }}
           />
         </Box>
+
       </FBConditionalWrapper>
     </Box>
 

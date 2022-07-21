@@ -30,6 +30,7 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
         <Box zIndex={1000}>
           <RemoveIcon
             fill={deleteDisabled ? Colors.hint_gray : "none"}
+            className={deleteDisabled ? "schema-delete-disabled" : "schema-delete-enabled"}
             data-cy={"remove-schema-item"}
             {...!deleteDisabled && { onClick: removeSchemaItem }}
           />

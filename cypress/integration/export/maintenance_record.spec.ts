@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import moment from "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -571,46 +572,25 @@ context("Export maintenance record", () => {
 
     it("Select 'Active' as EQ status", () => {
       cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.unClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Select 'CAL/PM' tab", () => {
+      cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
       cy.get("[value=\"Yes\"]").eq(0).arrowClick();
     });
 
-    it("Select 'Maintenance inline record form' for preventative maintenance required", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Maintenance inline record form").arrowClick();
-    });
-
-    it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).arrowType("10");
-    });
-
-    it("Type preventative maintenance instruction", () => {
-      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
-        .type("Instructions for preventative maintenance").wait(500);
-      cy.unClick();
-    });
-
     it("Select document 'Yes' for calibration required", () => {
       cy.get("[value=\"Yes\"]").eq(1).arrowClick();
-    });
-
-    it("Select 'Maintenance record form' for calibration required", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
-    });
-
-    it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).arrowType("5");
-    });
-
-    it("Type preventative maintenance instruction", () => {
-      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy,\"calibration\")]/../div[2]")
-        .type("Instructions for calibration").wait(500);
-      cy.unClick();
     });
 
     it("Save document", () => {
@@ -621,8 +601,8 @@ context("Export maintenance record", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Check equipment status is 'Released'", () => {
-      cy.arVerifyStatus({ status: "Released" });
+    it(`Check equipment status is '${STATUS_TYPES_LABEL.RELEASED}'`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -633,8 +613,7 @@ context("Export maintenance record", () => {
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceInlineRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
         cy.progressBarShouldNotExist();
@@ -658,6 +637,19 @@ context("Export maintenance record", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Create 'Preventative maintenance document'", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Select Equipment", () => {
+      cy.get("[data-cy=equipment_id]").autocompleteSelect("EQ-00001");
+      cy.unClick();
+    });
+
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
@@ -677,14 +669,17 @@ context("Export maintenance record", () => {
         });
     });
 
-    it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+    it("Save 'Preventative maintenance document'", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
   context("Maintenance Record with WIP status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-1-Maintenance-Record-inline-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: STATUS_TYPES_LABEL.WIP, filename: "-1-Maintenance-Record-inline-form",
+        status: STATUS_TYPES_LABEL.WIP,
+      });
     });
   });
 
@@ -699,12 +694,24 @@ context("Export maintenance record", () => {
           });
       });
 
+      it("Select Equipment", () => {
+        cy.get("[data-cy=equipment_id]").autocompleteSelect("EQ-00001");
+        cy.unClick();
+      });
+
       it("Click Request Approval button", () => {
+        cy.contains("Request approval").should("exist");
         cy.contains("Request approval").arrowClick();
       });
 
       it("Approve inline approval", () => {
-        cy.ebTryToApprove();
+        cy.inlineApproval();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Select Last Signed", () => {
@@ -714,15 +721,26 @@ context("Export maintenance record", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-Maintenance-Record-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Last Signed", filename: "-1-Maintenance-Record-inline-form",
+          status: STATUS_TYPES_LABEL.LAST_SIGNED,
+        });
       });
     });
   });
 
   context("Maintenance Record with Archive status", () => {
     context("Add Maintenance Record with Archive", () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status Maintenance Record", () => {
         cy.contains("WIP").arrowClick();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Update section", () => {
@@ -730,19 +748,32 @@ context("Export maintenance record", () => {
       });
 
       it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCall();
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
       });
 
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Approve inline approval", () => {
-        cy.ebTryToApprove();
+        cy.inlineApproval();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Select Archive", () => {
@@ -752,46 +783,42 @@ context("Export maintenance record", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Archive", filename: "-1-Maintenance-Record-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Archive", filename: "-1-Maintenance-Record-inline-form",
+          status: STATUS_TYPES_LABEL.ARCHIVE,
+        });
       });
     });
   });
 
   context("Maintenance Record with Released status", () => {
     context("Add Maintenance Record with Released", () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status Maintenance Record", () => {
         cy.contains("WIP").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Select Equipment", () => {
-        cy.get("[data-cy=equipment_id]").autocompleteSelect("ET-00002");
-        cy.unClick();
-      });
-
-      it("Select Maintainer", () => {
-        cy.get("[data-cy=equipment_maintainer]").autocompleteSelect(`${USERS[1].name}`);
-      });
-
-      it("Select Completion date", () => {
-        cy.get("input[name=fb-equipment_due_date]").parent().find("button").arrowClick();
-        cy.get(".MuiPickersDay-daySelected").arrowClick();
-      });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Finalize and release button click'", () => {
         cy.reload();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.recApproveAndReleaseInlineRecord();
+        cy.recFinalizeAndReleaseRecord();
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-A-Maintenance-Record-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Released", filename: "-A-Maintenance-Record-inline-form",
+          status: STATUS_TYPES_LABEL.RELEASED,
+        });
       });
     });
   });
@@ -811,7 +838,10 @@ context("Export maintenance record", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1-Maintenance-Record-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Canceled", filename: "-A-1-Maintenance-Record-inline-form",
+          status: STATUS_TYPES_LABEL.CANCELED,
+        });
       });
     });
   });
@@ -822,8 +852,7 @@ context("Export maintenance record", () => {
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
         cy.progressBarShouldNotExist();
@@ -850,6 +879,19 @@ context("Export maintenance record", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Create 'Preventative maintenance document'", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Open details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Select Equipment", () => {
+        cy.get("[data-cy=equipment_id]").autocompleteSelect("EQ-00001");
+        cy.unClick();
+      });
+
       it(`Select maintainer '${ADMIN_USER.name}'`, () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
@@ -870,7 +912,7 @@ context("Export maintenance record", () => {
       });
 
       it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -882,7 +924,7 @@ context("Export maintenance record", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Voided", filename: "-A-Void" });
+        cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-A-Void", status: STATUS_TYPES_LABEL.VOIDED });
       });
     });
   });
@@ -893,8 +935,7 @@ context("Export maintenance record", () => {
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
         cy.progressBarShouldNotExist();
@@ -917,6 +958,19 @@ context("Export maintenance record", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Create 'Preventative maintenance document'", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Open details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Select Equipment", () => {
+        cy.get("[data-cy=equipment_id]").autocompleteSelect("EQ-00001");
+        cy.unClick();
+      });
+
       it(`Select maintainer '${ADMIN_USER.name}'`, () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
@@ -937,11 +991,15 @@ context("Export maintenance record", () => {
       });
 
       it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
     context("Add Maintenance Record with In Review", () => {
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Add inline approver", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       });
@@ -957,7 +1015,10 @@ context("Export maintenance record", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "In Review", filename: "-A-Maintenance-Record" });
+        cy.exportVerifyEmail({
+          pdfStatus: "In Review", filename: "-A-Maintenance-Record",
+          status: STATUS_TYPES_LABEL.IN_REVIEW,
+        });
       });
     });
   });

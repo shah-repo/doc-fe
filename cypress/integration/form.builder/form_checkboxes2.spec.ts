@@ -102,9 +102,13 @@ context("Checkboxes test2", () => {
       cy.unClick();
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Add Fields with Checkboxes", () => {
       it("Add PO Approval Matrix with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
         cy.fbEnterNameValue({ name: "label", value: "poam-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -113,7 +117,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add PO Approval Matrix without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
         cy.fbEnterNameValue({ name: "label", value: "poam-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -121,7 +125,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Instructions Media upload with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
         cy.fbEnterNameValue({ name: "label", value: "imu-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -130,7 +134,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Instructions Media upload without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
         cy.fbEnterNameValue({ name: "label", value: "imu-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -138,7 +142,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Evidence Media upload with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
         cy.fbEnterNameValue({ name: "label", value: "emu-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -147,7 +151,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Evidence Media upload without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
         cy.fbEnterNameValue({ name: "label", value: "emu-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -155,7 +159,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Procedure with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -163,7 +167,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Procedure without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.fbUnSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -171,7 +175,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Equipment with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "eq-wi-ch" });
         cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
@@ -181,7 +185,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Equipment without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "eq-wo-ch" });
         cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
@@ -191,7 +195,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Text field with range with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
         cy.fbEnterNameValue({ name: "label", value: "twr-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -200,7 +204,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Text field with range without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
         cy.fbEnterNameValue({ name: "label", value: "twr-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -208,7 +212,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Inline Approval with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "ia-wi-ch" });
         cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
@@ -219,7 +223,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Inline Approval without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "ia-wo-ch" });
         cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
@@ -229,7 +233,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Request Approval with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Request Approval" });
         cy.fbEnterNameValue({ name: "label", value: "ra-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -238,7 +242,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Request Approval without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Request Approval" });
         cy.fbEnterNameValue({ name: "label", value: "ra-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -246,7 +250,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Checkpoint with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Checkpoint" });
         cy.fbEnterNameValue({ name: "label", value: "cp-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -255,7 +259,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Checkpoint without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Checkpoint" });
         cy.fbEnterNameValue({ name: "label", value: "cp-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -263,7 +267,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Create a Label with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Create a Label" });
         cy.fbEnterNameValue({ name: "label", value: "cl-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -272,7 +276,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Create a Label without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Create a Label" });
         cy.fbEnterNameValue({ name: "label", value: "cl-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -280,7 +284,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Implementation Task with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
         cy.fbEnterNameValue({ name: "label", value: "it-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -289,7 +293,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Implementation Task without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
         cy.fbEnterNameValue({ name: "label", value: "it-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -297,7 +301,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Instructions 'MPI' with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "MPI" });
         cy.fbEnterNameValue({ name: "label", value: "mpi-wi-ch" });
         cy.get("[data-cy=\"instructionsDocument\"]").autocompleteSelect("AR Form");
@@ -307,7 +311,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Instructions 'MPI' without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "MPI" });
         cy.fbEnterNameValue({ name: "label", value: "mpi-wo-ch" });
         cy.get("[data-cy=\"instructionsDocument\"]").autocompleteSelect("AR Form");
@@ -316,7 +320,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Instructions 'Select Document(s)' with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
         cy.fbEnterNameValue({ name: "label", value: "sd-wi-ch" });
         cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
@@ -326,7 +330,7 @@ context("Checkboxes test2", () => {
       });
 
       it("Add Instructions 'Select Document(s)' without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
         cy.fbEnterNameValue({ name: "label", value: "sd-wo-ch" });
         cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");

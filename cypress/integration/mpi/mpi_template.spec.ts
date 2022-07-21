@@ -51,7 +51,6 @@ context("Mpi Template", () => {
             documentTypes: [
               {
                 ...LotHistoryRecordTest,
-                schema: [],
               },
               MPITest,
               LHRTTest,
@@ -239,7 +238,7 @@ context("Mpi Template", () => {
 
       context("Add FB components", () => {
         it("Add TextField", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
           cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
           cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
@@ -249,7 +248,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Checkbox group", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
           cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
           cy.fbGroupOptions("option1", "option2");
@@ -257,7 +256,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Autocomplete", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
           cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
@@ -266,7 +265,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Text Editor", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
           cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
           cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
@@ -274,14 +273,14 @@ context("Mpi Template", () => {
         });
 
         it("Add Date picker", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
           cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Hyperlink", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Hyperlink" });
           cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
           cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
@@ -289,7 +288,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Select Field", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
           cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
           cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
@@ -298,7 +297,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Radio Button group", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
           cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
           cy.fbGroupOptions("option1", "option2");
@@ -306,7 +305,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Paragraph", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
           cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
             .click({ force: true }).clear().arrowType("fb-paragraph");
@@ -314,14 +313,14 @@ context("Mpi Template", () => {
         });
 
         it("Add File Upload", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
           cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Blank Template Form", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
           cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
           cy.fbAddNewFieldButton();
@@ -329,35 +328,35 @@ context("Mpi Template", () => {
         });
 
         it("Add Quantity", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
           cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Instructions Media upload", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
           cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Evidence Media upload", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
           cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Procedure", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Procedure" });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PI Procedure" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Text field with range", () => {
           SystemRequirement("REQ-3120");
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+          cy.fbAddNewFieldWhenHidden2ndLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
           cy.fbEnterNameValue({ name: "label", value: "fb-range" });
           cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
@@ -422,9 +421,36 @@ context("Mpi Template", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Material one");
+        cy.get("ul>li[role=option]").contains("Material one").arrowClick();
+      });
+
+      context("Select created MPI in LHR template", () => {
+        it("Select Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+        });
+
+        it("Select MPI document for step #1 in LHRt", () => {
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+            $el.trigger("click");
+          });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+      });
+
       context("Add FB components", () => {
         it("Add TextField", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
           cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
           cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
@@ -433,7 +459,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Checkbox group", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
           cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
           cy.fbGroupOptions("option1", "option2");
@@ -441,7 +467,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Autocomplete", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
           cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
@@ -450,7 +476,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Text Editor", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
           cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
           cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
@@ -458,14 +484,14 @@ context("Mpi Template", () => {
         });
 
         it("Add Date picker", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
           cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Hyperlink", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Hyperlink" });
           cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
           cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
@@ -473,7 +499,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Select Field", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
           cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
           cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
@@ -482,7 +508,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Radio Button group", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
           cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
           cy.fbGroupOptions("option1", "option2");
@@ -490,7 +516,7 @@ context("Mpi Template", () => {
         });
 
         it("Add Paragraph", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
           cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
             .click({ force: true }).clear().arrowType("fb-paragraph");
@@ -498,14 +524,14 @@ context("Mpi Template", () => {
         });
 
         it("Add File Upload", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
           cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Blank Template Form", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
           cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
           cy.fbAddNewFieldButton();
@@ -513,35 +539,35 @@ context("Mpi Template", () => {
         });
 
         it("Add Quantity", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
           cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Instructions Media upload", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
           cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Evidence Media upload", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
           cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Procedure", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
           cy.fbAddNewFieldButton();
         });
 
         it("Add Text field with range", () => {
           SystemRequirement("REQ-3160");
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
           cy.fbEnterNameValue({ name: "label", value: "fb-range" });
           cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });

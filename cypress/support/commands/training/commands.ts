@@ -87,7 +87,7 @@ Cypress.Commands.add("trRejectAR", () => {
 Cypress.Commands.add("trCompleteTraining", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostCompleteTraining], () => {
-      cy.get("[data-cy=training-complete]").click();
+      cy.get("button[data-cy=training-complete]").click();
       cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldAppear();

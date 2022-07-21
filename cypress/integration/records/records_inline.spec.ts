@@ -203,8 +203,18 @@ context("Record inline Flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Add textfield", () => {
@@ -215,7 +225,7 @@ context("Record inline Flow", () => {
       });
 
       it("Add inline approval", () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
@@ -225,7 +235,7 @@ context("Record inline Flow", () => {
       });
 
       it("Add Checkbox group", () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
         cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
         cy.fbGroupOptions("1", "2", "3");
@@ -235,7 +245,7 @@ context("Record inline Flow", () => {
       });
 
       it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.fbOpenValidation();
@@ -246,26 +256,20 @@ context("Record inline Flow", () => {
       });
 
       it("Add second textfield", () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Second textfield for inline" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add second inline approval", () => {
-        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Second inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddField();
-      });
-
-      it("Upload attachement picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-        cy.progressBarShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -723,9 +727,19 @@ context("Record inline Flow", () => {
 
       it("Upload attachment 'image.jpg'", () => {
         cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
-        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click();
+        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click().wait(500);
         cy.progressBarShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Click on Save", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Checkbox option 1 checked", () => {
@@ -801,7 +815,7 @@ context("Record inline Flow", () => {
 
       it("Click on Save", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithApiCall();
         });
       });
 
@@ -959,18 +973,24 @@ context("Record inline Flow", () => {
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
+        cy.listLoadingElementShouldNotExist();
         cy.get("button[data-cy=\"fb-control-btn\"]").first().contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetDocAggregatedAudit,
-          CyRoutes.SessionDetails], () => {
+          CyRoutes.SessionDetails,
+          CyRoutes.GetRequiredApproversDocRev,
+        ], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Check system creates new major revision after inline approve", () => {
@@ -984,7 +1004,9 @@ context("Record inline Flow", () => {
           SystemRequirement("REQ-1080", "REQ-1100");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostOrPatchDocRev,
-            CyRoutes.SessionDetails], () => {
+            CyRoutes.SessionDetails,
+            CyRoutes.GetRequiredApproversDocRev,
+          ], () => {
             cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
             cy.unClick();
             cy.progressBarShouldNotExist();
@@ -992,7 +1014,11 @@ context("Record inline Flow", () => {
         });
 
         it("Save record", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -1008,7 +1034,7 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetDocAggregatedAudit,
+            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
@@ -1017,13 +1043,17 @@ context("Record inline Flow", () => {
           cy.checkToastMessage({ exists: false });
         });
 
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Approve second Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
           cy.listLoadingElementShouldNotExist();
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetDocAggregatedAudit,
+            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
@@ -1034,10 +1064,15 @@ context("Record inline Flow", () => {
       });
 
       context("Edit and try to release it ", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Enter text 'Third entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostOrPatchDocRev,
+            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.SessionDetails], () => {
             cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
             cy.unClick();
@@ -1049,12 +1084,16 @@ context("Record inline Flow", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
         });
 
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Approve Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetDocAggregatedAudit,
+            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
@@ -1070,6 +1109,7 @@ context("Record inline Flow", () => {
             cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
           });
+
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
@@ -1101,7 +1141,6 @@ context("Record inline Flow", () => {
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.DocPreview,
             CyRoutes.GetRequiredApproversDocRev,
-            CyRoutes.GetRequiredApproversDocRev,
           ], () => {
             cy.get("tr.k-master-row").first().arrowClick();
           });
@@ -1109,6 +1148,7 @@ context("Record inline Flow", () => {
 
         it("Verify record is in alpha state", () => {
           SystemRequirement("REQ-1060");
+          cy.drClickRevisionsSidePanel();
           cy.recCheckRevisionStage({ stage: "Revision A" });
         });
 
@@ -1119,7 +1159,7 @@ context("Record inline Flow", () => {
             recDocId = $docIdElement.text();
           });
           dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-          cy.sendToEmail();
+          cy.sendToEmailFromHeader();
         });
 
         it("Verify popup message \"File will be sent to your email shortly.\"", () => {

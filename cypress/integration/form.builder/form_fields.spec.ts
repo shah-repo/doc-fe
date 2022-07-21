@@ -277,9 +277,9 @@ context("FORM Field test", () => {
         cy.fbAddNewFieldButton();
       });
 
-      it("Add Procedure", () => {
+      it("Add EB Procedure", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Procedure" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
       });
@@ -384,7 +384,7 @@ context("FORM Field test", () => {
 
       it("Add Instructions 'MPI'", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).arrowClick();
+        cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "MPI" });
         cy.fbEnterNameValue({ name: "label", value: "fb-mpi" });
         cy.get("[data-cy=\"instructionsDocument\"]").autocompleteSelect("AR Form");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -558,7 +558,7 @@ context("FORM Field test", () => {
         cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Verify Procedure attributes", () => {
+      it("Verify EB Procedure attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "Step #1" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbClickButton({ el: "dialog-close" });

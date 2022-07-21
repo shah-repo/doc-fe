@@ -7,7 +7,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -17,6 +17,7 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
+import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -116,11 +117,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
-
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
+  const { isVisible } = useDocumentTypeSelect(documentTypeId);
+  const isDocIdVisible = useDocId(documentTypeId).isVisible;
+  const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
 
   useEffect(() => {
     if (!redlineActive) {
@@ -185,6 +188,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  const isAttachmentRequired = () => {
+    const type = documentTypesById[documentTypeId];
+    const docId = _documentRevisionFormState?.documentRevision?.id;
+    return docId || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
+  };
+
   return (
     <FormWrapper
       dirty={dirty}
@@ -201,8 +210,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
       />
-      <Grid container spacing={3} md={8} sm={12}>
-        <Grid item xs={6}>
+      <Grid container spacing={3} md={12} sm={12}>
+        {isVisible && <Grid item xs={6}>
           <DocumentTypeSelect
             outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
             isDisabled={isDisabledInput}
@@ -213,19 +222,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             }}
           />
         </Grid>
-        <Grid item xs={6}>
-          <DocIdInput
-            document={values.document}
-            {...{
-              isDisabled,
-              documentTypesById,
-              setDocId,
-              documentTypeId,
-              type,
-            }}
-          />
-        </Grid>
-        <Grid item xs={6}>
+        }
+        {
+          isDocIdVisible && <Grid item xs={6}>
+            <DocIdInput
+              document={values.document}
+              {...{
+                isDisabled,
+                documentTypesById,
+                setDocId,
+                documentTypeId,
+                type,
+              }}
+            />
+          </Grid>
+        }
+        {isRevisionVisible && shouldShowRevStageForDocType && <Grid item xs={6}>
           {/* hack for rerender revision stage */}
           <Observer>
             {() => (
@@ -250,6 +262,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             )}
           </Observer>
         </Grid>
+        }
         <Grid item xs={6}>
           <RetrainField
             revisionChangeType={values.revisionChangeType}
@@ -313,7 +326,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {_formState?.active && ["design", "form"].includes(_formState.mode) && (
           <>
-            <Grid item xs={12}>
+            { isAttachmentRequired() && <Grid item xs={12}>
               <AttachmentsField
                 isDisabled={isDisabledInput}
                 isNewVersion={false}
@@ -325,6 +338,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 documentTypeId={documentTypeId || ""}
               />
             </Grid>
+            }
             {hasOutput &&
             <Grid item xs={12}>
               <FBActiveNoOutput

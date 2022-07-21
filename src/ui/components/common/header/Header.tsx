@@ -18,7 +18,7 @@ const styles = makeStyles((theme: Theme) =>
       borderRadius: "6px",
     },
     appbar: {
-      top: "47px",
+      top: "48px",
       zIndex: theme.zIndex.drawer + 1,
     },
     toolbar: (createUrl) => ({
