@@ -254,7 +254,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         />
         {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
             {pinHover && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
@@ -264,6 +264,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
+                  className={classes.cursorPointer}
                 />
               </StyleTooltip>
             )}
@@ -276,7 +277,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </div>
         )}

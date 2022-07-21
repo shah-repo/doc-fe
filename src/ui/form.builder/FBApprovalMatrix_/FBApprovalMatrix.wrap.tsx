@@ -37,7 +37,8 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     );
 
     handleSave = () => {
-      const formValue: FBApprovalMatrixItem[] = formState?.getFieldValue(name);
+      const formValue = formState?.getFieldValue(name);
+      const formApprovalMatrix = [ ...formValue.approvalMatrix ];
       const approvalMatrixValues = formValue || [];
 
       const approvalMatrix = approvalMatrixValues.map((e) => {
@@ -55,7 +56,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       if (isEmpty(approvalMatrix)) { return; }
       approvalMatrix[approvalMatrix.length - 1] = {
         ...last(approvalMatrix) as FBApprovalMatrixItem,
-        approvalRoles: last(approvalMatrix)?.approvalRoles || {
+        approvalRoles: last(formApprovalMatrix).approvalRoles || {
           stage1: [],
           stage2: [],
           stage3: [],

@@ -3,20 +3,31 @@ import Colors from "../../../layout/theme/utils/colors";
 
 export const styles = makeStyles(() =>
   createStyles({
-    typographyDueInfewDays: {
-      fontWeight: 700,
-      fontSize: "12px",
-      color: Colors.latest_yellow_varient,
-      letterSpacing: 0,
-      marginLeft: "5%",
+    header: {
+      justifyContent: "space-between",
+      flexWrap: "nowrap",
     },
-    typographyOverdue: {
+    headerLeft: {
+      display: "flex",
+      minWidth: 0,
+      marginRight: 10,
+    },
+    headerRight: {
+      display: "flex",
+      alignItems: "center",
+    },
+    status: {
+      width: "max-content",
       fontWeight: 700,
       fontSize: "12px",
+      letterSpacing: 0,
+    },
+    statusDueInfewDays: {
+      color: Colors.latest_yellow_varient,
+    },
+    statusOverdue: {
       color: Colors.latest_red_varient,
       textTransform: "uppercase",
-      letterSpacing: 0,
-      marginLeft: "5%",
     },
     name: {
       fontWeight: "bold",
@@ -43,10 +54,6 @@ export const styles = makeStyles(() =>
     contentSection: {
       marginTop: "2%",
     },
-    gridItems: {
-      display: "flex",
-      alignItems: "center",
-    },
     date: {
       fontWeight: "normal",
       fontSize: "12px",
@@ -60,10 +67,6 @@ export const styles = makeStyles(() =>
       fontWeight: 600,
       color: Colors.white,
       textTransform: "uppercase",
-    },
-    avatarSection: {
-      display: "flex",
-
     },
     margin5: {
       marginRight: "5px",

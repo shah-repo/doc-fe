@@ -255,6 +255,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <RejectIcon
                   data-cy="transition-reject"
                   onMouseEnter={onMouseHoverRejectIcon}
+                  className={classes.cursorPointer}
                 />
               )}
               {rejectHover && (
@@ -267,6 +268,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     data-cy="transition-reject"
                     onClick={handleRejectClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -276,6 +278,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <ApproveIcon
                   data-cy="transition-approve"
                   onMouseEnter={onMouseHoverApproveIcon}
+                  className={classes.cursorPointer}
                 />
               )}
               {approveHover && (
@@ -288,13 +291,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     data-cy="transition-approve"
                     onClick={handleApproveClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
             </span>
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
@@ -305,6 +309,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -317,6 +322,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -330,7 +336,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
         )}
@@ -338,7 +344,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
           {docRevs.map((prItem, index) => (
-            <StyledListItem button className={classes.nested} key={index}>
+            <StyledListItem button className={classes.nested} key={index} disableRipple>
               <IconButton aria-label="listIcon">
                 {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>
@@ -397,7 +403,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               />
               <Box component="div">
                 {viewHoverItem !== prItem.docId && (
-                  <ViewIcon
+                  <ViewIcon className={classes.cursorPointer}
                     onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
                   />
                 )}
@@ -443,7 +449,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     placement="top"
                     arrow
                   >
-                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} className={classes.cursorPointer} />
                   </StyleTooltip>
                 )}
               </Box>

@@ -198,7 +198,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
             {pinHover && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
@@ -208,6 +208,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
+                  className={classes.cursorPointer}
                 />
               </StyleTooltip>
             )}
@@ -220,7 +221,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
         )}
@@ -228,7 +229,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
           {docRevs.map((prItem, index) => (
-            <StyledListItem button className={classes.nested} key={index}>
+            <StyledListItem button className={classes.nested} key={index} disableRipple>
               <IconButton aria-label="listIcon">
                 {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>

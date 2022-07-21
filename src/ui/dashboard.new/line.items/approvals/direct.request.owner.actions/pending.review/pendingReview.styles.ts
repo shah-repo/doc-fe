@@ -34,6 +34,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     icon: {
       width: "15px",
+      cursor: "pointer",
     },
     listItem: {
       paddingLeft: "1px",
@@ -53,10 +54,11 @@ export const styles = makeStyles((theme: Theme) =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
-      cursor: "pointer",
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
+    },
+    cursorPointer: {
       cursor: "pointer",
     },
     viewTooltipText: {
