@@ -266,14 +266,14 @@ context("Records email popup modal", () => {
   context("Verify email for pending training notification and approve Record", () => {
     it("Verify emails", () => {
       getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
+        to: SECOND_USER.email,
         after: dateAfterEmailShouldArrive,
         subject: "Can you please approve my request",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      cy.imapGetMails({ userEmail: SECOND_USER.email, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
     });
@@ -379,7 +379,7 @@ context("Records email popup modal", () => {
         include_body: true,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      cy.imapGetMails({ userEmail: SECOND_USER.email, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
     });
@@ -415,7 +415,7 @@ context("Records email popup modal", () => {
       getEmailSetting =  {
         to: THIRD_USER.email,
         after: dateAfterEmailShouldArrive,
-        subject: "Record RD-00003 Record document from newly created form in review",
+        subject: "Can you please approve my request",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
@@ -443,13 +443,13 @@ context("Records email popup modal", () => {
 
     it("Get emails and visit Record approval url", () => {
       getEmailSetting =  {
-        to: SECOND_USER.email,
+        to: FIRST_USER.email,
         after: dateAfterEmailShouldArrive,
         subject: "Can you please approve my request",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
-      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
+      cy.imapGetRecordRequestLink({ userEmail: FIRST_USER.email, options: getEmailSetting });
     });
 
     it("Approve Record", () => {

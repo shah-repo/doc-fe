@@ -478,14 +478,14 @@ context("Autosave LHR", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
-                tabId: "details",
+                tabId: "procedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
-                tabId: "details",
+                tabId: "procedure",
                 index: 1,
                 stepIndex: 1,
                 applicableOn: [
@@ -527,7 +527,7 @@ context("Autosave LHR", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -545,7 +545,7 @@ context("Autosave LHR", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -563,7 +563,7 @@ context("Autosave LHR", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -581,7 +581,7 @@ context("Autosave LHR", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
-                tabId: "details",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1075,6 +1075,10 @@ context("Autosave LHR", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -1501,9 +1505,9 @@ context("Autosave LHR", () => {
   });
 
   context("Release LHRt", () => {
-    it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
+    // it("Click save document", () => {
+    //   cy.drClickCreateDocumentWithApiCallForForms();
+    // });
 
     it("Approve and release LHRt document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();

@@ -224,6 +224,10 @@ context("LHR Upgrade", () => {
       });
 
       context("Fill step #1", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
+        });
+
         it("Fill step #1 description", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
@@ -432,6 +436,10 @@ context("LHR Upgrade", () => {
         cy.cmpTurnOffAutosave();
       });
 
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Enter 'Start quntity' for LHRs #1", () => {
         cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
       });
@@ -442,6 +450,10 @@ context("LHR Upgrade", () => {
 
       it("Enter 'Rejected quntity' for LHRs #1", () => {
         cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+      });
+
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add an Approval", () => {

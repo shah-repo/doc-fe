@@ -317,6 +317,9 @@ context("Suppliers landing page", () => {
         cy.contains(`${supplierLevel}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 7 });
+
+        // workaround for sorting issue between 'Supplier Level' and 'Supplier Status' columns
+        cy.contains(`${supplierLevel}`).eq(0).click();
       });
     });
 
