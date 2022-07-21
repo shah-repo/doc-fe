@@ -233,6 +233,10 @@ context("Mpi/Qpi flow", () => {
         });
 
         context("Fill step #1 and check autosave", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Add attachment and check autosave", () => {
             cy.contains("Step #1").parentsUntil("li")
               .find("[data-cy=\"albumMediaButton\"]").arrowClick();
@@ -293,6 +297,10 @@ context("Mpi/Qpi flow", () => {
         context("Refresh page and check data should exist", () => {
           it("Refresh the page", () => {
             cy.reload();
+          });
+
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
           });
 
           it("Step description should be exist", () => {
@@ -362,6 +370,10 @@ context("Mpi/Qpi flow", () => {
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -481,6 +493,10 @@ context("Mpi/Qpi flow", () => {
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -595,6 +611,10 @@ context("Mpi/Qpi flow", () => {
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -668,6 +688,10 @@ context("Mpi/Qpi flow", () => {
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -785,6 +809,10 @@ context("Mpi/Qpi flow", () => {
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
