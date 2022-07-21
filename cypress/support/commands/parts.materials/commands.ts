@@ -134,7 +134,7 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
-  // cy.progressBarShouldNotExist();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -178,7 +178,7 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
   cy.wrapWithWaitOnApiCalls([], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
-  // cy.progressBarShouldNotExist();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 

@@ -457,7 +457,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
-  // cy.progressBarShouldNotExist();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -597,7 +597,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRevOwner, () => {
     cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
   });
-  // cy.progressBarShouldNotExist();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
