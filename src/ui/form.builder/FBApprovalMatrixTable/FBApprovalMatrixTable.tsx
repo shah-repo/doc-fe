@@ -11,7 +11,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
   mode,
   name,
   cellHeight,
-  statusRef,
+  statusTableRef,
   syncScroll,
 }) =>  (
   <Box display="flex" flexDirection="row" className={classes?.tableRoot}>
@@ -22,7 +22,11 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
     {approvalRoles && !isEmpty(approvalRoles) && (
       <>
         {/* Mui box has missing ref prop, this is workaround to assing ref to it */}
-        <Box width="35%" style={{ overflow: "hidden" }} {...{ ref: statusRef }}>
+        <Box
+          width="35%"
+          style={{ overflow: "hidden" }}
+          {...{ ref: statusTableRef }}
+        >
           <Box width="500%">
             <FBApprovalMatrixTableStatus {...{ classes, approvalData, mode, name, cellHeight }} />
           </Box>

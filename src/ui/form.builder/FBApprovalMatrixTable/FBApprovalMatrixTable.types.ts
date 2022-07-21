@@ -10,7 +10,7 @@ export type FBApprovalMatrixTableProps =
   mode?: FBApprovalMatrixFieldMode;
   classes?: Record<"tableRoot" | "tableInfo" | "tableStatus" | "statusScroller", string>;
   width?: number;
-  statusRef?: React.Ref<HTMLElement>;
+  statusTableRef?: React.Ref<HTMLElement>;
   syncScroll: (event: UIEvent<HTMLElement>) => void;
 };
 

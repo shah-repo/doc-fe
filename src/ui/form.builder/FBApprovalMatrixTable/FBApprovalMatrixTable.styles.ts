@@ -38,13 +38,13 @@ const FBApprovalMatrixTableClasses = makeStyles((theme: Theme) => createStyles({
       color: "#252525",
     },
   },
-  statusScroller: {
+  statusScroller: (scrollerBottomPosition = 0) => ({
     "position": "absolute",
     "height": theme.spacing(2),
     "overflowX": "auto",
     "overflowY": "hidden",
     "right": 0,
-    "bottom": 0,
+    "bottom": scrollerBottomPosition,
     "marginBottom": theme.spacing(0.25),
     "&::-webkit-scrollbar:horizontal": {
       backgroundColor: "transparent",
@@ -55,7 +55,7 @@ const FBApprovalMatrixTableClasses = makeStyles((theme: Theme) => createStyles({
       backgroundColor: "var(--font_gray)",
       borderRadius: theme.spacing(1),
     },
-  },
+  }),
 }));
 
 export default FBApprovalMatrixTableClasses;
