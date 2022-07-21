@@ -292,7 +292,6 @@ context("Validators tests", () => {
 
     it("Create 'Checkboxes'", () => {
       SystemRequirement("FB-0040");
-      // cy.fbSelectCustomFieldToAdd({ name: "Checkbox group" });
       cy.fbSelectItemFromNewFieldList({ section: "Inputs",  field: "Checkbox group" });
     });
 
@@ -311,7 +310,7 @@ context("Validators tests", () => {
 
     it(`Make 'Order' field required`, () => {
       SystemRequirement("FB-0220");
-      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.fbFieldRequired();
     });
 
     it("Add Checkbox Group", () => {
@@ -383,7 +382,7 @@ context("Validators tests", () => {
     });
 
     it(`Make '${requiredFieldLabel}' field required`, () => {
-      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.fbFieldRequired();
     });
 
     it("Add text field", () => {
@@ -769,51 +768,6 @@ field is empty: Add text field`, () => {
 
     it(`Fill in '${requiredWithFieldLabel}' field only`, () => {
       cy.get(`[data-cy^='${requiredWithFieldSelector}']`).arrowType("California");
-    });
-  });
-
-  context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
-    it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect("AR Form");
-      });
-    });
-
-    it("Should show error for 'Incorrect document status' field", () => {
-      cy.get(`[name^='${requiredDocStatusFieldSelector}']`).then((elem) => {
-        const errorBlock = elem.offsetParent().siblings("p");
-
-        cy.wrap(errorBlock)
-          .should("contain.text", `is not in DRAFT status.`);
-      });
-    });
-
-    it(`Fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
-      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect(`${documentRevisionName}`);
-      });
-    });
-  });
-
-  context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
-    it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect("AR Form").wait(500);
-      });
-      cy.unClick();
-    });
-
-    it("Should show error for 'Incorrect document type' field", () => {
-      cy.get(`[name^='${requiredDocTypeFieldSelector}']`).parent().siblings("p")
-        .should("have.text", `Incorrect document type.`);
-    });
-
-    it(`Fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect(`${csDocTitle}`);
-      });
     });
   });
 
