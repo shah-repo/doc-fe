@@ -12,6 +12,7 @@ interface Props {
   sidebarList: SidebarTypes[];
   setOpen: (value: boolean) => void;
   isDrawerOpen: boolean;
+  fromEdit?: boolean;
 }
 
 const StyledTooltip = (props: TooltipProps) => {
@@ -23,6 +24,7 @@ const Sidebar: React.FunctionComponent<Props> = ({
   sidebarList,
   isDrawerOpen,
   setOpen,
+  fromEdit,
 }) => {
   const [tab, setTab] = useState(0);
   const crClasses = CRStyles(isDrawerOpen);
@@ -32,7 +34,7 @@ const Sidebar: React.FunctionComponent<Props> = ({
       height="100%"
       bgcolor="white"
       width={isDrawerOpen ? 281 : 48}
-      marginTop={0.25}
+      marginTop={fromEdit ? 0.25 : 1.25}
       borderColor={Colors.medium_gray}
       className={crClasses.sidebar}
     >

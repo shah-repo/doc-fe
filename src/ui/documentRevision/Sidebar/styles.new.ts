@@ -123,5 +123,9 @@ export default makeStyles((theme: Theme) =>
       color: Colors.navy,
       fontSize: "14px",
     },
+    references: {
+      overflowX: "hidden",
+      overflowY: "auto",
+    },
   })
 );

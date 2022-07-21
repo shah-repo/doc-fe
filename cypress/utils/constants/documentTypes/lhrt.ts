@@ -4,7 +4,7 @@ import { IdocumentTypeDto } from "../../../support/commands";
 export const LHRTTest: IdocumentTypeDto = {
   documentTypeName: "LHR template",
   documentTypeAcronym: "LHRT-",
-  group: DOC_TYPE_GROUP.FORM, // check if this needs to be LHRT group instead.
+  group: DOC_TYPE_GROUP.LHRT, // check if this needs to be LHRT group instead.
 };
 
 export const LHRT: IdocumentTypeDto = {

@@ -79,7 +79,10 @@ function decodeHTMLEntities(text) {
 }
 
 Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => {
-  cy.imapGetMails({ userEmail: params.userEmail }).then((emails) => {
+  cy.imapGetMails({
+    userEmail: params.userEmail,
+    options: { subject: "Welcome to Enlil" },
+  }).then((emails) => {
     const emailText = emails[0].body.html;
     const startingPosition = emailText.search("new_user_set_password");
     const endingPosition = emailText.search("\" target");
@@ -147,7 +150,10 @@ Cypress.Commands.add("imapVerifyEmailsInList", (params: {
 });
 
 Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) => {
-  cy.imapGetMails({ userEmail: params.userEmail }).then((emails) => {
+  cy.imapGetMails({
+    userEmail: params.userEmail,
+    options: { subject: "Your Enlil account was locked" },
+  }).then((emails) => {
     const emailText = emails[0].body.html;
     const endingPosition = emailText.search("\" target");
     const startingPosition = emailText.search("sign_up");
@@ -157,7 +163,13 @@ Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) =>
 });
 
 Cypress.Commands.add("imapNavigToPasswordResetLink", (params: { userEmail: string; fromDate: Date}) => {
-  cy.imapGetMails({ userEmail: params.userEmail, options: { after: params.fromDate } }).then((emails) => {
+  cy.imapGetMails({
+    userEmail: params.userEmail,
+    options: {
+      after: params.fromDate,
+      subject: "Password expiring? No worries — ready, change, and go!",
+    },
+  }).then((emails) => {
     const emailText = emails[0].body.html;
     if (emailText.includes("reset_password")) {
       cy.visit(CONFIG.FE_URL + "/reset_password");
@@ -171,7 +183,11 @@ Cypress.Commands.add("imapNavigToPasswordResetLink", (params: { userEmail: strin
 Cypress.Commands.add("imapVerifyNoPasswordResetEmail", (params: { userEmail: string; fromDate: Date}) => {
   cy.imapGetMailsNoValidation({
     userEmail: params.userEmail,
-    options: { after: params.fromDate, max_wait_time_sec: 30 },
+    options: {
+      after: params.fromDate,
+      subject: "Need to reset your password? We gotcha — ready, reset and go!",
+      max_wait_time_sec: 30,
+    },
   })
     .then((emails) => {
       if (emails) { assert.fail("Password reset found"); }

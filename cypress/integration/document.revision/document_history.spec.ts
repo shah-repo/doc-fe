@@ -173,16 +173,8 @@ context("Check Document History", () => {
       cy.drSetDocTypeId({ docId: documentId.value });
     });
 
-    it("Select reference for document", () => {
-      cy.drSelectReferences( reference.value );
-    });
-
     it("Mark 'Training Required'", () => {
       cy.drClickTrainingRequired();
-    });
-
-    it("Uploads test_image.jpg", () => {
-      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
     });
 
     it(`Select user: ${sharedUser.name}`, () => {
@@ -210,6 +202,14 @@ context("Check Document History", () => {
   });
 
   context("Edit document attributes", () => {
+    it("Select reference for document", () => {
+      cy.drSelectReferences( reference.value );
+    });
+
+    it("Uploads test_image.jpg", () => {
+      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+    });
+
     it("edit the title", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
@@ -227,9 +227,7 @@ context("Check Document History", () => {
     });
 
     it("Remove reference for document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drRemoveReferences(0);
-      });
+      cy.drRemoveReferences({ reference: "FM-00001" });
       cy.progressBarShouldNotExist();
     });
 

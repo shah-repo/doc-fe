@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -184,7 +185,7 @@ context("Export Part doc", () => {
 
   context("Part with Draft status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-Part-form" });
+      cy.exportVerifyEmail({ pdfStatus: "Draft", filename: "-1-Part-form", status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 
@@ -195,7 +196,7 @@ context("Export Part doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-1-Part-form" });
+        cy.exportVerifyEmail({ pdfStatus: "Released", filename: "-1-Part-form", status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
   });
@@ -209,11 +210,15 @@ context("Export Part doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Obsolete", filename: "-OBS-Part-form" });
+      cy.exportVerifyEmail({ pdfStatus: "Obsolete", filename: "-OBS-Part-form", status: STATUS_TYPES_LABEL.OBSOLETE });
     });
   });
 
   context("Part with Superseded status", () => {
+    it("Select Revision", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -221,7 +226,10 @@ context("Export Part doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-Part-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-Part-form",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
@@ -254,10 +262,6 @@ context("Export Part doc", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
 
-    it("Upload logo picture 'image.jpg'", () => {
-      cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
-    });
-
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
@@ -269,7 +273,7 @@ context("Export Part doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-1-Void" });
+      cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-1-Void", status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 
@@ -355,7 +359,10 @@ context("Export Part doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Pending Change", filename: "-1-Part-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Pending Change", filename: "-1-Part-form",
+        status: STATUS_TYPES_LABEL.PENDING_CHANGE,
+      });
     });
   });
 
@@ -377,7 +384,10 @@ context("Export Part doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-1-Part-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "In Review", filename: "-1-Part-form",
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+      });
     });
   });
 
@@ -399,7 +409,7 @@ context("Export Part doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Approved", filename: "-1-Part-form" });
+      cy.exportVerifyEmail({ pdfStatus: "Approved", filename: "-1-Part-form", status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 

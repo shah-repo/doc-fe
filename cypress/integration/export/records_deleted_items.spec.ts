@@ -226,12 +226,10 @@ context("Export Record doc", () => {
 
     it("Add inline approval", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.fbSelectInlineApproval();
-      });
-      cy.get("[name=\"label\"]").arrowType("Inline field");
-      cy.fbAddApproverToInlineDialog({ approverName: USERS[1].name });
-      cy.fbAddField();
+      cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+      cy.fbEnterNameValue({ name: "label", value: "Inline field" });
+      cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
+      cy.fbAddNewFieldButton();
     });
 
     it("Click create document", () => {
@@ -254,7 +252,8 @@ context("Export Record doc", () => {
     });
 
     it("Click 'Create New' button", () => {
-      cy.drCreateNewDocumentFromFormRecord();
+      cy.drCreateNewDocumentFromForm();
+
     });
   });
 

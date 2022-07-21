@@ -5,6 +5,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -482,7 +483,7 @@ context("LHRs email notifications", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
-                tabId: "procedure",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -787,6 +788,14 @@ context("LHRs email notifications", () => {
     });
 
     context("Start LHRs", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
         cy.mpiStartStep({ stepNumber: 1 });
@@ -806,7 +815,7 @@ context("LHRs email notifications", () => {
       });
 
       it("Verify status is WIP", () => {
-        cy.drCheckDocumentStatus({ status: "WIP" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
         cy.url().then((url: any) => {
           lhrs1DocUrl = url;
         });

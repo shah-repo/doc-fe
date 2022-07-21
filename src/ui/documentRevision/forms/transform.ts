@@ -1,4 +1,4 @@
-import { get, maxBy, pick } from "lodash";
+import { get, isEmpty, maxBy, pick } from "lodash";
 import { DocumentType, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference } from "../../../state/ducks/documentRevisions/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
@@ -169,6 +169,11 @@ export const toNewVersionRequestBody = (
         },
       };
       newValues.document.documentType = { id: get(values, "document.documentType.id") };
+      const equipmentId = get(values, "parentEquipment.id");
+      if (!isEmpty(equipmentId)) {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        newValues.formInput = { ...newValues.formInput, equipment_id: equipmentId };
+      }
     }
   }
 

@@ -161,7 +161,7 @@ context("Autosave on leaving page while data is still not saved", () => {
       cy.drFilterDocListByNameAndStatus({ title: "Test", status: "Draft" });
       cy.cmpTurnOnAutosave();
       cy.get("[id='field-name']").contains("Test");
-      cy.get("[id='field-description']").contains("Test description");
+      cy.get("[data-cy='description']").contains("Test description");
     });
 
     it("Click on navigation while document is being saved", () => {

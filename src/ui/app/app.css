@@ -8,14 +8,23 @@
 /* Hide scrollbar for Chrome, Safari and Opera */
 .hide-scroll::-webkit-scrollbar,
 .hide-scroll div::-webkit-scrollbar {
-  display: none;
+  background-color: transparent;
+  width: 6px;
+  height: 6px;
+}
+
+.hide-scroll::-webkit-scrollbar-thumb,
+.hide-scroll div::-webkit-scrollbar-thumb {
+  background-color: transparent;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scroll,
 .hide-scroll div {
--ms-overflow-style: none;  /* IE and Edge */
-scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 :root {
@@ -367,11 +376,30 @@ td#kendo-expandable-column[role="gridcell"] {
   white-space: nowrap;
 }
 
-.MuiMenuItem-root span, .MuiAutocomplete-listbox {
+.MuiMenuItem-root span,
+.MuiAutocomplete-listbox {
   font-family: "Sora"
 }
 
-.Toastify__toast, .Toastify__toast-body,
-.Toastify__toast-container, .Toastify__close-button {
+.Toastify__toast,
+.Toastify__toast-body,
+.Toastify__toast-container,
+.Toastify__close-button {
   font-family: 'Sora';
+}
+
+
+.containing-box-scrollbar::-webkit-scrollbar {
+  background-color: transparent;
+  width: 6px;
+  height: 6px;
+}
+
+.containing-box-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.containing-box-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--light-gray);
+  border-radius: 1ex;
 }

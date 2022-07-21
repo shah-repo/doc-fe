@@ -447,7 +447,7 @@ context("Purchase Supplier Update", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApprove();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -530,7 +530,7 @@ context("Purchase Supplier Update", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApprove();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -635,7 +635,7 @@ context("Purchase Supplier Update", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApprove();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 3", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -694,7 +694,7 @@ context("Purchase Supplier Update", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApprove();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 4", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -774,9 +774,12 @@ context("Purchase Supplier Update", () => {
         cy.poAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
-      it("Click 'Submit for Approval' button and approve it", () => {
+      it("Click 'Submit for Approval' button", () => {
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+      });
+
+      it("Approve PO", () => {
+        cy.poApprove();
       });
 
       it("Update Supplier name and Release it", () => {
@@ -784,6 +787,9 @@ context("Purchase Supplier Update", () => {
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00002" });
         cy.dlSelectFirstDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"updateRecord\"]").should("exist");
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
@@ -792,7 +798,7 @@ context("Purchase Supplier Update", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApprove();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -813,7 +819,7 @@ context("Purchase Supplier Update", () => {
         cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
-        cy.ebApprove();
+        cy.poApprove();
       });
 
       it("Turn off autosave", () => {
@@ -869,7 +875,7 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApprove();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 3", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -882,6 +888,9 @@ context("Purchase Supplier Update", () => {
         cy.navigToPurchaseOrder();
         cy.dlClearFilters();
         cy.poClickOnSpecificPOFromList({ item: "PO-00003" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"updateRecord\"]").should("exist");
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
@@ -890,7 +899,7 @@ context("Purchase Supplier Update", () => {
         cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
-        cy.ebApprove();
+        cy.poApprove();
       });
 
       it("Turn off autosave", () => {
@@ -1033,7 +1042,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Approve PO", () => {
-        cy.ebApprove();
+        cy.poApprove();
       });
 
       it("reload page", () => {
@@ -1074,7 +1083,7 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApprove();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 4", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -1173,7 +1182,7 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApprove();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 5", status: STATUS_TYPES_LABEL.RELEASED });
       });

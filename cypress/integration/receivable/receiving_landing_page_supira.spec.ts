@@ -42,14 +42,14 @@ const todaysDate = moment().tz("America/Los_Angeles");
 const todaysDateFormated = moment().tz("America/Los_Angeles").format("L");
 
 const COLUMN_HEADERS = [
-  "Receipt ID",
-  "Receipt Record State",
-  "Owner",
+  "RECEIPT ID",
+  "RECEIPT RECORD STATE",
+  "OWNER",
   "PO #",
-  "Released Date",
-  "Supplier",
-  "Part Number/Rev",
-  "PO Status",
+  "RELEASED DATE",
+  "SUPPLIER",
+  "PART NUMBER/REV",
+  "PO STATUS",
 ];
 
 context("Test Supplier Landing Page for Supira", () => {
@@ -1318,6 +1318,10 @@ context("Test Supplier Landing Page for Supira", () => {
       });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Search for API PO document and select it", () => {
       cy.get("[data-cy='porec-receive-po-kzqkr5yl']").autocompleteSelect("PO for receiving" );
     });
@@ -1346,7 +1350,7 @@ context("Test Supplier Landing Page for Supira", () => {
       cy.navigToReceivableList();
     });
 
-    it("Filter Receipt ID column", () => {
+    it("Filter RECEIPT ID column", () => {
       cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
       cy.get(`th[aria-colindex="7"] input`).arrowType("PRT-00005 - 1");
     });
@@ -1364,7 +1368,10 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get(`[name^="fb-approvals-fb-approvals"]`).arrowClick().wait(500);
+      cy.get(`[name^="fb-approvals-fb-approvals"]`)
+        .autocompleteSelect(USERS[1].email);
+      cy.unClick();
     });
 
     it("Save PO", () => {
@@ -1386,7 +1393,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
-      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+      cy.get("tr[data-grid-row-index=\"0\"]").should("contain", "PRT-00005 - 1");
     });
 
     it("Navigate to created one", () => {
@@ -1402,7 +1409,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
-      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+      cy.get("tr[data-grid-row-index=\"0\"]").should("contain", "PRT-00005 - 1");
     });
 
     it("Verify export button exists", () => {
@@ -1411,7 +1418,6 @@ context("Test Supplier Landing Page for Supira", () => {
   });
 
   context("Verify PART NUMBER/REV when Released new one", () => {
-
     it("Filter RC-00001", () => {
       cy.get(`th[aria-colindex="1"] input`).arrowType("RC-00001");
     });
