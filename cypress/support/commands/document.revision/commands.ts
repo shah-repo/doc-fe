@@ -571,7 +571,6 @@ Cypress.Commands.add("drCancelDraftFromMenu", () => {
 });
 
 Cypress.Commands.add("drClickUpgradeForm", () => {
-  cy.get("[data-cy=\"upgradeNextRevisionStage\"]").arrowClick();
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
   cy.get("#UpgradeToLatest-upgrade").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.UpgradeToReleasedForm, () => {
