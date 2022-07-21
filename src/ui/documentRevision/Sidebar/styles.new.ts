@@ -124,10 +124,8 @@ export default makeStyles((theme: Theme) =>
       fontSize: "14px",
     },
     references: {
-      "overflow": "hidden",
-      "&:hover": {
-        overflowY: "auto",
-      },
+      overflowX: "hidden",
+      overflowY: "auto",
     },
   })
 );
