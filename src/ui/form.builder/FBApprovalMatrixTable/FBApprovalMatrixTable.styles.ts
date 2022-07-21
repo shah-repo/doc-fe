@@ -52,7 +52,7 @@ const FBApprovalMatrixTableClasses = makeStyles((theme: Theme) => createStyles({
       width: theme.spacing(1.5),
     },
     "&::-webkit-scrollbar-thumb:horizontal": {
-      backgroundColor: "var(--font_gray)",
+      backgroundColor: "var(--light-gray)",
       borderRadius: theme.spacing(1),
     },
   }),
