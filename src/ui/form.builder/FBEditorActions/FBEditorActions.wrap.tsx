@@ -43,7 +43,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         return !isUnique;
       });
 
-      if (additionalSchema.length) {
+      if ((!workspaceState?.getSchemaItemAt(index) || index === 0) && additionalSchema) {
         const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId: _tabsState?.tabID }));
         workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchemaWithInitialValues as FBSchemaProps[]));
         index = index + size(additionalSchema);
