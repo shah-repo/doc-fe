@@ -69,7 +69,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
           )}
         </Box>
         <Box width={233} display="flex" flexGrow={1} height="calc(100vh - 180px)"
-          className={classNames(classes.references, "panel-scrollbar")}>
+          className={classNames(classes.references, "containing-box-scrollbar")}>
           {sidebarList[indexNumber].details.component}
         </Box>
       </Box>
