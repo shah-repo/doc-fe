@@ -1985,6 +1985,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Navigate to LHR", () => {
         cy.navigToLHR();
+        cy.wait(10000);
       });
 
       it("Enter LHR document 1", () => {

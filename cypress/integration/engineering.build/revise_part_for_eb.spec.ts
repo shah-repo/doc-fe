@@ -277,13 +277,15 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
     });
 
+
     context("Clone EB", () => {
       it("Click Clone EB button", () => {
-        cy.ebClickClone();
+        cy.ebClickCloneFromHeader();
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00004 - " + PART_NAME);
+        cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
+        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - Test Part");
       });
     });
 

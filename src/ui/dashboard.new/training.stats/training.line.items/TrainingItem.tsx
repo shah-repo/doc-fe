@@ -50,8 +50,8 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
     date
   ) => (
     <>
-      <Grid  container >
-        <Grid item xs={10}  className={classes.avatarSection} >
+      <Grid  container justify="space-between" >
+        <Grid item xl={8} xs={7} md={7} className={classes.avatarSection} >
           {avatar ? (
             <Avatar
               style={{ backgroundColor: `${initialColor}` }}
@@ -76,7 +76,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             {name}
           </Typography>
         </Grid>
-        <Grid item  className={classes.gridItems}>
+        <Grid item xl={4} xs={5} md={5} className={classes.gridItems}>
           {isOverdue && (
             <Typography
               component="span"

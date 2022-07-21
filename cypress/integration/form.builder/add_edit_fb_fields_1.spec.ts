@@ -18,7 +18,7 @@ let employeeLoginFirst;
 let formId;
 let arId;
 let emailsFromInbox;
-const pages = ["", "", "", "", ""];
+const pages = ["", "", "", "", "", ""];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -130,21 +130,21 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add section field", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
       cy.fbEnterLabel({ label: "fb-section" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Subsection", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Subsection" });
       cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Checkbox group", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
@@ -156,7 +156,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Autocomplete with Document Revision", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-revision" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
@@ -164,7 +164,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Autocomplete with Parts", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-parts" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Parts");
@@ -172,7 +172,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Autocomplete with Document Approvers", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-approvers" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
@@ -180,21 +180,21 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Text Editor", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Date picker", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Hyperlink", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Hyperlink" });
       cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
       cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
@@ -202,7 +202,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Select Field", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
       cy.fbGroupOptions("option1", "option2");
@@ -210,7 +210,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Radio Button group", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
@@ -225,7 +225,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Paragraph", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
         .click({ force: true }).clear().arrowType("fb-paragraph");
@@ -233,7 +233,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add File Upload", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -241,7 +241,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Blank Template Form", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
@@ -249,56 +249,56 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add Step", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Step" });
       cy.fbEnterNameValue({ name: "label", value: "fb-step" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Quantity", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Timer", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Timer" });
       cy.fbEnterNameValue({ name: "label", value: "fb-timer" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Purchase Order", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Purchase Order" });
       cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Receive Purchase Order", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
       cy.fbEnterNameValue({ name: "label", value: "fb-receive-purchase-order" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add PO Approval Matrix", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
       cy.fbEnterNameValue({ name: "label", value: "fb-po-approval-matrix" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Instructions Media upload", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Evidence Media upload", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbClickAddNewHiddenBtn();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -306,7 +306,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Add EB Procedure", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.fbAddNewFieldButton();
     });
@@ -439,7 +439,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Edit EB Procedure", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "Step #2" });
+      cy.fbClickLabelEditHiddenBtn({ label: "Step #1" });
       cy.fbAddNewFieldButton();
     });
 
@@ -550,7 +550,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify EB Procedure", () => {
-      cy.contains("Step #2").should("exist");
+      cy.contains("Step #1").should("exist");
     });
 
 
@@ -658,29 +658,33 @@ context("Add and edit FB fields - Test 1", () => {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${formId}-1-New-Document-Revision.pdf`,
         }).then((cdata) => {
-        expect(cdata.numpages).eq(5);
-        expect(cdata.text).match(/Page 1 of 5/);
-        expect(cdata.text).match(/Page 2 of 5/);
-        expect(cdata.text).match(/Page 3 of 5/);
-        expect(cdata.text).match(/Page 4 of 5/);
-        expect(cdata.text).match(/Page 5 of 5/);
+        expect(cdata.numpages).eq(6);
+        expect(cdata.text).match(/Page 1 of 6/);
+        expect(cdata.text).match(/Page 2 of 6/);
+        expect(cdata.text).match(/Page 3 of 6/);
+        expect(cdata.text).match(/Page 4 of 6/);
+        expect(cdata.text).match(/Page 5 of 6/);
+        expect(cdata.text).match(/Page 6 of 6/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
         arr.forEach((element) => {
-          if (element.includes("Page 1 of 5")) {
+          if (element.includes("Page 1 of 6")) {
             pages[0] = element;
           }
-          if (element.includes("Page 2 of 5")) {
+          if (element.includes("Page 2 of 6")) {
             pages[1] = element;
           }
-          if (element.includes("Page 3 of 5")) {
+          if (element.includes("Page 3 of 6")) {
             pages[2] = element;
           }
-          if (element.includes("Page 4 of 5")) {
+          if (element.includes("Page 4 of 6")) {
             pages[3] = element;
           }
-          if (element.includes("Page 5 of 5")) {
+          if (element.includes("Page 5 of 6")) {
             pages[4] = element;
+          }
+          if (element.includes("Page 6 of 6")) {
+            pages[5] = element;
           }
         });
       });
@@ -688,7 +692,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 1 in document", () => {
       const el = pages[0];
-      if (el.includes("Page 1 of 5")) {
+      if (el.includes("Page 1 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
@@ -704,11 +708,9 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/fb-textfield1/);
 
-        expect(el).match(/STEP #2\nDescription/);
+        expect(el).match(/STEP #1\nDescription/);
 
-        expect(el).match(/Attachments\nMaterials\nEquipment/);
-
-        expect(el).match(/fb-instructions1/);
+        expect(el).match(/Attachments\nMaterials/);
 
         expect(el).match(/Draft/);
 
@@ -718,7 +720,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 5/);
+        expect(el).match(/Page 1 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -727,9 +729,13 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 2 in document", () => {
       const el = pages[1];
-      if (el.includes("Page 2 of 5")) {
+      if (el.includes("Page 2 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
+
+        expect(el).match(/Equipment/);
+
+        expect(el).match(/fb-instructions1/);
 
         expect(el).match(/video.mp4/);
 
@@ -748,7 +754,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 5/);
+        expect(el).match(/Page 2 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -757,7 +763,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 3 in document", () => {
       const el = pages[2];
-      if (el.includes("Page 3 of 5")) {
+      if (el.includes("Page 3 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
@@ -792,7 +798,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 5/);
+        expect(el).match(/Page 3 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -801,7 +807,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 4 in document", () => {
       const el = pages[3];
-      if (el.includes("Page 4 of 5")) {
+      if (el.includes("Page 4 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
@@ -830,7 +836,7 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 4 of 5/);
+        expect(el).match(/Page 4 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -839,7 +845,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Verify page 5 in document", () => {
       const el = pages[4];
-      if (el.includes("Page 5 of 5")) {
+      if (el.includes("Page 5 of 6")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
@@ -853,7 +859,30 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 5 of 5/);
+        expect(el).match(/Page 5 of 6/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 6 in document", () => {
+      const el = pages[5];
+      if (el.includes("Page 6 of 6")) {
+        tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 6 of 6/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
