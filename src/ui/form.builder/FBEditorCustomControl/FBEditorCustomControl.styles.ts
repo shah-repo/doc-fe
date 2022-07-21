@@ -23,11 +23,5 @@ export default makeStyles(() =>
         marginBottom: 0,
       },
     },
-    marginBStyle: {
-      "& p":
-      { marginBottom: "0px" },
-
-    },
-
   })
 );
