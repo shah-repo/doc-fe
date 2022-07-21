@@ -60,4 +60,5 @@ export interface FBSchemaComponentProps {
   workspaceMode?: FBWorkspaceMode;
   schema?: FBSchemaProps[];
   schemaState?: FBSchemaState;
+  showAllTabs?: boolean;
 }

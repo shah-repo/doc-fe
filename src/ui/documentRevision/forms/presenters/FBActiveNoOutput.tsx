@@ -1,4 +1,4 @@
-import { Box, Button, Grid, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Box, Button, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import { get } from "lodash";
 import * as React from "react";
@@ -17,7 +17,7 @@ import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus"
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 import RenderHtmlField from "./RenderHtmlField";
-import { FBProvider, FBDialog, FB, FBDialogState, FBForm } from "../../../form.builder";
+import { FB, FBDialog, FBDialogState, FBForm, FBProvider, FBWorkspaceModeOptions } from "../../../form.builder";
 import Text from "../../../components/Text";
 import { ReactComponent as PreviewIcon } from "../../../../assets/images/preview.svg";
 import Colors from "../../../layout/theme/utils/colors";
@@ -120,8 +120,9 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
           <Box mx={8}>
             <FBForm
               schema={revisionFormSchema}
+              showAllTabs={true}
               initialValidation={true}
-              workspaceMode="form"
+              workspaceMode={FBWorkspaceModeOptions.PREVIEW}
             />
           </Box>
         ),
