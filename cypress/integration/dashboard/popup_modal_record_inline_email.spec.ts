@@ -10,13 +10,13 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
-const dateOffset = (5 * 1000);
 const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
 
 let employeeLoginFirst;
@@ -344,7 +344,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
     });
   });
@@ -484,7 +484,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
     });
   });

@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -370,7 +371,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Add TextField", () => {
-      cy.fbAddNewFieldWhenHidden();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -379,7 +380,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Add File Upload", () => {
-      cy.fbAddNewFieldWhenHidden();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -388,7 +389,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Add Checkbox group", () => {
-      cy.fbAddNewFieldWhenHidden();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
@@ -401,13 +402,13 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Add Procedure1", () => {
-      cy.fbClickAddNewHiddenBtn();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Procedure2", () => {
-      cy.fbClickAddNewHiddenBtn();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.fbAddNewFieldButton();
     });
@@ -429,7 +430,7 @@ context("Export Engineering Build doc", () => {
 
   context("Check pdf email and get content", () => {
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Draft", filename: "-1-EB-form" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.DRAFT, filename: "-1-EB-form" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -603,7 +604,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Released", filename: "-1-EB-form" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-EB-form" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -776,6 +777,7 @@ context("Export Engineering Build doc", () => {
 
     it("Enter title 'EB doc'", () => {
       cy.drEnterDocumentTitle({ name: "EB doc" });
+      cy.unClick();
     });
 
     it("Enter description 'EB doc description'", () => {
@@ -948,7 +950,7 @@ context("Export Engineering Build doc", () => {
 
   context("Verify pdf content", () => {
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "WIP", filename: "-A-EB-doc" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.WIP, filename: "-A-EB-doc" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -994,7 +996,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/test.docx/);
         expect(el).match(/fb-textfield\ntextfield/);
 
-        expect(el).match(/WIP/);
+        expect(el).match(STATUS_TYPES_LABEL.WIP);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1026,7 +1028,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/test_image.jpg/);
         expect(el).match(/Materials\nMT-00004 - Materials document | ? | Qty: 2 each/);
 
-        expect(el).match(/WIP/);
+        expect(el).match(STATUS_TYPES_LABEL.WIP);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1058,7 +1060,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/STEP #3/);
         expect(el).match(/Attachments\nNone\nMaterials\nNone\nEquipment\nNone/);
 
-        expect(el).match(/WIP/);
+        expect(el).match(STATUS_TYPES_LABEL.WIP);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1080,7 +1082,7 @@ context("Export Engineering Build doc", () => {
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/WIP/);
+        expect(el).match(STATUS_TYPES_LABEL.WIP);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1200,7 +1202,7 @@ context("Export Engineering Build doc", () => {
 
   context("Verify pdf content", () => {
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Released", filename: "-A-EB-doc" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-A-EB-doc" }).then((data) => {
         pdfContent = data;
       });
     });

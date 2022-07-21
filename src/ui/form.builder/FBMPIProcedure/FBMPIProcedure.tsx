@@ -25,7 +25,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
 }) => (
   <FBInput {...props } {...{ name }} type="mpiprocedure">
     <Box
-      pb={3}
+      pb={3.8}
       mt={1.75}
       color={Colors.hint_gray}
       borderBottom={1}
@@ -64,7 +64,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           }}
           boxProps={{ style: { color: Colors.black, fontSize: 14 } }}
           withState
-          removeBorder={false}
+          removeBorder={isPreview}
         />
         <Box
           display="flex"
@@ -75,7 +75,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           borderTop={0}
           borderRight={0}
           borderBottom={0}
-          pb={7.5}
+          pb={0}
         >
           <FBMapWrapper<string[]> collection={types}>
             {(type, index) => (
@@ -83,7 +83,8 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                 key={`fb-procedure-item-${type}-${index}`}
                 display="flex"
                 flexDirection="row"
-                mt={5}
+                mt={3.8}
+
               >
 
                 {!isPreview && (
@@ -114,7 +115,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             )}
           </FBMapWrapper>
         </Box>
-        <Box display="flex" flexDirection="row" mt={-2.7} ml={isPreview ? 0 : 1.5}>
+        <Box display="flex" flexDirection="row" mt={3.8} ml={isPreview ? 0 : 1.5}>
           {!isPreview && (
             <Box
               width={10}

@@ -13,6 +13,7 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -37,8 +38,6 @@ let caGroup;
 let emailsFromInbox: IMAPEmail[];
 let dateAfterEmailShouldArrive;
 let getEmailSetting;
-
-const dateOffset = (5 * 1000);
 
 context("Email popup modal for training due", () => {
   before(() => {
@@ -816,7 +815,7 @@ context("Email popup modal for training due", () => {
     it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
       cy.contains("EMAIL SENT TO ALL").should("exist");
       cy.get("button[aria-label=close]").eq(1).arrowClick();
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
 
     it("There should be 3 columns", () => {
@@ -828,14 +827,13 @@ context("Email popup modal for training due", () => {
   context(`Verify email for pending training notification to ${USERS[1].name}`, () => {
     it("Verify emails", () => {
       getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
+        to: USERS[1].email,
         after: dateAfterEmailShouldArrive,
         subject: "Your training is overdue",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      cy.imapGetMails({ userEmail: USERS[1].email, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
     });
@@ -909,7 +907,7 @@ context("Email popup modal for training due", () => {
     it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
       cy.contains("EMAIL SENT TO ALL").should("exist");
       cy.get("button[aria-label=close]").eq(1).arrowClick();
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
   });
 

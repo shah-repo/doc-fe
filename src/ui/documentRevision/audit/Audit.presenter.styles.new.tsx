@@ -17,7 +17,7 @@ export const styles = makeStyles((theme: Theme) =>
       marginBottom: "15px",
     },
     changeContainer: {
-      boxShadow: `inset 0px 1px 1px -1px ${Colors.gray_goose}, inset 0px -1px 1px 0px ${Colors.gray_goose}`,
+      boxShadow: `inset 0px 1px 0px -1px ${Colors.gray_goose}, inset 0px -1px 0px 0px ${Colors.gray_goose}`,
       padding: theme.spacing(1.875),
     },
     auditValue: {
