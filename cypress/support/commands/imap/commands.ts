@@ -92,7 +92,7 @@ Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => 
 });
 
 Cypress.Commands.add("imapGetApprovalRequestLink", (params: {userEmail: string; options?: GmailTesterOptions}) => {
-  cy.imapGetMails({ userEmail: params.userEmail, options: { after: new Date(Date.now() - 300 * 1000) } })
+  cy.imapGetMails({ userEmail: params.userEmail, options: params.options || {} })
     .then((emails) => {
       const emailText = emails[0].body.html;
       const startingPosition = emailText.search("/change_request/");
@@ -103,7 +103,7 @@ Cypress.Commands.add("imapGetApprovalRequestLink", (params: {userEmail: string; 
 });
 
 Cypress.Commands.add("imapGetRecordRequestLink", (params: { userEmail: string; options?: GmailTesterOptions}) => {
-  cy.imapGetMails({ userEmail: params.userEmail, options: { after: new Date(Date.now() - 300 * 1000) } })
+  cy.imapGetMails({ userEmail: params.userEmail, options: params.options || {} })
     .then((emails) => {
       const emailText = emails[0].body.html;
       const filteredExtraSpaceEmailText = emailText.replace(/\s+/g, " ").trim();

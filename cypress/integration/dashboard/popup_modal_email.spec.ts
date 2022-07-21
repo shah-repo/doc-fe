@@ -7,6 +7,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -17,7 +18,6 @@ const SECOND_USER = USERS[31];
 const THIRD_USER = USERS[32];
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
-const dateOffset = (5 * 1000);
 
 let createdCompany;
 let loginResponse;
@@ -255,7 +255,7 @@ context("Approval request email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
     });
   });
@@ -358,7 +358,7 @@ context("Approval request email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
     });
   });
@@ -393,7 +393,6 @@ context("Approval request email popup modal", () => {
           sentToUser: SECOND_USER.email,
           contains: ["Can you please approve my\r\n                                      request:)",
           ],
-
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -443,13 +442,13 @@ context("Approval request email popup modal", () => {
 
     it("Get emails and visit AR approval url", () => {
       getEmailSetting =  {
-        to: SECOND_USER.email,
+        to: FIRST_USER.email,
         after: dateAfterEmailShouldArrive,
         subject: "Can you please approve my request",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
-      cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
+      cy.imapGetApprovalRequestLink({ userEmail: FIRST_USER.email, options: getEmailSetting });
     });
 
     it("Approve AR", () => {
