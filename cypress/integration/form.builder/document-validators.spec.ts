@@ -37,10 +37,8 @@ const requiredWithoutFieldLabel = "Address";
 const requiredWithoutFieldSelector = `${requiredWithoutFieldLabel.toLowerCase().split(" ").join("-")}-`;
 
 const requiredDocStatusFieldLabel = "Document Status";
-const requiredDocStatusFieldSelector = `${requiredDocStatusFieldLabel.toLowerCase().split(" ").join("-")}-`;
 
 const requiredDocTypeFieldLabel = "Document Type";
-const requiredDocTypeFieldSelector = `${requiredDocTypeFieldLabel.toLowerCase().split(" ").join("-")}-`;
 
 const csDocTitle = "My CS Doc";
 
