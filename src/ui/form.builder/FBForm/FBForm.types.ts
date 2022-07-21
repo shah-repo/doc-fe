@@ -16,7 +16,6 @@ export interface FBFormProps {
   children?: React.ReactNode | React.ReactNode[];
   formState?: FBFormState;
   schema?: FBSchemaProps[];
-  showAllTabs?: boolean;
   workspaceMode?: FBWorkspaceMode;
   errorValidation?: boolean;
   initialValidation?: boolean;

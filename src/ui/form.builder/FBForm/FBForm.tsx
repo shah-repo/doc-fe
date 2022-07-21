@@ -7,11 +7,10 @@ const FBForm: React.FunctionComponent<FBFormProps> = ({
   formState,
   workspaceMode,
   schema,
-  showAllTabs,
 }) => (
   <FBProvider {...{ formState }}>
     {children}
-    {schema && <FBSchema {...{ schema, showAllTabs, workspaceMode }} />}
+    {schema && <FBSchema {...{ schema, workspaceMode }} />}
   </FBProvider>
 );
 
