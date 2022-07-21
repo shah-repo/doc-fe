@@ -16,6 +16,8 @@ export const styles = makeStyles(() =>
     },
     actionIcon: {
       paddingLeft: "10px",
+    },
+    cursorPointer: {
       cursor: "pointer",
     },
     link: {
@@ -27,9 +29,11 @@ export const styles = makeStyles(() =>
     },
     icon: {
       width: "15px",
+      cursor: "pointer",
     },
     listItem: {
       paddingLeft: "1px",
+      cursor: "unset",
     },
     buttoncursor: {
       cursor: "unset",
@@ -50,6 +54,7 @@ export const styles = makeStyles(() =>
       borderLeft: `1px solid ${Colors.light_gray_blue}`,
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
+      cursor: "unset",
     },
     collapsedList: {
       backgroundColor: Colors.sky_blue,
@@ -76,7 +81,6 @@ export const styles = makeStyles(() =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
-      cursor: "pointer",
     },
     poActionIconsWidth: {
       width: "146px",
