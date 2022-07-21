@@ -476,7 +476,6 @@ context("Copyable Checkbox test", () => {
 
 
     it("Click on 'Add Another Role' button", () => {
-      cy.pause();
       cy.get("button[data-cy=\"form.builder.add.another.role\"]").arrowClick();
     });
 
