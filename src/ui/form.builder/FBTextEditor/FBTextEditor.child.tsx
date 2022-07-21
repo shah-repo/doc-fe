@@ -90,7 +90,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
           }}
           p={isPreview ? 0 : 1.5}
         >
-          <div
+          <div className="MarginBottom"
             style={{ width: "100%", height: "100%" }}
             dangerouslySetInnerHTML={{ __html: formattedFormValue }}
           />
