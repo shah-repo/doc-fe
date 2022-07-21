@@ -243,14 +243,14 @@ context("Change owner before starting LHRs", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
-                tabId: "details",
+                tabId: "procedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
-                tabId: "details",
+                tabId: "procedure",
                 index: 1,
                 stepIndex: 1,
                 applicableOn: [
@@ -286,7 +286,7 @@ context("Change owner before starting LHRs", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -304,7 +304,7 @@ context("Change owner before starting LHRs", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -322,7 +322,7 @@ context("Change owner before starting LHRs", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -340,7 +340,7 @@ context("Change owner before starting LHRs", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
-                tabId: "details",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -821,7 +821,7 @@ context("Change owner before starting LHRs", () => {
 
     context("Start LHRs", () => {
       it("Click 'LHR Step'", () => {
-        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+        cy.get("[data-cy^=\"LHR Step 1\"]").arrowClick();
       });
 
       it("Click 'START MPI'", () => {
@@ -876,6 +876,10 @@ context("Change owner before starting LHRs", () => {
     });
 
     context("Add atributes to LHRs with operator", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Enter 'Start quntity' for LHRs #1", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
@@ -895,6 +899,10 @@ context("Change owner before starting LHRs", () => {
           cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
           cy.unClick();
         });
+      });
+
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add an Approval", () => {

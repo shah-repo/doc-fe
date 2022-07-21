@@ -223,6 +223,10 @@ context("Mpi Template", () => {
       });
 
       context("Fill step #1", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
+        });
+
         it("Fill step #1 description", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
         });

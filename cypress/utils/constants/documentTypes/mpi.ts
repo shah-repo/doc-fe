@@ -103,7 +103,7 @@ export const MPITestProcedureDeletable: IdocumentTypeDto = {
       label: "form.builder.mpiprocedure",
       deleteDisabled: false,
       deleteInFormDisabled: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "mpi-procedure-built-in",
@@ -116,7 +116,7 @@ export const MPITestProcedureDeletable: IdocumentTypeDto = {
       deleteDisabled: false,
       deleteInFormDisabled: false,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-start-quantity",
@@ -131,7 +131,7 @@ export const MPITestProcedureDeletable: IdocumentTypeDto = {
       validationAttribute: "Start quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-accepted-quantity",
@@ -146,7 +146,7 @@ export const MPITestProcedureDeletable: IdocumentTypeDto = {
       validationAttribute: "Accepted quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-rejected-quantity",
@@ -161,7 +161,7 @@ export const MPITestProcedureDeletable: IdocumentTypeDto = {
       validationAttribute: "Rejected quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "approvals-built-in",
@@ -176,7 +176,7 @@ export const MPITestProcedureDeletable: IdocumentTypeDto = {
       validationAttribute: "Approvals",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "overview",
     },
   ],
 };
@@ -193,7 +193,7 @@ export const MPIExport: IdocumentTypeDto = {
       label: "form.builder.mpiprocedure",
       deleteDisabled: false,
       deleteInFormDisabled: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "mpi-procedure-built-in",
@@ -206,7 +206,7 @@ export const MPIExport: IdocumentTypeDto = {
       deleteDisabled: false,
       deleteInFormDisabled: false,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-start-quantity",
@@ -221,7 +221,7 @@ export const MPIExport: IdocumentTypeDto = {
       validationAttribute: "Start quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-accepted-quantity",
@@ -236,7 +236,7 @@ export const MPIExport: IdocumentTypeDto = {
       validationAttribute: "Accepted quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-rejected-quantity",
@@ -251,7 +251,7 @@ export const MPIExport: IdocumentTypeDto = {
       validationAttribute: "Rejected quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "approvals-built-in",
@@ -266,7 +266,7 @@ export const MPIExport: IdocumentTypeDto = {
       validationAttribute: "Approvals",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "overview",
     },
   ],
 };
