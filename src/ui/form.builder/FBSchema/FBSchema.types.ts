@@ -59,5 +59,6 @@ export type FBSchemaProps = Pick<FBInputProps,
 export interface FBSchemaComponentProps {
   workspaceMode?: FBWorkspaceMode;
   schema?: FBSchemaProps[];
+  showAllTabs?: boolean;
   schemaState?: FBSchemaState;
 }
