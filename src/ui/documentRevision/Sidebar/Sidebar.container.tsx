@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import FBStore from "../../form.builder/FBStore/FBStore";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { SIDE_BAR_TAB_INDEX } from "./constants";
 import SidebarPresenter from "./Sidebar.presenter.new";
 import { Sidebar } from "./types.new";
 
@@ -24,6 +25,14 @@ const SidebarContainer: React.FunctionComponent<
     const selectedTab = sidebarList[indexNumber].type;
     FBStore.setSelectedTab(selectedTab);
   }, [indexNumber, sidebarList]);
+
+  useEffect(() => {
+    const index = localStorage.getItem(SIDE_BAR_TAB_INDEX);
+    if (index) {
+      setIndex(Number(index));
+    }
+  }, []);
+
   const inputRef = useRef(null);
   useScrollIntoView();
   const onDrawerToggle = () => {
@@ -45,6 +54,7 @@ const SidebarContainer: React.FunctionComponent<
     }
     setIndex(index);
     setTab?.(index);
+    localStorage.setItem(SIDE_BAR_TAB_INDEX, String(index));
   };
 
   return (
