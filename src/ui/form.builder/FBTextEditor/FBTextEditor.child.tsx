@@ -4,6 +4,7 @@ import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBConditionalWrapper, FBTextEditorOptions, FBTextEditorProps } from "..";
+import styles from "../../form.builder/FBEditorCustomControl/FBEditorCustomControl.styles";
 import Colors from "../../layout/theme/utils/colors";
 
 const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
@@ -27,6 +28,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   // so there is no additional growing blank space on the bottom of editor
   // eslint-disable-next-line no-useless-escape
   const formattedFormValue = formValue.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" );
+  const classes = styles();
   return (
     <Box
       bgcolor={isPreview ? "transparent" : Colors.white}
@@ -90,7 +92,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
           }}
           p={isPreview ? 0 : 1.5}
         >
-          <div className="MarginBottom"
+          <div className={classes.marginBStyle}
             style={{ width: "100%", height: "100%" }}
             dangerouslySetInnerHTML={{ __html: formattedFormValue }}
           />

@@ -402,6 +402,3 @@ td#kendo-expandable-column[role="gridcell"] {
 .containing-box-scrollbar:hover::-webkit-scrollbar-thumb {
   background-color: var(--font_gray);
 }
-.MarginBottom p {
-  margin-bottom: 0px;
-}
