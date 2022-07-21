@@ -16,7 +16,7 @@ import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
-import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
+import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
@@ -188,6 +188,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  const showOutputSection = _formState?.active && [
+    FBWorkspaceModeOptions.DESIGN,
+    FBWorkspaceModeOptions.FORM,
+    FBWorkspaceModeOptions.FORMDESIGN,
+  ].includes(_formState?.mode as FBWorkspaceModeOptions);
+
   const isAttachmentRequired = () => {
     const type = documentTypesById[documentTypeId];
     const docId = _documentRevisionFormState?.documentRevision?.id;
@@ -324,31 +330,33 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
         )}
-        {_formState?.active && ["design", "form"].includes(_formState.mode) && (
+        {showOutputSection && (
           <>
-            { isAttachmentRequired() && <Grid item xs={12}>
-              <AttachmentsField
-                isDisabled={isDisabledInput}
-                isNewVersion={false}
-                docRevId={docRevId}
-                isAttachmentEmpty={isAttachmentEmpty}
-                containsRedline={false}
-                docRevStatus={documentRevision?.status}
-                documentRevision={documentRevision}
-                documentTypeId={documentTypeId || ""}
-              />
-            </Grid>
-            }
-            {hasOutput &&
-            <Grid item xs={12}>
-              <FBActiveNoOutput
-                docRevId={initialValues.id}
-                status={documentRevision?.status}
-                version={documentRevision?.version}
-                isDisabled={isDisabledInput}
-                outputDocs={values.outputDocumentTypes as OptionType[]}
-              />
-            </Grid>}
+            {isAttachmentRequired() && (
+              <Grid item xs={12}>
+                <AttachmentsField
+                  isDisabled={isDisabledInput}
+                  isNewVersion={false}
+                  docRevId={docRevId}
+                  isAttachmentEmpty={isAttachmentEmpty}
+                  containsRedline={false}
+                  docRevStatus={documentRevision?.status}
+                  documentRevision={documentRevision}
+                  documentTypeId={documentTypeId || ""}
+                />
+              </Grid>
+            )}
+            {hasOutput && (
+              <Grid item xs={12}>
+                <FBActiveNoOutput
+                  docRevId={initialValues.id}
+                  status={documentRevision?.status}
+                  version={documentRevision?.version}
+                  isDisabled={isDisabledInput}
+                  outputDocs={values.outputDocumentTypes as OptionType[]}
+                />
+              </Grid>
+            )}
           </>
         )}
         {_formState?.active && documentRevision && values.id && (
