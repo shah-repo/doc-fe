@@ -233,9 +233,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         disableRipple
       >
         {open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
+          <CollapseIcon className={classes.icon} onClick={handleClick}  />
         ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
+          <ExpandIcon className={classes.icon} onClick={handleClick}  />
         )}
         <ListItemAvatar>
           {docRevOwnerAvatar ? (
@@ -332,6 +332,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
+                  className={classes.cursorPointer}
                 />
               </span>
             )}
@@ -356,6 +357,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <RejectIcon
                   data-cy="transition-reject"
                   onMouseEnter={onMouseHoverRejectIcon}
+                  className={classes.cursorPointer}
                 />
               )}
               {rejectHover && (
@@ -368,6 +370,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     data-cy="transition-reject"
                     onClick={handleRejectClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -377,6 +380,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <ApproveIcon
                   data-cy="transition-approve"
                   onMouseEnter={onMouseHoverApproveIcon}
+                  className={classes.cursorPointer}
                 />
               )}
               {approveHover && (
@@ -389,13 +393,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     data-cy="transition-approve"
                     onClick={handleApproveClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
             </span>
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
@@ -406,6 +411,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -418,6 +424,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -431,7 +438,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
         )}

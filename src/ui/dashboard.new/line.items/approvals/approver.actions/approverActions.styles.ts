@@ -19,7 +19,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
-      cursor: "pointer",
     },
     actionIcons: {
       /* Action Icons */
@@ -36,6 +35,8 @@ export const styles = makeStyles((theme: Theme) =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
+    },
+    cursorPointer: {
       cursor: "pointer",
     },
     typography: {

@@ -374,6 +374,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
+                  className={classes.cursorPointer}
                 />
               </span>
             )}
@@ -395,7 +396,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             }
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
@@ -406,6 +407,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -418,6 +420,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -431,13 +434,13 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List disablePadding className={classes.collapsedList}>
+        <List disablePadding className={classes.collapsedList} >
           {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
