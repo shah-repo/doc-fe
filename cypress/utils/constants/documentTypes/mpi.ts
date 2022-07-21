@@ -13,7 +13,7 @@ export const MPITest: IdocumentTypeDto = {
       label: "form.builder.mpiprocedure",
       deleteDisabled: false,
       deleteInFormDisabled: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "mpi-procedure-built-in",
@@ -26,7 +26,7 @@ export const MPITest: IdocumentTypeDto = {
       deleteDisabled: false,
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-start-quantity",
@@ -41,7 +41,7 @@ export const MPITest: IdocumentTypeDto = {
       validationAttribute: "Start quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-accepted-quantity",
@@ -56,7 +56,7 @@ export const MPITest: IdocumentTypeDto = {
       validationAttribute: "Accepted quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "lhrs-rejected-quantity",
@@ -71,7 +71,7 @@ export const MPITest: IdocumentTypeDto = {
       validationAttribute: "Rejected quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "procedure",
     },
     {
       name: "approvals-built-in",
@@ -86,7 +86,7 @@ export const MPITest: IdocumentTypeDto = {
       validationAttribute: "Approvals",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
-      tabId: "details",
+      tabId: "overview",
     },
   ],
 };
