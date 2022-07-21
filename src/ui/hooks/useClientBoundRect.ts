@@ -19,15 +19,10 @@ export const useClientBoundRect = <T extends Element>(): [
   const ref = useRef<T>(null);
   const [rect, setRect] = useState<DOMRect>();
 
-  const set = useCallback(
-    () => {
-      setRect(ref.current?.getBoundingClientRect());
-    },
-    []
-  );
+  const updateRect = useCallback(() => { setRect(ref.current?.getBoundingClientRect()); }, []);
 
-  useEffectInEvent("resize", set);
-  useEffectInEvent("scroll", set, true);
+  useEffectInEvent("resize", updateRect);
+  useEffectInEvent("scroll", updateRect, true);
 
   return [rect, ref];
 };

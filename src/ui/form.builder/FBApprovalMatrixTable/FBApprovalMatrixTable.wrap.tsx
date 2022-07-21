@@ -46,7 +46,6 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     };
 
     const syncScroll = (event: UIEvent<HTMLElement>) => {
-      event.stopPropagation();
       const { scrollLeft } = event.currentTarget;
 
       if (statusTableRef.current) {
