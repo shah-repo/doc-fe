@@ -358,7 +358,8 @@ Cypress.Commands.add("fbClickButton", (params: { el: string }) => {
 });
 
 Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
-  cy.get(`input[name^="${params.name}"`).parent().trigger("mouseover");
+  cy.get(`input[name^="${params.name}"`).scrollTo("bottom", { ensureScrollable: false });
+  cy.get(`input[name^="${params.name}"`).parent().trigger("mouseover").wait(500);
 });
 
 Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
@@ -368,11 +369,11 @@ Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
 });
 
 Cypress.Commands.add("fbVerifyElementVisibile", (params: { name: string; el: string }) => {
-  cy.get(`[name^="${params.name}"`).parentsUntil("li").find(`[data-cy=${params.el}]`).should("be.visible");
+  cy.get(`[name^="${params.name}"`).parentsUntil("li").find(`svg[data-cy=${params.el}]`).should("be.visible");
 });
 
 Cypress.Commands.add("fbVerifyElementNotVisibile", (params: { name: string; el: string }) => {
-  cy.get(`[name^="${params.name}"`).parentsUntil("li").find(`[data-cy=${params.el}]`).should("not.be.visible");
+  cy.get(`[name^="${params.name}"`).parentsUntil("li").find(`svg[data-cy=${params.el}]`).should("not.be.visible");
 });
 
 Cypress.Commands.add("fbVerifyElementVisibileByLabel", (params: { label: string; el: string }) => {
