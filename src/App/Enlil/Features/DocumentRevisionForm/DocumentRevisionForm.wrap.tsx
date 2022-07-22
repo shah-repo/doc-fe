@@ -1,10 +1,11 @@
+import { useFormikContext } from "formik";
 import { get } from "lodash";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../../ui/constants/urls";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { FB, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
+import { FB, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
 import FBLeftPanelState from "../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state";
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -19,7 +20,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     isCreateUrl,
     ...props
   }: T) => {
-
+    const formik = useFormikContext();
     // MARK: @config
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const { _formState, _tabsState } = SM.useStores();
@@ -32,9 +33,34 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       mode: _formState?.mode,
       autosave: _formState?.autosave || false,
     });
+    const { document: { outputRevision = false } = {} } = workspaceState || {};
+    const { approvalMatrixFieldState } = FB.useStores();
+    let approvalMatrixState;
+    if (!approvalMatrixFieldState) {
+      approvalMatrixState = FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
+        formValue: _formState?.oldValues?.formInput,
+        outputRevision,
+        isOutput: true,
+      });
+    }
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
-
+    SM.reaction(
+      () => approvalMatrixState?.data,
+      (data) => {
+        if (_documentRevisionFormState?.documentType?.group === "DAM") {
+          const damCompData = {
+            "dam-built-in": data?.["approvalMatrix"],
+            "dar-built-in": data?.["approvalRoles"],
+          };
+          formik.setFieldValue("formInput", {
+            formInput: damCompData,
+          });
+          _formState?.setValue("formInput", damCompData);
+          formik.submitForm();
+        }
+      }
+    );
     useEffect(() => {
       if (!document?.id) { return; }
       const releasedDocument = (document?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status));
@@ -100,7 +126,10 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
 
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
-        <FBProvider {...{ leftPanelState, editorState, formState, workspaceState }}>
+        <FBProvider {...{
+          leftPanelState, editorState, formState, workspaceState,
+          approvalMatrixFieldState: approvalMatrixState,
+        }}>
           <Component
             {...props as T}
             {...{
