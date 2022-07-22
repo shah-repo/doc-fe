@@ -17,7 +17,7 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
-import { useDocId, useDocumentTypeSelect } from "../../hooks/docCustomization/useCustomization";
+import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -123,6 +123,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const { isVisible } = useDocumentTypeSelect(documentTypeId);
   const isDocIdVisible = useDocId(documentTypeId).isVisible;
+  const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
+  const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
+   || (!isRevisionVisible && defaultRevisionStage));
 
   useEffect(() => {
     if (!redlineActive) {
@@ -249,7 +252,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         }
-        <Grid item xs={6}>
+        {enableRevision && <Grid item xs={6}>
           {/* hack for rerender revision stage */}
           <Observer>
             {() => (
@@ -274,6 +277,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             )}
           </Observer>
         </Grid>
+        }
         <Grid item xs={6}>
           <RetrainField
             revisionChangeType={values.revisionChangeType}
