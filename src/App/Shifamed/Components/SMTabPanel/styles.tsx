@@ -4,8 +4,6 @@ export default makeStyles(() =>
   createStyles({
     content: {
       overflowY: "auto",
-      height: "100vh",
-      paddingBottom: "100%",
     },
   })
 );

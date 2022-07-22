@@ -152,7 +152,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 overflow: (_documentRevisionFormState?.expanded ? "auto" :
                   (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
                     (_documentRevisionFormState?.isDescriptionFocused) || isCreateUrl) ? "auto" : "")),
-                height: isCreateUrl ? "calc(100vh - 105px)" :  "calc(100vh - 130px)",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
                 type={type}
@@ -165,7 +164,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                   <SMTabs
                     onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                     tabs={tabLabels}
-                    boxProps={{ px: 3.75 }}
+                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;

@@ -12,6 +12,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   children,
   boxProps,
   tabProps,
+  panelProps,
 }) => (
   <Observer>
     {() => (
@@ -44,7 +45,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
         </Tabs>
         <SMMap<ReactNode> collection={children}>
           {(child: ReactNode, index) => (
-            <SMTabPanel {...{ index }} key={`sm-tabpanel-${index}`}>
+            <SMTabPanel {...{ index, panelProps }} key={`sm-tabpanel-${index}`}>
               {child}
             </SMTabPanel>
           )}
