@@ -1,8 +1,9 @@
 import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import { flatten, omit, set } from "lodash";
+import { flatten, includes, omit, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common/types";
@@ -15,10 +16,11 @@ import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
-import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
+import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { styles as AutoCompleteStyles } from "../../form.builder/styles/FBAutocomplete.styles";
 import { useTraining } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -78,6 +80,16 @@ const Presenter: React.FunctionComponent<Props> = ({
 
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
+  const hasPO = checkIsDocumentPO(document.documentType.groupOptions);
+  const isPO = checkIsDocumentPO(document.documentType.groupOptions);
+
+
+  const { _tabsState } = SM.useStores();
+  console.log("mode", FBDRStore.mode);
+  console.log("isPO", isPO);
+  console.log("hasPO", hasPO);
+  console.log("Presen");
+  console.log("document", document);
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
   const shouldRenderTrainingButton = isDocumentRevisionInStatus(
@@ -184,11 +196,20 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {attachments && <Attachment
+
+
+        {(isPO || includes(outputDocumentTypeName, "Purchase Order")) ? (attachments && _tabsState?.tabID !== "details"   &&  <Attachment
           isAttachmentEmpty={attachments.length < 1}
           docRevId = {id}
           containsRedline = {containsRedline()}
-          docRevStatus={status}/>}
+          docRevStatus={status}/>)
+
+
+          : (attachments  &&  <Attachment
+            isAttachmentEmpty={attachments.length < 1}
+            docRevId = {id}
+            containsRedline = {containsRedline()}
+            docRevStatus={status}/>)}
         {renderTrainingControl}
         {renderSelfTaughtTraining}
       </Grid>

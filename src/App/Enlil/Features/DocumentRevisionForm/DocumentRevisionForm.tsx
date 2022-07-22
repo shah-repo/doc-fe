@@ -9,6 +9,8 @@ import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../.
 import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
+import AttachmentsField from "../../../../ui/document.revision/form/attachments";
+import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
@@ -112,7 +114,18 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
+  // const isPO = checkIsDocumentPO(groupOptions);
+  const documentTypeId = formValues.values.document?.documentType?.id || "";
+  const docRevId = documentRevision?.id;
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
 
+  // const isAttachmentRequired = () => {
+  //   const type = documentTypesById[documentTypeId];
+  //   // const docId = _documentRevisionFormState?.documentRevision?.id;
+  //   return  ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
+  // };
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
 
   return (
     <SMForm
@@ -214,16 +227,31 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             />}
                           </>}
                           {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
-                            <FBWorkspace
-                              isPortal={false}
-                              document={{
-                                ...formValues.values as unknown as DocumentRevision,
-                                ...documentRevision as unknown as DocumentRevision,
-                              }}
-                              {... { autosaveEnabled, workspaceState }}
-                              initialValues={formInput}
-                              schema={schema}
-                            />
+                            <>
+                              {tabInfo.tabId === "lineitems" &&
+                              <AttachmentsField
+                                isDisabled={isDisabledInput}
+                                isNewVersion={false}
+                                docRevId={docRevId}
+                                isAttachmentEmpty={isAttachmentEmpty}
+                                containsRedline={false}
+                                docRevStatus={documentRevision?.status}
+                                documentRevision={documentRevision}
+                                documentTypeId={documentTypeId || ""}
+                                labeld = {"Supporting Documents"}
+                              />
+                              }
+                              <FBWorkspace
+                                isPortal={false}
+                                document={{
+                                  ...formValues.values as unknown as DocumentRevision,
+                                  ...documentRevision as unknown as DocumentRevision,
+                                }}
+                                {... { autosaveEnabled, workspaceState }}
+                                initialValues={formInput}
+                                schema={schema}
+                              />
+                            </>
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ && (
                             <FBMaterialEqInfoContainer

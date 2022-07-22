@@ -1,3 +1,4 @@
+import { Formik } from "formik";
 import { filter, get, includes, isEmpty, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
@@ -7,10 +8,14 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import { FormContext } from "../../../../ui/components/forms/FormContext";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
+import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
+import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { isOwner } from "../../../../ui/documentRevision/helpers/documentRevisionPermissions";
 import { FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -95,6 +100,21 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
+  const documentTypeId = documentRevision.document?.documentType?.id || "";
+  const docRevId = documentRevision?.id;
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+
+  // const isAttachmentRequired = () => {
+  //   const type = documentTypesById[documentTypeId];
+  //   // const docId = _documentRevisionFormState?.documentRevision?.id;
+  //   return  ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
+  // };
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const isDisabledInput = docRevId !== undefined && isCurrentUserOperator && !isOwner;
+  const onSubmit = () => void 0;
+  console.log("isDisabledInput", isDisabledInput);
+  console.log("documentTypeId", documentTypeId);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
@@ -163,13 +183,53 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             }
                           </>}
                           {tabType === TabTypeOptions.DYNAMIC && isFB && (
-                            <FBWorkspace
-                              document={documentRevision}
-                              initialValues={documentRevision.formInput}
-                              schema={tabSchema}
-                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
-                            />
+                            <>
+
+                              {tabInfo.tabId === "lineitems" &&
+                              <FormContext.Provider value={{ submitOnChange: false }}>
+
+                                <Formik
+
+                                  initialValues={{ attachments: documentRevision?.attachments }}
+
+                                  onSubmit={onSubmit}
+
+                                  enableReinitialize={true}
+
+                                >
+                                  {/* <AttachmentsField
+                                    isDisabled={true}
+                                    isNewVersion={false}
+                                    docRevId={docRevId}
+                                    isAttachmentEmpty={isAttachmentEmpty}
+                                    containsRedline={false}
+                                    docRevStatus={documentRevision?.status}
+                                    documentRevision={documentRevision}
+                                    documentTypeId={documentTypeId || ""}
+                                  /> */}
+
+                                  <Attachment
+
+                                    isAttachmentEmpty={isAttachmentEmpty}
+
+                                    docRevId = {documentRevision.id}
+
+                                    containsRedline = {false}
+                                    label = {"Supporting Documents"}
+                                    docRevStatus={documentRevision.status}/>
+                                </Formik>
+
+                              </FormContext.Provider>
+                              }
+                              <FBWorkspace
+                                document={documentRevision}
+                                initialValues={documentRevision.formInput}
+                                schema={tabSchema}
+                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                                  FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
+                              />
+                            </>
+
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ &&
                           documentRevision.status !== DocumentRevisionStatus.Voided &&
