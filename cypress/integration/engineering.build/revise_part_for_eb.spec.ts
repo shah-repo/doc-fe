@@ -280,7 +280,7 @@ context("Revise Part from EB and release cloned EB test", () => {
 
     context("Clone EB", () => {
       it("Click Clone EB button", () => {
-        cy.ebClickCloneFromHeader();
+        cy.ebClickCloneFromMenu();
       });
 
       it("Verify that the selected part is copied to the new build", () => {
