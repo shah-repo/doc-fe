@@ -187,11 +187,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
-  const showOutputSection = _formState?.active && [
+  const showOutputSection = _formState?.active && ([
     FBWorkspaceModeOptions.DESIGN,
     FBWorkspaceModeOptions.FORM,
     FBWorkspaceModeOptions.FORMDESIGN,
-  ].includes(_formState?.mode as FBWorkspaceModeOptions);
+  ].includes(_formState?.mode as FBWorkspaceModeOptions) || isEB);
 
   const isAttachmentRequired = () => {
     const type = documentTypesById[documentTypeId];
