@@ -1,7 +1,7 @@
 import { filter, includes, isEmpty, map, range, size } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable } from "..";
+import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from "..";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
 import FormBuilderDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 
@@ -12,6 +12,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     workspaceMode,
     schemaState,
     schema,
+    showAllTabs,
     ...props
   }: T) => {
 
@@ -56,15 +57,26 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     }
 
     function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
-      if (workspaceMode === "design" || workspaceMode === "formDesign") {
+      const isDesignOrFormDesign = [
+        FBWorkspaceModeOptions.DESIGN,
+        FBWorkspaceModeOptions.FORMDESIGN,
+      ].includes(workspaceMode as FBWorkspaceModeOptions);
+
+      const isPreviewOrFormPreview = [
+        FBWorkspaceModeOptions.PREVIEW,
+        FBWorkspaceModeOptions.FORMPREVIEW,
+      ].includes(workspaceMode as FBWorkspaceModeOptions);
+
+      if (isDesignOrFormDesign) {
         return <FBSortable />;
       }
+
       return map(schema, (schemaItem, index, ro) => {
         const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
         const { disabled, outputDisabled } = schemaItem || {};
         const reviseDisabled = schemaItem.editorProperties?.includes("reviseDisabled");
         if (schemaItem.deleted || schemaItem.hidden ||
-          (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
+          (!showAllTabs && _tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
         return controlRenderer({
           autosave: isUnderWorkspace && workspaceState?.autosave,
           ...schemaItem,
@@ -74,8 +86,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
           },
           disabled: (
             disabled ||
-            workspaceMode === "preview" ||
-            workspaceMode === "formPreview" ||
+            isPreviewOrFormPreview ||
             isApproved({ ...schemaItem, index }) ||
             (reviseDisabled && outputRevision) ||
             (outputDisabled && isOutput && !isEmpty(id))

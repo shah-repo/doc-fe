@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
 
-const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
+const FBApprovalMatrixTableInfo: React.FunctionComponent<Omit<FBApprovalMatrixTableProps, "syncScroll">> = ({
   cellHeight,
   approvalData: { approvalMatrix = [] } = {},
   classes,

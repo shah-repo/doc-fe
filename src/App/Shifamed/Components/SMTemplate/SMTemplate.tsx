@@ -16,13 +16,13 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
   footer,
   children,
 }) => (
-  <SMBox display={"flex"} flexDirection="row" flex={1} {...templateBoxProps}>
+  <SMBox display="flex" flexDirection="row" flex={1} {...templateBoxProps}>
     {leftSidebar && (
       <SMBox {...leftSidebarBoxProps}>
         {leftSidebar}
       </SMBox>
     )}
-    <SMBox flexDirection={"column"} flex={5} {...boxProps}>
+    <SMBox display="flex" flexDirection="column" flex={5} {...boxProps}>
       {header && (
         <SMBox {...headerBoxProps}>
           {header}
@@ -33,7 +33,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
           {lhrSteps}
         </SMBox>
       )}
-      <SMBox display="flex" {...contentBoxProps} >
+      <SMBox display="flex" flex={1} {...contentBoxProps} >
         <SMBox flex={1}>
           {children}
         </SMBox>

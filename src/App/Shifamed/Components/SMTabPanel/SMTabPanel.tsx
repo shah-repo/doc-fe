@@ -8,6 +8,7 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   _tabsState,
   index,
   children,
+  panelProps,
 }) => {
   const classes = styles();
 
@@ -18,7 +19,7 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
           hidden={_tabsState?.value !== index}
           id={`sm-tabpanel-${index}`}
           className={classes.content}
-          stretchY="100%"
+          {...panelProps}
         >
           {children}
         </SMBox>

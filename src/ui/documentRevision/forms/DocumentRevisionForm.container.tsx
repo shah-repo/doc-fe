@@ -278,7 +278,8 @@ DocumentRevisionFormContainerProps
   return (
     <>
       <Grid ref={bannerPortal} />
-      <Grid style={{ background: Colors.alabaster }} >
+      {/* TODO Get rid of inline styles */}
+      <Grid style={{ background: Colors.alabaster, height: "100%" }} >
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
@@ -292,4 +293,3 @@ DocumentRevisionFormContainerProps
 };
 
 export default withSMForm(DocumentRevisionFormContainer);
-
