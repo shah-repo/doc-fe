@@ -1,7 +1,7 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, isEmpty } from "lodash";
-import { Observer, observer } from "mobx-react";
+import { Observer, observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -181,6 +181,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       dirty = isDirty || false;
     }
   );
+
+
+  useObserver(() => {
+    if (values.id || values.document?.documentType?.id) {
+      dirty = _formState?.isDirty || false;
+    }
+  });
 
   useEffect(() => {
     workspaceState?.setMode(mode);
