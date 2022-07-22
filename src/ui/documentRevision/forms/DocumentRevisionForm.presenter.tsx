@@ -127,8 +127,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
    || (!isRevisionVisible && defaultRevisionStage));
 
-  console.log(shouldShowRevStageForDocType, enableRevision);
-
   useEffect(() => {
     if (!redlineActive) {
       return;
