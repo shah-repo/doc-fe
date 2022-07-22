@@ -525,15 +525,102 @@ context("Checkboxes test", () => {
         cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
         cy.fbAddNewFieldButton();
       });
+    });
+  });
 
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+  context("Verify other checkboxes properties", () => {
+    it("Verify Autocomplete with 'Include QR Scan' checkbox", () => {
+      cy.contains("ac-wi-ch").parentsUntil("li").should("contain", "Scan QR code");
+    });
 
-      it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+    it("Verify Autocomplete without 'Include QR Scan' checkbox", () => {
+      cy.contains("ac-wo-ch").parentsUntil("li").should("not.contain", "Scan QR code");
+    });
+
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify Autocomplete with 'Multi Select' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("input[data-cy^=\"ac-wi-ch-\"]")
+        .click()
+        .type("{downarrow}{enter}")
+        .click()
+        .type("{downarrow}{downarrow}{enter}")
+        .should("have.value", "");
+    });
+
+    it("Verify Autocomplete without 'Multi Select' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy^=\"ac-wo-ch-\"]")
+        .click()
+        .type("{downarrow}{enter}")
+        .should("not.have.value", "");
+    });
+
+    it("Verify Select Field without 'Include None' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
+      cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "None");
+      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
+    });
+
+    it("Verify Select Field with 'Include None' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
+      cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "None");
+      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
+    });
+
+    it("Verify Select Field without 'Include Other' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
+      cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "Other");
+      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
+    });
+
+    it("Verify Select Field with 'Include Other' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
+      cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "Other");
+      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
+    });
+
+    it("Verify Radio Button group without 'Include Other' checkbox", () => {
+      cy.contains("rbg-wo-ch").parentsUntil("li").should("not.contain", "Other");
+    });
+
+    it("Verify Radio Button group with 'Include Other' checkbox", () => {
+      cy.contains("rbg-wi-ch").parentsUntil("li").should("contain", "Other");
+    });
+
+    it("Verify 'Send Email' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy=\"Send Email\"]").eq(0)
+        .should("have.text", "Send Email");
+    });
+
+    it("Verify 'Send Email with Supplier' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy=\"Send Email\"]").eq(1)
+        .should("have.text", "Send Email");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("Create & Approve Document", () => {
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.fbClickButton({ el: "updateRecord" });
       });
     });
   });
@@ -903,107 +990,9 @@ context("Checkboxes test", () => {
     });
   });
 
-  context("Verify other checkboxes properties", () => {
-    it("Verify Autocomplete with 'Include QR Scan' checkbox", () => {
-      cy.contains("ac-wi-ch").parentsUntil("li").should("contain", "Scan QR code");
-    });
-
-    it("Verify Autocomplete without 'Include QR Scan' checkbox", () => {
-      cy.contains("ac-wo-ch").parentsUntil("li").should("not.contain", "Scan QR code");
-    });
-
-    it("Open Preview dialog", () => {
-      cy.fbClickButton({ el: "FBWorkspace-clickView" });
-    });
-
-    it("Verify Autocomplete with 'Multi Select' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("input[data-cy^=\"ac-wi-ch-\"]")
-        .click()
-        .type("{downarrow}{enter}")
-        .click()
-        .type("{downarrow}{downarrow}{enter}")
-        .should("have.value", "");
-    });
-
-    it("Verify Autocomplete without 'Multi Select' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy^=\"ac-wo-ch-\"]")
-        .click()
-        .type("{downarrow}{enter}")
-        .should("not.have.value", "");
-    });
-
-    it("Verify Select Field without 'Include None' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
-      cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "None");
-      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
-    });
-
-    it("Verify Select Field with 'Include None' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
-      cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "None");
-      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
-    });
-
-    it("Verify Select Field without 'Include Other' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
-      cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "Other");
-      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
-    });
-
-    it("Verify Select Field with 'Include Other' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
-      cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "Other");
-      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
-    });
-
-    it("Verify Radio Button group without 'Include Other' checkbox", () => {
-      cy.contains("rbg-wo-ch").parentsUntil("li").should("not.contain", "Other");
-    });
-
-    it("Verify Radio Button group with 'Include Other' checkbox", () => {
-      cy.contains("rbg-wi-ch").parentsUntil("li").should("contain", "Other");
-    });
-
-    it("Verify 'Send Email' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy=\"Send Email\"]").eq(0)
-        .should("have.text", "Send Email");
-    });
-
-    it("Verify 'Send Email with Supplier' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy=\"Send Email\"]").eq(1)
-        .should("have.text", "Send Email");
-    });
-
-    it("Close Preview dialog", () => {
-      cy.fbClickButton({ el: "dialog-close" });
-    });
-  });
-
   context("Approve Document", () => {
-    it("Add approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-    });
-
-    it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
-    });
-
-    it("Approve and release document", () => {
-      cy.ebApprove();
-    });
-
-    it("Click on revise", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
-        cy.fbClickButton({ el: "updateRecord" });
-      });
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
