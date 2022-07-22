@@ -1,8 +1,9 @@
 import { get } from "lodash";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { UIEvent } from "react";
 import { withResizeDetector } from "react-resize-detector";
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixTableProps, FBApprovalMatrixTableState, FBDAMFields } from "..";
+import { useClientBoundRect } from "../../hooks/useClientBoundRect";
 import FBApprovalMatrixTableClasses from "./FBApprovalMatrixTable.styles";
 
 export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
@@ -23,10 +24,14 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     const { approvalMatrixFieldState, workspaceState } = FB.useStores();
     const { formInput } = workspaceState || {};
     const damRoles = get(formInput, FBDAMFields.DAR, []);
-    classes = FBApprovalMatrixTableClasses();
     approvalMatrixTableState = FB.useRef(FBApprovalMatrixTableState);
 
     // MARK: @reactions
+    const [statusTableRect, statusTableRef] = useClientBoundRect();
+    // TODO position scroller via css
+    const calculatedScrollerBottom = statusTableRect?.bottom ? statusTableRect?.bottom - window.innerHeight : 0;
+    const scrollerBottom = Math.max(calculatedScrollerBottom, 0);
+    classes = FBApprovalMatrixTableClasses(scrollerBottom);
 
     // MARK: @helpers
 
@@ -38,6 +43,14 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
         approvalMatrixTableState.cellHeight[index] = height;
       }
       return approvalMatrixTableState.cellHeight[index];
+    };
+
+    const syncScroll = (event: UIEvent<HTMLElement>) => {
+      const { scrollLeft } = event.currentTarget;
+
+      if (statusTableRef.current) {
+        statusTableRef.current.scrollLeft = scrollLeft;
+      }
     };
 
     // MARK: @observer
@@ -55,6 +68,8 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
       classes,
       mode,
       name,
+      statusTableRef,
+      syncScroll,
     });
   };
 
