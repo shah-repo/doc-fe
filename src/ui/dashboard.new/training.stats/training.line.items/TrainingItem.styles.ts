@@ -1,7 +1,7 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../../layout/theme/utils/colors";
 
-export const styles = makeStyles(() =>
+export const styles = makeStyles((theme: Theme) =>
   createStyles({
     header: {
       justifyContent: "space-between",
@@ -10,7 +10,7 @@ export const styles = makeStyles(() =>
     headerLeft: {
       display: "flex",
       minWidth: 0,
-      marginRight: 10,
+      marginRight: theme.spacing(3.5),
     },
     headerRight: {
       display: "flex",
