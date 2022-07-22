@@ -474,35 +474,20 @@ context("Copyable Checkbox test", () => {
         .click({ force: true }).clear().arrowType("Justification2");
     });
 
-
-    it("Click on 'Add Another Role' button", () => {
-      cy.get("button[data-cy=\"form.builder.add.another.role\"]").arrowClick();
-    });
-
-    it("Enter Approval Role 'Role 1'", () => {
-      cy.get("[data-cy=\"name\"]").arrowType("Role 1");
-    });
-
-    it("Click on 'Add' button", () => {
-      cy.get("button[data-cy=\"common.add\"]").arrowClick();
-    });
-
     it("Enter title: 'test title'", () => {
-      cy.get("#Title-field",  { timeout: 10000 }).arrowType("test title");
+      cy.drEnterDocumentTitle({ name: "test title" });
     });
 
     it("Enter description: 'test description'", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]", { timeout: 10000 })
-        .click({ force: true }).clear().arrowType("test description");
+      cy.drEnterDocumentDescription({ description: "test description" });
     });
 
     it("Click 'Save' button", () => {
-      cy.unClick();
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click 'Clone EB' button", () => {
-      cy.ebClickClone();
+      cy.ebClickCloneFromMenu();
     });
   });
 
