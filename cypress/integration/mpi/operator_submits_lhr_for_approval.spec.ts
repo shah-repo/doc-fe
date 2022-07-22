@@ -4,6 +4,7 @@
 
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -288,6 +289,7 @@ context("Owner submits LHR for approval", () => {
                 name: "fb-mpi-procedure-section-built-in",
                 type: "section",
                 index: 0,
+                tabId: "procedure",
                 label: "form.builder.mpiprocedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
@@ -296,6 +298,7 @@ context("Owner submits LHR for approval", () => {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
+                tabId: "procedure",
                 stepIndex: 1,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -325,6 +328,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhrs-start-quantity",
                 type: "quantity",
                 index: 2,
+                tabId: "procedure",
                 label: "Start quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -342,6 +346,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhrs-accepted-quantity",
                 type: "quantity",
                 index: 3,
+                tabId: "procedure",
                 label: "Accepted quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -359,6 +364,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhrs-rejected-quantity",
                 type: "quantity",
                 index: 4,
+                tabId: "procedure",
                 label: "Rejected quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -376,6 +382,7 @@ context("Owner submits LHR for approval", () => {
                 name: "approvals-built-in",
                 type: "approvals",
                 index: 5,
+                tabId: "overview",
                 label: "Approvals",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -463,6 +470,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr-selected-part",
                 type: "partsselection",
                 index: 0,
+                tabId: "overview",
                 label: "Part to be Manufactured",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
@@ -474,6 +482,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr_initial_quantity",
                 type: "quantity",
                 index: 1,
+                tabId: "overview",
                 label: "Initial Quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -487,6 +496,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr-end-quantity",
                 type: "quantity",
                 index: 2,
+                tabId: "overview",
                 label: "End Quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -501,6 +511,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr-build-type",
                 type: "radiogroup",
                 index: 3,
+                tabId: "overview",
                 label: "Build Type",
                 options: [
                   {
@@ -525,6 +536,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr-due-date",
                 type: "datepicker",
                 index: 4,
+                tabId: "overview",
                 label: "Due Date",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -537,6 +549,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhrstep-built-in",
                 type: "lhrstep",
                 index: 5,
+                tabId: "details",
                 label: "LHR Step",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -551,6 +564,7 @@ context("Owner submits LHR for approval", () => {
               {
                 label: "form.builder.approvals",
                 type: "approvals",
+                tabId: "overview",
                 deleteDisabled: true,
                 name: "fb-approvals-kvateryo",
                 uniqueSchemaItem: true,
@@ -854,7 +868,7 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
@@ -884,6 +898,14 @@ context("Owner submits LHR for approval", () => {
       cy.unClick();
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+    });
+
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
     });
@@ -892,12 +914,28 @@ context("Owner submits LHR for approval", () => {
       cy.cmpTurnOffAutosave();
     });
 
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
     it("Enter 'Start quntity' for LHRs #1", () => {
       cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
     });
 
     it("Enter 'Accepted quntity' for LHRs #1", () => {
       cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
+    });
+
+    it("Enter 'Rejected quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("1");
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add an Approval", () => {
@@ -926,20 +964,22 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit LHR for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check status of LHR is 'In Review'", () => {
-      cy.poCheckStatus("In Review");
+      cy.poCheckStatus(STATUS_TYPES_LABEL.IN_REVIEW);
     });
 
     it("'Withdraw Submission' button does not exist", () => {
@@ -965,11 +1005,10 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -981,7 +1020,7 @@ context("Owner submits LHR for approval", () => {
     });
 
     it("Check status of LHR is 'WIP'", () => {
-      cy.poCheckStatus("WIP");
+      cy.poCheckStatus(STATUS_TYPES_LABEL.WIP);
     });
   });
 
@@ -1003,24 +1042,33 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit LHR for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check status of LHR is 'In Review'", () => {
-      cy.poCheckStatus("In Review");
+      cy.poCheckStatus(STATUS_TYPES_LABEL.IN_REVIEW);
     });
 
     it("Approve LHR", () => {
-      cy.ebApprove();
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1042,20 +1090,26 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve LHR", () => {
-      cy.ebApprove();
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check status of LHR is Released", () => {
-      cy.poCheckStatus("Released");
+      cy.poCheckStatus(STATUS_TYPES_LABEL.RELEASED);
     });
   });
 });

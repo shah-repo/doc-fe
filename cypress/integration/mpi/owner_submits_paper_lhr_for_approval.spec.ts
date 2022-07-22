@@ -73,7 +73,7 @@ context("Owner submits LHR for approval", () => {
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          paperLhrDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Paper Lot History Record");
+          paperLhrDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PaperLHR.documentTypeName);
           done();
         });
       });
@@ -513,7 +513,7 @@ context("Owner submits LHR for approval", () => {
 
       it("Select Lot History Record", () => {
         cy.recSelectRecordFormFromMultiSelect({
-          recordType: "Paper Lot History Record",
+          recordType: PaperLHR.documentTypeName,
         });
       });
 
