@@ -1954,20 +1954,40 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul>li[role=option]").contains(USERS[1].email).arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save LHR", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve LHR", () => {
       cy.wait(3000);
-      cy.ebApprove();
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify status is Released", () => {
