@@ -12,6 +12,7 @@ interface Props {
   isDisabled: boolean;
   isNewVersion: boolean;
   isAttachmentEmpty: boolean;
+  labeld?: string;
   docRevId: string;
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
@@ -42,6 +43,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   docRevStatus,
   documentRevision,
   documentTypeId,
+  labeld,
 }) => {
   const { isVisible, label } = useAttachments(documentTypeId);
 
@@ -53,7 +55,7 @@ const Attachments: React.FunctionComponent<Props> = ({
     <Box>
       <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
         <Typography variant="h6" style = {classes.attachmentHeadText}>
-          <Text message={label}/>
+          <Text message={labeld || label}/>
         </Typography>
         <AttachmentDownloadAllButton
           isAttachmentEmpty = {isAttachmentEmpty}
