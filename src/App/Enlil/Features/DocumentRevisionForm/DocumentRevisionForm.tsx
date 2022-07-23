@@ -3,24 +3,52 @@ import { filter, get, includes, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import {
+  DocumentRevisionFormHeader,
+  DocumentRevisionFormProgressBar,
+  DocumentRevisionFormProps,
+  DocumentRevisionHeader,
+  DocumentRevisionLeftPanel,
+  DocumentRevisionSidebar,
+  SMBox,
+  SMForm,
+  SMTabs,
+  SMTemplate,
+} from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
+import {
+  DocumentGroupType,
+  DOC_TYPE_GROUP,
+  TabInfo,
+  TabTypeOptions,
+} from "../../../../state/ducks/documentRevisions/documentType/types";
+import {
+  DocumentRevision,
+  SmartReferenceType,
+} from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import AttachmentsField from "../../../../ui/document.revision/form/attachments";
 import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
+import {
+  checkIsDocumentLHR,
+  checkIsDocumentMPIOutput,
+} from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import {
+  FBEditorState,
+  FBSchemaProps,
+  FBWorkspace,
+} from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
 
-const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> = ({
+const DocumentRevisionForm: React.FunctionComponent<
+  DocumentRevisionFormProps
+> = ({
   onTabChange,
   setDocId,
   onDirtyFlagChange,
@@ -55,16 +83,37 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   workspaceState,
   isCreateUrl,
 }) => {
-  const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
-  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
+  const docTypeGroup = get(
+    documentRevision?.document?.documentType,
+    "group",
+    "OTHER"
+  );
+  const outputTypeGroup = get(
+    documentRevision?.formTemplate?.outputDocumentTypes[0],
+    "group"
+  );
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
-  const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
-    ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
-      schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
-  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-  let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+  const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter(
+    (ref) =>
+      ref.active &&
+      ref.type === SmartReferenceType.HiddenPiInstance &&
+      schema
+        .map((el) => el.name)
+        .filter((el) => el?.includes(ref.metadata.fieldId))
+  );
+  const group: DocumentGroupType =
+    docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  let tabConfig = useSelector((state: ApplicationState) =>
+    documentTypeSelectors.getTabConfiguration(state, group)
+  );
+  const documentTypeId = formValues.values.document?.documentType?.id || "";
+  const docRevId = documentRevision?.id;
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const isDisabledInput =
+    formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -87,45 +136,48 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     });
   }
 
-  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
-    .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = [ ...tabConfig, {
-      labelId: "tabId.materialsandequipment",
-      tabId: TabTypeOptions.TABS_MEQ,
-      type: TabTypeOptions.TABS_MEQ,
-    }];
+  if (
+    tabConfig &&
+    [
+      DOC_TYPE_GROUP.LHR,
+      DOC_TYPE_GROUP.LHRT,
+      DOC_TYPE_GROUP.ENGINEERING_BUILD,
+      DOC_TYPE_GROUP.PI,
+    ].includes(group as DOC_TYPE_GROUP)
+  ) {
+    tabConfig = [
+      ...tabConfig,
+      {
+        labelId: "tabId.materialsandequipment",
+        tabId: TabTypeOptions.TABS_MEQ,
+        type: TabTypeOptions.TABS_MEQ,
+      },
+    ];
   }
 
   if (formValues.values?.retrain) {
-    tabConfig = tabConfig && [...tabConfig, {
-      labelId: "tabId.training",
-      tabId: "training",
-      type: "TRAINING",
-    } ];
+    tabConfig = tabConfig && [
+      ...tabConfig,
+      {
+        labelId: "tabId.training",
+        tabId: "training",
+        type: "TRAINING",
+      },
+    ];
   }
 
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+  const trainingTabIndex = tabLabels?.findIndex(
+    (tab) => tab === "tabId.training"
+  );
 
   useEffect(() => {
     if (!tabConfig) {
       return;
     }
     _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
-  // const isPO = checkIsDocumentPO(groupOptions);
-  const documentTypeId = formValues.values.document?.documentType?.id || "";
-  const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
-
-  // const isAttachmentRequired = () => {
-  //   const type = documentTypesById[documentTypeId];
-  //   // const docId = _documentRevisionFormState?.documentRevision?.id;
-  //   return  ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
-  // };
-  const isCurrentUserOperator = React.useContext(isOperator);
-  const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
 
   return (
     <SMForm
@@ -136,7 +188,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       }}
       values={formValues.values}
       leftSidebar={DocumentRevisionLeftPanel}
-      header= {
+      header={
         <DocumentRevisionHeader
           {...{ bannerPortal, shouldShowUpgrade }}
           documentRevisionId={documentRevision?.id}
@@ -148,106 +200,142 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
-        {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
-          rightSidebar: (
-            <Observer>
-              {() => <DocumentRevisionSidebar edit={true} />}
-            </Observer>
-          ),
-        }}
+        {...(_documentRevisionFormState?.id &&
+          _documentRevisionFormState?.documentRevision && {
+            rightSidebar: (
+              <Observer>
+                {() => <DocumentRevisionSidebar edit={true} />}
+              </Observer>
+            ),
+          })}
       >
         <Observer>
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
-              boxProps={{
-                overflow: (_documentRevisionFormState?.expanded ? "auto" :
-                  (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
-                    (_documentRevisionFormState?.isDescriptionFocused) || isCreateUrl) ? "auto" : "")),
+              contentBoxProps={{
+                minHeight: (!isLHR && !isTypeMpiDoc) || isLHR ? "20%" : "0px",
+                height: "auto",
               }}
-              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
-                type={type}
-                documentTypeId={formValues.values.document?.documentType?.id}
-              />}
-              lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
+              boxProps={{
+                overflow: _documentRevisionFormState?.expanded
+                  ? "auto"
+                  : (isCreateUrl &&
+                      _documentRevisionFormState?.isDescriptionFocused) ||
+                    _documentRevisionFormState?.isDescriptionFocused ||
+                    isCreateUrl
+                    ? "auto"
+                    : "",
+              }}
+              header={
+                !isLHR &&
+                !isTypeMpiDoc && (
+                  <DocumentRevisionFormHeader
+                    type={type}
+                    documentTypeId={
+                      formValues.values.document?.documentType?.id
+                    }
+                  />
+                )
+              }
+              lhrSteps={
+                isLHR && (
+                  <DocumentRevisionFormProgressBar
+                    smartReferencesFrom={smartReferencesFrom}
+                  />
+                )
+              }
             >
               <Observer>
                 {() => (
                   <SMTabs
-                    onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
+                    onChange={(ev, newValue) =>
+                      onTabChange?.(ev, newValue, tabConfig)
+                    }
                     tabs={tabLabels}
-                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    boxProps={{
+                      px: 3.75,
+                      stretchY: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
-                      const showTabContent = _tabsState?.tabID === tabInfo.tabId;
+                      const showTabContent =
+                        _tabsState?.tabID === tabInfo.tabId;
                       return (
-                        <SMBox
-                          key={index}
-                        >
-                          {tabType === "MIXED" && <>
-                            <DocumentRevisionFormPresenter
-                              {...formValues}
-                              releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                              {...{
-                                documentRevisions,
-                                documentRevision,
-                                showRevisionTypeChange,
-                                proposedDocId,
-                                setDocId,
-                                doNotPrompt,
-                                onDirtyFlagChange,
-                                documentTypesById,
-                                canChangeOwnerShip,
-                                type,
-                                isNewVersion,
-                                bannerPortal,
-                                showAdministrativeAndVoidChange,
-                                pmFormId,
-                                redlineActive,
-                                isOutput,
-                                lastSavedTimestamp,
-                                isDisabled,
-                                email,
-                                isOwner,
-                                mode,
-                              }}
-                            />
-                            {documentRevision && showTabContent &&  <FBWorkspace
-                              isPortal={false}
-                              document={{
-                                ...formValues.values as unknown as DocumentRevision,
-                                ...documentRevision as unknown as DocumentRevision,
-                              }}
-                              {... { autosaveEnabled, workspaceState }}
-                              initialValues={formInput}
-                              schema={schema}
-                            />}
-                          </>}
-                          {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
+                        <SMBox key={index}>
+                          {tabType === "MIXED" && (
                             <>
-                              {tabInfo.tabId === "lineitems" &&
-                              <AttachmentsField
-                                isDisabled={isDisabledInput}
-                                isNewVersion={false}
-                                docRevId={docRevId}
-                                isAttachmentEmpty={isAttachmentEmpty}
-                                containsRedline={false}
-                                docRevStatus={documentRevision?.status}
-                                documentRevision={documentRevision}
-                                documentTypeId={documentTypeId || ""}
-                                labeld = {"Supporting Documents"}
+                              <DocumentRevisionFormPresenter
+                                {...formValues}
+                                releasedDocRev={
+                                  _documentRevisionFormState?.releasedDocRev
+                                }
+                                {...{
+                                  documentRevisions,
+                                  documentRevision,
+                                  showRevisionTypeChange,
+                                  proposedDocId,
+                                  setDocId,
+                                  doNotPrompt,
+                                  onDirtyFlagChange,
+                                  documentTypesById,
+                                  canChangeOwnerShip,
+                                  type,
+                                  isNewVersion,
+                                  bannerPortal,
+                                  showAdministrativeAndVoidChange,
+                                  pmFormId,
+                                  redlineActive,
+                                  isOutput,
+                                  lastSavedTimestamp,
+                                  isDisabled,
+                                  email,
+                                  isOwner,
+                                  mode,
+                                }}
                               />
-                              }
+                              {documentRevision && showTabContent && (
+                                <FBWorkspace
+                                  isPortal={false}
+                                  document={{
+                                    ...(formValues.values as unknown as DocumentRevision),
+                                    ...(documentRevision as unknown as DocumentRevision),
+                                  }}
+                                  {...{ autosaveEnabled, workspaceState }}
+                                  initialValues={formInput}
+                                  schema={schema}
+                                />
+                              )}
+                            </>
+                          )}
+                          {tabType === "DYNAMIC" &&
+                            showTabContent &&
+                            _formState?.mode !== "none" && (
+                            <>
+                              {tabInfo.tabId === "lineitems" && (
+                                <AttachmentsField
+                                  isDisabled={isDisabledInput}
+                                  isNewVersion={false}
+                                  docRevId={docRevId}
+                                  isAttachmentEmpty={isAttachmentEmpty}
+                                  containsRedline={false}
+                                  docRevStatus={documentRevision?.status}
+                                  documentRevision={documentRevision}
+                                  documentTypeId={documentTypeId || ""}
+                                  labeld={"Supporting Documents"}
+                                />
+                              )}
                               <FBWorkspace
                                 isPortal={false}
                                 document={{
-                                  ...formValues.values as unknown as DocumentRevision,
-                                  ...documentRevision as unknown as DocumentRevision,
+                                  ...(formValues.values as unknown as DocumentRevision),
+                                  ...(documentRevision as unknown as DocumentRevision),
                                 }}
-                                {... { autosaveEnabled, workspaceState }}
+                                {...{ autosaveEnabled, workspaceState }}
                                 initialValues={formInput}
                                 schema={schema}
                               />
@@ -259,7 +347,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             />
                           )}
                           {tabType === "TRAINING" &&
-                          _tabsState?.value === trainingTabIndex && (
+                            _tabsState?.value === trainingTabIndex && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                             />
@@ -275,6 +363,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         </Observer>
       </SMTemplate>
     </SMForm>
-  ); };
+  );
+};
 
 export default withSMTabs(withDocumentRevisionFormWrap(DocumentRevisionForm));
