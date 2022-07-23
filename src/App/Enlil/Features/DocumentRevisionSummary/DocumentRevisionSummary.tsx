@@ -3,20 +3,44 @@ import { filter, get, includes, isEmpty, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import {
+  DocumentRevisionFormProgressBar,
+  DocumentRevisionSidebar,
+  DocumentRevisionSummaryHeader,
+  DocumentRevisionSummaryProps,
+  SMBox,
+  SMForm,
+  SMTabs,
+  SMTemplate,
+} from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
+import {
+  DocumentGroupType,
+  DOC_TYPE_GROUP,
+  TabInfo,
+  TabTypeOptions,
+} from "../../../../state/ducks/documentRevisions/documentType/types";
+import {
+  DocumentRevisionStatus,
+  SmartReferenceType,
+} from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { FormContext } from "../../../../ui/components/forms/FormContext";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
-import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
-import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { isOwner } from "../../../../ui/documentRevision/helpers/documentRevisionPermissions";
-import { FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
+import {
+  checkIsDocumentForm,
+  checkIsDocumentLHR,
+  checkIsDocumentMPIOutput,
+} from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import {
+  FBEditorState,
+  FBSchemaProps,
+  FBWorkspace,
+  FBWorkspaceModeOptions,
+} from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
@@ -24,7 +48,9 @@ import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withDocumentRevisionSummaryWrap } from "./DocumentRevisionSummary.wrap";
 
-const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryProps> = ({
+const DocumentRevisionSummary: React.FunctionComponent<
+  DocumentRevisionSummaryProps
+> = ({
   onTabChange,
   onScroll,
   _tabsState,
@@ -34,42 +60,67 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
 }) => {
-  const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
-  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
+  const docTypeGroup = get(
+    documentRevision?.document?.documentType,
+    "group",
+    "OTHER"
+  );
+  const outputTypeGroup = get(
+    documentRevision?.formTemplate?.outputDocumentTypes[0],
+    "group"
+  );
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
-  const smartReferencesFrom =
-  documentRevision?.smartReferencesFrom?.filter(
-      (ref) =>
-        ref.active &&
-        ref.type === SmartReferenceType.HiddenPiInstance &&
-        schema
-          ?.map((el) => el.name)
-          .filter((el) => el?.includes(ref.metadata.fieldId))
-    );
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const onSubmit = () => void 0;
+  const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter(
+    (ref) =>
+      ref.active &&
+      ref.type === SmartReferenceType.HiddenPiInstance &&
+      schema
+        ?.map((el) => el.name)
+        .filter((el) => el?.includes(ref.metadata.fieldId))
+  );
 
-  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  const group: DocumentGroupType =
+    docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) =>
-    documentTypeSelectors.getTabConfiguration(state, group));
-  if (tabConfig &&  [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
-    .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = [ ...tabConfig, {
-      labelId: "tabId.materialsandequipment",
-      tabId: TabTypeOptions.TABS_MEQ,
-      type: TabTypeOptions.TABS_MEQ,
-    }];
+    documentTypeSelectors.getTabConfiguration(state, group)
+  );
+  if (
+    tabConfig &&
+    [
+      DOC_TYPE_GROUP.LHR,
+      DOC_TYPE_GROUP.LHRT,
+      DOC_TYPE_GROUP.ENGINEERING_BUILD,
+      DOC_TYPE_GROUP.PI,
+    ].includes(group as DOC_TYPE_GROUP)
+  ) {
+    tabConfig = [
+      ...tabConfig,
+      {
+        labelId: "tabId.materialsandequipment",
+        tabId: TabTypeOptions.TABS_MEQ,
+        type: TabTypeOptions.TABS_MEQ,
+      },
+    ];
   }
   if (documentRevision.retrain && tabConfig) {
-    tabConfig = [...tabConfig, {
-      labelId: "tabId.training",
-      tabId: TabTypeOptions.TRAINING,
-      type: TabTypeOptions.TRAINING,
-    }];
+    tabConfig = [
+      ...tabConfig,
+      {
+        labelId: "tabId.training",
+        tabId: TabTypeOptions.TRAINING,
+        type: TabTypeOptions.TRAINING,
+      },
+    ];
   }
 
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+  const trainingTabIndex = tabLabels?.findIndex(
+    (tab) => tab === "tabId.training"
+  );
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -97,34 +148,20 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       return;
     }
     _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
-
-  const documentTypeId = documentRevision.document?.documentType?.id || "";
-  const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
-
-  // const isAttachmentRequired = () => {
-  //   const type = documentTypesById[documentTypeId];
-  //   // const docId = _documentRevisionFormState?.documentRevision?.id;
-  //   return  ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
-  // };
-  const isCurrentUserOperator = React.useContext(isOperator);
-  const isDisabledInput = docRevId !== undefined && isCurrentUserOperator && !isOwner;
-  const onSubmit = () => void 0;
-  console.log("isDisabledInput", isDisabledInput);
-  console.log("documentTypeId", documentTypeId);
 
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
       headerBoxProps={{ maxHeight: "30%", minHeight: 84 }}
       contentBoxProps={{
-        minHeight: "calc(70%)", height: "100%",
+        minHeight: "calc(70%)",
+        height: "100%",
         bgcolor: Colors.alabaster,
       }}
       values={documentRevision}
-      header= {
+      header={
         <SummaryHeader
           canShowCreateVersionButton={true}
           {...{ documentRevision, canChangeOwnerShip }}
@@ -136,109 +173,126 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2 }}
-        {..._documentRevisionFormState?.documentRevision && {
+        {...(_documentRevisionFormState?.documentRevision && {
           rightSidebar: (
             <Observer>
               {() => <DocumentRevisionSidebar edit={false} />}
             </Observer>
           ),
-        }}
+        })}
       >
         <Observer>
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%", overflow: "scroll" }}
-              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
-              lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
+              header={
+                !isLHR &&
+                !isTypeMpiDoc && (
+                  <DocumentRevisionSummaryHeader {...{ documentRevision }} />
+                )
+              }
+              lhrSteps={
+                isLHR && (
+                  <DocumentRevisionFormProgressBar
+                    smartReferencesFrom={smartReferencesFrom}
+                  />
+                )
+              }
             >
               <Observer>
                 {() => (
                   <SMTabs
-                    onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
+                    onChange={(ev, newValue) =>
+                      onTabChange?.(ev, newValue, tabConfig)
+                    }
                     tabs={tabLabels}
                     boxProps={{ px: 4.25 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo) => {
                       const tabType = tabInfo.type;
                       const { tabId } = tabInfo || {};
-                      const tabSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId);
-                      const availableSchema = schema?.filter((schemaItem) =>
-                        schemaItem.tabId === tabId && !schemaItem.deleted);
+                      const tabSchema = schema?.filter(
+                        (schemaItem) => schemaItem.tabId === tabId
+                      );
+                      const availableSchema = schema?.filter(
+                        (schemaItem) =>
+                          schemaItem.tabId === tabId && !schemaItem.deleted
+                      );
 
                       return (
                         <SMBox onScroll={onScroll} id="Presenter-FBWorkspace">
-                          {tabType === TabTypeOptions.MIXED &&  <>
-                            <SummaryPresenter
-                              dataProp={documentRevision}
-                              canChangeOwnerShip={canChangeOwnerShip}
-                              canShowCreateVersionButton={true}
-                            />
-                            {!isEmpty(availableSchema) && <FBWorkspace
-                              document={documentRevision}
-                              initialValues={documentRevision.formInput}
-                              schema={tabSchema}
-                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
-                            />
-                            }
-                          </>}
+                          {tabType === TabTypeOptions.MIXED && (
+                            <>
+                              <SummaryPresenter
+                                dataProp={documentRevision}
+                                canChangeOwnerShip={canChangeOwnerShip}
+                                canShowCreateVersionButton={true}
+                              />
+                              {!isEmpty(availableSchema) && (
+                                <FBWorkspace
+                                  document={documentRevision}
+                                  initialValues={documentRevision.formInput}
+                                  schema={tabSchema}
+                                  mode={
+                                    checkIsDocumentForm(
+                                      documentRevision?.document.documentType
+                                        .groupOptions
+                                    )
+                                      ? FBWorkspaceModeOptions.FORMPREVIEW
+                                      : FBWorkspaceModeOptions.PREVIEW
+                                  }
+                                />
+                              )}
+                            </>
+                          )}
                           {tabType === TabTypeOptions.DYNAMIC && isFB && (
                             <>
-
-                              {tabInfo.tabId === "lineitems" &&
-                              <FormContext.Provider value={{ submitOnChange: false }}>
-
-                                <Formik
-
-                                  initialValues={{ attachments: documentRevision?.attachments }}
-
-                                  onSubmit={onSubmit}
-
-                                  enableReinitialize={true}
-
+                              {tabInfo.tabId === "lineitems" && (
+                                <FormContext.Provider
+                                  value={{ submitOnChange: false }}
                                 >
-                                  {/* <AttachmentsField
-                                    isDisabled={true}
-                                    isNewVersion={false}
-                                    docRevId={docRevId}
-                                    isAttachmentEmpty={isAttachmentEmpty}
-                                    containsRedline={false}
-                                    docRevStatus={documentRevision?.status}
-                                    documentRevision={documentRevision}
-                                    documentTypeId={documentTypeId || ""}
-                                  /> */}
-
-                                  <Attachment
-
-                                    isAttachmentEmpty={isAttachmentEmpty}
-
-                                    docRevId = {documentRevision.id}
-
-                                    containsRedline = {false}
-                                    label = {"Supporting Documents"}
-                                    docRevStatus={documentRevision.status}/>
-                                </Formik>
-
-                              </FormContext.Provider>
-                              }
+                                  <Formik
+                                    initialValues={{
+                                      attachments:
+                                        documentRevision?.attachments,
+                                    }}
+                                    onSubmit={onSubmit}
+                                    enableReinitialize={true}
+                                  >
+                                    <Attachment
+                                      isAttachmentEmpty={isAttachmentEmpty}
+                                      docRevId={documentRevision.id}
+                                      containsRedline={false}
+                                      label={"Supporting Documents"}
+                                      docRevStatus={documentRevision.status}
+                                    />
+                                  </Formik>
+                                </FormContext.Provider>
+                              )}
                               <FBWorkspace
                                 document={documentRevision}
                                 initialValues={documentRevision.formInput}
                                 schema={tabSchema}
-                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                  FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
+                                mode={
+                                  checkIsDocumentForm(
+                                    documentRevision?.document.documentType
+                                      .groupOptions
+                                  )
+                                    ? FBWorkspaceModeOptions.FORMPREVIEW
+                                    : FBWorkspaceModeOptions.PREVIEW
+                                }
                               />
                             </>
-
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ &&
-                          documentRevision.status !== DocumentRevisionStatus.Voided &&
-                          <FBMaterialEqInfoContainer
-                            documentRevisionId={documentRevision?.id}
-                          />
-                          }
+                            documentRevision.status !==
+                              DocumentRevisionStatus.Voided && (
+                            <FBMaterialEqInfoContainer
+                              documentRevisionId={documentRevision?.id}
+                            />
+                          )}
                           {tabType === TabTypeOptions.TRAINING &&
-                          _tabsState?.value === trainingTabIndex && (
+                            _tabsState?.value === trainingTabIndex && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                             />
@@ -254,6 +308,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         </Observer>
       </SMTemplate>
     </SMForm>
-  ); };
+  );
+};
 
-export default withSMForm(withSMTabs(withDocumentRevisionSummaryWrap(DocumentRevisionSummary)));
+export default withSMForm(
+  withSMTabs(withDocumentRevisionSummaryWrap(DocumentRevisionSummary))
+);
