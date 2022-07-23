@@ -525,16 +525,404 @@ context("Checkboxes test", () => {
         cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
         cy.fbAddNewFieldButton();
       });
+    });
+  });
 
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+  context("Verify other checkboxes properties", () => {
+    it("Verify Autocomplete with 'Include QR Scan' checkbox", () => {
+      cy.contains("ac-wi-ch").parentsUntil("li").should("contain", "Scan QR code");
+    });
 
-      it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+    it("Verify Autocomplete without 'Include QR Scan' checkbox", () => {
+      cy.contains("ac-wo-ch").parentsUntil("li").should("not.contain", "Scan QR code");
+    });
+
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify Autocomplete with 'Multi Select' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("input[data-cy^=\"ac-wi-ch-\"]")
+        .click()
+        .type("{downarrow}{enter}")
+        .click()
+        .type("{downarrow}{downarrow}{enter}")
+        .should("have.value", "");
+    });
+
+    it("Verify Autocomplete without 'Multi Select' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy^=\"ac-wo-ch-\"]")
+        .click()
+        .type("{downarrow}{enter}")
+        .should("not.have.value", "");
+    });
+
+    it("Verify Select Field without 'Include None' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
+      cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "None");
+      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
+    });
+
+    it("Verify Select Field with 'Include None' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
+      cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "None");
+      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
+    });
+
+    it("Verify Select Field without 'Include Other' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
+      cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "Other");
+      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
+    });
+
+    it("Verify Select Field with 'Include Other' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
+      cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "Other");
+      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
+    });
+
+    it("Verify Radio Button group without 'Include Other' checkbox", () => {
+      cy.contains("rbg-wo-ch").parentsUntil("li").should("not.contain", "Other");
+    });
+
+    it("Verify Radio Button group with 'Include Other' checkbox", () => {
+      cy.contains("rbg-wi-ch").parentsUntil("li").should("contain", "Other");
+    });
+
+    it("Verify 'Send Email' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy=\"Send Email\"]").eq(0)
+        .should("have.text", "Send Email");
+    });
+
+    it("Verify 'Send Email with Supplier' checkbox", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy=\"Send Email\"]").eq(1)
+        .should("have.text", "Send Email");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("Create & Approve Document", () => {
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.fbClickButton({ el: "updateRecord" });
       });
+    });
+  });
+
+  context("Verify 'Revision Disabled' checkbox property", () => {
+    it("Verify TextField without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByName({ name: "textfield-wo-ch-" } );
+      cy.fbVerifyElementVisibile({ name: "textfield-wo-ch-", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibile({ name: "textfield-wo-ch-", el: "remove-schema-item" });
+    });
+
+    it("Verify TextField with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByName({ name: "textfield-wi-ch-" } );
+      cy.fbVerifyElementNotVisibile({ name: "textfield-wi-ch-", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibile({ name: "textfield-wi-ch-", el: "remove-schema-item" });
+    });
+
+    it("Verify Checkbox Group without 'Include Other' checkbox", () => {
+      cy.fbVerifyElementNotContainText({ name: "cbg-wo-ch-", label: "cbg-wo-ch", text: "Other" });
+    });
+
+    it("Verify Checkbox Group with 'Include Other' checkbox", () => {
+      cy.fbVerifyElementContainText({ name: "cbg-wi-ch-", label: "cbg-wi-ch", text: "Other" });
+    });
+
+    it("Verify Checkbox Group without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "cbg-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "cbg-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "cbg-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Checkbox Group with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "cbg-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "cbg-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "cbg-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Autocomplete without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "ac-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "ac-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "ac-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Autocomplete with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "ac-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "ac-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "ac-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Text Editor without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "te-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "te-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "te-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Text Editor with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "te-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "te-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "te-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Date picker without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "dp-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "dp-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "dp-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Date picker with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "dp-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "dp-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "dp-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Hyperlink without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "hl-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "hl-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "hl-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Hyperlink with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "hl-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "hl-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "hl-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Select Field without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "sf-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "sf-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "sf-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Select Field with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "sf-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "sf-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "sf-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Radio Button group without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "rbg-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "rbg-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "rbg-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Radio Button group with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "rbg-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "rbg-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "rbg-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify File Upload without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "fu-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "fu-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "fu-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify File Upload with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "fu-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "fu-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "fu-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Quantity without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "q-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "q-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "q-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Quantity with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "q-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "q-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "q-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Timer without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "t-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "t-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "t-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Timer with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "t-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "t-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "t-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify PO Approval Matrix without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "poam-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "poam-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "poam-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify PO Approval Matrix with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "poam-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "poam-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "poam-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Instructions Media upload without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "imu-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "imu-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "imu-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Instructions Media upload with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "imu-wi-ch" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "imu-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "imu-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Evidence Media upload without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "emu-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "emu-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "emu-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Evidence Media upload with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "emu-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "emu-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "emu-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Procedure without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "Step #1" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "Step #1", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "Step #1", el: "remove-schema-item" });
+    });
+
+    it("Verify Procedure with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "Step #2" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "Step #2", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "Step #2", el: "remove-schema-item" });
+    });
+
+    it("Verify Equipment without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "eq-wo-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "eq-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "eq-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Equipment with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "eq-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "eq-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "eq-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Text field with range without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "twr-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "twr-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "twr-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Text field with range with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "twr-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "twr-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "twr-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Inline Approval without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "ia-wo-ch" } );
+
+      cy.contains("ia-wi-ch").arrowClick();
+      cy.fbVerifyElementVisibileByLabel({ label: "ia-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "ia-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Inline Approval with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "ia-wi-ch" } );
+
+      cy.fbVerifyElementNotVisibileByLabel({ label: "ia-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "ia-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Request Approval without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "ra-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "ra-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "ra-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Request Approval with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "ra-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "ra-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "ra-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Checkpoint without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "cp-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "cp-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "cp-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Checkpoint with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "cp-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "cp-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "cp-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Create a Label without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "cl-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "cl-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "cl-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Create a Label with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "cl-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "cl-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "cl-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Implementation Task without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "it-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "it-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "it-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Implementation Task with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "it-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "it-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "it-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify MPI without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "mpi-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "mpi-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "mpi-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify MPI with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "mpi-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "mpi-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "mpi-wi-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Select Document(s) without 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "sd-wo-ch" } );
+      cy.fbVerifyElementVisibileByLabel({ label: "sd-wo-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementVisibileByLabel({ label: "sd-wo-ch", el: "remove-schema-item" });
+    });
+
+    it("Verify Select Document(s) with 'Revision Disabled' checkbox", () => {
+      cy.fbMouseOverByLabel({ label: "sd-wi-ch" } );
+      cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "edit-schema-item" });
+      cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "remove-schema-item" });
     });
   });
 
@@ -903,408 +1291,9 @@ context("Checkboxes test", () => {
     });
   });
 
-  context("Verify other checkboxes properties", () => {
-    it("Verify Autocomplete with 'Include QR Scan' checkbox", () => {
-      cy.contains("ac-wi-ch").parentsUntil("li").should("contain", "Scan QR code");
-    });
-
-    it("Verify Autocomplete without 'Include QR Scan' checkbox", () => {
-      cy.contains("ac-wo-ch").parentsUntil("li").should("not.contain", "Scan QR code");
-    });
-
-    it("Open Preview dialog", () => {
-      cy.fbClickButton({ el: "FBWorkspace-clickView" });
-    });
-
-    it("Verify Autocomplete with 'Multi Select' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("input[data-cy^=\"ac-wi-ch-\"]")
-        .click()
-        .type("{downarrow}{enter}")
-        .click()
-        .type("{downarrow}{downarrow}{enter}")
-        .should("have.value", "");
-    });
-
-    it("Verify Autocomplete without 'Multi Select' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy^=\"ac-wo-ch-\"]")
-        .click()
-        .type("{downarrow}{enter}")
-        .should("not.have.value", "");
-    });
-
-    it("Verify Select Field without 'Include None' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
-      cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "None");
-      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
-    });
-
-    it("Verify Select Field with 'Include None' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
-      cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "None");
-      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
-    });
-
-    it("Verify Select Field without 'Include Other' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
-      cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "Other");
-      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
-    });
-
-    it("Verify Select Field with 'Include Other' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
-      cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "Other");
-      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
-    });
-
-    it("Verify Radio Button group without 'Include Other' checkbox", () => {
-      cy.contains("rbg-wo-ch").parentsUntil("li").should("not.contain", "Other");
-    });
-
-    it("Verify Radio Button group with 'Include Other' checkbox", () => {
-      cy.contains("rbg-wi-ch").parentsUntil("li").should("contain", "Other");
-    });
-
-    it("Verify 'Send Email' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy=\"Send Email\"]").eq(0)
-        .should("have.text", "Send Email");
-    });
-
-    it("Verify 'Send Email with Supplier' checkbox", () => {
-      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy=\"Send Email\"]").eq(1)
-        .should("have.text", "Send Email");
-    });
-
-    it("Close Preview dialog", () => {
-      cy.fbClickButton({ el: "dialog-close" });
-    });
-  });
-
   context("Approve Document", () => {
-    it("Add approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-    });
-
-    it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
-    });
-
-    it("Approve and release document", () => {
-      cy.ebApprove();
-    });
-
-    it("Click on revise", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
-        cy.fbClickButton({ el: "updateRecord" });
-      });
-    });
-  });
-
-  context("Verify 'Revision Disabled' checkbox property", () => {
-    it("Verify TextField without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByName({ name: "textfield-wo-ch-" } );
-      cy.fbVerifyElementVisibile({ name: "textfield-wo-ch-", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibile({ name: "textfield-wo-ch-", el: "remove-schema-item" });
-    });
-
-    it("Verify TextField with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByName({ name: "textfield-wi-ch-" } );
-      cy.fbVerifyElementNotVisibile({ name: "textfield-wi-ch-", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibile({ name: "textfield-wi-ch-", el: "remove-schema-item" });
-    });
-
-    it("Verify Checkbox Group without 'Include Other' checkbox", () => {
-      cy.fbVerifyElementNotContainText({ name: "cbg-wo-ch-", label: "cbg-wo-ch", text: "Other" });
-    });
-
-    it("Verify Checkbox Group with 'Include Other' checkbox", () => {
-      cy.fbVerifyElementContainText({ name: "cbg-wi-ch-", label: "cbg-wi-ch", text: "Other" });
-    });
-
-    it("Verify Checkbox Group without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "cbg-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "cbg-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "cbg-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Checkbox Group with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "cbg-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "cbg-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "cbg-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Autocomplete without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "ac-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "ac-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "ac-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Autocomplete with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "ac-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "ac-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "ac-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Text Editor without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "te-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "te-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "te-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Text Editor with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "te-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "te-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "te-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Date picker without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "dp-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "dp-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "dp-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Date picker with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "dp-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "dp-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "dp-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Hyperlink without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "hl-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "hl-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "hl-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Hyperlink with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "hl-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "hl-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "hl-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Select Field without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "sf-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "sf-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "sf-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Select Field with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "sf-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "sf-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "sf-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Radio Button group without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "rbg-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "rbg-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "rbg-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Radio Button group with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "rbg-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "rbg-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "rbg-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify File Upload without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "fu-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "fu-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "fu-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify File Upload with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "fu-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "fu-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "fu-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Quantity without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "q-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "q-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "q-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Quantity with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "q-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "q-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "q-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Timer without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "t-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "t-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "t-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Timer with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "t-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "t-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "t-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify PO Approval Matrix without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "poam-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "poam-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "poam-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify PO Approval Matrix with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "poam-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "poam-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "poam-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Instructions Media upload without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "imu-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "imu-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "imu-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Instructions Media upload with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "imu-wi-ch" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "imu-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "imu-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Evidence Media upload without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "emu-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "emu-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "emu-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Evidence Media upload with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "emu-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "emu-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "emu-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Procedure without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "Step #1" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "Step #1", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "Step #1", el: "remove-schema-item" });
-    });
-
-    it("Verify Procedure with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "Step #2" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "Step #2", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "Step #2", el: "remove-schema-item" });
-    });
-
-    it("Verify Equipment without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "eq-wo-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "eq-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "eq-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Equipment with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "eq-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "eq-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "eq-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Text field with range without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "twr-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "twr-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "twr-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Text field with range with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "twr-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "twr-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "twr-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Inline Approval without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "ia-wo-ch" } );
-
-      cy.contains("ia-wi-ch").arrowClick();
-      cy.fbVerifyElementVisibileByLabel({ label: "ia-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "ia-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Inline Approval with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "ia-wi-ch" } );
-
-      cy.fbVerifyElementNotVisibileByLabel({ label: "ia-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "ia-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Request Approval without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "ra-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "ra-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "ra-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Request Approval with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "ra-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "ra-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "ra-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Checkpoint without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "cp-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "cp-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "cp-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Checkpoint with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "cp-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "cp-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "cp-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Create a Label without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "cl-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "cl-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "cl-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Create a Label with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "cl-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "cl-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "cl-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Implementation Task without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "it-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "it-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "it-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Implementation Task with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "it-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "it-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "it-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify MPI without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "mpi-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "mpi-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "mpi-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify MPI with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "mpi-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "mpi-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "mpi-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Select Document(s) without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "sd-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "sd-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "sd-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Select Document(s) with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "sd-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "remove-schema-item" });
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 });
