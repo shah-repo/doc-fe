@@ -286,12 +286,12 @@ context("Approval request implementation tasks", () => {
   context("Verify export", () => {
     it(`Check doc status as ${STATUS_TYPES_LABEL.IMPLEMENTATION} and click on Send To Email`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
-      cy.get(`[data-cy="field-name"]`).should("have.text", "Approval request from newly created form");
+      cy.get(`[data-cy="field-name"]`).should("have.text", approvalRequestTitle);
       cy.get(`[data-cy="HeaderInfo-docId"]`).then(($x) => {
         releasedFormId = $x.text();
       });
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -357,7 +357,8 @@ context("Approval request implementation tasks", () => {
         {
           directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
-        });
+        }).wait(2000);
+
       const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
         `${releasedFormId}-Approval-request-from-newly-created-form.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
@@ -449,7 +450,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click on ‘Approve & Release’", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
     });
 
     it("Set effective date to 10 days", () => {
@@ -457,7 +458,7 @@ context("Approval request implementation tasks", () => {
       const month = effectiveDate.format("MMM");
       const day = effectiveDate.format("D");
 
-      cy.get("[aria-label=\"change date\"]").arrowClick();
+      cy.get("[aria-label=\"change date\"]").find("svg").arrowClick().wait(1000);
       cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
         const monthYearText = $el.text();
         if (!monthYearText.includes(month)) {
