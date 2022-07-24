@@ -344,6 +344,8 @@ context("Approval request form scenario", () => {
 
       it("Rejecting request gives prompt", () => {
         cy.arRejectComfirmationARNew();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Reject AR from dashboard", () => {
