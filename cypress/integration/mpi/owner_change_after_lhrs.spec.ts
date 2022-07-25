@@ -843,7 +843,14 @@ context("Change owner after starting LHRs", () => {
     });
 
     it(`Change owner of LHR to ${USERS[4].name}`, () => {
-      cy.drChangeOwnerFromMenu({ employee: USERS[4].name });
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("[data-cy=\"changeOwner\"]").arrowClick();
+      cy.get("#employee").arrowClick();
+      cy.get(`[data-cy="selectItem.employee.${USERS[4].name}"]`).arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRevOwner, () => {
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
