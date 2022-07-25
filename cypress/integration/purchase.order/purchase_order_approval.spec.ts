@@ -332,7 +332,8 @@ context("PO approval test", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApproval();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if error message says that approvers are not present", () => {

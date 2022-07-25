@@ -125,7 +125,7 @@ Cypress.Commands.add("atchUploadTemplateForBLC", (params: {fileName: string }) =
 Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment], () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
+      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick({ force: true });
       cy.get("#attachments-button-file-clean-copy").attachFile({
         fileContent: fileContent.toString(),
         fileName: params.fileName,
