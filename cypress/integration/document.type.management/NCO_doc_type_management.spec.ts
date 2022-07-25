@@ -268,6 +268,7 @@ context("NCO document type management", () => {
     });
 
     it("Add Acronym", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.dtmAddAcronym({ acronym: "RED" });
     });
 
@@ -326,6 +327,7 @@ context("NCO document type management", () => {
     });
 
     it("Edit Acronym", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.dtmAddAcronym({ acronym: "YEL" });
     });
 
