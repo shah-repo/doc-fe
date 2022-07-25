@@ -40,6 +40,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
             style={{
               marginTop: gutter ? 5 : 0,
               borderRadius: 0,
+              borderStyle: "solid",
             }}
             {...{ disabled }}
           />
