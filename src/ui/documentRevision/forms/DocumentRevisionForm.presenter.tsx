@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, isEmpty } from "lodash";
+import { flatten, includes, isEmpty } from "lodash";
 import { Observer, observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -21,7 +21,7 @@ import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../h
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
 import DocIdInput from "./presenters/DocIdInput";
@@ -79,7 +79,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   onDirtyFlagChange,
 }) => {
   useScrollIntoView();
-  const { _formState, _documentRevisionFormState } = SM.useStores();
+  const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
   const intl = useIntl();
   const { workspaceState } = FB.useStores();
   const { revisionChangeType } = values || {};
@@ -101,6 +101,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
   const isEB = checkIsDocumentEB(groupOptions);
+  const isPO = checkIsDocumentPO(groupOptions);
   const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
@@ -208,6 +209,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const docId = _documentRevisionFormState?.documentRevision?.id;
     return docId || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
   };
+
+  const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
+    i.label.includes("Purchase Order")) : [false];
 
   return (
     <FormWrapper
@@ -341,7 +345,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {showOutputSection && (
           <>
-            {isAttachmentRequired() && (
+            {isAttachmentRequired() && (isPO || includes(outputDocumentTypeName, true)
+              ? _tabsState?.tabID !== "details" && (
               <Grid item xs={12}>
                 <AttachmentsField
                   isDisabled={isDisabledInput}
@@ -354,7 +359,21 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   documentTypeId={documentTypeId || ""}
                 />
               </Grid>
-            )}
+            ) : (
+                <Grid item xs={12}>
+                  <AttachmentsField
+                    isDisabled={isDisabledInput}
+                    isNewVersion={false}
+                    docRevId={docRevId}
+                    isAttachmentEmpty={isAttachmentEmpty}
+                    containsRedline={false}
+                    docRevStatus={documentRevision?.status}
+                    documentRevision={documentRevision}
+                    documentTypeId={documentTypeId || ""}
+                  />
+                </Grid>
+              ))}
+
             {hasOutput && (
               <Grid item xs={12}>
                 <FBActiveNoOutput
