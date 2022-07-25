@@ -51,9 +51,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
             [FBDAMFields.DAM]: data?.["approvalMatrix"],
             [FBDAMFields.DAR]: data?.["approvalRoles"],
           };
-          formik.setFieldValue("formInput", {
-            formInput: damData,
-          });
+          formik.setFieldValue("formInput", damData);
           _formState?.setValue("formInput", damData);
           formik.submitForm();
         }
