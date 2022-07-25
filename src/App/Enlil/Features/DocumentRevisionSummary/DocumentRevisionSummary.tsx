@@ -132,7 +132,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         <Observer>
           {() => (
             <SMTemplate
-              templateBoxProps={{ stretchY: "100%", overflow: "scroll" }}
+              templateBoxProps={{ stretchY: "100%", overflow: "auto" }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
