@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { get } from "lodash";
+import { cloneDeep, get } from "lodash";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
@@ -34,15 +34,11 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       autosave: _formState?.autosave || false,
     });
     const { document: { outputRevision = false } = {} } = workspaceState || {};
-    const { approvalMatrixFieldState } = FB.useStores();
-    let approvalMatrixState;
-    if (!approvalMatrixFieldState) {
-      approvalMatrixState = FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
-        formValue: _formState?.oldValues?.formInput,
-        outputRevision,
-        isOutput: true,
-      });
-    }
+    const approvalMatrixState = props.isDAM ? FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
+      formValue: cloneDeep(_formState?.getValue("formInput")),
+      outputRevision,
+      isOutput: props.isDAM,
+    }) : undefined;
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
     SM.reaction(

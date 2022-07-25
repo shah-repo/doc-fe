@@ -50,6 +50,7 @@ export type DocumentRevisionFormProps =
   mode: FBWorkspaceMode;
   workspaceState?: FBWorkspaceState;
   isCreateUrl?: boolean;
+  isDAM?: boolean;
 };
 
 export interface DocumentRevisionFormStateProps {
