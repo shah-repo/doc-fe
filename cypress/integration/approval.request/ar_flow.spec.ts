@@ -477,7 +477,9 @@ context("Approval request form", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for approval request" });
+      cy.get("[data-cy=\"field-description\"]").click();
+      cy.get("[data-cy=\"field-description\"]").arrowType("AR from New form template for approval request").wait(2000);
+      cy.unClick();
     });
 
     it("Add created document revision", () => {
@@ -975,7 +977,7 @@ context("Approval request form", () => {
       cy.arEnterApprovalRequestTitle({ title: "AR for Void" });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
+    it("Enter description 'CR from New form template for voided approval request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "CR from New form template for voided approval request" });
     });
 

@@ -112,6 +112,8 @@ context("File delete in Pending Change", () => {
     context("Withdraw submission and check attachments on document", () => {
       it("Navigates to Approval Request list", () => {
         cy.navigToApprovalRequestList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Filters document by name and status, and select it", () => {
