@@ -24,6 +24,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     const { approvalMatrixFieldState, workspaceState } = FB.useStores();
     const { formInput } = workspaceState || {};
     const damRoles = get(formInput, FBDAMFields.DAR, []);
+    const damMatrix = get(formInput, FBDAMFields.DAM, []);
     approvalMatrixTableState = FB.useRef(FBApprovalMatrixTableState);
 
     // MARK: @reactions
@@ -57,6 +58,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     useObserver(() => {
       approvalData = {
         ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
+        approvalMatrix: approvalData?.approvalMatrix || damMatrix,
         approvalRoles: approvalData?.approvalRoles || damRoles,
       };
     });

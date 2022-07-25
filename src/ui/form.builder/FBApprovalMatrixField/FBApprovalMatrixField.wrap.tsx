@@ -32,7 +32,7 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
 
     React.useEffect(() => {
       reaction( // Form sync & autosave
-        () => approvalMatrixState?.data,
+        () => approvalMatrixFieldState?.data,
         (data) => {
           formState?.setFieldValue(name, cloneDeep(data?.[type || ""]));
           formState?.setFieldAutosave(name);

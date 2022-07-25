@@ -27,6 +27,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const leftPanelState = FB.useRef<FBLeftPanelState>(FBLeftPanelState);
     const editorState = FB.useRef<FBEditorState>(FBEditorState);
     const formState = FB.useRef<FBFormState>(FBFormState, {});
+    const { approvalMatrixFieldState } = FB.useStores();
     isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
     const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema: _documentRevisionFormState?.schema,
@@ -34,11 +35,12 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       autosave: _formState?.autosave || false,
     });
     const { document: { outputRevision = false } = {} } = workspaceState || {};
-    const approvalMatrixState = props.isDAM ? FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
-      formValue: cloneDeep(_formState?.getValue("formInput")),
-      outputRevision,
-      isOutput: props.isDAM,
-    }) : undefined;
+    const approvalMatrixState = (props.isDAM && !approvalMatrixFieldState) ? (
+      FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
+        formValue: cloneDeep(props?.formInput),
+        outputRevision,
+        isOutput: props.isDAM,
+      })) : undefined;
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
     SM.reaction(
