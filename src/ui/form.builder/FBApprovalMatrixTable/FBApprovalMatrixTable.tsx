@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/core";
+import cx from "classnames";
 import { isEmpty } from "lodash";
 import React from "react";
 import { FBApprovalMatrixTableInfo, FBApprovalMatrixTableProps, FBApprovalMatrixTableStatus } from "..";
@@ -11,34 +12,20 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
   mode,
   name,
   cellHeight,
-  statusTableRef,
-  syncScroll,
 }) =>  (
   <Box display="flex" flexDirection="row" className={classes?.tableRoot}>
-    {/* TODO remove inline styles */}
-    <Box width="65%" style={{ zIndex: 2 }}>
+    <Box width="65%">
       <FBApprovalMatrixTableInfo {...{ classes, approvalData, mode, name, cellHeight }} />
     </Box>
     {approvalRoles && !isEmpty(approvalRoles) && (
-      <>
-        {/* Mui box has missing ref prop, this is workaround to assing ref to it */}
-        <Box
-          width="35%"
-          style={{ overflow: "hidden" }}
-          {...{ ref: statusTableRef }}
-        >
-          <Box width="500%">
-            <FBApprovalMatrixTableStatus {...{ classes, approvalData, mode, name, cellHeight }} />
-          </Box>
+      <Box
+        width="35%"
+        className={cx(classes?.wrapperStatus, "containing-box-scrollbar")}
+      >
+        <Box width="500%">
+          <FBApprovalMatrixTableStatus {...{ classes, approvalData, mode, name, cellHeight }} />
         </Box>
-        <Box
-          width="35%"
-          className={classes?.statusScroller}
-          onScroll={syncScroll}
-        >
-          <Box width="500%" />
-        </Box>
-      </>
+      </Box>
     )}
   </Box>
 );
