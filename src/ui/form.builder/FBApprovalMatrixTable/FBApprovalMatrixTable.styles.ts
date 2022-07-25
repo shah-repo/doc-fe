@@ -3,15 +3,16 @@ import Colors from "../../layout/theme/utils/colors";
 
 const FBApprovalMatrixTableClasses = makeStyles((theme: Theme) => createStyles({
   tableRoot: {
-    background: Colors.white,
-    border: `1px solid ${Colors.light_gray_blue}`,
-    borderRadius: theme.spacing(0.5),
-    overflow: "hidden",
-    position: "relative",
+    "background": Colors.white,
+    "border": `1px solid ${Colors.light_gray_blue}`,
+    "overflow": "hidden",
+    "position": "relative",
+    "& tr:last-child td": {
+      borderBottom: "none",
+    },
   },
   tableInfo: {
     "width": "100%",
-    "boxShadow": theme.shadows[16],
     "zIndex": 2,
     "tableLayout": "fixed",
     "& th": {
@@ -38,24 +39,11 @@ const FBApprovalMatrixTableClasses = makeStyles((theme: Theme) => createStyles({
       color: "#252525",
     },
   },
-  statusScroller: (scrollerBottomPosition = 0) => ({
-    "position": "absolute",
-    "height": theme.spacing(2),
-    "overflowX": "auto",
-    "overflowY": "hidden",
-    "right": 0,
-    "bottom": scrollerBottomPosition,
-    "marginBottom": theme.spacing(0.25),
-    "&::-webkit-scrollbar:horizontal": {
-      backgroundColor: "transparent",
-      height: theme.spacing(1.5),
-      width: theme.spacing(1.5),
-    },
-    "&::-webkit-scrollbar-thumb:horizontal": {
-      backgroundColor: "var(--light-gray)",
-      borderRadius: theme.spacing(1),
-    },
-  }),
+  wrapperStatus: {
+    borderLeft: `1px solid ${Colors.light_gray_blue}`,
+    overflowX: "auto",
+    overflowY: "hidden",
+  },
 }));
 
 export default FBApprovalMatrixTableClasses;
