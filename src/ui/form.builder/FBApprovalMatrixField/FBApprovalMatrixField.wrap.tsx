@@ -8,7 +8,6 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
 ) => {
   const Comp = ({
     handleAdd,
-    approvalMatrixFieldState,
     disabled,
     name,
     mode,
@@ -16,15 +15,16 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     ...props
   }: T) => {
 
-    const { formState, workspaceState } = FB.useStores();
+    const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
     const { document: { outputRevision = false } = {}, isOutput } = workspaceState || {};
     const formValue = formState?.getFieldValue(name);
 
-    approvalMatrixFieldState = FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
-      formValue: { [type as string]: cloneDeep(formValue) },
-      outputRevision,
-      isOutput,
-    });
+    const approvalMatrixState = !approvalMatrixFieldState ? (
+      FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
+        formValue: { [type as string]: cloneDeep(formValue) },
+        outputRevision,
+        isOutput,
+      })) : approvalMatrixFieldState;
 
     handleAdd = () => {
       approvalMatrixFieldState && (approvalMatrixFieldState.mode = "add");
@@ -44,7 +44,7 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     return Component({
       ...(props as T),
       handleAdd,
-      approvalMatrixFieldState,
+      approvalMatrixFieldState: approvalMatrixState,
       disabled,
       name,
       mode,

@@ -18,7 +18,7 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
 import FBDataStore from "../../form.builder/FBStore/FBDataStore";
 import useDidMount from "../../hooks/useDidMount";
@@ -240,6 +240,7 @@ DocumentRevisionFormContainerProps
   const shouldShowUpgrade =
     ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isMPIOutput && !isLHR;
+  const isDAM = checkIsDocumentDAM(formGroupOptions);
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <DocumentRevisionForm
@@ -271,6 +272,7 @@ DocumentRevisionFormContainerProps
         autosaveEnabled,
         formInput,
         mode,
+        isDAM,
       }}
     />
   );
