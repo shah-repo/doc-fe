@@ -8,19 +8,20 @@ export default makeStyles(() =>
       "border": `1px dashed ${Colors.navy}`,
       "borderRadius": "100px",
       "background": isHover ? Colors.navy : Colors.white,
+      "color": isHover ? Colors.white : Colors.navy,
       "&:hover": {
         background: Colors.navy,
+        color: Colors.white,
       },
     }),
-    label: ({ isHover }) => ({
+    label: {
       "padding": "2px",
       "fontWeight": 700,
       "fontSize": "12px",
       "lineHeight": "15px",
       "text-transform": "capitalize",
       "white-space": "nowrap",
-      "color": isHover ? Colors.white : Colors.navy,
-    }),
+    },
     fbBtn: {
       "height": "36px",
       "borderRadius": "100px",
