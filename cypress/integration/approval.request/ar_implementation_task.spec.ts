@@ -1,13 +1,15 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { momentInPST } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -18,6 +20,12 @@ let secondEmployee;
 let componentSpecificationDocumentType;
 let group;
 let asyncTasksGroup;
+let downloadUrl;
+let releasedFormId;
+let emailsFromInbox;
+let dateAfterEmailShouldArrive;
+let downloadFile;
+let fileId;
 
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
@@ -229,6 +237,10 @@ context("Approval request implementation tasks", () => {
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[1].email });
     });
+
+    it("Click on Save", () => {
+      cy.arSaveApiCall();
+    });
   });
 
   context("Add implementation task and continue AR creation flow", () => {
@@ -245,7 +257,9 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add description 'Test' to trigger autosave", () => {
-      cy.arEnterApprovalRequestDescription({ description: "Test" });
+      cy.get("[data-cy=\"field-description\"]").click();
+      cy.get("[data-cy=\"field-description\"]").clear().arrowType("Test").wait(2000);
+      cy.unClick();
     });
 
     it(`Check 'Implementation task' status is '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
@@ -260,21 +274,109 @@ context("Approval request implementation tasks", () => {
     it("Approve AR", () => {
       SystemRequirement("REQ-0920");
       cy.arApproveAR();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Check approval request status is ${STATUS_TYPES_LABEL.IMPLEMENTATION}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730");
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
     });
+  });
 
-    it("Verify export", () => {
-      SystemRequirement("REQ-3800");
-      cy.exportVerifyEmail({
-        status: STATUS_TYPES_LABEL.IMPLEMENTATION, filename: "-Approval-request-from-newly-created-form",
-        pdfStatus: STATUS_TYPES_LABEL.IMPLEMENTATION, type: "approval request",
+  context("Verify export", () => {
+    it(`Check doc status as ${STATUS_TYPES_LABEL.IMPLEMENTATION} and click on Send To Email`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
+      cy.get(`[data-cy="field-name"]`).should("have.text", approvalRequestTitle);
+      cy.get(`[data-cy="HeaderInfo-docId"]`).then(($x) => {
+        releasedFormId = $x.text();
+      });
+      cy.sendToEmail();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
       });
     });
 
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for approval request ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+
+    it("Download zip file", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${releasedFormId}${fileTimeFormat}_im.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        }).wait(2000);
+
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${releasedFormId}-Approval-request-from-newly-created-form.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Extract texts from PDF file content for Approval request form", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${releasedFormId}-Approval-request-from-newly-created-form.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).gt(0);
+        expect(cdata.text).to.have.string(STATUS_TYPES_LABEL.IMPLEMENTATION);
+      });
+    });
+  });
+
+  context("Check Implementation Task Status", () => {
     it(`Check Implementation task' status is ${STATUS_TYPES_LABEL.PENDING}`, () => {
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.PENDING });
@@ -348,7 +450,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click on ‘Approve & Release’", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
     });
 
     it("Set effective date to 10 days", () => {
@@ -356,7 +458,7 @@ context("Approval request implementation tasks", () => {
       const month = effectiveDate.format("MMM");
       const day = effectiveDate.format("D");
 
-      cy.get("[aria-label=\"change date\"]").arrowClick();
+      cy.get("[aria-label=\"change date\"]").find("svg").arrowClick().wait(1000);
       cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
         const monthYearText = $el.text();
         if (!monthYearText.includes(month)) {
