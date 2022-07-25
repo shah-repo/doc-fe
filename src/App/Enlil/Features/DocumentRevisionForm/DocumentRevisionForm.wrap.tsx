@@ -5,7 +5,7 @@ import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } 
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../../ui/constants/urls";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { FB, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
+import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBDocTypeGroup, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
 import FBLeftPanelState from "../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state";
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -48,15 +48,15 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     SM.reaction(
       () => approvalMatrixState?.data,
       (data) => {
-        if (_documentRevisionFormState?.documentType?.group === "DAM") {
-          const damCompData = {
-            "dam-built-in": data?.["approvalMatrix"],
-            "dar-built-in": data?.["approvalRoles"],
+        if (_documentRevisionFormState?.documentType?.group === FBDocTypeGroup.DAM) {
+          const damData = {
+            [FBDAMFields.DAM]: data?.["approvalMatrix"],
+            [FBDAMFields.DAR]: data?.["approvalRoles"],
           };
           formik.setFieldValue("formInput", {
-            formInput: damCompData,
+            formInput: damData,
           });
-          _formState?.setValue("formInput", damCompData);
+          _formState?.setValue("formInput", damData);
           formik.submitForm();
         }
       }
