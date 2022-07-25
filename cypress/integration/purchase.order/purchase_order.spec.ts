@@ -304,14 +304,14 @@ context("PO test", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
+    });
+
     it("Uploads text.docx", () => {
       SystemRequirement("REQ-1350");
       cy.atchUploadAttachment({ fileName: "test.docx" });
       cy.progressBarShouldAppear();
-    });
-
-    it("navigate to Line Items", () => {
-      cy.drSelectLineItems();
     });
 
     it("Click on 'Add item' button", () => {
@@ -603,7 +603,8 @@ context("PO test", () => {
 
       it("Click 'Submit for Approval' button", () => {
         SystemRequirement("REQ-1490");
-        cy.pmSubmitForApproval();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'Approve' button", () => {
@@ -886,7 +887,8 @@ context("PO test", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApproval();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
