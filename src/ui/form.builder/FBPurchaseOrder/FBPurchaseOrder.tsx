@@ -1,9 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
-import Colors from "../../layout/theme/utils/colors";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
-
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleItem,
@@ -33,17 +31,15 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
           />
         )}
         {!disabled && (
+          // TODO remove inline styles and make add button consistent with other buttons
           <FBButton
             label="form.builder.add.item"
             onClick={() => handleItem && handleItem()}
-            variant="contained"
+            showNewButton
+            fullWidth
             style={{
-              backgroundColor: Colors.navy,
-              borderRadius: "100px",
-              fontSize: 12,
-              fontWeight: 600,
-              color: Colors.white,
-              border: `1px solid ${Colors.navy}`,
+              marginTop: gutter ? 5 : 0,
+              borderRadius: 0,
             }}
             {...{ disabled }}
           />
