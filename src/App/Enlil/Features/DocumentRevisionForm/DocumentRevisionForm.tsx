@@ -12,7 +12,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import AttachmentsField from "../../../../ui/document.revision/form/attachments";
 import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -65,7 +65,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
-  const isPO = checkIsDocumentPO(groupOptions);
   const documentTypeId = formValues.values.document?.documentType?.id || "";
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
@@ -223,7 +222,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           </>}
                           {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
                             <>
-                              {isPO && tabInfo.tabId === "lineitems" && (
+                              {tabInfo.tabId === "lineitems" && (
                                 <AttachmentsField
                                   isDisabled={isDisabledInput}
                                   isNewVersion={false}

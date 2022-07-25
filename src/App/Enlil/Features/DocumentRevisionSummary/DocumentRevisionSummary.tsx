@@ -13,7 +13,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
-import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -69,7 +69,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
-  const isPO = checkIsDocumentPO(groupOptions);
   const onSubmit = () => void 0;
 
   if (isLHR) {
@@ -170,7 +169,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           </>}
                           {tabType === TabTypeOptions.DYNAMIC && isFB && (
                             <>
-                              {isPO && tabInfo.tabId === "lineitems" && (
+                              {tabInfo.tabId === "lineitems" && (
                                 <FormContext.Provider
                                   value={{ submitOnChange: false }}>
                                   <Formik
