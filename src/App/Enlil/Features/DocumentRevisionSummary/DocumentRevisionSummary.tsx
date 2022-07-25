@@ -1,3 +1,4 @@
+import { Formik } from "formik";
 import { filter, get, includes, isEmpty, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
@@ -7,8 +8,10 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import { FormContext } from "../../../../ui/components/forms/FormContext";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
+import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
@@ -65,6 +68,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const onSubmit = () => void 0;
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -163,13 +168,33 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             }
                           </>}
                           {tabType === TabTypeOptions.DYNAMIC && isFB && (
-                            <FBWorkspace
-                              document={documentRevision}
-                              initialValues={documentRevision.formInput}
-                              schema={tabSchema}
-                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
-                            />
+                            <>
+                              {tabInfo.tabId === "lineitems" && (
+                                <FormContext.Provider
+                                  value={{ submitOnChange: false }}>
+                                  <Formik
+                                    initialValues={{ attachments: documentRevision?.attachments }}
+                                    onSubmit={onSubmit}
+                                    enableReinitialize={true}
+                                  >
+                                    <Attachment
+                                      isAttachmentEmpty={isAttachmentEmpty}
+                                      docRevId={documentRevision.id}
+                                      containsRedline={false}
+                                      label={"Supporting Documents"}
+                                      docRevStatus={documentRevision.status}
+                                    />
+                                  </Formik>
+                                </FormContext.Provider>
+                              )}
+                              <FBWorkspace
+                                document={documentRevision}
+                                initialValues={documentRevision.formInput}
+                                schema={tabSchema}
+                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                                  FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
+                              />
+                            </>
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ &&
                           documentRevision.status !== DocumentRevisionStatus.Voided &&

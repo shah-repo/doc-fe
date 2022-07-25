@@ -10,10 +10,11 @@ export interface Props {
   isAttachmentEmpty: boolean;
   docRevId: string;
   containsRedline: boolean;
+  label?: string;
   docRevStatus: DocumentRevisionStatus;
 }
 
-export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus }) => {
+export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label }) => {
 
   const classes = {
     buttonsContainer: {
@@ -49,7 +50,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
     <Box pl={0} width="100%">
       <Box  display={"flex"}>
         <Typography variant="h6" style = {classes.buttonLeft}>
-          <Text message={"common.attachments" }/>
+          <Text message={label || "common.attachments" }/>
         </Typography>
         <AttachmentDownloadAllButton
           isAttachmentEmpty = {isAttachmentEmpty}
