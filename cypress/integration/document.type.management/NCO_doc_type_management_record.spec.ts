@@ -224,6 +224,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Add Acronym", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.dtmAddAcronym({ acronym: "GRN-" });
     });
 
@@ -428,6 +429,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Edit Document type name", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.dtmAddAcronym({ acronym: "LGR-" });
     });
 
