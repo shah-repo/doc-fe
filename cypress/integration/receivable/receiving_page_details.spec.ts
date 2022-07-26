@@ -1106,7 +1106,9 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Upload logo picture image.jpg", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev], () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1139,7 +1141,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Save receivable", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
