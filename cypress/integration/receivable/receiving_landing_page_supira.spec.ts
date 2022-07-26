@@ -1427,27 +1427,15 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.pmSubmitForApproval();
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
-      cy.listLoadingElementShouldNotExist();
+      cy.ebApprove();
     });
 
     it("Navigate to Receivable landing page", () => {
