@@ -353,6 +353,7 @@ context("Receiving landing page test", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -367,6 +368,7 @@ context("Receiving landing page test", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -381,6 +383,7 @@ context("Receiving landing page test", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -394,6 +397,7 @@ context("Receiving landing page test", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -404,6 +408,7 @@ context("Receiving landing page test", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -478,6 +483,7 @@ context("Receiving landing page test", () => {
                 type: "select",
                 index: 0,
                 label: "PO Status",
+                tabId: "details",
                 options: [
                   {
                     text: "Open",
@@ -505,6 +511,7 @@ context("Receiving landing page test", () => {
                 type: "section",
                 index: 1,
                 label: "General Information",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -514,6 +521,7 @@ context("Receiving landing page test", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -537,6 +545,7 @@ context("Receiving landing page test", () => {
               {
                 name: "po-supplier-built-in",
                 type: "supplier",
+                tabId: "details",
                 index: 3,
                 label: "Supplier ",
                 applicableOn: [
@@ -552,6 +561,7 @@ context("Receiving landing page test", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Order Date",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -576,6 +586,7 @@ context("Receiving landing page test", () => {
                 type: "purchaseorder",
                 index: 5,
                 label: "Purchase Order",
+                tabId: "lineitems",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -589,6 +600,7 @@ context("Receiving landing page test", () => {
                 type: "approvals",
                 index: 6,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -857,11 +869,13 @@ context("Receiving landing page test", () => {
               index: 0,
               type: "poreceive",
               label: "Receivable",
+              tabId: "details",
               name: "receivable-test",
               applicableOn: ["ON_STATE_TO_IN_REVIEW"],
             },
             {
               label: "form.builder.approvals",
+              tabId: "overview",
               type: "poapprovals",
               deleteDisabled: false,
               name: "fb-po-approvals",
@@ -1021,21 +1035,21 @@ context("Receiving landing page test", () => {
           payload: {
             columns: [
               {
-                label: "Receipt ID",
+                label: "RECEIPT ID",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "document.docId",
                 showOnAndroid: true,
               },
               {
-                label: "Receipt Record State",
+                label: "RECEIPT RECORD STATE",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "displayStatus",
                 showOnAndroid: true,
               },
               {
-                label: "Owner",
+                label: "OWNER",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "owner.user.name",
@@ -1053,7 +1067,7 @@ context("Receiving landing page test", () => {
                 showOnAndroid: true,
               },
               {
-                label: "Released Date",
+                label: "RELEASED DATE",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "releasedAt",
@@ -1072,7 +1086,7 @@ context("Receiving landing page test", () => {
               },
               {
                 fn: "PART_NUMBER_REV_FROM_RECEIVABLE",
-                label: "Part Number/Rev",
+                label: "PART NUMBER/REV",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "precalc.part_number_rev",
@@ -1119,14 +1133,14 @@ context("Receiving landing page test", () => {
 
     it("Verify all columns are present", () => {
       SystemRequirement("REQ-1680");
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Receipt ID");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Receipt Record State");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Owner");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "RECEIPT ID");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "RECEIPT RECORD STATE");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "OWNER");
       cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "PO #");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Released Date");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Supplier");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Part Number/Rev");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "PO Status");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "RELEASED DATE");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "SUPPLIER");
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "PART NUMBER/REV");
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "PO STATUS");
     });
 
     it(`Verify buttons "Clear Filter", "Export List" and "Add New Receiving" are present`, () => {
@@ -1137,7 +1151,7 @@ context("Receiving landing page test", () => {
         .and("have.text", "Add new Receiving");
     });
 
-    it(`Verify drag and drop Receipt ID header on second slot`, () => {
+    it(`Verify drag and drop RECEIPT ID header on second slot`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "RCT-");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
@@ -1164,9 +1178,9 @@ context("Receiving landing page test", () => {
     });
 
     it(`Verify receiving can be opened`, () => {
-      cy.get("#HeaderInfo-docId").should("not.exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("not.exist");
       cy.dlSelectFirstDocument();
-      cy.get("#HeaderInfo-docId").should("exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("exist");
       cy.navigToReceivableList();
       cy.get("div[role=dialog]").should("not.exist");
     });
@@ -1177,7 +1191,7 @@ context("Receiving landing page test", () => {
     });
 
     context("Verify filters on each field", () => {
-      it("Verify filter for Receipt Record State", () => {
+      it("Verify filter for RECEIPT RECORD STATE", () => {
         cy.get(`th[aria-colindex="1"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="1"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Released").arrowClick();
@@ -1186,7 +1200,7 @@ context("Receiving landing page test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       });
 
-      it("Verify filter for Receipt ID", () => {
+      it("Verify filter for RECEIPT ID", () => {
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).arrowType("RCT-00002");
         cy.landingPageLoadingElementShouldAppear();
@@ -1194,7 +1208,7 @@ context("Receiving landing page test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Owner", () => {
+      it("Verify filter for OWNER", () => {
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType("Athena Block");
         cy.landingPageLoadingElementShouldAppear();
@@ -1210,7 +1224,7 @@ context("Receiving landing page test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Released Date", () => {
+      it("Verify filter for RELEASED DATE", () => {
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
@@ -1219,7 +1233,7 @@ context("Receiving landing page test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Supplier", () => {
+      it("Verify filter for SUPPLIER", () => {
         cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="6"] input`).arrowType("API Supplier Document");
         cy.landingPageLoadingElementShouldAppear();
@@ -1227,7 +1241,7 @@ context("Receiving landing page test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Part Number/Rev", () => {
+      it("Verify filter for PART NUMBER/REV", () => {
         cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="7"] input`).arrowType("PRT-00005");
         cy.landingPageLoadingElementShouldAppear();
@@ -1235,7 +1249,7 @@ context("Receiving landing page test", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for PO Status", () => {
+      it("Verify filter for PO STATUS", () => {
         cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="8"] input`).arrowType("Closed");
         cy.landingPageLoadingElementShouldAppear();
@@ -1303,13 +1317,13 @@ context("Receiving landing page test", () => {
 
 
     context("Verify dropdown filters", () => {
-      it("Verify Receipt ID dropdown filters", () => {
+      it("Verify RECEIPT ID dropdown filters", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
 
-      it(`Verify Receipt ID "Does not contain" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("2");
@@ -1319,7 +1333,7 @@ context("Receiving landing page test", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Receipt ID "Is equal to" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
@@ -1330,7 +1344,7 @@ context("Receiving landing page test", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Receipt ID "Is not equal to" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is not equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
@@ -1341,7 +1355,7 @@ context("Receiving landing page test", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Receipt ID "Starts with" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Starts with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
@@ -1352,7 +1366,7 @@ context("Receiving landing page test", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Receipt ID "Ends with" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Ends with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
@@ -1363,7 +1377,7 @@ context("Receiving landing page test", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Receipt ID "Is null" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
@@ -1373,7 +1387,7 @@ context("Receiving landing page test", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Receipt ID "Is not null" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
@@ -1384,7 +1398,7 @@ context("Receiving landing page test", () => {
       });
 
 
-      it(`Verify Receipt ID "Is empty" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
@@ -1394,7 +1408,7 @@ context("Receiving landing page test", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Receipt ID "Is not empty" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();

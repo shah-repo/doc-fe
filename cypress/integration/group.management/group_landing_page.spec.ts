@@ -103,12 +103,12 @@ context("Group Landing Page Flow", () => {
     });
 
     it("Verify all columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Group Type");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Name");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Members");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Permissions");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Tags");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Parent Groups");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "GROUP TYPE");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "NAME");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "MEMBERS");
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "PERMISSIONS");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "TAGS");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "PARENT GROUPS");
     });
 
     it(`Verify buttons "Clear Filter" and "Add Group" are present`, () => {

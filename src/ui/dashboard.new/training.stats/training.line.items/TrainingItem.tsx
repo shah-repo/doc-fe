@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import cx from "classnames";
 import {
   getFormattedDateString,
   MomentFormats,
@@ -50,8 +51,8 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
     date
   ) => (
     <>
-      <Grid justify="space-between" container>
-        <Grid item className={classes.avatarSection}>
+      <Grid container className={classes.header}>
+        <Grid item className={classes.headerLeft}>
           {avatar ? (
             <Avatar
               style={{ backgroundColor: `${initialColor}` }}
@@ -76,27 +77,15 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             {name}
           </Typography>
         </Grid>
-        <Grid item>
-          {isOverdue && (
-            <Typography
-              component="span"
-              variant="body2"
-              className={classes.typographyOverdue}
-              color="textPrimary"
-            >
-              <Text translation="common.overdue" />
-            </Typography>
-          )}
-          {!isOverdue && (
-            <Typography
-              component="span"
-              variant="body2"
-              className={classes.typographyDueInfewDays}
-              color="textPrimary"
-            >
-              <Text translation="common.duein7days" />
-            </Typography>
-          )}
+        <Grid item className={classes.headerRight}>
+          <Typography
+            className={cx(classes.status, isOverdue ? classes.statusOverdue : classes.statusDueInfewDays)}
+            component="span"
+            variant="body2"
+            color="textPrimary"
+          >
+            <Text translation={isOverdue ? "common.overdue" : "common.duein7days"} />
+          </Typography>
         </Grid>
       </Grid>
       <Grid

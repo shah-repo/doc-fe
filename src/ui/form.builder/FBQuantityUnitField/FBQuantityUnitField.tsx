@@ -24,6 +24,9 @@ const FBQuantityUnitField: React.FunctionComponent<FBQuantityUnitFieldProps> = (
         optionLabelKey="text"
         defaultValue={initialValues?.unit}
         disabled={unitDisabled}
+        inputPropStyleSize="small"
+        customStyles = {{ height: 40 }}
+        inputStyle={{ padding: 0 }}
       />
     </Box>
   </ FBInput>

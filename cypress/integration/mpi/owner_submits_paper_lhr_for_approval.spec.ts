@@ -4,6 +4,7 @@
 
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -214,6 +215,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr-selected-part",
                 type: "partsselection",
                 index: 0,
+                tabId: "details",
                 label: "Part to be Manufactured",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
@@ -225,6 +227,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr_initial_quantity",
                 type: "quantity",
                 index: 1,
+                tabId: "details",
                 label: "Initial Quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -238,6 +241,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr-end-quantity",
                 type: "quantity",
                 index: 2,
+                tabId: "details",
                 label: "End Quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -251,6 +255,7 @@ context("Owner submits LHR for approval", () => {
                 name: "lhr-build-type",
                 type: "radiogroup",
                 index: 3,
+                tabId: "details",
                 label: "Build Type",
                 options: [
                   {
@@ -274,6 +279,7 @@ context("Owner submits LHR for approval", () => {
               {
                 label: "form.builder.approvals",
                 type: "approvals",
+                tabId: "details",
                 deleteDisabled: true,
                 name: "fb-approvals-kvateryo",
                 uniqueSchemaItem: true,
@@ -577,7 +583,7 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
@@ -626,7 +632,7 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
@@ -657,7 +663,7 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
@@ -686,7 +692,7 @@ context("Owner submits LHR for approval", () => {
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
@@ -721,7 +727,7 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
@@ -752,7 +758,7 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
@@ -783,7 +789,7 @@ context("Owner submits LHR for approval", () => {
     it("Visit LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
@@ -796,7 +802,7 @@ context("Owner submits LHR for approval", () => {
     });
 
     it("Check status of LHR is Released", () => {
-      cy.poCheckStatus("Released");
+      cy.poCheckStatus(STATUS_TYPES_LABEL.RELEASED);
     });
   });
 });

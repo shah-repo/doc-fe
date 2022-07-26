@@ -1,9 +1,11 @@
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -16,8 +18,8 @@ let adminEmployeeLoginResponse;
 let equipmentURL;
 let createdPMFormDocumentId;
 let createdCalibrationFormDocumentId;
-let pmSchemaFieldName;
-let calibrationSchemaFieldName;
+let pmSchemaField;
+let calibrationSchemaField;
 
 const multipleCompanies = true;
 let pMFormId;
@@ -128,13 +130,17 @@ context("Equipment maintenance and calibration", () => {
       cy.unClick();
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Add preventative maintenance section", () => {
       it("Click add a field", () => {
         cy.fbClickAddNewHiddenBtn();
       });
 
       it("Select equipment", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       });
 
       it("Add label for preventative maintenance", () => {
@@ -156,7 +162,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Select equipment", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       });
 
       it("Add label for Calibration", () => {
@@ -174,15 +180,17 @@ context("Equipment maintenance and calibration", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
 
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
 
         cy.wait("@response").then((res) => {
           if (res.response) {
             const response = res.response.body;
-            pmSchemaFieldName = response.formTemplate.schema[3].name;
-            calibrationSchemaFieldName = response.formTemplate.schema[4].name;
+            // eslint-disable-next-line max-len
+            pmSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Preventative Maintenance");
+            // eslint-disable-next-line max-len
+            calibrationSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Calibration");
           }
         });
 
@@ -235,42 +243,40 @@ context("Equipment maintenance and calibration", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add Checkbox group", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).last().check();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.get(`input[type="checkbox"][value="3"]`).first().check();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
   context("Verify form draft status and Send To Email", () => {
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative Maintenance form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         pMFormId = $docIdElement.text();
@@ -405,9 +411,7 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
-
-        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date\nEquipment Maintenance Section/);
 
         expect(el).match(/Draft/);
 
@@ -426,8 +430,6 @@ context("Equipment maintenance and calibration", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Equipment Maintenance Section/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 
@@ -473,7 +475,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative Maintenance form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         pMFormId = $docIdElement.text();
@@ -615,9 +617,7 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
-
-        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date\nEquipment Maintenance Section/);
 
         expect(el).match(/Released/);
 
@@ -636,8 +636,6 @@ context("Equipment maintenance and calibration", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Equipment Maintenance Section/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 
@@ -715,40 +713,38 @@ context("Equipment maintenance and calibration", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add Checkbox group", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).last().check();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.get(`input[type="checkbox"][value="3"]`).first().check();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         calFormId = $docIdElement.text();
@@ -887,9 +883,7 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
-
-        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date\nEquipment Maintenance Section/);
 
         expect(el).match(/Draft/);
 
@@ -908,8 +902,6 @@ context("Equipment maintenance and calibration", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Equipment Maintenance Section/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 
@@ -955,7 +947,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify form released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         calFormId = $docIdElement.text();
@@ -1097,9 +1089,7 @@ context("Equipment maintenance and calibration", () => {
 
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date/);
-
-        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+        expect(el).match(/MAINTENANCE DETAILS\nEquipment\nMaintainer\nCompletion Date\nEquipment Maintenance Section/);
 
         expect(el).match(/Released/);
 
@@ -1118,8 +1108,6 @@ context("Equipment maintenance and calibration", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Equipment Maintenance Section/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 
@@ -1180,8 +1168,8 @@ context("Equipment maintenance and calibration", () => {
       cy.drEnterDocumentDescription({ description: "Equipment description" });
     });
 
-    it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+    it("navigate to Specification", () => {
+      cy.drSelectSpecificationTab();
     });
 
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
@@ -1192,6 +1180,18 @@ context("Equipment maintenance and calibration", () => {
     it(`Select '${USERS[1].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("navigate to overview", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Select 'Active' as EQ status", () => {
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1255,10 +1255,9 @@ context("Equipment maintenance and calibration", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMFormDocumentId}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMFormDocumentId}/create_maintenance/${docIdFromUrl}/${pmSchemaField.name}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
         cy.progressBarShouldNotExist();
@@ -1282,6 +1281,14 @@ context("Equipment maintenance and calibration", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
@@ -1301,16 +1308,20 @@ context("Equipment maintenance and calibration", () => {
         });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Create 'Preventative maintenance document'", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
-    it("Upload attachement picture 'image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    it("navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
-    it("Checkbox option 1 checked", () => {
-      cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Add first Approver", () => {
@@ -1330,7 +1341,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Extract document Id", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         pMDocId = $docIdElement.text();
@@ -1390,7 +1401,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Check doc WIP status and click on Send To Email", () => {
     it("Check doc WIP status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         pMDocId = $docIdElement.text();
@@ -1522,13 +1533,10 @@ context("Equipment maintenance and calibration", () => {
         tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| DRAFT\\n1 2 3`);
+        tmpRegex = new RegExp(`APPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| DRAFT`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
-        expect(el).not.match(tmpRegex);
-
-        tmpRegex = new RegExp(`REJECTED`, "gi");
         expect(el).not.match(tmpRegex);
 
         expect(el).match(/WIP/);
@@ -1612,13 +1620,13 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
   context("Check doc Released status and click on Send To Email", () => {
     it("Check doc released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Preventative maintenance document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         pMDocId = $docIdElement.text();
@@ -1751,13 +1759,10 @@ context("Equipment maintenance and calibration", () => {
         expect(el).match(tmpRegex);
 
         // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| APPROVED \\| ${docRelDate}.*\n.*\\n1 2 3`);
+        tmpRegex = new RegExp(`APPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| APPROVED \\| ${docRelDate}.*`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
-        expect(el).not.match(tmpRegex);
-
-        tmpRegex = new RegExp(`REJECTED`, "gi");
         expect(el).not.match(tmpRegex);
 
         expect(el).match(/Released/);
@@ -1787,10 +1792,9 @@ context("Equipment maintenance and calibration", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationFormDocumentId}/create_maintenance/${docIdFromUrl}/${calibrationSchemaFieldName}`;
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationFormDocumentId}/create_maintenance/${docIdFromUrl}/${calibrationSchemaField.name}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
@@ -1810,6 +1814,14 @@ context("Equipment maintenance and calibration", () => {
 
     it("Select revision stage 'Numeric'", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -1833,16 +1845,20 @@ context("Equipment maintenance and calibration", () => {
         });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Create 'Calibration document'", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
-    it("Upload attachement picture 'image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    it("navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
-    it("Checkbox option 1 checked", () => {
-      cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Add first Approver", () => {
@@ -1862,7 +1878,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Extract document Id", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         calDocId = $docIdElement.text();
@@ -1922,7 +1938,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Check doc WIP status and click on Send To Email", () => {
     it("Check doc WIP status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
       cy.drGetDocIdElementFromUI().should("contain.text", "MR-").then(($docIdElement: JQuery<HTMLElement>) => {
         calDocId = $docIdElement.text();
@@ -2054,13 +2070,10 @@ context("Equipment maintenance and calibration", () => {
         tmpRegex = new RegExp(`Completion Date\n${footerDate}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| DRAFT\\n1 2 3`);
+        tmpRegex = new RegExp(`APPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| DRAFT`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
-        expect(el).not.match(tmpRegex);
-
-        tmpRegex = new RegExp(`REJECTED`, "gi");
         expect(el).not.match(tmpRegex);
 
         expect(el).match(/WIP/);
@@ -2144,13 +2157,13 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
   context("Check doc Released status and click on Send To Email", () => {
     it("Check doc released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Calibration document" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         calDocId = $docIdElement.text();
@@ -2283,13 +2296,10 @@ context("Equipment maintenance and calibration", () => {
         expect(el).match(tmpRegex);
 
         // eslint-disable-next-line max-len
-        tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| APPROVED \\| ${docRelDate}.*\n.*\\n1 2 3`);
+        tmpRegex = new RegExp(`APPROVALS\\n${FIRST_USER.name} \\- .*@.* \\| APPROVED \\| ${docRelDate}.*`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`${SECOND_USER.name}`, "gi" );
-        expect(el).not.match(tmpRegex);
-
-        tmpRegex = new RegExp(`REJECTED`, "gi");
         expect(el).not.match(tmpRegex);
 
         expect(el).match(/Released/);
@@ -2376,6 +2386,10 @@ context("Equipment maintenance and calibration", () => {
       cy.cmpTurnOffAutosave();
     });
 
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Change 'Completion Date' to 10 days prior", () => {
       const completionDate = moment().tz("America/Los_Angeles").subtract(10, "days");
       const month = completionDate.format("MMMM");
@@ -2401,6 +2415,10 @@ context("Equipment maintenance and calibration", () => {
             }
           });
       });
+    });
+
+    it("navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add approver", () => {
@@ -2441,6 +2459,10 @@ context("Equipment maintenance and calibration", () => {
       cy.cmpTurnOffAutosave();
     });
 
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Change 'Completion Date' to 10 days later", () => {
       const completionDate = moment().tz("America/Los_Angeles").add(10, "days");
       const month = completionDate.format("MMMM");
@@ -2466,6 +2488,10 @@ context("Equipment maintenance and calibration", () => {
             }
           });
       });
+    });
+
+    it("navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add approver", () => {

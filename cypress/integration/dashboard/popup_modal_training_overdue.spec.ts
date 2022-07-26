@@ -5,6 +5,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -12,6 +13,7 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -28,15 +30,14 @@ let createdTrainingCurriculumFormDocument;
 let trainingCurriculumDocumentType;
 let clinicalProtocolDocumentType;
 let createdClinicalProtocolForm;
+let allGroups;
 let developersGroup;
 let asyncTasksGroup;
 let releasedDoc1Id;
 let caGroup;
 let emailsFromInbox: IMAPEmail[];
-
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+let dateAfterEmailShouldArrive;
+let getEmailSetting;
 
 context("Email popup modal for training due", () => {
   before(() => {
@@ -45,11 +46,6 @@ context("Email popup modal for training due", () => {
 
   beforeEach(() => {
     cy.restoreLocalStorage();
-    cy.intercept({ url: "/api/v1/*/search", middleware: true }, (req) => {
-      req.continue((res) => {
-        res.setDelay(100);
-      });
-    }).as("Search");
   });
 
   afterEach(() => {
@@ -97,24 +93,27 @@ context("Email popup modal for training due", () => {
     });
 
     it("[API]Get group", (done: any) => {
-      cy.grpGetGroupByName({
-        groupName: "Developers",
+      cy.grpGetGroups({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
       }).then((response) => {
-        developersGroup = response;
+        allGroups = response;
+        cy.log(response);
+        developersGroup = allGroups.find((group) => group.name === "Developers");
+        asyncTasksGroup = allGroups.find((group) => group.name === "Async Tasks");
+        caGroup = allGroups.find((group) => group.name === "Company Admin");
         done();
       });
     });
 
-    it("[API]Patch group", () => {
+    it("[API]Patch 'Developers' group", () => {
       cy.grpPatchGroup({
-        groupId: developersGroup.body[0].id,
+        groupId: developersGroup.id,
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
         payload: {
           employees: [{ id: secondEmployee.id }],
-          tags: [...developersGroup.body[0].tags,
+          tags: [...developersGroup.tags,
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
             GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
           ],
@@ -122,20 +121,9 @@ context("Email popup modal for training due", () => {
       });
     });
 
-    it("[API]Get group", (done: any) => {
-      cy.grpGetGroupByName({
-        groupName: "Async Tasks",
-        sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
-      }).then((response) => {
-        asyncTasksGroup = response;
-        done();
-      });
-    });
-
-    it("[API]Patch group", () => {
+    it("[API]Patch 'Async Tasks' group", () => {
       cy.grpPatchGroup({
-        groupId: asyncTasksGroup.body[0].id,
+        groupId: asyncTasksGroup.id,
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
         payload: {
@@ -144,20 +132,9 @@ context("Email popup modal for training due", () => {
       });
     });
 
-    it("[API]Get group", (done: any) => {
-      cy.grpGetGroupByName({
-        groupName: "Company Admin",
-        sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
-      }).then((response) => {
-        caGroup = response;
-        done();
-      });
-    });
-
-    it("[API]Patch group", () => {
+    it("[API]Patch 'Company Admin' group", () => {
       cy.grpPatchGroup({
-        groupId: caGroup.body[0].id,
+        groupId: caGroup.id,
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
         payload: {
@@ -448,6 +425,7 @@ context("Email popup modal for training due", () => {
                 type: "section",
                 index: 0,
                 label: "Periodic Training",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -460,6 +438,7 @@ context("Email popup modal for training due", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Documents to Train on",
+                tabId: "details",
                 rules: "|required",
                 multiple: true,
                 optionId: "36",
@@ -482,6 +461,7 @@ context("Email popup modal for training due", () => {
                 type: "radiogroup",
                 index: 2,
                 label: "Refresh/repeat training periodically?",
+                tabId: "details",
                 rules: "required||",
                 options: [
                   {
@@ -504,6 +484,7 @@ context("Email popup modal for training due", () => {
                 type: "quantity",
                 index: 3,
                 label: "Training Frequency (in days)",
+                tabId: "details",
                 rules: "required_if:training-refresh-training-periodically,Yes",
                 validators: {
                   required_if: {
@@ -525,6 +506,7 @@ context("Email popup modal for training due", () => {
                 type: "section",
                 index: 4,
                 label: "Trainees Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -537,6 +519,7 @@ context("Email popup modal for training due", () => {
                 type: "autocomplete",
                 index: 5,
                 label: "Groups to Train",
+                tabId: "details",
                 multiple: true,
                 optionId: "10",
                 placeholder: "Select groups",
@@ -555,6 +538,7 @@ context("Email popup modal for training due", () => {
                 type: "autocomplete",
                 index: 6,
                 label: "Users to Train (if applicable)",
+                tabId: "details",
                 multiple: true,
                 optionId: "13",
                 placeholder: "Select users",
@@ -575,6 +559,7 @@ context("Email popup modal for training due", () => {
                 name: "fb-approvals-l0wcpa0v",
                 uniqueSchemaItem: true,
                 index: 7,
+                tabId: "overview",
               },
             ],
           },
@@ -624,8 +609,8 @@ context("Email popup modal for training due", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 
@@ -640,7 +625,7 @@ context("Email popup modal for training due", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview,
+        CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("Training Curriculum test");
@@ -657,6 +642,14 @@ context("Email popup modal for training due", () => {
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Select document 'released doc1' to be trained on", () => {
@@ -676,12 +669,26 @@ context("Email popup modal for training due", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Click on 'Overview' tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -694,8 +701,8 @@ context("Email popup modal for training due", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -754,23 +761,20 @@ context("Email popup modal for training due", () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
-      cy.wait(5000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
+
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wait(5000);
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
+        .should("contain.text", "COMPLETE");
+    });
   });
-
-  // context("Login user", () => {
-  //   it("Logs user in", () => {
-  //     cy.authLogin({
-  //       email: USERS[1].email,
-  //     });
-  //   });
-
-  //   it("Selects company", () => {
-  //     cy.cmpSelectCompany({ name: "Sky blue Jacobi, Russel and Kerluke 84895", multiple: true });
-  //   });
-  // });
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
@@ -811,23 +815,25 @@ context("Email popup modal for training due", () => {
     it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
       cy.contains("EMAIL SENT TO ALL").should("exist");
       cy.get("button[aria-label=close]").eq(1).arrowClick();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
 
     it("There should be 3 columns", () => {
       cy.contains("Overdue (2)").parent().parent().find(".MuiGrid-item").should("have.length", 3);
       cy.get("button[aria-label=close]").eq(0).arrowClick();
-      cy.wait(10000);
     });
   });
 
   context(`Verify email for pending training notification to ${USERS[1].name}`, () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
+      getEmailSetting =  {
+        to: USERS[1].email,
         after: dateAfterEmailShouldArrive,
+        subject: "Your training is overdue",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      cy.imapGetMails({ userEmail: USERS[1].email, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
     });
@@ -858,7 +864,14 @@ context("Email popup modal for training due", () => {
     });
 
     it("Get emails and visit training page", () => {
-      cy.imapGetRecordRequestLink({ userEmail: USERS[1].email });
+      getEmailSetting =  {
+        to: USERS[1].email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Your training is overdue",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: USERS[1].email, options: getEmailSetting });
     });
 
     it("click complete training button", () => {
@@ -889,7 +902,12 @@ context("Email popup modal for training due", () => {
 
     it("Click on 'EMAIL ALL'", () => {
       cy.get("button").contains("EMAIL ALL").eq(0).arrowClick();
-      cy.wait(10000);
+    });
+
+    it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
+      cy.contains("EMAIL SENT TO ALL").should("exist");
+      cy.get("button[aria-label=close]").eq(1).arrowClick();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
   });
 
@@ -901,9 +919,12 @@ context("Email popup modal for training due", () => {
 
   context(`Verify email for pending training notification to ${USERS[2].name}`, () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Your training is overdue",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -932,12 +953,19 @@ context("Email popup modal for training due", () => {
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 2,
+        assertNumberOfEmailsFoundInList: 1,
       });
     });
 
     it("Get emails and visit training page", () => {
-      cy.imapGetRecordRequestLink({ userEmail: USERS[2].email });
+      getEmailSetting =  {
+        to: USERS[2].email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Your training is overdue",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: USERS[2].email, options: getEmailSetting });
     });
 
     it("click complete training button", () => {

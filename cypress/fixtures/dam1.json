@@ -582,6 +582,7 @@
                 "type": "select",
                 "index": 0,
                 "label": "PO Status",
+                "tabId": "details",
                 "options": [
                   {
                     "text": "Open",
@@ -610,6 +611,7 @@
                 "type": "section",
                 "index": 1,
                 "label": "General Information",
+                "tabId": "details",
                 "applicableOn": [
                   "ON_STATE_TO_IN_REVIEW"
                 ]
@@ -619,6 +621,7 @@
                 "type": "autocomplete",
                 "index": 2,
                 "label": "Requestor",
+                "tabId": "details",
                 "optionId": "3",
                 "optionPath": "/change_requests/available_approvers",
                 "placeholder": "[Select requestor here]",
@@ -638,6 +641,7 @@
                 "type": "supplier",
                 "index": 3,
                 "label": "Supplier ",
+                "tabId": "details",
                 "applicableOn": [
                   "ON_STATE_TO_IN_REVIEW"
                 ],
@@ -652,6 +656,7 @@
                 "type": "datepicker",
                 "index": 4,
                 "label": "Order Date",
+                "tabId": "details",
                 "rules": "required",
                 "validators": {
                   "required": true
@@ -670,6 +675,7 @@
                 "type": "purchaseorder",
                 "index": 5,
                 "label": "Purchase Order",
+                "tabId": "lineitems",
                 "applicableOn": [
                   "ON_STATE_TO_IN_REVIEW"
                 ],

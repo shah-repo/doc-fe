@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBDialogState, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from "..";
+import { SM } from "../../../App";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
@@ -24,6 +25,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   }: T) => {
 
     const dispatch = useDispatch();
+    const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
@@ -34,7 +36,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     useObserver(() => {
-      disabled = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange || disabled;
+      disabled = _documentRevisionFormState?.revisionChangeType === RevisionChangeType.AdministrativeChange || disabled;
     });
 
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {

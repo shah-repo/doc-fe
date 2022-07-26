@@ -6,6 +6,9 @@ export const styles = makeStyles((theme: Theme) =>
     inline: {
       display: "inline",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     listItemIcon: {
       paddingLeft: "10px",
     },
@@ -27,6 +30,9 @@ export const styles = makeStyles((theme: Theme) =>
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
+    },
+    cursorPointer: {
+      cursor: "pointer",
     },
     typographyDueInfewDays: {
       fontWeight: "bold",

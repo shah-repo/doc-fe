@@ -1,4 +1,4 @@
-import { FormGroupProps } from "@material-ui/core";
+import { BoxProps, FormGroupProps } from "@material-ui/core";
 import { FBInputProps, FBOptionProps } from "..";
 
 export type FBCheckboxGroupProps =
@@ -16,4 +16,7 @@ export type FBCheckboxGroupProps =
   & Pick<FormGroupProps, "row">
   & {
     controls?: React.ReactNode[];
+    className?: string;
+    boxProps?: BoxProps;
+    labelProps?: BoxProps;
   };

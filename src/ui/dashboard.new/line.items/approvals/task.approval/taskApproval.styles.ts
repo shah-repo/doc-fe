@@ -14,9 +14,11 @@ export const styles = makeStyles(() =>
     },
     icon: {
       width: "15px",
+      cursor: "pointer",
     },
     listItem: {
       paddingLeft: "1px",
+      cursor: "unset",
     },
     viewTooltipText: {
       fontWeight: "bold",
@@ -28,6 +30,7 @@ export const styles = makeStyles(() =>
       borderLeft: `1px solid ${Colors.light_gray_blue}`,
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
+      cursor: "unset",
     },
     customTooltipWidth: {
       maxWidth: 500,
@@ -50,6 +53,9 @@ export const styles = makeStyles(() =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
+    },
+    cursorPointer: {
+      cursor: "pointer",
     },
     typography: {
       fontSize: "14px",

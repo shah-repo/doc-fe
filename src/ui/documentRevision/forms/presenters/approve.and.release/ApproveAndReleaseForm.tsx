@@ -1,4 +1,4 @@
-import { Box, Button } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import { Dictionary, isEmpty, isObject } from "lodash";
 import moment from "moment";
@@ -16,9 +16,10 @@ import InputField from "../../../../components/forms/fields/Input";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import FormMessage from "../../../../components/forms/FormMessage";
 import FormProgress from "../../../../components/forms/FormProgress";
-import SubmitButton from "../../../../components/forms/SubmitButton";
+import StyledSubmitButton from "../../../../components/forms/StyledSubmitButton";
 import Text from "../../../../components/Text";
 import { FBFormState, FBSchemaProps } from "../../../../form.builder";
+import { StyledCancelFBButton } from "../../../../form.builder/FBButton/StyledCancelFBButton";
 import Colors from "../../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../../types";
 import { styles } from "./ApproveAndRelease.styles";
@@ -213,7 +214,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         </Box>
       )}
       <FormProgress asyncState={asyncState} />
-      <SubmitButton
+      <StyledSubmitButton
         asyncState={asyncState}
         label="transition.action.confirm"
         fullWidth={false}
@@ -221,17 +222,16 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         id="ApproveAndRelease-submit"
         data-cy="ApproveAndRelease-submit"
       />
-      <Button
+      <StyledCancelFBButton
         variant="text"
         color="secondary"
+        label="transition.action.cancel"
         className={classes.cancelButton}
         disabled={asyncState.status === AsyncStatus.Active}
         onClick={cancel}
         id="ApproveAndRelease-cancelButton"
         data-cy="ApproveAndRelease-cancelButton"
-      >
-        <Text translation="transition.action.cancel" />
-      </Button>
+      />
     </Form>
   );
 };

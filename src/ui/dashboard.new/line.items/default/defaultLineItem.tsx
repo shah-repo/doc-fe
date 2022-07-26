@@ -20,7 +20,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <StyledListItem button onMouseEnter={onMouseHoverListItem}>
+    <StyledListItem button onMouseEnter={onMouseHoverListItem} className={classes.buttoncursor} disableRipple>
       <ListItemText
         primary={
           <Grid container={true}>

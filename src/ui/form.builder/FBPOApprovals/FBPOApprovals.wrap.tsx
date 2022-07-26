@@ -4,8 +4,10 @@ import { compact, concat, difference, filter, find, includes, isEmpty, map, minB
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
@@ -13,6 +15,7 @@ import { store } from "../../../state/store";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import useDidMount from "../../hooks/useDidMount";
 import Colors from "../../layout/theme/utils/colors";
+import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
@@ -39,7 +42,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
-    const { isSubmitting } = useFormikContext();
+    const formik = useFormikContext();
     const { document, changeRequest, id, isOutput } = workspaceState || {};
     const outputId = isOutput ? id : null;
     const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
@@ -56,6 +59,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const didMount = useDidMount();
     let availableApprovers: string[] = [];
     const hasPOItems = useRef(false);
+    const dispatch = useDispatch();
+
 
     isIncluded = (group: FBRequiredApprover): boolean =>
       (includes(map(poApprovalsState?.checkedGroups, "id"), group.id));
@@ -169,7 +174,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // On add approver
     React.useEffect(() => reaction(
       () => poApprovalsState?.approvalApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        FBDataStore.setPoApprovals(data);
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -179,6 +187,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const filteredApprovals: FBInlineApprovalBody[] = compact(map(poApprovalsState.approvals, (approval) =>
           approval.approverId === data?.approverId ? data : approval
         ));
+        FBDataStore.setPoApprovals(data);
         poApprovalsState.setApprovals(getApprovals(filteredApprovals));
         if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();
@@ -221,6 +230,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           formState?.getInputState(name)?.setRender();
         }
       }
+      return () => {
+        FBDataStore.setPoApprovals([]);
+      };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -266,6 +278,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         fieldId: name,
         partOf: { id },
         signatureGroupName: groupName,
+      }, () => {
+        const id  = workspaceState?.id;
+        if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
       }));
     };
 
@@ -276,7 +291,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       map(ids, (approver) => {
         const approval = find(poApprovalsState?.getApprovals, (a) => a.approver?.id === approver);
         poApprovalsState?.removeCheckedGroups(approval?.signatureGroupName);
-        poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id);
+        poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
+          const id  = workspaceState?.id;
+          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+        });
       });
     };
 
@@ -318,7 +336,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     formState?.setFieldValue(`${name}`, fieldValue, true);
     documentStatus = document?.status as any;
     // Should be disabled while submitting if group levels changes while adding/editing PO items
-    disabled = disabled || loading || isSubmitting;
+    disabled = disabled || loading || formik?.isSubmitting;
 
     disabledOptions = [];
     if (formState?.inputState.get(name)?.value.length) {

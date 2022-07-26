@@ -69,7 +69,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
   return (
     <Box mt={3}>
       <CustomLabelTooltip tooltipConfig={revisionTooltipConfig}>
-        <Typography variant="h6">
+        <Typography variant="h6" className={classes.labelTitle}>
           <Text
             message={revisionSelectLabel}
           />
@@ -82,13 +82,18 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             <CustomLabelTooltip tooltipConfig={revisionLevelTooltipConfig}>
               <>
                 <RadioButton
-                  label={<Text message={nextRevisionLevelLabel} />}
+                  label={
+                    <Typography variant="body1" className={classes.labelSubTitle}>
+                      <Text message={nextRevisionLevelLabel} />
+                    </Typography>}
                   value={RevisionChangeType.NextRevision}
                   id="RevisionTypeChange-nextRevision"
                   disabled={isDisabled}
                   className={classes.label}
                 />
-                {generateVersionPrediction(RevisionChangeType.NextRevision)}
+                <Typography variant="body1" display="inline" className={classes.labelSubTitle}>
+                  {generateVersionPrediction(RevisionChangeType.NextRevision)}
+                </Typography>
               </>
             </CustomLabelTooltip>
           }
@@ -100,7 +105,9 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
               <>
                 <RadioButton
                   label={
-                    <Text message={nextRevisionStageLabel} />
+                    <Typography variant="body1" className={classes.labelSubTitle}>
+                      <Text message={nextRevisionStageLabel} />
+                    </Typography>
                   }
                   data-cy="upgradeNextRevisionStage"
                   value={RevisionChangeType.NextRevisionStage}
@@ -108,7 +115,9 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
                   disabled={isDisabled}
                   className={classes.label}
                 />
-                {generateVersionPrediction(RevisionChangeType.NextRevisionStage)}
+                <Typography variant="body1" display="inline" className={classes.labelSubTitle}>
+                  {generateVersionPrediction(RevisionChangeType.NextRevisionStage)}
+                </Typography>
               </>
             </CustomLabelTooltip>
           }
@@ -119,7 +128,10 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             <CustomLabelTooltip tooltipConfig={obsoleteTooltipConfig }>
               <>
                 <RadioButton
-                  label={<Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />}
+                  label={
+                    <Typography variant="body1" className={classes.labelSubTitle}>
+                      <Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />
+                    </Typography>}
                   value={RevisionChangeType.Obsolete}
                   id="RevisionTypeChange-obsolete"
                   disabled={isDisabled}
@@ -136,7 +148,10 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             <CustomLabelTooltip tooltipConfig={administrationTooltipConfig}>
               <>
                 <RadioButton
-                  label={<Text message={administrationChangeLabel} />}
+                  label={
+                    <Typography variant="body1" className={classes.labelSubTitle}>
+                      <Text message={administrationChangeLabel} />
+                    </Typography>}
                   value={RevisionChangeType.AdministrativeChange}
                   id="RevisionTypeChange-administrativeChange"
                   data-cy="RevisionTypeChange-administrativeChange"

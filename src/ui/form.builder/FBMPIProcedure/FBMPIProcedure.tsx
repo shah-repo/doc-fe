@@ -1,7 +1,10 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBInput, FBMapWrapper, FBMPIProcedureItem, FBMPIProcedureProps, FBProcedureItemType, FBProvider, FBTextEditor } from "..";
+import { FBInput, FBMapWrapper, FBMPIProcedureItem, FBMPIProcedureProps, FBProcedureItemType, FBProvider, FBTextEditor } from "..";
+import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
+import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/add_filled.svg";
+import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/clone_filled.svg";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedure } from "./FBMPIProcedure.wrap";
 
@@ -22,28 +25,31 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
 }) => (
   <FBInput {...props } {...{ name }} type="mpiprocedure">
     <Box
-      pb={3}
-      mt={-2.7}
+      pb={3.8}
+      mt={1.75}
       color={Colors.hint_gray}
-      borderBottom={2}
+      borderBottom={1}
     >
       <FBProvider {...{ mpiProcedureState }}>
+        {/* TODO: As per design editor title and button should be in line */}
         {!isPreview && (
-          <Box display="flex" flexDirection="row-reverse" mb={1} mt={2.5}>
-            <FBButton
-              label="form.builder.clone.step"
-              style={{ textTransform: "none", margin: 0 }}
-              size="small"
-              onClick={() => handleAdd?.(true)}
-              {...{ disabled }}
-            />
-            <FBButton
-              label="form.builder.add.step"
-              style={{ textTransform: "none", margin: 0, marginRight: 4 }}
-              size="small"
-              onClick={() => handleAdd?.()}
-              {...{ disabled }}
-            />
+          <Box display="flex" flexDirection="row-reverse" mt={3.125}>
+            <StyledTooltip placement="top" title="form.builder.clone.step">
+              <CloneIcon
+                data-cy="form.builder.clone.step"
+                onClick={() => handleAdd?.(true)}
+                {...{ disabled }}
+                style={{ marginLeft: "5px", cursor: "pointer" }}
+              />
+            </StyledTooltip>
+            <StyledTooltip placement="top" title="form.builder.add.step">
+              <AddNewIcon
+                data-cy="form.builder.add.step"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleAdd?.()}
+                {...{ disabled }}
+              />
+            </StyledTooltip>
           </Box>
         )}
         <FBTextEditor
@@ -56,20 +62,20 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             locale: "form.builder.step.number",
             values: { number: stepIndex },
           }}
-          boxProps={{ style: { color: Colors.black } }}
+          boxProps={{ style: { color: Colors.black, fontSize: 14 } }}
           withState
+          removeBorder={isPreview}
         />
         <Box
           display="flex"
           flexDirection="column"
           borderColor={Colors.hint_gray}
           ml={isPreview ? 0 : 1.5}
-          mt={1}
           border={isPreview ? 0 : 1}
           borderTop={0}
           borderRight={0}
           borderBottom={0}
-          pb={7.5}
+          pb={0}
         >
           <FBMapWrapper<string[]> collection={types}>
             {(type, index) => (
@@ -77,15 +83,16 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                 key={`fb-procedure-item-${type}-${index}`}
                 display="flex"
                 flexDirection="row"
-                mt={5}
+                mt={3.8}
+
               >
+
                 {!isPreview && (
                   <Box
-                    width={10}
-                    mr={1}
+                    width={11.51}
                     mt={2.7}
-                    border={0.5}
-                    borderColor={Colors.hint_gray}
+                    border={1}
+                    borderColor={Colors.chinese_silver}
                     borderBottom={0}
                     borderLeft={0}
                     borderRight={0}
@@ -108,11 +115,10 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             )}
           </FBMapWrapper>
         </Box>
-        <Box display="flex" flexDirection="row" mt={-2.7} ml={isPreview ? 0 : 1.5}>
+        <Box display="flex" flexDirection="row" mt={3.8} ml={isPreview ? 0 : 1.5}>
           {!isPreview && (
             <Box
               width={10}
-              mr={1}
               mt={2.7}
               border={0.5}
               borderColor={Colors.hint_gray}

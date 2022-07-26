@@ -79,7 +79,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         );
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    ), [ebId]);
 
     React.useEffect(() => reaction(
       () => formState?.inputState.get("childForRevise")?.value,

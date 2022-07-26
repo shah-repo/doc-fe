@@ -23,7 +23,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     const { document: docRev, externalState } = workspaceState || {};
     const docTypeId = docRev?.document.documentType.id || "";
     const documentTypesById = externalState?.documentType?.byId;
-    const docGroupOptions = documentTypesById[docTypeId]?.groupOptions;
+    const docGroupOptions = documentTypesById?.[docTypeId]?.groupOptions;
     const outputDocumentTypes = docRev?.outputDocumentTypes?.map((type) =>
       documentTypesById[type.value]);
     const isDocumentForm = checkIsDocumentForm(docGroupOptions);

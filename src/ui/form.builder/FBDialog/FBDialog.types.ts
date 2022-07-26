@@ -15,4 +15,5 @@ export type FBDialogProps =
   actions?: React.ReactNode;
   portalAction?: Element;
   portalTitle?: Element;
+  showLeftPanelEditor?: boolean;
 };

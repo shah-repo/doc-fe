@@ -53,10 +53,12 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "tabId"
 > & {
   validators?: Dictionary<any>;
+  tabId?: string;
 };
 
 export interface FBSchemaComponentProps {
   workspaceMode?: FBWorkspaceMode;
   schema?: FBSchemaProps[];
+  showAllTabs?: boolean;
   schemaState?: FBSchemaState;
 }

@@ -290,12 +290,14 @@ context("LHR Build type flow", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
+                tabId: "details",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
+                tabId: "details",
                 index: 1,
                 stepIndex: 1,
                 applicableOn: [
@@ -327,6 +329,7 @@ context("LHR Build type flow", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -344,6 +347,7 @@ context("LHR Build type flow", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -361,6 +365,7 @@ context("LHR Build type flow", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -378,6 +383,7 @@ context("LHR Build type flow", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -465,6 +471,7 @@ context("LHR Build type flow", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -479,6 +486,7 @@ context("LHR Build type flow", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -493,6 +501,7 @@ context("LHR Build type flow", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -506,6 +515,7 @@ context("LHR Build type flow", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -516,6 +526,7 @@ context("LHR Build type flow", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -534,6 +545,7 @@ context("LHR Build type flow", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ksherq6d",
@@ -787,6 +799,10 @@ context("LHR Build type flow", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -809,11 +825,6 @@ context("LHR Build type flow", () => {
       cy.poAddDateRequired();
     });
 
-    it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-
-    });
-
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
@@ -821,6 +832,11 @@ context("LHR Build type flow", () => {
 
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
+      cy.wait(5000);
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Approve record", () => {
@@ -828,7 +844,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
     });
   });
 
@@ -922,7 +938,8 @@ context("LHR Build type flow", () => {
 
       context("Enable notes in LHR step", () => {
         it("Click edit on LHR step", () => {
-          cy.get("[data-cy=\"edit-schema-item\"]").eq(2).arrowClick({ force: true });
+          cy.drSelectDetailsTab();
+          cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         });
 
         it("Check 'Include Notes' checkbox", () => {
@@ -935,6 +952,14 @@ context("LHR Build type flow", () => {
       });
 
       context("Select created MPI in LHR template", () => {
+        it("Select Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+        });
+
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
@@ -1004,6 +1029,14 @@ context("LHR Build type flow", () => {
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
     });
 
     it("Click 'START MPI'", () => {

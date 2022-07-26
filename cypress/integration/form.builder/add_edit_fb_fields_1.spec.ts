@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -17,7 +18,7 @@ let employeeLoginFirst;
 let formId;
 let arId;
 let emailsFromInbox;
-const pages = ["", "", "", "", ""];
+const pages = ["", "", "", "", "", ""];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -121,7 +122,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add TextField", () => {
       cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
@@ -130,21 +131,21 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add section field", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Section" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
       cy.fbEnterLabel({ label: "fb-section" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Subsection", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Subsection" });
       cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Checkbox group", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
@@ -156,7 +157,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Autocomplete with Document Revision", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-revision" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
       cy.fbAddNewFieldButton();
@@ -164,7 +165,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Autocomplete with Parts", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-parts" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Parts");
       cy.fbAddNewFieldButton();
@@ -172,7 +173,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Autocomplete with Document Approvers", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-approvers" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
       cy.fbAddNewFieldButton();
@@ -180,21 +181,21 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Text Editor", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Date picker", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Hyperlink", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Hyperlink" });
       cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
       cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
       cy.fbAddNewFieldButton();
@@ -202,7 +203,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Select Field", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Select" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
@@ -210,7 +211,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Radio Button group", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -225,7 +226,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Paragraph", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
         .click({ force: true }).clear().arrowType("fb-paragraph");
       cy.fbAddNewFieldButton();
@@ -233,7 +234,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add File Upload", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
@@ -241,78 +242,72 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Blank Template Form", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
       cy.elUploadAttachment({ fileName: "TestTemplate.json", el: "fb-attachment-field-fb-blank-template-" });
     });
 
-    it("Add Step", () => {
-      cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Step" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-step" });
-      cy.fbAddNewFieldButton();
-    });
-
     it("Add Quantity", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Timer", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).arrowClick();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Timer" });
       cy.fbEnterNameValue({ name: "label", value: "fb-timer" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Purchase Order", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Purchase Order" });
       cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Receive Purchase Order", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
       cy.fbEnterNameValue({ name: "label", value: "fb-receive-purchase-order" });
-      cy.fbAddNewFieldButton();
-    });
-
-    it("Add Approval Matrix", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add PO Approval Matrix", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "PO Approval Matrix" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
       cy.fbEnterNameValue({ name: "label", value: "fb-po-approval-matrix" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Instructions Media upload", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Evidence Media upload", () => {
-      cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
     });
 
+    it("Add Step", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Step" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-step" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Add EB Procedure", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "EB Procedure" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.fbAddNewFieldButton();
     });
 
@@ -431,11 +426,6 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Edit Approval Matrix", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "Approval Roles" });
-      cy.fbAddNewFieldButton();
-    });
-
     it("Edit PO Approval Matrix", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-po-approval-matrix" });
       cy.fbEnterNameValue({ name: "label", value: "fb-po-approval-matrix1" });
@@ -540,10 +530,6 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("fb-receive-purchase-order1").should("exist");
     });
 
-    it("Verify Approval Matrix", () => {
-      cy.contains("Approval Roles").should("exist");
-    });
-
     it("Verify PO Approval Matrix", () => {
       cy.contains("fb-po-approval-matrix1").should("exist");
     });
@@ -560,12 +546,12 @@ context("Add and edit FB fields - Test 1", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify EB Procedure", () => {
       cy.contains("Step #1").should("exist");
     });
-
 
     it("Save document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -573,8 +559,8 @@ context("Add and edit FB fields - Test 1", () => {
       });
     });
 
-    it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "New Document Revision" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -719,9 +705,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/STEP #1\nDescription/);
 
-        expect(el).match(/Attachments\nMaterials\nEquipment/);
-
-        expect(el).match(/fb-instructions1/);
+        expect(el).match(/Attachments\nMaterials/);
 
         expect(el).match(/Draft/);
 
@@ -744,18 +728,19 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/Equipment/);
+
+        expect(el).match(/FB-STEP #1/);
+
+        expect(el).match(/fb-evidence/);
+
+        expect(el).match(/fb-instructions1/);
+
         expect(el).match(/video.mp4/);
 
         expect(el).match(/FB-PO-APPROVAL-MATRIX1/);
 
         expect(el).match(/LEVEL NAMELIMITSIGNATURE 1SIGNATURE 2SIGNATURE 3/);
-
-        expect(el).match(/APPROVAL ROLES/);
-
-        expect(el).match(/APPROVAL MATRIX/);
-
-        // eslint-disable-next-line max-len
-        expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);
 
         expect(el).match(/Draft/);
 
@@ -780,7 +765,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Purchase Orders/);
 
-        expect(el).match(/ITEMPART NUMBERSUPPLIER PART NUMBERDESCRIPTIONORDEREDRECEIPT QTYUNITSTAXSUM/);
+        expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITSTAXSUM/);
 
         expect(el).match(/fb-quantity1/);
 
@@ -791,15 +776,6 @@ context("Add and edit FB fields - Test 1", () => {
         expect(el).match(/fb-fileupload1/);
 
         expect(el).match(/fb-paragraph1/);
-
-        tmpRegex = new RegExp( `fb-radiobutton-group1\n(.*)option1(.*)option2`, "gi" );
-        expect(el).match(tmpRegex);
-
-        expect(el).match(/fb-select-field1\nfb-hyperlink1/);
-
-        expect(el).match(/fb-datepicker1/);
-
-        expect(el).match(/fb-text-editor1/);
 
         expect(el).match(/Draft/);
 
@@ -822,22 +798,23 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
+        tmpRegex = new RegExp( `fb-radiobutton-group1\n(.*)option1(.*)option2`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/fb-select-field1\nfb-hyperlink1/);
+
+        expect(el).match(/fb-datepicker1/);
+
+        expect(el).match(/fb-text-editor1/);
+
         expect(el).match(/fb-autocomplete-doc-approvers1/);
 
         expect(el).match(/fb-autocomplete-parts1/);
 
         expect(el).match(/fb-autocomplete-doc-revision1/);
 
-        tmpRegex = new RegExp( `fb-checkbox-group1\n(.*)\n(.*)\n(.*)\n(.*)\noption1 option2`, "gi" );
+        tmpRegex = new RegExp( `fb-checkbox-group1\nFB-SUBSECTION1\nFB-SECTION1\noption1 option2`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/FB-SUBSECTION1/);
-
-        expect(el).match(/FB-SECTION1/);
-
-        expect(el).match(/FB-STEP #1/);
-
-        expect(el).match(/fb-evidence/);
 
         expect(el).match(/Draft/);
 
@@ -883,8 +860,8 @@ context("Add and edit FB fields - Test 1", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "New Document Revision" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -1035,9 +1012,8 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/STEP #1\nDescription/);
 
-        expect(el).match(/Attachments\nMaterials\nEquipment/);
+        expect(el).match(/Attachments\nMaterials/);
 
-        expect(el).match(/fb-instructions1/);
 
         expect(el).match(/Released/);
 
@@ -1060,18 +1036,19 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/Equipment/);
+
+        expect(el).match(/FB-STEP #1/);
+
+        expect(el).match(/fb-evidence/);
+
+        expect(el).match(/fb-instructions1/);
+
         expect(el).match(/video.mp4/);
 
         expect(el).match(/FB-PO-APPROVAL-MATRIX1/);
 
         expect(el).match(/LEVEL NAMELIMITSIGNATURE 1SIGNATURE 2SIGNATURE 3/);
-
-        expect(el).match(/APPROVAL ROLES/);
-
-        expect(el).match(/APPROVAL MATRIX/);
-
-        // eslint-disable-next-line max-len
-        expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);
 
         expect(el).match(/Released/);
 
@@ -1096,7 +1073,7 @@ context("Add and edit FB fields - Test 1", () => {
 
         expect(el).match(/Purchase Orders/);
 
-        expect(el).match(/ITEMPART NUMBERSUPPLIER PART NUMBERDESCRIPTIONORDEREDRECEIPT QTYUNITSTAXSUM/);
+        expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITSTAXSUM/);
 
         expect(el).match(/fb-quantity1/);
 
@@ -1107,15 +1084,6 @@ context("Add and edit FB fields - Test 1", () => {
         expect(el).match(/fb-fileupload1/);
 
         expect(el).match(/fb-paragraph1/);
-
-        tmpRegex = new RegExp( `fb-radiobutton-group1\n(.*)option1(.*)option2`, "gi" );
-        expect(el).match(tmpRegex);
-
-        expect(el).match(/fb-select-field1\nfb-hyperlink1/);
-
-        expect(el).match(/fb-datepicker1/);
-
-        expect(el).match(/fb-text-editor1/);
 
         expect(el).match(/Released/);
 
@@ -1138,22 +1106,23 @@ context("Add and edit FB fields - Test 1", () => {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
         expect(el).match(tmpRegex);
 
+        tmpRegex = new RegExp( `fb-radiobutton-group1\n(.*)option1(.*)option2`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/fb-select-field1\nfb-hyperlink1/);
+
+        expect(el).match(/fb-datepicker1/);
+
+        expect(el).match(/fb-text-editor1/);
+
         expect(el).match(/fb-autocomplete-doc-approvers1/);
 
         expect(el).match(/fb-autocomplete-parts1/);
 
         expect(el).match(/fb-autocomplete-doc-revision1/);
 
-        tmpRegex = new RegExp( `fb-checkbox-group1\n(.*)\n(.*)\n(.*)\n(.*)\noption1 option2`, "gi" );
+        tmpRegex = new RegExp( `fb-checkbox-group1\nFB-SUBSECTION1\nFB-SECTION1\noption1 option2`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/FB-SUBSECTION1/);
-
-        expect(el).match(/FB-SECTION1/);
-
-        expect(el).match(/FB-STEP #1/);
-
-        expect(el).match(/fb-evidence/);
 
         expect(el).match(/Released/);
 

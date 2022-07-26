@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -72,7 +72,7 @@ const ApiTokenContent: React.FunctionComponent = () => {
   );
 
   return (
-    <>
+    <Box>
       <Typography variant="h6" style={{ marginBottom: 15, marginTop: 15 }}>
         <Text translation="user.management.api.token" />
       </Typography>
@@ -94,7 +94,7 @@ const ApiTokenContent: React.FunctionComponent = () => {
         tableName={TABLE_NAME}
         disableApiToken={disableApiToken}
       />
-    </>
+    </Box>
   );
 };
 

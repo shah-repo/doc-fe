@@ -74,7 +74,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   };
   return (
     <>
-      <StyledListItem button onMouseEnter={onMouseHoverListItem}>
+      <StyledListItem button onMouseEnter={onMouseHoverListItem} className={classes.buttoncursor} disableRipple>
         <ListItemIcon>
           <EQIcon height={30} width={30} />
         </ListItemIcon>
@@ -164,7 +164,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           >
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
@@ -175,6 +175,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -188,7 +189,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
         )}

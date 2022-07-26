@@ -1,4 +1,5 @@
 import { FBDialogState, FBFormProps, FBSchemaProps, FBSnackbarState, FBWorkspaceState } from "..";
+import { SMProviderProps } from "../../../App";
 import { UserGroupsState, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { Company } from "../../../state/ducks/company/types";
@@ -12,8 +13,18 @@ export type FBWorkspaceMode =
 | "preview"
 | "formDesign";
 
+export enum FBWorkspaceModeOptions {
+  NONE = "none",
+  DESIGN = "design",
+  FORM = "form",
+  FORMPREVIEW = "formPreview",
+  PREVIEW = "preview",
+  FORMDESIGN = "formDesign"
+}
+
 export type FBWorkspaceProps =
 & Pick<FBFormProps, "initialValues" | "children">
+& Pick<SMProviderProps, "_tabsState">
 & {
   workspaceState?: FBWorkspaceState;
   dialogState?: FBDialogState;
@@ -30,6 +41,7 @@ export type FBWorkspaceProps =
   includeProcedureDiff?: boolean;
   // Temp portal flag. This will be removed once the RichTextEditor double mounting is fixed
   isPortal?: boolean;
+  isStarterRequired?: () => boolean;
 };
 
 export interface FBWorkspaceExternalState {

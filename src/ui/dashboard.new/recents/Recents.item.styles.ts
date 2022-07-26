@@ -6,6 +6,9 @@ export const styles = makeStyles(() =>
     link: {
       color: Colors.black,
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     truncateText: {
       textOverflow: "ellipsis",
       overflow: "hidden",

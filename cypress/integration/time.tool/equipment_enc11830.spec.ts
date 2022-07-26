@@ -4,6 +4,7 @@
 
 import "moment-timezone";
 import moment from "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -170,6 +171,7 @@ context("Autocomplete 'Equipment' test", () => {
                     type: "section",
                     index: 0,
                     label: "Maintenance Details",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -181,6 +183,7 @@ context("Autocomplete 'Equipment' test", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Equipment",
+                    tabId: "details",
                     rules: "required",
                     optionId: "20",
                     placeholder: "[Select revision here]",
@@ -196,6 +199,7 @@ context("Autocomplete 'Equipment' test", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Maintainer",
+                    tabId: "details",
                     rules: "required",
                     optionId: "13",
                     placeholder: "[Select name here]",
@@ -211,6 +215,7 @@ context("Autocomplete 'Equipment' test", () => {
                     type: "datepicker",
                     index: 3,
                     label: "Completion Date",
+                    tabId: "details",
                     rules: "required",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -224,6 +229,7 @@ context("Autocomplete 'Equipment' test", () => {
                     type: "textfield",
                     index: 4,
                     label: "Equipment Maintenance Section",
+                    tabId: "details",
                     rules: "required",
                     hidden: true,
                     applicableOn: [
@@ -235,6 +241,7 @@ context("Autocomplete 'Equipment' test", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-kybkhbpt",
@@ -299,6 +306,7 @@ context("Autocomplete 'Equipment' test", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -310,6 +318,7 @@ context("Autocomplete 'Equipment' test", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -325,6 +334,7 @@ context("Autocomplete 'Equipment' test", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -340,6 +350,7 @@ context("Autocomplete 'Equipment' test", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -353,6 +364,7 @@ context("Autocomplete 'Equipment' test", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -364,6 +376,7 @@ context("Autocomplete 'Equipment' test", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",
@@ -428,30 +441,25 @@ context("Autocomplete 'Equipment' test", () => {
         cy.drSelectOutputDocumentType({ documentType: "Equipment" });
       });
 
-      it("Add autocomplete of 'Approvers' and set validation", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
-        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
-        cy.fbOpenValidation();
-        cy.fbFieldRequired();
-        cy.fbAddField();
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
       });
 
       it("Add select field and set validation ", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Select" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field" });
         cy.fbGroupOptions("option1", "option2");
-        cy.fbOpenValidation();
-        cy.get("input[value^=\"visibility\"]").check();
-        cy.fbFieldRequiredIf({ name: "Autocomplete-Approvers", value: USERS[1].email });
         cy.fbAddField();
       });
 
       it("EQUIPMENT SECTIONS FOR PM", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
         cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
         cy.fbAddField();
@@ -459,10 +467,28 @@ context("Autocomplete 'Equipment' test", () => {
 
       it("EQUIPMENT SECTIONS FOR CAL", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "Calibration" });
         cy.get("input[value=\"calibration\"]").arrowClick();
         cy.fbAddField();
+      });
+
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add Autocomplete", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.fbAddNewFieldButton();
+        });
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -477,7 +503,7 @@ context("Autocomplete 'Equipment' test", () => {
       });
 
       it("Click create document", () => {
-        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.wait("@response").then((res) => {
           if (res.response) {
@@ -495,7 +521,7 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Verify form Draft status", () => {
     it("Verify form Draft status", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
     });
   });
@@ -508,7 +534,7 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Verify form Released status", () => {
     it("Verify form Released status", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: equipmentTitleForm });
     });
   });
@@ -542,8 +568,8 @@ context("Autocomplete 'Equipment' test", () => {
       cy.unClick();
     });
 
-    it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
     });
 
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
@@ -554,10 +580,6 @@ context("Autocomplete 'Equipment' test", () => {
     it(`Select '${USERS[2].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
-    });
-
-    it("Autocomplete-Approvers", () => {
-      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -608,6 +630,22 @@ context("Autocomplete 'Equipment' test", () => {
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
+
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Select 'Active' as EQ status", () => {
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+    });
+
+    it("Autocomplete-Approvers", () => {
+      cy.get(`input[data-cy^="autocomplete-approvers"]`).autocompleteSelect(`${USERS[2].name }`);
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
   });
 
   context("Approve and release document", () => {
@@ -619,9 +657,9 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify equipment Released status and header information", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Equipment document" });
-      cy.get("[id=\"HeaderInfo-docId\"]").should("have.text", equipmentDocId );
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", equipmentDocId );
     });
   });
 
@@ -640,21 +678,20 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Fill new calbration form", () => {
+    it("Switch to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
     it("Click 'NEW CAL' on calibration section", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaFieldName}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
 
     it("Enter title 'Calibration document'", () => {
@@ -667,6 +704,14 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select revision stage 'Numeric'", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -691,7 +736,15 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Create 'Calibration document' and approve", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add an Approval", () => {
@@ -722,8 +775,7 @@ context("Autocomplete 'Equipment' test", () => {
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
+          CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
@@ -739,6 +791,14 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select revision stage 'Numeric'", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -762,7 +822,11 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Create 'Preventative Maintenance' and approve it", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Add an Approval", () => {
@@ -984,7 +1048,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify Primary owner did not received notification as 'Preventative Maintenance will be due in 30 days'", () => {
-      dashboardDueDate = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(11, "days").format("MMM DD");
+      dashboardDueDate = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(11, "days").format("MMM D");
       cy.dashVerifyListItemNotExistsOnDashboard({
         listItem:
         `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days${dashboardDueDate}`,
@@ -1125,7 +1189,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify the Dashboard notification as 'Due for Calibration in 7 days'", () => {
-      dashboardDueDate = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MMM DD");
+      dashboardDueDate = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MMM D");
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
         `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days${dashboardDueDate}`,
@@ -1184,7 +1248,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify the Dashboard notification as 'Due for Calibration in 7 days'", () => {
-      dashboardDueDate = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MMM DD");
+      dashboardDueDate = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MMM D");
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
         `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 7 days${dashboardDueDate}`,
@@ -1234,6 +1298,10 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select first Equipment on list", () => {
       cy.dlSelectFirstDocument();
+    });
+
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
     });
 
     it("CAL status should update to CAL Due", () => {
@@ -1308,7 +1376,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify the Dashboard notification not received as 'Preventative Maintenance will be due in 7 days'", () => {
-      dashboardDueDate = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(34, "days").format("MMM DD");
+      dashboardDueDate = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(34, "days").format("MMM D");
       cy.dashVerifyListItemNotExistsOnDashboard({
         listItem:
         `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 7 days${dashboardDueDate}`,
@@ -1416,6 +1484,10 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Select first Equipment on list", () => {
       cy.dlSelectFirstDocument();
+    });
+
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
     });
 
     it("PM status should update to PM Due", () => {
