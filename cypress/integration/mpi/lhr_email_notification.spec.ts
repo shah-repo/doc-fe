@@ -378,7 +378,10 @@ context("LHRs email notifications", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
