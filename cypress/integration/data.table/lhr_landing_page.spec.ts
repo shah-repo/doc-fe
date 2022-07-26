@@ -900,6 +900,7 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "FM-00004");
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.dlClearFilters();
+        cy.wait(2000);
       });
 
       it("Verify filter for State", () => {
@@ -1016,7 +1017,6 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${state}`);
       });
     });
-
 
     context("Verify dropdown filters", () => {
       it("Verify ID dropdown filters", () => {
