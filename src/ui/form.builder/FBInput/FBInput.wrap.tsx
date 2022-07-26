@@ -88,6 +88,7 @@ export const withFBInput = <T extends FBInputProps>(
     const intl = useIntl();
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
+    let oldState = formState;
 
     const feedbackDetails = useLocalStore(() => ({
       error, helperText,
@@ -103,7 +104,8 @@ export const withFBInput = <T extends FBInputProps>(
     }, []);
 
     useObserver(() => {
-      if (!formState) { return; }
+      if (!formState || JSON.stringify(oldState) === JSON.stringify(formState)) { return; }
+      oldState = formState;
       formState.validate();
     });
 
