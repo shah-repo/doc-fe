@@ -358,15 +358,13 @@ Cypress.Commands.add("fbClickButton", (params: { el: string }) => {
 });
 
 Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
-  cy.get(`input[name^="${params.name}"`).parent().trigger("mouseover").wait(500);
-  cy.get(`input[name^="${params.name}"`).parent().scrollIntoView({ offset: { top: -100, left: 0 } });
+  cy.get(`input[name^="${params.name}"`).parent().trigger("mouseover").scrollIntoView({ offset: { top: -100, left: 0 } });
 });
 
 Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
-  cy.contains(params.label).parent().trigger("mouseover");
-  cy.contains(params.label).parent().scrollIntoView({ offset: { top: -100, left: 0 } });
+  cy.contains(params.label).parent().trigger("mouseover").scrollIntoView({ offset: { top: -100, left: 0 } });
 });
 
 Cypress.Commands.add("fbVerifyElementVisibile", (params: { name: string; el: string }) => {
