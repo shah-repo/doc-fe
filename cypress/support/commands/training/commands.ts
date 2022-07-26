@@ -29,6 +29,7 @@ declare global {
       trLandingPagetrId(params: { trId: string }): Chainable<Subject>;
       trLandingPageDynamicParams(params: { dynamicParams: string }): Chainable<Subject>;
       trSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
+      setTimeTravelToComplete(params: { tasktype: string; days: string; status: string }): Chainable<Subject>;
     }
   }
 }
@@ -164,3 +165,17 @@ Cypress.Commands.add("trSetTimeTravelInDays", (params: {days: number}) => {
   cy.wait(1000);
   cy.listLoadingElementShouldNotExist();
 });
+
+Cypress.Commands.add(
+  "setTimeTravelToComplete",
+  (params: { tasktype: string; days: string; status: string }) => {
+    cy.reload();
+    cy.progressBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+    cy.get(`tr[data-grid-row-index="0"]`)
+      .find("td")
+      .should("contain.text", params.tasktype)
+      .and("contain.text", params.days)
+      .and("contain.text", params.status);
+  }
+);
