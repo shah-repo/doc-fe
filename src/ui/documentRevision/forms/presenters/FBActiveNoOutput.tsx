@@ -145,6 +145,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   // Temp
   const documentRevision = _documentRevisionFormState?.documentRevision;
   let schema = revisionFormSchema;
+  const isOwner = true;
+  const onTabChange = (_ev, newValue, tabConfig) => {
+    _tabsState?.setValue(newValue);
+    _tabsState?.setTabID(tabConfig[newValue].tabId);
+  };
 
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
@@ -158,7 +163,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   const documentTypeId = formValues.values.document?.documentType?.id || "";
   // const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const isAttachmentEmpty = !((documentRevision?.attachments?.length || 0) > 1);
   const isCurrentUserOperator = React.useContext(isOperator);
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
 
@@ -210,13 +215,6 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
-
-  // Temp
-  const isOwner = true;
-  const onTabChange = (_ev, newValue, tabConfig) => {
-    _tabsState?.setValue(newValue);
-    _tabsState?.setTabID(tabConfig[newValue].tabId);
-  };
 
   const dialogState = FB.useRef<FBDialogState>(FBDialogState);
   const handlePreview: React.MouseEventHandler = () => {
