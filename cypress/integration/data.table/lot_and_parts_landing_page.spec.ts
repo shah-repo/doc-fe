@@ -883,6 +883,7 @@ context("Test Lots and Parts landing page", () => {
       cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
       cy.landingPageLoadingElementShouldAppear();
       cy.get("tr.k-grouping-row").should("not.exist");
+      cy.wait(2000);
     });
 
     it(`Verify Lot can be opened`, () => {
