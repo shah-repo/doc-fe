@@ -1048,6 +1048,7 @@ context("Owner submits LHR for approval", () => {
     });
 
     it(`User 1 can remove ${USERS[3].name} approver`, () => {
+      cy.wait(5000);
       cy.contains(USERS[3].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
     });
 
