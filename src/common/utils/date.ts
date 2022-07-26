@@ -1,7 +1,7 @@
 import moment from "moment";
 import "moment-timezone";
 
-export const TIME_ZONE = "America/Los_Angeles";
+export const TIME_ZONE =  moment.tz.guess();
 
 type DateTypes = Date | string | number | undefined;
 
