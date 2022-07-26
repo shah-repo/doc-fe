@@ -1,4 +1,4 @@
-import { debounce, isEmpty, pick, set } from "lodash";
+import { debounce, get, has, isEmpty, map, pick, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DocumentRevisionSummary } from "../../App";
@@ -9,6 +9,7 @@ import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
+import { FBDAMFields } from "../form.builder";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
 import FBStore from "../form.builder/FBStore/FBStore";
@@ -104,6 +105,21 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       set(values, "formInput.formInput", formStateContext?._currentValue);
     }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    const formInput = get(dataToSubmit, "formInput");
+    if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)
+    && get(formInput, FBDAMFields.DAR).length === 1) {
+      const approvalRoles = get(formInput, FBDAMFields.DAR);
+      const approvalMatrix = map(get(formInput, FBDAMFields.DAM), (am) => {
+        map(new Array(approvalRoles.length), (_, i) => {
+          am.approvalRoles.stage1[i] = am.approvalRoles.stage1[i] || false;
+          am.approvalRoles.stage2[i] = am.approvalRoles.stage2[i] || false;
+          am.approvalRoles.stage3[i] = am.approvalRoles.stage3[i] || false;
+          am.approvalRoles.admStage[i] = am.approvalRoles.admStage[i] || false;
+        });
+        return am;
+      });
+      set(dataToSubmit, "formInput", { [FBDAMFields.DAR]: approvalRoles, [FBDAMFields.DAM]: approvalMatrix });
+    }
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
     if (redlineActive) {
