@@ -101,7 +101,6 @@ Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
-
 Cypress.Commands.add("ebSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev], () => {
