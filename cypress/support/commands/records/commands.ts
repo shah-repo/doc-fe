@@ -35,7 +35,6 @@ declare global {
         employeeId: string;
         sessionId: string;}): Chainable<Subject>;
       equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
-      recSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
     }
   }
 }
@@ -231,16 +230,4 @@ Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {
   () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   });
-});
-
-Cypress.Commands.add("recSetTimeTravelInDays", (params: {days: number}) => {
-  cy.navigToAsyncTasks();
-  cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-  cy.asyncSelectBackToTheFutureTime({ day: params.days });
-  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH });
-  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
-  cy.asyncTaskClickSubmit();
-  cy.progressBarShouldNotExist();
-  cy.wait(1000);
-  cy.listLoadingElementShouldNotExist();
 });
