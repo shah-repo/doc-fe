@@ -250,6 +250,9 @@ context("Record inline approval dates flow", () => {
 
       it("Send request for approval", () => {
         cy.get("[data-cy=\"form.builder.request.approval\"]").arrowClick();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("The owner should have a notification that Record rev 1 is for approval of User 2", () => {
