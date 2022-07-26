@@ -50,7 +50,7 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
 });
 
 Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
-  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").arrowClick({ force: true }).wait(1000);
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
