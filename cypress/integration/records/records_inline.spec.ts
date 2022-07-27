@@ -842,6 +842,8 @@ context("Record inline Flow", () => {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recDocId}`,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
@@ -990,7 +992,11 @@ context("Record inline Flow", () => {
       });
 
       it("Click on 'Details' tab", () => {
-        cy.drSelectDetailsTab();
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.GetFieldLocks,
+        ], () => {
+          cy.drSelectDetailsTab();
+        });
       });
 
       it("Check system creates new major revision after inline approve", () => {
