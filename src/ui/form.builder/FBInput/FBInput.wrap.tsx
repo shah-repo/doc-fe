@@ -116,7 +116,7 @@ export const withFBInput = <T extends FBInputProps>(
         feedbackDetails.helperText = errorName;
       });
       return disposeAutorun;
-    }, []);
+    }, [formState?.errors]);
 
     value = inputState?.value;
     includeContext = inputState?.includeContext;
