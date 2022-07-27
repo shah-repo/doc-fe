@@ -22,7 +22,7 @@ import {
 } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
-import { getActiveDocumentTypes, toDocumentRevisionFormValues } from "../transform";
+import { getActiveDocumentTypes } from "../transform";
 import RenderHtmlField from "./RenderHtmlField";
 import {
   FBProvider,
@@ -36,6 +36,7 @@ import Text from "../../../components/Text";
 import { ReactComponent as PreviewIcon } from "../../../../assets/images/preview.svg";
 import Colors from "../../../layout/theme/utils/colors";
 import useAsync from "../../../hooks/useAsync";
+import { DocumentRevisionFormValues } from "../types";
 
 interface Props {
   status: DocumentRevisionStatus;
@@ -125,8 +126,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   };
 
   // Temp
-  const documentRevision = _documentRevisionFormState?.documentRevision;
-  const initialValues = toDocumentRevisionFormValues(documentRevision as DocumentRevision);
+  const documentRevision = get(formik, "values") as DocumentRevision;
+  documentRevision.schema = revisionFormSchema;
+
+  // const documentRevision = _documentRevisionFormState?.documentRevision;
+  const initialValues = documentRevision as unknown as DocumentRevisionFormValues;
   const async = useAsync<DocumentRevision>({});
 
   const dialogState = FB.useRef<FBDialogState>(FBDialogState);
@@ -143,7 +147,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
             onSubmit={console.log}
             initialValues={initialValues}
             onDirtyFlagChange={console.log}
-            documentRevision={documentRevision as DocumentRevision}
+            documentRevision={documentRevision}
             canChangeOwnerShip={false}
             showRevisionTypeChange
             isNewVersion={true}
