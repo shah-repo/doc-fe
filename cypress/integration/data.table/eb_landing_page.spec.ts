@@ -652,6 +652,7 @@ context("Test Engineering Build landing page", () => {
       cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
       cy.landingPageLoadingElementShouldAppear();
       cy.get("tr.k-grouping-row").should("not.exist");
+      cy.wait(2000);
     });
 
     it(`Verify EB can be opened`, () => {
@@ -776,7 +777,6 @@ context("Test Engineering Build landing page", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${state}`);
       });
     });
-
 
     context("Verify dropdown filters", () => {
       it("Verify EB ID dropdown filters", () => {
