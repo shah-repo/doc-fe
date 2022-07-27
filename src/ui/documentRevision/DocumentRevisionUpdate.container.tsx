@@ -20,6 +20,7 @@ import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
+import { checkIsDocumentDAM } from "./helpers/checkDocumentGroup";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
 interface Props {
@@ -104,10 +105,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
       set(values, "formInput.formInput", formStateContext?._currentValue);
     }
-    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    let dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     const formInput = get(dataToSubmit, "formInput");
-    if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)
-    && get(formInput, FBDAMFields.DAR).length === 1) {
+    const orgDataToSubmit: any = dataToSubmit;
+    if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)) {
       const approvalRoles = get(formInput, FBDAMFields.DAR);
       const approvalMatrix = map(get(formInput, FBDAMFields.DAM), (am) => {
         map(new Array(approvalRoles.length), (_, i) => {
@@ -119,6 +120,19 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         return am;
       });
       set(dataToSubmit, "formInput", { [FBDAMFields.DAR]: approvalRoles, [FBDAMFields.DAM]: approvalMatrix });
+    } else if (checkIsDocumentDAM(documentRevision.document.documentType.groupOptions) &&
+      !has(formInput, FBDAMFields.DAM)) {
+      const updatedData = {
+        ...dataToSubmit,
+        formInput: { ...cleanInitialValues.formInput, ...orgDataToSubmit.formInput },
+      };
+      dataToSubmit = updatedData;
+    }
+    if (checkIsDocumentDAM(documentRevision.document.documentType.groupOptions)) {
+      dataToSubmit = {
+        ...dataToSubmit,
+        formInput: { ...cleanInitialValues.formInput, ...orgDataToSubmit.formInput },
+      };
     }
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
