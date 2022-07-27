@@ -953,9 +953,7 @@ Cypress.Commands.add("drVerifyDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("drClickRevisionsSidePanel", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-    cy.get(`button[data-cy="note-icon"]`).arrowClick();
-  });
+  cy.get(`button[data-cy="note-icon"]`).arrowClick();
 });
 
 Cypress.Commands.add("drPatchDocType", (params: {
