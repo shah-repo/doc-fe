@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -103,7 +104,7 @@ context("Document voiding Flow", () => {
   context("Document in DRAFT", () => {
     it("Checks if document status is DRAFT after creating a document", () => {
       SystemRequirement("REQ-0020");
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Checks if Revison Change Type does not contain OBSOLETE option", () => {
@@ -115,7 +116,7 @@ context("Document voiding Flow", () => {
       it("Clicks on VOID button in header menu ", () => {
         SystemRequirement("REQ-2800");
         cy.get("#HeaderMenuButton").arrowClick();
-        cy.get("#void").arrowClick();
+        cy.get("[data-cy=\"void-button\"]").arrowClick();
         cy.get("#AlertDialog-continueButton").arrowClick();
         cy.checkToastMessage({ exists: false });
       });
@@ -125,7 +126,7 @@ context("Document voiding Flow", () => {
   context("Document in VOIDED", () => {
     it("Checks if document status is VOIDED after voiding a document", () => {
       SystemRequirement("REQ-0020");
-      cy.drCheckDocumentStatus({ status: "Voided" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 });

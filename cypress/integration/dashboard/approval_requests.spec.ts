@@ -390,7 +390,8 @@ context("Approval request form", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arClickSendToReview();
-      cy.arVerifyStatus({ status: "In Review" });
+      cy.wait(1000);
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Goto dashboard", () => {
@@ -617,8 +618,8 @@ context("Approval request form", () => {
         .find(".MuiGrid-root").eq(2).find("a").arrowClick();
     });
 
-    it("Status should be 'Draft'", () => {
-      cy.arVerifyStatus({ status: "Draft" });
+    it("Status should be 'DRAFT'", () => {
+      cy.arVerifyStatus({ status: "DRAFT" });
     });
 
     it("Click 'Send To Review'", () => {
@@ -788,8 +789,8 @@ context("Approval request form", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status is 'In Review'", () => {
-      cy.arVerifyStatus({ status: "In Review" });
+    it("Verify AR status is 'IN_REVIEW'", () => {
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Goto dashboard", () => {
@@ -1107,17 +1108,13 @@ context("Approval request form", () => {
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wait(5000);
       cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).eq(0)
-        .should("contain.text", "TIME_TRAVEL_COMPANY");
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="3"]`).eq(0)
-        .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
       cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
         .should("contain.text", "COMPLETE");
-      cy.wait(5000);
     });
   });
 

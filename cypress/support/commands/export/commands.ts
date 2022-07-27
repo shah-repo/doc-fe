@@ -28,11 +28,17 @@ Cypress.Commands.add("exportVerifyEmail", (params: { status: string; filename: s
   let downloadFile;
   const dateOffset = (5 * 1000);
 
-  cy.get("#HeaderInfo-status").should("have.text", params.status);
-  cy.get("#HeaderInfo-docId").then(($x) => {
+  cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
+  cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
     recordId = $x.text();
     dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
-    cy.sendToEmail();
+    cy.get("body").then(($body) => {
+      if ($body.find("[data-cy=\"HeaderMenuButton\"]").length) {
+        cy.sendToEmail();
+      } else {
+        cy.sendToEmailFromHeader();
+      }
+    });
     cy.checkToastMessageContains({
       message: "File will be sent to your email shortly.",
     });
@@ -88,7 +94,6 @@ Cypress.Commands.add("inlineApproval", () => {
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.PostApprovalsApprove,
-    CyRoutes.GetDocAggregatedAudit,
     CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
@@ -106,8 +111,8 @@ Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename:
   let downloadFile;
   const dateOffset = (5 * 1000);
 
-  cy.get("#HeaderInfo-status").should("have.text", params.status);
-  cy.get("#HeaderInfo-docId").then(($x) => {
+  cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
+  cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
     recordId = $x.text();
     dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
     cy.sendToEmail();

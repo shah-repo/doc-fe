@@ -11,9 +11,11 @@ const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: 
     <a
       href={`/document_revision/${documentId}/version/${docRevId}`}
       target={"_self"}
+      style={{ textDecoration: "none" }}
       rel="noopener noreferrer">
       {label.length < LABEL_LENGTH ? label : `${label.substr(0, LABEL_LENGTH - 3)}...`}
-    </a>);
+    </a>
+  );
 
 const generateLHRSubtitle = (documentRevision: DocumentRevision) => <React.Fragment>
   {`${documentRevision.document?.lot?.lotId}`}
@@ -30,16 +32,10 @@ const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
     ?.precalc
     ?.[LHR_SUBTITLE_PRECALC_KEY];
 
-  const partLink = subtitle?.part?.docRevId && subtitle?.part?.documentId && generateDocRevUrl(subtitle.part);
   const lhrLink = subtitle?.lhr?.docRevId && subtitle?.lhr?.documentId && generateDocRevUrl(subtitle.lhr);
-  const lotLabel = subtitle?.lot?.label && <span>{subtitle?.lot?.label}</span>;
 
   return <React.Fragment>
-    {lotLabel}
-    {lhrLink && " | "}
     {lhrLink}
-    {partLink && " | "}
-    {partLink}
   </React.Fragment>;
 };
 

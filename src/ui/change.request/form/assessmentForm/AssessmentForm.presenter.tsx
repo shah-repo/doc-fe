@@ -1,7 +1,8 @@
 import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
+import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncState } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/RichTextEditor";
@@ -10,10 +11,12 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
+import DocumentRevisionOutputInfo from "../../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
+import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useDidMount from "../../../hooks/useDidMount";
-import FormHeader from "../../form/assessmentForm/FormHeader";
 import { ChangeRequestFormValues } from "../types";
 import styles from "./AssessmentForm.styles";
+import FormHeader from "./FormHeader";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -22,6 +25,8 @@ interface Props
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
+  sidebar?: ReactNode;
+  chosenForm?: FBDocumentRevisionProps;
 }
 
 export let formIdContext = React.createContext<string | undefined>(undefined);
@@ -39,6 +44,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   values,
   FBContainer,
   doNotPrompt,
+  chosenForm,
+  sidebar,
 }) => {
   const formContext = useFormContext();
   const didMount = useDidMount();
@@ -57,36 +64,46 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <FormHeader {...{ changeRequest, asyncState }}/>
-      <FormWrapper
-        dirty={dirty}
-        resetForm={resetForm}
-        initialValues={initialValues}
-      >
-        <ScrollToError
-          isSubmitting={isSubmitting}
-          isValidating={isValidating}
-          errors={errors}
-        />
-        <PromptIfDirty
-          dirty={dirty}
-          doNotPrompt={doNotPrompt}
-        />
-        <Box>
-          <InputField
-            name="title"
-            label="common.title"
-            inputProps={{ id: "title", multiline: true, rows: "2" }}
-            validate={validator(required)}
-          />
-          <TextEditorField
-            data-testid="description"
-            name="description"
-            label="common.description"
-            validate={validator(required)}
-          />
-          <div ref={FBContainer} />
+      <Box width="100%" height="100%" display="flex" marginTop={1.25}>
+        <Box width="100%" px="34px" height="calc(100vh - 132px)" overflow="auto" className="hide-scroll">
+          <FormWrapper
+            dirty={dirty}
+            resetForm={resetForm}
+            initialValues={initialValues}
+          >
+            <ScrollToError
+              isSubmitting={isSubmitting}
+              isValidating={isValidating}
+              errors={errors}
+            />
+            <PromptIfDirty
+              dirty={dirty}
+              doNotPrompt={doNotPrompt}
+            />
+            <Box>
+              <InputField
+                name="title"
+                label="common.title"
+                inputProps={{ id: "title", multiline: true, rows: "2" }}
+                validate={validator(required)}
+                labelProps={AutoCompleteStyles.labelStyle}
+              />
+              <TextEditorField
+                data-testid="description"
+                name="description"
+                label="common.description"
+                validate={validator(required)}
+                labelProps={AutoCompleteStyles.labelStyle}
+              />
+              <div ref={FBContainer} />
+              <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument} />
+            </Box>
+          </FormWrapper>
         </Box>
-      </FormWrapper>
+        <Box height="80vh">
+          {sidebar}
+        </Box>
+      </Box>
     </div>
   );
 };

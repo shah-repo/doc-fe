@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-export const SIDEBAR_WIDTH = 300;
+const SIDEBAR_WIDTH = 300;
 
 export default makeStyles((theme: Theme) =>
   createStyles({
@@ -56,6 +56,18 @@ export default makeStyles((theme: Theme) =>
       "margin": "8px 13px 13px 11px",
       "paddingTop": "5px",
       "paddingBottom": "5px",
+      "&:hover, &:focus, li.active > a": {
+        "background": Colors.light_blue,
+        "borderRadius": "5px",
+        "& svg": {
+          stroke: Colors.medium_blue,
+        },
+      },
+      "& svg": {
+        stroke: Colors.hint_gray,
+      },
+    },
+    iconButtonNew: {
       "&:hover, &:focus, li.active > a": {
         "background": Colors.light_blue,
         "borderRadius": "5px",

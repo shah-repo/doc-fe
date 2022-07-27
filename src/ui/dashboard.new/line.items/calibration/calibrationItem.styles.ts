@@ -9,6 +9,9 @@ export const styles = makeStyles(() =>
     listItemIcon: {
       paddingLeft: "10px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     actionIcons: {
       display: "flex",
       flexDirection: "row",
@@ -21,6 +24,9 @@ export const styles = makeStyles(() =>
       right: "0px",
       top: "0px",
       background: Colors.sky_blue,
+    },
+    cursorPointer: {
+      cursor: "pointer",
     },
     actionIcon: {
       paddingLeft: "10px",

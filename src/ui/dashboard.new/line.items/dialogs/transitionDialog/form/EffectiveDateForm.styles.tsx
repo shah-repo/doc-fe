@@ -27,7 +27,6 @@ export default () =>
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",
-      textTransform: "uppercase",
       color: Colors.white,
     },
     pendingBox: {
@@ -83,7 +82,6 @@ export default () =>
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",
-      textTransform: "uppercase",
       color: Colors.white,
     },
     ScheduleIcon: {

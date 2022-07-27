@@ -1,6 +1,7 @@
-import { debounce, isEmpty, pick } from "lodash";
+import { debounce, isEmpty, pick, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { DocumentRevisionSummary } from "../../App";
 import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
 import { authSelectors } from "../../state/ducks/auth";
 import { companyActions, companySelectors } from "../../state/ducks/company";
@@ -8,8 +9,8 @@ import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
-import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
+import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
 import FBStore from "../form.builder/FBStore/FBStore";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
@@ -69,11 +70,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator) )) {
     return (
-      <DocumentRevisionSummaryPresenter
-        dataProp={documentRevision}
-        canShowCreateVersionButton={true}
-        canChangeOwnerShip={canChangeOwnerShip}
-      />
+      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }}/>
     );
   }
 
@@ -101,6 +98,11 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   };
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
+    // Hack to take updated formInput
+    const formStateContext = FBFormStateContext as any;
+    if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
+      set(values, "formInput.formInput", formStateContext?._currentValue);
+    }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 

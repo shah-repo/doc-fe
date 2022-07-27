@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -28,6 +29,16 @@ let LHRtDocumentType;
 let LHRDocumentType;
 let createdLHRtDocument;
 let developersGroup;
+
+const lot = "LOT #";
+const state = "STATE";
+const owner = "OWNER";
+const partNumberRev = "PART NUMBER/REV";
+const completionDate = "COMPLETION DATE";
+const startQuantity = "START QUANTITY";
+const endQuantity = "END QUANTITY";
+const template = "TEMPLATE";
+const id = "ID";
 
 context("Test LHR landing page", () => {
   before(() => {
@@ -228,6 +239,7 @@ context("Test LHR landing page", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
+                tabId: "details",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
@@ -235,6 +247,7 @@ context("Test LHR landing page", () => {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
+                tabId: "details",
                 stepIndex: 1,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -269,6 +282,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -286,6 +300,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -303,6 +318,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -320,6 +336,7 @@ context("Test LHR landing page", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -387,6 +404,7 @@ context("Test LHR landing page", () => {
                 type: "partsselection",
                 index: 0,
                 label: "Part to be Manufactured",
+                tabId: "overview",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
                 editorConfig: {
@@ -398,6 +416,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 1,
                 label: "Initial Quantity",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -411,6 +430,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 2,
                 label: "End Quantity",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -425,6 +445,7 @@ context("Test LHR landing page", () => {
                 type: "radiogroup",
                 index: 3,
                 label: "Build Type",
+                tabId: "overview",
                 options: [
                   {
                     text: "R&D",
@@ -449,6 +470,7 @@ context("Test LHR landing page", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Due Date",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -461,6 +483,7 @@ context("Test LHR landing page", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -474,6 +497,7 @@ context("Test LHR landing page", () => {
               {
                 label: "form.builder.approvals",
                 type: "approvals",
+                tabId: "overview",
                 deleteDisabled: true,
                 name: "fb-approvals-kvateryo",
                 uniqueSchemaItem: true,
@@ -805,15 +829,15 @@ context("Test LHR landing page", () => {
     });
 
     it("Verify all columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "LOT #");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "State");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Owner");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Part Number/Rev");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Completion Date");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Start Quantity");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "End Quantity");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Template");
-      cy.get(`th[role="columnheader"]`).eq(8).should("have.text", "ID");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${lot}`);
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${state}`);
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${partNumberRev}`);
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${completionDate}`);
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${startQuantity}`);
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", `${endQuantity}`);
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", `${template}`);
+      cy.get(`th[role="columnheader"]`).eq(8).should("have.text", `${id}`);
     });
 
     it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
@@ -859,7 +883,7 @@ context("Test LHR landing page", () => {
 
     it(`Verify LHR can be opened`, () => {
       cy.dlSelectFirstDocument();
-      cy.arVerifyStatus({ status: "WIP" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.WIP });
     });
 
     it(`Verify LHR count`, () => {
@@ -876,6 +900,7 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "FM-00004");
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.dlClearFilters();
+        cy.wait(2000);
       });
 
       it("Verify filter for State", () => {
@@ -964,35 +989,34 @@ context("Test LHR landing page", () => {
 
     context("Verify hide and freeze", () => {
       it("Verify hide on State", () => {
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${state}`);
         cy.get(`th[aria-colindex="2"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${state}`);
       });
 
       it("Verify unhide on State", () => {
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${state}`);
         cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
-        cy.get("ul>li[role=menuitem]").contains("STATE").parents("li").find("svg").arrowClick();
+        cy.get("ul>li[role=menuitem]").contains(`${state}`).parents("li").find("svg").arrowClick();
         cy.get("body").type("{esc}");
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${state}`);
       });
 
       it("Verify freeze on State", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${state}`);
         cy.get(`th[aria-colindex="2"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${state}`);
       });
 
       it("Verify un-freeze on State", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${state}`);
         cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${state}`);
       });
     });
-
 
     context("Verify dropdown filters", () => {
       it("Verify ID dropdown filters", () => {

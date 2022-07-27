@@ -28,8 +28,8 @@ let clinicalProtocolDocumentType;
 let createdClinicalProtocolForm;
 let developersGroup;
 let createdClinicalProtocolForm2;
-const assignDate = moment().tz("America/Los_Angeles").format("l");
-const dueDate = moment().tz("America/Los_Angeles").add(1, "month").subtract(1, "days").format("l");
+const assignDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
+const dueDate = moment().tz("America/Los_Angeles").add(30, "days").format("M/D/YYYY");
 
 context("Test training records and training curriculum landing page", () => {
   before(() => {
@@ -445,6 +445,7 @@ context("Test training records and training curriculum landing page", () => {
                 type: "section",
                 index: 0,
                 label: "Periodic Training",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -457,6 +458,7 @@ context("Test training records and training curriculum landing page", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Documents to Train on",
+                tabId: "details",
                 rules: "|required",
                 multiple: true,
                 optionId: "36",
@@ -479,6 +481,7 @@ context("Test training records and training curriculum landing page", () => {
                 type: "radiogroup",
                 index: 2,
                 label: "Refresh/repeat training periodically?",
+                tabId: "details",
                 rules: "required||",
                 options: [
                   {
@@ -501,6 +504,7 @@ context("Test training records and training curriculum landing page", () => {
                 type: "quantity",
                 index: 3,
                 label: "Training Frequency (in days)",
+                tabId: "details",
                 rules: "required_if:training-refresh-training-periodically,Yes",
                 validators: {
                   required_if: {
@@ -522,6 +526,7 @@ context("Test training records and training curriculum landing page", () => {
                 type: "section",
                 index: 4,
                 label: "Trainees Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -534,6 +539,7 @@ context("Test training records and training curriculum landing page", () => {
                 type: "autocomplete",
                 index: 5,
                 label: "Groups to Train",
+                tabId: "details",
                 multiple: true,
                 optionId: "10",
                 placeholder: "Select groups",
@@ -552,6 +558,7 @@ context("Test training records and training curriculum landing page", () => {
                 type: "autocomplete",
                 index: 6,
                 label: "Users to Train (if applicable)",
+                tabId: "details",
                 multiple: true,
                 optionId: "13",
                 placeholder: "Select users",
@@ -567,6 +574,7 @@ context("Test training records and training curriculum landing page", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-l0wcpa0v",
@@ -738,13 +746,13 @@ context("Test training records and training curriculum landing page", () => {
     it("Verify all columns are present", () => {
       SystemRequirement("REQ-2810");
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "TRN ID");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Doc ID");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Revision");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Document Title");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Trainee");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Assign Date");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Due date");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Completed On");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "DOC ID");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "REVISION");
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "DOCUMENT TITLE");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "TRAINEE");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "ASSIGN DATE");
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "DUE DATE");
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "COMPLETED ON");
       cy.get(`th[role="columnheader"]`).eq(8).should("have.text", "TC ID");
     });
 
@@ -754,12 +762,14 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     it(`Verify drag and drop TRN ID header on second slot`, () => {
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TRN-");
+      cy.get(`th>span>span>span[class="k-column-title"]`).eq(0).should("contain.text", "TRN ID");
+      cy.get(`th[aria-colindex="1"][role="columnheader"]>span>span`).contains("TRN ID");
+      cy.get(`th[aria-colindex="2"][role="columnheader"]>span>span`).contains("DOC ID");
       cy.dragAndDrop({
-        fromSelector: `th[aria-colindex="1"][role]>span>span`,
-        toSelector: `th[aria-colindex="2"][role]>span>span`,
+        fromSelector: `th[aria-colindex="1"][role="columnheader"]>span>span`,
+        toSelector: `th[aria-colindex="2"][role="columnheader"]>span>span`,
       });
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "FM-");
+      cy.get(`th>span>span>span[class="k-column-title"]`).eq(0).should("contain.text", "DOC ID");
     });
 
     it(`Column grouping should be displayed`, () => {
@@ -793,7 +803,7 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     context("Verify sorting arrows on each field", () => {
-      it("Verify sorting arrow for Doc ID", () => {
+      it("Verify sorting arrow for DOC ID", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should("exist");
@@ -819,7 +829,7 @@ context("Test training records and training curriculum landing page", () => {
           .should("have.text", "TRN-00006TRN-00005TRN-00004TRN-00003TRN-00002TRN-00001");
       });
 
-      it("Verify sorting arrow for Revision", () => {
+      it("Verify sorting arrow for REVISION", () => {
         cy.get(`td[data-grid-col-index="2"]`)
           .should("have.text", "111111");
         cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
@@ -834,7 +844,7 @@ context("Test training records and training curriculum landing page", () => {
           .should("have.text", "111111");
       });
 
-      it("Verify sorting arrow for Document title", () => {
+      it("Verify sorting arrow for DOCUMENT TITLE", () => {
         cy.get(`th[aria-colindex="4"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="4"] span.k-i-sort-asc-sm`).should("exist");
@@ -849,7 +859,7 @@ context("Test training records and training curriculum landing page", () => {
         "Form2 document for trainingForm2 document for trainingForm2 document for trainingForm2 document for training");
       });
 
-      it("Verify sorting arrow for Trainee", () => {
+      it("Verify sorting arrow for TRAINEE", () => {
         cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="5"] span.k-i-sort-asc-sm`).should("exist");
@@ -864,7 +874,7 @@ context("Test training records and training curriculum landing page", () => {
         "GRGiovanni ReynoldsEWEda WalkerABAthena Block");
       });
 
-      it("Verify sorting arrow for Assign Date", () => {
+      it("Verify sorting arrow for ASSIGN DATE", () => {
         cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
@@ -877,7 +887,7 @@ context("Test training records and training curriculum landing page", () => {
           .should("have.text", `${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}`);
       });
 
-      it("Verify sorting arrow for Due Date", () => {
+      it("Verify sorting arrow for DUE DATE", () => {
         cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
@@ -890,7 +900,7 @@ context("Test training records and training curriculum landing page", () => {
           .should("have.text", `${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}`);
       });
 
-      it("Verify sorting arrow for Completed On", () => {
+      it("Verify sorting arrow for COMPLETED ON", () => {
         cy.get(`th[aria-colindex="8"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="8"] span.k-i-sort-asc-sm`).should("exist");
@@ -918,7 +928,7 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     context("Verify filters on each field", () => {
-      it("Verify filter for Doc ID", () => {
+      it("Verify filter for DOC ID", () => {
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00004");
         cy.landingPageLoadingElementShouldAppear();
@@ -934,7 +944,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Revision", () => {
+      it("Verify filter for REVISION", () => {
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType("1");
         cy.landingPageLoadingElementShouldAppear();
@@ -942,7 +952,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Document Title", () => {
+      it("Verify filter for DOCUMENT TITLE", () => {
         cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="4"] input`).arrowType("Form2 document for training");
         cy.landingPageLoadingElementShouldAppear();
@@ -950,7 +960,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Trainee", () => {
+      it("Verify filter for TRAINEE", () => {
         cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="5"] input`).arrowType("Athena Block");
         cy.landingPageLoadingElementShouldAppear();
@@ -958,7 +968,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Assign Date", () => {
+      it("Verify filter for ASSIGN DATE", () => {
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="6"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
@@ -967,7 +977,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Due Date", () => {
+      it("Verify filter for DUE DATE", () => {
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="7"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Due in 7 days").arrowClick();
@@ -981,7 +991,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Completed On", () => {
+      it("Verify filter for COMPLETED ON", () => {
         cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="8"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Pending").arrowClick();
@@ -1014,33 +1024,33 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     context("Verify hide and freeze", () => {
-      it("Verify hide on Document Title", () => {
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Document Title");
+      it("Verify hide on DOCUMENT TITLE", () => {
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "DOCUMENT TITLE");
         cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Document Title");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "DOCUMENT TITLE");
       });
 
-      it("Verify unhide on Document Title", () => {
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Document Title");
+      it("Verify unhide on DOCUMENT TITLE", () => {
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "DOCUMENT TITLE");
         cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
         cy.get("ul>li[role=menuitem]").contains("DOCUMENT TITLE").parents("li").find("svg").arrowClick();
         cy.get("body").type("{esc}");
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Document Title");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "DOCUMENT TITLE");
       });
 
-      it("Verify freeze on Document Title", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Document Title");
+      it("Verify freeze on DOCUMENT TITLE", () => {
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "DOCUMENT TITLE");
         cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Document Title");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "DOCUMENT TITLE");
       });
 
-      it("Verify un-freeze on Document Title", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Document Title");
+      it("Verify un-freeze on DOCUMENT TITLE", () => {
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "DOCUMENT TITLE");
         cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Document Title");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "DOCUMENT TITLE");
       });
     });
 
@@ -1172,11 +1182,11 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     it("Verify all columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Training Curriculum ID");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Title");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Owner");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "State");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Group");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "TRAINING CURRICULUM ID");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "TITLE");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "OWNER");
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "STATE");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "GROUP");
     });
 
     it(`Verify buttons "Clear Filter" and "Export List" are present`, () => {
@@ -1184,7 +1194,7 @@ context("Test training records and training curriculum landing page", () => {
       cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
     });
 
-    it(`Verify drag and drop Training Curriculum ID header on second slot`, () => {
+    it(`Verify drag and drop TRAINING CURRICULUM ID header on second slot`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TCT-");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
@@ -1211,9 +1221,9 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     it(`Verify training curriculum could be open`, () => {
-      cy.get("#HeaderInfo-docId").should("not.exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("not.exist");
       cy.trSelectFirstDocument();
-      cy.get("#HeaderInfo-docId").should("exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("exist");
       cy.navigToTrainingCurriculums();
       cy.get("div[role=dialog]").should("not.exist");
     });
@@ -1241,7 +1251,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it("Verify sorting arrow for Training Curriculum ID", () => {
+      it("Verify sorting arrow for TRAINING CURRICULUM ID", () => {
         cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="2"] span.k-i-sort-asc-sm`).should("exist");
@@ -1254,7 +1264,7 @@ context("Test training records and training curriculum landing page", () => {
           .should("have.text", "TCT-00002TCT-00001");
       });
 
-      it("Verify sorting arrow for Owner", () => {
+      it("Verify sorting arrow for OWNER", () => {
         cy.get(`td[data-grid-col-index="2"]`)
           .should("have.text", "GRGiovanni ReynoldsGRGiovanni Reynolds");
         cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
@@ -1269,7 +1279,7 @@ context("Test training records and training curriculum landing page", () => {
           .should("have.text", "GRGiovanni ReynoldsGRGiovanni Reynolds");
       });
 
-      it("Verify sorting arrow for State", () => {
+      it("Verify sorting arrow for STATE", () => {
         cy.get(`td[data-grid-col-index="3"]`)
           .should("have.text", "ReleasedReleased");
         cy.get(`th[aria-colindex="4"] span.k-column-title`).arrowClick();
@@ -1284,7 +1294,7 @@ context("Test training records and training curriculum landing page", () => {
           .should("have.text", "ReleasedReleased");
       });
 
-      it("Verify sorting arrow for Group", () => {
+      it("Verify sorting arrow for GROUP", () => {
         cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="5"] span.k-i-sort-asc-sm`).should("exist");
@@ -1307,7 +1317,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Training Curriculum ID", () => {
+      it("Verify filter for TRAINING CURRICULUM ID", () => {
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).arrowType("TCT-00002");
         cy.landingPageLoadingElementShouldAppear();
@@ -1315,7 +1325,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Owner", () => {
+      it("Verify filter for OWNER", () => {
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType("Giovanni Reynolds");
         cy.landingPageLoadingElementShouldAppear();
@@ -1323,7 +1333,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Document State", () => {
+      it("Verify filter for DOCUMENT STATE", () => {
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="4"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Released").arrowClick();
@@ -1332,7 +1342,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Group", () => {
+      it("Verify filter for GROUP", () => {
         cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="5"] input`).arrowType("Everyone");
         cy.landingPageLoadingElementShouldAppear();
@@ -1352,45 +1362,45 @@ context("Test training records and training curriculum landing page", () => {
     });
 
     context("Verify hide and freeze", () => {
-      it("Verify hide on State", () => {
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "State");
+      it("Verify hide on STATE", () => {
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "STATE");
         cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "STATE");
       });
 
-      it("Verify unhide on State", () => {
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "State");
+      it("Verify unhide on STATE", () => {
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "STATE");
         cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
         cy.get("ul>li[role=menuitem]").contains("STATE").parents("li").find("svg").arrowClick();
         cy.get("body").type("{esc}");
-        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "State");
+        cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "STATE");
       });
 
-      it("Verify freeze on State", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "State");
+      it("Verify freeze on STATE", () => {
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "STATE");
         cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "STATE");
       });
 
-      it("Verify un-freeze on State", () => {
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "State");
+      it("Verify un-freeze on STATE", () => {
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "STATE");
         cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "State");
+        cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "STATE");
       });
     });
 
 
     context("Verify dropdown filters", () => {
-      it("Verify Training Curriculum ID dropdown filters", () => {
+      it("Verify TRAINING CURRICULUM ID dropdown filters", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
 
-      it(`Verify Training Curriculum ID "Does not contain" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("2");
@@ -1400,7 +1410,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Training Curriculum ID "Is equal to" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Is equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
@@ -1411,7 +1421,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Training Curriculum ID "Is not equal to" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Is not equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
@@ -1422,7 +1432,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Training Curriculum ID "Starts with" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Starts with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
@@ -1433,7 +1443,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Training Curriculum ID "Ends with" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Ends with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
@@ -1444,7 +1454,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Training Curriculum ID "Is null" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
@@ -1454,7 +1464,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Training Curriculum ID "Is not null" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
@@ -1464,8 +1474,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-
-      it(`Verify Training Curriculum ID "Is empty" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Is empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
@@ -1475,7 +1484,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-      it(`Verify Training Curriculum ID "Is not empty" dropdown filter`, () => {
+      it(`Verify TRAINING CURRICULUM ID "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();

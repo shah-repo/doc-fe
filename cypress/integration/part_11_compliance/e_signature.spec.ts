@@ -179,7 +179,6 @@ context("E-signature test", () => {
       cy.usrEnterName({ name: nameOfFirstUserToSignUp });
     });
 
-
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
       cy.checkToastMessage({ exists: false });
@@ -235,7 +234,6 @@ context("E-signature test", () => {
       cy.usrEnterName({ name: nameOfSecondUserToSignUp });
     });
 
-
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
       cy.checkToastMessage({ exists: false });
@@ -290,7 +288,6 @@ context("E-signature test", () => {
     it("Enters name", () => {
       cy.usrEnterName({ name: nameOfThirdUserToSignUp });
     });
-
 
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
@@ -409,7 +406,7 @@ context("E-signature test", () => {
     });
 
     it("Enters description 'EB description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "EB description" });
+      cy.drEnterDocumentDescription({ description: "EB description" });
     });
 
     it("Add first approver to EB document", () => {
@@ -420,11 +417,13 @@ context("E-signature test", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
       cy.wait(500);
     });
+
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
+
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -697,6 +696,10 @@ context("E-signature test", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Check user names and emails of approvers on old revision are not changed", () => {
         SystemRequirement("REQ-4060");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
@@ -710,6 +713,10 @@ context("E-signature test", () => {
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(emailOfFirstUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(emailOfSecondUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(emailOfThirdUserToSignUp);
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Go back to new revision of EB, add approver", () => {

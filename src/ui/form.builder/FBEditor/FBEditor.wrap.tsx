@@ -13,7 +13,7 @@ export const withFBEditor = <T extends FBEditorProps>(
   }: T) => {
 
     const { workspaceState } = FB.useStores();
-    editorState = FB.useRef<FBEditorState>(FBEditorState);
+    editorState = editorState || FB.useRef<FBEditorState>(FBEditorState);
     isFormOutput = workspaceState?.mode === "formDesign";
 
     useObserver(() => {

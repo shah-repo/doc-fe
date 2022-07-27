@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -440,6 +441,7 @@ context("Test for multiple TCs and users have different due dates", () => {
                 type: "section",
                 index: 0,
                 label: "Periodic Training",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -452,6 +454,7 @@ context("Test for multiple TCs and users have different due dates", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Documents to Train on",
+                tabId: "details",
                 rules: "|required",
                 multiple: true,
                 optionId: "36",
@@ -474,6 +477,7 @@ context("Test for multiple TCs and users have different due dates", () => {
                 type: "radiogroup",
                 index: 2,
                 label: "Refresh/repeat training periodically?",
+                tabId: "details",
                 rules: "required||",
                 options: [
                   {
@@ -496,6 +500,7 @@ context("Test for multiple TCs and users have different due dates", () => {
                 type: "quantity",
                 index: 3,
                 label: "Training Frequency (in days)",
+                tabId: "details",
                 rules: "required_if:training-refresh-training-periodically,Yes",
                 validators: {
                   required_if: {
@@ -517,6 +522,7 @@ context("Test for multiple TCs and users have different due dates", () => {
                 type: "section",
                 index: 4,
                 label: "Trainees Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -529,6 +535,7 @@ context("Test for multiple TCs and users have different due dates", () => {
                 type: "autocomplete",
                 index: 5,
                 label: "Groups to Train",
+                tabId: "details",
                 multiple: true,
                 optionId: "10",
                 placeholder: "Select groups",
@@ -547,6 +554,7 @@ context("Test for multiple TCs and users have different due dates", () => {
                 type: "autocomplete",
                 index: 6,
                 label: "Users to Train (if applicable)",
+                tabId: "details",
                 multiple: true,
                 optionId: "13",
                 placeholder: "Select users",
@@ -562,6 +570,7 @@ context("Test for multiple TCs and users have different due dates", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-l0wcpa0v",
@@ -602,7 +611,7 @@ context("Test for multiple TCs and users have different due dates", () => {
   });
 
   context("Create a document", () => {
-    it("Doc1 with Released status", () => {
+    it(`Doc1 with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
       cy.navigToDocumentList();
       cy.cmpClickCreateNewDocument();
       cy.drEnterDocumentTitle({ name: "released doc1" });
@@ -616,8 +625,8 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get(`[data-cy="HeaderInfo-docId"]`).then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 
@@ -651,6 +660,14 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document 'released doc1' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
@@ -668,12 +685,22 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -686,8 +713,8 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -782,6 +809,10 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document 'released doc1' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
@@ -799,12 +830,22 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[6].name}`);
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
@@ -817,8 +858,8 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.pmSubmitForApproval();
     });
 
-    it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+    it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Click Approve", () => {
@@ -902,7 +943,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
   });
 
@@ -912,7 +953,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
   });
 
@@ -948,7 +989,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it("Click on due tag", () => {
@@ -960,10 +1001,10 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Check if pop-up modal has due trainings with 2 users", () => {
-      cy.get("h2").eq(1).should("contain.text", "DUE IN 7 DAYS (2)");
+      cy.get("h2").eq(1).should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (2)`);
       cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[2].name)
         .and("contain.text", USERS[3].name);
-      cy.get("h2").eq(1).should("contain.text", "DUE IN 7 DAYS (2)");
+      cy.get("h2").eq(1).should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (2)`);
       cy.get("button[aria-label=close]").eq(0).arrowClick();
     });
 
@@ -1024,13 +1065,13 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
   });
 
-  context("Notification for all users with 'DUE IN 7 DAYS' tag", () => {
+  context(`Notification for all users with ${TrainingStatus.DUE_IN_7_DAYS} tag`, () => {
     it(`Login as ${USERS[2].name}`, () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it(`Login as ${USERS[3].name}`, () => {
@@ -1038,7 +1079,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it(`Login as ${USERS[4].name}`, () => {
@@ -1046,7 +1087,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it(`Login as ${USERS[6].name}`, () => {
@@ -1054,7 +1095,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
   });
 
@@ -1070,7 +1111,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it("Click on due tag", () => {
@@ -1082,12 +1123,12 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Check if pop-up modal has due trainings with 4 users", () => {
-      cy.get("h2").eq(1).should("contain.text", "DUE IN 7 DAYS (4)");
+      cy.get("h2").eq(1).should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (4)`);
       cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[2].name)
         .and("contain.text", USERS[3].name)
         .and("contain.text", USERS[4].name)
         .and("contain.text", USERS[6].name);
-      cy.get("h2").eq(1).should("contain.text", "DUE IN 7 DAYS (4)");
+      cy.get("h2").eq(1).should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (4)`);
       cy.get("button[aria-label=close]").eq(0).arrowClick();
     });
 
@@ -1174,7 +1215,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.contains("DUE IN 7 DAYS").should("exist");
+      cy.contains(TrainingStatus.DUE_IN_7_DAYS).should("exist");
     });
 
     it(`Login as ${USERS[6].name}`, () => {
@@ -1182,7 +1223,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.contains("DUE IN 7 DAYS").should("exist");
+      cy.contains(TrainingStatus.DUE_IN_7_DAYS).should("exist");
     });
   });
 
@@ -1198,7 +1239,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification for due", () => {
-      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it("Click on due tag", () => {
@@ -1235,7 +1276,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification for overdue", () => {
-      cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", "OVERDUE");
+      cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 
     it("Click on overdue tag", () => {
@@ -1337,7 +1378,7 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    it("'Due in 7 days' should not exist", () => {
+    it(`${TrainingStatus.DUE_IN_7_DAYS} should not exist`, () => {
       cy.contains("Due in 7 days").should("not.exist");
     });
 
@@ -1346,7 +1387,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.contains("OVERDUE").should("exist");
+      cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
     it(`Login user as ${USERS[6].name}`, () => {
@@ -1354,7 +1395,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification", () => {
-      cy.contains("DUE IN 7 DAYS").should("exist");
+      cy.contains(TrainingStatus.DUE_IN_7_DAYS).should("exist");
     });
   });
 
@@ -1370,7 +1411,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification for due", () => {
-      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
+      cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
     it("Click on due tag", () => {
@@ -1382,9 +1423,9 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Check if pop-up modal has due trainings with 1 user", () => {
-      cy.get("h2").eq(1).should("contain.text", "DUE IN 7 DAYS (1)");
+      cy.get("h2").eq(1).should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (1)`);
       cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[6].name);
-      cy.get("h2").eq(1).should("contain.text", "DUE IN 7 DAYS (1)");
+      cy.get("h2").eq(1).should("contain.text", `${TrainingStatus.DUE_IN_7_DAYS} (1)`);
       cy.get("button[aria-label=close]").eq(0).arrowClick();
     });
 
@@ -1403,7 +1444,7 @@ context("Test for multiple TCs and users have different due dates", () => {
     });
 
     it("Verify training notification for overdue", () => {
-      cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", "OVERDUE");
+      cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 
     it("Click on overdue tag", () => {
@@ -1461,6 +1502,85 @@ context("Test for multiple TCs and users have different due dates", () => {
       cy.wait("@response");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Check dashboard and training tab for company admin", () => {
+    it("In dashboard, 3 tabs should be present", () => {
+      cy.get("[role=\"tablist\"]").eq(0).find("button").should("have.length", 3);
+      cy.get("[role=\"tablist\"]").eq(0).find("button").eq(0).should("contain.text", "My Feed");
+      cy.get("[role=\"tablist\"]").eq(0).find("button").eq(1).should("contain.text", "Trainings");
+      cy.get("[role=\"tablist\"]").eq(0).find("button").eq(2).should("contain.text", "Recent");
+    });
+
+    it("In dashboard, training outstanding chart should be present", () => {
+      cy.get("#training-chart canvas").should("be.exist");
+    });
+
+    it("In dashboard, user view should have 3 tabs", () => {
+      cy.get("[role=\"tablist\"]").eq(1).find("button").should("have.length", 3);
+      cy.get("[role=\"tablist\"]").eq(1).find("button").eq(0).should("contain.text", "ALL");
+      cy.get("[role=\"tablist\"]").eq(1).find("button").eq(1).should("contain.text", "Overdue");
+      cy.get("[role=\"tablist\"]").eq(1).find("button").eq(2).should("contain.text", "DUE IN 7 DAYS");
+    });
+
+    it("Training tab should have separate line item for Overdue & Due", () => {
+      cy.contains("Trainings").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").should("have.length", 2);
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0).should("contain.text", "OVERDUE");
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(1).should("contain.text", "DUE IN 7 DAYS");
+    });
+
+    it("Check line item format in training tab", () => {
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .find(".MuiListItemIcon-root svg").should("be.exist");
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .find(".MuiGrid-container").eq(0)
+        .should("contain.text", "Training on")
+        .and("contain.text", "FM-00002")
+        .and("contain.text", "OVERDUE")
+        .and("contain.text", "released doc1");
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .find(".MuiGrid-container").eq(1)
+        .should("contain.text", `${USERS[3].name}`);
+    });
+
+    it("Click on 'All' tab should display all training items", () => {
+      cy.get("#full-width-tabpanel-0 ul li").should("have.length", 2);
+    });
+
+    it("Click on 'Due' tab should display due training items", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
+        cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
+      });
+      cy.get("#full-width-tabpanel-2 ul li").should("have.length", 1);
+    });
+
+    it("Click on 'Overdue' tab should display Overdue training items", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
+        cy.get("button[aria-controls=\"full-width-tabpanel-2\"]").arrowClick();
+      });
+      cy.get("#full-width-tabpanel-1 ul li").should("have.length", 1);
+    });
+
+    it("Check training item format", () => {
+      cy.get("#full-width-tabpanel-1 li").eq(0)
+        .should("contain.text", "At")
+        .and("contain.text", "Athena")
+        .and("contain.text", "Overdue")
+        .and("contain.text", "FM-00002")
+        .and("contain.text", "released doc1")
+        .and("contain.text", "Due date");
+    });
+
+    it("On hover line item, Pin button should display", () => {
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .realHover().wait(1000);
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").eq(0)
+        .find("svg").eq(2).realHover().wait(1000);
+      cy.get("[id^=mui-tooltip-]").should("have.text", "Pin this item");
     });
   });
 

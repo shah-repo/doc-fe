@@ -12,6 +12,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import DialogContent from "./dialog/DialogContent";
 import DialogTitle from "./dialog/DialogTitle";
+import { Translation } from "../../translations/types";
 
 interface OwnProps {
   isOpen: boolean;
@@ -72,7 +73,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   isDeveloper,
   canUpdateCompany,
 }) => {
-  const [isUsernameEmpty, setUsernameError] = useState<boolean>(false);
+  const [usernameError, setUsernameError] = useState<Translation | null>(null);
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isCurrentUser = userId === currentUserId;
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
@@ -91,7 +92,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   const handleCloseEdit = () => {
     closeEdit();
     setPreviewAvatar("");
-    setUsernameError(false);
+    setUsernameError(null);
     async.start(getCompanyMine, currentEmployeeId, async);
   };
   const handleCloseDialog = () => {
@@ -114,7 +115,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         userInfo={userInfo}
         setUserInfo={setUserInfo}
         close={handleCloseDialog}
-        isUsernameEmpty={isUsernameEmpty}
+        usernameError={usernameError}
         setUsernameError={setUsernameError}
       />
       <AvatarContainer
@@ -151,7 +152,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         setUserInfo={setUserInfo}
         userId={userId}
         isCurrentUser={isCurrentUser}
-        isUsernameEmpty={isUsernameEmpty}
+        usernameError={usernameError}
         isDeveloper={isDeveloper}
         canUpdateCompany={canUpdateCompany}
       />

@@ -181,16 +181,20 @@ context("Export Record doc", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add textfield", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for inline" });
       cy.fbAddField();
     });
 
     it("Add Checkbox group", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
@@ -198,14 +202,14 @@ context("Export Record doc", () => {
 
     it("Add Date picker", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Text Editor", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
       cy.fbAddNewFieldButton();
@@ -213,7 +217,7 @@ context("Export Record doc", () => {
 
     it("Add Select Field", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Select" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
       cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
       cy.fbGroupOptions("option1", "option2");
@@ -222,12 +226,10 @@ context("Export Record doc", () => {
 
     it("Add inline approval", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.fbSelectInlineApproval();
-      });
-      cy.get("[name=\"label\"]").arrowType("Inline field");
-      cy.fbAddApproverToInlineDialog({ approverName: USERS[1].name });
-      cy.fbAddField();
+      cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+      cy.fbEnterNameValue({ name: "label", value: "Inline field" });
+      cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
+      cy.fbAddNewFieldButton();
     });
 
     it("Click create document", () => {
@@ -250,7 +252,8 @@ context("Export Record doc", () => {
     });
 
     it("Click 'Create New' button", () => {
-      cy.drCreateNewDocumentFromFormRecord();
+      cy.drCreateNewDocumentFromForm();
+
     });
   });
 

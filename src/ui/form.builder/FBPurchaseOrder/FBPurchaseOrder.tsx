@@ -3,7 +3,6 @@ import React from "react";
 import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
-
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleItem,
   handleLot,
@@ -32,12 +31,17 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
           />
         )}
         {!disabled && (
+          // TODO remove inline styles and make add button consistent with other buttons
           <FBButton
-            fullWidth={true}
             label="form.builder.add.item"
             onClick={() => handleItem && handleItem()}
-            variant="outlined"
-            style={{ margin: 0 }}
+            showNewButton
+            fullWidth
+            style={{
+              marginTop: gutter ? 5 : 0,
+              borderRadius: 0,
+              borderStyle: "solid",
+            }}
             {...{ disabled }}
           />
         )}

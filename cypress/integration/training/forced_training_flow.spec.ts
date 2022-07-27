@@ -403,6 +403,14 @@ context("Forced training flow", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
     });
@@ -418,6 +426,10 @@ context("Forced training flow", () => {
     it("Select Users to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {
@@ -445,12 +457,16 @@ context("Forced training flow", () => {
   context("Check training notification", () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
-      cy.get(".MuiTypography-root.MuiListItemText-primary")
-        .should("contain", "FM-00001").and("contain", "AR Form");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `FM-00001Rev 1 AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem: "FM-00001Rev 1 AR Form",
+      });
     });
   });
 
@@ -494,6 +510,14 @@ context("Forced training flow", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
     });
@@ -508,9 +532,6 @@ context("Forced training flow", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
 
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls(
@@ -533,6 +554,7 @@ context("Forced training flow", () => {
   context("Verify Training Records with 'Pending' on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.trClearFilters();
     });
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {

@@ -24,6 +24,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   useEffect(() => {
     if (employeeId) {
       dispatch(pageDetailsActions.allPageDetails());
+      dispatch(documentTypeActions.loadTabConfiguration());
       dispatch(documentTypeActions.loadList());
       dispatch(authActions.getSessionDetails(employeeId));
       dispatch(authActions.loadUserGroups());

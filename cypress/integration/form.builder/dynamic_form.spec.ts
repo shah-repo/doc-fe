@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -110,16 +111,20 @@ context("Dynamic Form Test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add section field", () => {
       cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Section" });
-      cy.fbEnterLabel({ label: "fb-section" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-section" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Select field", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Select" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "Select field" });
       cy.fbGroupOptions("A", "B", "C");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -129,14 +134,14 @@ context("Dynamic Form Test", () => {
 
     it("Add Text Editor", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add TextField", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
@@ -145,14 +150,14 @@ context("Dynamic Form Test", () => {
 
     it("Add Subsection", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Subsection" });
       cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Autocomplete with Document Revision", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-revision" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
       cy.fbAddNewFieldButton();
@@ -160,7 +165,7 @@ context("Dynamic Form Test", () => {
 
     it("Add Autocomplete with Parts", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-parts" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Parts");
       cy.fbAddNewFieldButton();
@@ -168,7 +173,7 @@ context("Dynamic Form Test", () => {
 
     it("Add Autocomplete with Document Approvers", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-approvers" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
       cy.fbAddNewFieldButton();
@@ -176,7 +181,7 @@ context("Dynamic Form Test", () => {
 
     it("Add Checkbox group", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("1", "2", "3");
       cy.fbAddNewFieldButton();
@@ -184,7 +189,7 @@ context("Dynamic Form Test", () => {
 
     it("Add Date picker", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbOpenValidation();
       cy.get("input[value^=\"visibility\"]").check();
@@ -198,7 +203,7 @@ context("Dynamic Form Test", () => {
 
     it("Add File Upload", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
@@ -210,7 +215,7 @@ context("Dynamic Form Test", () => {
 
     it("Add Paragraph", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
         .click({ force: true }).clear().arrowType("fb-paragraph");
       cy.fbAddNewFieldButton();
@@ -218,7 +223,7 @@ context("Dynamic Form Test", () => {
 
     it("Add Radio Button group", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
@@ -226,7 +231,7 @@ context("Dynamic Form Test", () => {
 
     it("Add Evidence Media upload", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
@@ -234,14 +239,14 @@ context("Dynamic Form Test", () => {
 
     it("Add Instructions Media upload", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Blank Template Form", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
       cy.elUploadAttachment({ fileName: "TestTemplate.json", el: "fb-attachment-field-fb-blank-template-" });
@@ -249,24 +254,20 @@ context("Dynamic Form Test", () => {
 
     it("Add Step", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Step" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Step" });
       cy.fbEnterNameValue({ name: "label", value: "fb-step" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Quantity", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
       cy.fbAddNewFieldButton();
     });
 
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("upload file in Instructions Media upload", () => {
-      cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+      cy.get("[data-cy=\"albumMediaButton\"]").first().arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
         cy.pmUploadAttachment({ fileName: "video.mp4" });
       });
@@ -281,8 +282,8 @@ context("Dynamic Form Test", () => {
   });
 
   context("Send to Email", () => {
-    it("Verify form Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "New Dynamic Form" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -405,6 +406,7 @@ context("Dynamic Form Test", () => {
 
     it("Verify page 1 in document", () => {
       const el = pages[0];
+      expect(el).match(/Page 1 of 4/);
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DYNAMIC FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -429,8 +431,6 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 4/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -438,6 +438,7 @@ context("Dynamic Form Test", () => {
 
     it("Verify page 2 in document", () => {
       const el = pages[1];
+      expect(el).match(/Page 2 of 4/);
       if (el.includes("Page 2 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DYNAMIC FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -469,8 +470,6 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 4/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -478,6 +477,7 @@ context("Dynamic Form Test", () => {
 
     it("Verify page 3 in document", () => {
       const el = pages[2];
+      expect(el).match(/Page 3 of 4/);
       if (el.includes("Page 3 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DYNAMIC FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -494,8 +494,6 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 4/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -503,6 +501,7 @@ context("Dynamic Form Test", () => {
 
     it("Verify page 4 in document", () => {
       const el = pages[3];
+      expect(el).match(/Page 4 of 4/);
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DYNAMIC FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -517,8 +516,6 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 4 of 4/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -530,8 +527,8 @@ context("Dynamic Form Test", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Verify form Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "New Dynamic Form" });
       cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
         formId = $formIdElement.text();
@@ -659,6 +656,7 @@ context("Dynamic Form Test", () => {
 
     it("Verify page 1 in document", () => {
       const el = pages[0];
+      expect(el).match(/Page 1 of 4/);
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DYNAMIC FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -684,8 +682,6 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 4/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -693,6 +689,7 @@ context("Dynamic Form Test", () => {
 
     it("Verify page 2 in document", () => {
       const el = pages[1];
+      expect(el).match(/Page 2 of 4/);
       if (el.includes("Page 2 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DYNAMIC FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -724,8 +721,6 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 4/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -733,6 +728,7 @@ context("Dynamic Form Test", () => {
 
     it("Verify page 3 in document", () => {
       const el = pages[2];
+      expect(el).match(/Page 3 of 4/);
       if (el.includes("Page 3 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DYNAMIC FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -749,8 +745,6 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 4/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
       }
@@ -758,6 +752,7 @@ context("Dynamic Form Test", () => {
 
     it("Verify page 4 in document", () => {
       const el = pages[3];
+      expect(el).match(/Page 4 of 4/);
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DYNAMIC FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -773,8 +768,6 @@ context("Dynamic Form Test", () => {
 
         tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Page 4 of 4/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -803,8 +796,16 @@ context("Dynamic Form Test", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Selects 'Clinical Protocol' output document type from dropdown", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Click on 'Add a field'", () => {
@@ -812,7 +813,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'New Dynamic Form' field", () => {
-      cy.fbSelectCustomControl();
+      cy.fbSelectItemFromNewFieldList({ section: "Custom Controls", field: "New Dynamic Form" });
     });
 
     it("Click on 'Add a field'", () => {
@@ -820,7 +821,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'Text Field 2' field", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field 2'", () => {
@@ -831,12 +832,8 @@ context("Dynamic Form Test", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and Release document", () => {

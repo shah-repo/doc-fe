@@ -26,11 +26,15 @@ export const styles = makeStyles((theme: Theme) =>
     attachmentIcon: {
       paddingTop: "2px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     collapsedList: {
       backgroundColor: Colors.sky_blue,
     },
     icon: {
       width: "15px",
+      cursor: "pointer",
     },
     listItem: {
       paddingLeft: "1px",
@@ -53,6 +57,9 @@ export const styles = makeStyles((theme: Theme) =>
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
+    },
+    cursorPointer: {
+      cursor: "pointer",
     },
     viewTooltipText: {
       fontWeight: "bold",

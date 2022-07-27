@@ -14,7 +14,6 @@ export const EMPLOYEES_URL = "/employees";
 export const GROUPS_URL = "/groups";
 export const GROUPS_ME_URL = `${GROUPS_URL}/me`;
 
-export const COMPANY_SLACK_URL = "/slack/company_oauth_url";
 export const USER_SLACK_URL = "/slack/user_oauth_url";
 
 export const API_TOKEN = "/api_tokens";

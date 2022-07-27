@@ -4,6 +4,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -167,10 +168,18 @@ context("Create company via API and create Suppliers document", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click on 'Supplier' document type", () => {
       SystemRequirement("REQ-2400");
       cy.drSelectOutputDocumentType({ documentType: "Supplier" });
       cy.unClick();
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Verify approval field is added as result of predefined schema", () => {
@@ -179,34 +188,28 @@ context("Create company via API and create Suppliers document", () => {
       cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
     });
 
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
     it("Add Checkbox group", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
-      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it(`Add 'Text Field' labelled as 'TEXT FIELD'`, () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
-      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).last().check();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.get(`input[type="checkbox"][value="3"]`).first().check();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").first().contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -215,8 +218,8 @@ context("Create company via API and create Suppliers document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Check form status as draft and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Check form status as ${STATUS_TYPES_LABEL.DRAFT} and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "New Supplier Form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         supFormId = $docIdElement.text();
@@ -388,8 +391,8 @@ context("Create company via API and create Suppliers document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Check form status as released and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Check form status as ${STATUS_TYPES_LABEL.RELEASED} and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "New Supplier Form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         supFormId = $docIdElement.text();
@@ -830,6 +833,13 @@ context("Create company via API and create Suppliers document", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
+      it("Click 'Save' button", () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("exist");
+        cy.recClickCreateDocumentWithApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
       });
@@ -839,7 +849,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Verify revision after update is equal to 2", () => {
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
 
@@ -864,12 +874,18 @@ context("Create company via API and create Suppliers document", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[3].email });
       });
 
+      it("Click 'Save' button", () => {
+        cy.recClickCreateDocumentWithApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
       });
 
       it("Get the pending approval document Id", () => {
-        cy.arVerifyStatus({ status: "Pending Approval" });
+        cy.arVerifyStatus({ status: "PENDING APPROVAL" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           supDocId = $docIdElement.text();
         });
@@ -953,8 +969,8 @@ context("Create company via API and create Suppliers document", () => {
         });
       });
 
-      it("Check doc status as Draft and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+      it(`Check doc status as ${STATUS_TYPES_LABEL.DRAFT} and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.arCheckTitleInEditableAndMatches({ name: "Test Supplier" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           supDocId = $docIdElement.text();
@@ -1117,11 +1133,11 @@ context("Create company via API and create Suppliers document", () => {
         });
 
         it("Verify revision after update is equal to 2", () => {
-          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2.1  - Released" });
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2.1", status: STATUS_TYPES_LABEL.RELEASED });
         });
 
-        it("Check doc status as Released and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+        it(`Check doc status as ${STATUS_TYPES_LABEL.RELEASED} and click on Send To Email`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           cy.arCheckTitleInEditableAndMatches({ name: "Test Supplier" });
           cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
             supDocId = $docIdElement.text();

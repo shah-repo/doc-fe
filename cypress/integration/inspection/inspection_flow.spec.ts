@@ -36,6 +36,7 @@ const FGLandSLSchema = [
     validationAttribute: "Quantity Received",
     deleteInFormDisabled: true,
     applicableValidationSchema: true,
+    tabId: "details",
   },
   {
     name: "100-inspection-override",
@@ -57,6 +58,7 @@ const FGLandSLSchema = [
     validationAttribute: "100% Inspection Override",
     deleteInFormDisabled: true,
     applicableValidationSchema: true,
+    tabId: "details",
   },
 ];
 const FGLandSLFieldsConfig = {
@@ -159,6 +161,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Make vs Buy",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "primary-supplier",
@@ -180,6 +183,7 @@ const subassemblySchema = [
     omitFinalValidation: true,
     validationAttribute: "Primary Supplier",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "other-suppliers",
@@ -201,6 +205,7 @@ const subassemblySchema = [
     omitFinalValidation: true,
     validationAttribute: "Other Suppliers",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "unit-of-measure",
@@ -321,6 +326,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Unit of measure",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "traceability-required",
@@ -340,6 +346,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Traceability required",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "serialized",
@@ -364,6 +371,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Serialized",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "select-serialization",
@@ -388,6 +396,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Select serialization",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "iqc-required",
@@ -407,6 +416,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "IQC Required",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "limited-shelf-life",
@@ -426,6 +436,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Limited Shelf Life",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "fai-required",
@@ -445,6 +456,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "FAI Required",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
 ];
 
@@ -744,6 +756,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Make vs Buy",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "primary-supplier",
@@ -764,6 +777,7 @@ context("Inspection flow", () => {
                       ],
                       validationAttribute: "Primary Supplier",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "other-suppliers",
@@ -784,6 +798,7 @@ context("Inspection flow", () => {
                       ],
                       validationAttribute: "Other Suppliers",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "unit-of-measure",
@@ -904,6 +919,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Unit of measure",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "traceability-required",
@@ -923,6 +939,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Traceability required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "serialized",
@@ -948,6 +965,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Serialized",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "select-serialization",
@@ -973,6 +991,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Select serialization",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "iqc-required",
@@ -992,6 +1011,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "IQC Required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "limited-shelf-life",
@@ -1011,6 +1031,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Limited Shelf Life",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "fai-required",
@@ -1030,6 +1051,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "FAI Required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                   ],
                 },

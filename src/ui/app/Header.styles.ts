@@ -5,11 +5,33 @@ import { DRAWER_WIDTH } from "./Navigation.styles";
 
 export default (theme: Theme) =>
   createStyles({
+    newAppBar: {
+      background: `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 16.91%, #011FBB 85.48%)`,
+      color: Colors.white,
+      position: "inherit",
+    },
     appBar: {
-      background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
+      background: `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 16.91%, #011FBB 85.48%)`,
       marginLeft: DRAWER_WIDTH,
       fontSize: "1rem",
       color: Colors.white,
+    },
+    newLogo: {
+      backgroundRepeat: "no-repeat",
+      backgroundImage: `url(${EnlilLogo})`,
+      left: "53%",
+      right: "20%",
+      position: "absolute",
+      paddingTop: "48px",
+    },
+    topScrollBarBox: {
+      color: Colors.white,
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 700,
+      fontSize: "12px",
+      display: "flex",
+      textTransform: "uppercase",
     },
     welcomeText: {
       color: Colors.dark_gray,
@@ -19,9 +41,12 @@ export default (theme: Theme) =>
       color: theme.palette.primary.main,
     },
     toolbar: {
-      marginLeft: DRAWER_WIDTH,
-      borderBottom: `1px solid ${Colors.medium_gray}`,
-      minHeight: "40px",
+      "marginLeft": DRAWER_WIDTH,
+      "borderBottom": `1px solid ${Colors.medium_gray}`,
+      "minHeight": "40px",
+      "&.formBuilder": {
+        minHeight: "48px",
+      },
     },
     headerButton: {
       "boxShadow": "none",

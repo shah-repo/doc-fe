@@ -11,6 +11,7 @@ export enum FBEndpoint {
   AttachmentById = "/attachments/${id}",
   AttachmentsByIds ="/attachments?ids=${ids}",
   AllDocRevAttachments ="/document_revisions/all_attachments/${id}",
+  MaterialAndEquipment = "/document_revisions/${id}/materials_and_equipment",
   PostInlineApprove = "/document_revisions/${documentId}/inline_approve",
   DynamicControl = "/document_revisions/dynamic_forms",
   FetchDocumentRevision = "/document_revisions/${documentId}",
@@ -56,6 +57,8 @@ export enum FBEndpoint {
   LockFieldsExpire = "/document_revision_field_locks/${id}/expire",
   CreateLot = "/receivable/${receivableId}/create_lot",
   AttachmentUnzipping = "/attachment_job/start_unzipping",
-  ZIPStatus = "/attachment_job/connected_to/${attachmentId}"
+  ZIPStatus = "/attachment_job/connected_to/${attachmentId}",
+  Favourites = "/user_favourites",
+  ModifyFavourites = "/user_favourites/${id}",
 }
 

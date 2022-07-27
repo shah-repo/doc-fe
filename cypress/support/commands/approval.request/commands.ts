@@ -374,7 +374,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.ArAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.ArAudit], () => {
     cy.get(".k-master-row").contains(params.title).arrowClick();
   });
   cy.progressBarShouldNotExist();
@@ -407,12 +407,12 @@ Cypress.Commands.add("arApproveARFromDashboard", () => {
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
-  cy.get("[id=\"HeaderInfo-name\"]").should("have.text", params.name);
+  cy.get("[id=\"field-name\"]").should("have.text", params.name);
 });
 
 Cypress.Commands.add("arWithdrawSubmission", () => {
-  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
-  cy.get("[data-cy=\"change.request.withdraw.alert\"]").arrowClick();
+  cy.get("div[class=\"MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end\"]")
+    .find("button[data-cy=\"change.request.withdraw.alert\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.PostWithdrawChangeRequests,
     CyRoutes.ARPreview,
@@ -428,7 +428,7 @@ Cypress.Commands.add("arCloseARFromMenu", () => {
 
 Cypress.Commands.add("arVoidAR", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
-  cy.get("[id=\"void\"]").arrowClick();
+  cy.get("[data-cy=\"void-button\"]").arrowClick();
   cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });

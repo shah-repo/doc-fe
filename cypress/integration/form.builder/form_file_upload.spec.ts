@@ -97,26 +97,30 @@ context("FORM Field Upload test", () => {
       cy.unClick();
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Create FORM document with File Upload fields", () => {
       it("Add File Upload", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
         cy.fbEnterNameValue({ name: "label", value: "file1" });
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "file1" } );
       });
 
       it("Add File Upload", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
         cy.fbEnterNameValue({ name: "label", value: "file2" });
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "file2" } );
       });
 
       it("Add File Upload", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
         cy.fbEnterNameValue({ name: "label", value: "file3" });
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "file3" } );

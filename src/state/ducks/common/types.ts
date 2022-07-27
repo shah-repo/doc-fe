@@ -32,6 +32,7 @@ export interface Approval {
   type: "MASTER" | "SECTION";
   fieldId?: string;
   approver: Owner;
+  approverId?: string;
   approverName?: string;
   approverEmail?: string;
   approverGroups?: string[];
