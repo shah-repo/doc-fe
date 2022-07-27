@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -37,8 +38,10 @@ const requiredWithoutFieldLabel = "Address";
 const requiredWithoutFieldSelector = `${requiredWithoutFieldLabel.toLowerCase().split(" ").join("-")}-`;
 
 const requiredDocStatusFieldLabel = "Document Status";
+const requiredDocStatusFieldSelector = `${requiredDocStatusFieldLabel.toLowerCase().split(" ").join("-")}-`;
 
 const requiredDocTypeFieldLabel = "Document Type";
+const requiredDocTypeFieldSelector = `${requiredDocTypeFieldLabel.toLowerCase().split(" ").join("-")}-`;
 
 const csDocTitle = "My CS Doc";
 
@@ -618,9 +621,6 @@ field is empty: Add text field`, () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 
-    it("Check returned errors are not empty", () => {
-      cy.checkToastMessageIsNotEmpty({ exists: true });
-    });
 
     it("Check returned toast error message", () => {
       cy.checkToastMessageContains({
@@ -769,6 +769,51 @@ field is empty: Add text field`, () => {
     });
   });
 
+  context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
+    it("Add incorrect document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect("AR Form");
+      });
+    });
+
+    it("Should show error for 'Incorrect document status' field", () => {
+      cy.get(`[name^='${requiredDocStatusFieldSelector}']`).then((elem) => {
+        const errorBlock = elem.offsetParent().siblings("p");
+
+        cy.wrap(errorBlock)
+          .should("contain.text", `is not in DRAFT status.`);
+      });
+    });
+
+    it(`Fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
+      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect(`${documentRevisionName}`);
+      });
+    });
+  });
+
+  context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
+    it("Add incorrect document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect("AR Form").wait(500);
+        cy.unClick();
+      });
+    });
+
+    it("Should show error for 'Incorrect document type' field", () => {
+      cy.get(`[name^='${requiredDocTypeFieldSelector}']`).parent().siblings("p")
+        .should("have.text", `Incorrect document type.`);
+    });
+
+    it(`Fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
+      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect(`${csDocTitle}`);
+      });
+    });
+  });
+
   context("Release document", () => {
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
@@ -784,8 +829,8 @@ field is empty: Add text field`, () => {
   context("No validation error, submission is successful", () => {
     // No need to check if validation pop-up is shown.
     // If doc status is released that means there were no validation errors.
-    it("Check document status is released", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Check document status is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 });
