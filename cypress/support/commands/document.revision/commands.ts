@@ -816,7 +816,6 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 Cypress.Commands.add("drSelectApprovalRolesTab", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetFieldLocks,
-    CyRoutes.PostOrPatchDocRev,
   ],
   () => {
     cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
