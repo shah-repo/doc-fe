@@ -211,7 +211,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
-    i.label.includes("Purchase Order")) : [false];
+    i?.label?.includes("Purchase Order")) : [false];
 
   return (
     <FormWrapper
