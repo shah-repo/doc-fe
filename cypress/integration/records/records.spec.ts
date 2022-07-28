@@ -9,6 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -33,11 +34,6 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 let arId;
-
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-
 
 context("Records flow", () => {
   before(() => {
@@ -303,8 +299,8 @@ context("Records flow", () => {
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
         });
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
 
       it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -320,6 +316,8 @@ context("Records flow", () => {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recFormId}`,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -356,8 +354,7 @@ context("Records flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recFormId}${filetime}_draft.zip`;
+            downloadFile  =  `${recFormId}${fileTimeFormat}_draft.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -439,7 +436,7 @@ context("Records flow", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -462,7 +459,7 @@ context("Records flow", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -487,8 +484,8 @@ context("Records flow", () => {
         cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
           arId = $lnEl.text();
         });
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
 
       it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -504,6 +501,8 @@ context("Records flow", () => {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recFormId}`,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -540,8 +539,7 @@ context("Records flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recFormId}${filetime}_rel.zip`;
+            downloadFile  =  `${recFormId}${fileTimeFormat}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -624,10 +622,10 @@ context("Records flow", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 2/);
@@ -641,7 +639,7 @@ context("Records flow", () => {
           expect(el).match(tmpRegex);
 
           expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -649,10 +647,10 @@ context("Records flow", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 2 of 2/);
@@ -735,7 +733,11 @@ context("Records flow", () => {
     });
 
     it("Select 'Approval Record' form", () => {
-      cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document", recordForm: "Approval Record" });
+      cy.get(`div[data-cy^="field-selectType"]`).click().focused()
+        .arrowType("Record Document{downarrow}{enter}", { force: true });
+      cy.unClick();
+      cy.get("[data-cy=\"field-selectForm\"]").click().focused()
+        .arrowType("Lot History Record{downarrow}{enter}", { force: true });
     });
 
     it("Check if revision is in alpha revision stage", () => {
@@ -848,7 +850,7 @@ context("Records flow", () => {
       cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
     });
 
@@ -864,9 +866,8 @@ context("Records flow", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase,
-
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${recDocId}`,
       };
@@ -906,8 +907,7 @@ context("Records flow", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${recDocId}${filetime}_WIP.zip`;
+          downloadFile  =  `${recDocId}${fileTimeFormat}_WIP.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -981,10 +981,10 @@ context("Records flow", () => {
 
         expect(el).match(/WIP/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 1/);
@@ -1010,7 +1010,7 @@ context("Records flow", () => {
       cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmailFromHeader();
     });
 
@@ -1026,6 +1026,8 @@ context("Records flow", () => {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recDocId}`,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
@@ -1064,8 +1066,7 @@ context("Records flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recDocId}${filetime}_rel.zip`;
+            downloadFile  =  `${recDocId}${fileTimeFormat}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -1127,7 +1128,7 @@ context("Records flow", () => {
           tmpRegex = new RegExp(`${USERS[1].name} \\- .*@.*`);
           expect(el).not.match(tmpRegex);
 
-          tmpRegex = new RegExp(`APPROVALS\\n${USERS[2].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[2].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Checkbox\\n1 2 3`);
@@ -1139,10 +1140,10 @@ context("Records flow", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
