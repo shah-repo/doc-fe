@@ -1,11 +1,12 @@
-import { includes, isArray, isEmpty, isUndefined, map, omit, size } from "lodash";
+import { has, includes, isArray, isEmpty, isUndefined, map, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
+import { FBDAMFields, FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
 import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { checkIsDocumentDAM } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
@@ -184,6 +185,15 @@ class FBWorkspaceState extends FBSchemaState {
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     this.setDirty(true);
     let body = {};
+    const fbData = this.formInput;
+    if (checkIsDocumentDAM(this.document?.document.documentType.groupOptions) &&
+      (has(this.formInput, FBDAMFields.DAM) || has(this.formInput, FBDAMFields.DAR))) {
+      values = {
+        ...values,
+        [FBDAMFields.DAM]: fbData?.[FBDAMFields.DAM],
+        [FBDAMFields.DAR]: fbData?.[FBDAMFields.DAR],
+      };
+    }
     switch (mode) {
       case "design":
         body = {
