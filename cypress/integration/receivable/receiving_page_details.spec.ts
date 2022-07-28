@@ -53,7 +53,7 @@ const CHECKBOX_LABEL = "checkboxGroup";
 const CHECKBOX_REQUIRED_IF_VALUE = "Y";
 
 const dateOffset = (5 * 1000);
-const footerDate = moment().format("D MMM YYYY");
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
 const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/DD/YYYY");
