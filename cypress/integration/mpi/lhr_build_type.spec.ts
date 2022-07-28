@@ -1026,10 +1026,12 @@ context("LHR Build type flow", () => {
 
     it("Add 'Due Date'", () => {
       cy.poAddDateRequired();
+      cy.wait(2000);
     });
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(3000);
     });
 
     it("Select Details tab", () => {
@@ -1139,6 +1141,7 @@ context("LHR Build type flow", () => {
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(3000);
     });
 
     it("Select Details tab", () => {
@@ -1181,6 +1184,7 @@ context("LHR Build type flow", () => {
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(3000);
     });
 
     it("Select Overview tab", () => {
@@ -1193,6 +1197,7 @@ context("LHR Build type flow", () => {
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(3000);
     });
 
     it("Complete step", () => {
