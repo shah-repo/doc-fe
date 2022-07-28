@@ -6,7 +6,7 @@ import cx from "classnames";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
 import {
-  DocumentRevisionFormHeader,
+  DocumentRevisionSummaryHeader,
   DocumentRevisionFormProgressBar,
   SM,
   SMBox,
@@ -166,6 +166,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     _tabsState?.setTabID(tabConfig[newValue].tabId);
   };
 
+  // @todo: Mix between DocumentRevisionSummary and DocumentRevisionForm.
+  // @todo: Move these elements to one component to reuse.
   // Create documentRevision and fill it
   const documentRevision = get(formik, "values") as DocumentRevision;
 
@@ -277,10 +279,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
               <SMTemplate
                 templateBoxProps={{ stretchY: "100%" }}
                 contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
-                header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
-                  type={type}
-                  documentTypeId={formValues.values.document?.documentType?.id}
-                />}
+                header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
                 lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
               >
                 <Observer>
