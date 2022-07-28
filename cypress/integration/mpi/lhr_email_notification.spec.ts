@@ -485,7 +485,10 @@ context("LHRs email notifications", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -598,7 +601,10 @@ context("LHRs email notifications", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -774,7 +780,12 @@ context("LHRs email notifications", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.PatchDocRev], () => {
+            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+          });
+        cy.checkToastMessage({ exists: false });
+        cy.listLoadingElementShouldNotExist();
       });
 
       context("Add approvers to LHR A", () => {
@@ -793,7 +804,10 @@ context("LHRs email notifications", () => {
         });
 
         it("Click 'Submit for Approval' button", () => {
-          cy.pmSubmitForApproval();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          });
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -829,7 +843,10 @@ context("LHRs email notifications", () => {
         });
 
         it("Click 'Submit for Approval' button", () => {
-          cy.pmSubmitForApproval();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          });
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });

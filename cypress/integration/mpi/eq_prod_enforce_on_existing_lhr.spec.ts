@@ -1776,7 +1776,10 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Select first LHR", () => {
-      cy.dlSelectFirstDocument();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+        cy.get("tr.k-master-row").first().arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Details tab", () => {
@@ -1950,7 +1953,10 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Select first LHR", () => {
-      cy.dlSelectFirstDocument();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+        cy.get("tr.k-master-row").first().arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approver", () => {
