@@ -302,6 +302,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                 }}
                               />
                               {documentRevision && showTabContent &&  <FBWorkspace
+                                withoutBottomBar
                                 isPortal={false}
                                 document={{
                                   ...formValues.values as unknown as DocumentRevision,
@@ -328,6 +329,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                   />
                                 )}
                                 <FBWorkspace
+                                  withoutBottomBar
                                   isPortal={false}
                                   document={{
                                     ...formValues.values as unknown as DocumentRevision,
