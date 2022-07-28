@@ -91,6 +91,9 @@ const styles = makeStyles((theme: Theme) =>
         marginRight: 10,
       },
     },
+    previewDialog: {
+      backgroundColor: Colors.alabaster,
+    },
   }),
 );
 const FBActiveNoOutput: React.FunctionComponent<Props> = ({
@@ -253,6 +256,9 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       open: true,
       maxWidth: "md",
       title: "form.builder.form.preview",
+      classes: {
+        paper: classes.previewDialog,
+      },
       content: (
         <Box mx={8}>
           <Observer>
