@@ -265,6 +265,10 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       classes: {
         paper: classes.previewDialog,
       },
+      onClose: () => {
+        dialogState.closeDialog();
+        onTabChange(undefined, 0, tabConfig);
+      },
       content: (
         <Box>
           <Observer>
