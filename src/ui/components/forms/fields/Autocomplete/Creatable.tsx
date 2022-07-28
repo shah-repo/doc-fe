@@ -60,7 +60,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     setFieldValue(name, (value as any)?.value);
   };
   const onInputChange = (value) => {
-    // debugger;
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
