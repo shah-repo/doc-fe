@@ -412,9 +412,9 @@ context("All regular users on new dashboard", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
+    // it("Turn off autosave", () => {
+    //   cy.cmpTurnOffAutosave();
+    // });
   });
 
   context("Verify Dashboard tabs", () => {
@@ -499,7 +499,7 @@ context("All regular users on new dashboard", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-      cy.cmpTurnOffAutosave();
+      // cy.cmpTurnOffAutosave();
     });
 
     it(`For ${USERS[1].name}, verify each line contain icon, doc detail & datetime`, () => {
@@ -582,6 +582,11 @@ context("All regular users on new dashboard", () => {
         cy.drEnterDocumentDescription({ description: "New Purchase Order" });
       });
 
+      it("Upload attachments", () => {
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
       it("Select 'Open' for PO status", () => {
         cy.poSelectPOStatus({ status: "Open" });
       });
@@ -598,18 +603,6 @@ context("All regular users on new dashboard", () => {
 
       it("Select 'SUP-00003' Supplier ", () => {
         cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
-      });
-
-      it("Upload attachments 'test_image.jpg'", () => {
-        cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
-        cy.get("#attachments-button-file-clean-copy")
-          .attachFiles(
-            [
-              { name: "./test_image.jpg", type: "image/jpg" },
-            ]
-          );
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Third party Company' for Ship To", () => {
