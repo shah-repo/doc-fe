@@ -411,10 +411,6 @@ context("All regular users on new dashboard", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
-
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
   });
 
   context("Verify Dashboard tabs", () => {
@@ -499,7 +495,6 @@ context("All regular users on new dashboard", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-      // cy.cmpTurnOffAutosave();
     });
 
     it(`For ${USERS[1].name}, verify each line contain icon, doc detail & datetime`, () => {
