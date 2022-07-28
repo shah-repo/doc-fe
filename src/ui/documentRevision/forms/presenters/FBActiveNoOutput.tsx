@@ -1,6 +1,6 @@
 import { Box, Button, Grid, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { FormikProps, useFormikContext } from "formik";
-import { filter, get, includes, map, size } from "lodash";
+import { filter, get, set, includes, map, size } from "lodash";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
@@ -36,7 +36,9 @@ import {
   FBDialog,
   FB,
   FBDialogState,
-  FBWorkspace, FBSchemaProps, FBEditorState,
+  FBWorkspace,
+  FBSchemaProps,
+  FBEditorState,
 } from "../../../form.builder";
 import Text from "../../../components/Text";
 import { ReactComponent as PreviewIcon } from "../../../../assets/images/preview.svg";
@@ -149,23 +151,32 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
 
   const { workspaceState } = FB.useStores();
 
-  // Temp
+  const onTabChange = (_ev, newValue, tabConfig) => {
+    _tabsState?.setValue(newValue);
+    _tabsState?.setTabID(tabConfig[newValue].tabId);
+  };
+
+  // Create documentRevision and fill it
   const documentRevision = get(formik, "values") as DocumentRevision;
-  documentRevision.schema = revisionFormSchema;
+
   let schema = revisionFormSchema;
+  set(documentRevision, "schema", schema);
+  set(documentRevision, "formTemplate.schema", schema);
+
+  const docTypeId = documentRevision?.document?.documentType?.id as string;
+  const outputTypeId = documentRevision?.outputDocumentTypes?.value as string;
+  set(documentRevision, "document.documentType", documentTypesById[docTypeId]);
+  set(documentRevision, "formTemplate.outputDocumentTypes", [documentTypesById[outputTypeId]]);
 
   const formValues = formik as FormikProps<DocumentRevisionFormValues>;
-
-  // const documentRevision = _documentRevisionFormState?.documentRevision;
   const initialValues = documentRevision as unknown as DocumentRevisionFormValues;
 
   const isOutput = true;
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  // const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
   const showAdministrativeAndVoidChange = false;
-  const type = "none";
-  const mode = "preview";
+  const type = "newOutput";
+  const mode = "formPreview";
 
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
@@ -201,6 +212,9 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       const obj = schema?.filter((el) => ele?.metadata?.fieldId === el.name);
       ele.stepIndex = obj?.[0]?.stepIndex;
     });
+
+    set(documentRevision, "schema", schema);
+    set(documentRevision, "formTemplate.schema", schema);
   }
 
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
@@ -255,7 +269,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                 <Observer>
                   {() => (
                     <SMTabs
-                      onChange={(ev, newValue) => console.log(ev, newValue, tabConfig)}
+                      onChange={(ev, newValue) => onTabChange(ev, newValue, tabConfig)}
                       tabs={tabLabels}
                       boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                       panelProps={{ flex: 1 }}
