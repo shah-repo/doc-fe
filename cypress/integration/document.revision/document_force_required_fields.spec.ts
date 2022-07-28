@@ -176,6 +176,11 @@ context("Document force required fields", () => {
       cy.checkToastMessageContains({ message: "Title is required,Description is required" });
       cy.closeAllAlertMessages();
     });
+
+    it("Close dialog box", () => {
+      cy.drCloseApproveAndReleaseDialog();
+    });
+
   });
 
   context("Verify filled fields of created document", () => {

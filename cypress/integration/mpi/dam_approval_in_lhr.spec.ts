@@ -425,13 +425,13 @@ context("DAM approvals in LHR", () => {
                 label: "form.builder.mpiprocedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
-                tabId: "details",
+                tabId: "procedure",
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
-                tabId: "details",
+                tabId: "procedure",
                 stepIndex: 1,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -477,7 +477,7 @@ context("DAM approvals in LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
-                tabId: "details",
+                tabId: "procedure",
               },
               {
                 name: "lhrs-accepted-quantity",
@@ -495,7 +495,7 @@ context("DAM approvals in LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
-                tabId: "details",
+                tabId: "procedure",
               },
               {
                 name: "lhrs-rejected-quantity",
@@ -513,7 +513,7 @@ context("DAM approvals in LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
-                tabId: "details",
+                tabId: "procedure",
               },
               {
                 name: "approvals-built-in",
@@ -528,7 +528,7 @@ context("DAM approvals in LHR", () => {
                 validationAttribute: "Approvals",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
-                tabId: "details",
+                tabId: "overview",
               },
             ],
           },
@@ -1508,14 +1508,6 @@ context("DAM approvals in LHR", () => {
         cy.cmpTurnOffAutosave();
       });
 
-      it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
-      });
-
-      it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
-      });
-
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -1523,6 +1515,20 @@ context("DAM approvals in LHR", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click save document", () => {
+        cy.drSaveDocumentWithoutaudit();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
+      });
+
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
       });
 
       it("Click save document", () => {
@@ -1777,14 +1783,6 @@ context("DAM approvals in LHR", () => {
         cy.cmpTurnOffAutosave();
       });
 
-      it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
-      });
-
-      it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
-      });
-
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -1792,6 +1790,20 @@ context("DAM approvals in LHR", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click save document", () => {
+        cy.drSaveDocumentWithoutaudit();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
+      });
+
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
       });
 
       it("Click save document", () => {

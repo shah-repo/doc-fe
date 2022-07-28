@@ -153,15 +153,8 @@ context("Document Field Owners Test", () => {
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(2000);
     });
-
-    // it("Enters title 'New Document'", () => {
-    //   cy.drEnterDocumentTitle({ name: "New Document" });
-    // });
-
-    // it("Enters description 'New Document description'", () => {
-    //   cy.drEnterDocumentDescription({ description: "New Document description" });
-    // });
 
     it("Click on sidebar permission icon to add Operators", () => {
       cy.drSelectPermissionTab();
@@ -199,15 +192,6 @@ context("Document Field Owners Test", () => {
       cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
-    // it("Check if Title input field is disabled", () => {
-    //   cy.get("[value='New Document']input").should("be.disabled");
-    // });
-
-    // it("Check if Description input field is disabled", () => {
-    //   cy.get("[class='public-DraftEditor-content']")
-    //     .should("have.attr", "contenteditable", "false");
-    // });
-
     it("Check if Document Type input field is disabled", () => {
       cy.get("[id='documentType']input").should("have.attr", "type", "hidden");
     });
@@ -215,10 +199,6 @@ context("Document Field Owners Test", () => {
     it("Check if Document ID field is disabled", () => {
       cy.get("[id='document.docId']input").should("be.disabled");
     });
-
-    // it("Check if Reference input field is disabled", () => {
-    //   cy.get("[data-cy='referenceTo']>div>div>input").should("be.disabled");
-    // });
 
     it("Fill value for FB textbox field", () => {
       cy.get("[name^='text-field-for']").arrowType("Test First Field");

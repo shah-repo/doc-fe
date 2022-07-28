@@ -1992,11 +1992,12 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Navigate to LHR", () => {
         cy.navigToLHR();
-        cy.wait(10000);
+        cy.wait(5000);
       });
 
       it("Enter LHR document 1", () => {
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00004");
+        cy.wait(5000);
         cy.dlSelectFirstDocument();
       });
 

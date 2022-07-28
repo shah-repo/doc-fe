@@ -221,6 +221,10 @@ context("Autosave LHR", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Navigate to Procedure Tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -293,6 +297,10 @@ context("Autosave LHR", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
           cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
+      });
+
+      it("Navigate to Detail Tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       context("Select created MPI in LHR template", () => {
@@ -368,6 +376,9 @@ context("Autosave LHR", () => {
     it("Add first Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
+    it("Save Document'", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
 
     it("Add second Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
@@ -375,7 +386,11 @@ context("Autosave LHR", () => {
 
     it("Remove second Approver'", () => {
       cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
+    });
+
+    it("Reload Page'", () => {
       cy.reload();
+      cy.wait(2000);
     });
 
     it("check approvers after reload page", () => {
@@ -406,9 +421,17 @@ context("Autosave LHR", () => {
         });
       });
 
+      it("Navigate to Detail Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Click 'START MPI'", () => {
         cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         cy.mpiStartStep({ stepNumber: 1 });
+      });
+
+      it("Navigate to Procedure Tab", () => {
+        cy.drSelectProcedureTab();
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
@@ -448,6 +471,11 @@ context("Autosave LHR", () => {
     });
 
     context("Add/remove approver and check autosave", () => {
+
+      it("Navigate to overview Tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Add first Approver'", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
       });
@@ -465,6 +493,10 @@ context("Autosave LHR", () => {
           .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
         cy.get("[name=\"fb-approvals-approvals-built-in\"]")
           .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
+      });
+
+      it("Navigate to Procedure Tab", () => {
+        cy.drSelectProcedureTab();
       });
 
       it("check Start quntity", () => {

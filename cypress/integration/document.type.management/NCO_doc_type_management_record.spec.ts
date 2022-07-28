@@ -244,6 +244,7 @@ context("NCO document type management with record doc type", () => {
       cy.get("[class='k-grid-content k-virtual-content']").scrollTo("center").wait(1000);
       cy.dtmAddStartingNumber({ startingNumber: "{backspace}2000" });
     });
+
     it("Select Revision Stage 'Numeric'", () => {
       cy.dtmSelectRevisionStage({ revisionStage: "Numeric" });
     });
@@ -274,6 +275,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Edit Revision Stage", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("center").wait(1000);
       cy.get("[data-grid-row-index='0']>td>span>span>span").eq(3).contains("Numeric").arrowClick();
       cy.get("li").contains("Alpha").arrowClick();
     });
