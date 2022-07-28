@@ -732,7 +732,7 @@ context("Records flow", () => {
       cy.recCreateRecordFromLandingPage();
     });
 
-    it("Select 'Approval Record' form", () => {
+    it("Select 'Lot History Record' form", () => {
       cy.get(`div[data-cy^="field-selectType"]`).click().focused()
         .arrowType("Record Document{downarrow}{enter}", { force: true });
       cy.unClick();
