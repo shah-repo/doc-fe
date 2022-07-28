@@ -8,6 +8,7 @@ import { SelectComponentsProps } from "react-select/base";
 import CreatableSelect, { CreatableProps } from "react-select/creatable";
 import { ActionMeta, ValueType } from "react-select/src/types";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
+import { FB } from "../../../../form.builder";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
@@ -35,6 +36,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   ...fieldProps
 }) => {
   const formikValue = fieldProps.field.value;
+  const { workspaceState } = FB.useStores();
   const value = React.useMemo(() => ({ value: formikValue, label: formikValue }), [formikValue]);
   React.useEffect(() => {
     setInputValue(formikValue);
@@ -58,11 +60,13 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     setFieldValue(name, (value as any)?.value);
   };
   const onInputChange = (value) => {
+    // debugger;
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
     if (value) {
       setInputValue(value);
+      workspaceState?.setDirty(true);
     }
     if (!value && inputValue?.length === 1) {
       setInputValue(value);
@@ -86,6 +90,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     setHover(false);
     setShowOnlyText(true);
   };
+
 
   const intl = useIntl();
   const titlePlaceholder = intl.formatMessage({ id: "form.builder.enter.title" });
