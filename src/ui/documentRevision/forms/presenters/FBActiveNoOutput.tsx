@@ -2,6 +2,7 @@ import { Box, Button, Grid, createStyles, makeStyles, Theme } from "@material-ui
 import { FormikProps, useFormikContext } from "formik";
 import { filter, get, set, includes, map, size } from "lodash";
 import * as React from "react";
+import cx from "classnames";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
 import {
@@ -91,6 +92,10 @@ const styles = makeStyles((theme: Theme) =>
         marginRight: 10,
       },
     },
+    previewButtonDisabled: {
+      color: `${Colors.white} !important`,
+      backgroundColor: `${Colors.dawn} !important`,
+    },
     previewDialog: {
       backgroundColor: Colors.alabaster,
     },
@@ -106,6 +111,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const classes = styles();
   const formik = useFormikContext();
   const { _documentRevisionFormState, _tabsState, _formState } = SM.useStores();
+  const { dialogState: existsDialogState } = FB.useStores();
   const revisionFormSchema = _documentRevisionFormState?.schema;
   const [selectedValues, setSelectedValues] = React.useState<any>([]);
 
@@ -260,7 +266,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         paper: classes.previewDialog,
       },
       content: (
-        <Box mx={8}>
+        <Box>
           <Observer>
             {() => (
               <SMTemplate
@@ -372,6 +378,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     });
   };
 
+  const previewDisabled = !revisionFormSchema?.length || existsDialogState?.open;
+
   return (
     <FBProvider dialogState={dialogState}>
       <FBDialog />
@@ -397,10 +405,10 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
           </Grid>
           <Grid item xs className={classes.previewColumn}>
             <Button
-              className={classes.previewButton}
+              className={cx(classes.previewButton, { [classes.previewButtonDisabled]: previewDisabled })}
               color="primary"
               onClick={handlePreview}
-              disabled={!revisionFormSchema}
+              disabled={previewDisabled}
             >
               <PreviewIcon />
               <Text message="form.builder.layout.preview" />
