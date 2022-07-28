@@ -985,10 +985,6 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
     it("Click 'Submit for Approval' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
@@ -997,7 +993,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Navigate to Details tab again", () => {
+    it("Navigate to Details tab again again", () => {
       cy.drSelectDetailsTab();
     });
 
@@ -1007,10 +1003,6 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick().wait(1000);
       });
-    });
-
-    it("Navigate to Details tab again again", () => {
-      cy.drSelectDetailsTab();
     });
 
     it("Click on update record", () => {
