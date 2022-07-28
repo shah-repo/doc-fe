@@ -184,7 +184,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const showAdministrativeAndVoidChange = false;
-  const type = "newOutput";
+  const type = "none";
   const mode = "formPreview";
 
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
