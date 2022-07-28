@@ -239,7 +239,7 @@ context("Test LHR landing page", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
-                tabId: "details",
+                tabId: "procedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
@@ -247,7 +247,7 @@ context("Test LHR landing page", () => {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
-                tabId: "details",
+                tabId: "procedure",
                 stepIndex: 1,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -282,7 +282,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -300,7 +300,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -318,7 +318,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -336,7 +336,7 @@ context("Test LHR landing page", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
-                tabId: "details",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
