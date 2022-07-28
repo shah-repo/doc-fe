@@ -189,7 +189,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   useObserver(() => {
     if (values.id || values.document?.documentType?.id) {
-      dirty = _formState?.isDirty || false;
+      dirty = _formState?.isDirty || _documentRevisionFormState?.isDirty || false;
     }
   });
 
