@@ -239,7 +239,7 @@ context("Test LHR landing page", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
-                tabId: "details",
+                tabId: "procedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
@@ -247,7 +247,7 @@ context("Test LHR landing page", () => {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
-                tabId: "details",
+                tabId: "procedure",
                 stepIndex: 1,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -282,7 +282,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -300,7 +300,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -318,7 +318,7 @@ context("Test LHR landing page", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -336,7 +336,7 @@ context("Test LHR landing page", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
-                tabId: "details",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -874,10 +874,10 @@ context("Test LHR landing page", () => {
       cy.get("tr.k-grouping-row").should("not.exist");
       cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-grouping-row").should("have.length", "1");
       cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-grouping-row").should("not.exist");
     });
 
@@ -896,17 +896,18 @@ context("Test LHR landing page", () => {
       it("Verify filter for LOT #", () => {
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00004");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "FM-00004");
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.dlClearFilters();
+        cy.wait(2000);
       });
 
       it("Verify filter for State", () => {
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="2"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("WIP").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "WIP");
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       });
@@ -914,7 +915,7 @@ context("Test LHR landing page", () => {
       it("Verify filter for owner", () => {
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType(USERS[1].name);
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", USERS[1].name);
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       });
@@ -922,7 +923,7 @@ context("Test LHR landing page", () => {
       it("Verify filter for Part Number/Rev", () => {
         cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="4"] input`).arrowType("P");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "P");
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       });
@@ -931,7 +932,7 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Last 7 days");
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="5"] span.k-i-filter-clear`).arrowClick();
@@ -940,7 +941,7 @@ context("Test LHR landing page", () => {
       it("Verify filter for Start Quantity", () => {
         cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="6"] input`).arrowType("Test");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "Test");
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="6"] span.k-i-filter-clear`).arrowClick();
@@ -949,7 +950,7 @@ context("Test LHR landing page", () => {
       it("Verify filter for End Quantity", () => {
         cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="7"] input`).arrowType("Test");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "Test");
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="7"] span.k-i-filter-clear`).arrowClick();
@@ -958,7 +959,7 @@ context("Test LHR landing page", () => {
       it("Verify filter for Template", () => {
         cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="8"] input`).arrowType("LHRT-00003");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "LHRT-00003");
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       });
@@ -966,14 +967,14 @@ context("Test LHR landing page", () => {
       it("Verify filter for ID", () => {
         cy.get(`th[aria-colindex="9"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00006");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="9"] input`).should("have.attr", "value", "LHR-00006");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
@@ -1017,7 +1018,6 @@ context("Test LHR landing page", () => {
       });
     });
 
-
     context("Verify dropdown filters", () => {
       it("Verify ID dropdown filters", () => {
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
@@ -1029,10 +1029,10 @@ context("Test LHR landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
         cy.get(`th[aria-colindex="9"] input`).arrowType("6");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify ID "Is equal to" dropdown filter`, () => {
@@ -1040,10 +1040,10 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00006");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify ID "Is not equal to" dropdown filter`, () => {
@@ -1051,10 +1051,10 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00006");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify ID "Starts with" dropdown filter`, () => {
@@ -1062,10 +1062,10 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-0000");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify ID "Ends with" dropdown filter`, () => {
@@ -1073,30 +1073,30 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
         cy.get(`th[aria-colindex="9"] input`).arrowType("6");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify ID "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
 
@@ -1104,20 +1104,20 @@ context("Test LHR landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify ID "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="9"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="9"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -1126,11 +1126,11 @@ context("Test LHR landing page", () => {
         cy.get(`th[aria-colindex="2"] button[title="Clear"]`).should("have.attr", "disabled");
         cy.get(`th[aria-colindex="2"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("WIP").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "WIP");
         cy.get(`th[aria-colindex="2"] button[title="Clear"]`).should("not.have.attr", "disabled");
         cy.get(`th[aria-colindex="2"] button[title="Clear"]`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
   });

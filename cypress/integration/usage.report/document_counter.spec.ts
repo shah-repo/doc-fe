@@ -1977,14 +1977,14 @@ context("Test usage report is correctly counting documents", () => {
                     type: "section",
                     index: 0,
                     label: "form.builder.mpiprocedure",
-                    tabId: "details",
+                    tabId: "procedure",
                     deleteDisabled: true,
                     deleteInFormDisabled: true,
                   },
                   {
                     name: "mpi-procedure-built-in",
                     type: "mpiprocedure",
-                    tabId: "details",
+                    tabId: "procedure",
                     index: 1,
                     stepIndex: 1,
                     applicableOn: [
@@ -2016,7 +2016,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 2,
                     label: "Start quantity",
-                    tabId: "details",
+                    tabId: "procedure",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2034,7 +2034,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 3,
                     label: "Accepted quantity",
-                    tabId: "details",
+                    tabId: "procedure",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2052,7 +2052,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 4,
                     label: "Rejected quantity",
-                    tabId: "details",
+                    tabId: "procedure",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2070,7 +2070,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "approvals",
                     index: 5,
                     label: "Approvals",
-                    tabId: "details",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -4066,6 +4066,10 @@ context("Test usage report is correctly counting documents", () => {
         cy.drCheckDocumentStatus({ status: "WIP" });
       });
 
+      it("Select 'Procedure' tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Enter 'Accepted quntity' for LHRs #1", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
@@ -4078,6 +4082,10 @@ context("Test usage report is correctly counting documents", () => {
           cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
           cy.unClick();
         });
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {

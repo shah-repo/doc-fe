@@ -1598,6 +1598,7 @@ context("LHR flow", () => {
 
         it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
           cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
           cy.get("input[data-cy=usedOverride]").arrowClick();
           cy.get("ul>li[role=option]").contains(`LOT #${lotDateSuffix}01`).arrowClick();
         });
@@ -1816,7 +1817,10 @@ context("LHR flow", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.DocRevPreview,
           CyRoutes.GetAutocompleteOptions], () => {
-          cy.dlSelectFirstDocument();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+            cy.get("tr.k-master-row").first().arrowClick();
+          });
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
