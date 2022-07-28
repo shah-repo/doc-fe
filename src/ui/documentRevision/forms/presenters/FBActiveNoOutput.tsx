@@ -156,6 +156,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     );
 
     _documentRevisionFormState?.setFBSchema(scheme);
+    workspaceState?.setSchema(scheme);
   };
 
   const { workspaceState } = FB.useStores();
