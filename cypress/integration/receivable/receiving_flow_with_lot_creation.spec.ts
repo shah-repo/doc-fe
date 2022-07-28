@@ -959,7 +959,9 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
   context("Enter Quantity received on line item and save it", () => {
     it("Click on first line item", () => {
-      cy.get("tr[data-cy='poItems']").eq(0).arrowClick().wait(2000);
+      cy.get("tr[data-cy='poItems']").eq(0).arrowClick({ force: true }).wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add quantity received", () => {
