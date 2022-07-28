@@ -19,6 +19,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { FB } from "../../../form.builder";
 import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
@@ -48,6 +49,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // of create button until correct doc id is generated
   const { isCreateDocumentDisabled } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
+  const { workspaceState } = FB.useStores();
 
   const {
     documentRevision,
@@ -107,7 +109,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
-  const isLHRProductionBuild =  _formState?.isLHRProductionBuild || false;
+  const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
 
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
