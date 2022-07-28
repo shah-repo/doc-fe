@@ -91,7 +91,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     setShowOnlyText(true);
   };
 
-
   const intl = useIntl();
   const titlePlaceholder = intl.formatMessage({ id: "form.builder.enter.title" });
 
