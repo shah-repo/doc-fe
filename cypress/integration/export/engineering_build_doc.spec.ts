@@ -2,12 +2,14 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -33,6 +35,11 @@ let equipmentDocument;
 let createdEquipmentFormDocument;
 let materialsDocument;
 let createdPartDocument;
+let dateAfterEmailShouldArrive;
+let emailsFromInbox;
+let downloadUrl;
+let downloadFile;
+let fileId;
 
 context("Export Engineering Build doc", () => {
   before(() => {
@@ -362,7 +369,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Select 'Engineering Build' output document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").click().focused().autocompleteSelect("Engineering Build");
       cy.unClick();
     });
 
@@ -370,19 +377,19 @@ context("Export Engineering Build doc", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Add TextField", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+    it("Add File Upload", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
       cy.fbAddNewFieldButton();
     });
 
-    it("Add File Upload", () => {
+    it("Add TextField", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
       cy.fbAddNewFieldButton();
@@ -420,48 +427,132 @@ context("Export Engineering Build doc", () => {
     it("Save the document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
+  });
 
-    it("Get ids", () => {
-      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
-        docId = $docIdElement.text();
+  context("Send to Email after DRAFT status", () => {
+    it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      cy.get(`[data-cy="field-name"]`).should("have.text", "EB form");
+      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+        docId = $formIdElement.text();
+      });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
       });
     });
   });
 
-  context("Check pdf email and get content", () => {
-    it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.DRAFT, filename: "-1-EB-form" }).then((data) => {
-        pdfContent = data;
+  context("Verify DRAFT form email notification", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${docId}`,
+      };
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file containing training form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${fileId}${fileTimeFormat}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${docId}-1-EB-form.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
     });
   });
 
   context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
-      expect(pdfContent.numpages).eq(5);
-      expect(pdfContent.text).match(/Page 1 of 5/);
-      expect(pdfContent.text).match(/Page 2 of 5/);
-      expect(pdfContent.text).match(/Page 3 of 5/);
-      expect(pdfContent.text).match(/Page 4 of 5/);
-      expect(pdfContent.text).match(/Page 5 of 5/);
-      tmpRegex = new RegExp( "\\n\\n");
-      const arr = pdfContent.text.split(tmpRegex);
-      arr.forEach((element) => {
-        if (element.includes("Page 1 of 5")) {
-          pages[0] = element;
-        }
-        if (element.includes("Page 2 of 5")) {
-          pages[1] = element;
-        }
-        if (element.includes("Page 3 of 5")) {
-          pages[2] = element;
-        }
-        if (element.includes("Page 4 of 5")) {
-          pages[3] = element;
-        }
-        if (element.includes("Page 5 of 5")) {
-          pages[4] = element;
-        }
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${docId}-1-EB-form.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(5);
+        expect(cdata.text).match(/Page 1 of 5/);
+        expect(cdata.text).match(/Page 2 of 5/);
+        expect(cdata.text).match(/Page 3 of 5/);
+        expect(cdata.text).match(/Page 4 of 5/);
+        expect(cdata.text).match(/Page 5 of 5/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 5")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 5")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 5")) {
+            pages[2] = element;
+          }
+          if (element.includes("Page 4 of 5")) {
+            pages[3] = element;
+          }
+          if (element.includes("Page 5 of 5")) {
+            pages[4] = element;
+          }
+        });
       });
     });
 
@@ -595,45 +686,138 @@ context("Export Engineering Build doc", () => {
     });
   });
 
-  context("Verify pdf content after released", () => {
+  context("Approve and release the form", () => {
     it("Approve and release the form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Send to Email after RELEASED status", () => {
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get(`[data-cy="field-name"]`).should("have.text", "EB form");
+      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+        docId = $formIdElement.text();
+      });
       cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
         arId = $lnEl.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.sendToEmail();
     });
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
 
-    it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-EB-form" }).then((data) => {
-        pdfContent = data;
+  context("Verify email notification", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${docId}`,
+      };
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file containing training form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${fileId}${fileTimeFormat}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${docId}-1-EB-form.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
-      expect(pdfContent.numpages).eq(5);
-      expect(pdfContent.text).match(/Page 1 of 5/);
-      expect(pdfContent.text).match(/Page 2 of 5/);
-      expect(pdfContent.text).match(/Page 3 of 5/);
-      expect(pdfContent.text).match(/Page 4 of 5/);
-      expect(pdfContent.text).match(/Page 5 of 5/);
-      tmpRegex = new RegExp( "\\n\\n");
-      const arr = pdfContent.text.split(tmpRegex);
-      arr.forEach((element) => {
-        if (element.includes("Page 1 of 5")) {
-          pages[0] = element;
-        }
-        if (element.includes("Page 2 of 5")) {
-          pages[1] = element;
-        }
-        if (element.includes("Page 3 of 5")) {
-          pages[2] = element;
-        }
-        if (element.includes("Page 4 of 5")) {
-          pages[3] = element;
-        }
-        if (element.includes("Page 5 of 5")) {
-          pages[4] = element;
-        }
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${docId}-1-EB-form.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(5);
+        expect(cdata.text).match(/Page 1 of 5/);
+        expect(cdata.text).match(/Page 2 of 5/);
+        expect(cdata.text).match(/Page 3 of 5/);
+        expect(cdata.text).match(/Page 4 of 5/);
+        expect(cdata.text).match(/Page 5 of 5/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 5")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 5")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 5")) {
+            pages[2] = element;
+          }
+          if (element.includes("Page 4 of 5")) {
+            pages[3] = element;
+          }
+          if (element.includes("Page 5 of 5")) {
+            pages[4] = element;
+          }
+        });
       });
     });
 
@@ -891,7 +1075,8 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Save the EB", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Submit for Approval", () => {
@@ -941,47 +1126,127 @@ context("Export Engineering Build doc", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Get ids", () => {
-      cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
-        docId = $docIdElement.text();
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Send to Email after WIP status", () => {
+    it(`Check doc ${STATUS_TYPES_LABEL.WIP} status and click on Send To Email`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.WIP });
+      cy.get(`[data-cy="field-name"]`).should("have.text", "EB doc");
+      cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
+        docId = $formIdElement.text();
+      });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.sendToEmail();
+    });
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
       });
     });
   });
 
-  context("Verify pdf content", () => {
-    it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.WIP, filename: "-A-EB-doc" }).then((data) => {
-        pdfContent = data;
+  context("Verify email notification", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${docId}`,
+      };
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          downloadFile  =  `${fileId}${fileTimeFormat}_WIP.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${docId}-A-EB-doc.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
-      expect(pdfContent.numpages).eq(4);
-      expect(pdfContent.text).match(/Page 1 of 4/);
-      expect(pdfContent.text).match(/Page 2 of 4/);
-      expect(pdfContent.text).match(/Page 3 of 4/);
-      expect(pdfContent.text).match(/Page 4 of 4/);
-      tmpRegex = new RegExp( "\\n\\n");
-      const arr = pdfContent.text.split(tmpRegex);
-      arr.forEach((element) => {
-        if (element.includes("Page 1 of 4")) {
-          pages[0] = element;
-        }
-        if (element.includes("Page 2 of 4")) {
-          pages[1] = element;
-        }
-        if (element.includes("Page 3 of 4")) {
-          pages[2] = element;
-        }
-        if (element.includes("Page 4 of 4")) {
-          pages[3] = element;
-        }
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${docId}-A-EB-doc.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
       });
     });
 
     it("Verify page 1 of EB form", () => {
       const el = pages[0];
-      if (el.includes("Page 1 of 4")) {
+      if (el.includes("Page 1 of 3")) {
         tmpRegex = new
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
@@ -996,15 +1261,14 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/test.docx/);
         expect(el).match(/fb-textfield\ntextfield/);
 
-        expect(el).match(STATUS_TYPES_LABEL.WIP);
-
+        expect(el).match(/WIP/);
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 4/);
+        expect(el).match(/Page 1 of 3/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1013,7 +1277,7 @@ context("Export Engineering Build doc", () => {
 
     it("Verify page 2 of EB form", () => {
       const el = pages[1];
-      if (el.includes("Page 2 of 4")) {
+      if (el.includes("Page 2 of 3")) {
         tmpRegex = new
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
@@ -1027,8 +1291,8 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/Attachments/);
         expect(el).match(/test_image.jpg/);
         expect(el).match(/Materials\nMT-00004 - Materials document | ? | Qty: 2 each/);
-
-        expect(el).match(STATUS_TYPES_LABEL.WIP);
+        expect(el).match(/Equipment\nET-00003 - Equipment document/);
+        expect(el).match(/WIP/);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1036,7 +1300,7 @@ context("Export Engineering Build doc", () => {
         tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 4/);
+        expect(el).match(/Page 2 of 3/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1045,12 +1309,11 @@ context("Export Engineering Build doc", () => {
 
     it("Verify page 3 of EB form", () => {
       const el = pages[2];
-      if (el.includes("Page 3 of 4")) {
+      if (el.includes("Page 3 of 3")) {
         tmpRegex = new
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Equipment\nET-00003 - Equipment document/);
         expect(el).match(/EB PROCEDURE\nSTEP #2/);
         expect(el).match(/Step #2 description/);
         expect(el).match(/Attachments/);
@@ -1060,7 +1323,7 @@ context("Export Engineering Build doc", () => {
         expect(el).match(/STEP #3/);
         expect(el).match(/Attachments\nNone\nMaterials\nNone\nEquipment\nNone/);
 
-        expect(el).match(STATUS_TYPES_LABEL.WIP);
+        expect(el).match(/WIP/);
 
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
@@ -1068,29 +1331,7 @@ context("Export Engineering Build doc", () => {
         tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 4/);
-
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(el).not.match(tmpRegex);
-      }
-    });
-
-    it("Verify page 4 of EB form", () => {
-      const el = pages[3];
-      if (el.includes("Page 4 of 4")) {
-        tmpRegex = new
-        RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
-        expect(el).match(tmpRegex);
-
-        expect(el).match(STATUS_TYPES_LABEL.WIP);
-
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
-
-        expect(el).match(/Page 4 of 4/);
+        expect(el).match(/Page 3 of 3/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1212,7 +1453,7 @@ context("Export Engineering Build doc", () => {
       expect(pdfContent.text).match(/Page 1 of 4/);
       expect(pdfContent.text).match(/Page 2 of 4/);
       expect(pdfContent.text).match(/Page 3 of 4/);
-      expect(pdfContent.text).match(/Page 3 of 4/);
+      expect(pdfContent.text).match(/Page 4 of 4/);
       tmpRegex = new RegExp( "\\n\\n");
       const arr = pdfContent.text.split(tmpRegex);
       arr.forEach((element) => {
@@ -1225,7 +1466,7 @@ context("Export Engineering Build doc", () => {
         if (element.includes("Page 3 of 4")) {
           pages[2] = element;
         }
-        if (element.includes("Page 3 of 4")) {
+        if (element.includes("Page 4 of 4")) {
           pages[3] = element;
         }
       });
@@ -1352,7 +1593,6 @@ context("Export Engineering Build doc", () => {
       }
     });
   });
-
 });
 
 export { };
