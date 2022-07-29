@@ -172,13 +172,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const documentRevision = get(formik, "values") as DocumentRevision;
 
   let schema = revisionFormSchema;
-  set(documentRevision, "schema", schema);
   set(documentRevision, "formTemplate.schema", schema);
 
   const docTypeId = documentRevision?.document?.documentType?.id as string;
   const outputTypeId = documentRevision?.outputDocumentTypes?.value as string;
   set(documentRevision, "document.documentType", documentTypesById[docTypeId]);
-  set(documentRevision, "formTemplate.outputDocumentTypes", [documentTypesById[outputTypeId]]);
 
   const formValues = formik as FormikProps<DocumentRevisionFormValues>;
   const initialValues = documentRevision as unknown as DocumentRevisionFormValues;
@@ -189,9 +187,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const showAdministrativeAndVoidChange = false;
   const type = "none";
   const mode = "formPreview";
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const resetForm = () => {};
 
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
-  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
+  const outputTypeGroup = get(documentTypesById[outputTypeId], "group");
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
@@ -225,7 +225,6 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       ele.stepIndex = obj?.[0]?.stepIndex;
     });
 
-    set(documentRevision, "schema", schema);
     set(documentRevision, "formTemplate.schema", schema);
   }
 
@@ -307,6 +306,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                 documentTypesById={documentTypesById}
                                 canChangeOwnerShip={false}
                                 type={type}
+                                resetForm={resetForm}
                                 {...{
                                   type,
                                   showAdministrativeAndVoidChange,
@@ -382,7 +382,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     });
   };
 
-  const previewDisabled = !revisionFormSchema?.length || existsDialogState?.open;
+  const previewDisabled = !schema?.length || existsDialogState?.open;
 
   return (
     <FBProvider dialogState={dialogState}>
