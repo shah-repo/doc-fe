@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalMatrixRolesActions, FBApprovalMatrixRolesProps, FBDAMFields, FBData, FBDialogState, FBForm } from "..";
@@ -29,7 +29,8 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     };
 
     useObserver(() => {
-      approvalRoles = approvalMatrixFieldState?.data?.approvalRoles || darMatrix;
+      approvalRoles = isEmpty(approvalMatrixFieldState?.data?.approvalRoles) ? darMatrix :
+        approvalMatrixFieldState?.data?.approvalRoles;
     });
 
     return Component({

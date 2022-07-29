@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { withResizeDetector } from "react-resize-detector";
@@ -45,8 +45,8 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     useObserver(() => {
       approvalData = {
         ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
-        approvalMatrix: approvalData?.approvalMatrix || damMatrix,
-        approvalRoles: approvalData?.approvalRoles || damRoles,
+        approvalMatrix: isEmpty(approvalData?.approvalMatrix) ? damMatrix : approvalData?.approvalMatrix,
+        approvalRoles: isEmpty(approvalData?.approvalRoles) ? damRoles : approvalData?.approvalRoles,
       };
     });
 
