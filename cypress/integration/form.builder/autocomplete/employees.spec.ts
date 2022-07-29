@@ -112,7 +112,7 @@ context("Autocomplete 'Employees' test", () => {
         });
         it("Close Popup", () => {
           cy.get("[role=\"dialog\"]").scrollTo("top");
-          cy.get("[id=\"DialogContent-close\"]").arrowClick();
+          cy.get("#DialogContent-close").arrowClick();
         });
       });
     });
