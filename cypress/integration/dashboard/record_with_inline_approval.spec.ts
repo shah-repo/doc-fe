@@ -395,7 +395,9 @@ context("Records test with Inline approval", () => {
     });
 
     it("Click on revisions tab on side panel", () => {
-      cy.drClickRevisionsSidePanel();
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drClickRevisionsSidePanel();
+      });
     });
 
     it("rev 3 will be created", () => {

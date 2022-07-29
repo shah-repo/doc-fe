@@ -189,7 +189,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   useObserver(() => {
     if (values.id || values.document?.documentType?.id) {
-      dirty = _formState?.isDirty || false;
+      dirty = _formState?.isDirty || _documentRevisionFormState?.isDirty || false;
     }
   });
 
@@ -211,7 +211,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
-    i.label.includes("Purchase Order")) : [false];
+    i?.label?.includes("Purchase Order")) : [false];
 
   return (
     <FormWrapper

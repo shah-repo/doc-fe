@@ -389,6 +389,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Navigate to procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
     it("Add 'CS Part' as Material to step #1", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
@@ -410,6 +414,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     context("Verify Materials", () => {
+      it("Navigate to procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Verify materials of clone of Step #1", () => {
         cy.contains("Step #1").parentsUntil("li")
           .find("[data-cy=\"form.builder.mpi.procedure.materials.title\"]")
@@ -522,12 +530,13 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Start LHRs #1", () => {
-    it("Navigate to Details tab", () => {
+    it("Navigate to details tab", () => {
       cy.drSelectDetailsTab();
     });
 
@@ -537,6 +546,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
+    });
+
+    it("Navigate to procedure tab", () => {
+      cy.drSelectProcedureTab();
     });
 
     it(`Click 'SELECT' for CS '${CSPartDocumentTitle}'`, () => {
@@ -684,6 +697,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Navigate to procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
     it("Add 'CS Part' as Material to step #1", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
@@ -705,6 +722,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     context("Verify Materials", () => {
+      it("Navigate to procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Verify materials of clone of Step #1", () => {
         cy.contains("Step #1").parentsUntil("li")
           .find("[data-cy=\"form.builder.mpi.procedure.materials.title\"]")
@@ -819,7 +840,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -834,6 +855,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
+    });
+
+    it("Navigate to Procedure tab", () => {
+      cy.drSelectProcedureTab();
     });
 
     it(`Click 'SELECT' for CS '${CSPartDocumentTitle}'`, () => {

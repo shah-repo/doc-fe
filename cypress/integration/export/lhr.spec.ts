@@ -225,14 +225,14 @@ context("Export for LHR", () => {
                 label: "form.builder.mpiprocedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
-                tabId: "details",
+                tabId: "procedure",
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
                 stepIndex: 1,
-                tabId: "details",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -277,7 +277,7 @@ context("Export for LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
-                tabId: "details",
+                tabId: "procedure",
               },
               {
                 name: "lhrs-accepted-quantity",
@@ -295,7 +295,7 @@ context("Export for LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
-                tabId: "details",
+                tabId: "procedure",
               },
               {
                 name: "lhrs-rejected-quantity",
@@ -305,7 +305,7 @@ context("Export for LHR", () => {
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
-                tabId: "details",
+                tabId: "procedure",
                 deleteDisabled: true,
                 editorProperties: [
                   "includeNotes",
@@ -328,7 +328,7 @@ context("Export for LHR", () => {
                 validationAttribute: "Approvals",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
-                tabId: "details",
+                tabId: "overview",
               },
             ],
           },
@@ -592,14 +592,6 @@ context("Export for LHR", () => {
       cy.cmpTurnOffAutosave();
     });
 
-    it("Enter 'Start quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
-    });
-
-    it("Enter 'Accepted quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
-    });
-
     it("Add an Approval", () => {
       cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -607,6 +599,24 @@ context("Export for LHR", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.drSaveDocumentWithoutaudit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select 'Procedure' tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Enter 'Start quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
+    });
+
+    it("Enter 'Accepted quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
     });
 
     it("Click save document", () => {
