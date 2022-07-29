@@ -411,10 +411,6 @@ context("All regular users on new dashboard", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Verify Dashboard tabs", () => {
@@ -499,7 +495,6 @@ context("All regular users on new dashboard", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-      cy.cmpTurnOffAutosave();
     });
 
     it(`For ${USERS[1].name}, verify each line contain icon, doc detail & datetime`, () => {
@@ -600,18 +595,6 @@ context("All regular users on new dashboard", () => {
         cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
       });
 
-      it("Upload attachments 'test_image.jpg'", () => {
-        cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
-        cy.get("#attachments-button-file-clean-copy")
-          .attachFiles(
-            [
-              { name: "./test_image.jpg", type: "image/jpg" },
-            ]
-          );
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
       it("Select 'Third party Company' for Ship To", () => {
         cy.get("[name^=\"ship-to\"]").eq(1).arrowClick();
       });
@@ -653,8 +636,13 @@ context("All regular users on new dashboard", () => {
         cy.drSelectLineItems();
       });
 
+      it("Upload attachments", () => {
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
       it("Click on 'Add item' button to add item without Part Number", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+        cy.get(`button[data-cy="fb-control-btn"]`).arrowClick().wait(1000);
       });
 
       it("Enter Quantity Ordered", () => {
@@ -675,8 +663,7 @@ context("All regular users on new dashboard", () => {
 
       it("Add Required Date", () => {
         cy.get("input[name^=date]").parent().find("button").arrowClick();
-
-        cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+        cy.get(".MuiPickersDay-daySelected").arrowClick();
       });
 
       it("Check Tax box", () => {
@@ -806,13 +793,13 @@ context("All regular users on new dashboard", () => {
 
     it("Clicking on the arrow should show the PO details", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).next()
-        .should("contain.text", "Supplier:API supplier")
-        .and("contain.text", "Total:USD 21.85")
-        .and("contain.text", "Description:New Purchase Order")
-        .and("contain.text", "Line Items:1")
-        .and("contain.text", "Attachments test_image.jpg");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Line Items:1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Attachments` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `image.jpg` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `test_image.jpg` });
     });
 
     it("Buttons for PO should be displayed", () => {
@@ -880,14 +867,14 @@ context("All regular users on new dashboard", () => {
 
     it("Verify updated info on PO notification", () => {
       cy.navigToDashboard();
-
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find("svg").eq(0).arrowClick();
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).next()
-        .should("contain.text", "Supplier:API supplier")
-        .and("contain.text", "Total:USD 21.85")
-        .and("contain.text", "Description:New Purchase Order test")
-        .and("contain.text", "Line Items:1")
-        .and("contain.text", "Attachments test_image.jpg");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Line Items:1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Attachments` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `image.jpg` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `test_image.jpg` });
     });
 
     it(`${USERS[1].name} should see 2 pending PO on dashboard`, () => {

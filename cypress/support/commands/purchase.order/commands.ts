@@ -136,14 +136,15 @@ Cypress.Commands.add("poEnterQuantityReceipt", (params: {quantity: string}) => {
 });
 
 Cypress.Commands.add("poSelectUnits", () => {
-  cy.get("[name=\"units\"]").arrowClick();
-  cy.get("ul > li[role=option]").contains("Each").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[name=\"units\"]").click().focused().autocompleteSelect("Each");
+  cy.unClick();
 });
 
 Cypress.Commands.add("poSelectGLCode", () => {
   cy.listLoadingElementShouldNotExist();
-  cy.get("[name=\"glCode\"]").arrowClick();
-  cy.get("ul > li[role=option]").contains("code 1").arrowClick();
+  cy.get("[name=\"glCode\"]").click().focused().autocompleteSelect("code 1");
+  cy.unClick();
 });
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
