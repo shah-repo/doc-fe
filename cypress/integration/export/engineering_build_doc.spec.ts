@@ -1569,7 +1569,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Verify page 4 of EB form", () => {
-      const el = pages[2];
+      const el = pages[3];
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new
         RegExp( `Engineering Build\n${docId}, Revision A\nEB DOC`, "gi" );
