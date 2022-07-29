@@ -1,12 +1,14 @@
+/* eslint-disable no-console */
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, includes, isEmpty } from "lodash";
+import { flatten, get, includes, isEmpty } from "lodash";
 import { Observer, observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
 import { authSelectors } from "../../../state/ducks/auth";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -18,6 +20,8 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -210,6 +214,49 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     return docId || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
   };
 
+  /** Will move to within the new RelatedParts Component */
+
+  const createDocAction = useActionCreator(documentRevisionsActions.create);
+  const async = useAsync<DocumentRevision>({
+    onSuccess: (createdDocumentRevision?) => {
+      if (createdDocumentRevision) {
+        console.log(createdDocumentRevision);
+      }
+    },
+  });
+
+  const createNewDocument = () => {
+    const docDto = {
+      formDocument: {
+        id: get(documentRevision, "formDocumentId"),
+      },
+      description: "",
+      name: "",
+      attachments: [],
+      referenceTo: [],
+      revisionStage: null,
+      revisionChangeType: get(documentRevision, "revisionChangeType"),
+      document: {
+        docId: "SA-03045-01",
+        securityList: {
+          securityEmployees: (get(documentRevision, "document.securityEmployees") || [])
+            .map((employee) => ({ id: employee.value })),
+          securityGroups: (get(documentRevision, "document.securityGroups") || [])
+            .map((group) => ({ id: group.id })),
+          operators: get(documentRevision, "document.operators"),
+        },
+        documentType: {
+          id: get(documentRevision, "document.documentType.id"),
+        },
+      },
+    };
+
+    console.log(documentRevision, docDto);
+    async.start(createDocAction, docDto, async);
+  };
+
+  /** Will move to within the new RelatedParts Component */
+
   const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
     i?.label?.includes("Purchase Order")) : [false];
 
@@ -301,6 +348,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               label="common.part.of"
               isDraft={isDocRevStatusDraft || isRevised}
             />
+          </Grid>
+        )}
+        {isPart && (
+          <Grid item xs={12}>
+            <button
+              onClick = {createNewDocument}
+            >Add Related Part</button>
           </Grid>
         )}
         {isEB && documentRevision?.parent && (
