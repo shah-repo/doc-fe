@@ -124,22 +124,22 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       const approvalMatrix = map(get(formInput, FBDAMFields.DAM), (am) => {
         map(new Array(approvalRoles.length), (_, i) => {
           if (isEmpty(am.approvalRoles.stage1)) {
-            am.approvalRoles.stage1 = am.approvalRoles.stage1?.[i] || [false];
+            am.approvalRoles.stage1 = [am.approvalRoles.stage1?.[i] || false];
           } else {
             am.approvalRoles.stage1[i] = am.approvalRoles.stage1?.[i] || false;
           }
           if (isEmpty(am.approvalRoles.stage2)) {
-            am.approvalRoles.stage2 = am.approvalRoles.stage2?.[i] || [false];
+            am.approvalRoles.stage2 = [am.approvalRoles.stage2?.[i] || false];
           } else {
             am.approvalRoles.stage2[i] = am.approvalRoles.stage2?.[i] || false;
           }
           if (isEmpty(am.approvalRoles.stage3)) {
-            am.approvalRoles.stage3 = am.approvalRoles.stage3?.[i] || [false];
+            am.approvalRoles.stage3 = [am.approvalRoles.stage3?.[i] || false];
           } else {
             am.approvalRoles.stage3[i] = am.approvalRoles.stage3?.[i] || false;
           }
           if (isEmpty(am.approvalRoles.admStage)) {
-            am.approvalRoles.admStage = am.approvalRoles.admStage?.[i] || [false];
+            am.approvalRoles.admStage = [am.approvalRoles.admStage?.[i] || false];
           } else {
             am.approvalRoles.admStage[i] = am.approvalRoles.admStage?.[i] || false;
           }
