@@ -333,7 +333,7 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -343,8 +343,8 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drCreateNewDocumentFromForm();
       });
     });
   });
@@ -562,9 +562,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Create new POAM document from Form", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title 'New POAM'", () => {
@@ -628,9 +626,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Create new Supplier document from Form", () => {
-        cy.wrapWithWaitOnApiCalls([ CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApproversDocRev ], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Fill document name", () => {
