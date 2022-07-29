@@ -1,4 +1,4 @@
-import { debounce, get, isEmpty, pick, set } from "lodash";
+import { debounce, get, has, isEmpty, map, pick, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DocumentRevisionSummary } from "../../App";
@@ -109,13 +109,30 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       set(values, "formInput.formInput", formStateContext?._currentValue);
     }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    const formInput = get(dataToSubmit, "formInput");
 
     if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
       set(dataToSubmit, "formInput", {
-        ...get(dataToSubmit, "formInput"), ...{
+        ...formInput, ...{
           [FBDAMFields.DAM]: FBStore.damData?.["approvalMatrix"],
           [FBDAMFields.DAR]: FBStore.damData?.["approvalRoles"],
         },
+      });
+    }
+    if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)) {
+      const approvalRoles = get(formInput, FBDAMFields.DAR);
+      const approvalMatrix = map(get(formInput, FBDAMFields.DAM), (am) => {
+        map(new Array(approvalRoles.length), (_, i) => {
+          am.approvalRoles.stage1[i] = am.approvalRoles.stage1[i] || false;
+          am.approvalRoles.stage2[i] = am.approvalRoles.stage2[i] || false;
+          am.approvalRoles.stage3[i] = am.approvalRoles.stage3[i] || false;
+          am.approvalRoles.admStage[i] = am.approvalRoles.admStage[i] || false;
+        });
+        return am;
+      });
+      set(dataToSubmit, "formInput", {
+        ...formInput,
+        [FBDAMFields.DAR]: approvalRoles, [FBDAMFields.DAM]: approvalMatrix,
       });
     }
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
