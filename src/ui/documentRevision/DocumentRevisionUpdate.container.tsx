@@ -1,4 +1,4 @@
-import { debounce, isEmpty, pick, set } from "lodash";
+import { debounce, get, isEmpty, pick, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DocumentRevisionSummary } from "../../App";
@@ -9,6 +9,7 @@ import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
+import { FBDAMFields } from "../form.builder";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
 import FBStore from "../form.builder/FBStore/FBStore";
@@ -19,6 +20,7 @@ import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
+import { checkIsDocumentDAM } from "./helpers/checkDocumentGroup";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
 interface Props {
@@ -44,6 +46,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
+  const formGroupOptions = documentRevision?.document.documentType.groupOptions;
+  const isDAM = checkIsDocumentDAM(formGroupOptions);
   useDocumentTitle(docId);
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
@@ -105,6 +109,15 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       set(values, "formInput.formInput", formStateContext?._currentValue);
     }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+
+    if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
+      set(dataToSubmit, "formInput", {
+        ...get(dataToSubmit, "formInput"), ...{
+          [FBDAMFields.DAM]: FBStore.damData?.["approvalMatrix"],
+          [FBDAMFields.DAR]: FBStore.damData?.["approvalRoles"],
+        },
+      });
+    }
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
     if (redlineActive) {
