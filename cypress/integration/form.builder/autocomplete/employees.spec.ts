@@ -110,6 +110,10 @@ context("Autocomplete 'Employees' test", () => {
         it("Checks on 'Enable Hello Sign' button", () => {
           cy.contains("Enable Hello Sign").arrowClick();
         });
+        it("Close Popup", () => {
+          cy.get("[role=\"dialog\"]").scrollTo("top");
+          cy.get("[id=\"DialogContent-close\"]").arrowClick();
+        });
       });
     });
 
