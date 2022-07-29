@@ -423,7 +423,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it(`Uncheck Approvals Numeric for ${roleOne}`, () => {
-      cy.get("div:nth-child(2) > div> table > tbody > tr:nth-child(6) > td:nth-child(1)").click();
+      cy.get("div:nth-child(2) > div> table > tbody > tr:nth-child(26) > td:nth-child(1)").click();
     });
   });
 
