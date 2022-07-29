@@ -2,7 +2,6 @@
 /* eslint-disable max-classes-per-file */
 
 import "moment-timezone";
-import moment from "moment-timezone";
 import path from "path";
 import { emailDateOffset, fileTimeFormat } from "../../../utils/constants/dateHandler";
 import { CONFIG } from "../../config";
@@ -105,17 +104,21 @@ Cypress.Commands.add("inlineApproval", () => {
 
 Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename: string; type?: string}) => {
   let recordId;
-  let dateAfterEmailShouldArrive;
   let downloadUrl;
   let fileId;
   let downloadFile;
-  const dateOffset = (5 * 1000);
 
   cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
   cy.get("[data-cy=\"HeaderInfo-docId\"]").then(($x) => {
     recordId = $x.text();
-    dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
-    cy.sendToEmail();
+    const dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+    cy.get("body").then(($body) => {
+      if ($body.find("[data-cy=\"HeaderMenuButton\"]").length) {
+        cy.sendToEmail();
+      } else {
+        cy.sendToEmailFromHeader();
+      }
+    });
     cy.checkToastMessageContains({
       message: "File will be sent to your email shortly.",
     });
@@ -124,6 +127,8 @@ Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename:
       to: CONFIG.TEST_EMAIL,
       after: dateAfterEmailShouldArrive,
       subject: `Export for ${params.type ? params.type : "document"} ${recordId}`,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      include_body: true,
     };
 
     cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -136,8 +141,7 @@ Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename:
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${recordId}${filetime}_closed.zip`;
+          downloadFile  =  `${recordId}${fileTimeFormat}_closed.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
