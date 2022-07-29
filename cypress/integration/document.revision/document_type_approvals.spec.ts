@@ -333,7 +333,7 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
@@ -343,7 +343,9 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+      });
     });
   });
 
@@ -355,13 +357,15 @@ context("Check DAM enforcement rules for document types", () => {
     it("type a description", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
+
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
   });
 
   context("Add New Role: Role One", () => {
     it("Open approval roles tab", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drSelectApprovalRolesTab();
-      });
+      cy.drSelectApprovalRolesTab();
     });
 
     it("Open 'Add Role' dialog", () => {
@@ -382,8 +386,6 @@ context("Check DAM enforcement rules for document types", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drAddApprovalRole();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -560,7 +562,9 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Create new POAM document from Form", () => {
-        cy.drCreateNewDocumentFromForm();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+          cy.drCreateNewDocumentFromForm();
+        });
       });
 
       it("Enter title 'New POAM'", () => {
@@ -624,7 +628,9 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Create new Supplier document from Form", () => {
-        cy.drCreateNewDocumentFromForm();
+        cy.wrapWithWaitOnApiCalls([ CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApproversDocRev ], () => {
+          cy.drCreateNewDocumentFromForm();
+        });
       });
 
       it("Fill document name", () => {
