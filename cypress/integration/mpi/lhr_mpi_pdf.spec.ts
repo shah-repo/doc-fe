@@ -967,10 +967,6 @@ context("Autosave LHR", () => {
   });
 
   context("Create lot document", () => {
-    // it("Turn off autosave", () => {
-    //  // cy.cmpTurnOffAutosave();
-    // });
-
     it("Navigate to Lots", () => {
       cy.navigToLots();
     });
@@ -2413,10 +2409,6 @@ context("Autosave LHR", () => {
       cy.get("[name=\"lhr_initial_quantity\"]").should("have.value", "50.1");
     });
 
-    // it("check End quntity", () => {
-    //   cy.get("[name=\"lhr-end-quantity\"]").should("have.value", "10.8");
-    // });
-
     it("check build type", () => {
       cy.get("[name=\"lhr-build-type\"]").should("be.checked");
     });
@@ -2458,10 +2450,6 @@ context("Autosave LHR", () => {
     it("check Initial quntity", () => {
       cy.get("[name=\"lhr_initial_quantity\"]").should("have.value", "50.1");
     });
-
-    // it("check End quntity", () => {
-    //   cy.get("[name=\"lhr-end-quantity\"]").should("have.value", "10.8");
-    // });
 
     it("check build type", () => {
       cy.get("[name=\"lhr-build-type\"]").should("be.checked");
