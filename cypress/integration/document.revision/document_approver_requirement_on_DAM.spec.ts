@@ -186,7 +186,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Send email, verify email and verify PDF file content", () => {
+  context("Send email, verify email and verify PDF file content", () => {
     context("Verify `Draft DAM request form` title", () => {
       it("Check doc Released status and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
@@ -374,7 +374,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Send email, verify email and verify PDF file content", () => {
+  context("Send email, verify email and verify PDF file content", () => {
     context("Verify `Released DAM request form` title", () => {
       it("Check doc Released status and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
@@ -781,14 +781,13 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Send email, verify email and verify PDF file content", () => {
+  context("Send email, verify email and verify PDF file content", () => {
     context("Verify `Draft DAM document` title", () => {
       it("Check doc Draft status and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
           releasedFormId = x.text();
         });
-        cy.get(".MuiBox-root").contains(`${releasedFormId}`);
         dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         cy.sendToEmail();
       });
@@ -916,6 +915,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/image.jpg/);
 
+          expect(el).match(/Checkbox/);
+
+          expect(el).match(/1 2 3/);
+
           expect(el).match(/Draft/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -953,9 +956,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           expect(el).match(tmpRegex);
 
           expect(el).not.match(/TEXT FIELD/);
-
-          tmpRegex = new RegExp( `Checkbox\n1 2 3`, "gi" );
-          expect(el).match(tmpRegex);
 
           expect(el).match(/Draft/);
 
@@ -1033,14 +1033,13 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Send email, verify email and verify PDF file content", () => {
+  context("Send email, verify email and verify PDF file content", () => {
     context("Send email for released document", () => {
       it("Check revised doc released status and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
           releasedFormId = x.text();
         });
-        cy.get(".MuiBox-root").contains(`${releasedFormId}`);
         cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
           arId = x.text();
         });
@@ -1172,6 +1171,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/image.jpg/);
 
+          expect(el).match(/Checkbox/);
+
+          expect(el).match(/1 2 3/);
+
           expect(el).match(/Released/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1209,9 +1212,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           expect(el).match(tmpRegex);
 
           expect(el).not.match(/TEXT FIELD/);
-
-          tmpRegex = new RegExp( `Checkbox\n1 2 3`, "gi" );
-          expect(el).match(tmpRegex);
 
           expect(el).match(/Released/);
 
@@ -1392,21 +1392,25 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Add first approver to approval request on approver list", () => {
       SystemRequirement("REQ-4270");
-      cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: FIRST_USER.email });
     });
 
     it("Add second approver to approval request on approver list", () => {
       SystemRequirement("REQ-4270");
-      cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: SECOND_USER.email });
     });
 
     it("Add third approver to approval request on approver list", () => {
       SystemRequirement("REQ-4270");
-      cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: THIRD_USER.email });
+    });
+
+    it("Clicks on 'Save' button", () => {
+      cy.arSaveApiCall();
     });
   });
 
-  xcontext("Send email, verify email and verify PDF file content", () => {
+  context("Send email, verify email and verify PDF file content", () => {
     context("Verify `Draft DAM document` title", () => {
       it("Check approval request document draft status and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
@@ -1563,7 +1567,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Send email, verify email and verify PDF file content", () => {
+  context("Send email, verify email and verify PDF file content", () => {
     context("Verify `In Review DAM document` title", () => {
       it("Check AR status in review and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
@@ -1571,6 +1575,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           releasedFormId = x.text();
         });
         dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        cy.sendToEmail();
       });
     });
 
@@ -1692,7 +1697,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           RegExp( `${THIRD_USER.name} | PENDING ${docRelDate}\n\n(.*)@(.*)`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/IN_REVIEW/);
+          expect(el).match(/In Review/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
@@ -1819,7 +1824,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  xcontext("Send email, verify email and verify PDF file content", () => {
+  context("Send email, verify email and verify PDF file content", () => {
     context("Verify `Closed DAM document` title", () => {
       it("Check Approval Request closed status and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.CLOSED });
@@ -1973,7 +1978,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Filter the Released documents", () => {
-      cy.dlFilterByStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.dlFilterByStatus({ status: "Released" });
     });
 
     it(`select '${documentOne}'`, () => {
@@ -1989,7 +1994,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Filter the Released document", () => {
-      cy.dlFilterByStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.dlFilterByStatus({ status: "Released" });
     });
 
     it(`Select '${documentTwo}'`, () => {
