@@ -1,6 +1,6 @@
 import { Box, Button, Grid, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { FormikProps, useFormikContext } from "formik";
-import { filter, get, set, includes, map, size } from "lodash";
+import { filter, get, includes, map, size } from "lodash";
 import * as React from "react";
 import cx from "classnames";
 import { useSelector } from "react-redux";
@@ -172,11 +172,10 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const documentRevision = get(formik, "values") as DocumentRevision;
 
   let schema = revisionFormSchema;
-  set(documentRevision, "formTemplate.schema", schema);
 
   const docTypeId = documentRevision?.document?.documentType?.id as string;
   const outputTypeId = documentRevision?.outputDocumentTypes?.value as string;
-  set(documentRevision, "document.documentType", documentTypesById[docTypeId]);
+  const documentType = documentTypesById[docTypeId];
 
   const formValues = formik as FormikProps<DocumentRevisionFormValues>;
   const initialValues = documentRevision as unknown as DocumentRevisionFormValues;
@@ -190,9 +189,9 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const resetForm = () => {};
 
-  const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
+  const docTypeGroup = get(documentType, "group", "OTHER");
   const outputTypeGroup = get(documentTypesById[outputTypeId], "group");
-  const groupOptions = documentRevision?.document.documentType.groupOptions;
+  const groupOptions = documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
@@ -200,7 +199,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
-  const documentTypeId = formValues.values.document?.documentType?.id || "";
+  const documentTypeId = docTypeId || "";
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const isCurrentUserOperator = React.useContext(isOperator);
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
@@ -224,8 +223,6 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       const obj = schema?.filter((el) => ele?.metadata?.fieldId === el.name);
       ele.stepIndex = obj?.[0]?.stepIndex;
     });
-
-    set(documentRevision, "formTemplate.schema", schema);
   }
 
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
