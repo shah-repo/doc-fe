@@ -111,8 +111,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const classes = styles();
   const formik = useFormikContext();
   const { _documentRevisionFormState, _tabsState, _formState } = SM.useStores();
-  const { dialogState: existsDialogState } = FB.useStores();
-  const revisionFormSchema = _documentRevisionFormState?.schema;
+  const { workspaceState, dialogState: existsDialogState } = FB.useStores();
+  let schema = _documentRevisionFormState?.schema;
   const [selectedValues, setSelectedValues] = React.useState<any>([]);
 
   const disabled: boolean = (docRevId !== undefined) || isDisabled;
@@ -151,7 +151,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     const scheme = getFBSchemeByDocType(
       formValue,
       documentTypesById,
-      revisionFormSchema,
+      schema,
       _tabsState?.tabID,
     );
 
@@ -159,50 +159,41 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     workspaceState?.setSchema(scheme);
   };
 
-  const { workspaceState } = FB.useStores();
-
-  const onTabChange = (_ev, newValue, tabConfig) => {
-    _tabsState?.setValue(newValue);
-    _tabsState?.setTabID(tabConfig[newValue].tabId);
-  };
-
   // @todo: Mix between DocumentRevisionSummary and DocumentRevisionForm.
   // @todo: Move these elements to one component to reuse.
   // Create documentRevision and fill it
   const documentRevision = get(formik, "values") as DocumentRevision;
-
-  let schema = revisionFormSchema;
-
-  const docTypeId = documentRevision?.document?.documentType?.id as string;
-  const outputTypeId = documentRevision?.outputDocumentTypes?.value as string;
-  const documentType = documentTypesById[docTypeId];
-
   const formValues = formik as FormikProps<DocumentRevisionFormValues>;
   const initialValues = documentRevision as unknown as DocumentRevisionFormValues;
 
-  const isOutput = true;
+  const docTypeId = documentRevision?.document?.documentType?.id as string;
+  const documentType = documentTypesById[docTypeId];
+  const docTypeGroup = get(documentType, "group", "OTHER");
+
+  const outputTypeId = documentRevision?.outputDocumentTypes?.value as string;
+  const outputType = documentTypesById[outputTypeId];
+  const outputTypeGroup = get(outputType, "group");
+
+  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
+  const isLHR = checkIsDocumentLHR(documentType.groupOptions);
+  const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isOutput = true;
   const showAdministrativeAndVoidChange = false;
   const type = "none";
   const mode = "formPreview";
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const resetForm = () => {};
 
-  const docTypeGroup = get(documentType, "group", "OTHER");
-  const outputTypeGroup = get(documentTypesById[outputTypeId], "group");
-  const groupOptions = documentType.groupOptions;
-  const isLHR = checkIsDocumentLHR(groupOptions);
-  const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
     schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
-  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
-  const documentTypeId = docTypeId || "";
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
-  const isCurrentUserOperator = React.useContext(isOperator);
-  const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -219,7 +210,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       }),
     }));
 
-    smartReferencesFrom?.forEach((ele, i) => {
+    smartReferencesFrom?.forEach((ele) => {
       const obj = schema?.filter((el) => ele?.metadata?.fieldId === el.name);
       ele.stepIndex = obj?.[0]?.stepIndex;
     });
@@ -253,7 +244,10 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
-  const formInput = initialValues;
+  const onTabChange = (_ev, newValue, tabConfig) => {
+    _tabsState?.setValue(newValue);
+    _tabsState?.setTabID(tabConfig[newValue].tabId);
+  };
 
   const dialogState = FB.useRef<FBDialogState>(FBDialogState);
   const handlePreview: React.MouseEventHandler = () => {
@@ -322,7 +316,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                   ...documentRevision as unknown as DocumentRevision,
                                 }}
                                 {... { workspaceState }}
-                                initialValues={formInput}
+                                initialValues={initialValues}
                                 schema={schema}
                               />}
                             </>}
@@ -337,7 +331,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                     containsRedline={false}
                                     docRevStatus={documentRevision?.status}
                                     documentRevision={documentRevision}
-                                    documentTypeId={documentTypeId || ""}
+                                    documentTypeId={docTypeId || ""}
                                     labeld={"Supporting Documents"}
                                   />
                                 )}
@@ -349,7 +343,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                     ...documentRevision as unknown as DocumentRevision,
                                   }}
                                   {... { workspaceState }}
-                                  initialValues={formInput}
+                                  initialValues={initialValues}
                                   schema={schema}
                                 />
                               </>
