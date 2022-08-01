@@ -143,7 +143,7 @@ Cypress.Commands.add("lhrAddApproverOnApproverList", (params: { approver: string
 
   cy.get(`[data-cy^="fb-approvals"]`).parent().find(`button[aria-label="Open"]`).arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
+    cy.get("ul>li[role=option]").contains(params.approver + " (enlil").arrowClick();
   });
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
