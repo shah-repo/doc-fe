@@ -837,7 +837,7 @@ Cypress.Commands.add("drSelectUser", (...users: string[]) => {
 Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
   users.forEach((user) => {
     cy.get("div")
-      .contains("Search users")
+      .contains("Start typing to invite users")
       .click();
 
     cy.get("[id^=react-select]").contains(user).arrowClick();
