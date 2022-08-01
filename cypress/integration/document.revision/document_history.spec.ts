@@ -78,15 +78,26 @@ const history = [
   {
     owner,
     actions: [
+      { key: "Attachment added", value: "test_image.jpg" },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "New reference to", value: "FM-00001" },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "New description", value: `${formDescription.value}` },
       { key: "New Doc ID", value: documentId.fullId },
+      { key: "New name", value: formTitle.value },
+      { key: "New owner", value: `${owner}` },
       { key: "Access granted to user", value: sharedUser.name },
       { key: "Access granted to group", value: "Everyone" },
       { key: "Access granted to group", value: groupOne },
       { key: "New status", value: `Set to Draft by ${owner}` },
-      { key: "New owner", value: `${owner}` },
-      { key: "New name", value: formTitle.value },
-      { key: "New description", value: `${formDescription.value}` },
-      { key: "Attachment added", value: `test_image.jpg` },
     ],
   },
 ];
@@ -336,13 +347,15 @@ context("Check Document History", () => {
       cy.drSelectHistoryTab();
     });
 
+    console.log("history", history);
+
     history.forEach((element, groupIndex) => {
       it(`Check owner name for group ${groupIndex + 1}`, () => {
         cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-        cy.pause();
+        // cy.pause();
       });
 
-      element.actions.forEach((action) => {
+      element.actions.forEach((action, index) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
           const typeOfChange = action.key;
           let contentOfChange = action.value;
@@ -352,17 +365,17 @@ context("Check Document History", () => {
           }
 
           if (typeOfChange === "s3Link added") {
-            cy.get(`[data-cy^="change-key-${groupIndex}-"]`).should("have.text", typeOfChange);
+            cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
             cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
           }
           else {
-            cy.get(`[data-cy^="change-value-${groupIndex}-"]`)
-              .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
+            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
+              .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
               .parent()
               .parent()
               .within(() => {
-                cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
-                cy.get("[data-cy^=change-value]").should("contain.text", contentOfChange);
+                cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
+                cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
               });
           }
         });
