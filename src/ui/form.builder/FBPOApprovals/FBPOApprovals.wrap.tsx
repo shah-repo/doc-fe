@@ -231,7 +231,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         }
       }
       return () => {
-        FBDataStore.setPoApprovals([]);
+        FBDataStore.clearPoApprovals();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

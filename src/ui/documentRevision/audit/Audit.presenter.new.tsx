@@ -59,7 +59,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <UserAvatarListItem
-            name={name}
+            name={<span data-cy={`change-key-${key}`}>{name}</span>}
             user={(owner && owner.user) || ownerUser || ownerThirdParty}
             secondaryComponent={
               <DateTime
