@@ -110,7 +110,9 @@ context("Export DAM", () => {
     });
 
     it("Click 'Create New' button", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+      });
     });
 
     it("Enter title", () => {
@@ -150,7 +152,9 @@ context("Export DAM", () => {
     });
 
     it("Click 'Create New' button", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+      });
     });
 
     it("Enter title", () => {
@@ -171,10 +175,6 @@ context("Export DAM", () => {
 
     it("navigate to matrix details tab", () => {
       cy.drSelectMatrixDetailsTab();
-    });
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -272,7 +272,7 @@ context("Export DAM", () => {
     });
   });
 
-  context("DAM with ${STATUS_TYPES_LABEL.APPROVED} status", () => {
+  context(`DAM with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
       cy.progressBarShouldNotExist();
