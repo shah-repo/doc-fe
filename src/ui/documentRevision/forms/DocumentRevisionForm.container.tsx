@@ -166,7 +166,7 @@ DocumentRevisionFormContainerProps
     }
     return () => {
       FBDataStore.setRefreshData(undefined);
-      FBDataStore.setPoApprovals([]);
+      FBDataStore.clearPoApprovals();
     };
   }, []);
 

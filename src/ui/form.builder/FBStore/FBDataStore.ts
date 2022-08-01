@@ -11,6 +11,9 @@ class FBDataStore {
   @action public setRefreshData = (value) => {
     set(this, "refreshData", value);
   };
+  @action public clearPoApprovals = () => {
+    set(this, "poApprovals", []);
+  };
 
   @action public setPoApprovals = (approvals) => {
     let result: FBInlineApprovalBody[] | Approval[];
