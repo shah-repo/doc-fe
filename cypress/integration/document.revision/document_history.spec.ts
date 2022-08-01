@@ -84,7 +84,7 @@ const history = [
   {
     owner,
     actions: [
-      { key: "New reference to", value: "FM-00001" },
+      { key: "New reference to", value: reference.valueCode },
     ],
   },
   {
@@ -95,8 +95,8 @@ const history = [
       { key: "New name", value: formTitle.value },
       { key: "New owner", value: `${owner}` },
       { key: "Access granted to user", value: sharedUser.name },
-      { key: "Access granted to group", value: "Everyone" },
       { key: "Access granted to group", value: groupOne },
+      { key: "Access granted to group", value: "Everyone" },
       { key: "New status", value: `Set to Draft by ${owner}` },
     ],
   },
@@ -347,12 +347,9 @@ context("Check Document History", () => {
       cy.drSelectHistoryTab();
     });
 
-    console.log("history", history);
-
     history.forEach((element, groupIndex) => {
       it(`Check owner name for group ${groupIndex + 1}`, () => {
         cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-        // cy.pause();
       });
 
       element.actions.forEach((action, index) => {
@@ -383,6 +380,3 @@ context("Check Document History", () => {
     });
   });
 });
-
-export { };
-
