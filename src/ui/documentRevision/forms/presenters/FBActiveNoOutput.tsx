@@ -64,6 +64,7 @@ import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { useEffect } from "react";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { DocumentCloneTypeOptions } from "../../Clone.container";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
 
 interface Props {
   status: DocumentRevisionStatus;
@@ -378,7 +379,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     });
   };
 
-  const previewDisabled = !schema?.length || existsDialogState?.open;
+  const showPreview = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) && !existsDialogState?.open;
+  const disablePreview = !schema?.length;
 
   return (
     <FBProvider dialogState={dialogState}>
@@ -403,17 +405,19 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
               portal={true}
             />
           </Grid>
-          <Grid item xs className={classes.previewColumn}>
-            <Button
-              className={cx(classes.previewButton, { [classes.previewButtonDisabled]: previewDisabled })}
-              color="primary"
-              onClick={handlePreview}
-              disabled={previewDisabled}
-            >
-              <PreviewIcon />
-              <Text message="form.builder.layout.preview" />
-            </Button>
-          </Grid>
+          {showPreview && (
+            <Grid item xs className={classes.previewColumn}>
+              <Button
+                className={cx(classes.previewButton, { [classes.previewButtonDisabled]: disablePreview })}
+                color="primary"
+                onClick={handlePreview}
+                disabled={disablePreview}
+              >
+                <PreviewIcon />
+                <Text message="form.builder.layout.preview" />
+              </Button>
+            </Grid>
+          )}
         </Grid>
         {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
       </Box>
