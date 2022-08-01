@@ -201,7 +201,9 @@ context("Document Approval Matrix Flow", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+      });
     });
   });
 
@@ -237,13 +239,15 @@ context("Document Approval Matrix Flow", () => {
     it("type a description", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
+
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
   });
 
   context("Add New Role: Role One", () => {
     it("Open approval roles tab", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drSelectApprovalRolesTab();
-      });
+      cy.drSelectApprovalRolesTab();
     });
 
     it("Open 'Add Role' dialog", () => {
@@ -265,14 +269,11 @@ context("Document Approval Matrix Flow", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drAddApprovalRole();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Add New Document Type", () => {
     it("Open matrix details tab", () => {
-      cy.cmpTurnOffAutosave();
       cy.drSelectMatrixDetailsTab();
     });
 
@@ -311,7 +312,9 @@ context("Document Approval Matrix Flow", () => {
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
       SystemRequirement("REQ-4360");
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      });
     });
 
     it("Save document", () => {
@@ -342,7 +345,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -398,6 +401,10 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Fill in document attributes", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("type a title", () => {
       cy.drEnterDocumentTitle({ name: `${DDTitle}{enter}` });
     });
@@ -427,9 +434,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("Verify training can be deselected", () => {
       SystemRequirement("REQ-0290");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickTrainingRequired();
-      });
+      cy.drClickTrainingRequired();
       cy.drIsTrainingRequired({ shouldBe: false });
     });
 
@@ -503,18 +508,23 @@ context("Document Approval Matrix Flow", () => {
       cy.drClickReviseDocument();
     });
 
+    it("Click on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Navigate to matrix details tab", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
-        cy.drSelectMatrixDetailsTab();
-      });
+      cy.drSelectMatrixDetailsTab();
       cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
   });
 
   context("Add New Role: Role Two", () => {
+    it("Open approval roles tab", () => {
+      cy.drSelectApprovalRolesTab();
+    });
+
     it("Open 'Add Role' dialog", () => {
       cy.drAddAnotherRoleBtn();
-
     });
 
     it(`Fill role name: ${roleTwo}`, () => {
@@ -526,9 +536,9 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save role", () => {
-      cy.drAddApprovalRole();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drAddApprovalRole();
+      });
     });
   });
 
@@ -547,16 +557,18 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       SystemRequirement("REQ-0600");
-      cy.drAddApprovalRole();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drAddApprovalRole();
+      });
     });
   });
 
   context("Add New Document Type", () => {
-    it("Click on 'Add Item' button", () => {
-      cy.drOpenCloseSidebarDrawer();
+    it("Open matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
 
+    it("Click on 'Add Item' button", () => {
       cy.drAddApprovalMatrixItem();
     });
 
@@ -613,17 +625,13 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      });
     });
   });
 
   context("'Approve & Release' Document", () => {
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Approve and Release the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
