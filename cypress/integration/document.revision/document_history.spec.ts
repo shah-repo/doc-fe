@@ -213,8 +213,6 @@ context("Check Document History", () => {
     it("edit the title", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
-        cy.get("[data-cy=field-description]>label").arrowClick();
-        // auto-save
       });
       cy.progressBarShouldNotExist();
     });
@@ -319,7 +317,7 @@ context("Check Document History", () => {
     });
 
     it(`select '${formTitle.newValue}'`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("#root").contains(formTitle.newValue).arrowClick();
       });
     });
@@ -340,7 +338,8 @@ context("Check Document History", () => {
 
     history.forEach((element, groupIndex) => {
       it(`Check owner name for group ${groupIndex + 1}`, () => {
-        cy.get(`[data-cy="owner-${groupIndex}"]`).should("have.text", element.owner);
+        cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
+        cy.pause();
       });
 
       element.actions.forEach((action) => {
@@ -357,7 +356,6 @@ context("Check Document History", () => {
             cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
           }
           else {
-
             cy.get(`[data-cy^="change-value-${groupIndex}-"]`)
               .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
               .parent()
