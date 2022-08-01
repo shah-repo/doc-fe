@@ -628,7 +628,9 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true });
-  cy.get("[data-cy='add-user'").eq(2).arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get("[data-cy='add-user'").eq(2).arrowClick();
+  });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
