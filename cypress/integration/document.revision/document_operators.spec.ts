@@ -308,7 +308,9 @@ context("Document Operators Access Test", () => {
     });
 
     it("Check if Title input field is disabled", () => {
-      cy.get("[value='New Document']input").should("be.disabled");
+      cy.get("[data-cy=\"field-name\"]").arrowClick();
+      cy.wait(2000);
+      cy.get("input[value=\"New Document\"]").should("be.disabled");
     });
 
     it("Check if Description input field is disabled", () => {

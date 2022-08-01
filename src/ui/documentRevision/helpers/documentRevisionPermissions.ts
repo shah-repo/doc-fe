@@ -6,9 +6,7 @@ import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./docume
 export const isOwner = (
   documentRevision: DocumentRevision,
   currentUserEmail: string,
-) =>
-documentRevision?.owner &&
-currentUserEmail === documentRevision?.owner.user?.email;
+) => documentRevision?.owner.user && currentUserEmail === documentRevision?.owner.user?.email;
 
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
