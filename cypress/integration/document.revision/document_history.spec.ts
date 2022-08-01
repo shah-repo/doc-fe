@@ -370,7 +370,7 @@ context("Check Document History", () => {
           }
           else {
             cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-              .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
+              .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
               .parent()
               .parent()
               .within(() => {
