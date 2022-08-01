@@ -171,7 +171,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
 
   const docTypeId = documentRevision?.document?.documentType?.id as string;
   const documentType = documentTypesById[docTypeId];
-  const docTypeGroup = get(documentType, "group", "OTHER");
+  const docTypeGroup = get(documentType, "group", DOC_TYPE_GROUP.OTHER);
 
   const outputTypeId = documentRevision?.outputDocumentTypes?.value as string;
   const outputType = documentTypesById[outputTypeId];
@@ -231,8 +231,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   if (formValues.values?.retrain) {
     tabConfig = tabConfig && [...tabConfig, {
       labelId: "tabId.training",
-      tabId: "training",
-      type: "TRAINING",
+      tabId: TabTypeOptions.TRAINING,
+      type: TabTypeOptions.TRAINING,
     } ];
   }
 
@@ -287,14 +287,12 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                       boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                       panelProps={{ flex: 1 }}
                     >
-                      {map(tabConfig, (tabInfo: TabInfo, index: number) => {
+                      {map(tabConfig, (tabInfo: TabInfo) => {
                         const tabType = tabInfo.type;
                         const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                         return (
-                          <SMBox
-                            key={index}
-                          >
-                            {tabType === "MIXED" && <>
+                          <SMBox key={tabInfo.tabId}>
+                            {tabType === TabTypeOptions.MIXED && <>
                               <DocumentRevisionFormPresenter
                                 {...formValues}
                                 redlineActive={false}
@@ -326,7 +324,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                 schema={schema}
                               />}
                             </>}
-                            {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
+                            {tabType === TabTypeOptions.DYNAMIC && showTabContent
+                              && _formState?.mode !== FBWorkspaceModeOptions.NONE &&  (
                               <>
                                 {tabInfo.tabId === "lineitems" && (
                                   <AttachmentsField
@@ -359,7 +358,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                 documentRevisionId={documentRevision?.id}
                               />
                             )}
-                            {tabType === "TRAINING" &&
+                            {tabType === TabTypeOptions.TRAINING &&
                             _tabsState?.value === trainingTabIndex && (
                               <FBTrainingInfoContainer
                                 documentRevisionId={documentRevision?.id}
