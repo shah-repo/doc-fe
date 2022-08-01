@@ -571,9 +571,12 @@ context("NCO document type management multiple users", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Navigate to Revision tab", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Check if 'Rev A' revision is displayed", () => {
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-        .contains("Revision A");
+      cy.get("[data-cy=\"revision\"]").contains("Revision A");
     });
 
     it("Open attachment upload dialog", () => {
