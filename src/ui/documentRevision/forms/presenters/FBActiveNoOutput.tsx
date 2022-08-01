@@ -38,6 +38,7 @@ import {
   FB,
   FBDialogState,
   FBWorkspace,
+  FBWorkspaceModeOptions,
   FBSchemaProps,
   FBEditorState,
 } from "../../../form.builder";
@@ -62,6 +63,7 @@ import { ApplicationState } from "../../../../state/reducers";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { useEffect } from "react";
 import { authSelectors } from "../../../../state/ducks/auth";
+import { DocumentCloneTypeOptions } from "../../Clone.container";
 
 interface Props {
   status: DocumentRevisionStatus;
@@ -184,8 +186,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
   const isOutput = true;
   const showAdministrativeAndVoidChange = false;
-  const type = "none";
-  const mode = "formPreview";
+  const type = DocumentCloneTypeOptions.none;
+  const mode = FBWorkspaceModeOptions.FORMPREVIEW;
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const resetForm = () => {};
 
@@ -296,7 +298,6 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                 proposedDocId={docRevId}
                                 documentTypesById={documentTypesById}
                                 canChangeOwnerShip={false}
-                                type={type}
                                 resetForm={resetForm}
                                 {...{
                                   type,
