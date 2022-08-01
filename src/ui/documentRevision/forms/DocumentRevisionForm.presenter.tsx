@@ -8,10 +8,10 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
 import { authSelectors } from "../../../state/ducks/auth";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
+import { relatedPartsActions } from "../../../state/ducks/relatedParts";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
@@ -216,7 +216,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   /** Will move to within the new RelatedParts Component */
 
-  const createDocAction = useActionCreator(documentRevisionsActions.create);
+  const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
@@ -234,10 +234,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       name: "",
       attachments: [],
       referenceTo: [],
-      revisionStage: null,
       revisionChangeType: get(documentRevision, "revisionChangeType"),
       document: {
-        docId: "SA-03045-01",
+        docId: "",
         securityList: {
           securityEmployees: (get(documentRevision, "document.securityEmployees") || [])
             .map((employee) => ({ id: employee.value })),
@@ -252,7 +251,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     };
 
     console.log(documentRevision, docDto);
-    async.start(createDocAction, docDto, async);
+    async.start(createRelatedPartAction, documentRevision.document.id, docDto, async);
   };
 
   /** Will move to within the new RelatedParts Component */
