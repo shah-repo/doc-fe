@@ -247,6 +247,10 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   }, [tabConfig]);
 
   const onTabChange = (_ev, newValue, tabConfig) => {
+    if (!tabConfig) {
+      return;
+    }
+
     _tabsState?.setValue(newValue);
     _tabsState?.setTabID(tabConfig[newValue].tabId);
   };
