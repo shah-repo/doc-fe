@@ -17,3 +17,5 @@ export const equimentCALDueDaysFmt = momentInPST().add(equimentCALDueDays, "days
 export const dueDate = momentInPST().subtract(1, "days").format("ddd, MMMM D, YYYY");
 export const trAssignedDate =  momentInPST().add(30, "days").subtract(10, "days").format("MMM D");
 export const trCompleteDate =  momentInPST().format("M/D/YYYY");
+export const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
+export const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/D/YYYY");
