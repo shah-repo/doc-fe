@@ -256,6 +256,24 @@ context("Records flow", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
+      it("Verify Add Field section", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbVerifySectionsOnAddField("Section", "Inputs", "Approvals", "Custom Controls",
+          "Instructions", "Buttons", "Actions");
+        cy.fbCheckFieldsExistSectionList("Section", "Subsection", "Step");
+        cy.fbCheckFieldsExistInputsList("Text Field", "Checkbox Group", "Autocomplete", "Text Editor",
+          "Date Picker", "Hyperlink", "Select", "Radio Button Group", "Paragraph", "File Upload",
+          "Blank Template Form", "Quantity", "Timer", "Purchase Order", "Receive Purchase Order",
+          "PO Approval Matrix", "Instructions Media Upload", "Evidence Media Upload", "EB Procedure",
+          "PI Procedure", "Equipment", "Text Field with Range", "Supplier", "");
+        // cy.fbCheckFieldsDoesntExistOnInputsList("LHR Step");
+        cy.fbCheckFieldsExistApprovalsList("Approvals", "Inline Approval", "Request Approval");
+        cy.fbCheckFieldsExistCustomControlsList("Dynamic Form");
+        cy.fbCheckFieldsExistInstructionsList("MPI", "Select Document(s)");
+        cy.fbCheckFieldsExistButtonsList("Checkpoint", "Create a Label", "Implementation Task");
+        cy.fbCheckFieldsExistActionsList("Action Button");
+      });
+
       it("Add Checkbox group", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
