@@ -27,6 +27,7 @@ declare global {
       poShippingCost(params: {number: string}): Chainable<Subject>;
       poCheckCurrency(): Chainable<Subject>;
       poCheckAmount(params: {number: string}): Chainable<Subject>;
+      poCheckTotalAmount(params: {number: string}): Chainable<Subject>;
       poSelectTaxCheckbox(): Chainable<Subject>;
       poSelectOption(params: {optionName: string}): Chainable<Subject>;
       poEnterServiceID(params: {serviceId: string}): Chainable<Subject>;
@@ -62,6 +63,7 @@ declare global {
       poCheckTax(params: {number: string}): Chainable<Subject>;
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
+      poApprove(): Chainable<Subject>;
     }
   }
 }
@@ -84,21 +86,21 @@ Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
 
 Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
-
   cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
+    cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(params.approver).wait(500);
   });
+  cy.unClick();
 
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("Add item").arrowClick();
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
 });
 
 Cypress.Commands.add("poCreateNew", () => {
@@ -134,14 +136,15 @@ Cypress.Commands.add("poEnterQuantityReceipt", (params: {quantity: string}) => {
 });
 
 Cypress.Commands.add("poSelectUnits", () => {
-  cy.get("[name=\"units\"]").arrowClick();
-  cy.get("ul > li[role=option]").contains("Each").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[name=\"units\"]").click().focused().autocompleteSelect("Each");
+  cy.unClick();
 });
 
 Cypress.Commands.add("poSelectGLCode", () => {
   cy.listLoadingElementShouldNotExist();
-  cy.get("[name=\"glCode\"]").arrowClick();
-  cy.get("ul > li[role=option]").contains("code 1").arrowClick();
+  cy.get("[name=\"glCode\"]").click().focused().autocompleteSelect("code 1");
+  cy.unClick();
 });
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
@@ -185,7 +188,11 @@ Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains(params.number).should("exist");
+  cy.get("[class*=\"MuiTableCell-root MuiTableCell-body FBTotal-root\"]").contains(params.number).should("exist");
+});
+
+Cypress.Commands.add("poCheckTotalAmount", (params: {number: string}) => {
+  cy.get("[data-cy=\"poTotal\"]").contains(params.number).should("exist");
 });
 
 Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
@@ -205,9 +212,7 @@ Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-    cy.get("tr.k-master-row").contains(params.item).arrowClick();
-  });
+  cy.get("tr.k-master-row").contains(params.item).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -217,29 +222,28 @@ Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: strin
 });
 
 Cypress.Commands.add("poCheckMessageForConversionSite", () => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "Exchange rate according to ");
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "fixer.io");
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "as of");
+  cy.get("[name=\"po-items-built-in\"]").contains("Exchange rate according to ").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("fixer.io").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("as of").should("exist");
 });
 
 Cypress.Commands.add("poConvertedToDollarsMessage", () => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("Total in US dollars:").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("Total in US dollars:").should("exist");
 });
 
 Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[class=\"MuiList-root MuiList-padding\"] > div > a > div").contains(item).should("exist");
+    cy.get("[data-cy=\"HeaderInfo\"]").contains(item).should("exist");
   });
 });
 
 Cypress.Commands.add("poCheckIfFormPopUpIsActive", (params: {type: string; list: string[]}) => {
-  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+  cy.get("[data-cy=\"field-selectType\"]").arrowClick();
   cy.get("[id^=\"react-select\"]").contains(params.type).arrowClick();
-  cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowClick();
+  cy.get("[data-cy=\"field-selectForm\"]").arrowClick();
   params.list.forEach((item) => {
     cy.get("[id^=react-select]").contains(item).should("exist");
   });
-  cy.get("[data-cy=field-selectType]>div:nth-child(1)").arrowClick();
 });
 
 Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
@@ -370,3 +374,12 @@ Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
   cy.progressBarShouldNotExist();
 });
 
+Cypress.Commands.add("poApprove", () => {
+  cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});

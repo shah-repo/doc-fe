@@ -25,7 +25,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     const { label, type, includeQRScan } = workspaceState?.getSchemaItemAt(index) || {};
 
     if (!includes(FBSchemaState.omitLabel, type) && !isUndefined(label) && !includeQRScan) {
-      topBarMargin = -3;
+      topBarMargin = 0;
       grabMargin = 3.5;
     }
 

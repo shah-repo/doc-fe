@@ -11,21 +11,22 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
   label,
   error,
   loading,
+  labelProps,
   ...boxProps
 }) => (
   <FormLabel component="legend" {...{ error }}>
     <Box
-      mb={2}
+      mb={1.25}
       fontWeight={500}
       color={Colors.dark_gray}
       {...boxProps}
     >
       {isString(label) && (
-        <FBText {...{ loading }} locale={label} />
+        <FBText {...{ loading, labelProps }} locale={label} />
       )}
       {hasIn(label, "locale") && (
         <FBText
-          {...{ loading }}
+          {...{ loading, labelProps }}
           locale={(label as FBLabelLocaleProps).locale}
           values={(label as FBLabelLocaleProps).values}
         />

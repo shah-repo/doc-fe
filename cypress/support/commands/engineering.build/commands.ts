@@ -14,13 +14,18 @@ declare global {
       ebCheckIfPartIsInSummary(params: { partName: string }): Chainable<Subject>;
       ebVerifyNewRevisionCreated(): Chainable<Subject>;
       ebApprove(): Chainable<Subject>;
+      lhrApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
+<<<<<<< HEAD
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
       ebCloneClickNo(): Chainable<Subject>;
       ebCloneClickContinue(): Chainable<Subject>;
       ebAddMaterialDocument(params: { title: string; value: string; name: string }): Chainable<Subject>;
       ebAddEquipmentDocument(params: { title: string }): Chainable<Subject>;
+=======
+      ebClickCloneFromMenu(): Chainable<Subject>;
+>>>>>>> demo
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
       ebWithdrawSubmisison(): Chainable<Subject>;
@@ -33,8 +38,8 @@ Cypress.Commands.add("ebEnterPartName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("ebEnterPartDescription", (params: { description: string }) => {
-  cy.xpath("//div[@data-cy=\"description\"]/../div[2]").arrowClick();
-  cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear().arrowType(params.description);
+  cy.xpath("//div[@data-cy=\"description\"]/../div[2]").eq(1).arrowClick();
+  cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").eq(1).clear().arrowType(params.description);
   cy.get("[data-cy=\"form.builder.field.description\"]>div").arrowClick();
 });
 
@@ -49,7 +54,7 @@ Cypress.Commands.add("ebCheckIfPartIsInSummary", (params: {partName: string}) =>
 });
 
 Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
-  cy.get(" [data-cy=\"DocumentRevisionList-item\"]>a>div").first()
+  cy.get("[data-cy=\"revision\"]").eq(0)
     .then(($el) => {
       const text = $el.text();
       expect(text.replace(/\u00a0/g, " ")).to.contain("Revision 2  - Draft");
@@ -57,7 +62,19 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
 });
 
 Cypress.Commands.add("ebClickClone", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
+    cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
+  });
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebClickCloneFromMenu", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
     cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
@@ -111,7 +128,7 @@ Cypress.Commands.add("ebSelectFirstDocument", () => {
 });
 
 Cypress.Commands.add("ebApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
@@ -119,6 +136,18 @@ Cypress.Commands.add("ebApprove", () => {
   });
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrApprove", () => {
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.unClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  });
+  cy.checkToastMessage({ exists: false });
+  cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 

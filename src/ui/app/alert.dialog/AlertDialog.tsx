@@ -1,6 +1,6 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } from "@material-ui/core";
-import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
+import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as AlertIcon } from "../../../assets/images/alert.svg";
 import Text from "../../components/Text";
 import { DialogHandler } from "../../hooks/useDialog";
 import { Translation } from "../../translations/types";
@@ -43,35 +43,36 @@ const AlertDialog: React.FunctionComponent<Props> = ({
           PaperProps={{ id: "alertDialog" }}
         >
           <DialogContent>
-            <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
-              <Box textAlign="center">
-                <span className={classes.iconContainer}>
-                  <ReportProblemOutlinedIcon color="error" />
-                </span>
-                <Typography variant="h6" style={{ marginTop: 20, marginBottom: 5 }}>
-                  <Text translation="common.alert" />
-                </Typography>
-              </Box>
-              <DialogContentText>
-                <Box className={classes.dialogContent}>
-                  <Text translation={message} />
-                </Box>
-              </DialogContentText>
-            </Box>
+            <DialogContentText>
+              <Grid container className={classes.contentContainer}>
+                <Grid item className={classes.alertIcon}>
+                  <AlertIcon />
+                </Grid>
+                <Grid item >
+                  <Typography className={classes.alertTitle}>
+                    <Text translation="common.alert" />!
+                  </Typography>
+                  <Typography className={classes.contentText}>
+                    <Text translation={message} />
+                  </Typography>
+                </Grid>
+              </Grid>
+            </DialogContentText>
           </DialogContent>
-          <Box className={classes.dialogAction} >
+          <Box className={classes.dialogAction}>
             <Button
               variant="contained"
-              className={classes.cancelButton}
+              className={`${classes.cancelButton} ${classes.buttonLabel}`}
               onClick={cancelAction}
               id="AlertDialog-cancelButton"
+              data-cy="AlertDialog-cancelButton"
             >
               <Text translation={cancelLabel} />
             </Button>
             <Button
               type="submit"
               variant="contained"
-              className={classes.submitButton}
+              className={`${classes.submitButton} ${classes.buttonLabel}`}
               id="AlertDialog-continueButton"
               data-cy="AlertDialog-continueButton"
               onClick={confirmAction}

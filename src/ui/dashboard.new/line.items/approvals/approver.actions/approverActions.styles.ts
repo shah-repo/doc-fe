@@ -14,6 +14,9 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.white,
       textTransform: "uppercase",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
     },
@@ -32,6 +35,9 @@ export const styles = makeStyles((theme: Theme) =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
+    },
+    cursorPointer: {
+      cursor: "pointer",
     },
     typography: {
       "fontSize": "14px",

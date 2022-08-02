@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -142,6 +143,7 @@ context("Export Receivable doc", () => {
                     validationAttribute: "PO Status",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "po-supplier-built-in",
@@ -155,6 +157,7 @@ context("Export Receivable doc", () => {
                     validationAttribute: "Supplier",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "po-items-built-in",
@@ -168,6 +171,7 @@ context("Export Receivable doc", () => {
                     validationAttribute: "Purchase Order",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "lineitems",
                   },
                   {
                     label: "form.builder.approvals",
@@ -176,6 +180,7 @@ context("Export Receivable doc", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -414,6 +419,7 @@ context("Export Receivable doc", () => {
                   label: "Receivable",
                   name: "receivable-kdptzei2",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                  tabId: "details",
                 },
                 {
                   index: 1,
@@ -426,15 +432,8 @@ context("Export Receivable doc", () => {
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
+                  tabId: "details",
                 },
-                // {
-                //   label: "form.builder.approvals",
-                //   type: "poapprovals",
-                //   deleteDisabled: false,
-                //   name: "fb-po-approvals-kqqix31p",
-                //   uniqueSchemaItem: true,
-                //   index: 2,
-                // },
                 {
                   index: 2,
                   type: "section",
@@ -446,6 +445,7 @@ context("Export Receivable doc", () => {
                   ],
                   applicableValidationSchema: true,
                   validationAttribute: "textfield",
+                  tabId: "details",
                 },
                 {
                   index: 3,
@@ -459,6 +459,7 @@ context("Export Receivable doc", () => {
                   ],
                   applicableValidationSchema: true,
                   validationAttribute: "textfield",
+                  tabId: "details",
                 },
                 {
                   index: 4,
@@ -470,6 +471,7 @@ context("Export Receivable doc", () => {
                   deleteInFormDisabled: false,
                   validationMode: "default",
                   validationAttribute: "Inline approval",
+                  tabId: "details",
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
@@ -553,6 +555,7 @@ context("Export Receivable doc", () => {
                   label: "Receivable",
                   name: "receivable-kdptzei2",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                  tabId: "details",
                 },
                 {
                   index: 1,
@@ -565,6 +568,7 @@ context("Export Receivable doc", () => {
                   applicableOn: [
                     "ON_STATE_TO_IN_REVIEW",
                   ],
+                  tabId: "details",
                 },
                 {
                   label: "form.builder.approvals",
@@ -573,6 +577,7 @@ context("Export Receivable doc", () => {
                   name: "fb-po-approvals-kqqix31p",
                   uniqueSchemaItem: true,
                   index: 2,
+                  tabId: "details",
                 }],
               },
             },
@@ -625,12 +630,17 @@ context("Export Receivable doc", () => {
       cy.drCreateNewDocumentFromForm();
     });
 
-    it("Select Receivable", () => {
-      cy.recSelectPo({ poTitle: "API PO document 2" });
+    it("Select 'Details' tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Enter text in textfield", () => {
       cy.get("[name^=\"textfield1\"]").arrowType("Test one");
+    });
+
+    it("Select Receivable", () => {
+      cy.get("[data-cy=\"Receivable\"]").arrowClick();
+      cy.recSelectPo({ poTitle: "API PO document 2" });
     });
 
     it("Save the document", () => {
@@ -638,14 +648,14 @@ context("Export Receivable doc", () => {
     });
   });
 
-  context("Receivable with WIP status", () => {
+  context(`Receivable with ${STATUS_TYPES_LABEL.WIP} status`, () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-1" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-1" });
     });
   });
 
-  context("Receivable with Last Signed status", () => {
-    context("Add Receivable with Last Signed", () => {
+  context(`Receivable with ${STATUS_TYPES_LABEL.LAST_SIGNED} status`, () => {
+    context(`Add Receivable with ${STATUS_TYPES_LABEL.LAST_SIGNED}`, () => {
       it("Add inline approver", () => {
         cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       });
@@ -658,6 +668,10 @@ context("Export Receivable doc", () => {
         cy.inlineApproval();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Select Last Signed", () => {
         cy.contains("Last Signed").arrowClick();
         cy.progressBarShouldNotExist();
@@ -665,15 +679,23 @@ context("Export Receivable doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1" });
+        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.LAST_SIGNED, filename: "-1", pdfStatus: "Last Signed" });
       });
     });
   });
 
-  context("Receivable with Archive status", () => {
-    context("Add Receivable with Archive", () => {
+  context(`Receivable with ${STATUS_TYPES_LABEL.ARCHIVE} status`, () => {
+    context(`Add Receivable with ${STATUS_TYPES_LABEL.ARCHIVE}`, () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status Receivable", () => {
         cy.contains("WIP").arrowClick();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Update section", () => {
@@ -681,9 +703,15 @@ context("Export Receivable doc", () => {
       });
 
       it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
         cy.unClick();
+        cy.wait(2000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Click Request Approval button", () => {
@@ -694,6 +722,10 @@ context("Export Receivable doc", () => {
         cy.inlineApproval();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Select Archive", () => {
         cy.contains("Archive").arrowClick();
         cy.progressBarShouldNotExist();
@@ -701,13 +733,17 @@ context("Export Receivable doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Archive", filename: "-1" });
+        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.ARCHIVE, filename: "-1", pdfStatus: "Archive" });
       });
     });
   });
 
-  context("Receivable with Released status", () => {
-    context("Add Receivable with Released", () => {
+  context(`Receivable with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
+    context(`Add Receivable with ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status Receivable", () => {
         cy.contains("WIP").arrowClick();
         cy.progressBarShouldNotExist();
@@ -718,17 +754,17 @@ context("Export Receivable doc", () => {
         cy.reload();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.recApproveAndReleaseInlineRecord();
+        cy.recFinalizeAndReleaseRecord();
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-A" });
+        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-A", pdfStatus: "Released" });
       });
     });
   });
 
-  context("Receivable with Canceled status", () => {
-    context("Add Receivable with Canceled", () => {
+  context(`Receivable with ${STATUS_TYPES_LABEL.CANCELED} status`, () => {
+    context(`Add Receivable with ${STATUS_TYPES_LABEL.CANCELED}`, () => {
       it("Click Update Receivable", () => {
         cy.drClickReviseDocument();
       });
@@ -742,12 +778,12 @@ context("Export Receivable doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1" });
+        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.CANCELED, filename: "-A-1", pdfStatus: "Canceled" });
       });
     });
   });
 
-  context("Receivable with Pending Approval status", () => {
+  context(`Receivable with ${STATUS_TYPES_LABEL.PENDING_APPROVAL} status`, () => {
     context("Create a Receivable from form", () => {
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
@@ -765,6 +801,10 @@ context("Export Receivable doc", () => {
 
       it("Click on Create New button", () => {
         cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Select Receivable", () => {
@@ -792,12 +832,15 @@ context("Export Receivable doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Pending Approval", filename: "-A" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.PENDING_APPROVAL, filename: "-A",
+          pdfStatus: "Pending Approval",
+        });
       });
     });
   });
 
-  context("Receivable with Voided status", () => {
+  context(`Receivable with ${STATUS_TYPES_LABEL.VOIDED} status`, () => {
     context("Create a Receivable from form", () => {
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
@@ -834,7 +877,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Voided", filename: "-A-Void" });
+        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.VOIDED, filename: "-A-Void", pdfStatus: "Voided" });
       });
     });
   });

@@ -138,6 +138,10 @@ context("NCO document type management multiple users", () => {
       cy.drEnterDocumentDescription({ description: "New Company description" });
     });
 
+    it("Select 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it(`Enters company name '${newCompanyName}'`, () => {
       cy.get("[name^=company-name-]").arrowType(newCompanyName);
     });
@@ -183,7 +187,7 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
@@ -259,6 +263,25 @@ context("NCO document type management multiple users", () => {
       cy.dtmSelectGroup({ group: "OTHER" });
     });
 
+    // should be added after DAM.json is updated
+    // it("Enter schema", () => {
+    //   cy.get("[data-grid-col-index='14']>span>svg").eq(0).arrowClick();
+    //   cy.get("#schema").arrowType(`[{
+    //     "name": "fb-attachment-built-in",
+    //     "type": "attachments",
+    //     "index": 0,
+    //     "label": "Attachments",
+    //     "tabId": "overview",
+    //     "applicableOn": [
+    //       "ON_STATE_TO_IN_REVIEW"
+    //     ],
+    //     "deleteDisabled": true,
+    //     "deleteInFormDisabled": true,
+    //     "applicableValidationSchema": true
+    //   }]`, { delay: 0 });
+    //   cy.get(`button[type="submit"]`).arrowClick();
+    // });
+
     it("Create Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
         cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
@@ -309,8 +332,8 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Check if 'Rev 1' revision is displayed", () => {
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-        .contains("Revision 1");
+      cy.get("[data-cy=\"HeaderInfo-Rev\"]")
+        .contains("Rev 1");
     });
 
     it("Uploads redline attachment: test.docx", () => {
@@ -548,9 +571,12 @@ context("NCO document type management multiple users", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Navigate to Revision tab", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Check if 'Rev A' revision is displayed", () => {
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-        .contains("Revision A");
+      cy.get("[data-cy=\"revision\"]").contains("Revision A");
     });
 
     it("Open attachment upload dialog", () => {

@@ -1,4 +1,3 @@
-import { Box } from "@material-ui/core";
 import React from "react";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { KendoGridConfiguration } from "../../components/common/kendo/types";
@@ -18,13 +17,10 @@ export const DocumentTypeManagementPresenter: React.FunctionComponent<DTMProps> 
   tableCriteria,
   gridConfiguration,
 }) => (
-  <Box p={2}>
-    <KendoPanel
-      gridData={gridData}
-      gridConfiguration={gridConfiguration}
-      tableName={tableName}
-      tableCriteria={tableCriteria}
-    />
-  </Box>
-
+  <KendoPanel
+    gridData={gridData}
+    gridConfiguration={gridConfiguration}
+    tableName={tableName}
+    tableCriteria={tableCriteria}
+  />
 );

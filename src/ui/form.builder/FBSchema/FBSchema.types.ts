@@ -53,6 +53,7 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "tabId"
 > & {
   validators?: Dictionary<any>;
+  tabId?: string;
 };
 
 export interface FBSchemaComponentProps {

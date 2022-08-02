@@ -38,7 +38,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
       post[actionMode]();
       // Adding task marks form as dirty but has separate request for saving tasks
       // This is solution for triggering prompt for unsaved changes
-      formik.resetForm();
+      formik?.resetForm();
     }
 
     function handleAddDescription() {

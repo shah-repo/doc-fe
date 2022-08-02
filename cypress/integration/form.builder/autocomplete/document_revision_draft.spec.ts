@@ -133,10 +133,14 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
         });
 
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 
@@ -151,6 +155,10 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
 
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
+          });
+
+          it("Click create a document", () => {
+            cy.drClickCreateDocumentWithApiCall();
           });
         });
 
@@ -196,7 +204,7 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
         });
 
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 1);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 2);
         });
       });
     });

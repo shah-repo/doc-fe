@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -91,17 +92,17 @@ context("Export Supplier", () => {
       cy.unClick();
     });
 
-    it("Verify approval field is added as result of predefined schema", () => {
-      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
-      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Verify approval field is added as result of predefined schema", () => {
+      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
+      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
     });
 
     it("Approve and release document", () => {
@@ -129,7 +130,7 @@ context("Export Supplier", () => {
 
   context("Supplier with Draft status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-Test-Supplier" });
+      cy.exportVerifyEmail({ pdfStatus: "Draft", filename: "-1-Test-Supplier", status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 
@@ -149,7 +150,10 @@ context("Export Supplier", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-1-Test-Supplier" });
+      cy.exportVerifyEmail({
+        pdfStatus: "In Review", filename: "-1-Test-Supplier",
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+      });
     });
   });
 
@@ -159,7 +163,10 @@ context("Export Supplier", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Released", filename: "-1-Test-Supplier" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Released", filename: "-1-Test-Supplier",
+        status: STATUS_TYPES_LABEL.RELEASED,
+      });
     });
   });
 
@@ -173,6 +180,10 @@ context("Export Supplier", () => {
       cy.ebApprove();
     });
 
+    it("Select Revision", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -180,11 +191,18 @@ context("Export Supplier", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-Test-Supplier" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-Test-Supplier",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
   context("Supplier with Voided status", () => {
+    it("Select Revision", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Released' record", () => {
       cy.contains("Released").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -209,7 +227,7 @@ context("Export Supplier", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-OBS-Test-Supplier" });
+      cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-OBS-Test-Supplier", status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 });

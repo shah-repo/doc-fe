@@ -50,7 +50,7 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
 });
 
 Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
-  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").arrowClick();
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
@@ -107,7 +107,7 @@ Cypress.Commands.add("navigToLots", () => {
 });
 
 Cypress.Commands.add("navigToLHR", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.PreventIdleLogout], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigToNestedItem({
       navigItems: [
         NavigationItems.DASHBOARD,

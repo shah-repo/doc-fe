@@ -18,10 +18,14 @@ export type FBAutocompleteProps =
    onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any;
    refresh?: () => any;
    disabledOptions?: string[];
+   customStyles?: {};
    groupByKey?: string;
    inputStyle?: any;
    modifiedOptions?: any[];
    debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void;
+   inputPropStyle?: React.CSSProperties;
+   inputPropStyleSize?: any;
+   isDocumentLHRT?: boolean;
    /**
     * @cfg {Boolean} Option to disable deletion of rendered chips using Backspace key.
     */

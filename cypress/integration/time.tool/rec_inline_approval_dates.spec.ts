@@ -24,8 +24,8 @@ let adminEmployee;
 let asyncTasksGroup;
 let emailsFromInbox;
 let dateAfterEmailShouldArrive;
-const approvalNotificationToday = momentInPST().format("MMM DD, YYYY");
-const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM DD, YYYY");
+const approvalNotificationToday = momentInPST().format("MMM D, YYYY");
+const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM D, YYYY");
 
 context("Record inline approval dates flow", () => {
   before(() => {
@@ -152,6 +152,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 0,
                     type: "textfield",
+                    tabId: "details",
                     name: "textfield-for-inline-l39qj0uv",
                     hidden: false,
                     outputDisabled: false,
@@ -172,6 +173,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 1,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "inline-field-l39qj2f2",
                     hidden: false,
                     outputDisabled: false,
@@ -195,6 +197,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 2,
                     type: "textfield",
+                    tabId: "details",
                     name: "second-textfield-for-inline-l39qj3i5",
                     hidden: false,
                     outputDisabled: false,
@@ -215,6 +218,7 @@ context("Record inline approval dates flow", () => {
                   {
                     index: 3,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "second-inline-field-l39qj5nh",
                     hidden: false,
                     outputDisabled: false,
@@ -312,6 +316,10 @@ context("Record inline approval dates flow", () => {
     });
 
     context("Fill first textfield and add inline approval", () => {
+      it("Navigate to details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter text 'First entry' in textfield for inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
@@ -320,12 +328,11 @@ context("Record inline approval dates flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.listLoadingElementShouldNotExist();
-          cy.get("[name*=\"fb-ia-inline-field\"] input")
-            .autocompleteSelect(USERS[1].email);
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+          cy.get("input[data-cy*=\"fb-ia-inline-field\"]").arrowClick().wait(1000);
+          cy.get("ul>li[role=option]").contains(USERS[1].email).arrowClick();
+          cy.unClick();
         });
-        cy.cmpExitDropdown();
       });
 
       context("Request for approval and send notification to email", () => {
@@ -403,6 +410,10 @@ context("Record inline approval dates flow", () => {
     });
 
     context("Fill second textfield and add inline approval", () => {
+      it("Navigate to details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter text 'First entry' in second textfield for inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
@@ -412,12 +423,11 @@ context("Record inline approval dates flow", () => {
       });
 
       it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-              .autocompleteSelect(USERS[2].email);
-          });
-        cy.cmpExitDropdown();
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+          cy.get("input[data-cy*=\"fb-ia-second-inline-field\"]").arrowClick().wait(1000);
+          cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
+          cy.unClick();
+        });
       });
 
       context("Request for approval and send notification to email", () => {

@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
 
-const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
+const FBApprovalMatrixTableInfo: React.FunctionComponent<Omit<FBApprovalMatrixTableProps, "syncScroll">> = ({
   cellHeight,
   approvalData: { approvalMatrix = [] } = {},
   classes,
@@ -60,7 +60,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             {mode === "edit" && (
               <FBTableCell align="center">
                 <FBApprovalMatrixCheck
-                  name={`${name}.approvalMatrix.${index}.docType.defaultTraining`}
+                  name={`${name}.${index}.docType.defaultTraining`}
                   checked={am.docType.defaultTraining}
                 />
               </FBTableCell>
@@ -74,7 +74,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             {mode === "edit" && (
               <FBTableCell align="center">
                 <FBApprovalMatrixCheck
-                  name={`${name}.approvalMatrix.${index}.docType.needsSignature`}
+                  name={`${name}.${index}.docType.needsSignature`}
                   checked={am.docType.needsSignature}
                 />
               </FBTableCell>
@@ -89,7 +89,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
       {mode === "add" && (
         <TableRow>
           <FBTextField
-            name={`${name}.approvalMatrix.${approvalMatrix.length}.id`}
+            name={`${name}.${approvalMatrix.length}.id`}
             defaultValue={generateUuid()}
             hidden={true}
           />
@@ -100,7 +100,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                   <FBTableCell>
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.defaultTraining`}
+                        name={`${name}.${approvalMatrix.length}.docType.defaultTraining`}
                         dataCy={key}
                         gutter={false}
                         defaultChecked={false}
@@ -112,7 +112,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                   <FBTableCell>
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.needsSignature`}
+                        name={`${name}.${approvalMatrix.length}.docType.needsSignature`}
                         dataCy={key}
                         gutter={false}
                         defaultChecked={false}
@@ -125,7 +125,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" px={1} alignItems="center">
                       <FBSelect
                         dataCy={key}
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.group`}
+                        name={`${name}.${approvalMatrix.length}.docType.group`}
                         rules="required"
                         showErrorMsg={false}
                         // TODO: define options as static
@@ -142,7 +142,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                   <FBTableCell>
                     <Box display="flex" px={1}>
                       <FBTextField
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.acronym`}
+                        name={`${name}.${approvalMatrix.length}.docType.acronym`}
                         dataCy={key}
                         gutter={false}
                         size="small"
@@ -158,7 +158,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                   <FBTableCell>
                     <Box display="flex" px={1}>
                       <FBTextField
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.name`}
+                        name={`${name}.${approvalMatrix.length}.docType.name`}
                         dataCy={key}
                         gutter={false} size="small"
                         inputProps={{ style: { padding: "8px" } }}
@@ -172,7 +172,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                   <FBTableCell>
                     <Box display="flex" px={1}>
                       <FBTextField
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.category`}
+                        name={`${name}.${approvalMatrix.length}.docType.category`}
                         dataCy={key}
                         gutter={false} size="small"
                         inputProps={{ style: { padding: "8px" } }}

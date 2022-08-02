@@ -35,6 +35,7 @@ export const PaperLHR: IdocumentTypeDto = {
       label: "Part to be Manufactured",
       deleteDisabled: true,
       deleteInFormDisabled: true,
+      tabId: "details",
     },
     {
       name: "lhr_initial_quantity",
@@ -48,6 +49,7 @@ export const PaperLHR: IdocumentTypeDto = {
       validationAttribute: "Initial Quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "lhr-end-quantity",
@@ -62,6 +64,7 @@ export const PaperLHR: IdocumentTypeDto = {
       validationAttribute: "End Quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "lhr-build-type",
@@ -86,6 +89,7 @@ export const PaperLHR: IdocumentTypeDto = {
       validationAttribute: "Build Type",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
   ],
 };

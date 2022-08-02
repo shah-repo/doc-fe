@@ -148,10 +148,14 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
         });
 
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

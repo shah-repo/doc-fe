@@ -9,6 +9,9 @@ export const styles = makeStyles((theme: Theme) =>
     listItemIcon: {
       paddingLeft: "10px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     link: {
       "color": Colors.black,
       "textDecoration": "none",
@@ -39,6 +42,9 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: "bold",
       fontSize: "13px",
       color: Colors.latest_yellow_varient,
+    },
+    cursorPointer: {
+      cursor: "pointer",
     },
     typographyOverdue: {
       fontWeight: "bold",

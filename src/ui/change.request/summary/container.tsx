@@ -11,10 +11,11 @@ import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
+import Sidebar from "../../common/components/Sidebar";
+import styles from "../../common/style/styles";
 import { FormContext } from "../../components/forms/FormContext";
-import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
-import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { Sidebar } from "../../documentRevision/Sidebar/types";
+import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
+import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
 import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -26,7 +27,7 @@ import { ChangeRequestFormValues } from "../form/types";
 import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import Presenter from "./presenter";
-import styles from "./styles";
+import SummaryHeader from "./SummaryHeader";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
@@ -37,6 +38,7 @@ const Container: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
 }) => {
+  let errors;
   const FBContainer = React.useRef(null);
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
 
@@ -96,28 +98,31 @@ const Container: React.FunctionComponent<Props> = ({
 
   const summaryPresenterRenderer = (
     props: FormikProps<ChangeRequestFormValues>,
-  ) => (
-    <FBWorkspace
-      portalContainer={FBContainer}
-      isPortal={true}
-      initialValues={dataProp.formInput}
-      changeRequest={dataProp}
-      autosave={autosaveEnabled}
-      schema={schema}
-      mode={"preview"}
-    >
-      <Form>
-        <Presenter
-          dataProp={dataProp}
-          asyncState={async.asyncState}
-          canEdit={canEdit}
-          canChangeOwnerShip={canChangeOwnerShip}
-          {...props}
-          {...{ FBContainer }}
-        />
-      </Form>
-    </FBWorkspace>
-  );
+  ) => {
+    errors = props.errors;
+    return (
+      <FBWorkspace
+        portalContainer={FBContainer}
+        isPortal={true}
+        initialValues={dataProp.formInput}
+        changeRequest={dataProp}
+        autosave={autosaveEnabled}
+        schema={schema}
+        mode={"preview"}
+      >
+        <Form>
+          <Presenter
+            dataProp={dataProp}
+            asyncState={async.asyncState}
+            canEdit={canEdit}
+            canChangeOwnerShip={canChangeOwnerShip}
+            {...props}
+            {...{ FBContainer }}
+          />
+        </Form>
+      </FBWorkspace>
+    );
+  };
 
   const summaryFormikRenderer = () => (
     <FormContext.Provider value={{ submitOnChange: false }}>
@@ -131,7 +136,7 @@ const Container: React.FunctionComponent<Props> = ({
     </FormContext.Provider>
   );
 
-  const sidebarList: Sidebar[] = [
+  const sidebarList: SidebarTypes[] = [
     {
       icon: <TimelineIcon />,
       type: "history",
@@ -141,7 +146,7 @@ const Container: React.FunctionComponent<Props> = ({
         title: intl.formatMessage({
           id: "document.revision.history",
         }),
-        component: dataProp ? <ChangeRequestAuditContainer changeRequest={dataProp} />
+        component: dataProp ? <ChangeRequestAuditContainer changeRequest={dataProp} isDrawerOpen={isDrawerOpen} />
           : null,
       },
     }, {
@@ -153,18 +158,19 @@ const Container: React.FunctionComponent<Props> = ({
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks />,
+        component: <Bookmarks fromAR={true} />,
       },
     },
   ];
 
   return (
     <FBProvider {...{ bookmarkState }}>
+      <SummaryHeader {...{ dataProp, canChangeOwnerShip, asyncState: async.asyncState, errors, canEdit }}/>
       <div className={classes.root}>
         <div className={classes.appFrame}>
           {summaryFormikRenderer()}
         </div>
-        <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
+        <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen} setOpen={setOpen} />
       </div>
     </FBProvider>
   );

@@ -9,8 +9,8 @@ interface Props {
 
 const DocumentSecurity: React.FunctionComponent<Props> = ({ documentTypeId }) => (
   <>
-    <SecurityEmployees />
-    <SecurityGroups />
+    <SecurityEmployees portal={true} />
+    <SecurityGroups portal={true} />
     <OperatorAccess documentTypeId={documentTypeId} />
   </>
 );

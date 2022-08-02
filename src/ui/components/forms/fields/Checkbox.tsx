@@ -2,6 +2,7 @@ import { Checkbox as MuiCheckbox, FormControlLabel } from "@material-ui/core";
 import { CheckboxProps as MuiCheckboxProps } from "@material-ui/core/Checkbox";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
+import { styles } from "../../../../../src/ui/form.builder/styles/FBEditorTextFieldWithRange.styles";
 import { Translation } from "../../../translations/types";
 import Text from "../../Text";
 import { useFormContext } from "../FormContext";
@@ -20,10 +21,10 @@ type CheckboxPropsWithFormik = CheckboxOwnProps & FormikFieldProps & OwnProps;
 const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxProps, label, ...fieldProps }) => {
   const { field } = fieldProps;
   const { submitForm } = useFormContext();
-
+  const classes = styles();
   return (
     <Field {...fieldProps} >
-      <FormControlLabel id="Checkbox-label"
+      <FormControlLabel id="Checkbox-label" className={classes.checkbox}
         control={
           <MuiCheckbox
             {...fieldProps.field}

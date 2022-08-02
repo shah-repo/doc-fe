@@ -1,11 +1,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -14,6 +16,8 @@ const ADMIN_USER = USERS[29];
 const FIRST_USER = USERS[30];
 const SECOND_USER = USERS[31];
 const THIRD_USER = USERS[32];
+const documentRevisionName = "New document for testing AR";
+const approvalRequestTitle = "Approval request from newly created form";
 
 let createdCompany;
 let loginResponse;
@@ -23,15 +27,8 @@ let fourthEmployee;
 let emailsFromInbox: IMAPEmail[];
 let clinicalProtocolDocumentType;
 let group;
-let doateOfSendToAll;
-
-const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Approval request from newly created form";
-
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+let dateAfterEmailShouldArrive;
+let getEmailSetting;
 
 context("Approval request email popup modal", () => {
   before(() => {
@@ -168,6 +165,7 @@ context("Approval request email popup modal", () => {
       });
     });
   });
+
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
@@ -221,8 +219,8 @@ context("Approval request email popup modal", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status is 'In Review'", () => {
-      cy.arVerifyStatus({ status: "In Review" });
+    it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
@@ -242,7 +240,8 @@ context("Approval request email popup modal", () => {
 
       it("Check if pop-up modal has pending with all the approvers", () => {
         cy.get("h2").should("contain.text", "PENDING (3)");
-        cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", FIRST_USER.name)
+        cy.get("[class='MuiCollapse-wrapperInner']")
+          .should("contain.text", FIRST_USER.name)
           .and("contain.text", SECOND_USER.name)
           .and("contain.text", THIRD_USER.name);
         cy.get("h2").should("contain.text", "APPROVED (0)");
@@ -256,6 +255,7 @@ context("Approval request email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
     });
   });
@@ -272,9 +272,12 @@ context("Approval request email popup modal", () => {
 
   context("Verify email for pending training notification and approve AR", () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -294,8 +297,6 @@ context("Approval request email popup modal", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log(emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -305,7 +306,14 @@ context("Approval request email popup modal", () => {
     });
 
     it("Get emails and visit AR approval url", () => {
-      cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: SECOND_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
     });
 
     it("Approve AR", () => {
@@ -344,13 +352,13 @@ context("Approval request email popup modal", () => {
       it("Click on 'EMAIL ALL'", () => {
         SystemRequirement("REQ-5090");
         cy.get("button").contains("EMAIL ALL").arrowClick();
-        doateOfSendToAll = new Date();
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
     });
   });
@@ -367,10 +375,14 @@ context("Approval request email popup modal", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        after: doateOfSendToAll,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      cy.imapGetMails({
+        userEmail: SECOND_USER.email,
+        options: getEmailSetting,
+      }).then((emails) => {
         emailsFromInbox = emails;
       });
     });
@@ -379,13 +391,14 @@ context("Approval request email popup modal", () => {
       const emailsThatShouldNotBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: SECOND_USER.email,
-          contains: ["Can you please approve my\r\n                                      request:)"],
+          contains: ["Can you please approve my\r\n                                      request:)",
+          ],
         },
       ];
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldNotBeReceived,
-        getEmailsSincedate: doateOfSendToAll,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 0,
       });
     });
@@ -403,7 +416,14 @@ context("Approval request email popup modal", () => {
 
   context("Verify email for pending training notification and approve AR", () => {
     it("Get emails and visit AR approval url", () => {
-      cy.imapGetApprovalRequestLink({ userEmail: THIRD_USER.email });
+      getEmailSetting =  {
+        to: THIRD_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetApprovalRequestLink({ userEmail: THIRD_USER.email, options: getEmailSetting });
     });
 
     it("Approve AR", () => {
@@ -421,16 +441,22 @@ context("Approval request email popup modal", () => {
     });
 
     it("Get emails and visit AR approval url", () => {
-      cy.imapGetApprovalRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: FIRST_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetApprovalRequestLink({ userEmail: FIRST_USER.email, options: getEmailSetting });
     });
 
     it("Approve AR", () => {
       cy.arApproveAR();
     });
 
-    it("Check if AR has status 'Approved'", () => {
-      cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Approved");
+    it(`Check if AR has status ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 });
-

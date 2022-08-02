@@ -4,7 +4,7 @@ import { AttachmentStyleProps } from "./types";
 
 export const styles = makeStyles((theme: Theme) => ({
   root: ({ isField }: AttachmentStyleProps) => ({
-    padding: isField ? theme.spacing(2, 1) : 0,
+    padding: 0,
     backgroundColor: isField ? Colors.white : "transparent",
     borderRadius: isField ? "4px" : "none",
     border: isField ? `1px solid ${Colors.medium_gray}` : "none",

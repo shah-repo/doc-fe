@@ -7,7 +7,7 @@ export type FBApprovalMatrixTableProps =
   cellHeight?: (height: number, index: number) => number;
   approvalData?: FBApprovalMatrixFieldData;
   mode?: FBApprovalMatrixFieldMode;
-  classes?: Record<"tableInfo" | "tableStatus", string>;
+  classes?: Record<"tableRoot" | "tableInfo" | "tableStatus" | "wrapperStatus", string>;
   width?: number;
 };
 
@@ -37,4 +37,9 @@ export enum FBDocTypeGroup {
   PO = "PO",
   DAM = "DAM",
   PART_LOT = "PART_LOT"
+}
+
+export enum FBDAMFields {
+  DAR = "dar-built-in",
+  DAM = "dam-built-in"
 }

@@ -12,7 +12,6 @@ export const styles = makeStyles((theme: Theme) =>
       marginLeft: 50,
       zIndex: 1,
       position: "relative",
-      top: -14,
     },
     root: {
       width: "100%",

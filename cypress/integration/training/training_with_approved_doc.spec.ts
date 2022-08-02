@@ -4,6 +4,7 @@
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -373,8 +374,8 @@ context("Training notifications for documents with approved and released revisio
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDocId = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDocId = x.text(); });
     });
   });
 
@@ -408,6 +409,14 @@ context("Training notifications for documents with approved and released revisio
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -433,6 +442,16 @@ context("Training notifications for documents with approved and released revisio
     it("Select Users to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {
@@ -558,10 +577,10 @@ context("Training notifications for documents with approved and released revisio
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
     });
 
-    it("Click training notification and check doc with Approved status", () => {
+    it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
       SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -572,10 +591,10 @@ context("Training notifications for documents with approved and released revisio
       cy.navigToDashboard();
     });
 
-    it("Click training notification and check doc with Released status", () => {
+    it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
       SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -599,9 +618,9 @@ context("Training notifications for documents with approved and released revisio
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
     });
 
-    it("Click training notification and check doc with Approved status", () => {
+    it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -753,7 +772,7 @@ context("Training notifications for documents with approved and released revisio
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
+      cy.wait(10000);
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -772,7 +791,7 @@ context("Training notifications for documents with approved and released revisio
       cy.trClearFilters();
       cy.trLandingPageOwner({ owner: "1" });
       cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.contains("Completed On").arrowClick().wait(500);
+      cy.contains("COMPLETED ON").arrowClick().wait(500);
       cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
         .and("contain", USERS[1].name).and("not.contain", "Pending");
@@ -836,6 +855,10 @@ context("Training notifications for documents with approved and released revisio
       });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Change frequency to 10 days", () => {
       cy.get("[name=training-validity]").clear().arrowType("10");
     });
@@ -845,6 +868,10 @@ context("Training notifications for documents with approved and released revisio
         CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {
@@ -916,7 +943,7 @@ context("Training notifications for documents with approved and released revisio
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
+      cy.wait(10000);
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -965,7 +992,7 @@ context("Training notifications for documents with approved and released revisio
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
+      cy.wait(10000);
       cy.landingPageLoadingElementShouldNotExist();
     });
   });

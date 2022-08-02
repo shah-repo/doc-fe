@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
@@ -13,6 +14,8 @@ const ADMIN_USER = USERS[33];
 const FIRST_USER = USERS[34];
 const SECOND_USER = USERS[35];
 const THIRD_USER = USERS[36];
+const recordTitle = "Record document from newly created form";
+const dateOffset = (5 * 1000);
 
 let createdCompany;
 let loginResponse;
@@ -22,14 +25,9 @@ let fourthEmployee;
 let emailsFromInbox: IMAPEmail[];
 let adminEmployee;
 let adminSessionId;
-let doateOfSendToAll;
 let developersGroup;
-
-const recordTitle = "Record document from newly created form";
-
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+let dateAfterEmailShouldArrive;
+let getEmailSetting;
 
 context("Records email popup modal", () => {
   before(() => {
@@ -93,7 +91,6 @@ context("Records email popup modal", () => {
         done();
       });
     });
-
 
     context("[API]Add employee to developers group", () => {
       it("[API]Get group", (done: any) => {
@@ -161,13 +158,13 @@ context("Records email popup modal", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Verify approvals field is automatically added", () => {
-      cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-    });
-
     context("Creates document and releases it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Verify approvals field is automatically added", () => {
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and Release document", () => {
@@ -175,7 +172,6 @@ context("Records email popup modal", () => {
       });
     });
   });
-
 
   context("Create record with newly created form", () => {
     it("Navigate to records list", () => {
@@ -252,7 +248,7 @@ context("Records email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(10000);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -269,12 +265,15 @@ context("Records email popup modal", () => {
 
   context("Verify email for pending training notification and approve Record", () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
+      getEmailSetting =  {
+        to: SECOND_USER.email,
         after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      cy.imapGetMails({ userEmail: SECOND_USER.email, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
     });
@@ -302,7 +301,14 @@ context("Records email popup modal", () => {
     });
 
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: SECOND_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
     });
 
     it("Approve Record", () => {
@@ -344,13 +350,13 @@ context("Records email popup modal", () => {
 
       it("Click on 'EMAIL ALL'", () => {
         cy.get("button").contains("EMAIL ALL").arrowClick();
-        doateOfSendToAll = new Date();
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       });
     });
   });
@@ -365,12 +371,15 @@ context("Records email popup modal", () => {
     });
 
     it("Get emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        after: doateOfSendToAll,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+      cy.imapGetMails({ userEmail: SECOND_USER.email, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
     });
@@ -385,7 +394,7 @@ context("Records email popup modal", () => {
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldNotBeReceived,
-        getEmailsSincedate: doateOfSendToAll,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 0,
       });
     });
@@ -396,14 +405,21 @@ context("Records email popup modal", () => {
       cy.authLogout();
     });
 
-    it("Login user to dashboard", () => {
+    it(`Login as user ${THIRD_USER} to dashboard`, () => {
       cy.authLoginToDashboard({ USER: THIRD_USER, employeeId: fourthEmployee.id });
     });
   });
 
   context("Verify email for pending training notification and approve Record", () => {
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: THIRD_USER.email });
+      getEmailSetting =  {
+        to: THIRD_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: THIRD_USER.email, options: getEmailSetting });
     });
 
     it("Approve Record", () => {
@@ -421,12 +437,19 @@ context("Records email popup modal", () => {
       cy.authLogout();
     });
 
-    it("Login user to dashboard", () => {
+    it(`Login user as ${FIRST_USER} to dashboard`, () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
     });
 
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: FIRST_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: FIRST_USER.email, options: getEmailSetting });
     });
 
     it("Approve Record", () => {
@@ -438,9 +461,8 @@ context("Records email popup modal", () => {
       cy.checkToastMessage({ exists: false });
     });
 
-    it("Check if Record has status 'Released'", () => {
-      cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Released");
+    it(`Check if Record has status ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 });
-

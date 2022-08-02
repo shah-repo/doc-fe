@@ -109,6 +109,7 @@ export enum CyRoutes {
   AsyncTasks = "AsyncTasks",
   PostTrainingDue = "PostTrainingDue",
   AsyncSessionTasks = "AsyncSessionTasks",
+  PostNewUserSetPassword = "PostNewUserSetPassword",
 }
 
 export const routes: ICyRoutes =   {
@@ -933,6 +934,15 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/training_record/due/*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+    },
+  },
+  PostNewUserSetPassword: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/auth/new_user_set_password",
     },
     callConfig: {
       responseTimeout: 30 * 1000,
