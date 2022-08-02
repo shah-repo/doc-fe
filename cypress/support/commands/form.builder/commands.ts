@@ -53,6 +53,7 @@ declare global {
       fbCheckFieldsExistInstructionsList(...list: string[]): Chainable<Subject>;
       fbCheckFieldsExistButtonsList(...list: string[]): Chainable<Subject>;
       fbCheckFieldsExistActionsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsExistFavoritesList(...list: string[]): Chainable<Subject>;
       fbCheckFieldsDoesntExistOnInputsList(...list: string[]): Chainable<Subject>;
       fbCheckFieldsDoesntExistOnApprovalsList(...list: string[]): Chainable<Subject>;
       fbEditHiddenBtn(): Chainable<Subject>;
@@ -60,6 +61,7 @@ declare global {
       fbFieldRequiredIf(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIfIn(params: { name: string }): Chainable<Subject>;
       fbVerifySectionsOnAddField(...list: string[]): Chainable<Subject>;
+      fbVerifySectionsNotOnAddField(...list: string[]): Chainable<Subject>;
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string; value: string }): Chainable<Subject>;
@@ -243,6 +245,14 @@ Cypress.Commands.add("fbCheckFieldsExistActionsList", (...list: string[]) => {
   });
 });
 
+Cypress.Commands.add("fbCheckFieldsExistFavoritesList", (...list: string[]) => {
+  cy.get(`[data-cy="Favorites"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
 Cypress.Commands.add("fbCheckFieldsDoesntExistOnInputsList", (...list: string[]) => {
   cy.get(`[data-cy="Inputs"]`).arrowClick();
 
@@ -365,6 +375,12 @@ Cypress.Commands.add("fbVerifyCheckboxValue", (...list: string[]) => {
 Cypress.Commands.add("fbVerifySectionsOnAddField", (...list: string[]) => {
   list.forEach((item) => {
     cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbVerifySectionsNotOnAddField", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("not.exist");
   });
 });
 
