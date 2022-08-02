@@ -3,6 +3,7 @@ import AppBar from "@material-ui/core/AppBar";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
+import HelpCenter from "../../App/Enlil/Features/HelpCenter/HelpCenter";
 import SM from "../../App/Shifamed/Utils/SM/SM";
 import Text from "../components/Text";
 import AutosaveToggle from "./autosave/autosave";
@@ -13,7 +14,6 @@ interface Props extends WithStyles<typeof styles> {
   customLabelsValue: boolean;
   canToggleCustomLabels: boolean;
 }
-
 
 const Header: React.FunctionComponent<Props> = ({
   classes,
@@ -27,7 +27,7 @@ const Header: React.FunctionComponent<Props> = ({
       <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar className={`${classes.toolbar} formBuilder`}>
           {<Box className={classes.newLogo} />}
-          <Grid container={true} alignItems="flex-end" justify="flex-end">
+          <Grid container={true} alignItems="center" justify="flex-end">
             <Grid item>
               {canToggleCustomLabels && (
                 <FormControlLabel
@@ -47,6 +47,9 @@ const Header: React.FunctionComponent<Props> = ({
             <Grid item>
               <AutosaveToggle />
             </Grid>
+            <Grid item>
+              <HelpCenter />
+            </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
@@ -58,7 +61,7 @@ const Header: React.FunctionComponent<Props> = ({
         <div className={classes.logo}></div>
         <Grid
           container={true}
-          alignItems="flex-end"
+          alignItems="center"
           justify="flex-end"
         >
           {canToggleCustomLabels && (
@@ -68,6 +71,7 @@ const Header: React.FunctionComponent<Props> = ({
             />
           )}
           <AutosaveToggle />
+          <HelpCenter />
         </Grid>
       </Toolbar>
     </AppBar>
