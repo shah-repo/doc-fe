@@ -352,7 +352,7 @@ context("Check Document History", () => {
         cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
       });
 
-      element.actions.forEach((action, index) => {
+      element.actions.forEach((action, index, identifier) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
           const typeOfChange = action.key;
           let contentOfChange = action.value;
@@ -366,14 +366,21 @@ context("Check Document History", () => {
             cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
           }
           else {
-            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-              .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-              .parent()
-              .parent()
-              .within(() => {
-                cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
+            if (action.key === "Access granted to group") {
+              cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
+                expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
               });
+            }
+            else {
+              cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
+                .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
+                .parent()
+                .parent()
+                .within(() => {
+                  cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
+                  cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
+                });
+            }
           }
         });
       });
