@@ -205,11 +205,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     FBWorkspaceModeOptions.FORMDESIGN,
   ].includes(_formState?.mode as FBWorkspaceModeOptions) || isEB);
 
-  const isAttachmentRequired = () => {
-    const type = documentTypesById[documentTypeId];
-    const docId = _documentRevisionFormState?.documentRevision?.id;
-    return docId || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
-  };
+  const isAttachmentRequired = _documentRevisionFormState?.documentRevision?.id
+    || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(documentTypeById?.group as DOC_TYPE_GROUP);
   const isAttachmentForOther = [DOC_TYPE_GROUP.OTHER].includes(group as DOC_TYPE_GROUP);
 
   const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
@@ -347,7 +344,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {showOutputSection ? (
           <>
-            {isAttachmentRequired() && (isPO || includes(outputDocumentTypeName, true)
+            {isAttachmentRequired && (isPO || includes(outputDocumentTypeName, true)
               ? _tabsState?.tabID !== "details" && (
               <Grid item xs={12}>
                 <AttachmentsField

@@ -12,7 +12,6 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     workspaceMode,
     schemaState,
     schema,
-    showAllTabs,
     ...props
   }: T) => {
 
@@ -76,7 +75,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         const { disabled, outputDisabled } = schemaItem || {};
         const reviseDisabled = schemaItem.editorProperties?.includes("reviseDisabled");
         if (schemaItem.deleted || schemaItem.hidden ||
-          (!showAllTabs && _tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
+          (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
         return controlRenderer({
           autosave: isUnderWorkspace && workspaceState?.autosave,
           ...schemaItem,
