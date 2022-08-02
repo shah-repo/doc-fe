@@ -16,16 +16,13 @@ declare global {
       ebApprove(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
-<<<<<<< HEAD
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
       ebCloneClickNo(): Chainable<Subject>;
       ebCloneClickContinue(): Chainable<Subject>;
       ebAddMaterialDocument(params: { title: string; value: string; name: string }): Chainable<Subject>;
       ebAddEquipmentDocument(params: { title: string }): Chainable<Subject>;
-=======
       ebClickCloneFromMenu(): Chainable<Subject>;
->>>>>>> demo
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
       ebWithdrawSubmisison(): Chainable<Subject>;

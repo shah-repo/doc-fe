@@ -326,6 +326,7 @@ context("Export Engineering Build doc", () => {
                 applicableValidationSchema: true,
                 editorProperties: [],
                 index: 0,
+                tabId: "procedure",
               },
               {
                 type: "section",
@@ -342,10 +343,12 @@ context("Export Engineering Build doc", () => {
                 applicableValidationSchema: true,
                 editorProperties: [],
                 index: 1,
+                tabId: "procedure",
               },
               {
                 index: 2,
                 type: "procedure",
+                tabId: "procedure",
                 name: "-l42j5ayx",
                 hidden: false,
                 outputDisabled: false,
@@ -368,6 +371,7 @@ context("Export Engineering Build doc", () => {
                 type: "approvals",
                 index: 3,
                 label: "form.builder.approvals",
+                tabId: "overview",
                 deleteDisabled: true,
                 uniqueSchemaItem: true,
               },
@@ -390,40 +394,6 @@ context("Export Engineering Build doc", () => {
           sessionId: loginResponse.sessionId,
         }).then(() => done());
       });
-    });
-
-    it("[API]Create EB document", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>EB document3</p>",
-          document: {
-            docId: "EB-00003",
-            documentType: {
-              id: EBDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Engineering Build document",
-          formDocument: {
-            id: createdEBform.id,
-          },
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then(() => done());
     });
 
     it("[API]API request for updating company navigation", (done: any) => {
@@ -722,7 +692,7 @@ context("Export Engineering Build doc", () => {
 
       it("Add Procedure1", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.fbAddNewFieldButton();
       });
 
@@ -771,6 +741,7 @@ context("Export Engineering Build doc", () => {
 
     context("Clone EB select 'Yes' and  Click on the CONTINUE button", () => {
       it("Click Clone EB button", () => {
+        cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
         cy.ebClickCloneEB();
         cy.ebCloneClickNo();
         cy.ebCloneClickYes();
@@ -811,19 +782,19 @@ context("Export Engineering Build doc", () => {
 
       it("Verify title is copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("div[id^=\"Title-field\"]")
+        cy.get("[data-cy=\"field-name\"]")
           .should("have.text", "Test Engineering Build");
       });
 
       it("Verify description is copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("[id=field-description] div[data-editor]")
+        cy.get("[class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"]").eq(0)
           .should("have.text", "Test Engineering Build description");
       });
 
       it("Verify part revision", () => {
         SystemRequirement("REQ-3020");
-        cy.get("input[value=document]").should("have.attr", "checked");
+        cy.get("input[value=documentRevision]").should("have.attr", "checked");
       });
 
       it("Verify part document is same", () => {
@@ -897,173 +868,6 @@ context("Export Engineering Build doc", () => {
     });
   });
 
-  context("Scenario 2: Verify the user is able to clone existing EB in WIP and NOT link it to the previous build", () => {
-    context("Select WIP EB", () => {
-      it("Navigate to EB list", () => {
-        cy.navigToEB();
-      });
-
-      it("Select EB document", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "EB-00003" });
-        cy.ebSelectFirstDocument();
-      });
-
-      it("select parts", () => {
-        cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Part document");
-      });
-
-      it("Upload attachment", () => {
-        cy.atchUploadAttachment({ fileName: "image1.jpg" });
-      });
-
-      it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
-
-      it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([ ], () => {
-          cy.elUploadAttachment({
-            fileName: "image.png",
-            el: "fb-mediaalbum-upload-",
-          });
-        });
-      });
-
-      it("Add material document", () => {
-        cy.ebAddMaterialDocument({ title: "Materials document", value: "2", name: "Each" });
-      });
-
-      it("Add equipment document ", () => {
-        cy.ebAddEquipmentDocument({ title: "Equipment document" });
-      });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
-    });
-
-    context("Clone EB select 'No' and  Click on the CONTINUE button", () => {
-      it("Click Clone EB button", () => {
-        cy.ebClickCloneEB();
-        cy.ebCloneClickNo();
-        cy.ebCloneClickContinue();
-      });
-    });
-
-    context("Go to a new/cloned EB and check", () => {
-      it("Part Revision displays no values", () => {
-        SystemRequirement("REQ-3020");
-        cy.get("input[value=document]").should("not.be.checked");
-      });
-
-      it("Part displays no values", () => {
-        SystemRequirement("REQ-3020");
-        cy.get("[data-cy=\"childrenParts\"]").should("be.empty");
-      });
-
-      it("Previous Build displays none", () => {
-        cy.get("[data-cy=\"BuildsPresenter-link-common.previous.build\"]")
-          .should('not.exist');
-      });
-
-      it("Next Build displays none", () => {
-        cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]")
-          .should('not.exist');
-      });
-
-      it("Verify title is copied", () => {
-        SystemRequirement("REQ-3020");
-        cy.get("div[id^=\"Title-field\"]")
-          .should("have.text", "Engineering Build document");
-      });
-
-      it("Verify description is copied", () => {
-        SystemRequirement("REQ-3020");
-        cy.get("[id=field-description] div[data-editor]")
-          .should("have.text", "EB document3");
-      });
-
-      it("Verify attachments are copied", () => {
-        SystemRequirement("REQ-3020");
-        cy.get("[data-cy=\"attachment.title\"]").should("have.text", "image1.jpg");
-      });
-    });
-
-    context("Make some changes in EB such as to add/remove Materials, Equipment, attachment", () => {
-      it("Select a part in the Part field", () => {
-        cy.wait(2000);
-        cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("PRT-00005 - rev 1 - Part document");
-      });
-
-      it("Add reference to part", () => {
-        cy.drSelectReferences("FM-00002 - 1 - EB form");
-      });
-
-      it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
-          cy.elUploadAttachment({
-            fileName: "test.jpg",
-            el: "fb-mediaalbum-upload-",
-          });
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Add material document", () => {
-        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(4).arrowClick();
-        cy.wait(3000);
-        cy.ebAddMaterialDocument({ title: "Materials document", value: "4", name: "Each" });
-      });
-
-      it("Add equipment document", () => {
-        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(6).arrowClick();
-        cy.wait(3000);
-        cy.ebAddEquipmentDocument({ title: "Equipment document" });
-      });
-
-      it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
-
-      it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
-      });
-
-      it("Approve record button click", () => {
-        cy.ebApprove();
-      });
-    });
-
-    context("Go back to the previous build", () => {
-      it("Navigate to EB list", () => {
-        cy.navigToEB();
-      });
-
-      it("Select EB document", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "EB-00003" });
-        cy.ebSelectFirstDocument();
-      });
-
-      it("Verify the next Build link", () => {
-        cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]")
-          .should('not.exist');
-      });
-
-      it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
-      });
-
-      it("Approve record button click", () => {
-        cy.ebApprove();
-      });
-    });
-  });
-
   context("Scenario 3: Verify that the user is able to clone EB NOT linked to the previous build and release it", () => {
     context("Create EB form", () => {
       it("Navigate to document list", () => {
@@ -1111,7 +915,7 @@ context("Export Engineering Build doc", () => {
 
       it("Add Procedure1", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.fbAddNewFieldButton();
       });
 
@@ -1160,6 +964,7 @@ context("Export Engineering Build doc", () => {
 
     context("Clone EB select 'No' and  Click on the CONTINUE button", () => {
       it("Click Clone EB button", () => {
+        cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
         cy.ebClickCloneEB();
         cy.ebCloneClickNo();
         cy.ebCloneClickContinue();
@@ -1188,13 +993,13 @@ context("Export Engineering Build doc", () => {
 
       it("Verify title is copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("div[id^=\"Title-field\"]")
+        cy.get("[data-cy=\"field-name\"]")
           .should("have.text", "Test Engineering Build");
       });
 
       it("Verify description is copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("[id=field-description] div[data-editor]")
+        cy.get("[class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"]").eq(0)
           .should("have.text", "Test Engineering Build description");
       });
 
@@ -1252,7 +1057,7 @@ context("Export Engineering Build doc", () => {
 
       it("Select EB document", () => {
         cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "EB-00005" });
+        cy.dlFilterByDocId({ docId: "EB-00003" });
         cy.ebSelectFirstDocument();
       });
 
@@ -1318,7 +1123,7 @@ context("Export Engineering Build doc", () => {
 
       it("Add Procedure1", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.fbAddNewFieldButton();
       });
 
@@ -1367,6 +1172,7 @@ context("Export Engineering Build doc", () => {
 
     context("Clone EB select 'No' and  Click on the CONTINUE button", () => {
       it("Click Clone EB button", () => {
+        cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
         cy.ebClickCloneEB();
         cy.ebCloneClickNo();
         cy.ebCloneClickContinue();
@@ -1395,13 +1201,13 @@ context("Export Engineering Build doc", () => {
 
       it("Verify title is copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("div[id^=\"Title-field\"]")
+        cy.get("[data-cy=\"field-name\"]")
           .should("have.text", "Test Engineering Build");
       });
 
       it("Verify description is copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("[id=field-description] div[data-editor]")
+        cy.get("[class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"]").eq(0)
           .should("have.text", "Test Engineering Build description");
       });
 
@@ -1443,6 +1249,10 @@ context("Export Engineering Build doc", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Submit for Approval", () => {
         cy.pmSubmitForApproval();
       });
@@ -1459,7 +1269,7 @@ context("Export Engineering Build doc", () => {
 
       it("Select EB document", () => {
         cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "EB-00007" });
+        cy.dlFilterByDocId({ docId: "EB-00005" });
         cy.ebSelectFirstDocument();
       });
 
