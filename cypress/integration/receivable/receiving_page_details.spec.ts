@@ -56,7 +56,7 @@ const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
-const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/DD/YYYY");
+const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/D/YYYY");
 
 context("Receivable test with Page Details", () => {
   before(() => {

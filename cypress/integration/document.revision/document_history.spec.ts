@@ -78,15 +78,26 @@ const history = [
   {
     owner,
     actions: [
-      { key: "New Doc ID", value: documentId.fullId },
-      { key: "Access granted to user", value: sharedUser.name },
-      { key: "Access granted to group", value: "Everyone" },
-      { key: "Access granted to group", value: groupOne },
-      { key: "New status", value: `Set to Draft by ${owner}` },
-      { key: "New owner", value: `${owner}` },
-      { key: "New name", value: formTitle.value },
+      { key: "Attachment added", value: "test_image.jpg" },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "New reference to", value: reference.valueCode },
+    ],
+  },
+  {
+    owner,
+    actions: [
       { key: "New description", value: `${formDescription.value}` },
-      { key: "Attachment added", value: `test_image.jpg` },
+      { key: "New Doc ID", value: documentId.fullId },
+      { key: "New name", value: formTitle.value },
+      { key: "New owner", value: `${owner}` },
+      { key: "Access granted to user", value: sharedUser.name },
+      { key: "Access granted to group", value: groupOne },
+      { key: "Access granted to group", value: "Everyone" },
+      { key: "New status", value: `Set to Draft by ${owner}` },
     ],
   },
 ];
@@ -213,8 +224,6 @@ context("Check Document History", () => {
     it("edit the title", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
-        cy.get("[data-cy=field-description]>label").arrowClick();
-        // auto-save
       });
       cy.progressBarShouldNotExist();
     });
@@ -319,7 +328,7 @@ context("Check Document History", () => {
     });
 
     it(`select '${formTitle.newValue}'`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("#root").contains(formTitle.newValue).arrowClick();
       });
     });
@@ -340,10 +349,10 @@ context("Check Document History", () => {
 
     history.forEach((element, groupIndex) => {
       it(`Check owner name for group ${groupIndex + 1}`, () => {
-        cy.get(`[data-cy="owner-${groupIndex}"]`).should("have.text", element.owner);
+        cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
       });
 
-      element.actions.forEach((action) => {
+      element.actions.forEach((action, index) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
           const typeOfChange = action.key;
           let contentOfChange = action.value;
@@ -353,18 +362,17 @@ context("Check Document History", () => {
           }
 
           if (typeOfChange === "s3Link added") {
-            cy.get(`[data-cy^="change-key-${groupIndex}-"]`).should("have.text", typeOfChange);
+            cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
             cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
           }
           else {
-
-            cy.get(`[data-cy^="change-value-${groupIndex}-"]`)
-              .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
+            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
+              .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
               .parent()
               .parent()
               .within(() => {
-                cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
-                cy.get("[data-cy^=change-value]").should("contain.text", contentOfChange);
+                cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
+                cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
               });
           }
         });
@@ -372,6 +380,3 @@ context("Check Document History", () => {
     });
   });
 });
-
-export { };
-

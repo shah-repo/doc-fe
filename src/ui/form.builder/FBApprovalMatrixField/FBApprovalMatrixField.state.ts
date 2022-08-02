@@ -22,6 +22,21 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
     this.data = formValue;
   }
 
+  public getCurrentData = (type) => {
+    let updatedData = [];
+    switch (type) {
+      case "roles":
+        updatedData = isEmpty(this.data?.approvalRoles) ? this.data?.[FBDAMFields.DAR] : this.data?.approvalRoles;
+        break;
+      case "matrix":
+        updatedData = isEmpty(this.data?.approvalMatrix) ? this.data?.[FBDAMFields.DAM] : this.data?.approvalMatrix;
+        break;
+      default:
+        break;
+    }
+    return updatedData || [];
+  };
+
   @action public prepareData = (data: FBApprovalMatrixFieldData): FBApprovalMatrixFieldData | undefined => this.data = {
     approvalRoles: data?.approvalRoles.map((x) => ({
       ...x,
@@ -38,20 +53,20 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
   @action public setApprovalRoles = (approvalRoles?: FBApprovalRole[]) => {
     set(this, "data", {
       approvalRoles,
-      approvalMatrix: this.data?.approvalMatrix,
+      approvalMatrix: this.getCurrentData("matrix"),
     });
   };
 
   @action public setApprovalMatrix = (approvalMatrix?: FBApprovalMatrixItem[]) => {
     set(this, "data", {
-      approvalRoles: this.data?.approvalRoles || [],
+      approvalRoles: this.getCurrentData("roles"),
       approvalMatrix,
     });
   };
 
   @action public addApprovalRole = (role: FBApprovalRole) => {
-    const defaultApprovalRoles = this.data?.approvalRoles || this.data?.[FBDAMFields.DAR] || [];
-    const defaultApprovalMatrix = this.data?.approvalMatrix || this.data?.[FBDAMFields.DAM] || [];
+    const defaultApprovalRoles: FBApprovalRole[] = this.getCurrentData("roles");
+    const defaultApprovalMatrix: FBApprovalMatrixItem[] = this.getCurrentData("matrix");
     const approvalRoles = union(defaultApprovalRoles, [{
       ...role,
       id: generateUuid(),

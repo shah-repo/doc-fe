@@ -1,5 +1,5 @@
 import { action, computed, observable, set } from "mobx";
-import { FBAuditData } from "..";
+import { FBApprovalMatrixFieldData, FBAuditData } from "..";
 import { SidebarType } from "../../documentRevision/Sidebar/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -10,6 +10,10 @@ class FBStore {
   @observable public audit = new FBRequest<FBAuditData[], null>(FBEndpoint.DocumentRevisionAudit);
   @observable public selectedTab: SidebarType | undefined;
   @observable purchaseOrderValue;
+  public damData?: FBApprovalMatrixFieldData ={
+    approvalRoles: [],
+    approvalMatrix: [],
+  };
 
   @computed public get isHistoryTabSelected() {
     return this.selectedTab === "history";

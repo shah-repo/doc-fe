@@ -1,4 +1,4 @@
-import { isUndefined } from "lodash";
+import { isEmpty, isUndefined } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeaderProps, SM } from "../../../../..";
@@ -18,9 +18,14 @@ export const withDocumentRevisionFormHeader = <T extends DocumentRevisionFormHea
 
     const isCurrentUserOperator = React.useContext(isOperator);
     const email = useSelector(authSelectors.currentUserEmail);
-    const isOwner = _documentRevisionFormState?.documentRevision?.owner
+    let isOwner = _documentRevisionFormState?.documentRevision?.owner
       ? _documentRevisionFormState?.documentRevision?.owner.user.email === email
       : true;
+
+    if (isCurrentUserOperator && isEmpty(_documentRevisionFormState?.documentRevision?.owner)) {
+      isOwner = false;
+    }
+
     isDisabledInput = (
       !isUndefined(_documentRevisionFormState?.documentRevision?.id) &&
       isCurrentUserOperator &&

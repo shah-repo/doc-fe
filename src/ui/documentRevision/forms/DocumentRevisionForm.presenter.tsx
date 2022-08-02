@@ -97,6 +97,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isCurrentUserOperator = React.useContext(isOperator);
   const groupOptions = documentRevision?.document.documentType.groupOptions;
+  const group = documentRevision?.document.documentType.group;
   // MARK: @helpers
   const isDocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
@@ -209,6 +210,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const docId = _documentRevisionFormState?.documentRevision?.id;
     return docId || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
   };
+  const isAttachmentForOther = [DOC_TYPE_GROUP.OTHER].includes(group as DOC_TYPE_GROUP);
 
   const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
     i?.label?.includes("Purchase Order")) : [false];
@@ -343,7 +345,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
         )}
-        {showOutputSection && (
+        {showOutputSection ? (
           <>
             {isAttachmentRequired() && (isPO || includes(outputDocumentTypeName, true)
               ? _tabsState?.tabID !== "details" && (
@@ -386,6 +388,19 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </Grid>
             )}
           </>
+        ) : (
+          isAttachmentForOther && <Grid item xs={12}>
+            <AttachmentsField
+              isDisabled={isDisabledInput}
+              isNewVersion={false}
+              docRevId={docRevId}
+              isAttachmentEmpty={isAttachmentEmpty}
+              containsRedline={false}
+              docRevStatus={documentRevision?.status}
+              documentRevision={documentRevision}
+              documentTypeId={documentTypeId || ""}
+            />
+          </Grid>
         )}
         {_formState?.active && documentRevision && values.id && (
           <Grid item xs={12}>
