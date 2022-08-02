@@ -936,12 +936,6 @@ context("Autocomplete test", () => {
       cy.drEnterDocumentDescription({ description: "test description" });
     });
 
-    // The following one step below is added as a work around for ENC-12360
-    // This step will be removed when the defect is fixed
-    it("Navigate to Approval roles tab", () => {
-      cy.drSelectMatrixDetailsTab();
-    });
-
     it("Navigate to Approval roles tab", () => {
       cy.drSelectApprovalRolesTab();
     });
