@@ -6,6 +6,6 @@ export const styles = makeStyles((theme) => ({
     color: error ? theme.palette.primary.main : theme.typography.h4.color,
   }),
   form: ({ gutter }: FieldStyleProps) => ({
-    margin: gutter ? theme.spacing(1, 0, 4.2) : theme.spacing(1, 0, 1),
+    margin: gutter ? theme.spacing(0, 0, 2.5) : theme.spacing(1, 0, 1),
   }),
 }));

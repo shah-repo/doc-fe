@@ -34,6 +34,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
     <Button
       variant="outlined"
       color="secondary"
+      data-cy="exportToEmail"
       style={{ margin: 0 }}
       onClick={() => handleTrainingRecordEmail()}
     >

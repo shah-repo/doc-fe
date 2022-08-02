@@ -133,7 +133,7 @@ context("Export restricted access doc", () => {
     });
 
     it("Click 'Send To Email'", () => {
-      cy.sendToEmail();
+      cy.sendToEmailFromHeader();
     });
 
     it("Verify restricted access message", () => {

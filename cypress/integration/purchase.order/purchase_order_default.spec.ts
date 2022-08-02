@@ -198,13 +198,15 @@ context("PO test with default enlil form", () => {
 
     context("Create purchase order", () => {
       it("Click on 'Purchase Order' on sidebar", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.navigToPurchaseOrder();
       });
 
       it("Click on 'Create PO' button", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-          poCreationDate1 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+          poCreationDate1 = moment().tz("America/Los_Angeles").format("MMM D, YYYY hh:mm A");
           poCreationDate2 = moment().tz("America/Los_Angeles").add(1, "minutes").format("MMMM D, YYYY hh:mm A");
         });
       });
@@ -216,27 +218,29 @@ context("PO test with default enlil form", () => {
 
         it("Check history entry", () => {
           SystemRequirement("REQ-1630");
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
             cy.drSelectHistoryTab();
           });
 
-          cy.get("div[data-cy=\"owner-0\"]").should("have.text", USERS[1].name);
-          cy.get("time[data-cy=\"time-0\"]")
-            .should("have.text", (poCreationDate1 || poCreationDate2));
+          cy.get("[class^=\"MuiListItemText-root MuiListItemText-multiline\"]").eq(1).contains(USERS[1].name);
+          cy.get("time[data-cy=\"audit-time-0\"]")
+            .contains((poCreationDate1 || poCreationDate2));
         });
 
         it("Select 'Open' for PO status", () => {
           cy.poSelectPOStatus({ status: "Open" });
+          cy.unClick();
         });
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
-          SystemRequirement("REQ-1300");
-          cy.get("[data-cy^=requestor]").arrowClick();
+          cy.get("[data-cy^=\"requestor-\"]").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
 
         it(`Select 'Quality' for Department`, () => {
-          cy.get("div[id*=department]").arrowClick();
+          cy.get("div[id*=mui-component-select-department]").arrowClick();
           cy.get("ul>li[role=option]").contains("Quality").arrowClick();
         });
 
@@ -271,14 +275,21 @@ context("PO test with default enlil form", () => {
 
         it("Select Order Date", () => {
           cy.get("input[name^=ordered]").parent().find("button").arrowClick();
-
           cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+        });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
       });
 
       context("Add purchase order item", () => {
+        it("navigate to Line Items", () => {
+          cy.drSelectLineItems();
+        });
+
         it("Click on 'Add item' button to add item without Part Number", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+          cy.poAddNewFieldItem();
         });
 
         it("Enter Quantity Ordered", () => {
@@ -305,7 +316,6 @@ context("PO test with default enlil form", () => {
 
         it("Add Required Date", () => {
           cy.get("input[name^=date]").parent().find("button").arrowClick();
-
           cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
         });
 
@@ -344,7 +354,7 @@ context("PO test with default enlil form", () => {
         it("Verify Sub Total, Tax & Total", () => {
           cy.poCheckAmount({ number: "$20.00" });
           cy.poCheckTax({ number: "1.850000" });
-          cy.get("[data-cy=\"poTotal\"]").should("have.text", "$21.85");
+          cy.poCheckTotalAmount({ number: "$21.85" });
         });
       });
 
@@ -398,11 +408,15 @@ context("PO test with default enlil form", () => {
         it("Verify Sub Total, Tax & Total", () => {
           cy.poCheckAmount({ number: "$50.00" });
           cy.poCheckTax({ number: "1.850000" });
-          cy.get("[data-cy=\"poTotal\"]").should("have.text", "$51.85");
+          cy.poCheckTotalAmount({ number: "$51.85" });
         });
       });
 
       context("Finish PO", () => {
+        it("navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Enter 'Nothing to comment' inside PO dialog box", () => {
           cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
           cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
@@ -441,6 +455,3 @@ context("PO test with default enlil form", () => {
     });
   });
 });
-
-export { };
-

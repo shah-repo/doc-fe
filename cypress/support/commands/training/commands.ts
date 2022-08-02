@@ -29,6 +29,7 @@ declare global {
       trLandingPagetrId(params: { trId: string }): Chainable<Subject>;
       trLandingPageDynamicParams(params: { dynamicParams: string }): Chainable<Subject>;
       trSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
+      setTimeTravelToComplete(params: { tasktype: string; days: string; status: string }): Chainable<Subject>;
     }
   }
 }
@@ -86,7 +87,7 @@ Cypress.Commands.add("trRejectAR", () => {
 Cypress.Commands.add("trCompleteTraining", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostCompleteTraining], () => {
-      cy.get("[data-cy=training-complete]").click();
+      cy.get("button[data-cy=training-complete]").click();
       cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldAppear();
@@ -164,3 +165,17 @@ Cypress.Commands.add("trSetTimeTravelInDays", (params: {days: number}) => {
   cy.wait(1000);
   cy.listLoadingElementShouldNotExist();
 });
+
+Cypress.Commands.add(
+  "setTimeTravelToComplete",
+  (params: { tasktype: string; days: string; status: string }) => {
+    cy.reload();
+    cy.progressBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+    cy.get(`tr[data-grid-row-index="0"]`)
+      .find("td")
+      .should("contain.text", params.tasktype)
+      .and("contain.text", params.days)
+      .and("contain.text", params.status);
+  }
+);

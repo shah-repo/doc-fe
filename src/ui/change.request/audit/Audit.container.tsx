@@ -11,6 +11,7 @@ import AuditPresenter from "./Audit.presenter";
 
 interface Props {
   changeRequest: ChangeRequest;
+  isDrawerOpen: boolean;
 }
 
 type OwnProps = Props;
@@ -37,13 +38,14 @@ const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   audit,
   loadAudit,
   changeRequest,
+  isDrawerOpen,
 }) => {
   const loadAuditAction = () => loadAudit(changeRequest.id);
   useState(() => {
     loadAuditAction();
   });
 
-  return <AuditPresenter approvals={changeRequest.approvals} audit={audit} />;
+  return <AuditPresenter approvals={changeRequest.approvals} audit={audit} isDrawerOpen={isDrawerOpen} />;
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(

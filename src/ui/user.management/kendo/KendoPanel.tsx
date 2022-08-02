@@ -39,6 +39,7 @@ import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -53,7 +54,6 @@ import { GroupsCell } from "./cell.template/GroupsCell";
 import { NameCell } from "./cell.template/NameCell";
 import { SignedCell } from "./cell.template/SignedCell";
 import { enterUserInfo } from "./column.definition";
-import KendoGridStyles from "./styles";
 import { AddUserManage, UserManage, UserManagementProps } from "./types";
 import UMExport from "./UMExport";
 
@@ -279,9 +279,9 @@ export function KendoPanel<T>({
           status:
             el?.user?.confirmed && !el?.user?.locked
               ? getTranslatedText("user.management.signed.up")
-              : el?.user?.locked
-                ? getTranslatedText("reset.password")
-                : getTranslatedText("user.management.resend.signup.email"),
+              : !el?.user?.confirmed
+                ? getTranslatedText("user.management.resend.signup.email")
+                : getTranslatedText("reset.password"),
           activeStatus: el?.active
             ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
             : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
@@ -500,7 +500,7 @@ export function KendoPanel<T>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className={`${classes.kGrid} no-row-pointer`}
+          className={`${classes.grid} no-row-pointer`}
           style={{ width: `${width}px` }}
           data={result}
           total={resultState.total}
@@ -545,25 +545,25 @@ export function KendoPanel<T>({
   };
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
   return (
-    <Box>
-      <Box mb={2}>
-        <Grid container justify="space-between" alignItems="center">
-          <Grid item xs >
+    <>
+      <Grid item xs={12} className={classes.headerGridItem}>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
             <GridTitle translation="navigation.user.management" />
           </Grid>
           <Grid item>
-            <UMExport gridData={dataState.group?.length ? getExportData(result) : result}
-              columns={columnDefinitions} />
-          </Grid>
-          <Grid item>
-            <AddEmployeeContainer addGroup={addNew} />
+            <Box display="flex">
+              <UMExport gridData={dataState.group?.length ? getExportData(result) : result}
+                columns={columnDefinitions} />
+              <AddEmployeeContainer addGroup={addNew} />
+            </Box>
           </Grid>
         </Grid>
-      </Box>
-      <Grid item xs>
-        <div className={classes.errorClass}>{tableCriteria.apiError}</div>
+      </Grid>
+      <Grid item xs={12} className={classes.kendoGridItem}>
+        <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
         {renderBody()}
       </Grid>
-    </Box>
+    </>
   );
 }

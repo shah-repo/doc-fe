@@ -14,7 +14,6 @@ let employeeLoginFirst;
 let adminLoginResponse;
 let adminSessionId;
 let asyncTasksGroup;
-let newEmployeId;
 let searchMailFromDate;
 
 const newPasswordsUI = [
@@ -136,15 +135,7 @@ context("Password expire reset flow", () => {
 
       context("Create new user", () => {
         it("Clicks the save button", () => {
-          cy.intercept({ method: "POST", pathname: "/api/v1/employees" }).as("postEmployee");
-          cy.get("button>span>svg>path").eq(1).arrowClick();
-          cy.wait("@postEmployee").then((res) => {
-            if (res.response) {
-              const response = res.response.body;
-              newEmployeId = response.id;
-            }
-          });
-          cy.landingPageLoadingElementShouldNotExist();
+          cy.usrClickSaveButton();
         });
 
         it("Logout", () => {
@@ -156,7 +147,6 @@ context("Password expire reset flow", () => {
     context("Activate new user", () => {
       it("Verify activation email", () => {
         cy.imapGetActivationLink({ userEmail: emailOfUserToSignUp });
-        cy.log(newEmployeId);
       });
 
       it("Enter password", () => {
@@ -253,6 +243,11 @@ context("Password expire reset flow", () => {
           cy.get("div.Toastify__toast-body>div>a").arrowClick();
         });
 
+        it("Enter email and current password", () => {
+          cy.get("[data-cy=\"email\"]").arrowType(emailOfUserToSignUp);
+          cy.get("[data-cy=\"currentPassword\"]").arrowType(previousPassword);
+        });
+
         it("Enter password", () => {
           cy.get(`[name="newPassword"]`).arrowType(newPassword);
         });
@@ -262,7 +257,7 @@ context("Password expire reset flow", () => {
         });
 
         it(`Click "RESET PASSWORD"`, () => {
-          cy.get("#ResetPassword-resetPassword").arrowClick();
+          cy.get("[data-cy=\"resetButtonSubmit\"]").arrowClick();
         });
 
         it("Verify password change notification", () => {
@@ -350,6 +345,11 @@ context("Password expire reset flow", () => {
           cy.imapNavigToPasswordResetLink({ userEmail: emailOfUserToSignUp, fromDate: searchMailFromDate });
         });
 
+        it("Enter email and current password", () => {
+          cy.get("[data-cy=\"email\"]").arrowType(emailOfUserToSignUp);
+          cy.get("[data-cy=\"currentPassword\"]").arrowType(previousPassword);
+        });
+
         it("Enter password", () => {
           cy.get(`input[name="newPassword"]`).arrowType( newPassword );
         });
@@ -358,8 +358,8 @@ context("Password expire reset flow", () => {
           cy.get(`input[name="newPasswordConfirmation"]`).arrowType( newPassword );
         });
 
-        it("Click 'SIGN IN'", () => {
-          cy.get(`button[id="ResetPassword-resetPassword"]`).arrowClick();
+        it(`Click "RESET PASSWORD"`, () => {
+          cy.get("[data-cy=\"resetButtonSubmit\"]").arrowClick();
         });
 
         it("Password Reset Successfully should be displayed", () => {

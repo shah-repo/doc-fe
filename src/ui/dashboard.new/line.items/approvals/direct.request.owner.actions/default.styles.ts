@@ -10,6 +10,9 @@ export const styles = makeStyles((theme: Theme) =>
       width: "30px",
       height: "30px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     actionIcons: {
       /* Action Icons */
       /* Auto Layout */
@@ -28,6 +31,9 @@ export const styles = makeStyles((theme: Theme) =>
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
+    },
+    cursorPointer: {
+      cursor: "pointer",
     },
     typography: {
       "fontSize": "14px",

@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -9,7 +10,6 @@ import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/cli
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-let docId;
 let loginResponse;
 let createdCompany;
 let secondEmployee;
@@ -236,15 +236,14 @@ context("Validators tests", () => {
     });
 
     it("Shows error 'required’ below 'document type' field", () => {
-      cy.get("[data-cy=\"field-document.documentType.id\"] .MuiFormHelperText-root.Mui-error")
+      cy.get("[data-cy=\"field-document.documentType.id\"]").find(".MuiFormHelperText-root.Mui-error")
         .should("have.text", "Required");
     });
 
     it("Shows error 'required’ below 'document ID' field", () => {
-      cy.get("[data-cy=\"field-document.docId\"] .MuiFormHelperText-root.Mui-error")
+      cy.get("[data-cy=\"field-document.docId\"]").find(".MuiFormHelperText-root.Mui-error")
         .should("have.text", "Required");
     });
-
   });
 
   context("Fills in Title, Description and Document Type", () => {
@@ -267,8 +266,8 @@ context("Validators tests", () => {
     });
 
     it("Shows error 'at least one required' below 'Output Document Type' field", () => {
-      cy.get("[data-cy=\"field-outputDocumentTypes\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "At least one input required");
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").find(".MuiFormHelperText-root.Mui-error")
+        .should("have.text", "Required");
     });
   });
 
@@ -281,6 +280,10 @@ context("Validators tests", () => {
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
+
+    it("Click Create Document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
   });
 
   context("Add 'Required' validation on 'Checkboxes'", () => {
@@ -290,7 +293,7 @@ context("Validators tests", () => {
 
     it("Create 'Checkboxes'", () => {
       SystemRequirement("FB-0040");
-      cy.fbSelectCustomFieldToAdd({ name: "Checkbox group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs",  field: "Checkbox group" });
     });
 
     it(`Give label to 'Checkbox' as 'Order'`, () => {
@@ -308,7 +311,7 @@ context("Validators tests", () => {
 
     it(`Make 'Order' field required`, () => {
       SystemRequirement("FB-0220");
-      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.fbFieldRequired();
     });
 
     it("Add Checkbox Group", () => {
@@ -322,7 +325,7 @@ context("Validators tests", () => {
     });
 
     it("Create 'Autocomplete' multi select", () => {
-      cy.fbSelectCustomFieldToAdd({ name: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
     });
 
     it(`Give label to 'Autocomplete' as 'Required doctypes'`, () => {
@@ -368,7 +371,7 @@ context("Validators tests", () => {
     });
 
     it("Create 'Text Field'", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it(`Give label to 'Text Field' as '${requiredFieldLabel}'`, () => {
@@ -380,7 +383,7 @@ context("Validators tests", () => {
     });
 
     it(`Make '${requiredFieldLabel}' field required`, () => {
-      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.fbFieldRequired();
     });
 
     it("Add text field", () => {
@@ -399,7 +402,7 @@ context("Validators tests", () => {
     });
 
     it("Create 'Text Field'", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it(`Give label to 'Text Field' as '${requiredIfFieldLabel}'`, () => {
@@ -434,11 +437,11 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
 
   context("Add 'Required With' validation on 'Text Field'", () => {
     it("Open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHiddenLastPlace();
     });
 
     it("Create 'Text Field'", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it(`Give label to 'Text Field' as '${requiredWithFieldLabel}'`, () => {
@@ -467,11 +470,11 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
 
   context("Add 'Required Without' validation on 'Text Field'", () => {
     it("Open add field dialogue", () => {
-      cy.get("button[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHiddenLastPlace();
     });
 
     it("Create 'Text Field'", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it(`Give label to 'Text Field' as '${requiredWithoutFieldLabel}'`, () => {
@@ -502,11 +505,11 @@ field is empty: Add text field`, () => {
 
   context("Add 'Required Document Status' validation on 'Autocomplete'", () => {
     it("Open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHiddenLastPlace();
     });
 
     it("Create 'Autocomplete'", () => {
-      cy.fbSelectAutoComplete();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
     });
 
     it(`Give label to 'Autocomplete' as '${requiredDocStatusFieldLabel}'`, () => {
@@ -539,11 +542,11 @@ field is empty: Add text field`, () => {
 
   context("Add 'Required Document Type' validation on 'Autocomplete'", () => {
     it("Open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
+      cy.fbAddNewFieldWhenHiddenLastPlace();
     });
 
     it("Create 'Autocomplete'", () => {
-      cy.fbSelectAutoComplete();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
     });
 
     it(`Give label to 'Autocomplete' as '${requiredDocTypeFieldLabel}'`, () => {
@@ -579,14 +582,6 @@ field is empty: Add text field`, () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Store Document Id", () => {
-      cy.get("[data-cy=\"common.docId\"]").then((element) => {
-        const text = element.text();
-        docId = text.split(":")[1].trim();
-        cy.log(docId);
-      });
-    });
-
     it("Approve and Release", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -607,7 +602,7 @@ field is empty: Add text field`, () => {
 
   context("Fills in Title and Description", () => {
     it("Type a title", () => {
-      cy.get("#Title-field").arrowType("Doc Title{enter}");
+      cy.drEnterDocumentTitle({ name: "Doc Title" });
     });
 
     it("Type a description", () => {
@@ -617,10 +612,7 @@ field is empty: Add text field`, () => {
 
   context("Validation errors on custom fields should not prevent from saving document", () => {
     it("saving the document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -629,9 +621,6 @@ field is empty: Add text field`, () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 
-    it("Check returned errors are not empty", () => {
-      cy.checkToastMessageIsNotEmpty({ exists: true });
-    });
 
     it("Check returned toast error message", () => {
       cy.checkToastMessageContains({
@@ -639,10 +628,11 @@ field is empty: Add text field`, () => {
         ",The Name is a required field." +
         ",The Address field is required when State is empty.,No document selected,No document selected",
       });
+      cy.closeAllAlertMessages();
     });
 
     it("Cancel release of document", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]", { timeout: 20 * 1000 }).arrowClick();
+      cy.drCloseApproveAndReleaseDialog();
     });
   });
 
@@ -839,8 +829,8 @@ field is empty: Add text field`, () => {
   context("No validation error, submission is successful", () => {
     // No need to check if validation pop-up is shown.
     // If doc status is released that means there were no validation errors.
-    it("Check document status is released", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Check document status is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 });

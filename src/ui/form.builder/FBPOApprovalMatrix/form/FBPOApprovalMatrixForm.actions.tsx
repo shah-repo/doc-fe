@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBSubmitButton } from "../..";
+import { FBSubmitButton } from "../..";
+import { StyledCancelFBButton } from "../../FBButton/StyledCancelFBButton";
 import { FBPOApprovalMatrixFormActionsProps } from "../FBPOApprovalMatrix.types";
 import { withFBPOApprovalMatrixForm } from "./FBPOApprovalMatrixForm.wrap";
 
@@ -15,7 +16,7 @@ const FBPOApprovalMatrixFormActions: React.FunctionComponent<FBPOApprovalMatrixF
       onClick={handleAdd}
       autoFocus
     />
-    <FBButton
+    <StyledCancelFBButton
       variant="outlined"
       label="common.cancel"
       onClick={handleCancel}

@@ -3,6 +3,7 @@ import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBButton, FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBProcedure } from "./FBProcedure.wrap";
 
 const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
@@ -27,6 +28,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
           locale: "form.builder.step.number",
           values: { number: stepIndex },
         }}
+        labelProps={FBFontStyle.labelProps}
       />
     )}
     <Box

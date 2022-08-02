@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
@@ -186,21 +187,34 @@ context("Autocomplete 'Lots' test", () => {
         cy.drSelectOutputDocumentType({ documentType: "Component Specification Lot" });
       });
 
+      it("Click create a document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Add Text field with range", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
         cy.fbEnterNameValue({ name: "label", value: "fb-range" });
         cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
-        cy.fbClickButton({ el: "fb-control-form.builder.range" });
+        cy.get(`[data-cy="fb-control-form.builder.range"]`).arrowClick();
         cy.fbSelectTextFieldRangeFromValue({ value: "0" });
         cy.fbSelectTextFieldRangeToValue({ value: "10" });
-        cy.fbClickButton({ el: "fb-control-form.builder.critical.to.quality" });
+        cy.unClick();
+        cy.get(`[data-cy="fb-control-form.builder.critical.to.quality"]`).arrowClick();
         cy.fbAddNewFieldButton();
       });
 
       it("Add Radio Button group", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
         cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
         cy.fbGroupOptions("X", "Y", "Z");
         cy.fbOpenValidation();
@@ -209,8 +223,8 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add Text Editor", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
         cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
@@ -221,8 +235,8 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add Text Field", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbAddNewFieldWhenHidden2ndLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "fb-text-field" });
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
@@ -230,10 +244,6 @@ context("Autocomplete 'Lots' test", () => {
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
         cy.fbSelectCheckboxValue("Y");
         cy.fbAddNewFieldButton();
-      });
-
-      it("Upload attachement picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Add a reference ", () => {
@@ -246,8 +256,8 @@ context("Autocomplete 'Lots' test", () => {
     });
 
     context("Verify `Lots document` status and send email", () => {
-      it("Verify form Draft status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+      it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.arCheckTitleInEditableAndMatches({ name: lotsTitle });
         cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
           formId = $formIdElement.text();
@@ -411,8 +421,6 @@ context("Autocomplete 'Lots' test", () => {
 
           expect(el).match(/fb-text-field/);
 
-          expect(el).match(/APPROVALS\nApprovers/);
-
           expect(el).match(/Draft/);
 
           tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
@@ -433,6 +441,8 @@ context("Autocomplete 'Lots' test", () => {
         if (el.includes("Page 2 of 3")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           expect(el).match(/Draft/);
 
@@ -479,14 +489,13 @@ context("Autocomplete 'Lots' test", () => {
       it("Approve and release FORM document", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
         });
       });
     });
 
     context("Verify `Lots document` status and send email", () => {
-      it("Verify form Draft status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: lotsTitle });
         cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
           formId = $formIdElement.text();
@@ -654,8 +663,6 @@ context("Autocomplete 'Lots' test", () => {
 
           expect(el).match(/fb-text-field/);
 
-          expect(el).match(/APPROVALS\nApprovers/);
-
           expect(el).match(/Released/);
 
           tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
@@ -676,6 +683,8 @@ context("Autocomplete 'Lots' test", () => {
         if (el.includes("Page 2 of 3")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
           expect(el).match(tmpRegex);
+
+          expect(el).match(/APPROVALS\nApprovers/);
 
           expect(el).match(/Released/);
 
@@ -746,6 +755,10 @@ context("Autocomplete 'Lots' test", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter quantity received", () => {
         cy.get("[name=\"lot_quantity\"]").arrowType("12");
       });
@@ -780,7 +793,11 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Create document", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+      });
+
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add two approvers", () => {
@@ -998,7 +1015,7 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp(`fb-radiobutton-group\n(.*)X(.*)Y(.*)Z`);
           expect(el).match(tmpRegex);
 
-          expect(el).match(/fb-text-editor\nSome text for Text editor/);
+          expect(el).match(/fb-text-editor/);
 
           expect(el).not.match(/fb-text-field/);
 
@@ -1075,8 +1092,8 @@ context("Autocomplete 'Lots' test", () => {
     });
 
     context("Verify `Lots document` status and send email", () => {
-      it("Verify document Released status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Verify document ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: lotsTitle });
         cy.drGetDocIdElementFromUI().then(($formIdElement: JQuery<HTMLElement>) => {
           formId = $formIdElement.text();
@@ -1223,7 +1240,7 @@ context("Autocomplete 'Lots' test", () => {
           tmpRegex = new RegExp(`fb-radiobutton-group\n(.*)X(.*)Y(.*)Z`);
           expect(el).match(tmpRegex);
 
-          expect(el).match(/fb-text-editor\nSome text for Text editor/);
+          expect(el).match(/fb-text-editor/);
 
           expect(el).not.match(/fb-text-field/);
 
@@ -1275,14 +1292,18 @@ context("Autocomplete 'Lots' test", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
 
-        it("Select 'Component Protocol' output document type", () => {
+        it("Select 'Clinical Protocol' output document type", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+        });
+
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
 
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

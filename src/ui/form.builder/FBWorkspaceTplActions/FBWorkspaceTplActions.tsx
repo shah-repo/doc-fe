@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBSubmitButton, FBWorkspaceTplActionsProps } from "..";
+import { FBSubmitButton, FBWorkspaceTplActionsProps } from "..";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { withFBWorkspaceTplActions } from "./FBWorkspaceTplActions.wrap";
 
 const FBWorkspaceTplActions: React.FunctionComponent<FBWorkspaceTplActionsProps> = ({
@@ -14,7 +15,7 @@ const FBWorkspaceTplActions: React.FunctionComponent<FBWorkspaceTplActionsProps>
       onClick={handleTplName}
       autoFocus
     />
-    <FBButton
+    <StyledCancelFBButton
       variant="outlined"
       label="common.cancel"
       onClick={handleCancel}

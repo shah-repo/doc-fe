@@ -375,12 +375,14 @@ context("LHRT Pending Change", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
+                tabId: "procedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
+                tabId: "procedure",
                 index: 1,
                 stepIndex: 1,
                 applicableOn: [
@@ -422,6 +424,7 @@ context("LHRT Pending Change", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -439,6 +442,7 @@ context("LHRT Pending Change", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -456,6 +460,7 @@ context("LHRT Pending Change", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -473,6 +478,7 @@ context("LHRT Pending Change", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -565,6 +571,10 @@ context("LHRT Pending Change", () => {
       });
 
       context("Fill step #1", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
+        });
+
         it("Add 'Material one' to step #1", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
             cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
@@ -690,6 +700,17 @@ context("LHRT Pending Change", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("CS-00005 - Part document").arrowClick();
     });
     context("Select a different MPI", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        // eslint-disable-next-line max-len
+        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd']")
+          .eq(0)
+          .arrowClick();
+      });
+
       it("Select MPI document for step #1 in LHRt", () => {
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
           $el.trigger("click");
@@ -707,7 +728,7 @@ context("LHRT Pending Change", () => {
       it("Add LHR step", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "LHR Step" });
         });
         cy.listLoadingElementShouldNotExist();
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {

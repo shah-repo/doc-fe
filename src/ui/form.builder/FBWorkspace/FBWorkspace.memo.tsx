@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import { isEqual, size } from "lodash";
 import React from "react";
 import { FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from "..";
@@ -8,13 +9,14 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   mode = "none",
   includeTransport = true,
   workspaceState,
+  withoutBottomBar = false,
 }) => (
-  <>
+  <Box>
     <FBWorkspaceSocket />
     {isStarter && <FBStarter />}
     {!isStarter && size(schema) > 0 && <FBSchema {...{ schema }} schemaState={workspaceState} workspaceMode={mode} />}
-    <FBWorkspaceBottomBar {...{ includeTransport }} />
-  </>
+    {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
+  </Box>
 );
 
 export default React.memo(FBWorkspaceMemo,  (prev: FBWorkspaceProps, next: FBWorkspaceProps) =>

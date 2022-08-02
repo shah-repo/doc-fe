@@ -117,4 +117,3 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
 };
 
 export default DocumentListContainer;
-

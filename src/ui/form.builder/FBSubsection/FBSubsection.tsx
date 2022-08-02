@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import { FBInput, FBSectionProps } from "..";
 import Text from "../../components/Text";
+import Colors from "../../layout/theme/utils/colors";
 
 const FBSubsection: React.FunctionComponent<FBSectionProps> = ({
   label,
@@ -11,14 +12,14 @@ const FBSubsection: React.FunctionComponent<FBSectionProps> = ({
 }) => (
   <FBInput {...props} {...{ showErrorMsg, omitFinalValidation }}>
     <Box
-      py={1.5}
-      px={2}
-      fontSize="h6.fontSize"
-      fontWeight={100}
-      borderColor="text.hint"
-      border={1}
-      borderLeft={0}
-      borderRight={0}
+      py={0.75}
+      pr={0}
+      pl={1.25}
+      bgcolor={Colors.whitest_grey}
+      borderRadius={4}
+      fontSize={14}
+      lineHeight="24px"
+      fontWeight={600}
     >
       {label && <Text message={(label as string).toUpperCase()} />}
     </Box>

@@ -28,7 +28,7 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
   const renderFields = () => availableFields.map((field) => {
     // Hack: added default value for paragraph because it doesn't have a label
     const label = field.type === "paragraph" ? "Paragraph" : field.label;
-    return <Box width={"200px"} key={field.name}>
+    return <Box key={field.name}>
       <AutocompleteField
         name={`${field.name}`}
         label={`${label}`}
@@ -42,7 +42,7 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Form>
-      <Box width={"200px"}>
+      <Box>
         <AutocompleteField
           name="changeDocumentForm"
           size="sm"
@@ -61,6 +61,7 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
       </Box>
       <Box display="flex" flexDirection="row-reverse">
         <Button
+          style={{ margin: 0 }}
           type="submit"
           variant="contained"
           color="secondary"

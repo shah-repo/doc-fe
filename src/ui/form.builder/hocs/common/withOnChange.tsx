@@ -2,6 +2,7 @@ import { filter, get, isArray, isEmpty, isEqual, isString as lodashIsString, isU
 import React from "react";
 import { FB, FBButton } from "../..";
 import FBTextField from "../../components/inputs/FBTextField";
+import { StyledCancelFBButton } from "../../FBButton/StyledCancelFBButton";
 import { FBFieldName } from "../../helpers/FBFieldName";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
@@ -100,7 +101,7 @@ export const withOnChange = <T extends FBInputProps>(
         ),
         actions: (
           <>
-            <FBButton label="common.cancel" onClick={() => {
+            <StyledCancelFBButton label="common.cancel" onClick={() => {
               name && storeValue(name, oldValue);
               dialogState.closeDialog();
             }} />

@@ -11,7 +11,7 @@ import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { GeneralDocumentDocType } from "../../utils/constants/documentTypes/generalDocument";
-import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
+import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
@@ -95,7 +95,7 @@ const emailOfUserToSignUp =
 
 const usageReportTomorrow = momentInPST().add("days", "2").format("YYYY-MM-DDThh:mm");
 
-interface StructureFromPerCompanyReport {
+export interface StructureFromPerCompanyReport {
   name: string;
   releasedCompleted: integer;
   draftPending: integer;
@@ -220,7 +220,7 @@ context("Test usage report is correctly counting documents", () => {
               MPITest,
               GeneralDocumentDocType,
               EngineeringBuild,
-              LHRTTest,
+              LHRT,
               { ...TrainingCurriculum, documentTypeName: "Training Curriculum Test" },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -530,6 +530,7 @@ context("Test usage report is correctly counting documents", () => {
                         placeholder: "",
                         rows: 1,
                         label: "Textfield for inline",
+                        tabId: "details",
                       },
                       {
                         index: 1,
@@ -548,6 +549,7 @@ context("Test usage report is correctly counting documents", () => {
                         applicableValidationSchema: true,
                         editorProperties: [],
                         label: "Inline field",
+                        tabId: "details",
                         editorConfig: {
                           approvers: [
                             adminEmployee.id,
@@ -573,6 +575,7 @@ context("Test usage report is correctly counting documents", () => {
                         placeholder: "",
                         rows: 1,
                         label: "Second textfield for inline",
+                        tabId: "details",
                       },
                       {
                         index: 3,
@@ -591,6 +594,7 @@ context("Test usage report is correctly counting documents", () => {
                         applicableValidationSchema: true,
                         editorProperties: [],
                         label: "Second inline field",
+                        tabId: "details",
                         editorConfig: {
                           approvers: [
                             secondEmployee.id,
@@ -656,6 +660,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "radiogroup",
                     index: 0,
                     label: "EQ Status",
+                    tabId: "overview",
                     rules: "required",
                     options: [
                       {
@@ -678,6 +683,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Primary Owner",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as primary owner",
                     applicableOn: [
@@ -693,6 +699,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Coordinator",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as coordinator",
                     applicableOn: [
@@ -712,6 +719,7 @@ context("Test usage report is correctly counting documents", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -727,6 +735,7 @@ context("Test usage report is correctly counting documents", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
+                    tabId: "calpmhistory",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -735,6 +744,7 @@ context("Test usage report is correctly counting documents", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-kycyk1n8",
@@ -796,6 +806,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "fb-approvals-l42iv0i2",
                     type: "approvals",
+                    tabId: "overview",
                     index: 3,
                     label: "form.builder.approvals",
                     deleteDisabled: true,
@@ -860,6 +871,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -885,6 +897,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "po-general-information-to-be-completed-by-requester-section",
                     type: "section",
+                    tabId: "details",
                     index: 1,
                     label: "General Information",
                     applicableOn: [
@@ -896,6 +909,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Requestor",
+                    tabId: "details",
                     rules: "required",
                     hidden: false,
                     deleted: false,
@@ -921,6 +935,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "supplier",
                     index: 3,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -934,6 +949,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "datepicker",
                     index: 4,
                     label: "Order Date",
+                    tabId: "details",
                     rules: "required",
                     hidden: false,
                     deleted: false,
@@ -958,6 +974,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "purchaseorder",
                     index: 5,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -971,6 +988,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "approvals",
                     index: 6,
                     label: "Approvals",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1033,6 +1051,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "poreceive",
                     index: 0,
                     label: "Receive PO",
+                    tabId: "details",
                     rules: "",
                     hidden: false,
                     deleted: false,
@@ -1051,6 +1070,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "fb-approvals-kzqkpxqm",
                     type: "approvals",
+                    tabId: "details",
                     index: 1,
                     label: "form.builder.approvals",
                     deleteDisabled: true,
@@ -1177,6 +1197,7 @@ context("Test usage report is correctly counting documents", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     index: 0,
+                    tabId: "procedure",
                   },
                   {
                     type: "section",
@@ -1193,10 +1214,12 @@ context("Test usage report is correctly counting documents", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     index: 1,
+                    tabId: "procedure",
                   },
                   {
                     index: 2,
                     type: "procedure",
+                    tabId: "procedure",
                     name: "-l42j5ayx",
                     hidden: false,
                     outputDisabled: false,
@@ -1219,6 +1242,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "approvals",
                     index: 3,
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     deleteDisabled: true,
                     uniqueSchemaItem: true,
                   },
@@ -1279,6 +1303,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "poApprovalMatrix",
                     index: 0,
                     label: "Purchase Order Approval Matrix",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1401,6 +1426,16 @@ context("Test usage report is correctly counting documents", () => {
                     uniqueSchemaItem: true,
                     deleteInFormDisabled: true,
                   },
+                  {
+                    name: "dar-built-in",
+                    type: "approvalRoles",
+                    index: 1,
+                    label: "Approval Roles",
+                    tabId: "approvalroles",
+                    deleteDisabled: true,
+                    uniqueSchemaItem: true,
+                    deleteInFormDisabled: true,
+                  },
                 ],
               },
 
@@ -1430,25 +1465,41 @@ context("Test usage report is correctly counting documents", () => {
               formDocument: {
                 id: createdDAMForm.id,
               },
-              formInput: {
-                "dam-built-in": {
-                  approvalRoles: [
-                    {
-                      employees: [],
-                      groups: [
-                        {
-                          id: group.body[0].id,
-                        },
-                      ],
-                      name: "Role One",
-                      id: "4596e0ca-3daa-4f39-90af-2adda56605f2",
-                      index: 0,
-                    },
-                  ],
-                  approvalMatrix: [],
-                },
-              },
               description: "<p>DAM</p>",
+              formInput: {
+                "dar-built-in": [
+                  {
+                    employees: [],
+                    groups: [
+                      {
+                        id: group.body[0].id,
+                      },
+                    ],
+                    name: "Test group",
+                    id: "44ada43e-de5d-4ac5-95b7-9e3dd949d1cd",
+                    index: 0,
+                  },
+                ],
+                "dam-built-in": [
+                  {
+                    id: "84ddcc0e-e1bd-4646-b1f2-837ad8e250cd",
+                    docType: {
+                      defaultTraining: false,
+                      needsSignature: false,
+                      acronym: "TT-",
+                      group: "OTHER",
+                      name: "Test Type",
+                      category: "record",
+                    },
+                    approvalRoles: {
+                      stage1: [],
+                      stage2: [],
+                      stage3: [],
+                      admStage: [],
+                    },
+                  },
+                ],
+              },
               document: {
                 docId: "DAM-00001",
                 documentType: {
@@ -1926,12 +1977,14 @@ context("Test usage report is correctly counting documents", () => {
                     type: "section",
                     index: 0,
                     label: "form.builder.mpiprocedure",
+                    tabId: "procedure",
                     deleteDisabled: true,
                     deleteInFormDisabled: true,
                   },
                   {
                     name: "mpi-procedure-built-in",
                     type: "mpiprocedure",
+                    tabId: "procedure",
                     index: 1,
                     stepIndex: 1,
                     applicableOn: [
@@ -1963,6 +2016,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 2,
                     label: "Start quantity",
+                    tabId: "procedure",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1980,6 +2034,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 3,
                     label: "Accepted quantity",
+                    tabId: "procedure",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1997,6 +2052,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 4,
                     label: "Rejected quantity",
+                    tabId: "procedure",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2014,6 +2070,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "approvals",
                     index: 5,
                     label: "Approvals",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2081,6 +2138,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 0,
                     label: "Initial Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2095,6 +2153,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 1,
                     label: "Usable Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2109,6 +2168,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "datepicker",
                     index: 2,
                     label: "Expiration Date",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2122,6 +2182,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "autocomplete",
                     index: 3,
                     label: "Part Selection",
+                    tabId: "details",
                     optionId: "21",
                     placeholder: "Select the appropriate part for this lot",
                     deleteDisabled: true,
@@ -2132,6 +2193,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "checkboxgroup",
                     index: 4,
                     label: "100% Inspection Override",
+                    tabId: "details",
                     options: [
                       {
                         text: "100% Inspection Override",
@@ -2150,6 +2212,7 @@ context("Test usage report is correctly counting documents", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-",
@@ -2649,6 +2712,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "partsselection",
                     index: 0,
                     label: "Part to be Manufactured",
+                    tabId: "overview",
                     deleteDisabled: true,
                     deleteInFormDisabled: true,
                     editorConfig: {
@@ -2660,6 +2724,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 1,
                     label: "Initial Quantity",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2673,6 +2738,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 2,
                     label: "End Quantity",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2687,6 +2753,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "radiogroup",
                     index: 3,
                     label: "Build Type",
+                    tabId: "overview",
                     options: [
                       {
                         text: "R&D",
@@ -2711,6 +2778,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "datepicker",
                     index: 4,
                     label: "Due Date",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2723,6 +2791,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "lhrstep",
                     index: 5,
                     label: "LHR Step",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2736,6 +2805,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     label: "form.builder.approvals",
                     type: "approvals",
+                    tabId: "overview",
                     deleteDisabled: true,
                     name: "fb-approvals-kvateryo",
                     uniqueSchemaItem: true,
@@ -2868,12 +2938,14 @@ context("Test usage report is correctly counting documents", () => {
                     placeholder: "",
                     rows: 1,
                     label: "Textfield for inline",
+                    tabId: "details",
                   },
                   {
                     name: "fb-approvals",
                     type: "approvals",
                     index: 1,
                     label: "Approvals",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -2954,12 +3026,14 @@ context("Test usage report is correctly counting documents", () => {
                     placeholder: "",
                     rows: 1,
                     label: "Textfield for inline",
+                    tabId: "details",
                   },
                   {
                     name: "fb-approvals",
                     type: "approvals",
                     index: 1,
                     label: "Approvals",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -3026,6 +3100,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "section",
                     index: 0,
                     label: "Periodic Training",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -3038,6 +3113,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Documents to Train on",
+                    tabId: "details",
                     rules: "|required",
                     multiple: true,
                     optionId: "36",
@@ -3060,6 +3136,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "radiogroup",
                     index: 2,
                     label: "Refresh/repeat training periodically?",
+                    tabId: "details",
                     rules: "required||",
                     options: [
                       {
@@ -3082,6 +3159,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
+                    tabId: "details",
                     rules: "required_if:training-refresh-training-periodically,Yes",
                     validators: {
                       required_if: {
@@ -3103,6 +3181,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "section",
                     index: 4,
                     label: "Trainees Details",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -3115,6 +3194,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "autocomplete",
                     index: 5,
                     label: "Groups to Train",
+                    tabId: "details",
                     multiple: true,
                     optionId: "10",
                     placeholder: "Select groups",
@@ -3133,6 +3213,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "autocomplete",
                     index: 6,
                     label: "Users to Train (if applicable)",
+                    tabId: "details",
                     multiple: true,
                     optionId: "13",
                     placeholder: "Select users",
@@ -3151,6 +3232,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l0wcpa0v",
+                    tabId: "overview",
                     uniqueSchemaItem: true,
                     index: 7,
                   },
@@ -3964,6 +4046,14 @@ context("Test usage report is correctly counting documents", () => {
     });
 
     context("Complete LHR step", () => {
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Open LHRs 1 dropdown", () => {
+        cy.get(`div[id="sm-tabpanel-1"] circle`).arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -3974,6 +4064,10 @@ context("Test usage report is correctly counting documents", () => {
 
       it("Verify status is WIP", () => {
         cy.drCheckDocumentStatus({ status: "WIP" });
+      });
+
+      it("Select 'Procedure' tab", () => {
+        cy.drSelectProcedureTab();
       });
 
       it("Enter 'Accepted quntity' for LHRs #1", () => {
@@ -3988,6 +4082,10 @@ context("Test usage report is correctly counting documents", () => {
           cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
           cy.unClick();
         });
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {
@@ -4011,15 +4109,15 @@ context("Test usage report is correctly counting documents", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.lhrSubmitForApproval();
       });
 
       it("Approve approval", () => {
-        cy.ebApprove();
+        cy.lhrApprove();
       });
     });
   });

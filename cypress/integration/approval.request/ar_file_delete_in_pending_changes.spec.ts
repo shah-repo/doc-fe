@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -95,13 +96,13 @@ context("File delete in Pending Change", () => {
       cy.unClick();
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Upload test.docx and image.jpg files", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
       cy.atchUploadAttachment({ fileName: "image.jpg" });
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release FORM document", () => {
@@ -111,10 +112,12 @@ context("File delete in Pending Change", () => {
     context("Withdraw submission and check attachments on document", () => {
       it("Navigates to Approval Request list", () => {
         cy.navigToApprovalRequestList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Filters document by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatus({ title: "test title", status: "IN_REVIEW" });
+        cy.arFilterARListByNameAndStatus({ title: "test title", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       });
 
       it("Withdraw Submission", () => {

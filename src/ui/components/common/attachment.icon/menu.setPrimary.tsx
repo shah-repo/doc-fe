@@ -4,7 +4,7 @@ import React from "react";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
-import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.container";
 import { isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";

@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBSubmitButton } from "..";
+import { FBSubmitButton } from "..";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
 
 const FBApprovalPasswordFormActions: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
@@ -8,7 +9,7 @@ const FBApprovalPasswordFormActions: React.FunctionComponent<FBApprovalPasswordF
   onDialogClose,
 }) => (
   <Box display="flex" justifyContent="center">
-    <FBButton
+    <StyledCancelFBButton
       variant="outlined"
       onClick={onDialogClose}
       label="common.cancel"

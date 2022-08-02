@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -228,10 +229,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1 and check autosave", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Add attachment and check autosave", () => {
             cy.contains("Step #1").parentsUntil("li")
               .find("[data-cy=\"albumMediaButton\"]").arrowClick();
@@ -294,6 +299,10 @@ context("Mpi/Qpi flow", () => {
             cy.reload();
           });
 
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Step description should be exist", () => {
             cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").next()
               .should("have.text", "Description of step one");
@@ -314,7 +323,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           });
         });
       });
@@ -357,10 +366,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -380,14 +393,12 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release MPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify MPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -437,7 +448,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify MPI state should be Approved", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
       });
     });
   });
@@ -478,10 +489,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -501,14 +516,12 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release MPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify MPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -553,7 +566,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify MPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Pending Change");
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_CHANGE });
       });
     });
   });
@@ -594,10 +607,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -624,7 +641,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           });
         });
       });
@@ -667,10 +684,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -690,14 +711,12 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release QPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -745,7 +764,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Approved", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
       });
     });
   });
@@ -786,10 +805,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -809,14 +832,12 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release QPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -861,7 +882,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Pending Change");
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_CHANGE });
       });
     });
   });

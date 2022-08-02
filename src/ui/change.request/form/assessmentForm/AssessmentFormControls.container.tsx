@@ -13,6 +13,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import useGetHasTag from "../../../hooks/useGetHasTag";
 import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
 import ChangeRequestWithdrawDialog from "../../dialogs/ChangeRequestWithdrawDialog";
+import ExportARToEmail from "../../export.email/ExportAREmail";
 import { canChangeCROwner } from "../../utils/helpers";
 import TransitionButton from "./TransitionButton";
 import AssessmentFormVoidContainer from "./Void";
@@ -56,6 +57,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
           transition={transition}
           changeRequestId={changeRequest.id}
           buttonProps={buttonProps}
+          renderAsButton={true}
           label={`changeRequest.transition.${transition}`}
         />;
 
@@ -112,13 +114,15 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
       {renderDialogButton(canApproveOrReject, "reject", { disabled: formHasErrors })}
       {renderDialogButton(canApproveOrReject, "approve", { disabled: formHasErrors })}
       {renderDialogButton(canClose, "closed")}
+      {renderAlertDialogButton(canWithdraw, "withdrawn")}
       <HeaderMenu>
         {canSendToReview && <AssessmentFormVoidContainer changeRequest={changeRequest} />}
         {
           canChangeOwnerShip &&
-           <OwnerChangerContainer requestId={changeRequest.id} requestType={RequestType.ChangeRequest}/>
+           <OwnerChangerContainer requestId={changeRequest.id} requestType={RequestType.ChangeRequest}
+             renderAsButton={false} />
         }
-        {renderAlertDialogButton(canWithdraw, "withdrawn")}
+        <ExportARToEmail {...{ id: changeRequest.id, renderAsButton: false }}/>
       </HeaderMenu>
     </>
   );
