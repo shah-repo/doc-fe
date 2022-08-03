@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+/* eslint-disable no-console */
+import React, { useState } from "react";
 
 import {
   Button,
@@ -13,13 +13,13 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import InfoIcon from "@material-ui/icons/Info";
-import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
+import InfoIcon from "@material-ui/icons/Info";
 
-//Component Styles using material ui
+// Component Styles using material ui
 
 import useStyles from "./RelatedPart.styles";
 
@@ -53,6 +53,8 @@ export const RelatedPart: React.FunctionComponent = () => {
         break;
       case "seperate":
         setDisable({ disable1: true, disable2: true, disable3: false });
+        break;
+      default:
         break;
     }
   };
@@ -102,7 +104,7 @@ export const RelatedPart: React.FunctionComponent = () => {
   );
 };
 
-//Seperate Button /////////////////////////////////
+// Seperate Button /////////////////////////////////
 
 const SeperateButton: React.FunctionComponent = () => {
   const classes = useStyles();
@@ -126,11 +128,11 @@ const RelatedPartGrid: React.FunctionComponent = () => {
     setVisible([...visible, { show: "" }]);
   };
 
-  console.log("From RelatedPartGridComponent");
+  // console.log("From RelatedPartGridComponent");
 
   return (
     <>
-      <Grid justifyContent="space-between" container>
+      <Grid style={{ justifyContent: "space-between" }} container>
         <Grid item>
           <Typography variant="h6" id="tableTitle" component="div">
             Related Parts
@@ -155,9 +157,7 @@ const RelatedPartGrid: React.FunctionComponent = () => {
           <div>TITLE</div>
           <div style={{ paddingRight: "10%" }}>OBSELETE</div>
         </div>
-        {visible.map((singleShow, index) => {
-          return index > 0 && singleShow && <ShowInputField key={index} />;
-        })}
+        {visible.map((singleShow, index) => index > 0 && singleShow && <ShowInputField key={index} />)}
         {
           <Button
             className={classes.fulllengthButton}
@@ -175,7 +175,7 @@ const RelatedPartGrid: React.FunctionComponent = () => {
   );
 };
 
-//Add related part: show inputfield////////////////////////
+// Add related part: show inputfield////////////////////////
 
 const ShowInputField: React.FunctionComponent = () => {
   const [field1, setField1] = useState();
@@ -196,7 +196,7 @@ const ShowInputField: React.FunctionComponent = () => {
         <TextField
           variant="outlined"
           onChange={(e: any) => setField1(e.target.value)}
-          onBlur={readingValueHnadler}
+          onBlur={(e: any) => readingValueHnadler}
           name={field1}
         />
       </div>

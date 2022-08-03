@@ -101,14 +101,15 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
       currentEmployeeId,
       documentRevision.owner.id,
       hasChangeOwnershipPermission,
+      documentRevision.relatedStatus,
     );
   }, [currentEmployeeId, documentRevision, hasChangeOwnershipPermission]);
 
   const canEdit =
-    documentRevision &&
-    !isNewVersion &&
-    !isNewOutput &&
-    canEditDocRev;
+  documentRevision &&
+  !isNewVersion &&
+  !isNewOutput &&
+  canEditDocRev;
 
   const canPreview =
     documentRevision && !(canEdit || isNewVersion || isNewOutput);

@@ -11,7 +11,6 @@ import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
-import { RELATED_STATUS } from "../../../state/ducks/relatedParts/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
@@ -109,15 +108,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(groupOptions);
-  const isRelatedPartTogether = documentRevision.relatedStatus === RELATED_STATUS.RELATED_TOGETHER;
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  const isDisabled: boolean = initialValues.id !== undefined || isRelatedPartTogether;
-  const isDisabledInput = (values.id !== undefined && isCurrentUserOperator && !isOwner) || isRelatedPartTogether;
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
@@ -130,7 +128,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocIdVisible = useDocId(documentTypeId).isVisible;
   const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
-   || (!isRevisionVisible && defaultRevisionStage) || isRelatedPartTogether);
+   || (!isRevisionVisible && defaultRevisionStage));
 
   useEffect(() => {
     if (!redlineActive) {
