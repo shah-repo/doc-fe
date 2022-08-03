@@ -40,7 +40,11 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
       !isInputOwner) || disabled;
-    const formValue = formState?.getFieldValue(name) || defaultValue;
+    if (!(formState?.getFieldValue(name) || defaultValue)) {
+      formState?.setFieldValue(name, workspaceState?.formInput?.[name], withState, omitFormValue);
+      formState?.validate();
+    }
+    const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
 
     const multiple = editorProperties?.includes("multiple") || props.multiple;
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
@@ -83,7 +87,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       placeholder = intl.formatMessage({ id: placeholder });
     }
 
-    (!optionId && options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
+    (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
 
     !getOptionLabel && (getOptionLabel = (option) => {
       if (freeSolo && isString(defaultValue) && isString(option)) {

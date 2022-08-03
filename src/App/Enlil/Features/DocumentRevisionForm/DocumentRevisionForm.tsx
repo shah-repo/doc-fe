@@ -60,6 +60,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
+  if (documentRevision?.schema) {
+    schema = documentRevision.schema;
+  }
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
       schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
