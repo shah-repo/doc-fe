@@ -52,35 +52,51 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
     async.start(action, pdf.s3Url, async);
   };
 
+  let button: React.ReactElement;
+
   if (isNewLayout) {
     const isActive = async.asyncState.status === AsyncStatus.Active;
 
-    if (!renderAsButton) {
-      return (<StyledMenuListItem disabled={isActive} button alignItems="flex-start">
-        <StyledMenuListIcon><DownloadHTMLIcon/></StyledMenuListIcon>
-        <StyledMenuListItemText
+    button = renderAsButton
+      ? (
+        <StyledButton
+          color="primary"
+          disabled={isActive}
           data-cy="downloadHtml"
-          primary={<Text translation="common.download.html" />}
           onClick={handleClick}
-        />
-      </StyledMenuListItem>
+        >
+          <Text translation="common.download.html" />
+        </StyledButton>
+      )
+      : (
+        <StyledMenuListItem disabled={isActive} button alignItems="flex-start">
+          <StyledMenuListIcon>
+            <DownloadHTMLIcon/>
+          </StyledMenuListIcon>
+          <StyledMenuListItemText
+            data-cy="downloadHtml"
+            primary={<Text translation="common.download.html" />}
+            onClick={handleClick}
+          />
+        </StyledMenuListItem>
       );
-    }
-
-    return (
-      <StyledButton
-        color="primary"
-        disabled={isActive}
+  } else {
+    button = (
+      <AsyncButton
+        label="common.download.pdf"
         data-cy="downloadHtml"
         onClick={handleClick}
-      >
-        <Text translation="common.download.html" />
-      </StyledButton>
+        asyncState={async.asyncState}
+        color="secondary"
+        variant="outlined"
+      />
     );
   }
+
   return (
     <>
-      {dialog.isOpen && <Dialog
+      {button}
+      <Dialog
         onClose={dialog.close}
         open={dialog.isOpen}
         classes={{
@@ -95,17 +111,8 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
           type={"PDF"}
           handleClose={dialog.close}
         />
-      </Dialog>}
-      <AsyncButton
-        label="common.download.pdf"
-        data-cy="downloadHtml"
-        onClick={handleClick}
-        asyncState={async.asyncState}
-        color="secondary"
-        variant="outlined"
-      />
+      </Dialog>
     </>
-
   );
 };
 
