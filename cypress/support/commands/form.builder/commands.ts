@@ -194,6 +194,9 @@ Cypress.Commands.add("fbCheckFieldsExistSectionList", (...list: string[]) => {
 
   list.forEach((item) => {
     cy.get(`[data-cy="${item}"]`).should("exist");
+    cy.get(`[data-cy="${item}"]`).arrowClick();
+    cy.get(`[data-cy="fb-editor-mode-config-0"]`).should("exist");
+    cy.get(`[data-cy="fb-editor-mode-validation-1"]`).should("exist");
   });
 });
 
