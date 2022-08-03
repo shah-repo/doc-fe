@@ -511,6 +511,11 @@ context("Document Approval Matrix Flow", () => {
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
+
+    it("Navigate to matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
+      cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
+    });
   });
 
   context("Add New Role: Role Two", () => {
