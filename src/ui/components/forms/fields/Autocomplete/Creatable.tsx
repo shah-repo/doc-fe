@@ -70,6 +70,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     if (!value && inputValue?.length === 1) {
       setInputValue(value);
     }
+    setFieldValue(name, value);
   };
 
   const onBlur = async () => {
@@ -88,6 +89,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const onAway = () => {
     setHover(false);
     setShowOnlyText(true);
+    onBlur();
   };
 
   const intl = useIntl();
