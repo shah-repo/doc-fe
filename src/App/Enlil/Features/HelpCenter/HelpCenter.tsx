@@ -18,6 +18,11 @@ const HelpCenter: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const openContent = () => {
+    setAnchorEl(null);
+    contentDialog.open();
+  };
+
   return (
     <>
       <IconButton color="inherit" size="small" onClick={openMenu}>
@@ -26,7 +31,7 @@ const HelpCenter: React.FC = () => {
       <HelpCenterNavigation
         anchorEl={anchorEl}
         handleCloseMenu={closeMenu}
-        handleOpenContent={contentDialog.open}
+        handleOpenContent={openContent}
       />
       <HelpCenterContent
         content={helpContent.PO}
