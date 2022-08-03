@@ -2113,13 +2113,17 @@ context("Receivable test with Page Details", () => {
   });
 
   context("Verify old receiving form", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Create new record button click", () => {
       cy.recCreateRecordFromLandingPage();
     });
 
     it("Select 'Receivable' form", () => {
       cy.get(`div[data-cy^="field-selectType"]`).click().focused()
-        .arrowType("Receivable{downarrow}{enter}", { force: true });
+        .arrowType("Receivable{downarrow}{enter}");
       cy.unClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
@@ -2127,7 +2131,10 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Search for API PO document and select it", () => {
-      cy.get("input[data-cy^=\"porec-rece\"]").autocompleteSelect("New Purchase Order");
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.DocRevPreview], () => {
+          cy.get("input[data-cy^=\"porec-rece\"]").click().focused().autocompleteSelect("New Purchase Order");
+        });
     });
 
     it("Verify requester is present on receivable", () => {
