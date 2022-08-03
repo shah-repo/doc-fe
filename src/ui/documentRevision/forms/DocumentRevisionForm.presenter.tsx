@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, get, includes, isEmpty } from "lodash";
+import { flatten, includes, isEmpty } from "lodash";
 import { Observer, observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -11,7 +11,7 @@ import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
-import { relatedPartsActions } from "../../../state/ducks/relatedParts";
+import { RELATED_STATUS } from "../../../state/ducks/relatedParts/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
@@ -20,8 +20,6 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -33,6 +31,7 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
+import RelatedParts from "./presenters/related.parts/RelatedParts";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -110,14 +109,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(groupOptions);
+  const isRelatedPartTogether = documentRevision.relatedStatus === RELATED_STATUS.RELATED_TOGETHER;
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  const isDisabled: boolean = initialValues.id !== undefined;
-  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isDisabled: boolean = initialValues.id !== undefined || isRelatedPartTogether;
+  const isDisabledInput = (values.id !== undefined && isCurrentUserOperator && !isOwner) || isRelatedPartTogether;
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
@@ -130,7 +130,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocIdVisible = useDocId(documentTypeId).isVisible;
   const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
-   || (!isRevisionVisible && defaultRevisionStage));
+   || (!isRevisionVisible && defaultRevisionStage) || isRelatedPartTogether);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -213,48 +213,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const docId = _documentRevisionFormState?.documentRevision?.id;
     return docId || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(type.group as DOC_TYPE_GROUP);
   };
-
-  /** Will move to within the new RelatedParts Component */
-
-  const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
-  const async = useAsync<DocumentRevision>({
-    onSuccess: (createdDocumentRevision?) => {
-      if (createdDocumentRevision) {
-        console.log(createdDocumentRevision);
-      }
-    },
-  });
-
-  const createNewDocument = () => {
-    const docDto = {
-      formDocument: {
-        id: get(documentRevision, "formDocumentId"),
-      },
-      description: "",
-      name: "",
-      attachments: [],
-      referenceTo: [],
-      revisionChangeType: get(documentRevision, "revisionChangeType"),
-      document: {
-        docId: "",
-        securityList: {
-          securityEmployees: (get(documentRevision, "document.securityEmployees") || [])
-            .map((employee) => ({ id: employee.value })),
-          securityGroups: (get(documentRevision, "document.securityGroups") || [])
-            .map((group) => ({ id: group.id })),
-          operators: get(documentRevision, "document.operators"),
-        },
-        documentType: {
-          id: get(documentRevision, "document.documentType.id"),
-        },
-      },
-    };
-
-    console.log(documentRevision, docDto);
-    async.start(createRelatedPartAction, documentRevision.document.id, docDto, async);
-  };
-
-  /** Will move to within the new RelatedParts Component */
 
   const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
     i?.label?.includes("Purchase Order")) : [false];
@@ -349,13 +307,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {isPart && (
-          <Grid item xs={12}>
-            <button
-              onClick = {createNewDocument}
-            >Add Related Part</button>
-          </Grid>
-        )}
+        {isPart && <RelatedParts
+          documentRevision={documentRevision}
+          parentPartStatus= {documentRevision?.relatedStatus}
+        ></RelatedParts>
+        }
         {isEB && documentRevision?.parent && (
           <Grid item xs={12}>
             <BuildsContainer
