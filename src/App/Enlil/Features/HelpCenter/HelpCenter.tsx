@@ -2,7 +2,7 @@ import { IconButton } from "@material-ui/core";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import React from "react";
 import useDialog from "../../../../ui/hooks/useDialog";
-import helpContent from "./content/en.json";
+import helpContent from "./data/en.json";
 import HelpCenterContent from "./HelpCenterContent";
 import HelpCenterNavigation from "./HelpCenterNavigation";
 
