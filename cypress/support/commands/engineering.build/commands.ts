@@ -86,11 +86,11 @@ Cypress.Commands.add("ebClickCloneEB", () => {
 });
 
 Cypress.Commands.add("ebCloneClickYes", () => {
-  cy.get("input[class^=\"PrivateSwitchBase-input\"]").eq(3).arrowClick();
+  cy.get("[class^=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").eq(3).arrowClick();
 });
 
 Cypress.Commands.add("ebCloneClickNo", () => {
-  cy.get("input[class^=\"PrivateSwitchBase-input\"]").eq(4).arrowClick();
+  cy.get("[class^=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").eq(4).arrowClick();
 });
 
 Cypress.Commands.add("ebCloneClickContinue", () => {

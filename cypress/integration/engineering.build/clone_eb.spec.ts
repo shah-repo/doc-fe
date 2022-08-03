@@ -14,7 +14,6 @@ import { EngineeringBuild } from "../../utils/constants/documentTypes/engineerin
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -32,7 +31,7 @@ let createdPartDocument;
 let EBDocumentType;
 let createdEBform;
 
-context("Export Engineering Build doc", () => {
+context("Clone EB Flow test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -781,24 +780,20 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify title is copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"field-name\"]")
           .should("have.text", "Test Engineering Build");
       });
 
       it("Verify description is copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"]").eq(0)
           .should("have.text", "Test Engineering Build description");
       });
 
       it("Verify part revision", () => {
-        SystemRequirement("REQ-3020");
         cy.get("input[value=documentRevision]").should("have.attr", "checked");
       });
 
       it("Verify part document is same", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=childForRevise]")
           .should("have.attr", "value", "PRT-00005 - Part document");
       });
@@ -809,7 +804,6 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify attachments are copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"attachment.title\"]").should("have.text", "image1.jpg");
       });
     });
@@ -973,12 +967,10 @@ context("Export Engineering Build doc", () => {
 
     context("Go to a new/cloned EB and check", () => {
       it("Part Revision displays no values", () => {
-        SystemRequirement("REQ-3020");
         cy.get("input[value=document]").should("not.be.checked");
       });
 
       it("Verify part document is same", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"childrenParts\"]").should("be.empty");
       });
       it("Previous Build displays none", () => {
@@ -992,19 +984,16 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify title is copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"field-name\"]")
           .should("have.text", "Test Engineering Build");
       });
 
       it("Verify description is copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"]").eq(0)
           .should("have.text", "Test Engineering Build description");
       });
 
       it("Verify attachments are copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"attachment.title\"]").should("have.text", "image1.jpg");
       });
     });
@@ -1181,12 +1170,10 @@ context("Export Engineering Build doc", () => {
 
     context("Go to a new/cloned EB and check", () => {
       it("Part Revision displays no values", () => {
-        SystemRequirement("REQ-3020");
         cy.get("input[value=document]").should("not.be.checked");
       });
 
       it("Verify part document is same", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"childrenParts\"]").should("be.empty");
       });
       it("Previous Build displays none", () => {
@@ -1200,19 +1187,16 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Verify title is copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"field-name\"]")
           .should("have.text", "Test Engineering Build");
       });
 
       it("Verify description is copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"]").eq(0)
           .should("have.text", "Test Engineering Build description");
       });
 
       it("Verify attachments are copied", () => {
-        SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"attachment.title\"]").should("have.text", "image1.jpg");
       });
     });
