@@ -407,11 +407,11 @@ context("Sigle user multiple company test", () => {
     });
   });
 
-  context(`Check if the change avatar history is visible for ${nameOfFirstUserToSignUp} in company B`, () => {
-    it("Switch company B", () => {
+  context(`Check if the change avatar history is visible for ${nameOfFirstUserToSignUp} in company A`, () => {
+    it("Switch company A", () => {
       cy.usrClickUserMenuButton();
       cy.usrClickSwitchCompanyButton();
-      cy.cmpSelectCompany({ name: createdCompanyC.name, multiple: multipleCompanies });
+      cy.cmpSelectCompany({ name: createdCompanyA.name, multiple: multipleCompanies });
     });
 
     it("Navigates to User management", () => {
@@ -441,11 +441,11 @@ context("Sigle user multiple company test", () => {
     });
   });
 
-  context(`Check if the change avatar history is visible for ${nameOfFirstUserToSignUp} in company C`, () => {
-    it("Switch company C", () => {
+  context(`Check if the change avatar history is visible for ${nameOfFirstUserToSignUp} in company B`, () => {
+    it("Switch company B", () => {
       cy.usrClickUserMenuButton();
       cy.usrClickSwitchCompanyButton();
-      cy.cmpSelectCompany({ name: createdCompanyC.name, multiple: multipleCompanies });
+      cy.cmpSelectCompany({ name: createdCompanyB.name, multiple: multipleCompanies });
     });
 
     it("Navigates to User management", () => {

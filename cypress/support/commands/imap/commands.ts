@@ -21,7 +21,7 @@ declare global {
       imapGetMailsNoValidation(params: {userEmail: string; options?: GmailTesterOptions}): Chainable;
       imapVerifyLastEmailDoesNotContain(params: {userEmail: string; content: string}): Chainable;
       imapVerifyNumberOfEmailsReceivedSince(params: {userEmail: string; emailCount: integer; date: Date}): Chainable;
-      imapGetActivationLink(params: {userEmail: string}): Chainable;
+      imapGetActivationLink(params: {userEmail: string; date?: Date}): Chainable;
       imapGetApprovalRequestLink(params: {userEmail: string; options?: GmailTesterOptions}): Chainable;
       imapGetRecordRequestLink(params: {userEmail: string; options?: GmailTesterOptions}): Chainable;
       imapVerifyLastEmailContains(params: {userEmail: string; content: string; date: Date}): Chainable;
@@ -78,10 +78,13 @@ function decodeHTMLEntities(text) {
   return textArea.value;
 }
 
-Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => {
+Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string; date?: Date }) => {
   cy.imapGetMails({
     userEmail: params.userEmail,
-    options: { subject: "Welcome to Enlil" },
+    options: {
+      subject: "Welcome to Enlil",
+      after: params.date,
+    },
   }).then((emails) => {
     const emailText = emails[0].body.html;
     const startingPosition = emailText.search("new_user_set_password");

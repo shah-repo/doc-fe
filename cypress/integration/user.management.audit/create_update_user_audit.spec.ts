@@ -2,15 +2,15 @@
 /// <reference types="Cypress" />
 
 import faker from "faker";
-import neatCSV from "neat-csv";
 import { CONFIG } from "../../support/config";
-import { fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
+import { emailDateOffset, momentInPST } from "../../utils/constants/dateHandler";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let companyAdmin;
 let loginResponse;
 let currentDate;
+let dateAfterEmailShouldArrive;
 
 const nameOfFirstUserToSignUp = faker.name.findName();
 const emailOfFirstUserToSignUp =
@@ -21,15 +21,6 @@ const emailOfSecondUserToSignUp =
 const nameOfThirdUserToSignUp = faker.name.findName();
 const emailOfThirdUserToSignUp =
 `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLocaleLowerCase();
-const fileName = "userExport" + fileTimeFormat;
-const usersExportList1 = Cypress.config("fileServerFolder") + "/cypress/downloads/" +
-fileName + ".csv";
-const fileNameWithFilter = "userExportWithFilter" + fileTimeFormat;
-const usersExportList2 = Cypress.config("fileServerFolder") + "/cypress/downloads/" +
-fileNameWithFilter + ".csv";
-const fileNameWithGrouping = "userExportWithGrouping" + fileTimeFormat;
-const usersExportList3 = Cypress.config("fileServerFolder") + "/cypress/downloads/" +
-fileNameWithGrouping + ".csv";
 
 context("User Creation Flow", () => {
   before(() => {
@@ -180,6 +171,7 @@ context("User Creation Flow", () => {
     it("Click on resend signup email", () => {
       cy.contains("Resend signup email").arrowClick();
       currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
 
     it("Verify popup message \"Signup email sent\"", () => {
@@ -223,6 +215,30 @@ context("User Creation Flow", () => {
     });
   });
 
+  context(`Activate user ${nameOfFirstUserToSignUp}`, () => {
+    it("Verify activation email", () => {
+      cy.imapGetActivationLink({ userEmail: emailOfFirstUserToSignUp, date: dateAfterEmailShouldArrive });
+    });
+
+    it("Enter password", () => {
+      cy.authEnterSignUpPassword();
+    });
+
+    it("Enter password for confirmation", () => {
+      cy.authEnterSignUpConfirmPassword();
+    });
+
+    it("Click 'SIGN IN'", () => {
+      cy.authClickSignIn();
+    });
+  });
+
+  context("Logout user", () => {
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+  });
+
   context("Login with user by inserting wrong password 5 times", () => {
     it("Enter wrong password 5 times", () => {
       cy.authLoginWithInvalidPassword({ email: emailOfFirstUserToSignUp, password: "tester123" });
@@ -234,6 +250,10 @@ context("User Creation Flow", () => {
       cy.authLoginWithInvalidPassword({ email: emailOfFirstUserToSignUp, password: "tester123" });
       cy.authSubmitLoginError({ show: true, message: "Incorrect username or password." });
       cy.authLoginWithInvalidPassword({ email: emailOfFirstUserToSignUp, password: "tester123" });
+    });
+
+    it("Should see locked notification", () => {
+      cy.get("[data-cy=UserLocked-lockedInfo]").should("have.text", "Your account has been locked.");
     });
   });
 
@@ -361,222 +381,6 @@ context("User Creation Flow", () => {
           cy.usrHistoryClickCloseButton();
         });
       });
-    });
-
-    context("Without appling any filter click on 'Export list' button", () => {
-      it("Navigates to User management", () => {
-        cy.grpClearFilter();
-        cy.get("#ListPresenter-export-list").arrowClick();
-        cy.get("#ExportListDialog-fileName").arrowType(fileName);
-        cy.get("#ExportListDialog-downloadButton").arrowClick();
-      });
-    });
-
-    context("Verify exported csv file", () => {
-      it("Verify line 1 group from dowloaded file", () => {
-        cy.readFile(usersExportList1)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[0].Active).to.equal("Active");
-            expect(csv[0].Email).to.equal(emailOfThirdUserToSignUp);
-            expect(csv[0].Name).to.equal(nameOfThirdUserToSignUp);
-            // eslint-disable-next-line max-len
-            expect(csv[0].Groups).to.equal("Can be approver, Everyone, Owner as approver");
-            expect(csv[0]["\"Signed Up\""]).to.equal("Resend signup email");
-          });
-      });
-
-      it("Verify line 2 group from dowloaded file", () => {
-        cy.readFile(usersExportList1)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[1].Active).to.equal("Active");
-            expect(csv[1].Email).to.equal(emailOfFirstUserToSignUp);
-            expect(csv[1].Name).to.equal(nameOfFirstUserToSignUp);
-            expect(csv[1].Groups).to.equal("Can be approver, Everyone, Owner as approver");
-            expect(csv[1]["\"Signed Up\""]).to.equal("Reset Password");
-          });
-      });
-
-      it("Verify line 3 group from dowloaded file", () => {
-        cy.readFile(usersExportList1)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[2].Active).to.equal("Active");
-            expect(csv[2].Email).to.equal(USERS[4].email);
-            expect(csv[2].Name).to.equal(USERS[4].name);
-            expect(csv[2].Groups).to.equal("Can be approver, Everyone, Owner as approver");
-            expect(csv[2]["\"Signed Up\""]).to.equal("Resend signup email");
-          });
-      });
-
-      it("Verify line 4 group from dowloaded file", () => {
-        cy.readFile(usersExportList1)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[3].Active).to.equal("Active");
-            expect(csv[3].Email).to.equal(USERS[1].email);
-            expect(csv[3].Name).to.equal(USERS[1].name);
-            // eslint-disable-next-line max-len
-            expect(csv[3].Groups).to.equal("Company Admin, Everyone, Groups Management, Groups Management Unofficial, Owner as approver, User Management");
-            expect(csv[3]["\"Signed Up\""]).to.equal("Resend signup email");
-          });
-      });
-
-      it("Verify line 5 group from dowloaded file", () => {
-        cy.readFile(usersExportList1)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[4].Active).to.equal("Active");
-            expect(csv[4].Email).to.equal("enlil.testmail+cyimporter@gmail.com");
-            expect(csv[4].Name).to.equal(USERS[5].name);
-            expect(csv[4].Groups).to.equal("Company Admin, Owner as approver");
-            expect(csv[4]["\"Signed Up\""]).to.equal("Resend signup email");
-          });
-      });
-    });
-
-    context("Apply filter and click on 'Export list' button", () => {
-      it("Navigates to User management", () => {
-        cy.grpClearFilter();
-        cy.usrFilterByEmail({ email: emailOfFirstUserToSignUp });
-        cy.get("#ListPresenter-export-list").arrowClick();
-        cy.get("#ExportListDialog-fileName").arrowType(fileNameWithFilter);
-        cy.get("#ExportListDialog-downloadButton").arrowClick();
-      });
-    });
-
-    context("Verify exported csv file", () => {
-      it("Verify line 1 group from dowloaded file", () => {
-        cy.readFile(usersExportList2)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[0].Active).to.equal("Active");
-            expect(csv[0].Email).to.equal(emailOfFirstUserToSignUp);
-            expect(csv[0].Name).to.equal(nameOfFirstUserToSignUp);
-            expect(csv[0].Groups).to.equal("Can be approver, Everyone, Owner as approver");
-            expect(csv[0]["\"Signed Up\""]).to.equal("Reset Password");
-          });
-      });
-    });
-
-    context("Select column grouping and click on 'Export list' button", () => {
-      it("Navigates to User management", () => {
-        cy.grpClearFilter();
-        cy.get(`th[aria-colindex="1"][role]>div.k-grid-column-menu`).arrowClick();
-        cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").arrowClick();
-        cy.get("#ListPresenter-export-list").arrowClick();
-        cy.get("#ExportListDialog-fileName").arrowType(fileNameWithGrouping);
-        cy.get("#ExportListDialog-downloadButton").arrowClick();
-      });
-    });
-
-    context("Verify exported csv file", () => {
-      it("Verify line 1 group from dowloaded file", () => {
-        cy.readFile(usersExportList3)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[0].Active).to.equal("Active");
-            expect(csv[0].Email).to.equal(emailOfThirdUserToSignUp);
-            expect(csv[0].Name).to.equal(nameOfThirdUserToSignUp);
-            expect(csv[0].Groups).to.equal("Can be approver, Everyone, Owner as approver");
-            expect(csv[0]["\"Signed Up\""]).to.equal("Resend signup email");
-          });
-      });
-
-      it("Verify line 2 group from dowloaded file", () => {
-        cy.readFile(usersExportList3)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[1].Active).to.equal("Active");
-            expect(csv[1].Email).to.equal(USERS[4].email);
-            expect(csv[1].Name).to.equal(USERS[4].name);
-            expect(csv[1].Groups).to.equal("Can be approver, Everyone, Owner as approver");
-            expect(csv[1]["\"Signed Up\""]).to.equal("Resend signup email");
-          });
-      });
-
-      it("Verify line 3 group from dowloaded file", () => {
-        cy.readFile(usersExportList3)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[2].Active).to.equal("Active");
-            expect(csv[2].Email).to.equal(USERS[1].email);
-            expect(csv[2].Name).to.equal(USERS[1].name);
-            // eslint-disable-next-line max-len
-            expect(csv[2].Groups).to.equal("Company Admin, Everyone, Groups Management, Groups Management Unofficial, Owner as approver, User Management");
-            expect(csv[2]["\"Signed Up\""]).to.equal("Resend signup email");
-          });
-      });
-
-      it("Verify line 4 group from dowloaded file", () => {
-        cy.readFile(usersExportList3)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[3].Active).to.equal("Active");
-            expect(csv[3].Email).to.equal("enlil.testmail+cyimporter@gmail.com");
-            expect(csv[3].Name).to.equal(USERS[5].name);
-            expect(csv[3].Groups).to.equal("Company Admin, Owner as approver");
-            expect(csv[3]["\"Signed Up\""]).to.equal("Resend signup email");
-          });
-      });
-
-      it("Verify line 5 group from dowloaded file", () => {
-        cy.readFile(usersExportList3)
-          .then(async (text) =>
-          {
-            const csv = await neatCSV(text, {
-              mapHeaders: ({ header, index }) => header.replace(/^\uFEFF/gm, ""),
-            });
-
-            expect(csv[4].Active).to.equal("Active");
-            expect(csv[4].Email).to.equal(emailOfFirstUserToSignUp);
-            expect(csv[4].Name).to.equal(nameOfFirstUserToSignUp);
-            expect(csv[4].Groups).to.equal("Can be approver, Everyone, Owner as approver");
-            expect(csv[4]["\"Signed Up\""]).to.equal("Reset Password");
-          });
-      });
-
     });
   });
 });
