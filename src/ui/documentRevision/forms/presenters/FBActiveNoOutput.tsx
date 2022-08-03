@@ -1,6 +1,6 @@
 import { Box, Button, Grid, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { FormikProps, useFormikContext } from "formik";
-import { filter, get, includes, map, size } from "lodash";
+import { filter, get, includes, map, size, isEmpty } from "lodash";
 import * as React from "react";
 import cx from "classnames";
 import { useSelector } from "react-redux";
@@ -379,7 +379,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   };
 
   const showPreview = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) && !existsDialogState?.open;
-  const disablePreview = !schema?.length;
+  const disablePreview = isEmpty(selectedValues);
 
   return (
     <FBProvider dialogState={dialogState}>
