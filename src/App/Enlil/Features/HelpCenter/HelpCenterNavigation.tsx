@@ -3,11 +3,10 @@ import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import React from "react";
-import { Nullable } from "../../../../state/ducks/common/types";
 import Text from "../../../../ui/components/Text";
 
 interface Props {
-  anchorEl: Nullable<HTMLElement>;
+  anchorEl: HTMLElement | null;
   handleCloseMenu: () => void;
   handleOpenContent: () => void;
 }

@@ -7,7 +7,7 @@ import HelpCenterContent from "./HelpCenterContent";
 import HelpCenterNavigation from "./HelpCenterNavigation";
 
 const HelpCenter: React.FC = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const contentDialog = useDialog();
 
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -19,7 +19,7 @@ const HelpCenter: React.FC = () => {
   };
 
   const openContent = () => {
-    setAnchorEl(null);
+    closeMenu();
     contentDialog.open();
   };
 
