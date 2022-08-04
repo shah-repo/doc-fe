@@ -337,4 +337,3 @@ Cypress.Commands.add("usrHistoryClickCloseButton", () => {
   cy.get("[data-cy=\"um-close-history-panel\"]").arrowClick();
 });
 
-
