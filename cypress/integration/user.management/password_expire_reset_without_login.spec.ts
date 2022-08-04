@@ -244,19 +244,25 @@ context("Password expire reset flow", () => {
           cy.checkToastMessageIsEqual({ message: `Your password will expire in ${5 - i} days. Reset it now.` });
         });
 
-        // it("Logout", () => {
-        //   cy.authLogout();
-        //   cy.pause();
-        // });
+        it("Logout", () => {
+          cy.authLogout();
+        });
       });
 
       context("Reset password through email notification", () => {
         it("Get email to unlock account", () => {
-          cy.pause();
           cy.imapNavigToPasswordResetLink({ userEmail: emailOfUserToSignUp, fromDate: searchMailFromDate });
         });
 
-        it("Enter password", () => {
+        it("Enter email", () => {
+          cy.usrForgotPageEnterEmail({ email: emailOfUserToSignUp });
+        });
+
+        it("Enter current password", () => {
+          cy.get("[data-cy=\"currentPassword\"]").arrowType( previousPassword );
+        });
+
+        it("Enter new password", () => {
           cy.get(`input[name="newPassword"]`).arrowType( newPassword );
         });
 
@@ -264,8 +270,8 @@ context("Password expire reset flow", () => {
           cy.get(`input[name="newPasswordConfirmation"]`).arrowType( newPassword );
         });
 
-        it("Click 'SIGN IN'", () => {
-          cy.get(`button[id="ResetPassword-resetPassword"]`).arrowClick();
+        it(`Click "RESET PASSWORD"`, () => {
+          cy.get("[data-cy=\"resetButtonSubmit\"]").arrowClick();
         });
 
         it("Password Reset Successfully should be displayed", () => {
