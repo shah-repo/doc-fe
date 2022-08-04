@@ -201,10 +201,13 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
       <InputField
         label="transition.action.password"
         name="password"
+        size="sm"
         inputProps={{
           type: "password",
           autoComplete: "new-password",
-          style: { marginTop: "0" },
+          classes: {
+            root: classes.passwordInput,
+          },
         }}
         validate={validator(required)}
       />
