@@ -24,4 +24,10 @@ export const FBTableCellStyles = makeStyles(() =>
       border: `1px solid ${Colors.whitest_grey}`,
       borderRadius: "3px",
     },
+    headerCellText: {
+      fontSize: "12px",
+      fontWeight: 400,
+      color: Colors.almost_black,
+      paddingLeft: 7,
+    },
   }));
