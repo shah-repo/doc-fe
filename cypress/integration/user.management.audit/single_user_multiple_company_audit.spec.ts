@@ -241,7 +241,7 @@ context("Sigle user multiple company test", () => {
       cy.usrMyProfileClickNameEdit({ name: `Dr. ${nameOfFirstUserToSignUp}` });
       cy.usrClickUpdateProfile();
       cy.usrClickCloseDialogButton();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
   });
 
@@ -381,7 +381,7 @@ context("Sigle user multiple company test", () => {
       cy.usrClickUpdateProfile();
       cy.wait(5000);
       cy.usrClickCloseDialogButton();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
   });
 
