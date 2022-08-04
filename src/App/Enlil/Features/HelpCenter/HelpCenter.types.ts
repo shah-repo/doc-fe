@@ -21,7 +21,7 @@ export enum AppModules {
   Dashboard = "Dashboard",
 }
 
-export interface IHelpCenterItemData {
+interface IHelpCenterItemData {
   type: HelpCenterItemType;
   title: string;
   url: string;
@@ -40,7 +40,3 @@ export interface IHelpCenterModuleData {
   title: string;
   items: IHelpCenterItemData[];
 }
-
-export type HelpCenterData = {
-  [key in AppModules]: IHelpCenterModuleData;
-};
