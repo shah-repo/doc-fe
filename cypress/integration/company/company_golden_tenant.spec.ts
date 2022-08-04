@@ -175,7 +175,7 @@ context("Create company with golden tenant", () => {
       cy.drEnterDocumentDescription({ description: "New Seed description" });
     });
 
-    it("Click on 'Details' tab", () => {
+    it("Switch to Details tab", () => {
       cy.drSelectDetailsTab();
     });
 
@@ -423,9 +423,7 @@ context("Create company with golden tenant", () => {
 
     it("Approve and release document - create company", () => {
       SystemRequirement("REQ-3600");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Log out user", () => {
@@ -530,8 +528,7 @@ context("Create company with golden tenant", () => {
     it("Check first document values", () => {
       SystemRequirement("REQ-3580");
       cy.drFilterDocListByNameAndStatus({ title: "First document", status: "Draft" });
-      cy.get("[data-cy=\"field-name\"]").contains("First document");
-      cy.get("[data-cy=\"description\"]").contains("First document description");
+      cy.drEnterDocumentDescription({ description: "First document description" });
       cy.get("[data-cy=\"select.document.documentType.id\"]").contains("Form");
       cy.get("[id=\"formTemplate.outputDocumentTypes\"]").contains("Clinical Protocol");
     });
@@ -541,8 +538,7 @@ context("Create company with golden tenant", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "Second document", status: "Draft" });
-      cy.get("[data-cy=\"field-name\"]").contains("Second document");
-      cy.get("[data-cy=\"description\"]").contains("Second document description");
+      cy.drEnterDocumentDescription({ description: "Second document description" });
       cy.get("[data-cy=\"select.document.documentType.id\"]").contains("Clinical Protocol");
     });
 
@@ -550,15 +546,13 @@ context("Create company with golden tenant", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Draft" });
-      cy.get("[data-cy=\"field-name\"]").contains("Document Approval Matrix");
-      cy.get("[data-cy=\"description\"]").contains("Initial DAM Description");
+      cy.drEnterDocumentDescription({ description: "Initial DAM Description" });
     });
 
     it("Check forth document values", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "DAM Form", status: "Released" });
-      cy.get("[data-cy=\"field-name\"]").contains("DAM Form");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("DAM Form");
       cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(1).contains("Document Approval Matrix");
     });
@@ -567,7 +561,6 @@ context("Create company with golden tenant", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "AR Form", status: "Released" });
-      cy.get("[data-cy=\"field-name\"]").eq(0).contains("AR Form");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
       cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(1).contains("Approval Request");
     });
@@ -578,12 +571,18 @@ context("Create company with golden tenant", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Draft" });
-      cy.get("[data-cy=\"field-name\"]").contains("Document Approval Matrix");
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("navigate to matrix details tab", () => {
-      cy.drSelectMatrixDetailsTab();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetFieldLocks,
+      ],
+      () => {
+        cy.drSelectMatrixDetailsTab();
+      });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("check DAM document types", () => {
@@ -592,7 +591,7 @@ context("Create company with golden tenant", () => {
         documentTypes.push($el.text());
       });
       cy.fixture("dam.json").then((file) => {
-        cy.get(file.approvalMatrix).each((obj) => {
+        cy.get(file.approvalMatrix).each((obj: any) => {
           expect(documentTypes).to.include(obj.docType.name);
         });
       });
@@ -667,7 +666,6 @@ context("Create company with golden tenant", () => {
       cy.navigToApprovalRequestList();
       cy.arClearFilters();
       cy.arFilterARListByNameAndStatus({ title: "AR Form", status: "CLOSED" });
-      cy.get("[data-cy=\"field-name\"]").eq(0).contains("AR Form");
       cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
         .should("have.value", "FM-00001 - rev 1 - AR Form");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");

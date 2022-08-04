@@ -187,7 +187,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Upload DAM JSON", () => {
-        cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
+        cy.atchUploadDOMJSONForNCO({ fileName: "dam_lhr.json", queue: 0 });
       });
 
       it("Select 'Yes' for 'Approved Page Details json is used'", () => {
