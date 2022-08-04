@@ -1,0 +1,415 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
+
+let createdCompany;
+let loginResponse;
+let secondEmployee;
+let componentSpecificationDocumentType;
+let group;
+let asyncTasksGroup;
+
+const documentRevisionName = "New document for testing AR";
+const approvalRequestTitle = "Approval request from newly created form";
+const approvalRequestFormName = "New Approval request form template";
+
+context("Approval request implementation tasks", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  context("[API]Prepare company", () => {
+    it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
+      cy.authApiLogin({
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: USERS[1].email,
+            importerEmail: IMPORTER_USER.email,
+            users: [USERS[2], USERS[3], USERS[4]],
+            acctCodes: ["code 1"],
+            addresses: ["Address 1"],
+            documentTypes: [
+              ClinicalProtocolDocType,
+            ],
+          }, sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
+          done();
+        });
+      });
+    });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API]Creates document revision for approval", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Test Doc Rev Description</p>",
+            document: {
+              docId: "CP-00004",
+              documentType: {
+                id: componentSpecificationDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: documentRevisionName,
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        payload: {
+          employees: [{ id: secondEmployee.id }],
+        },
+      });
+    });
+  });
+
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
+    });
+  });
+
+  context("Create new AR form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter title 'New Approval request form template'", () => {
+      cy.drEnterDocumentTitle({ name: approvalRequestFormName });
+    });
+
+    it("Enter description 'New form template for approval request'", () => {
+      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Check predefined fields", () => {
+    it("Verify Approval Request Details", () => {
+      cy.get(`[data-cy="Approval Request Details"]`).should("exist");
+    });
+
+    it("Verify Approvers", () => {
+      cy.get(`[data-cy="Approvers"]`).should("exist");
+    });
+
+    it("Select Documents tab", () => {
+      cy.drSelectDocumentTab();
+    });
+
+    it("Verify `Add a document` block", () => {
+      cy.get("[class=MuiFormControl-root MuiFormControl-fullWidth]").should("exist");
+    });
+
+    it("Select Change Details tab", () => {
+      cy.drSelectChangeDetailsTab();
+    });
+  });
+
+  context("Add Form fields and Release", () => {
+    it("Add TextField", () => {
+      SystemRequirement("FB-0020", "FB-0030");
+      cy.fbAddNewField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
+      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Create a Other type form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'test title'", () => {
+      cy.drEnterDocumentTitle({ name: "test title" });
+    });
+
+    it("Enter document description 'test description'", () => {
+      cy.drEnterDocumentDescription({ description: "test description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Clinical Protocol' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add TextField", () => {
+      SystemRequirement("FB-0020", "FB-0030");
+      cy.fbAddNewField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
+      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Checkbox group", () => {
+      SystemRequirement("FB-0120");
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
+      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Date picker", () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
+      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add File Upload", () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
+      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[3].name}`]);
+      });
+    });
+  });
+
+  context("Create output with newly created form", () => {
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Enter title", () => {
+      cy.drEnterDocumentTitle( { name: "Other type document" });
+    });
+
+    it("Enter description", () => {
+      cy.drEnterDocumentDescription({ description: "Description" });
+    });
+
+    it("Click on Save", () => {
+      cy.arSaveApiCall();
+    });
+  });
+
+  context("Create approval request with newly created form", () => {
+    it("Navigate to approval request list", () => {
+      SystemRequirement("REQ-0680");
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Click Create a Approval Request button", () => {
+      cy.arClickCreateAnAR();
+    });
+
+    it("Choose newly AR Form template", () => {
+      SystemRequirement("REQ-0690", "REQ-0700");
+      cy.arSelectARForm({ formTitle: approvalRequestFormName });
+    });
+
+    it("Enter title AR title: " + approvalRequestTitle, () => {
+      cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
+    });
+
+    it("Enter description 'AR from New form template for approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    });
+
+    it("Add created document revision", () => {
+      cy.arClickAddDocument();
+      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
+      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+      cy.arClickAddBtnOnAddDocumentsDialog();
+    });
+
+    it("Click Create Approval Request", () => {
+      SystemRequirement("REQ-0730");
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+
+    it("Click on Save", () => {
+      cy.arSaveApiCall();
+    });
+
+    it("Click 'Send To Review'", () => {
+      cy.arClickSendToReview();
+    });
+
+    it("Approve AR", () => {
+      SystemRequirement("REQ-0920");
+      cy.arApproveAR();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Create a Other type form 2", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'test title 2'", () => {
+      cy.drEnterDocumentTitle({ name: "test title 2" });
+    });
+
+    it("Enter document description 'test description 2'", () => {
+      cy.drEnterDocumentDescription({ description: "test description 2" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Clinical Protocol' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+});
+
+export { };
