@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
+import { ReactComponent as EyeIcon } from "../../../assets/images/eye-icon-references.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { companySelectors } from "../../../state/ducks/company";
@@ -15,6 +16,7 @@ import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
 import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
 import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
+import CRReferences from "../references/Reference";
 import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
 import { ChangeRequestFormValues } from "./types";
 
@@ -64,6 +66,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       initialValues={cloneDeep(changeRequest?.formInput)}
       changeRequest={cloneDeep(changeRequest)}
       autosave={autosaveEnabled}
+      withoutBottomBar={true}
       schema={schemaData}
       mode="form"
     >
@@ -82,6 +85,23 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   );
 
   const sidebarList: SidebarTypes[] = [
+    {
+      icon: <EyeIcon />,
+      type: "references",
+      details: {
+        shouldShow: true,
+        title:
+          intl?.formatMessage({
+            id: "common.references",
+          }) || "",
+        component: (
+          <CRReferences
+            chosenForm={chosenForm}
+            changeRequest={changeRequest}
+          />
+        ),
+      },
+    },
     {
       icon: <TimelineIcon />,
       type: "history",

@@ -4,6 +4,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
+import { ReactComponent as EyeIcon } from "../../../assets/images/eye-icon-references.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
@@ -24,6 +25,7 @@ import useGetHasTag from "../../hooks/useGetHasTag";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import { toChangeRequestFormValues, toChangeRequestUpdateRequestBody } from "../form/transform";
 import { ChangeRequestFormValues } from "../form/types";
+import CRReferences from "../references/Reference";
 import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import Presenter from "./presenter";
@@ -107,6 +109,7 @@ const Container: React.FunctionComponent<Props> = ({
         initialValues={dataProp.formInput}
         changeRequest={dataProp}
         autosave={autosaveEnabled}
+        withoutBottomBar={true}
         schema={schema}
         mode={"preview"}
       >
@@ -137,6 +140,22 @@ const Container: React.FunctionComponent<Props> = ({
   );
 
   const sidebarList: SidebarTypes[] = [
+    {
+      icon: <EyeIcon />,
+      type: "references",
+      details: {
+        shouldShow: true,
+        title:
+          intl?.formatMessage({
+            id: "common.references",
+          }) || "",
+        component: (
+          <CRReferences
+            changeRequest={dataProp}
+          />
+        ),
+      },
+    },
     {
       icon: <TimelineIcon />,
       type: "history",
