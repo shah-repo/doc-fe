@@ -178,7 +178,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         <DatePickerField
           label="transition.action.effective.date"
           name="effectiveDate"
-          size="mdw"
+          size="sm"
           minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
           value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
           validate={validator(required)}
