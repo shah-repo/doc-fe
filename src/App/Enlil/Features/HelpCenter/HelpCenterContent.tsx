@@ -37,7 +37,9 @@ const HelpCenterContent: React.FC<Props> = ({ content, isOpen, handleCloseDialog
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent classes={{
+        root: classes.contentRoot,
+      }} dividers>
         <HelpCenterList content={content} />
         <HelpCenterPopular />
       </DialogContent>

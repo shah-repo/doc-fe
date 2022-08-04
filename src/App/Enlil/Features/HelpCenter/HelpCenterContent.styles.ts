@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme: Theme) =>
     dialogPaper: {
       pointerEvents: "auto",
     },
+    contentRoot: {
+      padding: 0,
+    },
     // TODO Move to overrides
     titleRoot: {
       display: "flex",
@@ -19,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
     },
     actionsRoot: {
-      padding: theme.spacing(2),
+      padding: 0,
     },
   })
 );
