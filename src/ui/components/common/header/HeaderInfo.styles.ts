@@ -120,7 +120,6 @@ export const styles = makeStyles((theme: Theme) =>
       textTransform: "uppercase",
       alignItems: "center",
       justifyContent: "center",
-      cursor: "pointer",
     },
     GREEN_STATUS: {
       color: Colors.green_blue,
