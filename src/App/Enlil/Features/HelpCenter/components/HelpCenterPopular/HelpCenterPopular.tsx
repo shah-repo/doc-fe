@@ -1,9 +1,9 @@
 import { Box, List, ListItem, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as FAQsIcon } from "../../../../assets/images/faqs.svg";
-import { ReactComponent as GuidesIcon } from "../../../../assets/images/help-guide.svg";
-import { ReactComponent as ReleaseNotesIcon } from "../../../../assets/images/release-notes.svg";
-import Text from "../../../../ui/components/Text";
+import { ReactComponent as FAQsIcon } from "../../../../../../assets/images/faqs.svg";
+import { ReactComponent as GuidesIcon } from "../../../../../../assets/images/help-guide.svg";
+import { ReactComponent as ReleaseNotesIcon } from "../../../../../../assets/images/release-notes.svg";
+import Text from "../../../../../../ui/components/Text";
 import useStyles from "./HelpCenterPopular.styles";
 
 const HelpCenterPopular: React.FC = () => {

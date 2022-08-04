@@ -1,10 +1,10 @@
 import { Box, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as LinkOutIcon } from "../../../../assets/images/link-out.svg";
-import { ReactComponent as SendIcon } from "../../../../assets/images/send.svg";
+import { ReactComponent as LinkOutIcon } from "../../../../../../assets/images/link-out.svg";
+import { ReactComponent as SendIcon } from "../../../../../../assets/images/send.svg";
 import Text from "../../../../../../ui/components/Text";
-import useStyles from "./HelpCenterContact.styles";
 import openNewTab from "../../utils/openNewTab";
+import useStyles from "./HelpCenterContact.styles";
 
 const HelpCenterContact: React.FC = () => {
   const classes = useStyles();

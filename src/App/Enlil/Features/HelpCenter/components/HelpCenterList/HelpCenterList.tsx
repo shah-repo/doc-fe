@@ -1,7 +1,7 @@
 import { Typography } from "@material-ui/core";
 import React from "react";
-import HelpCenterVideoItem from "../../HelpCenterVideoItem";
-import HelpCenterWorkflowItem from "../../HelpCenterWorkflowItem";
+import HelpCenterVideoItem from "./components/HelpCenterVideoItem/HelpCenterVideoItem";
+import HelpCenterWorkflowItem from "./components/HelpCenterWorkflowItem/HelpCenterWorkflowItem";
 
 const items = {
   VIDEO: HelpCenterVideoItem,

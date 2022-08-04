@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import Text from "../../../../ui/components/Text";
+import Text from "../../../../../../../../ui/components/Text";
 
 const HelpCenterVideoItem: React.FC<{ title: string }> = ({ title }) => (
   <Box>

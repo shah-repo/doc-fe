@@ -1,10 +1,10 @@
 import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as FAQsIcon } from "../../../../../../assets/images/faqs.svg";
+import { ReactComponent as HelpIcon } from "../../../../../../assets/images/help.svg";
+import { ReactComponent as ReleaseNotesIcon } from "../../../../../../assets/images/release-notes.svg";
+import { ReactComponent as SendIcon } from "../../../../../../assets/images/send.svg";
 import Text from "../../../../../../ui/components/Text";
-import { ReactComponent as FAQsIcon } from "../../../../assets/images/faqs.svg";
-import { ReactComponent as HelpIcon } from "../../../../assets/images/help.svg";
-import { ReactComponent as ReleaseNotesIcon } from "../../../../assets/images/release-notes.svg";
-import { ReactComponent as SendIcon } from "../../../../assets/images/send.svg";
 import openNewTab from "../../utils/openNewTab";
 
 interface Props {
