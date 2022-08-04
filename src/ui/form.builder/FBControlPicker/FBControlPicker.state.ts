@@ -68,7 +68,6 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
         "eqmaintenance",
         "textfieldwithrange",
         "supplier",
-        "lhrstep",
       ],
       approvals: [
         "approvals",
