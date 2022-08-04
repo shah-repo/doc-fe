@@ -200,7 +200,7 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
     },
     MuiListItemIcon: {
       root: {
-        "minWidth": "none",
+        "minWidth": 0,
         "marginRight": appTheme.spacing(1.5),
         "&$small": {
           marginRight: appTheme.spacing(1),
