@@ -40,10 +40,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
       !isInputOwner) || disabled;
-    if (!(formState?.getFieldValue(name) || defaultValue)) {
-      formState?.setFieldValue(name, workspaceState?.formInput?.[name], withState, omitFormValue);
-      formState?.validate();
-    }
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
 
     const multiple = editorProperties?.includes("multiple") || props.multiple;
