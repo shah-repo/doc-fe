@@ -93,7 +93,7 @@ context("User Creation Flow", () => {
 
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
   });
 
@@ -170,7 +170,7 @@ context("User Creation Flow", () => {
 
     it("Click on resend signup email", () => {
       cy.contains("Resend signup email").arrowClick();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
 
@@ -271,7 +271,7 @@ context("User Creation Flow", () => {
     it("click reset password for user", () => {
       cy.usrFilterByEmail({ email: emailOfFirstUserToSignUp });
       cy.contains("Reset Password").arrowClick();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
 
     it("Verify popup message \"Reset password email sent\"", () => {
@@ -319,7 +319,7 @@ context("User Creation Flow", () => {
       it("Click deactivate button", () => {
         cy.usrClickStatusButton();
         cy.usrClickCloseDialogButton();
-        currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+        currentDate = momentInPST().format("MMM D, YYYY hh:m");
       });
     });
 
@@ -355,7 +355,7 @@ context("User Creation Flow", () => {
       it("Click reactivate button", () => {
         cy.usrClickStatusButton();
         cy.usrClickCloseDialogButton();
-        currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+        currentDate = momentInPST().format("MMM D, YYYY hh:m");
       });
     });
 
