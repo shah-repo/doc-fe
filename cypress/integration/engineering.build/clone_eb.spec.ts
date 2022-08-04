@@ -1001,7 +1001,10 @@ context("Clone EB Flow test", () => {
     context("Make some changes in EB such as to add/remove Materials, Equipment, attachment", () => {
       it("Select a part in the Part field", () => {
         cy.wait(2000);
-        cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("PRT-00005 - rev 1 - Part document");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"childrenParts\"]").arrowClick();
+        cy.get("[data-cy=\"childrenParts\"]").arrowType("PRT-00005 - rev 1 - Part document").arrowClick();
       });
 
       it("Add reference to part", () => {
