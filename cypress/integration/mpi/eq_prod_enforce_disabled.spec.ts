@@ -8,7 +8,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { Part } from "../../utils/constants/documentTypes/part";
@@ -1606,15 +1605,14 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     context("Verify equipment select dialog on LHRs", () => {
       it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("[data-cy=\"form.builder.select\"]")
-            .eq(1)
-            .click({ force: true });
-        });
+        cy.get("[data-cy=\"form.builder.select\"]")
+          .eq(1)
+          .click({ force: true });
       });
 
       it("Open dropdown", () => {
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.wait(1000);
+        cy.get(`div[role=dialog] button[title="Open"]`).should("be.visible").arrowClick({ force: true });
       });
 
       it("Verify list item should have cal and pm ", () => {
@@ -1655,9 +1653,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
-        cy.get(`div[data-cy="form.builder.change"]`).should("not.be.visible");
-        cy.get(`[data-cy="form.builder.lhrs.procedure.materials.title"]`).scrollIntoView();
-        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover();
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover().wait(1000);
         cy.get(`div[data-cy="form.builder.change"]`).should("be.visible");
       });
 
@@ -1844,15 +1840,14 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     context("Verify equipment select dialog on LHRs", () => {
       it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("[data-cy=\"form.builder.select\"]")
-            .eq(1)
-            .click({ force: true });
-        });
+        cy.get("[data-cy=\"form.builder.select\"]")
+          .eq(1)
+          .click({ force: true });
       });
 
       it("Open dropdown", () => {
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.wait(1000);
+        cy.get(`div[role=dialog] button[title="Open"]`).should("be.visible").arrowClick({ force: true });
       });
 
       it("Verify list item should have cal and pm ", () => {
@@ -1893,9 +1888,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
-        cy.get(`div[data-cy="form.builder.change"]`).should("not.be.visible");
-        cy.get(`[data-cy="form.builder.lhrs.procedure.materials.title"]`).scrollIntoView();
-        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover();
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover().wait(1000);
         cy.get(`div[data-cy="form.builder.change"]`).should("be.visible");
       });
 
