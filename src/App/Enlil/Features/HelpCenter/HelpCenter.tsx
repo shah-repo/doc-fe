@@ -1,19 +1,28 @@
 import { IconButton } from "@material-ui/core";
+import get from "lodash/get";
 import React from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as HelpIcon } from "../../../../assets/images/help-md.svg";
 import useDialog from "../../../../ui/hooks/useDialog";
 import HelpCenterContent from "./components/HelpCenterContent/HelpCenterContent";
 import HelpCenterNavigation from "./components/HelpCenterNavigation/HelpCenterNavigation";
-import helpContent from "./data/en.json";
+import helpContentEn from "./data/en.json";
 import { AppModules } from "./HelpCenter.types";
+
+const helpContent = {
+  en: helpContentEn,
+};
 
 const HelpCenter: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const contentDialog = useDialog();
+  const { locale, defaultLocale } = useIntl();
+
+  const localizedHelpContent = get(helpContent, locale, helpContent[defaultLocale]);
 
   // TODO Get the current module from the store/hoc
   const currentModule = AppModules.PurchaseOrders;
-  const currentModuleContent = helpContent[currentModule];
+  const currentModuleContent = get(localizedHelpContent, currentModule, null);
 
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -24,8 +33,10 @@ const HelpCenter: React.FC = () => {
   };
 
   const openContent = () => {
-    closeMenu();
-    contentDialog.open();
+    if (currentModuleContent) {
+      closeMenu();
+      contentDialog.open();
+    }
   };
 
   return (
@@ -38,11 +49,13 @@ const HelpCenter: React.FC = () => {
         handleCloseMenu={closeMenu}
         handleOpenContent={openContent}
       />
-      <HelpCenterContent
-        content={currentModuleContent}
-        isOpen={contentDialog.isOpen}
-        handleCloseDialog={contentDialog.close}
-      />
+      {currentModuleContent && (
+        <HelpCenterContent
+          content={currentModuleContent}
+          isOpen={contentDialog.isOpen}
+          handleCloseDialog={contentDialog.close}
+        />
+      )}
     </>
   );
 };
