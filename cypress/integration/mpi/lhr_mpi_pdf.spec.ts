@@ -10,7 +10,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, fileTimeFormat, lotDocumentIdRef, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, lotDateSuffix, lotDocumentIdRef, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -967,10 +967,6 @@ context("Autosave LHR", () => {
   });
 
   context("Create lot document", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to Lots", () => {
       cy.navigToLots();
     });
@@ -1041,6 +1037,7 @@ context("Autosave LHR", () => {
     it("Verify status is 'Released'", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
+
   });
 
   context("Create MPI document", () => {
@@ -1505,9 +1502,35 @@ context("Autosave LHR", () => {
   });
 
   context("Release LHRt", () => {
-    // it("Click save document", () => {
-    //   cy.drClickCreateDocumentWithApiCallForForms();
-    // });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+    });
+    it("Add material parameter", () => {
+      cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
+        .eq(0).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains("Material one").arrowClick();
+      cy.get("[name=\"quantity\"]").arrowType("3");
+      cy.get("[data-cy=\"unit\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains("Day(s)").arrowClick();
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    });
+    it("Add equipment parameter", () => {
+      cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
+        .eq(1).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains("Equipment one").arrowClick();
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    });
+
+    it("Click save document", () => {
+      cy.wait(2000);
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(3000);
+    });
 
     it("Approve and release LHRt document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -1691,9 +1714,10 @@ context("Autosave LHR", () => {
       if (el.includes("Page 2 of 3")) {
         expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
 
-        expect(el).match(/Materials\nA: Material one/);
 
-        expect(el).match(/Equipment\nB: Equipment one/);
+        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 days/);
+
+        expect(el).match(/Equipment\nET-00003 - Equipment one/);
 
         expect(el).match(/Select field/);
 
@@ -1762,7 +1786,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify LHR title", () => {
-      cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02");
+      cy.get("#HeaderInfo-subtitle").should("have.text", ` - LOT #` + lotDateSuffix() + "02");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "LHR-00004");
     });
 
@@ -1776,7 +1800,7 @@ context("Autosave LHR", () => {
     });
 
     it("Check lot number", () => {
-      cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02");
+      cy.get("#HeaderInfo-subtitle").should("have.text", ` - LOT #` + lotDateSuffix() + "02");
     });
 
     it("Enter initial quantity", () => {
@@ -1793,6 +1817,10 @@ context("Autosave LHR", () => {
       cy.get("button.MuiPickersDay-daySelected").arrowClick();
     });
 
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select option1 checked", () => {
       cy.get("[id^=\"mui-component-select-select-field\"]").arrowClick({ force: true });
       cy.get("[data-value=\"option1\"]").arrowClick();
@@ -1807,11 +1835,18 @@ context("Autosave LHR", () => {
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", ` - LOT #` + lotDateSuffix() + "02RD");
     });
   });
 
   context("Start LHRs #1 and Save it", () => {
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy^=\"LHR Step 1\"]").arrowClick();
+    });
+
     it("Click 'START MPI'", () => {
       cy.mpiStartStep({ stepNumber: 1 });
       cy.landingPageLoadingElementShouldNotExist();
@@ -1828,7 +1863,11 @@ context("Autosave LHR", () => {
 
     it("Verify LHRs title", () => {
       cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
-        .should("have.text", lotDocumentIdRef + "02RD | LHR-00004 | CS-00005.1 Part document");
+        .should("have.text",  "LHR-00004");
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
     });
 
     it("Enter 'Start quntity' for LHRs #1", () => {
@@ -1897,6 +1936,15 @@ context("Autosave LHR", () => {
         .should("have.text", "ET-00003");
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(2000);
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -1930,7 +1978,7 @@ context("Autosave LHR", () => {
       });
 
       cy.get("#HeaderInfo-subtitle").should("contain.text", "LOT").then(($docIdElement) => {
-        lotDocumentId = $docIdElement.text();
+        lotDocumentId = $docIdElement.text().replace(" - ", "");
       });
       cy.sendToEmail();
     });
@@ -2128,7 +2176,7 @@ context("Autosave LHR", () => {
 
           expect(el).match(/WIP/);
 
-          tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.859999999999999 days`);
+          tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 24.299999999999997 days`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
@@ -2198,11 +2246,21 @@ context("Autosave LHR", () => {
 
     it("Select created LHR record", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
         CyRoutes.DocRevPreview,
         CyRoutes.GetAutocompleteOptions], () => {
-        cy.dlSelectFirstDocument();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+          cy.get("tr.k-master-row").first().arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy^=\"LHR Step 2\"]").arrowClick();
     });
 
     it("Click 'START MPI'", () => {
@@ -2216,12 +2274,16 @@ context("Autosave LHR", () => {
 
     it("Verify LHRs title", () => {
       cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
-        .should("have.text", lotDocumentIdRef + "02RD | LHR-00004 | CS-00005.1 Part document");
+        .should("have.text", "LHR-00004");
     });
 
     it("Upload attachment 'test.docx'", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
       cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
     });
 
     it("Enter 'Start quntity' for LHRs #2", () => {
@@ -2290,6 +2352,15 @@ context("Autosave LHR", () => {
         .should("have.text", "ET-00003");
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(2000);
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -2302,10 +2373,14 @@ context("Autosave LHR", () => {
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
+      cy.wait(3000);
     });
 
     it("Complete step # 2", () => {
-      cy.pmSubmitForApproval();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
@@ -2328,15 +2403,10 @@ context("Autosave LHR", () => {
     it("Click open LHR", () => {
       cy.get(`[data-grid-row-index="0"]`).eq(0).contains(lotDocumentIdRef + "02RD").arrowClick();
       cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
     });
 
     it("check Initial quntity", () => {
       cy.get("[name=\"lhr_initial_quantity\"]").should("have.value", "50.1");
-    });
-
-    it("check End quntity", () => {
-      cy.get("[name=\"lhr-end-quantity\"]").should("have.value", "10.8");
     });
 
     it("check build type", () => {
@@ -2348,11 +2418,21 @@ context("Autosave LHR", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul>li[role=option]").contains(USERS[1].name ).arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add second Approver'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul>li[role=option]").contains(USERS[2].name ).arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove second Approver'", () => {
@@ -2371,10 +2451,6 @@ context("Autosave LHR", () => {
       cy.get("[name=\"lhr_initial_quantity\"]").should("have.value", "50.1");
     });
 
-    it("check End quntity", () => {
-      cy.get("[name=\"lhr-end-quantity\"]").should("have.value", "10.8");
-    });
-
     it("check build type", () => {
       cy.get("[name=\"lhr-build-type\"]").should("be.checked");
     });
@@ -2384,13 +2460,21 @@ context("Autosave LHR", () => {
     });
 
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Approve & Release Document and send email", () => {
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
@@ -2403,10 +2487,9 @@ context("Autosave LHR", () => {
     });
 
     it("Check doc status for Released and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-subtitle").should("have.text", lotDocumentIdRef + "02RD");
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDateSuffix() + "02RD");
       cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "LHR-00004");
-
       cy.sendToEmail();
     });
 
@@ -2558,7 +2641,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Initial Quantity\n50\.1/);
 
-        expect(el).match(/End Quantity\n10\.8/);
+        expect(el).match(/End Quantity/);
 
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
         expect(el).match(tmpRegex);
@@ -2622,7 +2705,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Released/);
 
-        tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.859999999999999 days`);
+        tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 24.299999999999997 days`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -2688,8 +2771,6 @@ context("Autosave LHR", () => {
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Select field\noption1/);
 
         expect(el).not.match(/TEXT FIELD/);
 

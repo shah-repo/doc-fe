@@ -283,6 +283,7 @@ context("Document form upgrade", () => {
 
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(2000);
     });
 
     context("Fill out the required fields", () => {

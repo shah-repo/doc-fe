@@ -74,7 +74,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<Omit<FBApprovalMatrix
                       {mode === "edit" && (
                         <FBTableCell align="center">
                           <FBApprovalMatrixCheck
-                            name={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
+                            name={`${name}.${i}.approvalRoles.${key}.${index}`}
                             dataCy={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
                             checked={value}
                           />
@@ -100,7 +100,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<Omit<FBApprovalMatrix
                   <FBTableCell key={`fb-approval-matrix-add-${value}-${index}`}>
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.approvalRoles.${key}.${index}`}
+                        name={`${name}.${approvalMatrix.length}.approvalRoles.${key}.${index}`}
                         dataCy={`approvalMatrix.approvalRoles.${key}.${index}`}
                         gutter={false}
                         defaultChecked={false}

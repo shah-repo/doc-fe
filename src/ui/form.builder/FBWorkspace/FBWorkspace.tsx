@@ -18,6 +18,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   isPortal,
   _tabsState,
   isStarterRequired,
+  withoutBottomBar = false,
 }) => (
   <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
     <FBSnackbar autoHideDuration={6000}/>
@@ -44,6 +45,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                         isStarter={isStarterRequired?.()}
                         mode={workspaceState?.mode}
                         schema={workspaceState?.schema}
+                        withoutBottomBar={withoutBottomBar}
                       />
                     </Portal>
                   )}
@@ -57,6 +59,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                         isStarter={isStarterRequired?.()}
                         mode={workspaceState?.mode}
                         schema={workspaceState?.schema}
+                        withoutBottomBar={withoutBottomBar}
                       />
                     </>
                   )}

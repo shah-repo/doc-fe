@@ -782,10 +782,10 @@ context("Test training records and training curriculum landing page", () => {
       cy.get("tr.k-grouping-row").should("not.exist");
       cy.get(`th[aria-colindex="5"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-grouping-row").should("have.length", "4");
       cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-grouping-row").should("not.exist");
     });
 
@@ -805,25 +805,25 @@ context("Test training records and training curriculum landing page", () => {
     context("Verify sorting arrows on each field", () => {
       it("Verify sorting arrow for DOC ID", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="0"]`).should("have.text", "FM-00003FM-00003FM-00004FM-00004FM-00004FM-00004");
         cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="0"]`).should("have.text", "FM-00004FM-00004FM-00004FM-00004FM-00003FM-00003");
         cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify sorting arrow for TRN ID", () => {
         cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="1"]`)
           .should("have.text", "TRN-00001TRN-00002TRN-00003TRN-00004TRN-00005TRN-00006");
         cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="1"]`)
           .should("have.text", "TRN-00006TRN-00005TRN-00004TRN-00003TRN-00002TRN-00001");
@@ -833,12 +833,12 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`td[data-grid-col-index="2"]`)
           .should("have.text", "111111");
         cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="3"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="2"]`)
           .should("have.text", "111111");
         cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="3"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="2"]`)
           .should("have.text", "111111");
@@ -846,13 +846,13 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify sorting arrow for DOCUMENT TITLE", () => {
         cy.get(`th[aria-colindex="4"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="4"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="3"]`)
           .should("have.text", "Form2 document for trainingForm2 document for training" +
         "Form2 document for trainingForm2 document for trainingForm document for trainingForm document for training");
         cy.get(`th[aria-colindex="4"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="4"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="3"]`)
           .should("have.text", "Form document for trainingForm document for training" +
@@ -861,13 +861,13 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify sorting arrow for TRAINEE", () => {
         cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="4"]`)
           .should("have.text", "ABAthena BlockEWEda WalkerGRGiovanni ReynoldsGRGiovanni Reynolds" +
         "HBHarry BartolettiHBHarry Bartoletti");
         cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="4"]`)
           .should("have.text", "HBHarry BartolettiHBHarry BartolettiGRGiovanni Reynolds" +
@@ -876,12 +876,12 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify sorting arrow for ASSIGN DATE", () => {
         cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="5"]`)
           .should("have.text", `${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}`);
         cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="5"]`)
           .should("have.text", `${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}${assignDate}`);
@@ -889,12 +889,12 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify sorting arrow for DUE DATE", () => {
         cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="6"]`)
           .should("have.text", `${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}`);
         cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="6"]`)
           .should("have.text", `${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}${dueDate}`);
@@ -902,12 +902,12 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify sorting arrow for COMPLETED ON", () => {
         cy.get(`th[aria-colindex="8"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="8"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="7"]`)
           .should("have.text", "PendingPendingPendingPendingPendingPending");
         cy.get(`th[aria-colindex="8"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="8"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="7"]`)
           .should("have.text", "PendingPendingPendingPendingPendingPending");
@@ -915,12 +915,12 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify sorting arrow for TC ID", () => {
         cy.get(`th[aria-colindex="9"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="9"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="8"]`)
           .should("have.text", "TCT-00001TCT-00001TCT-00002TCT-00002TCT-00002TCT-00002");
         cy.get(`th[aria-colindex="9"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="9"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="8"]`)
           .should("have.text", "TCT-00002TCT-00002TCT-00002TCT-00002TCT-00001TCT-00001");
@@ -931,7 +931,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for DOC ID", () => {
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00004");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "FM-00004");
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       });
@@ -939,7 +939,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for TRN ID", () => {
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).arrowType("TRN-00005");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "TRN-00005");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -947,7 +947,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for REVISION", () => {
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType("1");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "1");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -955,7 +955,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for DOCUMENT TITLE", () => {
         cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="4"] input`).arrowType("Form2 document for training");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "Form2 document for training");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -963,7 +963,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for TRAINEE", () => {
         cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="5"] input`).arrowType("Athena Block");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "Athena Block");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -972,7 +972,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="6"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "Last 7 days");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -981,12 +981,12 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="7"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Due in 7 days").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "Due in 7 days");
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="7"] span.k-input`).arrowClick();
         cy.get("div.k-list-optionlabel").contains("All").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "All");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -995,7 +995,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="8"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Pending").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "Pending");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -1003,14 +1003,14 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for TC ID", () => {
         cy.get(`th[aria-colindex="9"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="9"] input`).arrowType("TCT-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="9"] input`).should("have.attr", "value", "TCT-00002");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
@@ -1066,10 +1066,10 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is equal to" dropdown filter`, () => {
@@ -1077,10 +1077,10 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("TRN-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is not equal to" dropdown filter`, () => {
@@ -1088,10 +1088,10 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("TRN-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Starts with" dropdown filter`, () => {
@@ -1099,10 +1099,10 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("TRN-0000");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Ends with" dropdown filter`, () => {
@@ -1110,30 +1110,30 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
 
@@ -1141,20 +1141,20 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -1163,11 +1163,11 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="6"] button[title="Clear"]`).should("have.attr", "disabled");
         cy.get(`th[aria-colindex="6"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "Last 7 days");
         cy.get(`th[aria-colindex="6"] button[title="Clear"]`).should("not.have.attr", "disabled");
         cy.get(`th[aria-colindex="6"] button[title="Clear"]`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
   });
@@ -1213,10 +1213,10 @@ context("Test training records and training curriculum landing page", () => {
       cy.get("tr.k-grouping-row").should("not.exist");
       cy.get(`th[aria-colindex="3"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-grouping-row").should("have.length", "1");
       cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-grouping-row").should("not.exist");
     });
 
@@ -1238,27 +1238,27 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`td[data-grid-col-index="0"]`)
           .should("have.text", "BTraining Curriculum test record2ATraining Curriculum test record");
         cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="0"]`)
           .should("have.text", "ATraining Curriculum test recordBTraining Curriculum test record2");
         cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="0"]`)
           .should("have.text", "BTraining Curriculum test record2ATraining Curriculum test record");
         cy.get(`th[aria-colindex="1"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify sorting arrow for TRAINING CURRICULUM ID", () => {
         cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="1"]`)
           .should("have.text", "TCT-00001TCT-00002");
         cy.get(`th[aria-colindex="2"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="1"]`)
           .should("have.text", "TCT-00002TCT-00001");
@@ -1268,12 +1268,12 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`td[data-grid-col-index="2"]`)
           .should("have.text", "GRGiovanni ReynoldsGRGiovanni Reynolds");
         cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="3"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="2"]`)
           .should("have.text", "GRGiovanni ReynoldsGRGiovanni Reynolds");
         cy.get(`th[aria-colindex="3"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="3"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="2"]`)
           .should("have.text", "GRGiovanni ReynoldsGRGiovanni Reynolds");
@@ -1283,12 +1283,12 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`td[data-grid-col-index="3"]`)
           .should("have.text", "ReleasedReleased");
         cy.get(`th[aria-colindex="4"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="4"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="3"]`)
           .should("have.text", "ReleasedReleased");
         cy.get(`th[aria-colindex="4"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="4"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="3"]`)
           .should("have.text", "ReleasedReleased");
@@ -1296,12 +1296,12 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify sorting arrow for GROUP", () => {
         cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] span.k-i-sort-asc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="4"]`)
           .should("have.text", "DevelopersEveryone");
         cy.get(`th[aria-colindex="5"] span.k-column-title`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] span.k-i-sort-desc-sm`).should("exist");
         cy.get(`td[data-grid-col-index="4"]`)
           .should("have.text", "EveryoneDevelopers");
@@ -1312,7 +1312,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for Title", () => {
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="1"] input`).arrowType("BTraining Curriculum test record2");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "BTraining Curriculum test record2");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -1320,7 +1320,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for TRAINING CURRICULUM ID", () => {
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).arrowType("TCT-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "TCT-00002");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -1328,7 +1328,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for OWNER", () => {
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType("Giovanni Reynolds");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "Giovanni Reynolds");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -1337,7 +1337,7 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="4"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Released").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "Released");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -1345,14 +1345,14 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify filter for GROUP", () => {
         cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="5"] input`).arrowType("Everyone");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "Everyone");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
@@ -1404,10 +1404,10 @@ context("Test training records and training curriculum landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is equal to" dropdown filter`, () => {
@@ -1415,10 +1415,10 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is not equal to" dropdown filter`, () => {
@@ -1426,10 +1426,10 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Starts with" dropdown filter`, () => {
@@ -1437,10 +1437,10 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-0000");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Ends with" dropdown filter`, () => {
@@ -1448,50 +1448,50 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -1500,11 +1500,11 @@ context("Test training records and training curriculum landing page", () => {
         cy.get(`th[aria-colindex="2"] button[title="Clear"]`).should("have.attr", "disabled");
         cy.get(`th[aria-colindex="2"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Released").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "Released");
         cy.get(`th[aria-colindex="2"] button[title="Clear"]`).should("not.have.attr", "disabled");
         cy.get(`th[aria-colindex="2"] button[title="Clear"]`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
   });

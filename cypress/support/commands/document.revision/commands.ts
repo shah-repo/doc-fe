@@ -628,9 +628,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true });
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[data-cy='add-user'").eq(2).arrowClick();
-  });
+  cy.get("[data-cy='add-user'").eq(2).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -816,7 +814,6 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 Cypress.Commands.add("drSelectApprovalRolesTab", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetFieldLocks,
-    CyRoutes.PostOrPatchDocRev,
   ],
   () => {
     cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
@@ -838,7 +835,7 @@ Cypress.Commands.add("drSelectUser", (...users: string[]) => {
 Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
   users.forEach((user) => {
     cy.get("div")
-      .contains("Start typing to invite users")
+      .contains("Search users")
       .click();
 
     cy.get("[id^=react-select]").contains(user).arrowClick();
@@ -953,9 +950,7 @@ Cypress.Commands.add("drVerifyDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("drClickRevisionsSidePanel", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-    cy.get(`button[data-cy="note-icon"]`).arrowClick();
-  });
+  cy.get(`button[data-cy="note-icon"]`).arrowClick();
 });
 
 Cypress.Commands.add("drPatchDocType", (params: {

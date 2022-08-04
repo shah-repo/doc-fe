@@ -1,4 +1,4 @@
-import { isEmpty, last } from "lodash";
+import { isEmpty } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixSection, FBApprovalMatrixTable, FBDialogState, FBWorkspaceMode } from "..";
@@ -37,8 +37,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     );
 
     handleSave = () => {
-      const formValue = formState?.getFieldValue(name);
-      const formApprovalMatrix = [ ...formValue.approvalMatrix ];
+      const formValue: FBApprovalMatrixItem[] = formState?.getFieldValue(name);
       const approvalMatrixValues = formValue || [];
 
       const approvalMatrix = approvalMatrixValues.map((e) => {
@@ -54,15 +53,6 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       });
 
       if (isEmpty(approvalMatrix)) { return; }
-      approvalMatrix[approvalMatrix.length - 1] = {
-        ...last(approvalMatrix) as FBApprovalMatrixItem,
-        approvalRoles: last(formApprovalMatrix).approvalRoles || {
-          stage1: [],
-          stage2: [],
-          stage3: [],
-          admStage: [],
-        },
-      };
 
       approvalMatrixFieldState?.setApprovalMatrix(approvalMatrix);
       approvalMatrixFieldState?.setMode("none");

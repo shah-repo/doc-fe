@@ -1,7 +1,10 @@
 import { Box, Typography } from "@material-ui/core";
 import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 import { DocumentRevisionFooterNew } from "../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { authSelectors } from "../../../state/ducks/auth";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
 import ReferencedByContainer from "../../document.revision/summary/referencedBy.container.new";
 import ReferenceToContainer from "../../document.revision/summary/referenceTo.container.new";
@@ -29,7 +32,9 @@ const References = ({
   const availableReferences = useGetAvailableReferences(initialValues as DocumentRevisionFormValues);
   const isCurrentUserOperator = React.useContext(isOperator);
   const groupOptions = selectedDocument?.document.documentType.groupOptions;
-  const isDisabledInput = initialValues && initialValues.id !== undefined && isCurrentUserOperator && !isOwner;
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isDisabledInput = initialValues && initialValues.id !== undefined &&
+   isCurrentUserOperator && !isOwner(selectedDocument as DocumentRevision, email);
   return (
     <Box padding={1.875} width={1} data-cy="generalInfo">
       <Typography className={classes.generalInfo}>

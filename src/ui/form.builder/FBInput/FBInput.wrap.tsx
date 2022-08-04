@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Dictionary, find, findIndex, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { autorun, reaction } from "mobx";
-import { useLocalStore, useObserver } from "mobx-react";
+import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -88,7 +88,6 @@ export const withFBInput = <T extends FBInputProps>(
     const intl = useIntl();
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
-    let oldState = formState;
 
     const feedbackDetails = useLocalStore(() => ({
       error, helperText,
@@ -103,11 +102,9 @@ export const withFBInput = <T extends FBInputProps>(
       inputState?.setIncludeNotes(includeNotes || false);
     }, []);
 
-    useObserver(() => {
-      if (!formState || JSON.stringify(oldState) === JSON.stringify(formState)) { return; }
-      oldState = formState;
-      formState.validate();
-    });
+    useEffect(() => {
+      formState?.validate();
+    }, [formState]);
 
     useEffect(() => {
       const disposeAutorun = autorun(() => {

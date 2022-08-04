@@ -230,9 +230,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           formState?.getInputState(name)?.setRender();
         }
       }
-      return () => {
-        FBDataStore.setPoApprovals([]);
-      };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

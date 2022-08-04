@@ -130,14 +130,8 @@ context("Autocomplete 'Approval Roles' test", () => {
         cy.drEnterDocumentDescription({ description: "test description" });
       });
 
-      it("Navigate to Matrix Details tab", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.drSelectMatrixDetailsTab();
-        });
-      });
-
       it("Navigate to Approval Roles tab", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
           cy.drSelectApprovalRolesTab();
         });
       });

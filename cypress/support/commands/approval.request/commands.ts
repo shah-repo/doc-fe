@@ -25,6 +25,7 @@ declare global {
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
       arAddApproverOnApproverList(params: { approver: string; noWait?: bool }): Chainable<Subject>;
+      arAddApproverOnApproverListWithoutApiCall(params: { approver: string }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
@@ -325,6 +326,12 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
     });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arAddApproverOnApproverListWithoutApiCall", (params: { approver: string }) => {
+  cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
+  cy.unClick().wait(500);
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
