@@ -1,11 +1,11 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
-import Text from "../../../../ui/components/Text";
-import HelpCenterContact from "./HelpCenterContact";
+import Text from "../../../../../../ui/components/Text";
+import HelpCenterContact from "../HelpCenterContact/HelpCenterContact";
+import HelpCenterList from "../HelpCenterList/HelpCenterList";
+import HelpCenterPopular from "../HelpCenterPopular/HelpCenterPopular";
 import useStyles from "./HelpCenterContent.styles";
-import HelpCenterList from "./HelpCenterList";
-import HelpCenterPopular from "./HelpCenterPopular";
 
 interface Props {
   content: any;
