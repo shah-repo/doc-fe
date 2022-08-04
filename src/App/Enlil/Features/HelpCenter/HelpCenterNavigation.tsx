@@ -1,9 +1,11 @@
-import { Divider, Link, ListItemIcon, ListItemText, Menu, MenuItem } from "@material-ui/core";
-import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import LiveHelpIcon from "@material-ui/icons/LiveHelp";
+import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as FAQsIcon } from "../../../../assets/images/faqs.svg";
+import { ReactComponent as HelpIcon } from "../../../../assets/images/help.svg";
+import { ReactComponent as ReleaseNotesIcon } from "../../../../assets/images/release-notes.svg";
+import { ReactComponent as SendIcon } from "../../../../assets/images/send.svg";
 import Text from "../../../../ui/components/Text";
+import openNewTab from "./utils/openNewTab";
 
 interface Props {
   anchorEl: HTMLElement | null;
@@ -23,27 +25,21 @@ const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, handleCloseMenu, hand
     }}
   >
     <MenuItem onClick={handleOpenContent}>
-      <ListItemIcon><HelpOutlineIcon fontSize="small" /></ListItemIcon>
+      <ListItemIcon><HelpIcon /></ListItemIcon>
       <ListItemText><Text translation="help.guides" /></ListItemText>
     </MenuItem>
-    <MenuItem>
-      <Link href="//help.dev.enlil.io/release_notes.html" target="_blank" rel="noopener noreferrer">
-        <ListItemIcon><AssignmentTurnedInIcon fontSize="small" /></ListItemIcon>
-        <ListItemText><Text translation="help.release.notes" /></ListItemText>
-      </Link>
+    <MenuItem onClick={openNewTab("//help.dev.enlil.io/release_notes.html")}>
+      <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
+      <ListItemText><Text translation="help.release.notes" /></ListItemText>
     </MenuItem>
-    <MenuItem>
-      <Link href="//help.dev.enlil.io/faqs.html" target="_blank" rel="noopener noreferrer">
-        <ListItemIcon><AssignmentTurnedInIcon fontSize="small" /></ListItemIcon>
-        <ListItemText><Text translation="help.faqs" /></ListItemText>
-      </Link>
+    <MenuItem onClick={openNewTab("//help.dev.enlil.io/faqs.html")}>
+      <ListItemIcon><FAQsIcon /></ListItemIcon>
+      <ListItemText><Text translation="help.faqs" /></ListItemText>
     </MenuItem>
     <Divider />
-    <MenuItem>
-      <Link href="//enlil.happyfox.com/new/" target="_blank" rel="noopener noreferrer">
-        <ListItemIcon><LiveHelpIcon fontSize="small" /></ListItemIcon>
-        <ListItemText><Text translation="help.contact" /></ListItemText>
-      </Link>
+    <MenuItem onClick={openNewTab("//enlil.happyfox.com/new/")}>
+      <ListItemIcon><SendIcon /></ListItemIcon>
+      <ListItemText><Text translation="help.contact" /></ListItemText>
     </MenuItem>
   </Menu>
 );
