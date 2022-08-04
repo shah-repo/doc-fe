@@ -11,7 +11,6 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
-import DocumentRevisionOutputInfo from "../../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useDidMount from "../../../hooks/useDidMount";
 import { ChangeRequestFormValues } from "../types";
@@ -96,7 +95,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
                 labelProps={AutoCompleteStyles.labelStyle}
               />
               <div ref={FBContainer} />
-              <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument} />
             </Box>
           </FormWrapper>
         </Box>

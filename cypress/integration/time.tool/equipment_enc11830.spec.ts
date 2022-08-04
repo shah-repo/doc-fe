@@ -905,7 +905,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify the Dashboard notification as 'CAL will be due in 30 days'", () => {
-      dashboardDueDate = moment().tz("America/Los_Angeles").add(30, "days").format("MMM DD");
+      dashboardDueDate = moment().tz("America/Los_Angeles").add(30, "days").format("MMM D");
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
         `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days${dashboardDueDate}`,
@@ -964,7 +964,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify the Dashboard notification as 'CAL will be due in 30 days'", () => {
-      dashboardDueDate = moment().tz("America/Los_Angeles").add(30, "days").format("MMM DD");
+      dashboardDueDate = moment().tz("America/Los_Angeles").add(30, "days").format("MMM D");
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
         `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days${dashboardDueDate}`,

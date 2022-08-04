@@ -314,8 +314,6 @@ context("Export Record doc", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log(emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -358,8 +356,6 @@ context("Export Record doc", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log(emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,

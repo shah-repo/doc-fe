@@ -164,6 +164,7 @@ export interface UMAuditProps {
   id: string;
   nextValue: string;
   previousValue: string;
+  userId: string;
 }
 
 export interface UMAuditGroupProps extends UMAuditProps {
