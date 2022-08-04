@@ -1,6 +1,6 @@
 import { IconButton } from "@material-ui/core";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import React from "react";
+import { ReactComponent as HelpIcon } from "../../../../assets/images/help-md.svg";
 import useDialog from "../../../../ui/hooks/useDialog";
 import helpContent from "./data/en.json";
 import HelpCenterContent from "./HelpCenterContent";
@@ -26,7 +26,7 @@ const HelpCenter: React.FC = () => {
   return (
     <>
       <IconButton color="inherit" size="small" onClick={openMenu}>
-        <HelpOutlineIcon />
+        <HelpIcon />
       </IconButton>
       <HelpCenterNavigation
         anchorEl={anchorEl}
