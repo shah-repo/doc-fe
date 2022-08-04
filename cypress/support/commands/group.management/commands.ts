@@ -463,7 +463,9 @@ Cypress.Commands.add("grpVerifyHistoryButton", () => {
 });
 
 Cypress.Commands.add("grpHistoryClickOpenButton", () => {
-  cy.get("[data-cy=\"gm-open-history-panel\"]").arrowClick();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetGroupsAudit, () => {
+    cy.get("[data-cy=\"gm-open-history-panel\"]").arrowClick();
+  });
 });
 
 Cypress.Commands.add("grpHistoryVerifyAddedGroup", (params: { name: string }) => {

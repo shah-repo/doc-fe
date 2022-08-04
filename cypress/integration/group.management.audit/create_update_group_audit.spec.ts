@@ -143,7 +143,7 @@ context("Group Creation Flow", () => {
 
     it("Saves the group", () => {
       cy.grpSaveGroup();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
   });
 
@@ -337,7 +337,7 @@ context("Group Creation Flow", () => {
 
     it("Saves the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
   });
 
@@ -566,7 +566,7 @@ context("Group Creation Flow", () => {
 
     it("Click cancel without saving the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
   });
 
@@ -711,7 +711,7 @@ context("Group Creation Flow", () => {
 
     it("Click cancel without saving the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
   });
 
