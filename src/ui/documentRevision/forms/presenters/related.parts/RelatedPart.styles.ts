@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles({
+export const styles = makeStyles({
   title: {
     flex: "1 1 100%",
     padding: "16px",
@@ -55,5 +55,3 @@ const useStyles = makeStyles({
   },
   textField: {},
 });
-
-export default useStyles;
