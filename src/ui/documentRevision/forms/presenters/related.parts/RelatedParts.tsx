@@ -50,12 +50,12 @@ const ParentPartSelector: React.FunctionComponent<{
   const classes = styles();
 
   useEffect(() => {
-    parentStatusHandler(status as string);
+    disableOptions(status as string);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const parentStatusHandler = (
-    value: string
-  ) => {
+
+  const disableOptions = (value: string) => {
     switch (value) {
       case RELATED_STATUS.PARENT_NO:
         setDisable({ disable1: false, disable2: true, disable3: true });
@@ -69,6 +69,12 @@ const ParentPartSelector: React.FunctionComponent<{
       default:
         break;
     }
+  };
+
+  const parentStatusHandler = (
+    value: string
+  ) => {
+    disableOptions(value);
     parentStatusChanged(value);
   };
 
