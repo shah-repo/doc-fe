@@ -6,7 +6,6 @@ const FBPurchaseOrderClasses = makeStyles({
     "width": "100%",
     "tableLayout": "fixed",
     "& th": {
-      padding: "14px 8px",
       whiteSpace: "nowrap",
       background: Colors.athens_gray,
       boxShadow: `{0 1px 0 ${Colors.chinese_silver}}`,
