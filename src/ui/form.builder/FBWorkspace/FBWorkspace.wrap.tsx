@@ -1,6 +1,7 @@
 
 import { differenceBy, filter, isEmpty, map, size } from "lodash";
 import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceProps, FBWorkspaceState } from "..";
@@ -54,6 +55,14 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
         autosave,
       });
     }
+
+    useObserver(() => {
+      if (!isEmpty(schema?.length)) {
+        workspaceState && (workspaceState.schema = schema);
+      } else if (!isEmpty(workspaceState?.schema)) {
+        schema = workspaceState?.schema;
+      }
+    });
 
     // Bridging to new context
 
