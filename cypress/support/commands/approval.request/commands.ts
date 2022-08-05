@@ -348,7 +348,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARtoReview,
     CyRoutes.ARPreview,
-    CyRoutes.ArAudit,
+    CyRoutes.GetRequiredApproversDocRev,
   ],
   () => {
     cy.get("[data-cy=\"transitionButton\"]").arrowClick();
@@ -381,7 +381,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.ArAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get(".k-master-row").contains(params.title).arrowClick();
   });
   cy.progressBarShouldNotExist();
