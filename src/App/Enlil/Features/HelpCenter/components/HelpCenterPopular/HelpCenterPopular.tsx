@@ -1,9 +1,10 @@
-import { Box, List, ListItem, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
+import { Box, ListItemIcon, ListItemText, MenuList, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as FAQsIcon } from "../../../../../../assets/images/faqs.svg";
 import { ReactComponent as GuidesIcon } from "../../../../../../assets/images/help-guide.svg";
 import { ReactComponent as ReleaseNotesIcon } from "../../../../../../assets/images/release-notes.svg";
 import Text from "../../../../../../ui/components/Text";
+import HelpCenterExtarnalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
 import useStyles from "./HelpCenterPopular.styles";
 
 const HelpCenterPopular: React.FC = () => {
@@ -12,20 +13,20 @@ const HelpCenterPopular: React.FC = () => {
   return (
     <Box className={classes.root}>
       <Typography variant="h6"><Text translation="help.popular.resources" /></Typography>
-      <List dense disablePadding classes={{ root: classes.list }}>
-        <ListItem button>
+      <MenuList dense disablePadding classes={{ root: classes.list }}>
+        <HelpCenterExtarnalLink href="//help.{env}enlil.io/release_notes.html">
           <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
           <ListItemText><Text translation="help.release.notes" /></ListItemText>
-        </ListItem>
-        <ListItem button>
+        </HelpCenterExtarnalLink>
+        <HelpCenterExtarnalLink href="//help.{env}enlil.io/faqs.html">
           <ListItemIcon><FAQsIcon /></ListItemIcon>
           <ListItemText><Text translation="help.faqs" /></ListItemText>
-        </ListItem>
-        <ListItem button>
+        </HelpCenterExtarnalLink>
+        <HelpCenterExtarnalLink href="//help.{env}enlil.io/">
           <ListItemIcon><GuidesIcon /></ListItemIcon>
           <ListItemText><Text translation="help.view.all.guides" /></ListItemText>
-        </ListItem>
-      </List>
+        </HelpCenterExtarnalLink>
+      </MenuList>
     </Box>
   );
 };

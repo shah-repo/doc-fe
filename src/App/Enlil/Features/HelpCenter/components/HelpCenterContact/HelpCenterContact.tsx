@@ -1,9 +1,9 @@
-import { Box, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Box, ListItemIcon, ListItemText, MenuList } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as LinkOutIcon } from "../../../../../../assets/images/link-out.svg";
 import { ReactComponent as SendIcon } from "../../../../../../assets/images/send.svg";
 import Text from "../../../../../../ui/components/Text";
-import openNewTab from "../../utils/openNewTab";
+import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
 import useStyles from "./HelpCenterContact.styles";
 
 const HelpCenterContact: React.FC = () => {
@@ -11,8 +11,8 @@ const HelpCenterContact: React.FC = () => {
 
   return (
     <Box>
-      <List disablePadding classes={{ root: classes.list }}>
-        <ListItem button onClick={openNewTab("//enlil.happyfox.com/new/")}>
+      <MenuList disablePadding classes={{ root: classes.list }}>
+        <HelpCenterExternalLink href="//enlil.happyfox.com/new/">
           <ListItemIcon><SendIcon /></ListItemIcon>
           <ListItemText>
             <Box>
@@ -23,8 +23,8 @@ const HelpCenterContact: React.FC = () => {
               <LinkOutIcon />
             </Box>
           </ListItemText>
-        </ListItem>
-      </List>
+        </HelpCenterExternalLink>
+      </MenuList>
     </Box>
   );
 };
