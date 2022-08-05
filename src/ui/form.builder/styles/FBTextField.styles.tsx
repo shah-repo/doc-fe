@@ -10,7 +10,7 @@ export const FBTextFieldStyles = makeStyles(() =>
         "fontWeight": 400,
         "fontSize": 14,
         "&.MuiInputBase-multiline": {
-          height: 122,
+          height: rows && rows.rows > 1 ? rows.rows * 17 : 40,
           padding: 0,
         },
         "& fieldset": {
