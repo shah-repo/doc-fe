@@ -245,8 +245,10 @@ Cypress.Commands.add("usrVerifyHistoryButton", () => {
 });
 
 Cypress.Commands.add("usrHistoryClickOpenButton", () => {
-  cy.get("[data-cy=\"um-open-history-panel\"]").arrowClick();
-  cy.listLoadingElementShouldNotExist();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetUsersAudit, () => {
+    cy.get("[data-cy=\"um-open-history-panel\"]").arrowClick();
+    cy.listLoadingElementShouldNotExist();
+  });
 });
 
 Cypress.Commands.add("usrHistoryVerifyCreator", (params: { name: string }) => {
