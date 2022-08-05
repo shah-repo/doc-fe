@@ -52,7 +52,7 @@ const HelpCenter: React.FC = () => {
       {currentModuleContent && (
         <HelpCenterContent
           content={currentModuleContent}
-          isOpen={contentDialog.isOpen}
+          isOpen={contentDialog.isOpen || true}
           handleCloseDialog={contentDialog.close}
         />
       )}
