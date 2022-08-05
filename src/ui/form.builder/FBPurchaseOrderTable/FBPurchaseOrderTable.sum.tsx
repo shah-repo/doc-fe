@@ -48,7 +48,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
               onClick={() => handleItem && handleItem(item)}
             >
               {mode === "preview" && !(item?.type === "service") &&
-                <FBTableCell align="right">
+                <FBTableCell align="center">
                   <Button
                     variant="outlined"
                     className={lotButtonStyles.lotButton}
