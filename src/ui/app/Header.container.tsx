@@ -20,6 +20,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   const toggleCustomLabels = () => {
     dispatch(authActions.toggleCustomLabels(!customLabelsValue));
   };
+  // TODO Use single header component
   return (
     <>
       {isNewDashboard && (
