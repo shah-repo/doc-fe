@@ -8,7 +8,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const HelpCenterExtarnalLink: React.FC<Props> = ({ href, children }) => (
+const HelpCenterExternalLink: React.FC<Props> = ({ href, children }) => (
   <MenuItem
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
@@ -21,4 +21,4 @@ const HelpCenterExtarnalLink: React.FC<Props> = ({ href, children }) => (
   </MenuItem>
 );
 
-export default HelpCenterExtarnalLink;
+export default HelpCenterExternalLink;
