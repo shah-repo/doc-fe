@@ -66,7 +66,7 @@
   "errors.somethingWentWrong": "Something went wrong, please try again",
   "fields.select.none": "None",
   "table.column.actions": "Actions",
-  "receiving.table.header.text": "Select a line to receive against",
+  "receiving.table.header.text": "Select a line item to receive against",
   "table.no.results.found": "No results found",
   "environment.DEV_THEME": "DEVELOPMENT",
   "environment.DEMO_THEME": "DEMO",
