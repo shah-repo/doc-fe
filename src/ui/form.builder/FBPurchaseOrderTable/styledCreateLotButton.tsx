@@ -6,7 +6,7 @@ const styles = makeStyles((theme) => ({
     "margin": 0,
     "boxShadow": "none",
     "height": "30px",
-    "padding": `${theme.spacing(0.93)}px ${theme.spacing(1.25)}px`,
+    "padding": "7.5px 10px",
     "color": Colors.navy,
     "border": `1px solid ${Colors.navy}`,
     "borderRadius": 4,

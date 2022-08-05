@@ -10,7 +10,7 @@ import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell } from "..";
 import Text from "../../components/Text";
 import { FBTableCellStyles } from "../styles/FBTableCell.styles";
 import { FBPurchaseOrderTableSumProps } from "./FBPurchaseOrderTable.types";
-import createLot from "./styledCreateLotButton";
+import createLotButtonStyles from "./styledCreateLotButton";
 
 
 const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumProps> = ({
@@ -22,7 +22,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
   mode,
 }) => {
   const cellStyle = FBTableCellStyles();
-  const lotButtonStyles = createLot();
+  const lotButtonStyles = createLotButtonStyles();
 
   return (
     <Table className={classes?.table}>
