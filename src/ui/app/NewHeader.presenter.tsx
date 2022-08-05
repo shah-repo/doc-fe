@@ -5,6 +5,7 @@ import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import HelpCenter from "../../App/Enlil/Features/HelpCenter/HelpCenter";
 import Text from "../components/Text";
 import Colors from "../layout/theme/utils/colors";
 import AutosaveToggle from "./autosave/autosave";
@@ -63,6 +64,7 @@ const Header: React.FunctionComponent<Props> = ({
               />
             )}
             <AutosaveToggle/>
+            <HelpCenter />
           </Box>
         </Grid>
       </Grid>
