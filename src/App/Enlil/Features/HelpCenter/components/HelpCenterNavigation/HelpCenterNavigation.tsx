@@ -5,6 +5,7 @@ import { ReactComponent as HelpIcon } from "../../../../../../assets/images/help
 import { ReactComponent as ReleaseNotesIcon } from "../../../../../../assets/images/release-notes.svg";
 import { ReactComponent as SendIcon } from "../../../../../../assets/images/send.svg";
 import Text from "../../../../../../ui/components/Text";
+import StaticHelpLinks from "../../data/static-links";
 import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
 
 interface Props {
@@ -28,16 +29,16 @@ const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, handleCloseMenu, hand
       <ListItemIcon><HelpIcon /></ListItemIcon>
       <ListItemText><Text translation="help.guides" /></ListItemText>
     </MenuItem>
-    <HelpCenterExternalLink href="//help.{env}enlil.io/release_notes.html">
+    <HelpCenterExternalLink href={StaticHelpLinks.ReleaseNotes}>
       <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
       <ListItemText><Text translation="help.release.notes" /></ListItemText>
     </HelpCenterExternalLink>
-    <HelpCenterExternalLink href="//help.{env}enlil.io/faqs.html">
+    <HelpCenterExternalLink href={StaticHelpLinks.FAQs}>
       <ListItemIcon><FAQsIcon /></ListItemIcon>
       <ListItemText><Text translation="help.faqs" /></ListItemText>
     </HelpCenterExternalLink>
     <Divider />
-    <HelpCenterExternalLink href="//enlil.happyfox.com/new/">
+    <HelpCenterExternalLink href={StaticHelpLinks.Contact}>
       <ListItemIcon><SendIcon /></ListItemIcon>
       <ListItemText><Text translation="help.contact" /></ListItemText>
     </HelpCenterExternalLink>

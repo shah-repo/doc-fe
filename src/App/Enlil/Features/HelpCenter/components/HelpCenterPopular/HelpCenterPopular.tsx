@@ -4,6 +4,7 @@ import { ReactComponent as FAQsIcon } from "../../../../../../assets/images/faqs
 import { ReactComponent as GuidesIcon } from "../../../../../../assets/images/help-guide.svg";
 import { ReactComponent as ReleaseNotesIcon } from "../../../../../../assets/images/release-notes.svg";
 import Text from "../../../../../../ui/components/Text";
+import StaticHelpLinks from "../../data/static-links";
 import HelpCenterExtarnalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
 import useStyles from "./HelpCenterPopular.styles";
 
@@ -14,15 +15,15 @@ const HelpCenterPopular: React.FC = () => {
     <Box className={classes.root}>
       <Typography variant="h6"><Text translation="help.popular.resources" /></Typography>
       <MenuList dense disablePadding classes={{ root: classes.list }}>
-        <HelpCenterExtarnalLink href="//help.{env}enlil.io/release_notes.html">
+        <HelpCenterExtarnalLink href={StaticHelpLinks.ReleaseNotes}>
           <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
           <ListItemText><Text translation="help.release.notes" /></ListItemText>
         </HelpCenterExtarnalLink>
-        <HelpCenterExtarnalLink href="//help.{env}enlil.io/faqs.html">
+        <HelpCenterExtarnalLink href={StaticHelpLinks.FAQs}>
           <ListItemIcon><FAQsIcon /></ListItemIcon>
           <ListItemText><Text translation="help.faqs" /></ListItemText>
         </HelpCenterExtarnalLink>
-        <HelpCenterExtarnalLink href="//help.{env}enlil.io/">
+        <HelpCenterExtarnalLink href={StaticHelpLinks.Guides}>
           <ListItemIcon><GuidesIcon /></ListItemIcon>
           <ListItemText><Text translation="help.view.all.guides" /></ListItemText>
         </HelpCenterExtarnalLink>

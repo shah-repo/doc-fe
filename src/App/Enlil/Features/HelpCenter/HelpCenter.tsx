@@ -6,11 +6,11 @@ import { ReactComponent as HelpIcon } from "../../../../assets/images/help-md.sv
 import useDialog from "../../../../ui/hooks/useDialog";
 import HelpCenterContent from "./components/HelpCenterContent/HelpCenterContent";
 import HelpCenterNavigation from "./components/HelpCenterNavigation/HelpCenterNavigation";
-import helpContentEn from "./data/en.json";
+import en from "./data/content-en.json";
 import { AppModules } from "./HelpCenter.types";
 
 const helpContent = {
-  en: helpContentEn,
+  en,
 };
 
 const HelpCenter: React.FC = () => {

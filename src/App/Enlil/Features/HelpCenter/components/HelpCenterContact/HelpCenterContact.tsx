@@ -3,6 +3,7 @@ import React from "react";
 import { ReactComponent as LinkOutIcon } from "../../../../../../assets/images/link-out.svg";
 import { ReactComponent as SendIcon } from "../../../../../../assets/images/send.svg";
 import Text from "../../../../../../ui/components/Text";
+import StaticHelpLinks from "../../data/static-links";
 import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
 import useStyles from "./HelpCenterContact.styles";
 
@@ -12,7 +13,7 @@ const HelpCenterContact: React.FC = () => {
   return (
     <Box>
       <MenuList disablePadding classes={{ root: classes.list }}>
-        <HelpCenterExternalLink href="//enlil.happyfox.com/new/">
+        <HelpCenterExternalLink href={StaticHelpLinks.Contact}>
           <ListItemIcon><SendIcon /></ListItemIcon>
           <ListItemText>
             <Box>
