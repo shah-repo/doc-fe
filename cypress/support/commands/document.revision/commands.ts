@@ -93,6 +93,8 @@ declare global {
       drReleaseDocAfterRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
       drNewTypeTrainingSelect(): Chainable<Subject>;
       drClickDAMEditBtn(): Chainable<Subject>;
+      drEditAddApprovingGroups(params: {eq: number}, ...groups: string[]): Chainable<Subject>;
+      drEditRemoveApprovingGroups(params: {eq: number}, ...groups: string[]): Chainable<Subject>;
 
       /* Document Approval Matrix End */
       drCreateNewDocumentFromForm(): Chainable<Subject>;
@@ -195,6 +197,19 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
 
 Cypress.Commands.add("drClickDAMEditBtn", () => {
   cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
+});
+
+Cypress.Commands.add("drEditAddApprovingGroups", (params: {eq: number}, ...groups: string[]) => {
+  groups.forEach((item) => {
+    cy.get(`[data-cy="dar-built-in.${params.eq}.groups"]`).autocompleteSelect(item);
+  });
+});
+
+Cypress.Commands.add("drEditRemoveApprovingGroups", (params: {eq: number}, ...groups: string[]) => {
+  groups.forEach((item) => {
+    cy.get(`[data-cy="dar-built-in.${params.eq}.groups"]`).parent()
+      .contains(item).parent().parent().find("svg").arrowClick();
+  });
 });
 
 Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string; status: string}) => {
@@ -969,4 +984,3 @@ Cypress.Commands.add("drPatchDocType", (params: {
   }).then((response) => response ? response.body : {})
     .then((response) => JSON.stringify(response));
 });
-

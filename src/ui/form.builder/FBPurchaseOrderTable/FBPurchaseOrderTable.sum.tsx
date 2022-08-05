@@ -27,6 +27,9 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
     <Table className={classes?.table}>
       <TableHead>
         <TableRow>
+          <FBTableCell colSpan={1} />
+        </TableRow>
+        <TableRow>
           {mode === "preview" && <FBTableCell />}
           {mode !== "preview" && <FBTableCell label="form.builder.field.tax" align="right"
             className={`${cellStyle.cellFont} ${cellStyle.cellFontWeightLow}`}

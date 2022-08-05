@@ -1292,6 +1292,9 @@ context("Approval dates for AR and approval block", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: `Can you please approve my request`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
       cy.wait(20000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {

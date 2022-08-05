@@ -387,8 +387,6 @@ context("Records Inline approval email popup modal", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log("emailsFromInbox", emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,

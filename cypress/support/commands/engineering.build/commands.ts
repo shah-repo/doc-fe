@@ -16,6 +16,12 @@ declare global {
       ebApprove(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
+      ebClickCloneEB(): Chainable<Subject>;
+      ebCloneClickYes(): Chainable<Subject>;
+      ebCloneClickNo(): Chainable<Subject>;
+      ebCloneClickContinue(): Chainable<Subject>;
+      ebAddMaterialDocument(params: { title: string; value: string; name: string }): Chainable<Subject>;
+      ebAddEquipmentDocument(params: { title: string }): Chainable<Subject>;
       ebClickCloneFromMenu(): Chainable<Subject>;
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
@@ -73,6 +79,40 @@ Cypress.Commands.add("ebClickCloneFromMenu", () => {
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebClickCloneEB", () => {
+  cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
+});
+
+Cypress.Commands.add("ebCloneClickYes", () => {
+  cy.get("[class^=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").eq(3).arrowClick();
+});
+
+Cypress.Commands.add("ebCloneClickNo", () => {
+  cy.get("[class^=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").eq(4).arrowClick();
+});
+
+Cypress.Commands.add("ebCloneClickContinue", () => {
+  cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
+});
+
+Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: string; name: string }) => {
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.get("[name=\"quantity\"]").arrowType(params.value);
+  cy.get("[data-cy=\"unit\"]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.name).arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+});
+
+Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
+  cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.unClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
 Cypress.Commands.add("ebSelectFirstDocument", () => {

@@ -25,6 +25,7 @@ export const getCurrentDate = (format) => moment().tz(TIME_ZONE).format(format);
 
 export enum MomentFormats {
   MonthDateYear = "M/D/YYYY",
+  MonthDateYearTwoDigit = "MM/DD/YYYY",
   MonthDateYearAlt = "MMMM D, YYYY",
   DateTime = "MMMM D, YYYY hh:mm A",
   BriefDate = "MMM D, YYYY",
