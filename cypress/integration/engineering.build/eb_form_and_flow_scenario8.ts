@@ -760,13 +760,13 @@ context("Procedure and parts flow test", () => {
     });
 
     it("remove Component EB procedure Edited ", () => {
-      cy.fbRemoveComponemt();
+      cy.fbRemoveComponent();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.fbRemoveComponemt();
+      cy.fbRemoveComponent();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.fbRemoveComponemt();
+      cy.fbRemoveComponent();
     });
 
     it("Add component again", () => {
@@ -810,22 +810,22 @@ context("Procedure and parts flow test", () => {
       //   cy.fbImportTemplate({ fileName: "EB_Document.json", saveFileName: "EB_Document.json" });
       // });
 
-      it("select EB procedure component", () => {
+      it("Add component", () => {
         cy.fbAddNewFieldWhenHidden();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
-        cy.get("[value=\"copyableValue\"]").check();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbAddLabelName({ name: "Textfield for eb test" });
         cy.fbAddField();
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").eq(2).arrowClick({ force: true });
-        cy.get("[data-cy=\"label\"]").clear();
-        cy.fbEnterLabel({ label: "EB Procedure Edited" });
+        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
+        cy.fbAddLabelName({ name: "Textfield for eb test Edited" });
         cy.fbAddField();
       });
 
-      it("remove Component EB procedure Edited ", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").eq(2).arrowClick({ force: true });
+      it("remove Component", () => {
+        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -840,7 +840,7 @@ context("Procedure and parts flow test", () => {
         cy.get(`button[id="DocumentByTypeListPresenter-openDocRev"]`).arrowClick();
       });
 
-      it("Add component again", () => {
+      it("Add component", () => {
         cy.fbAddNewFieldWhenHidden();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for eb test" });
@@ -854,7 +854,7 @@ context("Procedure and parts flow test", () => {
         cy.fbAddField();
       });
 
-      it("remove Component EB procedure Edited ", () => {
+      it("remove Component", () => {
         cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1005,7 +1005,7 @@ context("Procedure and parts flow test", () => {
           cy.fbAddField();
         });
 
-        it("remove Component EB procedure Edited ", () => {
+        it("remove Component", () => {
           cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
