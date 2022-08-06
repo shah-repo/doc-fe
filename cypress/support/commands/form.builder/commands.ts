@@ -34,7 +34,7 @@ declare global {
       fbOpenValidation(): Chainable<Subject>;
       fbFieldRequired(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
-      fbRemoveComponemt(): Chainable<Subject>;
+      fbRemoveComponent(): Chainable<Subject>;
       fbSelectField(): Chainable<Subject>;
       fbAddLabelName(params: { name: string }): Chainable<Subject>;
       fbAddApproverToInlineDialog(params: { approverName: string }): Chainable<Subject>;
@@ -331,7 +331,7 @@ Cypress.Commands.add("fbFieldRequired", () =>
 Cypress.Commands.add("fbAddField", () =>
   cy.get("button[data-cy=\"fb-editor-actions-add\"]").arrowClick());
 
-Cypress.Commands.add("fbRemoveComponemt", () =>
+Cypress.Commands.add("fbRemoveComponent", () =>
   cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true }));
 
 Cypress.Commands.add("fbEditHiddenBtn", () =>
