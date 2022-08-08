@@ -7,7 +7,10 @@ export const styles = makeStyles({
     paddingLeft: "16px",
     justifyContent: "space-between",
   },
-  mainDiv: {
+  fullWidth: {
+    width: "100%",
+  },
+  headerDiv: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-start",
@@ -42,7 +45,7 @@ export const styles = makeStyles({
       backgroundColor: "transparent",
     },
   },
-  fulllengthButton: {
+  fullLengthButton: {
     width: "100%",
     borderStyle: "dashed",
     borderColor: "blue",

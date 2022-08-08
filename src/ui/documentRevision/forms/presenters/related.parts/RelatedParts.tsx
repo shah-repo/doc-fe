@@ -1,21 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import {
   Button,
+  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
-  Grid,
+  Grid, Paper,
   Radio,
   RadioGroup,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import { get } from "lodash";
+
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
-import { RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
+import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton } from "../../../../form.builder";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -25,7 +32,9 @@ import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 // import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
+import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
+import { get } from "lodash";
 import { styles } from "./RelatedPart.styles";
 
 interface Props {
@@ -109,7 +118,7 @@ const ParentPartSelector: React.FunctionComponent<{
           <FormControlLabel
             value={RELATED_STATUS.PARENT_SEPARATE}
             control={<Radio color="primary" disableRipple={true} />}
-            label="Yes, Child Released Seperately"
+            label="Yes, Child Released Separately"
             disabled={disable.disable3}
           />
         </RadioGroup>
@@ -130,9 +139,32 @@ const RelatedPartGrid: React.FunctionComponent<{
   const classes = styles();
 
   const [visible, setVisible] = useState([{ show: "" }]);
+  const [relatedPartsList, setRelatedPartsList] = useState<RelatedPartsListItem[]>([]);
 
-  const AddRelatedPartHandler = () => {
+  const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
+  const fetchRelatedPartsAsync = useAsync({
+    onSuccess: (relatedPartsList) => {
+      console.log(relatedPartsList);
+      setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
+    },
+  });
+
+  const addRelatedPartHandler = () => {
     setVisible([...visible, { show: "" }]);
+  };
+
+  useEffect(() => {
+    // const promise = apiClient().get(`${RELATED_PARTS_ROOT_URL}/${documentRevision.document.id}`).promise;
+    // promise.then((relatedPartsList) => {
+    //   console.log(relatedPartsList);
+    //   setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
+    // });
+    fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentRevision.document.id, fetchRelatedPartsAsync);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const voidRelatedPart = (listItem) => {
+    console.log(listItem);
   };
 
   return (
@@ -149,7 +181,7 @@ const RelatedPartGrid: React.FunctionComponent<{
             <Button
               color="primary"
               startIcon={<AddCircleIcon color="primary" />}
-              onClick={AddRelatedPartHandler}
+              onClick={addRelatedPartHandler}
             >
               Add Related part
             </Button>
@@ -157,20 +189,16 @@ const RelatedPartGrid: React.FunctionComponent<{
         </Grid>
       </Grid>
       <div>
-        <div className={classes.mainDiv}>
-          <div style={{ paddingLeft: "10%" }}>DOC ID</div>
-          <div>TITLE</div>
-          <div style={{ paddingRight: "10%" }}>OBSELETE</div>
-        </div>
+        <RelatedPartList list={relatedPartsList} voidRelatedPart = {voidRelatedPart}></RelatedPartList>
         {visible.map((singleShow, index) => index > 0 && singleShow &&
           <RelatedPartEditRow documentRevision={documentRevision} createNewDocument={createNewDocument} key={index} />)}
         {
           <Button
-            className={classes.fulllengthButton}
+            className={classes.fullLengthButton}
             variant="outlined"
             color="primary"
             startIcon={<AddOutlinedIcon />}
-            onClick={AddRelatedPartHandler}
+            onClick={addRelatedPartHandler}
           >
             ADD RELATED PART
           </Button>
@@ -178,6 +206,59 @@ const RelatedPartGrid: React.FunctionComponent<{
       </div>
       <Divider />
     </>
+  );
+};
+
+
+const RelatedPartList: React.FunctionComponent<{
+  list: RelatedPartsListItem[];
+  voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+}> = ({
+  list,
+  voidRelatedPart,
+}) => {
+  const classes = styles();
+  return (
+    <Paper className={classes.fullWidth}>
+      <div className={classes.fullWidth}>
+        <Table stickyHeader aria-label="related parts table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center" style={{ minWidth: "320px" }}>DOC ID</TableCell>
+              <TableCell align="center" style={{ flex: "1 1 100%" }}>TITLE</TableCell>
+              <TableCell align="center" style={{ minWidth: "100px" }}>OBSOLETE</TableCell>
+              <TableCell align="center" style={{ minWidth: "100px" }}></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {list.map((listItem: RelatedPartsListItem) => {
+              const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
+              || listItem.status === DocumentRevisionStatus.Voided;
+              return (
+                <TableRow hover key={listItem.documentRevisionId}>
+                  <TableCell align="center">
+                    {listItem.rootDocId}
+                  </TableCell>
+                  <TableCell align="center">
+                    {listItem.name}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Checkbox
+                      checked={isVoided}
+                      disabled={isVoided}
+                      onChange={(e) => voidRelatedPart(listItem)}
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <RemoveRedEyeIcon color="primary"></RemoveRedEyeIcon>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </Paper>
   );
 };
 
@@ -240,7 +321,7 @@ const RelatedParts: React.FunctionComponent<Props> = ({
   const [parentStatus, setParentStatus] = useState(parentPartStatus);
 
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
-  const async = useAsync<DocumentRevision>({
+  const createPartAsync = useAsync({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
         console.log(createdDocumentRevision);
@@ -249,7 +330,7 @@ const RelatedParts: React.FunctionComponent<Props> = ({
   });
 
   const createParentPartChoiceAction = useActionCreator(relatedPartsActions.parentPartChoiceAction);
-  const async1 = useAsync<any>({
+  const parentChoiceAsync = useAsync<any>({
     onSuccess: (data) => {
       if (data) {
         console.log(data);
@@ -292,8 +373,8 @@ const RelatedParts: React.FunctionComponent<Props> = ({
       };
     }
 
-    console.log(documentRevision, docDto);
-    async.start(createRelatedPartAction, documentRevision.document.id, docDto, async);
+    // console.log(documentRevision, docDto);
+    createPartAsync.start(createRelatedPartAction, documentRevision.document.id, docDto, createPartAsync);
   };
 
 
@@ -302,11 +383,11 @@ const RelatedParts: React.FunctionComponent<Props> = ({
 
     // Make an API call to persist the parent row.
     if (value) {
-      async1.start(createParentPartChoiceAction, {
+      parentChoiceAsync.start(createParentPartChoiceAction, {
         documentId: documentRevision.documentId,
         rootDocId: documentRevision.document?.docId,
         relatedStatus: value,
-      }, async1);
+      }, parentChoiceAsync);
     }
   };
 

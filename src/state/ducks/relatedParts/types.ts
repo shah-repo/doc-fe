@@ -6,8 +6,18 @@ export enum RELATED_STATUS {
   PARENT_TOGETHER = "parent_together"
 }
 
-export interface RelatedPartsChocieRequestBody {
+export interface RelatedPartsChoiceRequestBody {
   documentId: string;
   rootDocId: string;
   relatedStatus: RELATED_STATUS;
+}
+
+export interface RelatedPartsListItem {
+  documentId: string;
+  rootDocId: string;
+  suffixNumber: number;
+  suffixName: string;
+  documentRevisionId: string;
+  name: string;
+  status: string;
 }
