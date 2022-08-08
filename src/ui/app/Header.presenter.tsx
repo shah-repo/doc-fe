@@ -1,4 +1,4 @@
-import { FormControlLabel, Grid, Switch } from "@material-ui/core";
+import { FormControlLabel, Grid, Switch, Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,6 +8,8 @@ import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
 
 interface Props extends WithStyles<typeof styles> {
+  name: string;
+  fullHeight?: boolean;
   toggleCustomLabels: () => void;
   customLabelsValue: boolean;
   canToggleCustomLabels: boolean;
@@ -15,6 +17,8 @@ interface Props extends WithStyles<typeof styles> {
 
 const Header: React.FunctionComponent<Props> = ({
   classes,
+  name,
+  fullHeight,
   toggleCustomLabels,
   customLabelsValue,
   canToggleCustomLabels,
@@ -27,6 +31,13 @@ const Header: React.FunctionComponent<Props> = ({
         justify="flex-end"
         wrap="nowrap"
       >
+        {fullHeight && (
+          <Typography variant="caption" className={classes.welcomeText}>
+            <Text translation="header.welcome.back" />,
+            {" "}
+            <b className={classes.welcomeTextName}>{name}!</b>
+          </Typography>
+        )}
         {canToggleCustomLabels && (
           <FormControlLabel
             control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}

@@ -4,6 +4,8 @@ import Colors from "../layout/theme/utils/colors";
 import { DRAWER_WIDTH } from "./Navigation.styles";
 
 export const HEADER_HEIGHT = 48;
+export const HEADER_HEIGHT_FULL = 160;
+export const HEADER_GAP = 96;
 
 export default (theme: Theme) =>
   createStyles({
@@ -11,12 +13,17 @@ export default (theme: Theme) =>
       position: "absolute",
       background: `linear-gradient(260deg, ${Colors.cerulean}, ${Colors.ultramarine_blue} 17%, #011FBB 85%)`,
       marginLeft: DRAWER_WIDTH,
-      fontSize: "1rem",
       color: Colors.white,
+      zIndex: 1,
     },
-    toolbar: {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    toolbar: (props) => ({
       "marginLeft": DRAWER_WIDTH,
-      "minHeight": HEADER_HEIGHT,
+      "minHeight": props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
+      "paddingBottom": props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
+      "paddingLeft": theme.spacing(props.fullHeight ? 8 : 3),
+      "paddingRight": theme.spacing(props.fullHeight ? 4 : 3),
       "&::before": {
         content: "''",
         position: "absolute",
@@ -27,7 +34,7 @@ export default (theme: Theme) =>
         backgroundRepeat: "no-repeat",
         backgroundImage: `url(${EnlilLogo})`,
       },
-    },
+    }),
     welcomeText: {
       fontSize: "1.75rem",
       lineHeight: 1.2,
