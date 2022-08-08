@@ -126,6 +126,7 @@ context("Document voiding Flow", () => {
   context("Document in VOIDED", () => {
     it("Checks if document status is VOIDED after voiding a document", () => {
       SystemRequirement("REQ-0020");
+      cy.wait(2000);
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
