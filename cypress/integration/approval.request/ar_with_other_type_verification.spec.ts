@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -212,6 +213,20 @@ context("Approval request implementation tasks", () => {
       cy.fbAddNewFieldButton();
     });
 
+
+    it("Verify Edit, Move and Remove", () => {
+      cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+      cy.fbAddNewFieldButton();
+      cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
+      cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
+      cy.dragAndDrop({
+        fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
+        toSelector: `[class="drag-handle"]`,
+      });
+    });
+
+
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -249,6 +264,10 @@ context("Approval request implementation tasks", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Check status should be Draft", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Add TextField", () => {
@@ -294,6 +313,19 @@ context("Approval request implementation tasks", () => {
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
       cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
       cy.fbAddNewFieldButton();
+    });
+
+    it("Verify Edit, Move and Remove", () => {
+      cy.get("[id=sm-tabpanel-0 ul]");
+      cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+      cy.fbAddNewFieldButton();
+      cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
+      cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
+      cy.dragAndDrop({
+        fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
+        toSelector: `[class="drag-handle"]`,
+      });
     });
 
     it("Approve and release FORM document", () => {
