@@ -33,6 +33,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
       {
         name: `${kebabCase("lhr-step")}-${FB.uniqid}`,
         type: "lhrstep",
+        label: "LHR Step",
         index,
         tabId: _tabsState?.tabID,
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
