@@ -34,12 +34,16 @@ export default (theme: Theme) =>
         backgroundRepeat: "no-repeat",
         backgroundImage: `url(${EnlilLogo})`,
       },
+      "& .MuiFormControlLabel-label": {
+        whiteSpace: "nowrap",
+      },
     }),
     welcomeText: {
       fontSize: "1.75rem",
       lineHeight: 1.2,
       fontWeight: 300,
       flexGrow: 1,
+      marginRight: theme.spacing(4),
     },
     welcomeTextName: {
       fontWeight: 700,

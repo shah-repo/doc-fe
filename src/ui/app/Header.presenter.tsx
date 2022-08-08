@@ -25,12 +25,7 @@ const Header: React.FunctionComponent<Props> = ({
 }) => (
   <AppBar className={classes.appBar}>
     <Toolbar className={classes.toolbar}>
-      <Grid
-        container={true}
-        alignItems="flex-end"
-        justify="flex-end"
-        wrap="nowrap"
-      >
+      <Grid container alignItems="center" justify="flex-end" wrap="nowrap">
         {fullHeight && (
           <Typography variant="caption" className={classes.welcomeText}>
             <Text translation="header.welcome.back" />,
