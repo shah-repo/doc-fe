@@ -21,7 +21,7 @@ export const styles = makeStyles(() =>
       "top": formDocument ? 46 : 40,
       "bottom": 0,
       "right": 0,
-      "backgroundColor": Colors.light_gray,
+      "backgroundColor": Colors.alabaster,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
         display: "none",
