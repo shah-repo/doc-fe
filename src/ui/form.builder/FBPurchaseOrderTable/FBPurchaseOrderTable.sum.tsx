@@ -8,9 +8,9 @@ import React from "react";
 import { FormattedNumber } from "react-intl";
 import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell } from "..";
 import Text from "../../components/Text";
-import { FBButtonStyles } from "../styles/FBButton.styles";
 import { FBTableCellStyles } from "../styles/FBTableCell.styles";
 import { FBPurchaseOrderTableSumProps } from "./FBPurchaseOrderTable.types";
+import createLotButtonStyles from "./styledCreateLotButton";
 
 
 const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumProps> = ({
@@ -22,7 +22,8 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
   mode,
 }) => {
   const cellStyle = FBTableCellStyles();
-  const buttonStyles = FBButtonStyles();
+  const lotButtonStyles = createLotButtonStyles();
+
   return (
     <Table className={classes?.table}>
       <TableHead>
@@ -47,10 +48,10 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
               onClick={() => handleItem && handleItem(item)}
             >
               {mode === "preview" && !(item?.type === "service") &&
-                <FBTableCell align="right">
+                <FBTableCell align="center">
                   <Button
-                    variant="contained"
-                    className={buttonStyles.button}
+                    variant="outlined"
+                    className={lotButtonStyles.lotButton}
                     onClick={(e) => handleLot && handleLot(e, item)}>
                     <Text translation="form.builder.po.create.a.lot" />
                   </Button>

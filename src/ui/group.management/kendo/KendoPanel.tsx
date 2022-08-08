@@ -417,6 +417,9 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     />
   ;
 
+  const nameCell = (props: GridCellProps) =>
+    <NameCell {...props} />;
+
   const employeeCell = (props: GridCellProps) =>
     <EmployeesCell {...props} employees={activeEmployees} />;
 
@@ -453,7 +456,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
 
   const fieldToCellMapping = {
     "memberNames": employeeCell,
-    "name": NameCell,
+    "name": nameCell,
     "groupType": groupCell,
     "formattedPermissions": permissionCell,
     "parentName": parentCell,
