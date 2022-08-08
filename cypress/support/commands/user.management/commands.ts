@@ -161,7 +161,7 @@ Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
 
 Cypress.Commands.add("usrClickSaveButton", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
-    cy.get("button>span>svg>path").eq(1).arrowClick();
+    cy.get("button>span>svg>path").eq(1).arrowClick({ force: true });
   });
   cy.checkToastMessage({ exists: false });
   cy.landingPageLoadingElementShouldNotExist();
