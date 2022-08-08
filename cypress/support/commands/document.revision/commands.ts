@@ -214,7 +214,7 @@ Cypress.Commands.add("drEditRemoveApprovingGroups", (params: {eq: number}, ...gr
 
 Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string; status: string}) => {
   cy.get(" [data-cy=\"HeaderInfo-Rev\"]").should("have.text", params.revision);
-  cy.get(" [data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
+  cy.get(" div[data-cy=\"HeaderInfo-status\"]>span").should("contain", params.status);
 });
 
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
@@ -504,7 +504,7 @@ Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", params.status);
+  cy.get(`div[data-cy="HeaderInfo-status"]>span`).contains(params.status);
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {
@@ -556,7 +556,7 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick({ force: true });
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
@@ -643,7 +643,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true });
-  cy.get("[data-cy='add-user'").eq(2).arrowClick();
+  cy.get("[data-cy='add-user'").eq(2).arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -682,7 +682,7 @@ Cypress.Commands.add("closeAllAlertMessages", () => {
 
 Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
-    cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+    cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
@@ -690,7 +690,7 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
 });
 
 Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
-  cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+  cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
@@ -823,7 +823,7 @@ Cypress.Commands.add("drOpenCloseSidebarDrawer", () => {
 });
 
 Cypress.Commands.add("drSelectPermissionTab", () => {
-  cy.get("[data-cy=\"permission-icon\"]").arrowClick();
+  cy.get("[data-cy=\"permission-icon\"]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drSelectApprovalRolesTab", () => {

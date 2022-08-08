@@ -838,7 +838,7 @@
   "form.builder.po.line.item": "Purchase Order Line Item",
   "form.builder.po.items.received": "Items Received",
   "form.builder.po.create.lot": "Create Lot",
-  "form.builder.po.create.a.lot": "Create a Lot",
+  "form.builder.po.create.a.lot": "Create Lot",
   "form.builder.po.create.a.lot.error": "You cannot create a Lot for an unreleased Part",
   "form.builder.po.lot.wasnt.created": "Lot couldn't be created",
   "form.builder.po.no.document.lot": "There's no document type LOT",
