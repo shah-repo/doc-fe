@@ -11,10 +11,11 @@ const SearchBox: React.FunctionComponent<Props> = ({ onSearch }) => {
   const classes = styles();
   return (
     <Box className={classes.searchBox}>
-      <IconButton type="submit" size="small" disableRipple>
+      <IconButton type="submit" size="small" disableRipple data-cy="formBuilder-search-btn">
         <SearchIcon className={classes.searchIcon} />
       </IconButton>
-      <InputBase placeholder="Search" onChange={onSearch} className={classes.searchInput} />
+      <InputBase placeholder="Search" data-cy="formBuilder-search-input"
+        onChange={onSearch} className={classes.searchInput} />
     </Box>
   );
 };
