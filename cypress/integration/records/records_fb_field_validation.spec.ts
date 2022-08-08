@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -233,8 +234,13 @@ context("Records flow", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Check status should be Draft", () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      });
+
       it("Verify Add Field section", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.get(`input[placeholder^="Search"]`).should("exist");
         cy.fbVerifySectionsOnAddField("Section", "Inputs", "Approvals", "Custom Controls",
           "Instructions", "Buttons", "Actions");
         cy.fbCheckFieldsExistSectionList("Section", "Subsection", "Step");
@@ -243,7 +249,7 @@ context("Records flow", () => {
           "Blank Template Form", "Quantity", "Timer", "Purchase Order", "Receive Purchase Order",
           "PO Approval Matrix", "Instructions Media upload", "Evidence Media upload", "EB Procedure",
           "PI Procedure", "Equipment", "Text field with range", "Supplier");
-        // cy.fbCheckFieldsDoesntExistOnInputsList("LHR Step");
+        cy.fbCheckFieldsDoesntExistOnInputsList("LHR Step");
         cy.fbCheckFieldsExistApprovalsList("Approvals", "Inline Approval", "Request Approval");
         // cy.fbCheckFieldsExistCustomControlsList("Dynamic form");
         cy.fbCheckFieldsExistInstructionsList("MPI", "Select Document(s)");
@@ -279,6 +285,9 @@ context("Records flow", () => {
           .find(`[class="MuiButtonBase-root MuiIconButton-root"]`)
           .eq(0).should("have.css", "color", "rgb(252, 222, 222)"); */
         cy.get(`input[placeholder^="Search"]`).clear();
+      });
+
+      it("Verify Favorites", () => {
         cy.fbVerifySectionsOnAddField("Favorites");
         cy.fbCheckFieldsExistFavoritesList("Inline Approval");
         cy.get(`[data-cy="Inline Approval"]`).parent()
