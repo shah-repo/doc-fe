@@ -1,18 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { SM } from "../../App";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
-import { HOME_URL } from "../constants/urls";
 import useGetHasTag from "../hooks/useGetHasTag";
 import HeaderPresenter from "./Header.presenter";
 
-type Props = RouteComponentProps;
-
-const HeaderContainer: React.FunctionComponent<Props> = ({
-  location,
-}) => {
-  const fullHeight = location.pathname === HOME_URL;
+const HeaderContainer: React.FC = () => {
+  const fullHeight = SM.isHomeURL;
   const name = useSelector(authSelectors.currentUserName);
   const canToggleCustomLabels = useGetHasTag(GroupTag.LABEL_TOOLTIPS);
   const customLabelsValue = useSelector(authSelectors.isCustomLabelsOn);
@@ -34,4 +29,4 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withRouter(HeaderContainer);
+export default HeaderContainer;
