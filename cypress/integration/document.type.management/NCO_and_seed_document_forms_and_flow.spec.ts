@@ -801,7 +801,6 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Selects company", () => {
-      cy.pause();
       cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
     });
   });
