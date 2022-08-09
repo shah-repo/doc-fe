@@ -57,7 +57,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     }
 
     useObserver(() => {
-      if (workspaceState?.schema?.length) {
+      if (!isEmpty(workspaceState?.schema) && isEmpty(workspaceState?.document?.schema)) {
         schema = workspaceState?.schema;
       }
     });
