@@ -46,7 +46,7 @@ const HelpCenter: React.FC = () => {
       </IconButton>
       <HelpCenterNavigation
         anchorEl={anchorEl}
-        haveGuide={Boolean(currentModuleContent)}
+        hasGuide={Boolean(currentModuleContent)}
         handleCloseMenu={closeMenu}
         handleOpenContent={openContent}
       />

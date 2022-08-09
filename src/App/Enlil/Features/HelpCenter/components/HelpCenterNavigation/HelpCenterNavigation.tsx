@@ -10,7 +10,7 @@ import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternal
 
 interface Props {
   anchorEl: HTMLElement | null;
-  haveGuide: boolean;
+  hasGuide: boolean;
   handleCloseMenu: () => void;
   handleOpenContent: () => void;
 }
@@ -22,19 +22,20 @@ interface GuidesItemProps {
   children: React.ReactNode;
 }
 
-const GuidesLink: React.FC<GuidesItemProps> = ({ external, href, onClick, children }) => (
+const GuidesLink: React.FC<GuidesItemProps> = React.forwardRef(({ external, href, onClick, children }, ref) => (
   external ? (
     <HelpCenterExternalLink href={href}>
       {children}
     </HelpCenterExternalLink>
   ) : (
-    <MenuItem onClick={onClick}>
+    <MenuItem onClick={onClick} innerRef={ref}>
       {children}
     </MenuItem>
   )
-);
+));
+GuidesLink.displayName = "GuidesLink";
 
-const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, haveGuide, handleCloseMenu, handleOpenContent }) => (
+const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, hasGuide, handleCloseMenu, handleOpenContent }) => (
   <Menu
     anchorEl={anchorEl}
     open={Boolean(anchorEl)}
@@ -45,7 +46,7 @@ const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, haveGuide, handleClos
       horizontal: "right",
     }}
   >
-    <GuidesLink external={!haveGuide} href={staticLinks.Guides} onClick={handleOpenContent}>
+    <GuidesLink external={!hasGuide} href={staticLinks.Guides} onClick={handleOpenContent}>
       <ListItemIcon><HelpIcon /></ListItemIcon>
       <ListItemText><Text translation="help.guides" /></ListItemText>
     </GuidesLink>
