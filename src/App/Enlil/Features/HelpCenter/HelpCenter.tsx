@@ -15,36 +15,35 @@ const helpContent = {
 };
 
 const HelpCenter: React.FC = () => {
+  // Navigation
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const closeMenu = () => {
+    setAnchorEl(null);
+  };
+
+  // Content dialog
   const contentDialog = useDialog();
+  const openContent = () => {
+    closeMenu();
+    contentDialog.open();
+  };
 
+  // Module content
   const currentModule = useAppModule();
-  const previousModule = usePreviousValue(currentModule);
+  const { locale, defaultLocale } = useIntl();
+  const localizedContent = get(helpContent, locale, helpContent[defaultLocale]);
+  const currentContent = get(localizedContent, currentModule, null);
 
+  // Subscribe to module changing
+  const previousModule = usePreviousValue(currentModule);
   useEffect(() => {
     if (previousModule && currentModule !== previousModule) {
       contentDialog.close();
     }
   }, [contentDialog, currentModule, previousModule]);
-
-  const { locale, defaultLocale } = useIntl();
-  const localizedHelpContent = get(helpContent, locale, helpContent[defaultLocale]);
-  const currentModuleContent = get(localizedHelpContent, currentModule, null);
-
-  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const closeMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const openContent = () => {
-    if (currentModuleContent) {
-      closeMenu();
-      contentDialog.open();
-    }
-  };
 
   return (
     <>
@@ -53,13 +52,13 @@ const HelpCenter: React.FC = () => {
       </IconButton>
       <HelpCenterNavigation
         anchorEl={anchorEl}
-        hasGuide={Boolean(currentModuleContent)}
+        hasGuide={Boolean(currentContent)}
         handleCloseMenu={closeMenu}
         handleOpenContent={openContent}
       />
-      {currentModuleContent && (
+      {currentContent && (
         <HelpCenterContent
-          content={currentModuleContent}
+          content={currentContent}
           isOpen={contentDialog.isOpen}
           handleCloseDialog={contentDialog.close}
         />
