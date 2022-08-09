@@ -13,5 +13,9 @@ export const styles = makeStyles((theme: Theme) =>
       float: "right",
       marginRight: theme.spacing(1),
     },
+    passwordInput: {
+      height: 40,
+      marginTop: "0 !important",
+    },
   }),
 );
