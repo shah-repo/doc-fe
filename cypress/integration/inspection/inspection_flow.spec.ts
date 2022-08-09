@@ -4,8 +4,10 @@
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { DEFAUL_REV_STAGE } from "../../support/commands";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { Categories } from "../../utils/constants/categories";
@@ -495,20 +497,15 @@ context("Inspection flow", () => {
                 schema: subassemblySchema,
               },
               {
-                documentTypeName: "Finished Good Lot",
-                documentTypeAcronym: "FGL-",
-                group: DOC_TYPE_GROUP.PART_LOT,
-                isQms: true,
-                category: Categories.Parts,
-                schema: FGLandSLSchema,
-                fieldsConfig: FGLandSLFieldsConfig,
-              },
-              {
                 documentTypeName: "Subassembly Lot",
                 documentTypeAcronym: "SA-",
                 group: DOC_TYPE_GROUP.PART_LOT,
+                privateNumberPool: true,
                 isQms: true,
                 category: Categories.Record,
+                needsSignature: true,
+                startingNumber: 1,
+                defaultRevStage: DEFAUL_REV_STAGE.NUMERIC,
                 schema: FGLandSLSchema,
                 fieldsConfig: FGLandSLFieldsConfig,
               },
@@ -1274,10 +1271,6 @@ context("Inspection flow", () => {
       cy.drEnterDocumentTitle({ name: "Inspection Document" });
     });
 
-    it("Add reference to part", () => {
-      cy.drSelectReferences("New Part for Inspection");
-    });
-
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -1288,18 +1281,32 @@ context("Inspection flow", () => {
 
     it("Check 100% override", () => {
       cy.get("[value=\"100% Inspection Override\"]").check();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+    it("Click on save", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Add 'Expiry Date'", () => {
-      cy.get("input[name=expiry-date]").parent().find("button").arrowClick();
-      cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+    it("Add reference to part", () => {
+      cy.drSelectReferences("New Part for inspection");
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on save", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     context("Fill samples with values", () => {
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add 'Expiry Date'", () => {
+        cy.xpath("//input[@name]/ ../div/button").arrowClick();
+        cy.get("button.MuiPickersDay-current").arrowClick();
+      });
+
       it("Insert height for 'SAMPLE-1'", () => {
         cy.get("input[name^=height]").eq(0).arrowType("30");
       });
@@ -1393,17 +1400,17 @@ context("Inspection flow", () => {
         cy.ebApprove();
       });
 
-      it("Check status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Check status is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("Check referenced by parts", () => {
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", `LOT #${lotDateSuffix}04 - A - Inspection Document - 3 Restricted Use`);
+          .should("contain.text", `LOT #${lotDateSuffix}04 - 1 - Inspection Document - 3 Restricted Use`);
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", `LOT #${lotDateSuffix}03 - A - Inspection Document - 2 Use as Is`);
+          .should("contain.text", `LOT #${lotDateSuffix}03 - 1 - Inspection Document - 2 Use as Is`);
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", `LOT #${lotDateSuffix}02 - A - Inspection Document - 4 Rework`);
+          .should("contain.text", `LOT #${lotDateSuffix}02 - 1 - Inspection Document - 4 Rework`);
       });
     });
 
@@ -1423,6 +1430,7 @@ context("Inspection flow", () => {
         });
 
         it("Verify quantity value", () => {
+          cy.drSelectDetailsTab();
           cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "3");
         });
       });
@@ -1442,6 +1450,7 @@ context("Inspection flow", () => {
         });
 
         it("Verify quantity value", () => {
+          cy.drSelectDetailsTab();
           cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "2");
         });
       });
@@ -1461,6 +1470,7 @@ context("Inspection flow", () => {
         });
 
         it("Verify quantity value", () => {
+          cy.drSelectDetailsTab();
           cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "4");
         });
       });
