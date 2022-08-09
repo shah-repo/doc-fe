@@ -5,16 +5,36 @@ import { ReactComponent as HelpIcon } from "../../../../../../assets/images/help
 import { ReactComponent as ReleaseNotesIcon } from "../../../../../../assets/images/release-notes.svg";
 import { ReactComponent as SendIcon } from "../../../../../../assets/images/send.svg";
 import Text from "../../../../../../ui/components/Text";
-import StaticHelpLinks from "../../data/static-links";
+import staticLinks from "../../data/static-links";
 import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
 
 interface Props {
   anchorEl: HTMLElement | null;
+  haveGuide: boolean;
   handleCloseMenu: () => void;
   handleOpenContent: () => void;
 }
 
-const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, handleCloseMenu, handleOpenContent }) => (
+interface GuidesItemProps {
+  external: boolean;
+  href: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+const GuidesLink: React.FC<GuidesItemProps> = ({ external, href, onClick, children }) => (
+  external ? (
+    <HelpCenterExternalLink href={href}>
+      {children}
+    </HelpCenterExternalLink>
+  ) : (
+    <MenuItem onClick={onClick}>
+      {children}
+    </MenuItem>
+  )
+);
+
+const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, haveGuide, handleCloseMenu, handleOpenContent }) => (
   <Menu
     anchorEl={anchorEl}
     open={Boolean(anchorEl)}
@@ -22,23 +42,23 @@ const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, handleCloseMenu, hand
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: "bottom",
-      horizontal: "center",
+      horizontal: "right",
     }}
   >
-    <MenuItem onClick={handleOpenContent}>
+    <GuidesLink external={!haveGuide} href={staticLinks.Guides} onClick={handleOpenContent}>
       <ListItemIcon><HelpIcon /></ListItemIcon>
       <ListItemText><Text translation="help.guides" /></ListItemText>
-    </MenuItem>
-    <HelpCenterExternalLink href={StaticHelpLinks.ReleaseNotes}>
+    </GuidesLink>
+    <HelpCenterExternalLink href={staticLinks.ReleaseNotes}>
       <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
       <ListItemText><Text translation="help.release.notes" /></ListItemText>
     </HelpCenterExternalLink>
-    <HelpCenterExternalLink href={StaticHelpLinks.FAQs}>
+    <HelpCenterExternalLink href={staticLinks.FAQs}>
       <ListItemIcon><FAQsIcon /></ListItemIcon>
       <ListItemText><Text translation="help.faqs" /></ListItemText>
     </HelpCenterExternalLink>
     <Divider />
-    <HelpCenterExternalLink href={StaticHelpLinks.Contact}>
+    <HelpCenterExternalLink href={staticLinks.Contact}>
       <ListItemIcon><SendIcon /></ListItemIcon>
       <ListItemText><Text translation="help.contact" /></ListItemText>
     </HelpCenterExternalLink>
