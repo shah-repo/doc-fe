@@ -167,13 +167,13 @@ context("Password expire reset flow", () => {
           NavigationItems.DASHBOARD,
           NavigationItems.DOCUMENT_CONTROL);
       });
-    });
 
-    context("Relog to verify new user is able to login normally", () => {
       it("Logout", () => {
         cy.authLogout();
       });
+    });
 
+    context("Relog to verify new user is able to login normally", () => {
       it("Log user in", () => {
         cy.authLogin({
           email: emailOfUserToSignUp,
