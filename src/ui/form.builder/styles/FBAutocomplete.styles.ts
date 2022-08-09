@@ -28,9 +28,11 @@ export const FBAutoCompleteStyle = makeStyles(() =>
   createStyles({
     root: {
       "& .MuiAutocomplete-inputRoot": {
+        height: 40,
         padding: 0,
       },
       "& input": {
+        minHeight: "initial !important",
         fontSize: "12px",
         color: Colors.almost_black,
       },
