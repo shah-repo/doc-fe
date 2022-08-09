@@ -142,7 +142,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const filterOptions = () => {
     if (inputValue) {
-      const updatedOptions = options.filter(
+      const updatedOptions = availableReferences.filter(
         (o) => o.label.toLowerCase().includes(inputValue.toLowerCase())
       );
       setModifiedOptions(updatedOptions);
