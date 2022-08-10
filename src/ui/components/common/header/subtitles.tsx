@@ -9,6 +9,14 @@ import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../documentR
 const LHR_SUBTITLE_PRECALC_KEY = "lshs_subtitle";
 
 const LABEL_LENGTH = 50;
+
+const styles = makeStyles({
+  link: {
+    textDecoration: "none",
+    fontSize: "14px",
+  },
+});
+
 const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: string}) => any =
   ({ docRevId, documentId, label }) => {
     const classes = styles();
@@ -17,6 +25,7 @@ const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: 
       <Link
         component={RouterLink}
         to={`/document_revision/${documentId}/version/${docRevId}`}
+        className={classes.link}
         underline="hover"
       >
         {label.length < LABEL_LENGTH ? label : `${label.substr(0, LABEL_LENGTH - 3)}...`}
