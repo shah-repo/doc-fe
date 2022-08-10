@@ -51,6 +51,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
           </IconButton>
           <IconButton
             size="small"
+            data-cy="FBWorkspace-exportTemplate"
             disabled={!includeTransport}
             className={classes.exportIcon}
             onClick={exportSchema}
@@ -59,7 +60,10 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
               <ExportIcon />
             </StyledTooltip>
           </IconButton>
-          <IconButton size="small" disabled={!includeTransport}>
+          <IconButton
+            size="small"
+            data-cy="FBWorkspace-importTemplate"
+            disabled={!includeTransport}>
             <StyledTooltip title="form.builder.import.template">
               <label htmlFor="fb-import-schema">
                 <ImportIcon />
