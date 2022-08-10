@@ -178,7 +178,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         <DatePickerField
           label="transition.action.effective.date"
           name="effectiveDate"
-          size="mdw"
+          size="sm"
           minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
           value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
           validate={validator(required)}
@@ -201,10 +201,13 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
       <InputField
         label="transition.action.password"
         name="password"
+        size="sm"
         inputProps={{
           type: "password",
           autoComplete: "new-password",
-          style: { marginTop: "0" },
+          classes: {
+            root: classes.passwordInput,
+          },
         }}
         validate={validator(required)}
       />
