@@ -178,9 +178,15 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 }
                 {
                   isTypeMpiOutput &&
+                  <Link
+                    underline="hover"
+                    onClick={returnToList}
+                    className={classes.link}
+                  >
                     <Grid item={true} className={classes.mpiTitle}>
                       {title}
                     </Grid>
+                  </Link>
                 }
 
               </Grid>
@@ -207,7 +213,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     </Typography>
                   )}
                 </Grid>
-            &nbsp;
+                &nbsp;
                 <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
                 <Grid item={true}>
                   <Text
