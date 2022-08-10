@@ -7,7 +7,7 @@ let loginResponse;
 let adminEmployee;
 
 context(
-  "Verify that the intermediate page of the internal type Other matches the new design and functionality",
+  "Verify that the intermediate page of the Dynamic Form matches the new design and functionality",
   () => {
     before(() => {
       cy.clearLocalStorageSnapshot();
@@ -65,6 +65,92 @@ context(
           cy.cmpClickCreateNewDocument();
         });
       });
+
+      context(
+        "Select Document Type 'Dynamic Form' and check Page default fields",
+        () => {
+          it("Selects document type as 'Clinical Protocol'", () => {
+            cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
+          });
+
+          it("Verify 'Title' field is visible", () => {
+            cy.get("[data-cy=\"field-name\"]").should("exist");
+          });
+
+          it("Verify 'Description' field is visible", () => {
+            cy.get("[data-cy=\"description\"]").should("exist");
+          });
+
+          it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
+            cy.get("[data-cy=\"field-document.documentType.id\"]")
+              .parent()
+              .should("have.class", "MuiGrid-grid-xs-6")
+              .next()
+              .should("have.class", "MuiGrid-grid-xs-6")
+              .should("contain.text", "Document ID");
+          });
+
+          it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
+            cy.get("[data-cy=\"field-revisionStage\"]")
+              .parent()
+              .parent()
+              .should("have.class", "MuiGrid-grid-xs-6")
+              .next()
+              .should("have.class", "MuiGrid-grid-xs-6")
+              .should("contain.text", "Training Required");
+          });
+
+          it("Verify 'Selected Users' field is visible", () => {
+            cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+          });
+
+          it("Verify 'Selected Groups' field is visible", () => {
+            cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+          });
+
+          // 4th left
+
+          it("Verify Attachments and Output document type are not displayed", () => {
+            cy.get("[data-cy=\"albumMediaButton\"]").should("not.exist");
+            cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("not.exist");
+          });
+
+          // No predefined field is displayed
+
+          it("Verify there is no ADD A FIELD button", () => {
+            cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
+          });
+
+          it("Verify there are no options nor icons for Import and Export of the form JSON", () => {
+            cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
+            cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
+          });
+        }
+      );
+
+      context("Click on CREATE DOCUMENT button & Verify the design", () => {
+        it("Select 'Numeric' revision stage", () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+
+        it("Click CREATE DOCUMENT", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Verify there is ADD A FIELD button is displayed", () => {
+          cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        });
+
+        it("Verify center bottom displays: eye, import and export icons", () => {
+          cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("exist");
+          cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist");
+          cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist");
+        });
+
+        // The design matches the Figma
+        //  Description
+      });
+
     });
   }
 );
