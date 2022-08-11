@@ -327,11 +327,12 @@ const RelatedPartEditRow: React.FunctionComponent<{
       </div>
       <div className={classes.actionButtonParentDiv}>
         <div className={classes.actionButtonChildDiv}>
-          <Button className={classes.actionButton} onClick = {(e) => createNewDocument(relatedPartDetails)}>
-            <DoneIcon className={classes.iconButton} />
-          </Button>
           <Button className={classes.actionButton}>
             <ClearIcon className={classes.iconButton}/>
+          </Button>
+          <Button className={classes.actionButton}
+            onClick = {(e) => createNewDocument(relatedPartDetails)}>
+            <DoneIcon className={classes.iconButton} />
           </Button>
         </div>
       </div>

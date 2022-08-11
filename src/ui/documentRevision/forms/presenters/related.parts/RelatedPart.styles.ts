@@ -86,13 +86,6 @@ export const styles = makeStyles({
     padding: "0 15px",
     alignItems: "center",
   },
-  editRowChildDivThree: {
-    width: "240px",
-    display: "flex",
-    justifyContent: "center",
-    padding: "0 15px",
-    alignItems: "center",
-  },
 
   actionButtonParentDiv: {
     width: "100%",
@@ -100,20 +93,28 @@ export const styles = makeStyles({
     marginBottom: "20px",
   },
   actionButtonChildDiv: {
-    width: "20%",
-    backgroundColor: "blue",
+    width: "100px",
+    backgroundColor: "#01A6C7",
     position: "absolute",
     right: 0,
     borderRadius: "0 0 5px 5px",
+    display: "flex",
+    justifyContent: "center",
   },
   actionButton: {
     backgroundColor: "white",
+    padding: "4px",
+    minWidth: "auto",
+    border: "8px",
   },
   iconButton: {
+    "fontSize": "16px",
+    "fill": "#000",
     "&:hover": {
       color: "blue",
     },
   },
+
   tableHeadHeight: {
     height: "34px",
   },
