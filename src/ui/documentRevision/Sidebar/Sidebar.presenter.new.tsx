@@ -58,7 +58,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
                       item.details.dataCy : `${item.type}-icon`}
                     ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
                     onClick={() => handleMenuIconClick(index)}
-                    className={classNames(classes.iconButtonNew, indexNumber == index ? classes.bgIsActiveTab : "")}>
+                    className={classNames(classes.iconButtonNew, { [classes.bgIsActiveTab]: indexNumber === index })}>
                     {(!loading || item.type !== "bookmarks") && item.icon}
                     {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
                   </IconButton>
