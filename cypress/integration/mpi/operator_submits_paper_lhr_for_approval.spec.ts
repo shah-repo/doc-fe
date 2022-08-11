@@ -562,6 +562,16 @@ context("Owner submits LHR for approval", () => {
         });
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+
+      it("Check history - added approvers should be displayed", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+          cy.drSelectHistoryTab();
+        });
+        cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+          .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
+        cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+          .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
+      });
     });
   });
 
@@ -611,6 +621,13 @@ context("Owner submits LHR for approval", () => {
     it(`Add ${USERS[1].name} approver`, () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
+    });
+
+    it("Check history - added and removed approvers should be displayed", () => {
+      cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+        .should("contain.text", "Approver Added").and("contain.text", USERS[1].name);
+      cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+        .should("contain.text", "Approver Removed").and("contain.text", USERS[3].name);
     });
 
     it("Submit LHR for approval", () => {

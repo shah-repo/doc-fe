@@ -562,6 +562,16 @@ context("Owner submits LHR for approval", () => {
         });
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+
+      it("Check history - added approvers should be displayed", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+          cy.drSelectHistoryTab();
+        });
+        cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+          .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
+        cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+          .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
+      });
     });
   });
 
@@ -604,6 +614,13 @@ context("Owner submits LHR for approval", () => {
         .find(".MuiChip-deletable").should("contain.text", USERS[3].name);
     });
 
+    it("Check history - added approvers should be displayed", () => {
+      cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+        .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
+      cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+        .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
+    });
+
     it(`Remove ${USERS[3].name} approver`, () => {
       cy.contains(USERS[3].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
     });
@@ -611,6 +628,13 @@ context("Owner submits LHR for approval", () => {
     it(`Add ${USERS[1].name} approver`, () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
+    });
+
+    it("Check history - added and removed approvers should be displayed", () => {
+      cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+        .should("contain.text", "Approver Added").and("contain.text", USERS[1].name);
+      cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+        .should("contain.text", "Approver Removed").and("contain.text", USERS[3].name);
     });
   });
 
@@ -702,6 +726,14 @@ context("Owner submits LHR for approval", () => {
 
     it(`User 1 can remove ${USERS[3].name} approver`, () => {
       cy.contains(USERS[3].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+    });
+
+    it("Check history - added and removed approvers should be displayed", () => {
+      cy.wait(5000);
+      cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+        .should("contain.text", "Approver Removed").and("contain.text", USERS[3].name);
+      cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+        .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
     });
 
     it("Submit for approval", () => {
