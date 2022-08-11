@@ -8,8 +8,9 @@ let createdCompany;
 let loginResponse;
 let adminEmployee;
 
+const docType = "LHR Template";
 const outputDocType1 = "Bulk Create";
-const outputDocType2 = "Lot History Record";
+const lhrOutputDocType = "Lot History Record";
 
 context("Intermediate page validation", () => {
   before(() => {
@@ -24,7 +25,7 @@ context("Intermediate page validation", () => {
     cy.saveLocalStorage();
   });
 
-  xcontext("[API]Prepare company", () => {
+  context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -57,22 +58,9 @@ context("Intermediate page validation", () => {
     });
   });
 
-  xcontext("Login company admin", () => {
+  context("Login company admin", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-  });
-
-  // just for testing purpose
-  context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Maroon Leuschke and Sons 20095", multiple: true });
     });
   });
 
@@ -92,21 +80,31 @@ context("Intermediate page validation", () => {
     });
   });
 
-  context("Verify fields displays on page", () => {
-    it("Verify 'Title' field is visible", () => {
-      cy.get("[data-cy=\"field-name\"]").should("exist");
+  context("Enter title and select revision stage", () => {
+    it("Enter document title", () => {
+      cy.drEnterDocumentTitle({ name: "lhrt intermediate page test" });
     });
 
-    it("Verify 'Description' field is visible", () => {
-      cy.get("[data-cy=\"description\"]").should("exist");
+    it("Enter description", () => {
+      cy.drEnterDocumentDescription({ description: "LHRT document description" });
     });
 
-    it("Verify 'Document Type' field is visible", () => {
-      cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+  });
+
+  context(`Select document type ${docType} and check fields`, () => {
+    it(`Select ${docType} document type`, () => {
+      cy.drSelectDocumentType({ documentType: docType });
     });
 
-    it("Verify 'Document Id' field is visible", () => {
-      cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+    it("Verify Document id is assigned by system", () => {
+      cy.get("input[id='document.docId']").should("contain.value", "LHRT-000");
+    });
+
+    it("Verify Document id is editable", () => {
+      cy.get("input[id='document.docId']").should("not.be.disabled");
     });
 
     it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -138,40 +136,6 @@ context("Intermediate page validation", () => {
     it("Verify 'Selected Groups' field is visible", () => {
       cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
     });
-  });
-
-  context("Enter title and select revision stage", () => {
-    it("Enter document title 'test title'", () => {
-      cy.drEnterDocumentTitle({ name: "intermediate page test" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-  });
-
-  context("Verify some fields not displayed on page", () => {
-    it("Verify 'Add Field' button not displayed", () => {
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").should("not.exist");
-    });
-
-    it("Verify form options not displayed", () => {
-      cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("not.exist");
-    });
-  });
-
-  context("Select document type 'Form' and check some fields appeared", () => {
-    it("Select 'LHR Template' document type", () => {
-      cy.drSelectDocumentType({ documentType: "LHR Template" });
-    });
-
-    it("Verify Document id is assigned by system", () => {
-      cy.get("input[id='document.docId']").should("contain.value", "LHRT-000");
-    });
-
-    it("Verify Document id is editable", () => {
-      cy.get("input[id='document.docId']").should("not.be.disabled");
-    });
 
     it("Verify 'Attachment' field is displayed", () => {
       cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
@@ -188,18 +152,22 @@ context("Intermediate page validation", () => {
       cy.drSelectOutputDocumentType({ documentType: outputDocType1 });
     });
 
-    it(`Select ${outputDocType2} output document type`, () => {
-      cy.drSelectOutputDocumentType({ documentType: outputDocType2 });
+    it(`Select ${lhrOutputDocType} output document type`, () => {
+      cy.drSelectOutputDocumentType({ documentType: lhrOutputDocType });
     });
 
-    it(`Verify ${outputDocType1} is removed and only ${outputDocType2} is added`, () => {
+    it(`Verify ${outputDocType1} is removed and only ${lhrOutputDocType} is added`, () => {
       cy.get("[id=\"formTemplate.outputDocumentTypes\"]").should("not.have.text", outputDocType1);
       cy.get("[id=\"formTemplate.outputDocumentTypes\"]")
-        .should("have.text", outputDocType2);
+        .should("have.text", lhrOutputDocType);
+    });
+
+    it("Check 'Preview Layout' button gets colored", () => {
+      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
     });
   });
 
-  context("Verify no predefined fields are displayed", () => {
+  context("Verify predefined fields are not displayed", () => {
     it("Check 'Part to be Manufactured' is not displayed", () => {
       cy.get("[data-cy=\"Part to be Manufactured\"]").should("not.exist");
     });
@@ -224,12 +192,26 @@ context("Intermediate page validation", () => {
       cy.get("[data-cy=\"form.builder.approvals\"]").should("not.exist");
     });
 
-    it("Check 'Preview Layout' button gets colored", () => {
-      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
+    it("Check 'Step #1' is not displayed", () => {
+      cy.get("[data-cy^=\"LHR Step\"]").should("not.exist");
+    });
+  });
+
+  context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
+    it("Verify 'Add Field' button not displayed", () => {
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").should("not.exist");
     });
 
-    it("Check 'Step #1' is not displayed", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").should("not.exist");
+    it("Verify view option is not displayed", () => {
+      cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("not.exist");
+    });
+
+    it("check export option is diplayed", () => {
+      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
+    });
+
+    it("check import option is diplayed", () => {
+      cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
     });
   });
 
@@ -253,8 +235,6 @@ context("Intermediate page validation", () => {
 
     it("Check 'Build Type' is displayed", () => {
       cy.get("[data-cy=\"Build Type\"]").should("exist");
-      // cy.get("[data-cy=\"Build Type\"]").parents().should("have.value", "R&D");
-      // cy.get("[data-cy=\"Build Type\"]").parents().should("have.value", "Production");
     });
 
     it("Check 'Due Date' is displayed", () => {
@@ -282,6 +262,9 @@ context("Intermediate page validation", () => {
     });
   });
 
+  // TODO: User can interact with the fields (example. try filling out a few fields)
+  //    Close the preview >> changes made aren’t saved
+
   context("Click 'Create Document' button and verify predefined fields are displayed", () => {
     it("Click on 'Create Document' button", () => {
       cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
@@ -301,8 +284,6 @@ context("Intermediate page validation", () => {
 
     it("Check 'Build Type' is displayed", () => {
       cy.get("[data-cy=\"Build Type\"]").should("exist");
-      // cy.get("[label=\"Build Type\"]").should("have.value", "R&D");
-      // cy.get("[label=\"Build Type\"]").should("have.value", "Production");
     });
 
     it("Check 'Due Date' is displayed", () => {
@@ -317,9 +298,9 @@ context("Intermediate page validation", () => {
       cy.drSelectDetailsTab();
     });
 
-    // it("Check 'Step #1' is displayed", () => {
-    //   cy.get("[data-cy=\"LHR Step 1\"]").should("exist");
-    // });
+    it("Check 'Step #1' is displayed", () => {
+      cy.get("[data-cy^=\"LHR Step\"]").should("exist");
+    });
   });
 
   context("Verify form options and add field button is displayed in Details tab", () => {
