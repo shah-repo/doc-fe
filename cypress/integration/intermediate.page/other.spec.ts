@@ -115,7 +115,9 @@ context(
             cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("not.exist");
           });
 
-          // No predefined field is displayed
+          it("Verify no predefined fields are displayed", () => {
+            cy.get("[data-cy=\"field-securityGroups\"]").last().should("exist");
+          });
 
           it("Verify there is no ADD A FIELD button", () => {
             cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
