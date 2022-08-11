@@ -6,8 +6,7 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  Grid, Link, Paper,
-  Radio,
+  Grid, Link, Radio,
   RadioGroup,
   Table,
   TableBody,
@@ -19,6 +18,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
+import cx from "classnames";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
@@ -31,7 +31,7 @@ import { toastSuccess } from "../../../../../ui/components/notifications/index";
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
-// import ClearIcon from "@material-ui/icons/Clear";
+import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
 import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
@@ -91,19 +91,21 @@ const ParentPartSelector: React.FunctionComponent<{
 
   return (
     <div>
-      <FormControl>
+      <div className={classes.title}>
         <Typography
-          className={classes.title}
+          className={classes.titleHeading}
           variant="h6"
           id="tableTitle"
-          component="div"
         >
-            Is this a parent part?
-          <Tooltip title="Parent part info" arrow>
-            <InfoIcon color="primary" />
-          </Tooltip>
+          Is this a parent part?
         </Typography>
-
+        <Tooltip title="Parent part info" placement="right"
+          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          arrow>
+          <InfoIcon color="primary" />
+        </Tooltip>
+      </div>
+      <FormControl className={classes.formControlPad}>
         <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value)}>
           <FormControlLabel
             value={RELATED_STATUS.PARENT_NO}
@@ -141,6 +143,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   const classes = styles();
 
   const [visible, setVisible] = useState([{ show: "" }]);
+  const [showButton, setShowButton] = useState(true);
   const [relatedPartsList, setRelatedPartsList] = useState<RelatedPartsListItem[]>([]);
 
   const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
@@ -153,6 +156,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   const addRelatedPartHandler = () => {
     setVisible([...visible, { show: "" }]);
+    setShowButton(false);
   };
 
   useEffect(() => {
@@ -165,44 +169,49 @@ const RelatedPartGrid: React.FunctionComponent<{
   };
 
   return (
-    <>
-      <Grid style={{ justifyContent: "space-between" }} container>
-        <Grid item>
-          <Typography variant="h6" id="tableTitle" component="div">
-            Related Parts
-          </Typography>
-        </Grid>
+    <div className={classes.formControlPad}>
+      <div>
+        <Grid style={{ justifyContent: "space-between", alignItems: "center" }} container>
+          <Grid item>
+            <Typography variant="h6" id="tableTitle" component="div">
+                Related Parts
+            </Typography>
+          </Grid>
 
-        <Grid item>
-          <Typography>
-            <Button
-              color="primary"
-              startIcon={<AddCircleIcon color="primary" />}
-              onClick={addRelatedPartHandler}
-            >
-              Add Related part
-            </Button>
-          </Typography>
+          { showButton &&
+              <Grid item>
+                <Typography>
+                  <Button
+                    className={classes.btnMargin}
+                    color="primary"
+                    startIcon={<AddCircleIcon color="primary" />}
+                    onClick={addRelatedPartHandler}
+                  >
+                    Add Related part
+                  </Button>
+                </Typography>
+              </Grid>
+          }
         </Grid>
-      </Grid>
+        <Divider className={classes.dividerStyle} />
+      </div>
       <div>
         <RelatedPartList list={relatedPartsList} voidRelatedPart = {voidRelatedPart}></RelatedPartList>
         {visible.map((singleShow, index) => index > 0 && singleShow &&
-          <RelatedPartEditRow documentRevision={documentRevision} createNewDocument={createNewDocument} key={index} />)}
+            <RelatedPartEditRow documentRevision={documentRevision}
+              createNewDocument={createNewDocument} key={index} />)}
         {
-          <Button
+          showButton && <Button
             className={classes.fullLengthButton}
             variant="outlined"
-            color="primary"
             startIcon={<AddOutlinedIcon />}
             onClick={addRelatedPartHandler}
           >
-            ADD RELATED PART
+              ADD RELATED PART
           </Button>
         }
       </div>
-      <Divider />
-    </>
+    </div>
   );
 };
 
@@ -216,26 +225,28 @@ const RelatedPartList: React.FunctionComponent<{
 }) => {
   const classes = styles();
   return (
-    <Paper className={classes.fullWidth}>
-      <div className={classes.fullWidth}>
-        <Table stickyHeader aria-label="related parts table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center" style={{ minWidth: "320px" }}>DOC ID</TableCell>
-              <TableCell align="center" style={{ flex: "1 1 100%" }}>TITLE</TableCell>
-              <TableCell align="center" style={{ minWidth: "100px" }}>OBSOLETE</TableCell>
-              <TableCell align="center" style={{ minWidth: "100px" }}></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {list.map((listItem: RelatedPartsListItem) => (
-              <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart}
-                key={listItem.documentRevisionId}/>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </Paper>
+    <div className={classes.fullWidth}>
+      <Table stickyHeader aria-label="related parts table">
+        <TableHead className={classes.tableHeadHeight}>
+          <TableRow>
+            <TableCell className={cx(classes.tabelCell, classes.tableCellOne)} align="left">DOC ID</TableCell>
+            <TableCell className={classes.tabelCell} align="left">
+              <span className={classes.verticalDivider}>TITLE</span>
+            </TableCell>
+            <TableCell className={cx(classes.tabelCell, classes.tableCellThree)} align="center">
+              <span className={classes.verticalDivider}>OBSOLETE</span>
+            </TableCell>
+            <TableCell className={cx(classes.tabelCell, classes.tableCellFour)} align="center"></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {list.map((listItem: RelatedPartsListItem) => (
+            <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart}
+              key={listItem.documentRevisionId}/>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
@@ -251,10 +262,10 @@ const RelatedPartViewRow: React.FunctionComponent<{
   || listItem.status === DocumentRevisionStatus.Voided;
   return (
     <TableRow hover key={listItem.documentRevisionId}>
-      <TableCell align="center">
+      <TableCell align="left">
         {listItem.rootDocId}
       </TableCell>
-      <TableCell align="center">
+      <TableCell align="left">
         {listItem.name}
       </TableCell>
       <TableCell align="center">
@@ -291,32 +302,40 @@ const RelatedPartEditRow: React.FunctionComponent<{
   const classes = styles();
 
   return (
-    <div className={classes.mainDiv1}>
-      <div className={classes.itemSpace}>
-        <label>{documentRevision?.document?.docId} - </label>
-        <TextField
-          variant="outlined"
-          onChange = {(e: ChangeEvent<HTMLInputElement>) =>
-            setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
-          // onBlur={(e: any) => validateInputHandler}
-          value={relatedPartDetails.docId}
-        />
+    <>
+      <div className={classes.editRowParentDiv}>
+        <div className={classes.editRowChildDivOne}>
+          <label >{documentRevision?.document?.docId} - </label>
+          <TextField
+            className={classes.textField}
+            variant="outlined"
+            onChange = {(e: ChangeEvent<HTMLInputElement>) =>
+              setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
+            value={relatedPartDetails.docId}
+          />
+        </div>
+        <div
+          className={classes.editRowChildDivTwo}>
+          <label>{documentRevision?.name} - </label>
+          <TextField
+            className={classes.textField}
+            variant="outlined"
+            value = {relatedPartDetails.name}
+            onChange = {(e: ChangeEvent<HTMLInputElement>) =>
+              setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}/>
+        </div>
       </div>
-      <div>
-        <label>{documentRevision?.name} - </label>
-        <TextField
-          variant="outlined"
-          value = {relatedPartDetails.name}
-          onChange = {(e: ChangeEvent<HTMLInputElement>) =>
-            setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}/>
+      <div className={classes.actionButtonParentDiv}>
+        <div className={classes.actionButtonChildDiv}>
+          <Button className={classes.actionButton} onClick = {(e) => createNewDocument(relatedPartDetails)}>
+            <DoneIcon className={classes.iconButton} />
+          </Button>
+          <Button className={classes.actionButton}>
+            <ClearIcon className={classes.iconButton}/>
+          </Button>
+        </div>
       </div>
-      <div>
-        <span>
-          <FBButton label="Add Related Part" onClick = {(e) => createNewDocument(relatedPartDetails)}
-            color="primary" variant="outlined" startIcon={<DoneIcon />}></FBButton>
-        </span>
-      </div>
-    </div>
+    </>
   );
 };
 
@@ -326,6 +345,7 @@ const RelatedParts: React.FunctionComponent<Props> = ({
   parentPartStatus,
 }) => {
 
+  const classes = styles();
   const [parentStatus, setParentStatus] = useState(parentPartStatus);
 
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
@@ -425,7 +445,7 @@ const RelatedParts: React.FunctionComponent<Props> = ({
     <>
       {documentRevision.relatedStatus !== RELATED_STATUS.RELATED_SEPARATE &&
       documentRevision.relatedStatus !== RELATED_STATUS.RELATED_TOGETHER &&
-      <div style={{ marginLeft: "12px" }}>
+      <div className={classes.mainDiv}>
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
         {parentStatus === RELATED_STATUS.PARENT_SEPARATE && (
           <Grid item xs={12}>

@@ -305,10 +305,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {isPart && <RelatedParts
-          documentRevision={documentRevision}
-          parentPartStatus= {documentRevision?.relatedStatus}
-        ></RelatedParts>
+        {isPart &&
+          <Grid item xs={12}>
+            <RelatedParts
+              documentRevision={documentRevision}
+              parentPartStatus= {documentRevision?.relatedStatus}
+            ></RelatedParts>
+          </Grid>
         }
         {isEB && documentRevision?.parent && (
           <Grid item xs={12}>
