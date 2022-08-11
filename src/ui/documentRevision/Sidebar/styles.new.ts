@@ -127,7 +127,7 @@ export default makeStyles((theme: Theme) =>
       overflowX: "hidden",
       overflowY: "auto",
     },
-    bgIsActiveTab:{
+    bgIsActiveTab: {
       "background": Colors.light_blue,
       "borderRadius": "5px",
       "& svg": {
