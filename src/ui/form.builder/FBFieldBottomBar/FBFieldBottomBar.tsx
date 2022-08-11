@@ -12,7 +12,7 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   mt,
 }) => {
   const [isHover, setIsHover] = useState(false);
-  return (<Box display="flex" {...{ visibility, mt }}
+  return (<Box display="flex" {...{ visibility, mt }} style={{  display: visibility ===  "visible" ? "flex" : "none" }}
     onMouseEnter={() => setIsHover(true)}
     onMouseLeave={() => setIsHover(false)}>
     <Box
