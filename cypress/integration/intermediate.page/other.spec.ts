@@ -108,8 +108,6 @@ context(
             cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
           });
 
-          // 4th left
-
           it("Verify Attachments and Output document type are not displayed", () => {
             cy.get("[data-cy=\"albumMediaButton\"]").should("not.exist");
             cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("not.exist");
@@ -130,6 +128,72 @@ context(
         }
       );
 
+      context("Verify description field", () => {
+        it("Verify DescriptionToolBar", () => {
+          cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+          cy.get("div[class^=\"rdw-editor-toolbar\"]").should("exist");
+          cy.get("div[title=\"Bold\"]").should("exist");
+          cy.get("div[title=\"Italic\"]").should("exist");
+          cy.get("div[title=\"Underline\"]").should("exist");
+          cy.get("div[title=\"Strikethrough\"]").should("exist");
+          cy.get("div[title=\"Monospace\"]").should("exist");
+          cy.get("div[title=\"Superscript\"]").should("exist");
+          cy.get("div[title=\"Subscript\"]").should("exist");
+          cy.get("[aria-label=\"rdw-color-picker\"]").should("exist");
+          cy.get("div[title=\"Unordered\"]").should("exist");
+          cy.get("div[title=\"Ordered\"]").should("exist");
+          cy.get("div[title=\"Indent\"]").should("exist");
+          cy.get("div[title=\"Outdent\"]").should("exist");
+          cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
+          cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
+          cy.get("[title=\"Block Type\"]").should("not.exist");
+          cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
+          cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
+        });
+
+        it("Enter a 1 line description", () => {
+          cy.drEnterDocumentDescription({
+            description: "This is description test to check length. Checking length of characters and lines.",
+          });
+          cy.unClick();
+          cy.get("[data-cy=\"description\"] button").should("not.exist");
+          cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
+        });
+
+        it("Add 2nd line description", () => {
+          cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+          cy.get(`[data-cy="description"] [contenteditable]`)
+            .first()
+            .arrowType(
+              "{moveToEnd}{enter}This is description test to check length. Checking length of characters and lines."
+            );
+          cy.unClick();
+          cy.get("[data-cy=\"description\"] button").should("not.exist");
+          cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
+        });
+
+        it("Add 3rd line description", () => {
+          cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+          cy.get(`[data-cy="description"] [contenteditable]`)
+            .first()
+            .arrowType("{moveToEnd}{enter}This is description test to check length.");
+          cy.unClick();
+          cy.get("[data-cy=\"description\"] button").should("exist");
+          cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
+        });
+
+        it("Enter a description longer than 3 lines and over 245 characters", () => {
+          cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+          cy.get(`[data-cy="description"] [contenteditable]`)
+            .first()
+            .arrowType("{moveToEnd}{enter}Checking length of characters and lines ends here.");
+          cy.unClick();
+          cy.get("[data-cy=\"description\"] button").arrowClick();
+          cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
+          cy.unClick();
+        });
+      });
+
       context("Click on CREATE DOCUMENT button & Verify the design", () => {
         it("Select 'Numeric' revision stage", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
@@ -139,14 +203,14 @@ context(
           cy.drClickCreateDocumentWithApiCall();
         });
 
-        it("Verify there is ADD A FIELD button is displayed", () => {
-          cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        it("Verify there is ADD A FIELD button should not display", () => {
+          cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
         });
 
-        it("Verify center bottom displays: eye, import and export icons", () => {
-          cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("exist");
-          cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist");
-          cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist");
+        it("Verify center bottom should not display: eye, import and export icons", () => {
+          cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("not.exist");
+          cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
+          cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
         });
 
         // The design matches the Figma
