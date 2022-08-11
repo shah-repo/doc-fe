@@ -704,12 +704,6 @@ context("LHRT Pending Change", () => {
         cy.drSelectDetailsTab();
       });
 
-      it("Click 'LHR Step'", () => {
-        // eslint-disable-next-line max-len
-        cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd']")
-          .eq(0)
-          .arrowClick();
-      });
 
       it("Select MPI document for step #1 in LHRt", () => {
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
@@ -726,14 +720,7 @@ context("LHRT Pending Change", () => {
 
     context("Click on Add Field and add another LHR step ", () => {
       it("Add LHR step", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "LHR Step" });
-        });
-        cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-          cy.fbAddNewFieldButton();
-        });
+        cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

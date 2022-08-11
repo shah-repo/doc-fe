@@ -41,7 +41,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                         <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
                       )}
                       <FBWorkspaceMemo
-                        {...{ includeTransport, workspaceState }}
+                        {...{ includeTransport, workspaceState, _tabsState }}
                         isStarter={isStarterRequired?.()}
                         mode={workspaceState?.mode}
                         schema={workspaceState?.schema}
@@ -55,7 +55,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                         <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
                       )}
                       <FBWorkspaceMemo
-                        {...{ schema, includeTransport, workspaceState }}
+                        {...{ schema, includeTransport, workspaceState, _tabsState }}
                         isStarter={isStarterRequired?.()}
                         mode={workspaceState?.mode}
                         schema={workspaceState?.schema}
