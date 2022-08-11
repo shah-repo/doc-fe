@@ -2,11 +2,15 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+
+const mpiOutputDocType = "Manufacturing Process Instructions";
+const qpiOutputDocType = "Quantity Process Instructions Test";
 
 context("Intermediate page validation", () => {
   before(() => {
@@ -21,7 +25,7 @@ context("Intermediate page validation", () => {
     cy.saveLocalStorage();
   });
 
-  xcontext("[API]Prepare company", () => {
+  context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -34,7 +38,9 @@ context("Intermediate page validation", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [
+              QPITest,
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -54,26 +60,13 @@ context("Intermediate page validation", () => {
     });
   });
 
-  xcontext("Login company admin", () => {
+  context("Login company admin", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
-  // just for testing purpose
-  context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Maroon Leuschke and Sons 20095", multiple: true });
-    });
-  });
-
-  context("Validate 'Manufacturing Process Instructions' intermediate page", () => {
+  context(`Validate ${mpiOutputDocType} intermediate page`, () => {
     context("Navigate to document list", () => {
       it("Navigate to document list landing page", () => {
         cy.navigToDocumentList();
@@ -92,7 +85,7 @@ context("Intermediate page validation", () => {
 
     context("Enter title and select revision stage", () => {
       it("Enter document title 'test title'", () => {
-        cy.drEnterDocumentTitle({ name: "intermediate page test" });
+        cy.drEnterDocumentTitle({ name: "mpi intermediate page test" });
       });
 
       it("Enter description 'MPI document description'", () => {
@@ -104,9 +97,9 @@ context("Intermediate page validation", () => {
       });
     });
 
-    context("Select document type 'Manufacturing Process Instructions' and check fields", () => {
-      it("Select 'Manufacturing Process Instructions' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions" });
+    context(`Select document type ${mpiOutputDocType} and check fields`, () => {
+      it(`Select ${mpiOutputDocType} document type`, () => {
+        cy.drSelectDocumentType({ documentType: mpiOutputDocType });
       });
 
       it("Verify Document id is assigned by system", () => {
@@ -137,6 +130,14 @@ context("Intermediate page validation", () => {
           .should("have.class", "MuiGrid-grid-xs-6").next()
           .should("have.class", "MuiGrid-grid-xs-6")
           .should("contain.text", "Training Required");
+      });
+
+      it("Verify 'Selected Users' field is visible", () => {
+        cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+      });
+
+      it("Verify 'Selected Groups' field is visible", () => {
+        cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
       });
 
       it("Verify 'Attachment' field is not displayed", () => {
@@ -224,7 +225,7 @@ context("Intermediate page validation", () => {
     });
   });
 
-  xcontext("Validate 'Quality Process Instructions' intermediate page", () => {
+  context(`Validate ${qpiOutputDocType} intermediate page`, () => {
     context("Navigate to document list", () => {
       it("Navigate to document list landing page", () => {
         cy.navigToDocumentList();
@@ -243,11 +244,11 @@ context("Intermediate page validation", () => {
 
     context("Enter title and select revision stage", () => {
       it("Enter document title 'test title'", () => {
-        cy.drEnterDocumentTitle({ name: "intermediate page test" });
+        cy.drEnterDocumentTitle({ name: "qpi intermediate page test" });
       });
 
       it("Enter description 'MPI document description'", () => {
-        cy.drEnterDocumentDescription({ description: "MPI document description" });
+        cy.drEnterDocumentDescription({ description: "QPI document description" });
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -255,13 +256,13 @@ context("Intermediate page validation", () => {
       });
     });
 
-    context("Select document type 'Quality Process Instructions' and check fields", () => {
-      it("Select 'Quality Process Instructions' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Quality Process Instructions" });
+    context(`Select document type ${qpiOutputDocType} and check fields`, () => {
+      it(`Select ${qpiOutputDocType} document type`, () => {
+        cy.drSelectDocumentType({ documentType: qpiOutputDocType });
       });
 
       it("Verify Document id is assigned by system", () => {
-        cy.get("input[id='document.docId']").should("contain.value", "MPI-000");
+        cy.get("input[id='document.docId']").should("contain.value", "QPI-000");
       });
 
       it("Verify Document id is editable", () => {
@@ -288,6 +289,14 @@ context("Intermediate page validation", () => {
           .should("have.class", "MuiGrid-grid-xs-6").next()
           .should("have.class", "MuiGrid-grid-xs-6")
           .should("contain.text", "Training Required");
+      });
+
+      it("Verify 'Selected Users' field is visible", () => {
+        cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+      });
+
+      it("Verify 'Selected Groups' field is visible", () => {
+        cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
       });
 
       it("Verify 'Attachment' field is not displayed", () => {
