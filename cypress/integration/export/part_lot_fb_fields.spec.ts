@@ -62,9 +62,9 @@ context("Export Part Lot", () => {
       });
     });
 
-    it("[API]Login second tester", (done: any) => {
+    it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -83,7 +83,7 @@ context("Export Part Lot", () => {
           employeeId: employeeLoginFirst.id,
           name: "AR Form",
         }).then((response) => {
-          employeeLoginFirst = response;
+          initialArDocument = response;
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
@@ -218,18 +218,18 @@ context("Export Part Lot", () => {
       cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
       cy.fbEnterNameValue({ name: "rows", value: "2" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbSelectRadioButtonValue({ value: "visibility" });
       cy.fbAddNewFieldButton();
     });
 
 
     it("Verify Edit, Move and Remove", () => {
-      cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+      cy.get(`[data-cy="edit-schema-item"]`).last().arrowClick({ force: true });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-      cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
+      // cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
       cy.dragAndDrop({
         fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
         toSelector: `[class="drag-handle"]`,
@@ -243,7 +243,11 @@ context("Export Part Lot", () => {
   });
 
   context("export here", () => {
-    // write code here
+    it("Export template", () => {
+      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
+      cy.get(`[data-cy="fb-template-name"]`).arrowType("CPL_Form_Template");
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
   });
 
   context("Create new Part Lot form 2", () => {
@@ -285,7 +289,9 @@ context("Export Part Lot", () => {
   });
 
   context("import here", () => {
-    // write code here
+    it("Import template", () => {
+      // Write the import code here
+    });
   });
 
 
