@@ -806,9 +806,9 @@ context("Procedure and parts flow test", () => {
         cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
-      // it("Import the template", () => {
-      //   cy.fbImportTemplate({ fileName: "EB_Document.json", saveFileName: "EB_Document.json" });
-      // });
+      it("Import the template", () => {
+        cy.get("#fb-import-schema").attachFile("../downloads/EB_Document.json");
+      });
 
       it("Add component", () => {
         cy.fbAddNewFieldWhenHidden();
