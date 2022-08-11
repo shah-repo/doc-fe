@@ -11,7 +11,6 @@ import { EngineeringBuild } from "../../utils/constants/documentTypes/engineerin
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -736,7 +735,6 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Verify that Approvals field is automatically added", () => {
-        SystemRequirement("REQ-0980");
         cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
     });
@@ -802,14 +800,33 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Verify that Approvals field is automatically added", () => {
-        SystemRequirement("REQ-0980");
         cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Import the template", () => {
         cy.get("#fb-import-schema").attachFile("../downloads/EB_Document.json");
       });
+    });
 
+    context("Verify the imported field", () => {
+      it("Verify field materials", () => {
+        cy.get("[data-cy=\"form.builder.materials\"]").should("have.text", "Materials");
+      });
+
+      it("Verify field  Equipment", () => {
+        cy.get("[data-cy=\"form.builder.equipment\"]").eq(0).should("have.text", "Equipment");
+      });
+
+      it("Verify field EB Procedure", () => {
+        cy.get("[data-cy=\"form.builder.procedure\"]").should("have.text", "EB Procedure");
+      });
+
+      it("Verify field EB Procedure", () => {
+        cy.get("[data-cy=\"form.builder.step.number\"]").should("have.text", "Step #1");
+      });
+    });
+
+    context("Move & Edit & Remove component", () => {
       it("Add component", () => {
         cy.fbAddNewFieldWhenHidden();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
@@ -914,7 +931,6 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Add files to the step Attachments field", () => {
-          SystemRequirement("REQ-3090");
           cy.wrapWithWaitOnApiCalls([], () => {
             cy.contains("Step #2").parentsUntil("li")
               .find("[data-cy=\"albumMediaButton\"]").arrowClick();
@@ -948,7 +964,6 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Add files to the step Attachments field", () => {
-          SystemRequirement("REQ-3090");
           cy.wrapWithWaitOnApiCalls([], () => {
             cy.contains("Step #3").parentsUntil("li")
               .find("[data-cy=\"albumMediaButton\"]").arrowClick();
