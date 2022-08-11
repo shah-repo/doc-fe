@@ -1346,14 +1346,7 @@ context("LHR flow", () => {
       context("Add another step with different MPI on document ", () => {
         it("Add LHR step", () => {
           SystemRequirement("REQ-3150");
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "LHR Step" });
-          });
-          cy.listLoadingElementShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.fbAddNewFieldButton();
-          });
+          cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });

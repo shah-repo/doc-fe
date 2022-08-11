@@ -6,6 +6,7 @@ const FBPurchaseOrderClasses = makeStyles({
     "width": "100%",
     "tableLayout": "fixed",
     "& th": {
+      padding: "14px 8px",
       whiteSpace: "nowrap",
       background: Colors.athens_gray,
       boxShadow: `{0 1px 0 ${Colors.chinese_silver}}`,
@@ -29,7 +30,7 @@ const FBPurchaseOrderClasses = makeStyles({
     },
     "& tr": {
       cursor: "pointer",
-      height: "45px",
+      height: "47px",
       border: `1px solid ${Colors.chinese_silver}`,
     },
     "& td": {
