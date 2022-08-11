@@ -211,11 +211,22 @@ context("Export Part Lot", () => {
   });
 
   context("Add Form fields and Release", () => {
-    it("Add TextField", () => {
-      cy.fbAddNewField();
+    it("Add TextField 1", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add TextField 2", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
       cy.fbEnterNameValue({ name: "rows", value: "2" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
@@ -228,8 +239,8 @@ context("Export Part Lot", () => {
       cy.get(`[data-cy="edit-schema-item"]`).last().arrowClick({ force: true });
       cy.fbEnterPlaceholder({ placeholder: " changed" });
       cy.fbAddNewFieldButton();
-      cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-      // cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
       cy.dragAndDrop({
         fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
         toSelector: `[class="drag-handle"]`,
@@ -242,7 +253,7 @@ context("Export Part Lot", () => {
     });
   });
 
-  context("export here", () => {
+  context("Export", () => {
     it("Export template", () => {
       cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
       cy.get(`[data-cy="fb-template-name"]`).arrowType("CPL_Form_Template");
@@ -288,10 +299,46 @@ context("Export Part Lot", () => {
     });
   });
 
-  context("import here", () => {
+  context("import", () => {
     it("Import template", () => {
-      // Write the import code here
+      cy.pause();
+      cy.get("#fb-import-schema").attachFile("../downloads/CPL_Form_Template.json");
+      // cy.fixture("../downloads/CPL_Form_Template.json").then((fileContent) => {
+      //   // cy.wrapWithWaitOnApiCalls([CyRoutes.ImportTemplate], () => {
+      //   // cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").arrowClick({ force: true });
+      //   cy.pause();
+      //   cy.get("#fb-import-schema").attachFile({
+      //     fileContent: fileContent.toString(),
+      //   });
+      // });
     });
+
+    it("Verify TextField attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbVerifyNameValue({ name: "placeholder", value: "fb-textfield placeholder 1" });
+      cy.fbVerifyNameValue({ name: "rows", value: "2" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Verify Initial Quantity Lenth", () => {
+      cy.get(`[data-cy="Initial Quantity"]`).should("have.length", 1);
+    });
+
+    it("Add Checkbox group", () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+    });
+
   });
 
 
@@ -319,7 +366,7 @@ context("Export Part Lot", () => {
     });
 
     it("Enter text in textfield", () => {
-      cy.get("[name^=\"fb-textfield\"]").arrowType("Test one");
+      cy.get("[name^=\"fb-textfield-1\"]").arrowType("Test one");
     });
 
     it("Navigate to Details tab", () => {
