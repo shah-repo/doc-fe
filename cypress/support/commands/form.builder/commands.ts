@@ -104,7 +104,7 @@ Cypress.Commands.add("fbRemoveLastAddedItem", () => {
 
 Cypress.Commands.add("fbAddNewFieldOption", () => {
   cy.unClick();
-  cy.contains("Add a Field").arrowClick();
+  cy.contains("Add a Field").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewField", () => {

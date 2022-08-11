@@ -287,10 +287,10 @@ context("Autosave EB test", () => {
     });
 
     it("check approvers after reload page", () => {
-      cy.get(".MuiAutocomplete-tag").eq(0)
-        .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-      cy.get(".MuiAutocomplete-tag").eq(1)
-        .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(".MuiAutocomplete-tag span div").eq(0)
+        .should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(".MuiAutocomplete-tag span div").eq(1)
+        .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
     });
 
     it("Remove second Approver'", () => {
@@ -299,9 +299,9 @@ context("Autosave EB test", () => {
     });
 
     it("check approvers after reload page", () => {
-      cy.get(".MuiAutocomplete-tag").eq(0)
-        .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
-      cy.get(".MuiAutocomplete-tag").eq(1)
+      cy.get(".MuiAutocomplete-tag span div").eq(0)
+        .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(".MuiAutocomplete-tag span div").eq(1)
         .should("not.exist");
     });
   });

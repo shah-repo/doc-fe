@@ -92,11 +92,8 @@ export const styles = makeStyles((theme: Theme) =>
       "fontSize": "14px",
       "color": Colors.white,
       "textDecoration": "none",
-      "cursor": "pointer",
       "& a": {
         color: Colors.white,
-        textDecoration: "underline",
-        cursor: "pointer",
       },
     },
     whiteDot: {
