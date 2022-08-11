@@ -5,13 +5,14 @@ import { DocumentRevisionEditRequestBody } from "../documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "./constants";
 import { RelatedPartsChoiceRequestBody } from "./types";
 
+
 const createRelatedPart =
   (parentDocumentId: string, body: DocumentRevisionEditRequestBody, async) => apiAction({
     url: `${RELATED_PARTS_ROOT_URL}/${parentDocumentId}/child`,
     method: "post",
     data: body,
-    onSuccess(data) {
-      async.successHandler?.callback(data);
+    onSuccess: (document) => {
+      async.successHandler?.callback(document);
     },
   });
 
@@ -20,7 +21,7 @@ const parentPartChoiceAction = (body: RelatedPartsChoiceRequestBody, async) => a
   method: "post",
   data: body,
   onSuccess(data) {
-    async.successHandler?.callback(body.relatedStatus);
+    async.successHandler?.callback(data);
   },
 });
 

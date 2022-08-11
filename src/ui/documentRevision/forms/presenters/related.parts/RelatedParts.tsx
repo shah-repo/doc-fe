@@ -20,6 +20,7 @@ import {
 
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions/index";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
 import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
@@ -37,6 +38,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
 import { get } from "lodash";
+import { useDispatch } from "react-redux";
 import { styles } from "./RelatedPart.styles";
 
 interface Props {
@@ -394,6 +396,8 @@ const RelatedParts: React.FunctionComponent<Props> = ({
 }) => {
 
   const classes = styles();
+  const dispatch = useDispatch();
+
   const [parentStatus, setParentStatus] = useState(parentPartStatus);
 
   const [newRelatedPart, setNewRelatedPart] = useState<RelatedPartsListItem>();
@@ -406,6 +410,7 @@ const RelatedParts: React.FunctionComponent<Props> = ({
         if (parentStatus === RELATED_STATUS.PARENT_SEPARATE) {
           // Show a toast
           showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
+
         } else if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
           // populate the list with the new added part
           setNewRelatedPart({
@@ -415,6 +420,7 @@ const RelatedParts: React.FunctionComponent<Props> = ({
             documentRevisionId: get(createdDocumentRevision, "id"),
             status: get(createdDocumentRevision, "displayStatus"),
           });
+
         }
       }
     },
@@ -433,8 +439,10 @@ const RelatedParts: React.FunctionComponent<Props> = ({
   const createParentPartChoiceAction = useActionCreator(relatedPartsActions.parentPartChoiceAction);
   const parentChoiceAsync = useAsync<any>({
     onSuccess: (data) => {
+      // console.log(data);
       if (data) {
-        setParentStatus(data);
+        setParentStatus(data.relatedStatus);
+        dispatch(documentRevisionsActions.reload(documentRevision.id));
       }
     },
   });
