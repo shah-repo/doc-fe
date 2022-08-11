@@ -57,4 +57,10 @@ export const styles = makeStyles({
     visibility: "hidden",
   },
   textField: {},
+  successMessage: {
+    width: "380px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
 });

@@ -14,10 +14,13 @@ const createRelatedPart =
     },
   });
 
-const parentPartChoiceAction = (body: RelatedPartsChoiceRequestBody) => apiAction({
+const parentPartChoiceAction = (body: RelatedPartsChoiceRequestBody, async) => apiAction({
   url: `${RELATED_PARTS_ROOT_URL}/parent`,
   method: "post",
   data: body,
+  onSuccess(data) {
+    async.successHandler.callback(body.relatedStatus);
+  },
 });
 
 const fetchAllRelatedParts =

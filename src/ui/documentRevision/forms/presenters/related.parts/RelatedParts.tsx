@@ -6,7 +6,7 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  Grid, Paper,
+  Grid, Link, Paper,
   Radio,
   RadioGroup,
   Table,
@@ -26,6 +26,8 @@ import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks
 import { FBButton } from "../../../../form.builder";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
+
+import { toastSuccess } from "../../../../../ui/components/notifications/index";
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
@@ -154,11 +156,6 @@ const RelatedPartGrid: React.FunctionComponent<{
   };
 
   useEffect(() => {
-    // const promise = apiClient().get(`${RELATED_PARTS_ROOT_URL}/${documentRevision.document.id}`).promise;
-    // promise.then((relatedPartsList) => {
-    //   console.log(relatedPartsList);
-    //   setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
-    // });
     fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentRevision.document.id, fetchRelatedPartsAsync);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -231,30 +228,10 @@ const RelatedPartList: React.FunctionComponent<{
             </TableRow>
           </TableHead>
           <TableBody>
-            {list.map((listItem: RelatedPartsListItem) => {
-              const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
-              || listItem.status === DocumentRevisionStatus.Voided;
-              return (
-                <TableRow hover key={listItem.documentRevisionId}>
-                  <TableCell align="center">
-                    {listItem.rootDocId}
-                  </TableCell>
-                  <TableCell align="center">
-                    {listItem.name}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Checkbox
-                      checked={isVoided}
-                      disabled={isVoided}
-                      onChange={(e) => voidRelatedPart(listItem)}
-                    />
-                  </TableCell>
-                  <TableCell align="center">
-                    <RemoveRedEyeIcon color="primary"></RemoveRedEyeIcon>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {list.map((listItem: RelatedPartsListItem) => (
+              <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart}
+                key={listItem.documentRevisionId}/>
+            ))}
           </TableBody>
         </Table>
       </div>
@@ -262,6 +239,37 @@ const RelatedPartList: React.FunctionComponent<{
   );
 };
 
+
+const RelatedPartViewRow: React.FunctionComponent<{
+  listItem: RelatedPartsListItem;
+  voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+}> = ({
+  listItem,
+  voidRelatedPart,
+}) => {
+  const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
+  || listItem.status === DocumentRevisionStatus.Voided;
+  return (
+    <TableRow hover key={listItem.documentRevisionId}>
+      <TableCell align="center">
+        {listItem.rootDocId}
+      </TableCell>
+      <TableCell align="center">
+        {listItem.name}
+      </TableCell>
+      <TableCell align="center">
+        <Checkbox
+          checked={isVoided}
+          disabled={isVoided}
+          onChange={(e) => voidRelatedPart(listItem)}
+        />
+      </TableCell>
+      <TableCell align="center">
+        <RemoveRedEyeIcon color="primary"></RemoveRedEyeIcon>
+      </TableCell>
+    </TableRow>
+  );
+};
 
 const RelatedPartEditRow: React.FunctionComponent<{
   documentRevision: DocumentRevision;
@@ -304,7 +312,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
       </div>
       <div>
         <span>
-          <FBButton label="Add Related Part Together" onClick = {(e) => createNewDocument(relatedPartDetails)}
+          <FBButton label="Add Related Part" onClick = {(e) => createNewDocument(relatedPartDetails)}
             color="primary" variant="outlined" startIcon={<DoneIcon />}></FBButton>
         </span>
       </div>
@@ -325,15 +333,31 @@ const RelatedParts: React.FunctionComponent<Props> = ({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
         console.log(createdDocumentRevision);
+        if (parentStatus === RELATED_STATUS.PARENT_SEPARATE) {
+          showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
+        } else if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
+          // Change the view row to edit row.
+
+        }
       }
     },
   });
+
+  const showSuccessToast = (
+    docRevision: DocumentRevision,
+    viewRelatedPart: (docRevision) => void) => {
+
+    toastSuccess(<SuccessMsg docId={docRevision.document.docId}
+      viewRelatedPart={viewRelatedPart} documentRevisionId={docRevision.id}/>, {
+      closeButton: false,
+    });
+  };
 
   const createParentPartChoiceAction = useActionCreator(relatedPartsActions.parentPartChoiceAction);
   const parentChoiceAsync = useAsync<any>({
     onSuccess: (data) => {
       if (data) {
-        console.log(data);
+        setParentStatus(data);
       }
     },
   });
@@ -379,7 +403,7 @@ const RelatedParts: React.FunctionComponent<Props> = ({
 
 
   const parentStatusChanged = (value) => {
-    setParentStatus(value);
+    // setParentStatus(value);
 
     // Make an API call to persist the parent row.
     if (value) {
@@ -392,6 +416,11 @@ const RelatedParts: React.FunctionComponent<Props> = ({
   };
 
 
+  const viewRelatedPart = (docRevisionId: string) => {
+    console.log(docRevisionId);
+  };
+
+
   return (
     <>
       {documentRevision.relatedStatus !== RELATED_STATUS.RELATED_SEPARATE &&
@@ -400,13 +429,42 @@ const RelatedParts: React.FunctionComponent<Props> = ({
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
         {parentStatus === RELATED_STATUS.PARENT_SEPARATE && (
           <Grid item xs={12}>
-            <FBButton label="Add Related Part Separate" onClick = {createNewDocument}></FBButton>
+            <FBButton label="Add Related Part" onClick = {createNewDocument}></FBButton>
           </Grid>
         )}
         {parentStatus === RELATED_STATUS.PARENT_TOGETHER && (
           <RelatedPartGrid documentRevision={documentRevision} createNewDocument={createNewDocument} />
         )}
       </div>}
+    </>
+  );
+};
+
+
+const SuccessMsg: React.FunctionComponent<{
+  docId: string;
+  documentRevisionId: string;
+  viewRelatedPart: (documentRevisionId: string) => void;
+}> = ({
+  docId,
+  documentRevisionId,
+  viewRelatedPart,
+}) => {
+  const classes = styles();
+  return (
+    <>
+      <Typography variant="body1">
+          Related Part created successfully
+      </Typography>
+      <div className={classes.successMessage}>
+        <Typography variant="subtitle1">
+            Part <b>{docId}</b> has been created
+        </Typography>
+        <Link onClick={(event) => viewRelatedPart(documentRevisionId)} tabIndex={0} style={{ fontWeight: "normal" }}
+          variant="subtitle1" color="textSecondary">
+              View
+        </Link>
+      </div>
     </>
   );
 };
