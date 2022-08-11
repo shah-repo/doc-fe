@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { apiAction } from "../../factories";
+import { DOCUMENT_REVISION_ROOT_URL } from "../documentRevisions/constants";
 import { DocumentRevisionEditRequestBody } from "../documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "./constants";
 import { RelatedPartsChoiceRequestBody } from "./types";
@@ -10,7 +11,7 @@ const createRelatedPart =
     method: "post",
     data: body,
     onSuccess(data) {
-      async.successHandler.callback(data);
+      async.successHandler?.callback(data);
     },
   });
 
@@ -19,7 +20,7 @@ const parentPartChoiceAction = (body: RelatedPartsChoiceRequestBody, async) => a
   method: "post",
   data: body,
   onSuccess(data) {
-    async.successHandler.callback(body.relatedStatus);
+    async.successHandler?.callback(body.relatedStatus);
   },
 });
 
@@ -28,7 +29,18 @@ const fetchAllRelatedParts =
     url: `${RELATED_PARTS_ROOT_URL}/${parentDocumentId}`,
     method: "get",
     onSuccess(data) {
-      async.successHandler.callback(data);
+      if (async.successHandler?.callback) {
+        async.successHandler?.callback(data);
+      }
+    },
+  });
+
+const voidRelatedPart =
+  (documentRevisionId: string, async) => apiAction({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/void/${documentRevisionId}`,
+    method: "patch",
+    onSuccess: (documentRevision) => {
+      async.successHandler?.callback(documentRevisionId);
     },
   });
 
@@ -37,6 +49,7 @@ export default {
   createRelatedPart,
   parentPartChoiceAction,
   fetchAllRelatedParts,
+  voidRelatedPart,
 };
 
 

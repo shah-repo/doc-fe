@@ -6,7 +6,7 @@ export const styles = makeStyles({
   },
   title: {
     flex: "1 1 100%",
-    padding: "16px",
+    padding: "4px",
     paddingLeft: "16px",
     justifyContent: "space-between",
   },
@@ -51,6 +51,10 @@ export const styles = makeStyles({
   },
   formControlPad: {
     paddingLeft: "12px",
+  },
+  partsGrid: {
+    paddingLeft: "12px",
+    marginBottom: "1rem",
   },
   btnMargin: {
     marginRight: 0,
@@ -114,7 +118,12 @@ export const styles = makeStyles({
       color: "blue",
     },
   },
-
+  viewIcon: {
+    fill: "#01A6C7",
+    marginTop: "5px",
+    fontSize: "1.2rem",
+    cursor: "pointer",
+  },
   tableHeadHeight: {
     height: "34px",
   },

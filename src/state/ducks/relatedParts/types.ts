@@ -15,8 +15,8 @@ export interface RelatedPartsChoiceRequestBody {
 export interface RelatedPartsListItem {
   documentId: string;
   rootDocId: string;
-  suffixNumber: number;
-  suffixName: string;
+  suffixNumber?: number;
+  suffixName?: string;
   documentRevisionId: string;
   name: string;
   status: string;

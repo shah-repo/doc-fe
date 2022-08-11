@@ -134,15 +134,19 @@ const ParentPartSelector: React.FunctionComponent<{
 
 
 const RelatedPartGrid: React.FunctionComponent<{
+  newRelatedPart?: RelatedPartsListItem;
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
+  viewRelatedPart: (docRevId: string) => void;
 }> = ({
+  newRelatedPart,
   documentRevision,
   createNewDocument,
+  viewRelatedPart,
 }) => {
   const classes = styles();
 
-  const [visible, setVisible] = useState([{ show: "" }]);
+  const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [relatedPartsList, setRelatedPartsList] = useState<RelatedPartsListItem[]>([]);
 
@@ -154,8 +158,23 @@ const RelatedPartGrid: React.FunctionComponent<{
     },
   });
 
-  const addRelatedPartHandler = () => {
-    setVisible([...visible, { show: "" }]);
+  const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
+  const voidRelatedPartAsync = useAsync({
+    onSuccess: (docRevId) => {
+      setRelatedPartsList(
+        relatedPartsList.map(
+          (item) => {
+            if (item.documentRevisionId === docRevId) {
+              item.status = DocumentRevisionStatus.Voided;
+            }
+            return item;
+          }
+        ));
+    },
+  });
+
+  const showEditRow = () => {
+    setIsEditRowVisible(true);
     setShowButton(false);
   };
 
@@ -164,12 +183,27 @@ const RelatedPartGrid: React.FunctionComponent<{
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const voidRelatedPart = (listItem) => {
-    console.log(listItem);
+  useEffect(() => {
+    if (newRelatedPart && newRelatedPart.documentId) {
+      setRelatedPartsList([...relatedPartsList, newRelatedPart]);
+      setIsEditRowVisible(false);
+      setShowButton(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newRelatedPart]);
+
+  const cancelEdit = () => {
+    setIsEditRowVisible(false);
+    setShowButton(true);
+  };
+
+  const voidRelatedPart = (listItem: RelatedPartsListItem) => {
+    // console.log(listItem);
+    voidRelatedPartAsync.start(voidRelatedPartAction, listItem.documentRevisionId, voidRelatedPartAsync);
   };
 
   return (
-    <div className={classes.formControlPad}>
+    <div className={classes.partsGrid}>
       <div>
         <Grid style={{ justifyContent: "space-between", alignItems: "center" }} container>
           <Grid item>
@@ -185,7 +219,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                     className={classes.btnMargin}
                     color="primary"
                     startIcon={<AddCircleIcon color="primary" />}
-                    onClick={addRelatedPartHandler}
+                    onClick={showEditRow}
                   >
                     Add Related part
                   </Button>
@@ -196,16 +230,16 @@ const RelatedPartGrid: React.FunctionComponent<{
         <Divider className={classes.dividerStyle} />
       </div>
       <div>
-        <RelatedPartList list={relatedPartsList} voidRelatedPart = {voidRelatedPart}></RelatedPartList>
-        {visible.map((singleShow, index) => index > 0 && singleShow &&
-            <RelatedPartEditRow documentRevision={documentRevision}
-              createNewDocument={createNewDocument} key={index} />)}
+        <RelatedPartList list={relatedPartsList} voidRelatedPart = {voidRelatedPart}
+          viewRelatedPart={viewRelatedPart}></RelatedPartList>
+        {isEditRowVisible && <RelatedPartEditRow documentRevision={documentRevision}
+          createNewDocument={createNewDocument} cancelEdit={cancelEdit}/>}
         {
           showButton && <Button
             className={classes.fullLengthButton}
             variant="outlined"
             startIcon={<AddOutlinedIcon />}
-            onClick={addRelatedPartHandler}
+            onClick={showEditRow}
           >
               ADD RELATED PART
           </Button>
@@ -219,9 +253,11 @@ const RelatedPartGrid: React.FunctionComponent<{
 const RelatedPartList: React.FunctionComponent<{
   list: RelatedPartsListItem[];
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+  viewRelatedPart: (docRevId: string) => void;
 }> = ({
   list,
   voidRelatedPart,
+  viewRelatedPart,
 }) => {
   const classes = styles();
   return (
@@ -241,7 +277,7 @@ const RelatedPartList: React.FunctionComponent<{
         </TableHead>
         <TableBody>
           {list.map((listItem: RelatedPartsListItem) => (
-            <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart}
+            <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
               key={listItem.documentRevisionId}/>
           ))}
         </TableBody>
@@ -254,10 +290,13 @@ const RelatedPartList: React.FunctionComponent<{
 const RelatedPartViewRow: React.FunctionComponent<{
   listItem: RelatedPartsListItem;
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+  viewRelatedPart: (docRevId: string) => void;
 }> = ({
   listItem,
   voidRelatedPart,
+  viewRelatedPart,
 }) => {
+  const classes = styles();
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
   || listItem.status === DocumentRevisionStatus.Voided;
   return (
@@ -276,7 +315,9 @@ const RelatedPartViewRow: React.FunctionComponent<{
         />
       </TableCell>
       <TableCell align="center">
-        <RemoveRedEyeIcon color="primary"></RemoveRedEyeIcon>
+        <RemoveRedEyeIcon color="primary"
+          className={classes.viewIcon}
+          onClick={(e) => viewRelatedPart(listItem.documentRevisionId)}></RemoveRedEyeIcon>
       </TableCell>
     </TableRow>
   );
@@ -285,9 +326,11 @@ const RelatedPartViewRow: React.FunctionComponent<{
 const RelatedPartEditRow: React.FunctionComponent<{
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
+  cancelEdit: () => void;
 }> = ({
   documentRevision,
   createNewDocument,
+  cancelEdit,
 }) => {
   const [relatedPartDetails, setRelatedPartDetails] = React.useState({
     docId: "",
@@ -300,6 +343,11 @@ const RelatedPartEditRow: React.FunctionComponent<{
   // };
 
   const classes = styles();
+
+  const resetAndCancelEdit = () => {
+    setRelatedPartDetails({ docId: "", name: "" });
+    cancelEdit();
+  };
 
   return (
     <>
@@ -327,11 +375,10 @@ const RelatedPartEditRow: React.FunctionComponent<{
       </div>
       <div className={classes.actionButtonParentDiv}>
         <div className={classes.actionButtonChildDiv}>
-          <Button className={classes.actionButton}>
+          <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
             <ClearIcon className={classes.iconButton}/>
           </Button>
-          <Button className={classes.actionButton}
-            onClick = {(e) => createNewDocument(relatedPartDetails)}>
+          <Button className={classes.actionButton} onClick = {(e) => createNewDocument(relatedPartDetails)}>
             <DoneIcon className={classes.iconButton} />
           </Button>
         </div>
@@ -349,16 +396,25 @@ const RelatedParts: React.FunctionComponent<Props> = ({
   const classes = styles();
   const [parentStatus, setParentStatus] = useState(parentPartStatus);
 
+  const [newRelatedPart, setNewRelatedPart] = useState<RelatedPartsListItem>();
+
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
   const createPartAsync = useAsync({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
         console.log(createdDocumentRevision);
         if (parentStatus === RELATED_STATUS.PARENT_SEPARATE) {
+          // Show a toast
           showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
         } else if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
-          // Change the view row to edit row.
-
+          // populate the list with the new added part
+          setNewRelatedPart({
+            documentId: get(createdDocumentRevision, "documentId"),
+            rootDocId: get(createdDocumentRevision, "document.docId"),
+            name: get(createdDocumentRevision, "name"),
+            documentRevisionId: get(createdDocumentRevision, "id"),
+            status: get(createdDocumentRevision, "displayStatus"),
+          });
         }
       }
     },
@@ -454,7 +510,9 @@ const RelatedParts: React.FunctionComponent<Props> = ({
           </Grid>
         )}
         {parentStatus === RELATED_STATUS.PARENT_TOGETHER && (
-          <RelatedPartGrid documentRevision={documentRevision} createNewDocument={createNewDocument} />
+          <RelatedPartGrid documentRevision={documentRevision} createNewDocument={createNewDocument}
+            newRelatedPart = {newRelatedPart} viewRelatedPart={viewRelatedPart}
+          />
         )}
       </div>}
     </>
