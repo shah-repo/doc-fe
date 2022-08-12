@@ -150,7 +150,7 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
         right: "10px",
       },
       select: {
-        paddingLeft: appTheme.spacing(0.5),
+        padding: appTheme.spacing(1.625, 3, 1.625, 0.5),
         borderRadius: "4px",
       },
     },
