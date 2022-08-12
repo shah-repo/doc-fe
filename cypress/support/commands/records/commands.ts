@@ -139,8 +139,7 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
 Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
   cy.landingPageLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls([
-    CyRoutes.DocPreview,
-    CyRoutes.GetRequiredApproversDocRev], () => {
+    CyRoutes.DocPreview], () => {
     cy.get("[data-cy=\"field-selectType\"]").arrowClick().wait(2000);
     cy.get("div[id^=react-select]").contains(params.recordType).arrowClick().wait(2000);
 
