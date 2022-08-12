@@ -151,7 +151,7 @@ context("Export Supplier", () => {
         });
 
         it("Add TextField", () => {
-          cy.fbClickAddNewHiddenBtn();
+          cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
           cy.fbEnterNameValue({ name: "label", value: "Supplier Name" });
           cy.fbAddNewFieldButton();
@@ -358,11 +358,7 @@ context("Export Supplier", () => {
 
     context("Verify History tab content scroll", () => {
       it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-          cy.drSelectHistoryTab();
-          cy.get(`[data-cy="History-detail"]`).realHover().wait(500).scrollTo("top");
-          cy.get("[data-cy=\"History-detail\"]").scrollTo("bottom");
-        });
+        cy.verifyHistoryScroll();
       });
     });
   });
