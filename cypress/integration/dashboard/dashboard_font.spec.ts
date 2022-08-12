@@ -1897,6 +1897,7 @@ context("Dashboard notification font test", () => {
 
     it("Approve record button click", () => {
       cy.ebApprove();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
