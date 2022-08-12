@@ -350,6 +350,10 @@ context("NCO document type management with record doc type", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Import the template", () => {
       cy.get("#fb-import-schema").attachFile("../downloads/NCO_Form.json");
     });
