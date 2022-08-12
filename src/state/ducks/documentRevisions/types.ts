@@ -155,6 +155,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   redline?: boolean;
   relatedStatus?: RELATED_STATUS;
+  relatedParentPartDetails?: any;
 }
 
 export interface SmartReference {

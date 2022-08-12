@@ -14,6 +14,7 @@ import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/du
 import { ApplicationState } from "../../../../state/reducers";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
 import { DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
+import { documentPreviewPath } from "../../../document.revision/utils/paths";
 import { checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
@@ -36,6 +37,7 @@ interface Props {
   displayStatus?: string;
   subtitle?: any;
   displayRevision?: string;
+  relatedParentPartDetails?: any;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -46,6 +48,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   displayStatus,
   subtitle,
   displayRevision,
+  relatedParentPartDetails,
 }) => {
 
   const intl = useIntl();
@@ -150,6 +153,13 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const returnToList = () => {
     history.push(url);
   };
+
+  const viewDocument = () => {
+    const urlPath = documentPreviewPath(
+      relatedParentPartDetails.docRevId, relatedParentPartDetails.documentId);
+    history.push(urlPath);
+  };
+
   const newHeaderRenderer = () => (
     <Grid container xs={6} className={classes.itemWrap} >
       <Grid item>
@@ -166,7 +176,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   <div className={classes.icon} />
                 </Grid>
                 {
-                  !isTypeMpiOutput && <Link
+                  !isTypeMpiOutput && !relatedParentPartDetails && <Link
                     underline="hover"
                     onClick={returnToList}
                     className={classes.link}
@@ -182,7 +192,17 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       {title}
                     </Grid>
                 }
-
+                {
+                  relatedParentPartDetails && relatedParentPartDetails.parentDocId && <Link
+                    underline="hover"
+                    onClick={viewDocument}
+                    className={classes.link}
+                  >
+                    <Grid item={true} className={classes.title}>
+                      {relatedParentPartDetails.parentDocId}
+                    </Grid>
+                  </Link>
+                }
               </Grid>
             </Typography>
             <Typography data-cy="HeaderInfo" className={classes.breadcrumbId}>
