@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { CyRoutes } from "../../routes";
+
 export { };
 
 declare global {
@@ -14,6 +16,7 @@ declare global {
       verifyExpandCollpase(): Chainable;
       verifyReferencesGeneralInfo(params: {user: string}): Chainable;
       verifyReferencesOtherInfo(): Chainable;
+      verifyHistoryScroll(): Chainable;
     }
   }
 }
@@ -71,4 +74,12 @@ Cypress.Commands.add("verifyReferencesOtherInfo", () => {
     .and("contain.text", "Training")
     .and("contain.text", "Release Date")
     .and("contain.text", "Form Info");
+});
+
+Cypress.Commands.add("verifyHistoryScroll", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+    cy.drSelectHistoryTab();
+    cy.get(`[data-cy="History-detail"]`).realHover().wait(500).scrollTo("top");
+    cy.get("[data-cy=\"History-detail\"]").scrollTo("bottom");
+  });
 });
