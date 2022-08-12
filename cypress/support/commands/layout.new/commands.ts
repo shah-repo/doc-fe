@@ -13,6 +13,7 @@ declare global {
       verifySelectedTab(params: {tab: string}): Chainable;
       verifyFixedTab(): Chainable;
       verifyApprovalsField(): Chainable;
+      verifyFormOptionsVisibility(): Chainable;
       verifyExpandCollpase(): Chainable;
       verifyReferencesGeneralInfo(params: {user: string}): Chainable;
       verifyReferencesOtherInfo(): Chainable;
@@ -53,6 +54,12 @@ Cypress.Commands.add("verifyFixedTab", () => {
 Cypress.Commands.add("verifyApprovalsField", () => {
   cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
   cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyFormOptionsVisibility", (params: {user: string}) => {
+  cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("be.visible");
+  cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("be.visible");
+  cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("be.visible");
 });
 
 Cypress.Commands.add("verifyExpandCollpase", () => {

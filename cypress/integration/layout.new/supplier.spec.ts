@@ -12,7 +12,7 @@ let createdCompany;
 let loginResponse;
 let adminEmployee;
 
-context("Export Supplier", () => {
+context("Verify New Layout for Supplier Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -25,7 +25,7 @@ context("Export Supplier", () => {
     cy.saveLocalStorage();
   });
 
-  context("[API]Prepare company", () => {
+  xcontext("[API]Prepare company", () => {
     it("[API]Create company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -43,9 +43,7 @@ context("Export Supplier", () => {
           sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find(
-            (employee) => employee.user.email === USERS[1].email
-          );
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -61,11 +59,25 @@ context("Export Supplier", () => {
     });
   });
 
-  context("Login user", () => {
+  xcontext("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
+
+  // For testing purpose
+  context("Login user", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+      });
+    });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: "Grey Nicolas, Walter and Lindgren 37302", multiple: true });
+    });
+  });
+
+  // Scenario 11a - Newly Created Supplier
 
   context("Create supplier form", () => {
     it("Navigate to document list", () => {
@@ -141,7 +153,8 @@ context("Export Supplier", () => {
         });
 
         it("Verify that Form Options should appear for Overview tab", () => {
-          cy.get(".formOptionsBox").should("exist");
+          cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
+          cy.verifyFormOptionsVisibility();
         });
       });
 
@@ -169,7 +182,7 @@ context("Export Supplier", () => {
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.get(".formOptionsBox").should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
     });
@@ -238,7 +251,8 @@ context("Export Supplier", () => {
           });
 
           it("Verify that Form Options should appear for Overview tab", () => {
-            cy.get(".formOptionsBox").should("exist");
+            cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
+            cy.verifyFormOptionsVisibility();
           });
         });
       });
@@ -254,7 +268,7 @@ context("Export Supplier", () => {
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.get(".formOptionsBox").should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
     });
@@ -318,7 +332,7 @@ context("Export Supplier", () => {
 
       it("Add another user permission", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.drAddUserFromPermissionTab(USERS[2].name);
         });
       });
 
@@ -363,7 +377,7 @@ context("Export Supplier", () => {
     });
   });
 
-  context("Fill in the fields, add approver and submit for approval", () => {
+  context("Fill in the fields", () => {
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -374,20 +388,371 @@ context("Export Supplier", () => {
         cy.unClick();
       });
     });
+  });
 
-    it("Navigate to Overview tab", () => {
-      cy.drSelectOverviewTab();
+  // Scenario 11b - Existing Supplier
+
+  context("Select exisitng supplier draft document", () => {
+    it("Navigate to Supplier List", () => {
+      cy.navigToSuppliers();
     });
 
+    it("Filter the Draft document", () => {
+      cy.dlClearFilters();
+      cy.supFilterByState({ state: "Draft" });
+    });
+
+    it("Select 'Test Supplier Title' document'", () => {
+      cy.supFilterByDocTitle({ docTitle: "Test Supplier Title" });
+      cy.dlSelectFirstDocument();
+    });
+  });
+
+  context("Verify supplier draft document", () => {
+    it("Verify predefined fields", () => {
+      cy.verifyTitleDescriptionFields();
+      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+    });
+
+    it("Verify document header details", () => {
+      cy.verifyDocumentHeaderDetails();
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+
+    it("Verify tabs", () => {
+      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+    });
+
+    context("Verify created supplier document tabs content", () => {
+      context("Verify Overview tab content", () => {
+        it("Verify Overview as default selected tab", () => {
+          cy.verifySelectedTab({ tab: "overview" });
+        });
+
+        it("Verify tab as fixed", () => {
+          cy.verifyFixedTab();
+        });
+
+        context("Verify Overview tab content", () => {
+          it("Verify Overview tab default fields", () => {
+            cy.get("#sm-tabpanel-0").should("be.visible");
+            cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+            cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+          });
+
+          it("Verify Approvals field", () => {
+            cy.verifyApprovalsField();
+          });
+
+          it("Verify that Form Options should appear for Overview tab", () => {
+            cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
+            cy.verifyFormOptionsVisibility();
+          });
+        });
+      });
+
+      context("Verify Details tab content", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Verify TextField", () => {
+          cy.get("#sm-tabpanel-1").should("be.visible");
+          cy.contains("Supplier Name").should("exist");
+        });
+
+        it("Verify that Form Options should appear for Details tab", () => {
+          cy.verifyFormOptionsVisibility();
+        });
+      });
+    });
+
+    context("Verify Right side panel", () => {
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy=\"References\"]").should("exist");
+        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      });
+
+      it("Verify Right side panel Can be expanded or collapsed", () => {
+        cy.verifyExpandCollpase();
+      });
+
+      it("Verify References tab is fixed as the user scrolls up or down", () => {
+        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+      });
+
+      context("Verify References tab", () => {
+        it("Verify References tab General Info", () => {
+          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+        });
+
+        it("Verify Add/Remove References", () => {
+          cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
+          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+          cy.drSelectReferences( "FM-00001" );
+          cy.drRemoveReferences({ reference: "FM-00001" });
+        });
+
+        it("Verify Referenced By, Training, Release Date and Form Info", () => {
+          cy.verifyReferencesOtherInfo();
+        });
+      });
+
+      context("Verify Revisions tab", () => {
+        it("Open revisions tab, click and verify current revision", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drClickRevisionsSidePanel();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+            cy.recCheckRevisionStage({ stage: "Revision 1" });
+            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
+          });
+        });
+      });
+
+      context("Verify History tab", () => {
+        it("Open history tab and verify changes are being captured", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+            cy.drSelectHistoryTab();
+            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+          });
+        });
+      });
+
+      context("Verify Access Permissions tab", () => {
+        it("Open access permissions tab", () => {
+          cy.drSelectPermissionTab();
+        });
+
+        it("Add another user permission", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+            cy.drAddUserFromPermissionTab(USERS[3].name);
+          });
+        });
+
+        it("Add another group permission", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.drAddGroupFromPermissionTab("Company Admin");
+          });
+        });
+      });
+
+      context("Verify Bookmarks tab", () => {
+        it("Open bookmarks tab", () => {
+          cy.drSelectBookmarksTab();
+        });
+
+        it("Verify if Approvals bookmark is present", () => {
+          cy.get("[data-cy=\"Bookmarks-detail\"]").find("p").should("contain.text", "Approvals");
+        });
+      });
+
+      context("Verify Revision History tab", () => {
+        it("Open revision history tab", () => {
+          cy.drSelectRevisionHistoryTab();
+          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+        });
+      });
+
+      context("Verify Migrate Form tab", () => {
+        it("Open migrate form tab", () => {
+          cy.drSelectMigrateFormTab();
+        });
+
+        it("Select migration form", () => {
+          cy.get("[data-cy=\"field-changeDocumentForm\"]").eq(0).arrowClick();
+        });
+      });
+
+      context("Verify History tab content scroll", () => {
+        it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
+          cy.verifyHistoryScroll();
+        });
+      });
+    });
+  });
+
+  context("Approve and Release supplier document", () => {
     it("Add Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
     });
+
+    it("Approve supplier document", () => {
+      cy.ebApprove();
+    });
+  });
+
+  context("Select exisitng supplier released document", () => {
+    it("Navigate to Supplier List", () => {
+      cy.navigToSuppliers();
+    });
+
+    it("Filter the Draft document", () => {
+      cy.dlClearFilters();
+      cy.supFilterByState({ state: "Released" });
+    });
+
+    it("Select 'Test Supplier Title' document'", () => {
+      cy.supFilterByDocTitle({ docTitle: "Test Supplier Title" });
+      cy.dlSelectFirstDocument();
+    });
+  });
+
+  context("Verify supplier released document", () => {
+    it("Verify predefined fields", () => {
+      cy.get("[id='field-name']").contains("Test Supplier Title");
+      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Test Supplier Description");
+    });
+
+    it("Verify document header details", () => {
+      cy.verifyDocumentHeaderDetails();
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
+
+    it("Verify tabs", () => {
+      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+    });
+
+    context("Verify created supplier document tabs content", () => {
+      context("Verify Overview tab content", () => {
+        it("Verify Overview as default selected tab", () => {
+          cy.verifySelectedTab({ tab: "overview" });
+        });
+
+        it("Verify tab as fixed", () => {
+          cy.verifyFixedTab();
+        });
+
+        context("Verify Overview tab content", () => {
+          it("Verify Approvals field", () => {
+            cy.get("#sm-tabpanel-0").should("be.visible");
+            cy.verifyApprovalsField();
+          });
+
+          it("Verify that Form Options should appear for Overview tab", () => {
+            cy.verifyFormOptionsVisibility();
+          });
+        });
+      });
+
+      context("Verify Details tab content", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Verify TextField", () => {
+          cy.get("#sm-tabpanel-1").should("be.visible");
+          cy.contains("Supplier Name").should("exist");
+        });
+
+        it("Verify that Form Options should appear for Details tab", () => {
+          cy.verifyFormOptionsVisibility();
+        });
+      });
+    });
+
+    context("Verify Right side panel", () => {
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy=\"References\"]").should("exist");
+        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      });
+
+      it("Verify Right side panel Can be expanded or collapsed", () => {
+        cy.verifyExpandCollpase();
+      });
+
+      it("Verify References tab is fixed as the user scrolls up or down", () => {
+        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+      });
+
+      context("Verify References tab", () => {
+        it("Verify References tab General Info", () => {
+          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+        });
+
+        it("Verify References", () => {
+          cy.get("[data-cy=\"generalInfo\"]").should("contain.text", "References");
+        });
+
+        it("Verify Referenced By, Training, Release Date and Form Info", () => {
+          cy.verifyReferencesOtherInfo();
+        });
+      });
+
+      context("Verify Revisions tab", () => {
+        it("Open revisions tab, click and verify current revision", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drClickRevisionsSidePanel();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+            cy.recCheckRevisionStage({ stage: "Revision 1" });
+            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
+          });
+        });
+      });
+
+      context("Verify History tab", () => {
+        it("Open history tab and verify changes are being captured", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+            cy.drSelectHistoryTab();
+            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+          });
+        });
+      });
+
+      context("Verify Access Permissions tab", () => {
+        it("Open access permissions tab", () => {
+          cy.drSelectPermissionTab();
+        });
+
+        it("Add another user permission", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+            cy.drAddUserFromPermissionTab(USERS[4].name);
+          });
+        });
+
+        it("Add another group permission", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.drAddGroupFromPermissionTab("User Management");
+          });
+        });
+      });
+
+      context("Verify Bookmarks tab", () => {
+        it("Open bookmarks tab", () => {
+          cy.drSelectBookmarksTab();
+        });
+
+        it("Verify if Approvals bookmark is present", () => {
+          cy.get("[data-cy=\"Bookmarks-detail\"]").find("p").should("contain.text", "Approvals");
+        });
+      });
+
+      context("Verify Revision History tab", () => {
+        it("Open revision history tab", () => {
+          cy.drSelectRevisionHistoryTab();
+          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+        });
+      });
+
+      context("Verify Migrate Form tab", () => {
+        it("Migrate Form tab should not present", () => {
+          cy.get("[data-cy=\"form-migration-icon\"]").should("not.exist");
+        });
+      });
+
+      context("Verify History tab content scroll", () => {
+        it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
+          cy.verifyHistoryScroll();
+        });
+      });
+    });
   });
 });
 
 export { };
-
