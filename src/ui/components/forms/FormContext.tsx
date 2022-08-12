@@ -130,7 +130,7 @@ export const useFormContext = () => {
           setReferences(relation);
         }
       }
-      return formik.submitForm();
+      formik.submitForm();
     }
   };
 

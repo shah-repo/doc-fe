@@ -6,7 +6,6 @@ import { SMDialogAction } from "../../../App";
 import { withSMDialog } from "../../../App/Shifamed/Components/SMDialog/SMDialog.hoc";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { useFormContext } from "../../components/forms/FormContext";
-import FBDataStore from "../FBStore/FBDataStore";
 
 export const withFBLHRBuild = <T extends FBLHRBuildProps>(
   Component: React.FunctionComponent<T>,
@@ -47,12 +46,8 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     }, []);
 
     // MARK: @helpers
-    async function save() {
-      await formContext.submitForm();
-      FBDataStore?.setRefreshData({
-        ...FBDataStore?.refreshData,
-        formInput: formState?.getValues() || FBDataStore?.refreshData?.formInput,
-      });
+    function save() {
+      formContext.submitForm();
     }
 
     // MARK: @reactions
