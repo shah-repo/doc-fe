@@ -39,6 +39,8 @@ import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
 import { get } from "lodash";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { documentPreviewPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./RelatedPart.styles";
 
 interface Props {
@@ -139,7 +141,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   newRelatedPart?: RelatedPartsListItem;
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
-  viewRelatedPart: (docRevId: string) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
 }> = ({
   newRelatedPart,
   documentRevision,
@@ -255,7 +257,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 const RelatedPartList: React.FunctionComponent<{
   list: RelatedPartsListItem[];
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
-  viewRelatedPart: (docRevId: string) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
 }> = ({
   list,
   voidRelatedPart,
@@ -292,7 +294,7 @@ const RelatedPartList: React.FunctionComponent<{
 const RelatedPartViewRow: React.FunctionComponent<{
   listItem: RelatedPartsListItem;
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
-  viewRelatedPart: (docRevId: string) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
 }> = ({
   listItem,
   voidRelatedPart,
@@ -319,7 +321,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
       <TableCell align="center">
         <RemoveRedEyeIcon color="primary"
           className={classes.viewIcon}
-          onClick={(e) => viewRelatedPart(listItem.documentRevisionId)}></RemoveRedEyeIcon>
+          onClick={(e) => viewRelatedPart(listItem.documentRevisionId, listItem.documentId)}></RemoveRedEyeIcon>
       </TableCell>
     </TableRow>
   );
@@ -397,6 +399,7 @@ const RelatedParts: React.FunctionComponent<Props> = ({
 
   const classes = styles();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [parentStatus, setParentStatus] = useState(parentPartStatus);
 
@@ -428,12 +431,16 @@ const RelatedParts: React.FunctionComponent<Props> = ({
 
   const showSuccessToast = (
     docRevision: DocumentRevision,
-    viewRelatedPart: (docRevision) => void) => {
+    viewRelatedPart: (docRevId: string, documentId: string) => void) => {
 
-    toastSuccess(<SuccessMsg docId={docRevision.document.docId}
-      viewRelatedPart={viewRelatedPart} documentRevisionId={docRevision.id}/>, {
-      closeButton: false,
-    });
+    if (docRevision && docRevision.document) {
+      toastSuccess(<SuccessMsg docId={docRevision.document.docId}
+        viewRelatedPart={viewRelatedPart} documentRevisionId={docRevision.id}
+        documentId={docRevision.document.id}/>, {
+        closeButton: false,
+      });
+    }
+
   };
 
   const createParentPartChoiceAction = useActionCreator(relatedPartsActions.parentPartChoiceAction);
@@ -501,8 +508,9 @@ const RelatedParts: React.FunctionComponent<Props> = ({
   };
 
 
-  const viewRelatedPart = (docRevisionId: string) => {
-    console.log(docRevisionId);
+  const viewRelatedPart = (docRevId: string, documentId: string) => {
+    const urlPath = documentPreviewPath(docRevId, documentId);
+    history.push(urlPath);
   };
 
 
@@ -531,10 +539,12 @@ const RelatedParts: React.FunctionComponent<Props> = ({
 const SuccessMsg: React.FunctionComponent<{
   docId: string;
   documentRevisionId: string;
-  viewRelatedPart: (documentRevisionId: string) => void;
+  documentId: string;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
 }> = ({
   docId,
   documentRevisionId,
+  documentId,
   viewRelatedPart,
 }) => {
   const classes = styles();
@@ -547,7 +557,8 @@ const SuccessMsg: React.FunctionComponent<{
         <Typography variant="subtitle1">
             Part <b>{docId}</b> has been created
         </Typography>
-        <Link onClick={(event) => viewRelatedPart(documentRevisionId)} tabIndex={0} style={{ fontWeight: "normal" }}
+        <Link onClick={(event) => viewRelatedPart(documentRevisionId, documentId)}
+          tabIndex={0} style={{ fontWeight: "normal" }}
           variant="subtitle1" color="textSecondary">
               View
         </Link>
