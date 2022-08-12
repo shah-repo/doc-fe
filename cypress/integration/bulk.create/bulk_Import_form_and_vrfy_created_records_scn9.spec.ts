@@ -2,10 +2,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
 import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
 import { BulkImport } from "../../utils/constants/documentTypes/bulkImport";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -529,6 +529,13 @@ context("Export Bulk", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
+
+    it("Add component", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbAddLabelName({ name: "Textfield for bulk import test" });
+      cy.fbAddField();
+    });
   });
 
   context("Release Bulk Import form", () => {
@@ -542,12 +549,8 @@ context("Export Bulk", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
     it("Export and save the template", () => {
-      cy.get("[class=\"MuiIconButton-label\"]").eq(12).arrowClick();
+      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").eq(0).arrowClick();
       cy.get("[data-cy=\"fb-template-name\"]").arrowType("Bulk_Import");
       cy.get("[data-cy=\"common.add\"]").arrowClick();
     });
@@ -563,9 +566,14 @@ context("Export Bulk", () => {
         cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00003", status: "Draft" });
       });
 
-      // it("Import the template", () => {
-      //   cy.fbImportTemplate({ fileName: "EB_Document.json", saveFileName: "EB_Document.json" });
-      // });
+      it("Import the template", () => {
+        cy.get("#fb-import-schema").attachFile("../downloads/Bulk_Import.json");
+      });
+
+      it("verify the imported field 'Textfield for bulk import test'", () => {
+        cy.get("[data-cy=\"Textfield for bulk import test\"]")
+          .should("have.text", "Textfield for bulk import test");
+      });
 
       it("Add component", () => {
         cy.fbAddNewFieldWhenHidden();
@@ -599,7 +607,8 @@ context("Export Bulk", () => {
     });
 
     it("Select 'Record Document' form", () => {
-      cy.recSelectRecordFormFromMultiSelect({ recordType: "Bulk Import" });
+      cy.get("[data-cy=\"field-selectType\"]").arrowClick();
+      cy.get("div[id^=react-select]").contains("Bulk Import").arrowClick().wait(2000);
     });
 
     it("Turn off autosave", () => {
@@ -627,7 +636,7 @@ context("Export Bulk", () => {
     });
 
     it("Select column-document-record-id", () => {
-      cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(1).check();
+      cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
     });
 
     it("select output document type", () => {
@@ -639,14 +648,60 @@ context("Export Bulk", () => {
     });
 
     it("Download excel template file", () => {
-      const date = moment().tz("America/Los_Angeles").format("x");
-      const excelTemplateSaveName = date + "excelTemplate.xlsx";
-      cy.excelDownloadTemplate({ saveFileName: excelTemplateSaveName });
+      cy.excelDownloadTemplate({ saveFileName: "Form Template Spreadsheet.xlsx" });
     });
 
-    it("Upload template file", () => {
-      // eslint-disable-next-line max-len
-      cy.atchBlkImpDownloadFile({ fileName: "Form Template Spreadsheet.xlsx", saveFileName: "Form Template Spreadsheet.xlsx" });
+    it("Upload file", () => {
+      cy.atchUploadTemplateForBLC({ fileName: "Form Template Spreadsheet.xlsx" });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Add Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
+    });
+
+    it("Navigate to records list", () => {
+      cy.navigToRecords();
+    });
+
+    it("Filter by record-id", () => {
+      cy.dlClearFilters();
+      cy.dlFilterByDocId({ docId: "BLC-00005" });
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Verify the docId", () => {
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("BLC-00005")
+        .should("exist");
+    });
+
+    it("Verify the Rev A", () => {
+      cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A")
+        .should("exist");
+    });
+
+    it("Verify the status", () => {
+      cy.get("[data-cy=\"HeaderInfo-status\"]").contains("WIP")
+        .should("exist");
+    });
+
+    it("Verify the text field", () => {
+      cy.get("input[name^=\"textfield-for-bulk-import-test-\"]").should("have.value", "test");
     });
   });
 });
