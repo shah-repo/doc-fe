@@ -103,7 +103,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
       FBDataStore?.setRefreshData({
         ...FBDataStore?.refreshData,
-        formInput: data.formInput || FBDataStore?.refreshData?.formInput,
+        formInput: data.formInput ?? FBDataStore?.refreshData?.formInput,
       });
     });
   };
