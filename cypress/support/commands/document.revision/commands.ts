@@ -115,6 +115,9 @@ declare global {
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom(): Chainable<Subject>;
       drSelectHistoryTab(): Chainable<Subject>;
+      drSelectBookmarksTab(): Chainable<Subject>;
+      drSelectRevisionHistoryTab(): Chainable<Subject>;
+      drSelectMigrateFormTab(): Chainable<Subject>;
       drOpenCloseSidebarDrawer(): Chainable<Subject>;
       drSelectPermissionTab(): Chainable<Subject>;
       drSelectApprovalRolesTab(): Chainable<Subject>;
@@ -816,6 +819,16 @@ Cypress.Commands.add("drIsTrainingRequired", (params: {shouldBe: boolean}) => {
 
 Cypress.Commands.add("drSelectHistoryTab", () => {
   cy.get("[data-cy=\"timeline-icon\"]").arrowClick();
+});
+
+Cypress.Commands.add("drSelectBookmarksTab", () => {
+  cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
+});
+Cypress.Commands.add("drSelectRevisionHistoryTab", () => {
+  cy.get("[data-cy=\"cr-icon\"]").arrowClick();
+});
+Cypress.Commands.add("drSelectMigrateFormTab", () => {
+  cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
 });
 
 Cypress.Commands.add("drOpenCloseSidebarDrawer", () => {
