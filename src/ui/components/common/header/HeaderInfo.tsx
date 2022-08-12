@@ -171,7 +171,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     onClick={returnToList}
                     className={classes.link}
                   >
-                    <Grid item={true} className={classes.title}>
+                    <Grid item={true} data-cy="Header-listTitle" className={classes.title}>
                       {title}
                     </Grid>
                   </Link>
@@ -183,7 +183,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     onClick={returnToList}
                     className={classes.link}
                   >
-                    <Grid item={true} className={classes.mpiTitle}>
+                    <Grid item={true} data-cy="Header-listTitle" className={classes.mpiTitle}>
                       {title}
                     </Grid>
                   </Link>
