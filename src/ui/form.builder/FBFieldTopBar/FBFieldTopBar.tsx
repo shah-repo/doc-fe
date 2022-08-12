@@ -42,7 +42,7 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
           <CodeIcon style={{ fill: Colors.white }} onClick={markDownSchemaItem} />
         </Box>
         <Box zIndex={1000}>
-          <DragHandleIcon className="drag-handle" />
+          <DragHandleIcon className="drag-handle" data-cy={"drag-schema-item"} />
         </Box>
       </Grid>
     </Box>
