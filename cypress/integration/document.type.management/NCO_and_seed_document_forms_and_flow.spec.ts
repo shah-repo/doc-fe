@@ -283,7 +283,7 @@ context("NCO document type management with record doc type", () => {
     });
   });
 
-  context("Create NCO document from Form", () => {
+  context("Fill out the required fields", () => {
     it("Upload correct DAM JSON", () => {
       cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
     });
@@ -300,7 +300,7 @@ context("NCO document type management with record doc type", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Approve and release document - create company", () => {
+    it("Approve and release document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
@@ -350,9 +350,9 @@ context("NCO document type management with record doc type", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    // it("Import the template", () => {
-    //   cy.fbImportTemplate({ fileName: "EB_Document.json", saveFileName: "EB_Document.json" });
-    // });
+    it("Import the template", () => {
+      cy.get("#fb-import-schema").attachFile("../downloads/NCO_Form.json");
+    });
   });
 
   context("'Add' & 'Move' & 'Edit' & Remove component", () => {
@@ -545,9 +545,9 @@ context("NCO document type management with record doc type", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    // it("Import the template", () => {
-    //   cy.fbImportTemplate({ fileName: "EB_Document.json", saveFileName: "EB_Document.json" });
-    // });
+    it("Import the template", () => {
+      cy.get("#fb-import-schema").attachFile("../downloads/Seed_Form.json");
+    });
   });
 
   context("'Add' & 'Move' & 'Edit' & Remove component", () => {
@@ -645,12 +645,21 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Select 'Document' value on 'Type of document to be created'", () => {
-      cy.get("[name^=type-of-document-to-be-created-]").eq(1).check();
+      cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
+    });
+
+    it("Selects document type as 'Form'", () => {
+      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
+      cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").arrowClick();
+    });
+
+    it("Upload JSON Form", () => {
+      cy.atchUploadJSONFormForSeed({ fileName: "TestTemplate.json", queue: 0 });
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
-      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
-      cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul")
+      cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick();
+      cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul")
         .contains("li", "Clinical Protocol").arrowClick();
     });
 
@@ -751,7 +760,8 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Upload correct DAM JSON", () => {
-      cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
+      cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
+      // cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
@@ -759,7 +769,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Upload Page Details JSON", () => {
-      cy.atchUploadPageDetailsJSONForNCO({ fileName: "doc_type_page_details.json", queue: 0 });
+      cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
@@ -767,7 +777,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Upload Navigation JSON", () => {
-      cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+      cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
     });
 
     it("Upload Users List JSON", () => {
@@ -802,6 +812,10 @@ context("NCO document type management with record doc type", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
+    });
+
+    it("Logo field is empty and Verify default company logo", () => {
+      cy.get(`img[alt="Company logo"]`).should("have.attr", "src", "/logo_enlil.svg");
     });
   });
 });
