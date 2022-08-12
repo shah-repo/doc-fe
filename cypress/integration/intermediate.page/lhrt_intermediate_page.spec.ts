@@ -82,11 +82,11 @@ context("Intermediate page validation", () => {
 
   context("Enter title and select revision stage", () => {
     it("Enter document title", () => {
-      cy.drEnterDocumentTitle({ name: "lhrt intermediate page test" });
+      cy.drEnterDocumentTitle({ name: docType + " title" });
     });
 
     it("Enter description", () => {
-      cy.drEnterDocumentDescription({ description: "LHRT document description" });
+      cy.drEnterDocumentDescription({ description: docType + " description" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -216,49 +216,98 @@ context("Intermediate page validation", () => {
   });
 
   context("Click 'Preview Layout' button and verify predefined fields are displayed", () => {
-    it("Click 'Preview Layout' button", () => {
-      cy.contains("Preview Layout").arrowClick();
-      cy.get(".MuiDialogContent-root").scrollTo("bottom");
+    context("verify default tabs are displayed", () => {
+      it("Click 'Preview Layout' button", () => {
+        cy.contains("Preview Layout").arrowClick();
+        cy.get(".MuiDialogContent-root").scrollTo("bottom");
+      });
+
+      it("Verify 'Details' tab is displayed", () => {
+        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      });
     });
 
-    it("Check 'Part to be Manufactured' is displayed", () => {
-      cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist");
+    context("verify default fields are displayed", () => {
+      it("Verify Document type is displayed", () => {
+        cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+      });
+
+      it("Verify Document id is editable", () => {
+        cy.get("input[id='document.docId']").should("exist")
+          .should("not.be.disabled");
+      });
+
+      it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
+        cy.get("[data-cy=\"field-document.documentType.id\"]").parent()
+          .should("have.class", "MuiGrid-grid-xs-6").next()
+          .should("have.class", "MuiGrid-grid-xs-6")
+          .should("contain.text", "Document ID");
+      });
+
+      it("Verify 'Revision Stage' field is displayed", () => {
+        cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+      });
+
+      it("Verify 'Training required' field is displayed", () => {
+        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+      });
+
+      it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
+        cy.get("[data-cy=\"field-revisionStage\"]").parent().parent()
+          .should("have.class", "MuiGrid-grid-xs-6").next()
+          .should("have.class", "MuiGrid-grid-xs-6")
+          .should("contain.text", "Training Required");
+      });
+
+      it("Verify 'Attachment' field is displayed", () => {
+        cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+      });
+
+      it("Verify Output document type is displayed", () => {
+        cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+      });
     });
 
-    it("Check 'Initial Quantity' is displayed", () => {
-      cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
-    });
+    context("verify predefined fields are displayed", () => {
+      it("Check 'Part to be Manufactured' is displayed", () => {
+        cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist");
+      });
 
-    it("Check 'End Quantity' is displayed", () => {
-      cy.get("[data-cy=\"End Quantity\"]").should("exist");
-    });
+      it("Check 'Initial Quantity' is displayed", () => {
+        cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+      });
 
-    it("Check 'Build Type' is displayed", () => {
-      cy.get("[data-cy=\"Build Type\"]").should("exist");
-    });
+      it("Check 'End Quantity' is displayed", () => {
+        cy.get("[data-cy=\"End Quantity\"]").should("exist");
+      });
 
-    it("Check 'Due Date' is displayed", () => {
-      cy.get("[data-cy=\"Due Date\"]").should("exist");
-    });
+      it("Check 'Build Type' is displayed", () => {
+        cy.get("[data-cy=\"Build Type\"]").should("exist");
+      });
 
-    it("Check 'Approvals' is displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
-    });
+      it("Check 'Due Date' is displayed", () => {
+        cy.get("[data-cy=\"Due Date\"]").should("exist");
+      });
 
-    it("Check 'Preview Layout' button gets colored", () => {
-      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
-    });
+      it("Check 'Approvals' is displayed", () => {
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+      });
 
-    it("Navigate to Detail Tab", () => {
-      cy.drSelectDetailsTab();
-    });
+      it("Check 'Preview Layout' button gets colored", () => {
+        cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
+      });
 
-    it("Check 'Step #1' is displayed", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").should("exist");
-    });
+      it("Navigate to Detail Tab", () => {
+        cy.drSelectDetailsTab();
+      });
 
-    it("Close Preview dialog", () => {
-      cy.get("svg[data-cy=\"dialog-close\"]").arrowClick();
+      it("Check 'Step #1' is displayed", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").should("exist");
+      });
+
+      it("Close Preview dialog", () => {
+        cy.get("svg[data-cy=\"dialog-close\"]").arrowClick();
+      });
     });
   });
 
