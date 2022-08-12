@@ -116,11 +116,11 @@ context("Intermediate page validation", () => {
         .should("contain.text", "Document ID");
     });
 
-    it("Verify 'Revision Stage' field is visible", () => {
+    it("Verify 'Revision Stage' field is displayed", () => {
       cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
     });
 
-    it("Verify 'Training required' field is visible", () => {
+    it("Verify 'Training required' field is displayed", () => {
       cy.get("[data-cy=\"field-retrain\"]").should("exist");
     });
 
@@ -131,11 +131,11 @@ context("Intermediate page validation", () => {
         .should("contain.text", "Training Required");
     });
 
-    it("Verify 'Selected Users' field is visible", () => {
+    it("Verify 'Selected Users' field is displayed", () => {
       cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
     });
 
-    it("Verify 'Selected Groups' field is visible", () => {
+    it("Verify 'Selected Groups' field is displayed", () => {
       cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
     });
 
@@ -184,12 +184,22 @@ context("Intermediate page validation", () => {
   });
 
   context("Click 'Preview Layout' button and verify predefined fields are displayed", () => {
-    context("verify default fields are displayed", () => {
+    context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
         cy.contains("Preview Layout").arrowClick();
         cy.get(".MuiDialogContent-root").scrollTo("bottom");
       });
 
+      it("Verify 'Overview' tab is displayed", () => {
+        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+      });
+
+      it("Verify 'Details' tab is displayed", () => {
+        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      });
+    });
+
+    context("verify default fields are displayed", () => {
       it("Verify Document type is displayed", () => {
         cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
       });
@@ -206,11 +216,11 @@ context("Intermediate page validation", () => {
           .should("contain.text", "Document ID");
       });
 
-      it("Verify 'Revision Stage' field is visible", () => {
+      it("Verify 'Revision Stage' field is displayed", () => {
         cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
       });
 
-      it("Verify 'Training required' field is visible", () => {
+      it("Verify 'Training required' field is displayed", () => {
         cy.get("[data-cy=\"field-retrain\"]").should("exist");
       });
 
@@ -246,10 +256,6 @@ context("Intermediate page validation", () => {
       cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
-    it("Check 'Render HTML' is displayed", () => {
-      cy.get("[data-cy=\"field-renderHTML\"]").should("exist");
-    });
-
     it("Check 'Approvals' is displayed", () => {
       cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
     });
@@ -257,7 +263,7 @@ context("Intermediate page validation", () => {
 
   context("Verify form options and add field button is displayed in Overview tab", () => {
     context("Check form options are displayed at center bottom", () => {
-      it("check eye option is diplayed", () => {
+      it("check view option is diplayed", () => {
         cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
           .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
       });
@@ -286,7 +292,7 @@ context("Intermediate page validation", () => {
         cy.drSelectDetailsTab();
       });
 
-      it("check eye option is diplayed", () => {
+      it("check view option is diplayed", () => {
         cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
           .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
       });
