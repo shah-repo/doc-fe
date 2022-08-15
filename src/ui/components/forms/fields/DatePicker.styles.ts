@@ -2,6 +2,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 
 export const styles = makeStyles((theme: Theme) => ({
   root: {
+    height: 40,
     backgroundColor: "transparent",
     fontSize: theme.spacing(2),
     padding: theme.spacing(2),

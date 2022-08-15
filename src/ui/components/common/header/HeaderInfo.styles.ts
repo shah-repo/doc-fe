@@ -94,7 +94,6 @@ export const styles = makeStyles((theme: Theme) =>
       "textDecoration": "none",
       "& a": {
         color: Colors.white,
-        textDecoration: "underline",
       },
     },
     whiteDot: {
