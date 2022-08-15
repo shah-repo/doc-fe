@@ -8,18 +8,18 @@ const FBTimerField: React.FunctionComponent<FBTimerProps> = ({
 }) => {
   const classes = FBButtonStyles();
   return (
-    <Box display="flex" >
-      <Box flexGrow={0.99}>
-        <FBTextField {...props}/>
+    <Box display="flex" alignItems="center">
+      <Box flexGrow={1}>
+        <FBTextField {...props} />
       </Box>
-      <Box mt={2}>
+      <Box mt={1} ml={1}>
         <FBButton
           label="form.builder.start.timer"
           dataCy="form.builder.start.timer"
           size="medium"
           variant="text"
           fullWidth={true}
-          className={`${classes.button} ${classes.btnMargin}`}
+          className={`${classes.button} ${classes.margin}`}
           disabled={props.disabled}
         />
       </Box>
