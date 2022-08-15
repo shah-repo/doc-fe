@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -178,10 +177,6 @@ context("Approval request implementation tasks", () => {
   });
 
   context("Check predefined fields", () => {
-    it("Verify Approval Request Details", () => {
-      cy.get(`[data-cy="Approval Request Details"]`).should("exist");
-    });
-
     it("Verify Approvers", () => {
       cy.get(`[data-cy="Approvers"]`).should("exist");
     });
@@ -190,8 +185,12 @@ context("Approval request implementation tasks", () => {
       cy.drSelectDocumentTab();
     });
 
-    it("Verify `Add a document` block", () => {
-      cy.get("[class=MuiFormControl-root MuiFormControl-fullWidth]").should("exist");
+    it("Verify Approval Request Details", () => {
+      cy.get(`[data-cy="Approval Request Details"]`).should("exist");
+    });
+
+    it("Verify Add Document block", () => {
+      cy.get(`[data-cy="fb.add.document"]`).should("exist");
     });
 
     it("Select Change Details tab", () => {
@@ -200,37 +199,64 @@ context("Approval request implementation tasks", () => {
   });
 
   context("Add Form fields and Release", () => {
-    it("Add TextField", () => {
-      SystemRequirement("FB-0020", "FB-0030");
-      cy.fbAddNewField();
+    it("Add TextField 1", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
       cy.fbEnterNameValue({ name: "rows", value: "2" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
       cy.fbAddNewFieldButton();
     });
 
+    it("Add TextField 2", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbSelectRadioButtonValue({ value: "visibility" });
+      cy.fbAddNewFieldButton();
+    });
 
     it("Verify Edit, Move and Remove", () => {
-      cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
       cy.fbAddNewFieldButton();
-      cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-      cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
-      cy.dragAndDrop({
-        fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-        toSelector: `[class="drag-handle"]`,
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      /* cy.dragAndDrop({
+          fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
+          toSelector: `[class="drag-handle"]`,
+        }); */
+    });
+
+    it("Select Documents tab", () => {
+      cy.drSelectDocumentTab();
+    });
+
+    it("Verify Approval Request Details disabled", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "Approval Request Details", el: "remove-schema-item",
+        class: "schema-delete-disabled",
       });
     });
 
+    it("Verify Add Document disabled", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "fb.add.document", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
+
 
   context("Create a Other type form", () => {
     it("Navigate to document list", () => {
@@ -270,38 +296,46 @@ context("Approval request implementation tasks", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
-    it("Add TextField", () => {
-      SystemRequirement("FB-0020", "FB-0030");
-      cy.fbAddNewField();
+    it("Add TextField 1", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
       cy.fbEnterNameValue({ name: "rows", value: "2" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add TextField 2", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbSelectRadioButtonValue({ value: "visibility" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Checkbox group", () => {
       SystemRequirement("FB-0120");
-      cy.fbClickAddNewHiddenBtn();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Date picker", () => {
-      cy.fbClickAddNewHiddenBtn();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
       cy.fbAddNewFieldButton();
     });
 
@@ -311,27 +345,31 @@ context("Approval request implementation tasks", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
       cy.fbAddNewFieldButton();
     });
 
     it("Verify Edit, Move and Remove", () => {
-      cy.get("[id=sm-tabpanel-0 ul]");
-      cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
       cy.fbAddNewFieldButton();
-      cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-      cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
-      cy.dragAndDrop({
-        fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-        toSelector: `[class="drag-handle"]`,
-      });
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      /* cy.dragAndDrop({
+          fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
+          toSelector: `[class="drag-handle"]`,
+        }); */
     });
 
-    it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[3].name}`]);
-      });
+    it("Approve and Release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Export", () => {
+    it("Export template", () => {
+      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
+      cy.get(`[data-cy="fb-template-name"]`).arrowType("Other_Form_Template");
+      cy.get(`[data-cy="common.add"]`).arrowClick();
     });
   });
 
@@ -374,6 +412,10 @@ context("Approval request implementation tasks", () => {
 
     it("Enter description 'AR from New form template for approval request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    });
+
+    it("Select Documents tab", () => {
+      cy.drSelectDocumentTab();
     });
 
     it("Add created document revision", () => {
@@ -440,6 +482,23 @@ context("Approval request implementation tasks", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("import", () => {
+    it("Import template", () => {
+      cy.get("#fb-import-schema").attachFile("../downloads/Other_Form_Template.json");
+    });
+  });
+
+  context("Verify Fields", () => {
+    it("Verify TextField attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbVerifyNameValue({ name: "placeholder", value: "fb-textfield placeholder 1" });
+      cy.fbVerifyNameValue({ name: "rows", value: "2" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
     });
   });
 });
