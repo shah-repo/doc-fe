@@ -10,6 +10,7 @@ import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotsTest } from "../../utils/constants/documentTypes/lot";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
+import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -55,6 +56,7 @@ context("Mpi Template", () => {
                 ...LotHistoryRecordTest,
               },
               MPITest,
+              QPITest,
               LHRTTest,
               LotsTest,
             ],
@@ -286,10 +288,6 @@ context("Mpi Template", () => {
       it("Click on 'Create a document' button", () => {
         cy.cmpClickCreateNewDocument();
       });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
     });
 
     context("Fill in the MPI attributes", () => {
@@ -316,107 +314,137 @@ context("Mpi Template", () => {
       it("Check status should be Draft", () => {
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
+    });
 
-      context("Check predefined fields", () => {
-        it("Verify Approvals Section", () => {
-          cy.get(`[data-cy="Approvals"]`).should("exist");
-        });
-
-        it("Verify Approvals block", () => {
-          cy.get("[name=fb-approvals-approvals-built-in]").should("exist");
-        });
-
-        it("Select Procedure tab", () => {
-          cy.drSelectProcedureTab();
-        });
-
-        it("Verify PI Procedure", () => {
-          cy.get(`[data-cy="form.builder.mpiprocedure"]`).should("exist");
-        });
-
-        it("Verify Start quantity", () => {
-          cy.get(`[data-cy="Start quantity"]`).should("exist");
-        });
-
-        it("Verify Accepted quantity", () => {
-          cy.get(`[data-cy="Accepted quantity"]`).should("exist");
-        });
-
-        it("Verify Rejected quantity", () => {
-          cy.get(`[data-cy="Rejected quantity"]`).should("exist");
-        });
-
-        it("Select Overview tab", () => {
-          cy.drSelectOverviewTab();
-        });
+    context("Check predefined fields", () => {
+      it("Verify Approvals Section", () => {
+        cy.get(`[data-cy="Approvals"]`).should("exist");
       });
 
-      context("Add Form fields and Release", () => {
-        it("Add TextField", () => {
-          SystemRequirement("FB-0020", "FB-0030");
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
-          cy.fbEnterNameValue({ name: "rows", value: "2" });
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-          cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-          cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
-          cy.fbAddNewFieldButton();
-        });
+      it("Verify Approvals block", () => {
+        cy.get("[name=fb-approvals-approvals-built-in]").should("exist");
+      });
 
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
 
-        it("Verify Edit, Move and Remove", () => {
-          cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
-          cy.fbAddNewFieldButton();
-          cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
-          cy.dragAndDrop({
+      it("Verify PI Procedure", () => {
+        cy.get(`[data-cy="form.builder.mpiprocedure"]`).should("exist");
+      });
+
+      it("Verify Start quantity", () => {
+        cy.get(`[data-cy="Start quantity"]`).should("exist");
+      });
+
+      it("Verify Accepted quantity", () => {
+        cy.get(`[data-cy="Accepted quantity"]`).should("exist");
+      });
+
+      it("Verify Rejected quantity", () => {
+        cy.get(`[data-cy="Rejected quantity"]`).should("exist");
+      });
+
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+    });
+
+    context("Add Form fields and Release", () => {
+      it("Add TextField 1", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
+        cy.fbEnterNameValue({ name: "rows", value: "2" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add TextField 2", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+        cy.fbEnterNameValue({ name: "rows", value: "2" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+        cy.fbSelectRadioButtonValue({ value: "visibility" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Verify Edit, Move and Remove", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+        cy.fbEnterPlaceholder({ placeholder: " changed" });
+        cy.fbAddNewFieldButton();
+        cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+        cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+        /* cy.dragAndDrop({
             fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
             toSelector: `[class="drag-handle"]`,
-          });
-        });
+          }); */
+      });
 
-        it("Verify Remove for Quantity items disabled", () => {
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Verify Start quantity disabled", () => {
+        cy.fbVerifyElementClassByLabel({
+          label: "Start quantity", el: "remove-schema-item",
+          class: "schema-delete-disabled",
         });
       });
 
-      context("Fill step #1", () => {
-        it("Select Procedure tab", () => {
-          cy.drSelectProcedureTab();
-        });
-
-        it("Fill step #1 description", () => {
-          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-        });
-
-        it("Add attachment and check autosave", () => {
-          cy.contains("Step #1").parentsUntil("li")
-            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.elUploadAttachment({
-              fileName: "image.jpg",
-              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-            });
-          });
-        });
-
-        it("Add 'Material one' to step #1", () => {
-          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-        });
-
-        it("Add 'Equipment one' to step #1", () => {
-          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+      it("Verify Accepted quantity disabled", () => {
+        cy.fbVerifyElementClassByLabel({
+          label: "Accepted quantity", el: "remove-schema-item",
+          class: "schema-delete-disabled",
         });
       });
 
-      it("Verify step can be added", () => {
+      it("Verify Rejected quantity disabled", () => {
+        cy.fbVerifyElementClassByLabel({
+          label: "Rejected quantity", el: "remove-schema-item",
+          class: "schema-delete-disabled",
+        });
+      });
+    });
+
+    context("Fill step #1", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Fill step #1 description", () => {
+        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+      });
+
+      it("Add attachment and check autosave", () => {
+        cy.contains("Step #1").parentsUntil("li")
+          .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.elUploadAttachment({
+            fileName: "image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+          });
+        });
+      });
+
+      it("Add 'Material one' to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+      });
+
+      it("Add 'Equipment one' to step #1", () => {
+        cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+      });
+    });
+
+    context("Add step and clone step", () => {
+      it("Verify step can be added and add step 2", () => {
         SystemRequirement("REQ-2970");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
@@ -459,14 +487,7 @@ context("Mpi Template", () => {
       });
 
       it("Add attachment and check autosave", () => {
-        cy.contains("Step #2").parentsUntil("li")
-          .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.elUploadAttachment({
-            fileName: "image.jpg",
-            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-          });
-        });
+        // add one more attachment here
       });
 
       it("Add 'Material two' to Cloned step #1", () => {
@@ -476,23 +497,104 @@ context("Mpi Template", () => {
       it("Add 'Equipment two' to step #1", () => {
         cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
       });
+    });
 
-      context("Release MPI", () => {
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
 
-        it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+    context("Release MPI", () => {
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Approve and release MPI document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
   });
 
-  context("import export here", () => {
-    // add here
+  context("export", () => {
+    it("Export template", () => {
+      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
+      cy.get(`[data-cy="fb-template-name"]`).arrowType("MPI_Template");
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+  });
+
+  context("Start document creation flow again", () => {
+    it("Navigate to Document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'Create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+  });
+
+  context("Fill in the MPI attributes for form 2", () => {
+    it("Enter title 'MPI document 2", () => {
+      cy.drEnterDocumentTitle({ name: "MPI document 2" });
+    });
+
+    it("Enter description 'MPI document description 2'", () => {
+      cy.drEnterDocumentDescription({ description: "MPI document description 2" });
+    });
+
+    it("Select 'Manufacturing Process Instructions Test 2' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test 2" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Check status should be Draft", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+  });
+
+  context("import", () => {
+    it("Import template", () => {
+      cy.get("#fb-import-schema").attachFile("../downloads/MPI_Template.json");
+    });
+  });
+
+  context("Check predefined fields", () => {
+    it("Verify Approvals Section", () => {
+      cy.get(`[data-cy="Approvals"]`).should("exist");
+    });
+
+    it("Verify Approvals block", () => {
+      cy.get("[name=fb-approvals-approvals-built-in]").should("exist");
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Verify PI Procedure", () => {
+      cy.get(`[data-cy="form.builder.mpiprocedure"]`).should("exist");
+    });
+
+    it("Verify Start quantity", () => {
+      cy.get(`[data-cy="Start quantity"]`).should("exist");
+    });
+
+    it("Verify Accepted quantity", () => {
+      cy.get(`[data-cy="Accepted quantity"]`).should("exist");
+    });
+
+    it("Verify Rejected quantity", () => {
+      cy.get(`[data-cy="Rejected quantity"]`).should("exist");
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
   });
 
   context("Create QPI document", () => {
@@ -504,10 +606,6 @@ context("Mpi Template", () => {
       it("Click on 'Create a document' button", () => {
         cy.cmpClickCreateNewDocument();
       });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
     });
 
     context("Fill in the QPI attributes", () => {
@@ -515,12 +613,12 @@ context("Mpi Template", () => {
         cy.drEnterDocumentTitle({ name: "QPI document" });
       });
 
-      it("Enter description 'MPI document description'", () => {
+      it("Enter description 'QPI document description'", () => {
         cy.drEnterDocumentDescription({ description: "QPI document description" });
       });
 
       it("Select 'Quality Process Instructions Test' document type from dropdown", () => {
-        cy.drSelectDocumentType({ documentType: "Quality Process Instructions Test" });
+        cy.drSelectDocumentType({ documentType: "Quantity Process Instructions Test" });
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -534,107 +632,137 @@ context("Mpi Template", () => {
       it("Check status should be Draft", () => {
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
+    });
 
-      context("Check predefined fields", () => {
-        it("Verify Approvals Section", () => {
-          cy.get(`[data-cy="Approvals"]`).should("exist");
-        });
+    context("Check predefined fields", () => {
+      it("Verify Approvals Section", () => {
+        cy.get(`[data-cy="Approvals"]`).should("exist");
+      });
 
-        it("Verify Approvals block", () => {
-          cy.get("[name=fb-approvals-approvals-built-in]").should("exist");
-        });
+      it("Verify Approvals block", () => {
+        cy.get("[name=fb-approvals-approvals-built-in]").should("exist");
+      });
 
-        it("Select Procedure tab", () => {
-          cy.drSelectProcedureTab();
-        });
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
 
-        it("Verify PI Procedure", () => {
-          cy.get(`[data-cy="form.builder.mpiprocedure"]`).should("exist");
-        });
+      it("Verify PI Procedure", () => {
+        cy.get(`[data-cy="form.builder.mpiprocedure"]`).should("exist");
+      });
 
-        it("Verify Start quantity", () => {
-          cy.get(`[data-cy="Start quantity"]`).should("exist");
-        });
+      it("Verify Start quantity", () => {
+        cy.get(`[data-cy="Start quantity"]`).should("exist");
+      });
 
-        it("Verify Accepted quantity", () => {
-          cy.get(`[data-cy="Accepted quantity"]`).should("exist");
-        });
+      it("Verify Accepted quantity", () => {
+        cy.get(`[data-cy="Accepted quantity"]`).should("exist");
+      });
 
-        it("Verify Rejected quantity", () => {
-          cy.get(`[data-cy="Rejected quantity"]`).should("exist");
-        });
+      it("Verify Rejected quantity", () => {
+        cy.get(`[data-cy="Rejected quantity"]`).should("exist");
+      });
 
-        it("Select Overview tab", () => {
-          cy.drSelectOverviewTab();
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+    });
+
+    context("Add Form fields and Release", () => {
+      it("Add TextField 1", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
+        cy.fbEnterNameValue({ name: "rows", value: "2" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add TextField 2", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+        cy.fbEnterNameValue({ name: "rows", value: "2" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+        cy.fbSelectRadioButtonValue({ value: "visibility" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Verify Edit, Move and Remove", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+        cy.fbEnterPlaceholder({ placeholder: " changed" });
+        cy.fbAddNewFieldButton();
+        cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+        cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+        /* cy.dragAndDrop({
+              fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
+              toSelector: `[class="drag-handle"]`,
+            }); */
+      });
+
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Verify Start quantity disabled", () => {
+        cy.fbVerifyElementClassByLabel({
+          label: "Start quantity", el: "remove-schema-item",
+          class: "schema-delete-disabled",
         });
       });
 
-      context("Add Form fields and Release", () => {
-        it("Add TextField", () => {
-          SystemRequirement("FB-0020", "FB-0030");
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
-          cy.fbEnterNameValue({ name: "rows", value: "2" });
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-          cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-          cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
-          cy.fbAddNewFieldButton();
+      it("Verify Accepted quantity disabled", () => {
+        cy.fbVerifyElementClassByLabel({
+          label: "Accepted quantity", el: "remove-schema-item",
+          class: "schema-delete-disabled",
         });
+      });
 
+      it("Verify Rejected quantity disabled", () => {
+        cy.fbVerifyElementClassByLabel({
+          label: "Rejected quantity", el: "remove-schema-item",
+          class: "schema-delete-disabled",
+        });
+      });
+    });
 
-        it("Verify Edit, Move and Remove", () => {
-          cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
-          cy.fbAddNewFieldButton();
-          cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
-          cy.dragAndDrop({
-            fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-            toSelector: `[class="drag-handle"]`,
+    context("Fill step #1", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Fill step #1 description", () => {
+        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+      });
+
+      it("Add attachment and check autosave", () => {
+        cy.contains("Step #1").parentsUntil("li")
+          .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.elUploadAttachment({
+            fileName: "image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
           });
         });
-
-        it("Verify Remove for Quantity items disabled", () => {
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-        });
       });
 
-      context("Fill step #1", () => {
-        it("Select Procedure tab", () => {
-          cy.drSelectProcedureTab();
-        });
-
-        it("Fill step #1 description", () => {
-          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-        });
-
-        it("Add attachment and check autosave", () => {
-          cy.contains("Step #1").parentsUntil("li")
-            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.elUploadAttachment({
-              fileName: "image.jpg",
-              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-            });
-          });
-        });
-
-        it("Add 'Material one' to step #1", () => {
-          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-        });
-
-        it("Add 'Equipment one' to step #1", () => {
-          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-        });
+      it("Add 'Material one' to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
       });
 
-      it("Verify step can be added", () => {
+      it("Add 'Equipment one' to step #1", () => {
+        cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+      });
+    });
+
+    context("Add step and clone step", () => {
+      it("Verify step can be added and add step 2", () => {
         SystemRequirement("REQ-2970");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
@@ -677,14 +805,7 @@ context("Mpi Template", () => {
       });
 
       it("Add attachment and check autosave", () => {
-        cy.contains("Step #2").parentsUntil("li")
-          .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.elUploadAttachment({
-            fileName: "image.jpg",
-            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-          });
-        });
+        // add one more attachment
       });
 
       it("Add 'Material two' to Cloned step #1", () => {
@@ -694,23 +815,103 @@ context("Mpi Template", () => {
       it("Add 'Equipment two' to step #1", () => {
         cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
       });
+    });
 
-      context("Release MPI", () => {
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+    context("Release QPI", () => {
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
 
-        it("Approve and release QPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+      it("Approve and release MPI document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
   });
 
-  context("import export here", () => {
-    // add here
+  context("export QPI", () => {
+    it("Export QPI template", () => {
+      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
+      cy.get(`[data-cy="fb-template-name"]`).arrowType("QPI_Template");
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+  });
+
+  context("Start document creation flow again", () => {
+    it("Navigate to Document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'Create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+  });
+
+  context("Fill in the QPI attributes for form 2", () => {
+    it("Enter title 'QPI document 2", () => {
+      cy.drEnterDocumentTitle({ name: "QPI document 2" });
+    });
+
+    it("Enter description 'QPI document description 2'", () => {
+      cy.drEnterDocumentDescription({ description: "QPI document description 2" });
+    });
+
+    it("Select 'Quality Process Instructions Test 2' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Quantity Process Instructions Test" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Check status should be Draft", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+  });
+
+  context("import QPI", () => {
+    it("Import template", () => {
+      cy.get("#fb-import-schema").attachFile("../downloads/QPI_Template.json");
+    });
+  });
+
+  context("Check predefined fields", () => {
+    it("Verify Approvals Section", () => {
+      cy.get(`[data-cy="Approvals"]`).should("exist");
+    });
+
+    it("Verify Approvals block", () => {
+      cy.get("[name=fb-approvals-approvals-built-in]").should("exist");
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Verify PI Procedure", () => {
+      cy.get(`[data-cy="form.builder.mpiprocedure"]`).should("exist");
+    });
+
+    it("Verify Start quantity", () => {
+      cy.get(`[data-cy="Start quantity"]`).should("exist");
+    });
+
+    it("Verify Accepted quantity", () => {
+      cy.get(`[data-cy="Accepted quantity"]`).should("exist");
+    });
+
+    it("Verify Rejected quantity", () => {
+      cy.get(`[data-cy="Rejected quantity"]`).should("exist");
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
   });
 
   context("Create Lot with form", () => {
@@ -785,48 +986,67 @@ context("Mpi Template", () => {
       });
 
       context("Add Form fields and Release", () => {
-        it("Add TextField", () => {
-          SystemRequirement("FB-0020", "FB-0030");
-          cy.fbAddNewField();
+        it("Add TextField 1", () => {
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+          cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
           cy.fbEnterNameValue({ name: "rows", value: "2" });
           cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-          cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-          cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+          cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
           cy.fbAddNewFieldButton();
         });
 
+        it("Add TextField 2", () => {
+          cy.fbAddNewFieldWhenHiddenLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+          cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+          cy.fbEnterNameValue({ name: "rows", value: "2" });
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+          cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+          cy.fbSelectRadioButtonValue({ value: "visibility" });
+          cy.fbAddNewFieldButton();
+        });
 
         it("Verify Edit, Move and Remove", () => {
-          cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+          cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+          cy.fbEnterPlaceholder({ placeholder: " changed" });
           cy.fbAddNewFieldButton();
-          cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
-          cy.dragAndDrop({
-            fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-            toSelector: `[class="drag-handle"]`,
+          cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+          cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+          /* cy.dragAndDrop({
+                fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
+                toSelector: `[class="drag-handle"]`,
+              }); */
+        });
+
+        it("Verify Initial Quantity disabled", () => {
+          cy.fbVerifyElementClassByLabel({
+            label: "Initial Quantity", el: "remove-schema-item",
+            class: "schema-delete-disabled",
           });
         });
 
-        it("Verify Remove for Quantity items disabled", () => {
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
+        it("Verify Usable Quantity disabled", () => {
+          cy.fbVerifyElementClassByLabel({
+            label: "Usable Quantity", el: "remove-schema-item",
+            class: "schema-delete-disabled",
+          });
         });
 
-        it("Verify Remove for Expiration date disabled", () => {
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
+        it("Verify Expiration Date disabled", () => {
+          cy.fbVerifyElementClassByLabel({
+            label: "Expiration Date", el: "remove-schema-item",
+            class: "schema-delete-disabled",
+          });
         });
 
-        it("Verify Remove for Part Selection disabled", () => {
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
+        it("Verify Part Selection disabled", () => {
+          cy.fbVerifyElementClassByLabel({
+            label: "Part Selection", el: "remove-schema-item",
+            class: "schema-delete-disabled",
+          });
         });
       });
     });
@@ -927,48 +1147,67 @@ context("Mpi Template", () => {
       });
 
       context("Add Form fields and Release", () => {
-        it("Add TextField", () => {
-          SystemRequirement("FB-0020", "FB-0030");
-          cy.fbAddNewField();
+        it("Add TextField 1", () => {
+          cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+          cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
           cy.fbEnterNameValue({ name: "rows", value: "2" });
           cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-          cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-          cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+          cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
           cy.fbAddNewFieldButton();
         });
 
+        it("Add TextField 2", () => {
+          cy.fbAddNewFieldWhenHiddenLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+          cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+          cy.fbEnterNameValue({ name: "rows", value: "2" });
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+          cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+          cy.fbSelectRadioButtonValue({ value: "visibility" });
+          cy.fbAddNewFieldButton();
+        });
 
         it("Verify Edit, Move and Remove", () => {
-          cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-          cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+          cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+          cy.fbEnterPlaceholder({ placeholder: " changed" });
           cy.fbAddNewFieldButton();
-          cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
-          cy.dragAndDrop({
-            fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-            toSelector: `[class="drag-handle"]`,
+          cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+          cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+          /* cy.dragAndDrop({
+                fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
+                toSelector: `[class="drag-handle"]`,
+              }); */
+        });
+
+        it("Verify Part to be Manufactured disabled", () => {
+          cy.fbVerifyElementClassByLabel({
+            label: "Part to be Manufactured", el: "remove-schema-item",
+            class: "schema-delete-disabled",
           });
         });
 
-        it("Verify Remove for Part to be manufactured disabled", () => {
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
+        it("Verify Initial Quantity disabled", () => {
+          cy.fbVerifyElementClassByLabel({
+            label: "Initial Quantity", el: "remove-schema-item",
+            class: "schema-delete-disabled",
+          });
         });
 
-        it("Verify Remove for Initial and End quantities disabled", () => {
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
+        it("Verify End Quantity disabled", () => {
+          cy.fbVerifyElementClassByLabel({
+            label: "End Quantity", el: "remove-schema-item",
+            class: "schema-delete-disabled",
+          });
         });
 
-        it("Verify Remove for Build type disabled", () => {
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
-          cy.get(`[data-cy="remove-schema-item"] [class="schema-delete-disabled"]`).should("exist");
+        it("Verify Build Type disabled", () => {
+          cy.fbVerifyElementClassByLabel({
+            label: "Build Type", el: "remove-schema-item",
+            class: "schema-delete-disabled",
+          });
         });
       });
 
@@ -982,8 +1221,8 @@ context("Mpi Template", () => {
           cy.drSelectDetailsTab();
         });
 
-        it("Click 'LHR Step'", () => {
-          cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+        it("Click 'LHR Step 1'", () => {
+          cy.get("[data-cy^=\"LHR Step 1\"]").arrowClick();
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
@@ -1000,8 +1239,12 @@ context("Mpi Template", () => {
       });
 
       context("Select created QPI in LHR template", () => {
-        it("Add 'LHR Step'", () => {
-          // add step
+        it("Click 'Add Step'", () => {
+          cy.get("[data-cy^=\"form.builder.add.step\"]").arrowClick();
+        });
+
+        it("Click 'LHR Step 2'", () => {
+          cy.get("[data-cy^=\"LHR Step 2\"]").arrowClick();
         });
 
         it("Select QPI document for step #2 in LHRt", () => {
@@ -1025,6 +1268,104 @@ context("Mpi Template", () => {
         it("Approve and release LHRt document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
+      });
+
+      context("export QPI", () => {
+        it("Export QPI template", () => {
+          cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
+          cy.get(`[data-cy="fb-template-name"]`).arrowType("LHR_Template");
+          cy.get(`[data-cy="common.add"]`).arrowClick();
+        });
+      });
+
+      context("Start document creation flow", () => {
+        it("Navigate to Document list", () => {
+          cy.unClick();
+          cy.navigToDocumentList();
+        });
+
+        it("Click on 'Create a document' button", () => {
+          cy.cmpClickCreateNewDocument();
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+      });
+
+      context("Fill LHRt document attributes", () => {
+        it("Enter document title 'LHRt document 2'", () => {
+          cy.drEnterDocumentTitle({ name: "LHRt document 2" });
+        });
+
+        it("Fill LHRt document description", () => {
+          cy.drEnterDocumentDescription({ description: "LHRt document description 2" });
+        });
+
+        it("Select 'LHRt' document type", () => {
+          cy.drSelectDocumentType({ documentType: "LHR template" });
+        });
+
+        it("Select 'Numeric' revision stage", () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+
+        it("Select 'Lot History Record Test' output document type", () => {
+          cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
+        });
+
+        it("Click create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Check status should be Draft", () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+        });
+      });
+
+      context("import", () => {
+        it("Import template", () => {
+          cy.get("#fb-import-schema").attachFile("../downloads/LHR_Template.json");
+        });
+      });
+
+      context("Check predefined fields", () => {
+        it("Verify Part to be Manufactured", () => {
+          cy.get(`[data-cy="Part to be Manufactured"]`).should("exist");
+        });
+
+        it("Verify Initial Quantity", () => {
+          cy.get(`[data-cy="Initial Quantity"]`).should("exist");
+        });
+
+        it("Verify End Quantity", () => {
+          cy.get(`[data-cy="End Quantity"]`).should("exist");
+        });
+
+        it("Verify Build Type", () => {
+          cy.get(`[data-cy="Build Type"]`).should("exist");
+        });
+
+        it("Verify Due Date", () => {
+          cy.get(`[data-cy="Due Date"]`).should("exist");
+        });
+
+        it("Select Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Verify LHR Step", () => {
+          cy.get(`[data-cy^="LHR Step"]`).should("exist");
+        });
+
+        it("Select Overview tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
+        it("Verify Approvals", () => {
+          cy.get(`[data-cy="form.builder.approvals"]`).should("exist");
+        });
+
       });
     });
   });
