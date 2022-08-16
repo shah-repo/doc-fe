@@ -7,7 +7,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
-import { LotsTest } from "../../utils/constants/documentTypes/lot";
+import { LotsTestWithSchama } from "../../utils/constants/documentTypes/lot";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { QPITest } from "../../utils/constants/documentTypes/qpi";
@@ -58,7 +58,7 @@ context("Mpi Template", () => {
               MPITest,
               QPITest,
               LHRTTest,
-              LotsTest,
+              LotsTestWithSchama,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -380,10 +380,12 @@ context("Mpi Template", () => {
         cy.fbAddNewFieldButton();
         cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
         cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-        /* cy.dragAndDrop({
-            fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-            toSelector: `[class="drag-handle"]`,
-          }); */
+        cy.get(`[class="drag-handle"]`).eq(1)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
       });
 
       it("Select Procedure tab", () => {
@@ -541,7 +543,7 @@ context("Mpi Template", () => {
     });
 
     it("Select 'Manufacturing Process Instructions Test 2' document type from dropdown", () => {
-      cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test 2" });
+      cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -698,10 +700,12 @@ context("Mpi Template", () => {
         cy.fbAddNewFieldButton();
         cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
         cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-        /* cy.dragAndDrop({
-              fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-              toSelector: `[class="drag-handle"]`,
-            }); */
+        cy.get(`[class="drag-handle"]`).eq(1)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
       });
 
       it("Select Procedure tab", () => {
@@ -943,7 +947,7 @@ context("Mpi Template", () => {
       });
 
       it("Selects 'Lot Document' output document type from dropdown", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Lots test" });
+        cy.drSelectOutputDocumentType({ documentType: "Lots test with Schema" });
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -1015,10 +1019,12 @@ context("Mpi Template", () => {
           cy.fbAddNewFieldButton();
           cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
           cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-          /* cy.dragAndDrop({
-                fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-                toSelector: `[class="drag-handle"]`,
-              }); */
+          cy.get(`[class="drag-handle"]`).eq(1)
+            .realMouseDown({ position: "center", button: "left" });
+          cy.wait(3000);
+          cy.get(`[class="drag-handle"]`).eq(0)
+            .realMouseMove(0, 0, { position: "center" })
+            .realMouseUp();
         });
 
         it("Verify Initial Quantity disabled", () => {
@@ -1176,10 +1182,12 @@ context("Mpi Template", () => {
           cy.fbAddNewFieldButton();
           cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
           cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-          /* cy.dragAndDrop({
-                fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-                toSelector: `[class="drag-handle"]`,
-              }); */
+          cy.get(`[class="drag-handle"]`).eq(1)
+            .realMouseDown({ position: "center", button: "left" });
+          cy.wait(3000);
+          cy.get(`[class="drag-handle"]`).eq(0)
+            .realMouseMove(0, 0, { position: "center" })
+            .realMouseUp();
         });
 
         it("Verify Part to be Manufactured disabled", () => {
@@ -1240,7 +1248,7 @@ context("Mpi Template", () => {
 
       context("Select created QPI in LHR template", () => {
         it("Click 'Add Step'", () => {
-          cy.get("[data-cy^=\"form.builder.add.step\"]").arrowClick();
+          cy.get("[data-cy^=\"form.builder.add.step\"]").arrowClick().wait(1000);
         });
 
         it("Click 'LHR Step 2'", () => {
@@ -1248,12 +1256,13 @@ context("Mpi Template", () => {
         });
 
         it("Select QPI document for step #2 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+          cy.pause();
+          cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("QPI document");
+            cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("QPI document");
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
