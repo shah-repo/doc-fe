@@ -12,8 +12,8 @@ const FBSortable: React.FunctionComponent<FBSortableProps> = ({
       {items}
     </ul>
   ));
-
-  return <SortableList {...props} axis="y" lockAxis="y" pressDelay={200} lockToContainerEdges />;
+  // eslint-disable-next-line max-len
+  return <SortableList {...props} axis="y" lockAxis="y" pressDelay={200} lockToContainerEdges={true} lockOffset={["5%", "100%"]} />;
 };
 
 export default withFBSortable(FBSortable);
