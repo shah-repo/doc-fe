@@ -188,7 +188,7 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Enter title", () => {
-      cy.drEnterDocumentTitle({ name: "Test Supplier Title" });
+      cy.drEnterDocumentTitle({ name: "Test Supplier" });
     });
 
     it("Enter description", () => {
@@ -390,8 +390,8 @@ context("Verify New Layout for Supplier Document", () => {
       cy.supFilterByState({ state: "Draft" });
     });
 
-    it("Select 'Test Supplier Title' document'", () => {
-      cy.supFilterByDocTitle({ docTitle: "Test Supplier Title" });
+    it("Select 'Test Supplier' document'", () => {
+      cy.supFilterByDocTitle({ docTitle: "Test Supplier" });
       cy.dlSelectFirstDocument();
     });
   });
@@ -585,15 +585,15 @@ context("Verify New Layout for Supplier Document", () => {
       cy.supFilterByState({ state: "Released" });
     });
 
-    it("Select 'Test Supplier Title' document'", () => {
-      cy.supFilterByDocTitle({ docTitle: "Test Supplier Title" });
+    it("Select 'Test Supplier' document'", () => {
+      cy.supFilterByDocTitle({ docTitle: "Test Supplier" });
       cy.dlSelectFirstDocument();
     });
   });
 
   context("Verify supplier released document", () => {
     it("Verify predefined fields", () => {
-      cy.get("[id='field-name']").contains("Test Supplier Title");
+      cy.get("[id='field-name']").contains("Test Supplier");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Test Supplier Description");
     });
 
