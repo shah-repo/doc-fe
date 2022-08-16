@@ -246,10 +246,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Verify Add Document disabled", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "fb.add.document", el: "remove-schema-item",
-        class: "schema-delete-disabled",
-      });
+      cy.get("[data-cy=\"fb.add.document\"]").should("have.attr", "disabled");
     });
 
     it("Approve and release document", () => {
@@ -360,14 +357,27 @@ context("Approval request implementation tasks", () => {
         }); */
     });
 
-    it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    it("Click on ‘Approve & Release’", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
+    });
+
+    it("Select document template as 'AR form'", () => {
+      cy.get(`[data-cy="field-formDocument"]`).autocompleteSelect("New Approval request form template");
+    });
+
+    it("Enter password", () => {
+      cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+    });
+
+    it("Approve and Release the document", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
     });
   });
 
   context("Export", () => {
     it("Export template", () => {
-      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
+      cy.wait(2000);
+      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).click({ force: true });
       cy.get(`[data-cy="fb-template-name"]`).arrowType("Other_Form_Template");
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
@@ -384,10 +394,6 @@ context("Approval request implementation tasks", () => {
 
     it("Enter description", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
-    });
-
-    it("Click on Save", () => {
-      cy.arSaveApiCall();
     });
   });
 
@@ -414,9 +420,9 @@ context("Approval request implementation tasks", () => {
       cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
     });
 
-    it("Select Documents tab", () => {
+    /*     it("Select Documents tab", () => {
       cy.drSelectDocumentTab();
-    });
+    }); */
 
     it("Add created document revision", () => {
       cy.arClickAddDocument();
