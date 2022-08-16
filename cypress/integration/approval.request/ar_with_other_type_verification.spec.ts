@@ -228,10 +228,14 @@ context("Approval request implementation tasks", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      /* cy.dragAndDrop({
-          fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-          toSelector: `[class="drag-handle"]`,
-        }); */
+      cy.pause();
+      cy.get(`[class="drag-handle"]`).eq(2)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(0)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.pause();
     });
 
     it("Select Documents tab", () => {
@@ -351,10 +355,14 @@ context("Approval request implementation tasks", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      /* cy.dragAndDrop({
-          fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-          toSelector: `[class="drag-handle"]`,
-        }); */
+      cy.pause();
+      cy.get(`[class="drag-handle"]`).eq(0)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(1)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.pause();
     });
 
     it("Click on ‘Approve & Release’", () => {
