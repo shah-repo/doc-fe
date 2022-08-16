@@ -415,5 +415,111 @@ context("Verify new Layout for NCO for newly created Enlil items.", () => {
         cy.get("[data-cy=\"tabId.details\"]").should("exist");
       });
     });
+
+    context("Open NCO in state Release and verify", () => {
+      it("Navigates to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Filter document by name and status, and select it", () => {
+        cy.drFilterDocListByNameAndStatus({ title: "NCO Record Document", status: "Released" });
+      });
+    });
+
+    context("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+      it("Verify there is no ADD A FIELD button", () => {
+        cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify there is no ADD A FIELD button", () => {
+        cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
+      });
+
+      it("Verify there is no EDIT A FIELD button", () => {
+        cy.get("button[data-cy=\"edit-schema-item\"]").should("not.exist");
+      });
+    });
+
+    context("Verify that user should not be able to rearrange the order of the Tabs", () => {
+      it("Verify there is no drag A FIELD button", () => {
+        cy.get("button[data-cy=\"drag-schema-item\"]").should("not.exist");
+      });
+    });
+
+    context("Verify that right side panel opens by default to the References tab and that", () => {
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy=\"References\"]").should("exist");
+        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      });
+
+      it("Verify Right side panel Can be expanded or collapsed", () => {
+        cy.verifyExpandCollpase();
+      });
+
+      it("Verify References tab is fixed as the user scrolls up or down", () => {
+        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+      });
+    });
+
+    context("Verify References tab contains the following:", () => {
+      it("Verify References tab General Info", () => {
+        cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+      });
+
+      it("Verify Referenced By, Training, Release Date and Form Info", () => {
+        cy.verifyReferencesOtherInfo();
+      });
+    });
+
+    context("Verify Revisions tab", () => {
+      it("Open revisions tab, click and verify current revision", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+          cy.drClickRevisionsSidePanel();
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+          cy.recCheckRevisionStage({ stage: "Revision 1" });
+          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
+        });
+      });
+    });
+
+    context("Verify History tab", () => {
+      it("Open history tab and verify changes are being captured", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+          cy.drSelectHistoryTab();
+          cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+        });
+      });
+    });
+
+    context("Verify Access Permissions tab", () => {
+      it("Open access permissions tab", () => {
+        cy.drSelectPermissionTab();
+      });
+
+      it("Verify Selected Users", () => {
+        cy.get("[data-cy=\"Selected-Users\"]").contains(USERS[3].name);
+      });
+
+      it("Verify Selected Groups", () => {
+        cy.get("[data-cy=\"Selected-Groups\"]").contains("Developers");
+      });
+    });
+
+    context("Verify Bookmarks tab", () => {
+      it("Open bookmarks tab", () => {
+        cy.drSelectBookmarksTab();
+      });
+    });
+
+    context("Verify Revision History tab", () => {
+      it("Open revision history tab", () => {
+        cy.drSelectRevisionHistoryTab();
+        cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+      });
+    });
   });
 });
