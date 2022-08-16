@@ -57,7 +57,7 @@ Cypress.Commands.add("verifyApprovalsField", () => {
 });
 
 Cypress.Commands.add("verifyFormOptionsVisibility", (params: {visibility: boolean}) => {
-  const condition = params.visibility ? "be.visible" : "not.be.visible";
+  const condition = params.visibility ? "exist" : "not.exist";
   cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should(condition);
   cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should(condition);
   cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should(condition);
