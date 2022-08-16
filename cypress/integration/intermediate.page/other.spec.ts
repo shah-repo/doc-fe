@@ -193,6 +193,42 @@ context(
           cy.unClick();
         });
       });
+      context("Verify DescriptionToolBar Functionality", () => {
+        it("Verify Description for BOLD", () => {
+          cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
+          cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Bold\"]").arrowClick().wait(2000);
+          cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
+          cy.get("[data-cy=\"description\"]").contains("I am here").should("have.css", "font-weight", "700");
+          cy.unClick();
+        });
+
+        it("Verify Description for Italic", () => {
+          cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
+          cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Italic\"]").arrowClick().wait(2000);
+          cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
+          cy.get("[data-cy=\"description\"]").contains("I am here").should("have.css", "font-style", "italic");
+          cy.unClick();
+        });
+
+        // it("Verify Description for Underline", () => {
+        //   cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
+        //   cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Underline\"]").arrowClick().wait(2000);
+        //   cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
+        //   cy.get("[data-cy=\"description\"]").contains("I am here").
+        // should("have.css",  "text-decoration", "underline");
+        //   cy.unClick();
+
+        //   // this is failing: Underline, Strikethrough other are unable to add
+        // });
+
+        it("Verify Description for Monospace", () => {
+          cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
+          cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Monospace\"]").arrowClick().wait(2000);
+          cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
+          cy.get("[data-cy=\"description\"]").contains("I am here").should("have.css", "font-family", "monospace");
+          cy.unClick();
+        });
+      });
 
       context("Click on CREATE DOCUMENT button & Verify the design", () => {
         it("Select 'Numeric' revision stage", () => {
@@ -213,10 +249,9 @@ context(
           cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
         });
 
-        // The design matches the Figma
-        //  Description
+      // The design matches the Figma
+      //  Description
       });
 
     });
-  }
-);
+  });
