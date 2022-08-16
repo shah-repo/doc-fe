@@ -101,7 +101,7 @@ context("Verify new Layout for NCO for newly created Enlil items.", () => {
       });
 
       it("Verify that Form Options should Not appear for this tab", () => {
-        cy.verifyFormOptions({ visible: "not.exist" });
+        cy.verifyFormOptionsVisibility( { visibility: false });
       });
     });
 
@@ -148,7 +148,7 @@ context("Verify new Layout for NCO for newly created Enlil items.", () => {
       });
 
       it("Verify that Form Options should appear for this tab", () => {
-        cy.verifyFormOptions({ visible: "exist" });
+        cy.verifyFormOptionsVisibility({ visibility: true });
       });
     });
 
@@ -196,7 +196,7 @@ context("Verify new Layout for NCO for newly created Enlil items.", () => {
       });
 
       it("Verify that Form Options should appear for this tab", () => {
-        cy.verifyFormOptions({ visible: "exist" });
+        cy.verifyFormOptionsVisibility({ visibility: true });
       });
     });
 
