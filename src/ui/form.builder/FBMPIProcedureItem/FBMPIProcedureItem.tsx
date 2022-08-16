@@ -161,8 +161,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       <Box
                                         display="flex"
                                         flexDirection="row"
-                                        bgcolor={ eqOverdue ? Colors.light_red : Colors.medium_gray}
-                                        borderColor={eqOverdue ? Colors.light_red : Colors.medium_gray}
+                                        bgcolor={ eqOverdue ? Colors.light_red : Colors.bright_gray}
+                                        borderColor={eqOverdue ? Colors.light_red : Colors.bright_gray}
                                         borderRadius={2}
                                         border={0.5}
                                         mr={1}
