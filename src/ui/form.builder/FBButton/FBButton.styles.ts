@@ -30,13 +30,22 @@ export default makeStyles(() =>
       "border": `1px solid ${Colors.navy}`,
       "boxShadow": "none",
       "&:hover": {
-        background: Colors.navy,
-        border: `1px solid ${Colors.navy}`,
+        background: Colors.navy_active,
+        borderColor: Colors.navy_active,
+        boxShadow: "none",
       },
       "&.Mui-disabled": {
         border: "none",
         backgroundColor: Colors.gains_boro,
         color: Colors.spanish_gray,
+      },
+      "&.MuiButton-outlinedPrimary": {
+        "backgroundColor": Colors.white,
+        "borderColor": Colors.navy,
+        "color": Colors.navy,
+        "&:hover": {
+          background: Colors.background_white,
+        },
       },
     },
   })
