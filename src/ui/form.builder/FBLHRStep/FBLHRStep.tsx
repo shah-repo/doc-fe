@@ -6,7 +6,7 @@ import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import { find, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalStatusIdent, FBLHRStepProps, FBProvider, FBText } from "..";
 import { ReactComponent as CollapseMoreIcon } from "../../../assets/images/CollapseMoreIcon.svg";
@@ -55,10 +55,10 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];
     return find(approvers, (o) => o.approverId === operatorId && o.status !== "ABANDONED");
   };
-  const [operatorList] = useState(stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((e) => ({
+  const operatorList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((e) => ({
     stepId: e,
     user: getUserDetails(e)?.user,
-  })));
+  }));
   const classes = FBLHRStepStyles();
   const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
     : `LHR Step ${stepIndex}`;
