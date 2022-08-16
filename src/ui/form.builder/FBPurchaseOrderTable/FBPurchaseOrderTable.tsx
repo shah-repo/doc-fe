@@ -4,7 +4,6 @@ import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
 import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon_add_btn.svg";
-import Colors from "../../layout/theme/utils/colors";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
@@ -58,13 +57,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             color="secondary"
             showNewButton
             startIcon={<PlusIcon />}
-            style={{
-              borderRadius: 0,
-              borderStyle: "dashed",
-              borderColor: Colors.dodger_blue,
-              width: "1000%",
-              height: "40px",
-            }}
+            className={classes?.button}
             {...{ disabled }}
           />
         </TableRow>
