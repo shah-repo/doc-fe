@@ -184,7 +184,6 @@ export const withFBInput = <T extends FBInputProps>(
             return;
           }
           const value = optionsToString?.(options);
-          formState?.setFieldValue(name, value, withState, omitFormValue);
           return value;
         },
         autocompleteasync() { return; },
