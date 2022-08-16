@@ -14,7 +14,7 @@ import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
+import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
@@ -177,13 +177,16 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                     onSubmit={onSubmit}
                                     enableReinitialize={true}
                                   >
-                                    <Attachment
-                                      isAttachmentEmpty={isAttachmentEmpty}
-                                      docRevId={documentRevision.id}
-                                      containsRedline={false}
-                                      label={"Supporting Documents"}
-                                      docRevStatus={documentRevision.status}
-                                    />
+                                    <>
+                                      <FBSection name={`fb-po-section-po-items-built-in`} label="PO Details"  />
+                                      <Attachment
+                                        isAttachmentEmpty={isAttachmentEmpty}
+                                        docRevId={documentRevision.id}
+                                        containsRedline={false}
+                                        label={"Supporting Documents"}
+                                        docRevStatus={documentRevision.status}
+                                      />
+                                    </>
                                   </Formik>
                                 </FormContext.Provider>
                               )}

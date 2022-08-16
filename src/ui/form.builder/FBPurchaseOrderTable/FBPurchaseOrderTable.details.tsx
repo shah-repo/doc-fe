@@ -63,6 +63,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 key={`fb-po-item-${item.id}-${index}`}
                 onClick={() => handleItem?.(item)}
                 data-cy="poItems"
+                className={cellStyle.cell}
               >
                 <FBTableCell align="right">
                   {mode === "form" && (

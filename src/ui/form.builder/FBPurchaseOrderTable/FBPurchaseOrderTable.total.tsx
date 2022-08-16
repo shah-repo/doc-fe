@@ -67,6 +67,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
                 gutter={false}
                 type="number"
                 size="small"
+                customHeight={25}
                 value={calculation?.taxRate}
                 inputProps={{
                   style: {
@@ -104,6 +105,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             gutter={false}
             type="number"
             size="small"
+            customHeight={25}
             value={calculation?.tax}
             inputProps={{
               style: {
@@ -131,6 +133,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             gutter={false}
             type="number"
             size="small"
+            customHeight={25}
             inputProps={{
               style: {
                 padding: "5px",
