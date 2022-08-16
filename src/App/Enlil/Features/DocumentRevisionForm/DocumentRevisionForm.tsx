@@ -226,7 +226,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                               {tabInfo.tabId === "lineitems" && (
                                 <Box pb={3.75}>
                                   {mode === "form" &&
-                                    <FBSection name={`fb-po-section-po-items-built-in`} label="PO Details"  />}
+                                    <FBSection name={`fb-po-section-po-items-built-in`} label="form.builder.po.details"  />}
                                   <AttachmentsField
                                     isDisabled={isDisabledInput}
                                     isNewVersion={false}
