@@ -1256,7 +1256,6 @@ context("Mpi Template", () => {
         });
 
         it("Select QPI document for step #2 in LHRt", () => {
-          cy.pause();
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
