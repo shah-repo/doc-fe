@@ -48,7 +48,7 @@ const UserAvatarListItem: React.FunctionComponent<Props> = ({
   return (
     <>
       <ListItem alignItems="flex-start" disableGutters className={classes.auditListItem}>
-        <ListItemAvatar style={{ minWidth: 42 }}>
+        <ListItemAvatar data-cy="user-avatar" style={{ minWidth: 42 }}>
           {user?.avatar ? (
             <Avatar
               className={classes.avatar}
@@ -66,9 +66,10 @@ const UserAvatarListItem: React.FunctionComponent<Props> = ({
         </ListItemAvatar>
         <ListItemText
           primary={(
-            <Typography className={classes.primaryText}>{name}</Typography>)}
+            <Typography data-cy="user-name" className={classes.primaryText}>{name}</Typography>)}
           secondary={
             <Typography
+              data-cy="secondary-text"
               component="span"
               variant="body2"
               color="textPrimary"
