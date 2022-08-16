@@ -142,7 +142,7 @@ context("Verify New Layout for Supplier Document", () => {
 
         it("Verify that Form Options should appear for Overview tab", () => {
           cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
-          cy.verifyFormOptionsVisibility();
+          cy.verifyFormOptionsVisibility({ visibility: true });
         });
       });
 
@@ -170,7 +170,7 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.verifyFormOptionsVisibility();
+          cy.verifyFormOptionsVisibility({ visibility: true });
         });
       });
     });
@@ -240,7 +240,7 @@ context("Verify New Layout for Supplier Document", () => {
 
           it("Verify that Form Options should appear for Overview tab", () => {
             cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
-            cy.verifyFormOptionsVisibility();
+            cy.verifyFormOptionsVisibility({ visibility: true });
           });
         });
       });
@@ -256,7 +256,7 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.verifyFormOptionsVisibility();
+          cy.verifyFormOptionsVisibility({ visibility: true });
         });
       });
     });
@@ -436,7 +436,7 @@ context("Verify New Layout for Supplier Document", () => {
 
           it("Verify that Form Options should appear for Overview tab", () => {
             cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
-            cy.verifyFormOptionsVisibility();
+            cy.verifyFormOptionsVisibility({ visibility: true });
           });
         });
       });
@@ -452,7 +452,7 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.verifyFormOptionsVisibility();
+          cy.verifyFormOptionsVisibility({ visibility: true });
         });
       });
     });
@@ -624,7 +624,7 @@ context("Verify New Layout for Supplier Document", () => {
           });
 
           it("Verify that Form Options should appear for Overview tab", () => {
-            cy.verifyFormOptionsVisibility();
+            cy.verifyFormOptionsVisibility({ visibility: true });
           });
         });
       });
@@ -640,7 +640,7 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.verifyFormOptionsVisibility();
+          cy.verifyFormOptionsVisibility({ visibility: true });
         });
       });
     });
