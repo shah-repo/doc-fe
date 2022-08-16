@@ -163,7 +163,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true} className={classes.itemIcon}>
-                  <div data-cy="Header-listIcon" className={classes.icon} />
+                  <div className={classes.icon} />
                 </Grid>
                 {
                   !isTypeMpiOutput && <Link
@@ -183,7 +183,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     onClick={returnToList}
                     className={classes.link}
                   >
-                    <Grid item={true} data-cy="Header-listTitle" className={classes.mpiTitle}>
+                    <Grid item={true} className={classes.mpiTitle}>
                       {title}
                     </Grid>
                   </Link>
