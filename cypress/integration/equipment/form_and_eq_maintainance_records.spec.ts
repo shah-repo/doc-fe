@@ -245,6 +245,13 @@ context("Equipment maintenance and calibration", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+
+      it("Add component", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbAddLabelName({ name: "Textfield for equipment test" });
+        cy.fbAddField();
+      });
     });
 
     context("Create and release form", () => {
@@ -318,9 +325,14 @@ context("Equipment maintenance and calibration", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      // it("Import the template", () => {
-      // cy.fbImportTemplate({ fileName: "EB_Document.json", saveFileName: "EB_Document.json" });
-      // });
+      it("Import the template", () => {
+        cy.get("#fb-import-schema").attachFile("../downloads/Equipment_Form.json");
+      });
+
+      it("Verify the imported field", () => {
+        cy.get("[data-cy=\"Textfield for equipment test\"]")
+          .should("have.text", "Textfield for equipment test");
+      });
     });
 
     context("Move & Edit & Remove component", () => {
@@ -441,6 +453,17 @@ context("Equipment maintenance and calibration", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+
+      it("Add component", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbAddLabelName({ name: "Textfield for PM test" });
+        cy.fbAddField();
+      });
+
+      it("Click save a document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
     });
 
     context("Approve and release form & Export", () => {
@@ -504,9 +527,14 @@ context("Equipment maintenance and calibration", () => {
         cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
-      // it("Import the template", () => {
-      // cy.fbImportTemplate({ fileName: "EB_Document.json", saveFileName: "EB_Document.json" });
-      // });
+      it("Import the template", () => {
+        cy.get("#fb-import-schema").attachFile("../downloads/PM_Form.json");
+      });
+
+      it("Verify the imported field", () => {
+        cy.get("[data-cy=\"Textfield for PM test\"]")
+          .should("have.text", "Textfield for PM test");
+      });
     });
 
     context("Move & Edit & Remove component", () => {
@@ -623,6 +651,17 @@ context("Equipment maintenance and calibration", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+
+      it("Add component", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbAddLabelName({ name: "Textfield for CAL test" });
+        cy.fbAddField();
+      });
+
+      it("Click save a document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
     });
 
     context("Approve and release form", () => {
@@ -680,9 +719,15 @@ context("Equipment maintenance and calibration", () => {
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
-      // it("Import the template", () => {
-      // cy.fbImportTemplate({ fileName: "EB_Document.json", saveFileName: "EB_Document.json" });
-      // });
+
+      it("Import the template", () => {
+        cy.get("#fb-import-schema").attachFile("../downloads/CAL_Form.json");
+      });
+
+      it("Verify the imported field", () => {
+        cy.get("[data-cy=\"Textfield for CAL test\"]")
+          .should("have.text", "Textfield for CAL test");
+      });
     });
 
     context("Move & Edit & Remove component", () => {
