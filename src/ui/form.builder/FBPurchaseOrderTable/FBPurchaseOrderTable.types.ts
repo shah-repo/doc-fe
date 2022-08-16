@@ -14,6 +14,8 @@ export type FBPurchaseOrderTableProps =
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
   loading?: boolean;
+  isReceivable?: boolean;
+  gutter?: boolean;
 };
 
 export type FBPurchaseOrderTableDetailsProps =
@@ -25,10 +27,12 @@ export type FBPurchaseOrderTableDetailsProps =
 | "mode"
 | "loading"
 | "calculation"
+| "isReceivable"
 >;
 
 export type FBPurchaseOrderTableSumProps =
-& Pick<FBPurchaseOrderTableProps,  "handleItem" | "handleLot" | "classes" | "items" | "calculation" | "mode">;
+& Pick<FBPurchaseOrderTableProps,  "handleItem" | "handleLot" | "classes" | "items" | "calculation" | "mode" |
+"isReceivable">;
 
 export type FBPurchaseOrderTableTotalProps = Pick<FBPurchaseOrderTableProps,
 | "handleShippingCostChange"

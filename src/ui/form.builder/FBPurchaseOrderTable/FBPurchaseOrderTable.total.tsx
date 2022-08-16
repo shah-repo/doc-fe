@@ -21,11 +21,11 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
   const cellStyle = FBTableCellStyles();
   return (
     <React.Fragment>
-      <TableRow>
-        <FBTableCell rowSpan={7} colSpan={6} />
-        <FBTableCell label="form.builder.currency" colSpan={3}
-          align="right"
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
+      <TableRow className={cellStyle.cell}>
+        <FBTableCell rowSpan={7} colSpan={6} className={cellStyle.cellEmpty} />
+        <FBTableCell label="form.builder.currency" colSpan={2}
+          align="left"
+          className={`FBTotal-root ${cellStyle.cellHeader}`}
         />
         <FBTableCell className="FBTotal-root" colSpan={2}>
           <FormContext.Provider value={{ submitOnChange: false }}>
@@ -40,11 +40,11 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           </ FormContext.Provider>
         </FBTableCell>
       </TableRow>
-      <TableRow>
-        <FBTableCell label="form.builder.subTotal" align="right" colSpan={3}
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
+      <TableRow className={cellStyle.cell}>
+        <FBTableCell label="form.builder.subTotal" align="left" colSpan={2}
+          className={`FBTotal-root ${cellStyle.cellHeader}`}
         />
-        <FBTableCell className="FBTotal-root" colSpan={2}>
+        <FBTableCell className={`FBTotal-root ${cellStyle.cellHeader}`} colSpan={2} align="right">
           <FormattedNumber
             value={Number(calculation?.subTotal)}
             // eslint-disable-next-line react/style-prop-object
@@ -53,13 +53,13 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           />
         </FBTableCell>
       </TableRow>
-      <TableRow>
+      <TableRow className={cellStyle.cell}>
         <FBTableCell label="form.builder.tax.rate"
-          colSpan={3}
-          align="right"
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
+          colSpan={2}
+          align="left"
+          className={`FBTotal-root ${cellStyle.cellHeader}`}
         />
-        <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
+        <FBTableCell className={`FBTotal-root ${cellStyle.cellValueHeight}`} align="right" colSpan={2}>
           <Grid container>
             <Grid item xs={11}>
               <FBTextField
@@ -71,6 +71,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
                 inputProps={{
                   style: {
                     padding: "5px",
+                    textAlign: "right",
                   },
                   step: ".01",
                   min: "0",
@@ -87,15 +88,16 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           </Grid>
         </FBTableCell>
       </TableRow>
-      <TableRow>
+      <TableRow className={cellStyle.cell}>
         <FBTableCell label="form.builder.tax"
-          align="right"
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
-          colSpan={3}
+          align="left"
+          className={`FBTotal-root ${cellStyle.cellHeader}`}
+          colSpan={2}
         />
         <FBTableCell
           align="right" colSpan={2}
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
+          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow} 
+            ${cellStyle.cellValueHeight}`}
         >
           <FBTextField
             name={`${name}.tax`}
@@ -104,7 +106,10 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             size="small"
             value={calculation?.tax}
             inputProps={{
-              style: { padding: "5px" },
+              style: {
+                padding: "5px",
+                textAlign: "right",
+              },
               step: ".01",
               min: "0",
               onChange: handleTaxChange,
@@ -115,10 +120,10 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           />
         </FBTableCell>
       </TableRow>
-      <TableRow>
-        <FBTableCell label="form.builder.shipping.cost"  align="right"
-          colSpan={3}
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
+      <TableRow className={cellStyle.cell}>
+        <FBTableCell label="form.builder.shipping.cost"  align="left"
+          colSpan={2}
+          className={`FBTotal-root ${cellStyle.cellHeader}`}
         />
         <FBTableCell className="FBTotal-root" colSpan={2} align="right">
           <FBTextField
@@ -127,7 +132,10 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             type="number"
             size="small"
             inputProps={{
-              style: { padding: "5px" },
+              style: {
+                padding: "5px",
+                textAlign: "right",
+              },
               step: ".01",
               min: "0",
               onChange: handleShippingCostChange,
@@ -138,16 +146,16 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           />
         </FBTableCell>
       </TableRow>
-      <TableRow>
-        <FBTableCell label="form.builder.total" align="right"
-          colSpan={3}
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} 
-            ${cellStyle.cellFontWeightLow} ${cellStyle.cellBackground}`}
+      <TableRow className={cellStyle.cell}>
+        <FBTableCell label="form.builder.grand.total" align="left"
+          colSpan={2}
+          className={`FBTotal-root
+            ${cellStyle.cellHeader}`}
         />
         <FBTableCell
           colSpan={2} data-cy="poTotal"
-          className={`FBTotal-root ${cellStyle.cellFontWeightHigh} 
-            ${cellStyle.cellFontWeightLow} ${cellStyle.cellBackground}`}
+          align="right"
+          className={`FBTotal-root ${cellStyle.cellHeader}`}
         >
           <FormattedNumber
             value={Number(calculation?.totalAmount)}
@@ -159,10 +167,9 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       </TableRow>
       {
         calculation?.currency !== "USD" &&
-        <TableRow>
+        <TableRow className={cellStyle.cell}>
           <FBTableCell colSpan={5}
             align="right"
-            // No design so default style is added
             className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
           >
             <FBPurchaseOrderExchange {...{ calculation }} />

@@ -23,6 +23,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
   loading = false,
   mode,
   calculation,
+  isReceivable,
 }) => {
   const intl = useIntl();
   const cellStyle = FBTableCellStyles();
@@ -30,9 +31,9 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
     <Box width="100%" overflow="auto" className={"containing-box-scrollbar"}>
       <Table className={classes?.table}>
         <TableHead>
-          <TableRow>
+          {isReceivable && <TableRow>
             <FBTableCell />
-            <FBTableCell colSpan={values(FBPurchaseOrderDetailsProduct).length}>
+            <FBTableCell>
               <Box display="flex">
                 <InfoIcon />
                 <Typography className={cellStyle.headerCellText}>
@@ -40,7 +41,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 </Typography>
               </Box>
             </FBTableCell>
-          </TableRow>
+          </TableRow>}
           <TableRow>
             <FBTableCell />
             <FBMapWrapper<string[]> collection={values(FBPurchaseOrderDetailsProduct)}>

@@ -2,7 +2,9 @@ import { TableBody } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
-import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
+import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
+import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon_add_btn.svg";
+import Colors from "../../layout/theme/utils/colors";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
@@ -22,6 +24,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   loading,
   mode,
   name,
+  isReceivable,
+  gutter,
 }) => (
   <Table className={classes?.root}>
     {/* Commenting as per design */}
@@ -37,12 +41,34 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
     <TableBody>
       <TableRow>
         <FBTableCell colSpan={9}>
-          <FBPurchaseOrderTableDetails {...{ handleDelete, handleItem, classes, items, mode, loading, calculation }} />
+          <FBPurchaseOrderTableDetails {...{
+            handleDelete, handleItem, classes, items, mode,
+            loading, calculation, isReceivable,
+          }} />
         </FBTableCell>
         <FBTableCell colSpan={1} style={{ verticalAlign: "baseline" }}>
-          <FBPurchaseOrderTableSum {...{ handleItem, handleLot, classes, items, calculation, mode }} />
+          <FBPurchaseOrderTableSum {...{ handleItem, handleLot, classes, items, calculation, mode, isReceivable }} />
         </FBTableCell>
       </TableRow>
+      {!disabled && (
+        <TableRow>
+          <FBButton
+            label="form.builder.add.line.item"
+            onClick={() => handleItem && handleItem()}
+            color="secondary"
+            showNewButton
+            startIcon={<PlusIcon />}
+            style={{
+              borderRadius: 0,
+              borderStyle: "dashed",
+              borderColor: Colors.dodger_blue,
+              width: "1000%",
+              height: "40px",
+            }}
+            {...{ disabled }}
+          />
+        </TableRow>
+      )}
       {mode === "form" && (
         <FBPurchaseOrderTableTotal {...{
           handleShippingCostChange,
