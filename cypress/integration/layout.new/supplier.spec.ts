@@ -25,7 +25,7 @@ context("Verify New Layout for Supplier Document", () => {
     cy.saveLocalStorage();
   });
 
-  xcontext("[API]Prepare company", () => {
+  context("[API]Prepare company", () => {
     it("[API]Create company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -59,21 +59,9 @@ context("Verify New Layout for Supplier Document", () => {
     });
   });
 
-  xcontext("Login user", () => {
+  context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-  });
-
-  // For testing purpose
-  context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Grey Nicolas, Walter and Lindgren 37302", multiple: true });
     });
   });
 
