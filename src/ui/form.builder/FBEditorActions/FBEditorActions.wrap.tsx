@@ -6,6 +6,7 @@ import { SM } from "../../../App";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { COMMON_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
+import { EQMaintenanceRequired } from "./constants";
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
   Component: React.FunctionComponent<T>
@@ -90,9 +91,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       }
 
       // Inidvidual field flag setup
-      if (type === "eqmaintenance") {
-        const eqRules = [formRules, "eq_maintenance_required"];
-        formRules = compact(eqRules).join(",");
+      if (type === "eqmaintenance" && !formRules?.includes(EQMaintenanceRequired)) {
+        formRules = compact([formRules, EQMaintenanceRequired]).join(",");
       }
       if (type === "blanktplform" && !defaultValue) {
         formValues.defaultValue = [];
