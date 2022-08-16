@@ -13,7 +13,6 @@ declare global {
       supCheckForSuggestedForms(...list: string[]): Chainable<Subject>;
       supFilterByDocTitle(params: {docTitle: string }): Chainable<Subject>;
       supFilterById(params: {docId: string }): Chainable<Subject>;
-      supFilterByState(params: {state: string }): Chainable<Subject>;
     }
   }
 }
@@ -51,10 +50,4 @@ Cypress.Commands.add("supFilterByDocTitle", (params: {docTitle: string }) => {
 
 Cypress.Commands.add("supFilterById", (params: {docId: string }) => {
   cy.get(`[aria-colindex="1"] input`).clear().arrowType(params.docId).wait(500);
-});
-
-Cypress.Commands.add("supFilterByState", (params: {state: string}) => {
-  cy.get(`[aria-colindex="5"] [class="k-input"]`).arrowClick();
-  cy.get("li").contains(params.state).arrowClick().wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
 });
