@@ -39,7 +39,6 @@ import "./commands/filters/commands";
 import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
 import "./commands/imap/commands";
-import "./commands/layout.new/commands";
 import "./commands/mpi/commands";
 import "./commands/navigation/commands";
 import "./commands/parts.materials/commands";
