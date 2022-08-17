@@ -18,12 +18,16 @@ declare global {
       verifyReferencesGeneralInfo(params: {user: string}): Chainable;
       verifyReferencesOtherInfo(): Chainable;
       verifyHistoryScroll(): Chainable;
-
       verifyPredefiendFields(): Chainable;
       verifyReferenceInfo(): Chainable;
       verifyReferenceTab({ user, formId, shortName }): Chainable;
       verifyAddRemoveReference({ formId }): Chainable;
       verifyHistoryTab(history, groupOne, groupTwo): Chainable;
+      drVerifyDescriptionToolBar(): Chainable<Subject>;
+      drVerifytabIsFixed(): Chainable<Subject>;
+      drSelectBookmarksTab(): Chainable<Subject>;
+      drSelectRevisionHistoryTab(): Chainable<Subject>;
+      drSelectMigrateFormTab(): Chainable<Subject>;
     }
   }
 }
@@ -179,4 +183,48 @@ Cypress.Commands.add("verifyHistoryTab", (history, groupOne, groupTwo) => {
   });
 
 
+});
+
+Cypress.Commands.add("drVerifyDescriptionToolBar", () => {
+  cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+  cy.get("div[class^=\"rdw-editor-toolbar\"]").should("exist");
+  cy.get("div[title=\"Bold\"]").should("exist");
+  cy.get("div[title=\"Italic\"]").should("exist");
+  cy.get("div[title=\"Underline\"]").should("exist");
+  cy.get("div[title=\"Strikethrough\"]").should("exist");
+  cy.get("div[title=\"Monospace\"]").should("exist");
+  cy.get("div[title=\"Superscript\"]").should("exist");
+  cy.get("div[title=\"Subscript\"]").should("exist");
+  cy.get("[aria-label=\"rdw-color-picker\"]").should("exist");
+  cy.get("div[title=\"Unordered\"]").should("exist");
+  cy.get("div[title=\"Ordered\"]").should("exist");
+  cy.get("div[title=\"Indent\"]").should("exist");
+  cy.get("div[title=\"Outdent\"]").should("exist");
+
+  cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
+  cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
+  cy.get("[title=\"Block Type\"]").should("not.exist");
+  cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
+  cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
+  cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+  cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
+  cy.get("[aria-label=\"rdw-color-picker\"]").should("exist");
+  cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
+  cy.get("[title=\"Block Type\"]").should("not.exist");
+  cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
+  cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
+});
+
+Cypress.Commands.add("drVerifytabIsFixed", () => {
+  cy.get(".MuiTabs-fixed").should("exist");
+});
+
+Cypress.Commands.add("drSelectBookmarksTab", () => {
+  cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
+});
+Cypress.Commands.add("drSelectRevisionHistoryTab", () => {
+  cy.get("[data-cy=\"cr-icon\"]").arrowClick();
+});
+Cypress.Commands.add("drSelectMigrateFormTab", () => {
+  cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
 });
