@@ -109,6 +109,7 @@ context("Verify New Layout for Supplier Document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
       cy.verifyDefaultFields();
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
     });
 
     it("Verify document header details", () => {
@@ -132,8 +133,9 @@ context("Verify New Layout for Supplier Document", () => {
     context("Verify tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview tab default fields", () => {
-          cy.get("#sm-tabpanel-0").should("be.visible");
+          cy.get("#sm-tabpanel-0").should("exist");
           cy.verifyDefaultFields();
+          cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
         });
 
         it("Verify Approvals field as predefined schema", () => {
@@ -141,8 +143,8 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify that Form Options should appear for Overview tab", () => {
-          cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
-          cy.verifyFormOptionsVisibility({ visibility: true });
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
 
@@ -151,10 +153,10 @@ context("Verify New Layout for Supplier Document", () => {
           cy.drSelectDetailsTab();
         });
 
-        it("Add TextField", () => {
+        it("Add Text Field", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-          cy.fbEnterNameValue({ name: "label", value: "Supplier Name" });
+          cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
           cy.fbAddNewFieldButton();
         });
 
@@ -164,13 +166,14 @@ context("Verify New Layout for Supplier Document", () => {
       });
 
       context("Verify Details tab content", () => {
-        it("Verify TextField", () => {
-          cy.get("#sm-tabpanel-1").should("be.visible");
-          cy.contains("Supplier Name").should("exist");
+        it("Verify Text Field", () => {
+          cy.get("#sm-tabpanel-1").should("exist");
+          cy.contains("fb-textfield").should("exist");
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.verifyFormOptionsVisibility({ visibility: true });
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
     });
@@ -229,7 +232,7 @@ context("Verify New Layout for Supplier Document", () => {
 
         context("Verify Overview tab content", () => {
           it("Verify Overview tab default fields", () => {
-            cy.get("#sm-tabpanel-0").should("be.visible");
+            cy.get("#sm-tabpanel-0").should("exist");
             cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
             cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
           });
@@ -239,8 +242,8 @@ context("Verify New Layout for Supplier Document", () => {
           });
 
           it("Verify that Form Options should appear for Overview tab", () => {
-            cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
-            cy.verifyFormOptionsVisibility({ visibility: true });
+            cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+            cy.verifyFormOptionsVisibility();
           });
         });
       });
@@ -250,13 +253,14 @@ context("Verify New Layout for Supplier Document", () => {
           cy.drSelectDetailsTab();
         });
 
-        it("Verify TextField", () => {
-          cy.get("#sm-tabpanel-1").should("be.visible");
-          cy.contains("Supplier Name").should("exist");
+        it("Verify Text Field", () => {
+          cy.get("#sm-tabpanel-1").should("exist");
+          cy.contains("fb-textfield").should("exist");
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.verifyFormOptionsVisibility({ visibility: true });
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
     });
@@ -370,9 +374,9 @@ context("Verify New Layout for Supplier Document", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Fill Supplier Name and check for autosave", () => {
+    it("Fill Text Field and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^=supplier-name-]").arrowType("Test Supplier");
+        cy.get("[name^=fb-textfield-]").arrowType("Supplier Name");
         cy.unClick();
       });
     });
@@ -380,7 +384,7 @@ context("Verify New Layout for Supplier Document", () => {
 
   // Scenario 11b - Existing Supplier
 
-  context("Select exisitng supplier draft document", () => {
+  context("Select existing supplier draft document", () => {
     it("Navigate to Supplier List", () => {
       cy.navigToSuppliers();
     });
@@ -413,7 +417,7 @@ context("Verify New Layout for Supplier Document", () => {
       cy.get("[data-cy=\"tabId.details\"]").should("exist");
     });
 
-    context("Verify created supplier document tabs content", () => {
+    context("Verify draft supplier document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
           cy.verifySelectedTab({ tab: "overview" });
@@ -425,7 +429,7 @@ context("Verify New Layout for Supplier Document", () => {
 
         context("Verify Overview tab content", () => {
           it("Verify Overview tab default fields", () => {
-            cy.get("#sm-tabpanel-0").should("be.visible");
+            cy.get("#sm-tabpanel-0").should("exist");
             cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
             cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
           });
@@ -436,7 +440,7 @@ context("Verify New Layout for Supplier Document", () => {
 
           it("Verify that Form Options should appear for Overview tab", () => {
             cy.get(".formOptionsBox").scrollIntoView().should("be.visible");
-            cy.verifyFormOptionsVisibility({ visibility: true });
+            cy.verifyFormOptionsVisibility();
           });
         });
       });
@@ -446,13 +450,14 @@ context("Verify New Layout for Supplier Document", () => {
           cy.drSelectDetailsTab();
         });
 
-        it("Verify TextField", () => {
-          cy.get("#sm-tabpanel-1").should("be.visible");
-          cy.contains("Supplier Name").should("exist");
+        it("Verify Text Field", () => {
+          cy.get("#sm-tabpanel-1").should("exist");
+          cy.contains("fb-textfield").should("exist");
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.verifyFormOptionsVisibility({ visibility: true });
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
     });
@@ -575,12 +580,12 @@ context("Verify New Layout for Supplier Document", () => {
     });
   });
 
-  context("Select exisitng supplier released document", () => {
+  context("Select existing supplier released document", () => {
     it("Navigate to Supplier List", () => {
       cy.navigToSuppliers();
     });
 
-    it("Filter the Draft document", () => {
+    it("Filter the Released document", () => {
       cy.dlClearFilters();
       cy.supFilterByState({ state: "Released" });
     });
@@ -607,7 +612,7 @@ context("Verify New Layout for Supplier Document", () => {
       cy.get("[data-cy=\"tabId.details\"]").should("exist");
     });
 
-    context("Verify created supplier document tabs content", () => {
+    context("Verify released supplier document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
           cy.verifySelectedTab({ tab: "overview" });
@@ -619,12 +624,13 @@ context("Verify New Layout for Supplier Document", () => {
 
         context("Verify Overview tab content", () => {
           it("Verify Approvals field", () => {
-            cy.get("#sm-tabpanel-0").should("be.visible");
+            cy.get("#sm-tabpanel-0").should("exist");
             cy.verifyApprovalsField();
           });
 
           it("Verify that Form Options should appear for Overview tab", () => {
-            cy.verifyFormOptionsVisibility({ visibility: true });
+            cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+            cy.verifyFormOptionsVisibility();
           });
         });
       });
@@ -634,13 +640,14 @@ context("Verify New Layout for Supplier Document", () => {
           cy.drSelectDetailsTab();
         });
 
-        it("Verify TextField", () => {
-          cy.get("#sm-tabpanel-1").should("be.visible");
-          cy.contains("Supplier Name").should("exist");
+        it("Verify Text Field", () => {
+          cy.get("#sm-tabpanel-1").should("exist");
+          cy.contains("fb-textfield").should("exist");
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-          cy.verifyFormOptionsVisibility({ visibility: true });
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
     });
