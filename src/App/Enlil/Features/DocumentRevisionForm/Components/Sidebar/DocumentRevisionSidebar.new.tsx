@@ -8,7 +8,6 @@ import { ReactComponent as CollapseIcon } from "../../../../../../../src/assets/
 import { ReactComponent as CRIcon } from "../../../../../../../src/assets/images/cr.svg";
 import { ReactComponent as EyeIcon } from "../../../../../../../src/assets/images/eye-icon-references.svg";
 import { ReactComponent as TimelineIcon } from "../../../../../../../src/assets/images/history.svg";
-import { ReactComponent as MigrationIcon } from "../../../../../../../src/assets/images/migration.svg";
 import { ReactComponent as NoteIcon } from "../../../../../../../src/assets/images/note.svg";
 import { ChangeRequest } from "../../../../../../state/ducks/changeRequest/types";
 import AccessPermissionsContainer from "../../../../../../ui/documentRevision/accessPermissions/AccessPermissions.container";
@@ -115,11 +114,20 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                         id: "common.references",
                       }) || "",
                     component: (
-                      <ReferencesContainer
-                        selectedDocument={selectedDocument}
-                        edit={edit}
-                      />
-
+                      <Box>
+                        <ReferencesContainer
+                          selectedDocument={selectedDocument}
+                          edit={edit}
+                        />
+                        {showFormMigration && (
+                          <ChangeDocumentFormContainer
+                            docRevId={documentRevisionId || ""}
+                            documentTypeId={documentTypeId}
+                            sourceSchema={formDocument?.formTemplate?.schema || []}
+                            sourceFormId={formDocument?.id || ""}
+                          />
+                        )}
+                      </Box>
                     ),
                   },
                 },
@@ -229,26 +237,6 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                         }
                       />
                     ),
-                  },
-                },
-                {
-                  icon: <MigrationIcon />,
-                  type: "formMigration",
-                  details: {
-                    shouldShow: showFormMigration,
-                    dataCy: "form-migration-icon",
-                    title:
-                      intl?.formatMessage({
-                        id: "common.form.migration",
-                      }) || "",
-                    component: showFormMigration ? (
-                      <ChangeDocumentFormContainer
-                        docRevId={documentRevisionId || ""}
-                        documentTypeId={documentTypeId}
-                        sourceSchema={formDocument?.formTemplate?.schema || []}
-                        sourceFormId={formDocument?.id || ""}
-                      />
-                    ) : null,
                   },
                 },
               ]}
