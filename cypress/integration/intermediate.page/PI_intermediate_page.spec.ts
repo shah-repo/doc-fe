@@ -172,32 +172,56 @@ context("Intermediate page validation", () => {
     });
 
     context("Click 'Create Document' button and verify predefined fields are displayed", () => {
-      it("Click on 'Create Document' button", () => {
-        cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+      context("verify default tabs are displayed", () => {
+        it("Click on 'Create Document' button", () => {
+          cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+        });
+
+        it("Verify 'Overview' tab is displayed", () => {
+          cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+        });
+
+        it("Verify 'Procedure' tab is displayed", () => {
+          cy.get("[data-cy=\"tabId.procedure\"]").should("exist");
+        });
+
+        it("Verify 'Materials & Equipment' tab is displayed", () => {
+          cy.get("[data-cy=\"tabId.materialsandequipment\"]").should("exist");
+        });
+
+        it("Verify 'Training' tab is displayed", () => {
+          cy.get("[data-cy=\"tabId.training\"]").should("exist");
+        });
       });
 
-      it("Check 'Approvals' is displayed", () => {
-        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
+      context("verify predefined fields are displayed", () => {
+        it("Verify 'Attachment' field is displayed", () => {
+          cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+        });
 
-      it("Select 'Procedure' tab", () => {
-        cy.drSelectProcedureTab();
-      });
+        it("Check 'Approvals' is displayed", () => {
+          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+        });
 
-      it("Check 'PI PROCEDURE' is displayed", () => {
-        cy.get("[data-cy=\"form.builder.mpiprocedure\"]").should("exist");
-      });
+        it("Select 'Procedure' tab", () => {
+          cy.drSelectProcedureTab();
+        });
 
-      it("Check 'Start quantity' is displayed", () => {
-        cy.get("[data-cy=\"Start quantity\"]").should("exist");
-      });
+        it("Check 'PI PROCEDURE' is displayed", () => {
+          cy.get("[data-cy=\"form.builder.mpiprocedure\"]").should("exist");
+        });
 
-      it("Check 'Accepted quantity' is displayed", () => {
-        cy.get("[data-cy=\"Accepted quantity\"]").should("exist");
-      });
+        it("Check 'Start quantity' is displayed", () => {
+          cy.get("[data-cy=\"Start quantity\"]").should("exist");
+        });
 
-      it("Check 'Rejected quantity' is displayed", () => {
-        cy.get("[data-cy=\"Rejected quantity\"]").should("exist");
+        it("Check 'Accepted quantity' is displayed", () => {
+          cy.get("[data-cy=\"Accepted quantity\"]").should("exist");
+        });
+
+        it("Check 'Rejected quantity' is displayed", () => {
+          cy.get("[data-cy=\"Rejected quantity\"]").should("exist");
+        });
       });
     });
 
@@ -331,32 +355,52 @@ context("Intermediate page validation", () => {
     });
 
     context("Click 'Create Document' button and verify predefined fields are displayed", () => {
-      it("Click on 'Create Document' button", () => {
-        cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+      context("verify default tabs are displayed", () => {
+        it("Click on 'Create Document' button", () => {
+          cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+        });
+
+        it("Verify 'Overview' tab is displayed", () => {
+          cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+        });
+
+        it("Verify 'Procedure' tab is displayed", () => {
+          cy.get("[data-cy=\"tabId.procedure\"]").should("exist");
+        });
+
+        it("Verify 'Materials & Equipment' tab is displayed", () => {
+          cy.get("[data-cy=\"tabId.materialsandequipment\"]").should("exist");
+        });
       });
 
-      it("Check 'Approvals' is displayed", () => {
-        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
+      context("verify predefined fields are displayed", () => {
+        it("Verify 'Attachment' field is displayed", () => {
+          cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+        });
 
-      it("Select 'Procedure' tab", () => {
-        cy.drSelectProcedureTab();
-      });
+        it("Check 'Approvals' is displayed", () => {
+          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+        });
 
-      it("Check 'PI PROCEDURE' is displayed", () => {
-        cy.get("[data-cy=\"form.builder.mpiprocedure\"]").should("exist");
-      });
+        it("Select 'Procedure' tab", () => {
+          cy.drSelectProcedureTab();
+        });
 
-      it("Check 'Start quantity' is displayed", () => {
-        cy.get("[data-cy=\"Start quantity\"]").should("exist");
-      });
+        it("Check 'PI PROCEDURE' is displayed", () => {
+          cy.get("[data-cy=\"form.builder.mpiprocedure\"]").should("exist");
+        });
 
-      it("Check 'Accepted quantity' is displayed", () => {
-        cy.get("[data-cy=\"Accepted quantity\"]").should("exist");
-      });
+        it("Check 'Start quantity' is displayed", () => {
+          cy.get("[data-cy=\"Start quantity\"]").should("exist");
+        });
 
-      it("Check 'Rejected quantity' is displayed", () => {
-        cy.get("[data-cy=\"Rejected quantity\"]").should("exist");
+        it("Check 'Accepted quantity' is displayed", () => {
+          cy.get("[data-cy=\"Accepted quantity\"]").should("exist");
+        });
+
+        it("Check 'Rejected quantity' is displayed", () => {
+          cy.get("[data-cy=\"Rejected quantity\"]").should("exist");
+        });
       });
     });
 
