@@ -325,14 +325,8 @@ export function KendoPanel<T extends { id?: string }>({
 
   // On field config: inline edit
   const update = (dataItem: DTMRowItem) => {
-    if (dataItem.active.toString() === "Active") {
-      dataItem.active = true;
-
-    }
-    if (dataItem.active.toString() === "Inactive") {
-      dataItem.active = false;
-
-    }
+    (dataItem.active.toString() === "true" || dataItem.active.toString() === "Active") ?
+      dataItem.active = true : dataItem.active = false;
     const newData = {
       documentTypeName: dataItem.documentTypeName,
       documentTypeAcronym: dataItem.documentTypeAcronym,
