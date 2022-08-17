@@ -13,8 +13,9 @@ declare global {
       verifySelectedTab(params: {tab: string}): Chainable;
       verifyFixedTab(): Chainable;
       verifyApprovalsField(): Chainable;
-      verifyFormOptionsVisibility(params: {visibility: boolean}): Chainable;
+      verifyFormOptionsVisibility(): Chainable;
       verifyExpandCollpase(): Chainable;
+      verifyRightSidePanelOtherTabs(): Chainable;
       verifyReferencesGeneralInfo(params: {user: string}): Chainable;
       verifyReferencesOtherInfo(): Chainable;
       verifyHistoryScroll(): Chainable;
@@ -66,16 +67,23 @@ Cypress.Commands.add("verifyApprovalsField", () => {
   cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
 });
 
-Cypress.Commands.add("verifyFormOptionsVisibility", (params: {visibility: boolean}) => {
-  const condition = params.visibility ? "exist" : "not.exist";
-  cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should(condition);
-  cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should(condition);
-  cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should(condition);
+Cypress.Commands.add("verifyFormOptionsVisibility", () => {
+  cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("be.visible");
+  cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("be.visible");
+  cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("be.visible");
 });
 
 Cypress.Commands.add("verifyExpandCollpase", () => {
   cy.get("main span>button").eq(0).should("not.have.class", "maximize").click().should("have.class", "maximize");
   cy.get("main span>button").eq(0).arrowClick();
+});
+
+Cypress.Commands.add("verifyRightSidePanelOtherTabs", () => {
+  cy.get("[data-cy=\"note-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"timeline-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"permission-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"cr-icon\"]").should("be.visible");
 });
 
 Cypress.Commands.add("verifyReferencesGeneralInfo", (params: {user: string}) => {
@@ -181,8 +189,6 @@ Cypress.Commands.add("verifyHistoryTab", (history, groupOne, groupTwo) => {
       });
     });
   });
-
-
 });
 
 Cypress.Commands.add("drVerifyDescriptionToolBar", () => {
@@ -200,7 +206,6 @@ Cypress.Commands.add("drVerifyDescriptionToolBar", () => {
   cy.get("div[title=\"Ordered\"]").should("exist");
   cy.get("div[title=\"Indent\"]").should("exist");
   cy.get("div[title=\"Outdent\"]").should("exist");
-
   cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
   cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
   cy.get("[title=\"Block Type\"]").should("not.exist");
@@ -215,16 +220,4 @@ Cypress.Commands.add("drVerifyDescriptionToolBar", () => {
   cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
 });
 
-Cypress.Commands.add("drVerifytabIsFixed", () => {
-  cy.get(".MuiTabs-fixed").should("exist");
-});
 
-Cypress.Commands.add("drSelectBookmarksTab", () => {
-  cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-});
-Cypress.Commands.add("drSelectRevisionHistoryTab", () => {
-  cy.get("[data-cy=\"cr-icon\"]").arrowClick();
-});
-Cypress.Commands.add("drSelectMigrateFormTab", () => {
-  cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
-});
