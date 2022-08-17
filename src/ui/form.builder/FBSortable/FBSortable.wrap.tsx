@@ -1,5 +1,5 @@
 import { map } from "lodash";
-import { useObserver } from "mobx-react";
+import { useObserver, Observer } from "mobx-react";
 import React from "react";
 import { arrayMove, SortableElement, SortEnd } from "react-sortable-hoc";
 import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState, FBSortableProps } from "..";
@@ -25,15 +25,21 @@ export const withFBSortable = <T extends FBSortableProps>(
       });
     };
 
+    const isHiddenByRules = (item: FBSchemaProps) => workspaceState?.hiddenFieldsByRules?.has(item.name as string);
+
     const SortableItem = SortableElement(({ value }: { value: FBSchemaProps }) => (
-      <li style={{ listStyleType: "none" }}>
-        <FBFieldWrapper
-          key={`fb-sortable-wrapper-${value.index}`}
-          inputProps={value as FBInputProps}
-        >
-          {schemaField(value)}
-        </FBFieldWrapper>
-      </li>
+      <Observer>
+        {() => (
+          <li style={{ listStyleType: "none", display: isHiddenByRules(value) ? "none" : "block" }}>
+            <FBFieldWrapper
+              key={`fb-sortable-wrapper-${value.index}`}
+              inputProps={value as FBInputProps}
+            >
+              {schemaField(value)}
+            </FBFieldWrapper>
+          </li>
+        )}
+      </Observer>
     ));
 
     const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {

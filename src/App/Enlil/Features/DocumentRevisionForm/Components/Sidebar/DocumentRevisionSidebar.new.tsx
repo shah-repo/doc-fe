@@ -119,6 +119,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                         selectedDocument={selectedDocument}
                         edit={edit}
                       />
+
                     ),
                   },
                 },
