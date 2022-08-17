@@ -1,0 +1,1606 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+import "moment-timezone";
+import moment from "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { Part } from "../../utils/constants/documentTypes/part";
+import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
+import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+
+const ADMIN_USER = USERS[1];
+const FIRST_USER = USERS[2];
+const SECOND_USER = USERS[3];
+const THIRD_USER = USERS[4];
+
+let createdCompany;
+let loginResponse;
+let adminEmployeeLoginResponse;
+let adminEmployee;
+let purchaseOrderDocumentType;
+let formDocumentType;
+let approvalRequestDocumentType;
+let initialArDocument;
+let createdPOFormDocument;
+let group;
+let receivableDocumentType;
+let supplierDocumentType;
+let createdSupplierFormDocument;
+let createdSupplierDocument;
+let partDocumentType;
+let createdPartDocument;
+let createdPartDocument2;
+let createdPODocument;
+let createdRecivableFormDocument;
+let createdRecivableDocument;
+
+const PART_DOCUMENT_TYPE_NAME = "Part";
+const SupplierFormTitle = "Supplier form";
+const todaysDate = moment().tz("America/Los_Angeles");
+const todaysDateFormated = moment().tz("America/Los_Angeles").format("L");
+const LFPO =  {
+  documentTypeName: "Lot From Purchase Order Form",
+  documentTypeAcronym: "LFPO",
+  group: DOC_TYPE_GROUP.FORM,
+  isQms: true,
+};
+
+context("Receiving landing page test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+    cy.intercept({ url: "/api/v1/document_revisions/search", middleware: true }, (req) => {
+      req.continue((res) => {
+        res.setDelay(100);
+      });
+    }).as("Search");
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  context("[API]Prepare company", () => {
+    it("[API]Creates company", (done: any) => {
+      cy.authApiLogin({
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        adminEmployeeLoginResponse = response;
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: ADMIN_USER.email,
+            importerEmail: IMPORTER_USER.email,
+            users: [FIRST_USER, SECOND_USER, THIRD_USER],
+            documentTypes: [
+              LFPO,
+              Part,
+              PurchaseOrderTest,
+              ReceivableTest,
+            ],
+          }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
+          // secondEmployee = createdCompany.employees.find((employee) => employee.user.email === SECOND_USER.email);
+          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable test");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
+          // CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots test");
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
+          done();
+        });
+      });
+    });
+
+    it("[API]Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: ADMIN_USER.email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: SECOND_USER.email,
+      }).then((response) => {
+        // loginResponseSecondTester = response;
+        done();
+      });
+    });
+
+    it("[API]Create Supplier form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Supplier Form document</p>",
+              document: {
+                docId: "FM-00010",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: SupplierFormTitle,
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: supplierDocumentType[0].id,
+                }],
+                schema: [],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdSupplierFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdSupplierFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => {
+              cy.poAPICreatePO({
+                payload: {
+                  name: "API Supplier Document",
+                  attachments: [],
+                  referenceTo: [],
+                  formDocument: { id: createdSupplierFormDocument.id },
+                  description: "API Supplier document",
+                  revisionChangeType: RevisionChangeType.NextRevision,
+                  document: {
+                    docId: "SUP-00001",
+                    documentType: {
+                      id: supplierDocumentType[0].id,
+                    },
+                    securityList: {
+                      operators: [],
+                      securityEmployees: [],
+                      securityGroups: [
+                        {
+                          id: group.body[0].id,
+                        },
+                      ],
+                    },
+                  },
+                },
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then((response) => {
+                createdSupplierDocument = response;
+                cy.drAPIApproveAndRelease({
+                  documentId: createdSupplierDocument.id,
+                  payload: {
+                    effectiveDate: (new Date()).toISOString(),
+                    documentType: { id: approvalRequestDocumentType[0].id },
+                    formDocument: { id: initialArDocument[0].id },
+                    approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                  },
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                }).then(() => {
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+
+    it("[API]Create part documents", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Part document</p>",
+          document: {
+            docId: "PRT-00005",
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Part document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPartDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPartDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Part second document</p>",
+              document: {
+                docId: "PRT-00006",
+                documentType: {
+                  id: partDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part second document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPartDocument2 = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPartDocument2.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => {
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    it("[API]Create PO form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>PO Form document</p>",
+          document: {
+            docId: "FM-00003",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "PO Form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: purchaseOrderDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "po-status-built-in",
+                type: "select",
+                index: 0,
+                label: "PO Status",
+                tabId: "details",
+                options: [
+                  {
+                    text: "Open",
+                    value: "Open",
+                  },
+                  {
+                    text: "Closed",
+                    value: "Closed",
+                  },
+                  {
+                    text: "Cancelled",
+                    value: "Cancelled",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                validationAttribute: "PO Status",
+                applicableValidationSchema: true,
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "po-general-information-to-be-completed-by-requester-section",
+                type: "section",
+                index: 1,
+                label: "General Information",
+                tabId: "details",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+              },
+              {
+                name: "po-requestor-autocomplete",
+                type: "autocomplete",
+                index: 2,
+                label: "Requestor",
+                tabId: "details",
+                rules: "required",
+                hidden: false,
+                deleted: false,
+                optionId: "3",
+                placeholder: "[Select requestor here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: false,
+                optionLabelKey: "user.email",
+                optionValueKey: "id",
+                outputDisabled: false,
+                validationMode: "default",
+                editorProperties: [
+                  "deleteDisabled",
+                ],
+                validationAttribute: "Requestor",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "po-supplier-built-in",
+                type: "supplier",
+                tabId: "details",
+                index: 3,
+                label: "Supplier ",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                validationAttribute: "Supplier",
+                applicableValidationSchema: true,
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "po-order-date",
+                type: "datepicker",
+                index: 4,
+                label: "Order Date",
+                tabId: "details",
+                rules: "required",
+                hidden: false,
+                deleted: false,
+                validators: {
+                  required: true,
+                },
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: false,
+                outputDisabled: false,
+                validationMode: "default",
+                editorProperties: [
+                  "deleteDisabled",
+                ],
+                validationAttribute: "Order Date",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "po-items-built-in",
+                type: "purchaseorder",
+                index: 5,
+                label: "Purchase Order",
+                tabId: "lineitems",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                applicableValidationSchema: true,
+                validationAttribute: "Purchase Order",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-po-approvals",
+                type: "approvals",
+                index: 6,
+                label: "Approvals",
+                tabId: "details",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                uniqueSchemaItem: true,
+                validationAttribute: "Approvals",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+            ],
+          },
+
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPOFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPOFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Create PO", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>PO for receiving</p>",
+          document: {
+            docId: "POT-00001",
+            documentType: {
+              id: purchaseOrderDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          formDocument: {
+            id: createdPOFormDocument.id,
+          },
+          name: "",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formInput: {
+            "po-items-built-in": {
+              tax: "0.00",
+              taxRate: 9.25,
+              subTotal: "2100.00",
+              totalAmount: "2100.00",
+              shippingCost: "0.00",
+              currency: "USD",
+              exchangeRate: 1,
+              totalInUSD: "2100.00",
+              dateOfExchangeRate: "",
+              items: [
+                {
+                  type: "product",
+                  partNumberTitle: "Part document",
+                  partNumberDocId: "PRT-00005 - 1",
+                  partNumber: createdPartDocument.id,
+                  order: 200,
+                  units: "each",
+                  unitPrice: 5,
+                  date: todaysDate,
+                  id: "l1or09um",
+                  received: 0,
+                  totalAmount: "1000.00",
+                  formattedDate: todaysDateFormated,
+                  index: 0,
+                },
+                {
+                  type: "product",
+                  partNumberTitle: "Part second document",
+                  partNumberDocId: "PRT-00006 - 1",
+                  partNumber: createdPartDocument2.id,
+                  order: 100,
+                  units: "each",
+                  unitPrice: 11,
+                  date: todaysDate,
+                  id: "l1or0d4o",
+                  received: 0,
+                  totalAmount: "1100.00",
+                  formattedDate: todaysDateFormated,
+                  index: 1,
+                },
+              ],
+            },
+            "fb-po-approvals": [
+              adminEmployee.id,
+            ],
+            "po-status-built-in": "Open",
+            "po-requestor-autocomplete": adminEmployee.id,
+            "po-order-date": todaysDate,
+            "po-supplier-built-in": createdSupplierDocument.id,
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPODocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPODocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Create Receiving form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Document form for Receivable</p>",
+          document: {
+            docId: "FM-00004",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Receivable form",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: receivableDocumentType[0].id,
+            }],
+            schema: [{
+              index: 0,
+              type: "poreceive",
+              label: "Receivable",
+              tabId: "details",
+              name: "receivable-test",
+              applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+            },
+            {
+              label: "form.builder.approvals",
+              tabId: "overview",
+              type: "poapprovals",
+              deleteDisabled: false,
+              name: "fb-po-approvals",
+              uniqueSchemaItem: true,
+              index: 1,
+            }],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdRecivableFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdRecivableFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Create Receiving", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          name: "",
+          description: "",
+          document: {
+            docId: "RCT-00001",
+            documentType: {
+              id: receivableDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formDocument: {
+            id: createdRecivableFormDocument.id,
+          },
+          formInput: {
+            "fb-po-approvals": [ adminEmployee.id ],
+            "receivable-test": {
+              id: createdPODocument.id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdRecivableDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdRecivableDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+
+  });
+
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+
+  });
+
+  xcontext("Login user", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+      });
+    });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: "White Johnston, Beahan and Hackett 82734", multiple: true });
+    });
+  });
+
+  context("FORM document creation flow", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Verify form and tabs", () => {
+      it("Verify Title, Description, Document Type, References, Document ID, output document", () => {
+        cy.verifyPredefiendFields();
+        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+      });
+
+      it("Verify Title, Description, Document Type, References, Document ID, output document", () => {
+        cy.verifyPredefiendFields();
+        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+      });
+    });
+
+    context("Fill in document attributes", () => {
+      it("Enter title 'Inline Form Document Revision'", () => {
+        cy.drEnterDocumentTitle({ name: "LFPO Document Title" });
+      });
+
+      it("Enter description 'LFPO Document'", () => {
+        cy.drEnterDocumentDescription({ description: "LFPO Document form Document Revision description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Lot From Purchase Order Form" });
+      });
+
+      it("Select 'Lots' output document type from dropdown", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Click on Save", () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+      });
+    });
+  });
+
+  context("Verification of the created form", () => {
+    it("Add textfield", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Checkbox group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.fbAddNewFieldButton();
+    });
+    it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      cy.get("header li>p>div>a>div").should("have.text", "Document List");
+      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LFPO00002");
+      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+    });
+
+    it("Verify that it contains only Details tab", () => {
+      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+    });
+
+    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+      cy.verifyFixedTab();
+    });
+
+    it("Verify Form opens to the Details tab by default and it contains", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("#sm-tabpanel-0").should("be.visible");
+    });
+
+    context("Verify Schema Fields", () => {
+
+      it("Verify Default fields up to attachment", () => {
+        cy.verifyPredefiendFields();
+      });
+
+      it("Verify Added FB Fields", () => {
+        cy.get("[name^=\"textfield-for-inline\"]").should("exist");
+        cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+      });
+
+      xit("Quantity, Part Number, Comment, Usable Quantity", () => {
+        cy.get("[data-cy=\"field-renderHTML\"]").should("be.visible");
+        //  cy.get("#SMBodyTmpl").scrollTo("top");
+        cy.get("[name=\"lot_quantity\"]").should("be.visible");
+        cy.get("[name=\"lot_usable_quantity\"]").should("be.visible");
+        cy.get("[data-cy=\"lot_part\"]").should("be.visible");
+      });
+
+      it("Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
+        cy.get("[name=\"lot_expiry_date\"]").should("exist");
+        cy.get("[name=\"100-inspection-override\"]").should("exist");
+        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
+      });
+
+      it("Verify Form option", () => {
+        cy.get(".formOptionsBox").should("exist");
+      });
+
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy=\"References\"]").should("exist");
+        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      });
+
+      it("Submit for approval", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+
+      it("Click on create new", () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
+          cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+        });
+      });
+
+
+      it("Select Part", () => {
+        cy.drEnterDocumentTitle({ name: "LFPO form document" });
+        // cy.get("#SMBodyTmpl").scrollTo("top");
+        cy.get("[data-cy=\"lot_part\"]").autocompleteSelect(`PRT-00006 - rev 1 - Part second document`);
+        cy.get(`input[type="checkbox"][value="1"]`).last().check();
+      });
+
+      it("Save the document", () => {
+        cy.drSaveDocumentWithoutaudit();
+      });
+
+      it("Fill in Approval block and  Approve and release Record", () => {
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+
+      it("Approve and Release", () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.PostApprovalsApprove,
+          CyRoutes.GetRequiredApproversDocRev,
+          CyRoutes.SessionDetails], () => {
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+
+    });
+  });
+
+  context("Create Draft state Document", () => {
+
+    it("Navigate to Receiving landing page", () => {
+      cy.navigToReceivableList();
+    });
+
+    it("Click 'Create Receipt Record'", () => {
+      cy.get("[id=\"DocumentByTypeListPresenter-openDocRev\"]").arrowClick();
+    });
+
+    it("Create Receiving Record", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
+        CyRoutes.GetFieldLocks], () => {
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .autocompleteSelect("Receivable test");
+      });
+    });
+
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Select Purchase order", () => {
+      cy.drSelectDetailsTab();
+      cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
+        .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
+    });
+
+    it("Save the form", () => {
+      cy.drSaveDocumentWithoutaudit();
+      cy.wait(2000);
+    });
+
+    it("Click on create lot", () => {
+      cy.get("[name=\"po-items-built-in\"] button").contains("Create Lot").first().arrowClick();
+      cy.get("[name^=\"received\"]").arrowType("200");
+      cy.get("[data-cy=\"lotType\"]").arrowClick({ force: true })
+        .autocompleteSelect("Lots");
+
+      cy.wrapWithWaitOnApiCalls([], () => {
+        cy.get("[data-cy='lotForm']").arrowClick({ force: true })
+          .autocompleteSelect("LFPO Document Title");
+      });
+
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Create Lot").first().arrowClick();
+
+
+    });
+
+  });
+
+  context("Receving flow", () => {
+
+    it("Navigate to Receiving landing page", () => {
+      cy.navigToReceivableList();
+    });
+
+    it("Click 'Create Receipt Record'", () => {
+      cy.get("[id=\"DocumentByTypeListPresenter-openDocRev\"]").arrowClick();
+    });
+
+    it("Create Receiving Record", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
+        CyRoutes.GetFieldLocks], () => {
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .autocompleteSelect("Receivable test");
+      });
+    });
+
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Select Purchase order", () => {
+      cy.drSelectDetailsTab();
+      cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
+        .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
+    });
+
+    it("Save the form", () => {
+      cy.drSaveDocumentWithoutaudit();
+      cy.wait(2000);
+    });
+
+    it("Click on create lot", () => {
+      cy.get("[name=\"po-items-built-in\"] button").contains("Create Lot").first().arrowClick();
+      cy.get("[name^=\"received\"]").arrowType("200");
+      cy.get("[data-cy=\"lotType\"]").arrowClick({ force: true })
+        .autocompleteSelect("Lots");
+
+      cy.wrapWithWaitOnApiCalls([], () => {
+        cy.get("[data-cy='lotForm']").arrowClick({ force: true })
+          .autocompleteSelect("LFPO Document Title");
+      });
+
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Create Lot").first().arrowClick();
+
+
+    });
+
+  });
+
+  context("Verify created lot", () => {
+    it("Navigate to Lot landing page", () => {
+      cy.navigToLots();
+    });
+    it("Click to open that LOT", () => {
+      cy.dlClearFilters();
+      cy.dlFilterByDocId({ docId: "LOT #22081702" });
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (WIP)", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+      cy.get("header li>p>div>a>div").should("have.text", "Lots");
+      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LOT #22081702");
+      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+    });
+
+    it("Verify that it contains only Details tab", () => {
+      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+    });
+
+    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+      cy.verifyFixedTab();
+    });
+
+    it("Verify Form opens to the Details tab by default and it contains", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("#sm-tabpanel-0").should("be.visible");
+    });
+
+    it("Verify FB Fields", () => {
+      cy.get("[name^=\"textfield-for-inline\"]").should("exist");
+      cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+    });
+
+    it("Quantity, Part Number, Usable Quantity", () => {
+      cy.get("[name=\"lot_quantity\"]").should("be.visible");
+      cy.get("[name=\"lot_usable_quantity\"]").should("be.visible");
+      cy.get("[data-cy=\"lot_part\"]").should("be.visible");
+    });
+
+    it("Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
+      cy.get("[name=\"lot_expiry_date\"]").should("exist");
+      cy.get("[name=\"100-inspection-override\"]").should("exist");
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
+    });
+
+    it("Verify Form option", () => {
+      cy.get(".formOptionsBox").should("exist");
+    });
+
+  });
+
+  context("Validate Right Side Panel", () => {
+
+    it("Verify that right side panel opens by default to the References tab", () => {
+      cy.get("[data-cy=\"References\"]").should("exist");
+      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+    });
+
+    it("Verify Reference tab Info", () => {
+      cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
+    });
+
+    it("Verify Eye Icon", () => {
+      cy.get("[data-cy=\"references-icon\"]").should("exist");
+    });
+
+    it("Verify Expand and collapse", () => {
+      cy.verifyExpandCollpase();
+    });
+
+    it("It is fixed as the user scrolls up or down", () => {
+      cy.get("#sm-tabpanel-0").scrollIntoView().should("be.visible");
+      cy.get("[data-cy='References']").should("be.visible");
+    });
+
+    it("Verify References selection Add Remove", () => {
+      cy.verifyAddRemoveReference({ formId: "FM-00001" });
+    });
+
+    it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
+      cy.verifyReferenceInfo();
+      cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00002");
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", moment().format("YYYY.MM.DD"));
+    });
+
+    context("Verify Revision", () => {
+      it("open revision tab", () => {
+        cy.get("[data-cy=\"note-icon\"]").arrowClick();
+      });
+
+      it("Verify revision Rev Document open or not", () => {
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+        cy.wait(2000);
+        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+
+      });
+    });
+
+    context("Verify User able to add Groups or other user permissions", () => {
+      it("Open permissions tab", () => {
+        cy.drSelectPermissionTab();
+        // cy.pause();
+      });
+
+      it("Add another user permission", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+          cy.drAddUserFromPermissionTab(USERS[3].name);
+        });
+      });
+
+      it("Add another group permission", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.drAddGroupFromPermissionTab("Developers");
+        });
+      });
+
+    });
+
+    context("Check document history", () => {
+      const groupOne = "Developers";
+      let groupTwo;
+      const history = [
+        {
+          owner: USERS[1].name,
+          actions: [
+            { key: "Access granted to group", value: `Developers` },
+          ],
+        },
+        {
+          owner: USERS[1].name,
+          actions: [
+            { key: "Access granted to user", value: `${USERS[3].name}` },
+          ],
+        },
+      ];
+      it("Verify Doc history", () => {
+        cy.drSelectHistoryTab();
+        // cy.pause();
+      });
+      history.forEach((element, groupIndex) => {
+        it(`Check owner name for group ${groupIndex + 1}`, () => {
+          cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
+        });
+        element.actions.forEach((action, index, identifier) => {
+          it(`'${action.key}' as '${action.value}' exists`, () => {
+            const typeOfChange = action.key;
+            let contentOfChange = action.value;
+
+            if (action.key === "New description" || action.key === "Description changed" ) {
+              contentOfChange = "\n" + action.value + "\n";
+            }
+
+            if (typeOfChange === "s3Link added") {
+              cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
+              cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
+            }
+            else {
+              if (action.key === "Access granted to group") {
+                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
+                  expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
+                });
+              }
+              else {
+                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
+                  .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
+                  .parent()
+                  .parent()
+                  .within(() => {
+                    cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
+                    cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
+                  });
+              }
+            }
+          });
+        });
+      });
+    });
+
+
+    xcontext("Verify Revision History", () => {
+      it.skip("Verify Revision History Items", () => {
+        cy.get("[data-cy='note-icon']").arrowClick();
+        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
+        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
+        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
+        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
+      });
+    });
+
+    context("Verify Book Mark", () => {
+      it("Verify Book Mark Navigation", () => {
+        cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
+        cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+      });
+    });
+
+    context("Verify Migrate Form", () => {
+      it("Verify Form Migration", () => {
+        cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
+        cy.get("[data-cy=\"Migrate Form-detail\"]").should("be.visible");
+        cy.get("[data-cy=\"field-changeDocumentForm\"]").should("be.visible");
+        cy.get("[data-cy=\"confirmButton\"]").should("be.visible");
+        cy.get("[data-cy=\"references-icon\"]").arrowClick();
+      });
+    });
+
+  });
+
+  context("Verify Scroll", () => {
+    it("Navigate to history tab", () => {
+      cy.get("[data-cy='timeline-icon']").arrowClick();
+    });
+
+    it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+    });
+  });
+
+  context("Fill in the fields and Release", () => {
+
+    it("Checked chebox value", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    });
+
+    it("Fill in Approval block and  Approve and release Record", () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Save the document", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
+
+    it("Approve and Release", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostApprovalsApprove,
+        CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+
+  });
+
+
+  context("Verify After release", () => {
+    it("Navigate to Lot landing page", () => {
+      cy.navigToLots();
+    });
+    it("Click to open that LOT", () => {
+      cy.dlClearFilters();
+      cy.dlFilterByDocId({ docId: "LOT #22081702" });
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (ACCEPTED)", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.ACCEPTED });
+      cy.get("header li>p>div>a>div").should("have.text", "Lots");
+      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LOT #22081702");
+      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+    });
+
+    it("Verify that it contains only Details tab", () => {
+      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+    });
+
+    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+      cy.verifyFixedTab();
+    });
+
+    it("Verify Form opens to the Details tab by default and it contains", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("#sm-tabpanel-0").should("be.visible");
+    });
+
+    it("Verify FB Fields", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+    });
+
+    it("Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
+      cy.get("[name=\"lot_expiry_date\"]").should("exist");
+      cy.get("[name=\"100-inspection-override\"]").should("exist");
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
+    });
+
+    it("Verify that right side panel opens by default to the References tab", () => {
+      cy.get("[data-cy=\"References\"]").should("exist");
+      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+    });
+
+  });
+
+
+  // / verify draft state Lots
+
+  context("Verify created lot", () => {
+    it("Navigate to Lot landing page", () => {
+      cy.navigToLots();
+    });
+    it("Click to open that LOT", () => {
+      cy.dlClearFilters();
+      cy.dlFilterByDocId({ docId: "LOT #22081703" });
+      cy.dlSelectFirstDocument();
+    });
+
+    // it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (WIP)", () => {
+    //   cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+    //   cy.get("header li>p>div>a>div").should("have.text", "Lots");
+    //   cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LOT #22081703");
+    //   cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+    // });
+
+    it("Verify that it contains only Details tab", () => {
+      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+    });
+
+    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+      cy.verifyFixedTab();
+    });
+
+    it("Verify Form opens to the Details tab by default and it contains", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("#sm-tabpanel-0").should("be.visible");
+    });
+
+    it("Verify FB Fields", () => {
+      cy.get("[name^=\"textfield-for-inline\"]").should("exist");
+      cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+    });
+
+    it("Verify Quantity, Part Number, Usable Quantity", () => {
+      cy.get("[name=\"lot_quantity\"]").should("be.visible");
+      cy.get("[name=\"lot_usable_quantity\"]").should("be.visible");
+      cy.get("[data-cy=\"lot_part\"]").should("be.visible");
+    });
+
+    it("Verify Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
+      cy.get("[name=\"lot_expiry_date\"]").should("exist");
+      cy.get("[name=\"100-inspection-override\"]").should("exist");
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
+    });
+
+    it("Verify Form option", () => {
+      cy.get(".formOptionsBox").should("exist");
+    });
+
+  });
+
+  context("Validate Right Side Panel", () => {
+
+    it("Verify that right side panel opens by default to the References tab", () => {
+      cy.get("[data-cy=\"References\"]").should("exist");
+      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+    });
+
+    it("Verify Reference tab Info", () => {
+      cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
+    });
+
+    it("Verify Eye Icon", () => {
+      cy.get("[data-cy=\"references-icon\"]").should("exist");
+    });
+
+    it("Verify Expand and collapse", () => {
+      cy.verifyExpandCollpase();
+    });
+
+    it("It is fixed as the user scrolls up or down", () => {
+      cy.get("#sm-tabpanel-0").scrollIntoView().should("be.visible");
+      cy.get("[data-cy='References']").should("be.visible");
+    });
+
+    it("Verify References selection Add Remove", () => {
+      cy.verifyAddRemoveReference({ formId: "FM-00001" });
+    });
+
+    it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
+      cy.verifyReferenceInfo();
+      cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00002");
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", moment().format("YYYY.MM.DD"));
+    });
+
+    context("Verify Revision", () => {
+      it("open revision tab", () => {
+        cy.get("[data-cy=\"note-icon\"]").arrowClick();
+      });
+
+      it("Verify revision Rev Document open or not", () => {
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+        cy.wait(2000);
+        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+
+      });
+    });
+
+    context("Verify User able to add Groups or other user permissions", () => {
+      it("Open permissions tab", () => {
+        cy.drSelectPermissionTab();
+        // cy.pause();
+      });
+
+      it("Add another user permission", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+          cy.drAddUserFromPermissionTab(USERS[3].name);
+        });
+      });
+
+      it("Add another group permission", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.drAddGroupFromPermissionTab("Developers");
+        });
+      });
+
+    });
+
+    context("Check document history", () => {
+      const groupOne = "Developers";
+      let groupTwo;
+      const history = [
+        {
+          owner: USERS[1].name,
+          actions: [
+            { key: "Access granted to group", value: `Developers` },
+          ],
+        },
+        {
+          owner: USERS[1].name,
+          actions: [
+            { key: "Access granted to user", value: `${USERS[3].name}` },
+          ],
+        },
+      ];
+      it("Verify Doc history", () => {
+        cy.drSelectHistoryTab();
+        // cy.pause();
+      });
+      history.forEach((element, groupIndex) => {
+        it(`Check owner name for group ${groupIndex + 1}`, () => {
+          cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
+        });
+        element.actions.forEach((action, index, identifier) => {
+          it(`'${action.key}' as '${action.value}' exists`, () => {
+            const typeOfChange = action.key;
+            let contentOfChange = action.value;
+
+            if (action.key === "New description" || action.key === "Description changed" ) {
+              contentOfChange = "\n" + action.value + "\n";
+            }
+
+            if (typeOfChange === "s3Link added") {
+              cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
+              cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
+            }
+            else {
+              if (action.key === "Access granted to group") {
+                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
+                  expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
+                });
+              }
+              else {
+                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
+                  .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
+                  .parent()
+                  .parent()
+                  .within(() => {
+                    cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
+                    cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
+                  });
+              }
+            }
+          });
+        });
+      });
+    });
+
+
+    xcontext("Verify Revision History", () => {
+      it.skip("Verify Revision History Items", () => {
+        cy.get("[data-cy='note-icon']").arrowClick();
+        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
+        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
+        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
+        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
+      });
+    });
+
+    context("Verify Book Mark", () => {
+      it("Verify Book Mark Navigation", () => {
+        cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
+        cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+      });
+    });
+
+    context("Verify Migrate Form", () => {
+      it("Verify Form Migration", () => {
+        cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
+        cy.get("[data-cy=\"Migrate Form-detail\"]").should("be.visible");
+        cy.get("[data-cy=\"field-changeDocumentForm\"]").should("be.visible");
+        cy.get("[data-cy=\"confirmButton\"]").should("be.visible");
+        cy.get("[data-cy=\"references-icon\"]").arrowClick();
+      });
+    });
+
+  });
+
+  context("Verify Scroll", () => {
+    it("Navigate to history tab", () => {
+      cy.get("[data-cy='timeline-icon']").arrowClick();
+    });
+
+    it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+    });
+  });
+
+  context("Fill in the fields and Release", () => {
+
+    it("Enter value in textfield", () => {
+      cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("Test");
+      cy.get("[data-cy=\"lot_usable_quantity\"]").arrowType("200");
+    });
+
+    it("Enter Expiration date", () => {
+      cy.get("input[name^=\"lot_expiry_date\"]").parent().find("button").arrowClick({ force: true });
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+    });
+
+    it("Check 100% override", () => {
+      cy.get("[value=\"100% Inspection Override\"]").check();
+    });
+
+    it("Checked chebox value", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    });
+
+    it("Fill in Approval block and  Approve and release Record", () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Save the document", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
+
+    it("Approve and Release", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostApprovalsApprove,
+        CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+
+  });
+
+
+});
