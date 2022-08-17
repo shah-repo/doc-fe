@@ -20,6 +20,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
   items = [],
   calculation,
   mode,
+  isReceivable,
 }) => {
   const cellStyle = FBTableCellStyles();
   const lotButtonStyles = createLotButtonStyles();
@@ -27,9 +28,9 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
   return (
     <Table className={classes?.table}>
       <TableHead>
-        <TableRow>
+        {isReceivable && <TableRow>
           <FBTableCell colSpan={1} />
-        </TableRow>
+        </TableRow>}
         <TableRow>
           {mode === "preview" && <FBTableCell />}
           {mode !== "preview" && <FBTableCell label="form.builder.field.tax" align="right"
