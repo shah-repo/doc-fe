@@ -32,6 +32,9 @@ class FBWorkspaceState extends FBSchemaState {
 
   @observable public isDirty = false;
 
+  // @todo: Remove after moving fields validation to higher level.
+  @observable public hiddenFieldsByRules = new Set<string>();
+
   public omitAutosave = false;
 
   public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
@@ -264,6 +267,14 @@ class FBWorkspaceState extends FBSchemaState {
         this.setFormInputData(data);
       }
     });
+  };
+
+  @action public addHiddenFieldByRules = (name: string): void => {
+    this.hiddenFieldsByRules.add(name);
+  };
+
+  @action public deleteHiddenFieldByRules = (name: string): void => {
+    this.hiddenFieldsByRules.delete(name);
   };
 }
 
