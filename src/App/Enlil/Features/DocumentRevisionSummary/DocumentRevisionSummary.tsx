@@ -178,7 +178,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                     enableReinitialize={true}
                                   >
                                     <>
-                                      <FBSection name={`fb-po-section-po-items-built-in`} label="form.builder.po.details"  />
+                                      <FBSection name={`fb-po-section-po-items-built-in`}
+                                        label="form.builder.po.details" />
                                       <Attachment
                                         isAttachmentEmpty={isAttachmentEmpty}
                                         docRevId={documentRevision.id}
