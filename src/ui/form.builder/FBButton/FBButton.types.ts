@@ -23,5 +23,6 @@ export type FBButtonProps =
     isHover?: boolean;
     showNewButton?: boolean;
     className? : string;
+    newVariant?: boolean;
   };
 
