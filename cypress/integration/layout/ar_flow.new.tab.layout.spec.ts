@@ -381,7 +381,7 @@ context("Approval request form", () => {
 
   xcontext("Verify description field", () => {
     it("Verify DescriptionToolBar", () => {
-      cy.drVerifyDescriptionToolBar();
+      cy.verifyDescriptionToolbar();
     });
 
     it("Enter a 1 line description", () => {
@@ -532,7 +532,7 @@ context("Approval request form", () => {
 
   xcontext("Verify description field", () => {
     it("Verify DescriptionToolBar", () => {
-      cy.drVerifyDescriptionToolBar();
+      cy.verifyDescriptionToolbar();
     });
 
     it("Enter a 1 line description", () => {
@@ -598,7 +598,7 @@ context("Approval request form", () => {
     });
 
     xit("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
-      cy.drVerifytabIsFixed();
+      cy.verifyFixedTab();
     });
 
     xit("Verify Form opens to the “Change Details” tab by default", () => {

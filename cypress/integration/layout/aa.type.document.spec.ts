@@ -229,7 +229,7 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy=\"tabId.details\"]").should("not.exist");
     });
     it("Verify Description tool bar option", () => {
-      cy.drVerifyDescriptionToolBar();
+      cy.verifyDescriptionToolbar();
     });
     it("Verify form option box exist", () => {
       cy.get(".formOptionsBox").should("exist");
@@ -286,11 +286,11 @@ context("AA Document Layout verification", () => {
     //     .realHover().wait(500).should("have.css", "background-color", "rgb()");
     // });
     it("Verify row with the Tabs is fixed, and that user should not be able to add/edit new Tabs", () => {
-      cy.drVerifytabIsFixed();
+      cy.verifyFixedTab();
     });
     it("Click Training Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy=\"tabId.training\"]").arrowClick({ force: true });
-      cy.drVerifytabIsFixed();
+      cy.verifyFixedTab();
     });
 
     it("Add field button should not be displayed in Training tab", () => {
@@ -374,11 +374,11 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
-      cy.drVerifytabIsFixed();
+      cy.verifyFixedTab();
     });
 
     it("Verify that user should not be able to rearrange the order of the Tabs", () => {
-      cy.drVerifytabIsFixed();
+      cy.verifyFixedTab();
     });
 
     it("Verify AAD opens to the “Overview” tab by default and should show all the default fields up to Attachments ",
@@ -392,7 +392,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify Description", () => {
-      cy.drVerifyDescriptionToolBar();
+      cy.verifyDescriptionToolbar();
       cy.drEnterDocumentTitle({ name: "AA Title" });
       cy.drEnterDocumentDescription({ description: "AA Description" });
     });
@@ -658,10 +658,10 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy=\"select.document.documentType.id\"]").should("exist");
       cy.get("[data-cy=\"field-document.docId\"]").should("exist");
       cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-      cy.drVerifytabIsFixed();
+      cy.verifyFixedTab();
     });
     it("Verify Description", () => {
-      cy.drVerifyDescriptionToolBar();
+      cy.verifyDescriptionToolbar();
     });
 
     it("Verify there are two tabs Overview and Training tab", () => {
@@ -671,7 +671,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
-      cy.drVerifytabIsFixed();
+      cy.verifyFixedTab();
     });
 
     it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
@@ -877,7 +877,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify Description tool bar option", () => {
-      cy.drVerifyDescriptionToolBar();
+      cy.verifyDescriptionToolbar();
     });
     it("Verify form option box exist", () => {
       cy.get(".formOptionsBox").should("exist");
