@@ -100,8 +100,8 @@ context("Verify new Layout for NCO for newly created Enlil items.", () => {
         cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
       });
 
-      it("Verify that Form Options should Not appear for this tab", () => {
-        cy.verifyFormOptionsVisibility( { visibility: false });
+      it("Verify that Form Options should not appear for this tab", () => {
+        cy.get(".formOptionsBox").should("not.exist");
       });
     });
 
@@ -148,7 +148,8 @@ context("Verify new Layout for NCO for newly created Enlil items.", () => {
       });
 
       it("Verify that Form Options should appear for this tab", () => {
-        cy.verifyFormOptionsVisibility({ visibility: true });
+        cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+        cy.verifyFormOptionsVisibility();
       });
     });
 
@@ -196,7 +197,8 @@ context("Verify new Layout for NCO for newly created Enlil items.", () => {
       });
 
       it("Verify that Form Options should appear for this tab", () => {
-        cy.verifyFormOptionsVisibility({ visibility: true });
+        cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+        cy.verifyFormOptionsVisibility();
       });
     });
 
