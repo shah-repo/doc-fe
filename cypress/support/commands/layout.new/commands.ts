@@ -18,6 +18,12 @@ declare global {
       verifyReferencesGeneralInfo(params: {user: string}): Chainable;
       verifyReferencesOtherInfo(): Chainable;
       verifyHistoryScroll(): Chainable;
+
+      verifyPredefiendFields(): Chainable;
+      verifyReferenceInfo(): Chainable;
+      verifyReferenceTab({ user, formId, shortName }): Chainable;
+      verifyAddRemoveReference({ formId }): Chainable;
+      verifyHistoryTab(history, groupOne, groupTwo): Chainable;
     }
   }
 }
@@ -90,4 +96,87 @@ Cypress.Commands.add("verifyHistoryScroll", () => {
     cy.get(`[data-cy="History-detail"]`).realHover().wait(500).scrollTo("top");
     cy.get("[data-cy=\"History-detail\"]").scrollTo("bottom");
   });
+});
+
+Cypress.Commands.add("verifyPredefiendFields", () => {
+  cy.get("[data-cy=\"field-name\"]").should("exist");
+  cy.get("[data-cy=\"description\"]").should("exist");
+  cy.get("[data-cy=\"select.document.documentType.id\"]").should("exist");
+  cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+  cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+  cy.get("[data-cy=\"field-retrain\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyReferenceInfo", () => {
+  cy.get("[data-cy=\"References-detail\"] h6").should("exist");
+  cy.get("[data-cy=\"releaseDate\"]").should("exist");
+  cy.get("[data-cy=\"training\"]").should("exist");
+  cy.get("[data-cy=\"output.info\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyReferenceTab", ({ user, formId, shortName }) => {
+  cy.get("[data-cy=\"references-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"references-icon\"]").arrowClick();
+  cy.get("[data-cy=\"generalInfo\"]>p").should("contain.text", "General Info");
+  cy.get("[data-cy=\"generalInfo\"]>li>div>div").should("contain.text", shortName);
+  cy.get("[data-cy=\"generalInfo\"]>li>div>p").should("contain.text", user.name);
+  cy.get("[data-cy=\"generalInfo\"]>li>div>span").should("have.text", "Owner");
+  if (formId) {
+    cy.get("[data-cy=\"common.revision\"]").parent().should("contain.text", formId);
+  }
+});
+
+Cypress.Commands.add("verifyAddRemoveReference", ({ formId }) => {
+  cy.get("[data-cy=\"references-icon\"]").arrowClick();
+  cy.wait(1000);
+  cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+  cy.drSelectReferences(formId);
+  cy.drRemoveReferences({ reference: formId });
+});
+
+Cypress.Commands.add("verifyHistoryTab", (history, groupOne, groupTwo) => {
+
+  it("Open history drawer and compare history values", () => {
+    cy.drSelectHistoryTab();
+  });
+
+  history.forEach((element, groupIndex) => {
+    it(`Check owner name for group ${groupIndex + 1}`, () => {
+      cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
+    });
+    element.actions.forEach((action, index, identifier) => {
+      it(`'${action.key}' as '${action.value}' exists`, () => {
+        const typeOfChange = action.key;
+        let contentOfChange = action.value;
+
+        if (action.key === "New description" || action.key === "Description changed" ) {
+          contentOfChange = "\n" + action.value + "\n";
+        }
+
+        if (typeOfChange === "s3Link added") {
+          cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
+          cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
+        }
+        else {
+          if (action.key === "Access granted to group") {
+            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
+              expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
+            });
+          }
+          else {
+            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
+              .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
+              .parent()
+              .parent()
+              .within(() => {
+                cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
+                cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
+              });
+          }
+        }
+      });
+    });
+  });
+
+
 });
