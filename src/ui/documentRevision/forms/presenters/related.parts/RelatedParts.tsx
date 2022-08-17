@@ -304,22 +304,26 @@ const RelatedPartEditRow: React.FunctionComponent<{
     docId: "",
     name: "",
   });
-  // const [inputValue, setInputValue] = useState<any[]>([]);
-
-  // const readingValueHandler = (event: React.FocusEvent<HTMLInputElement>) => {
-  //   setInputValue((prevInputValue) => [...prevInputValue, event.target.name]);
-  // };
 
   const classes = styles();
+  const { relatedPartsStore } = useRelatedPartsStore();
 
   const resetAndCancelEdit = () => {
     setRelatedPartDetails({ docId: "", name: "" });
     cancelEdit();
   };
 
-  return (
+  const checkForDuplicateDocIds = () => {
+    relatedPartsStore.checkForDuplicateDocIds(`${documentRevision?.document?.docId}-${relatedPartDetails.docId}`);
+  };
+
+  return useObserver(() => (
     <>
-      <div className={classes.editRowParentDiv}>
+      <div className={cx({
+        [classes.editRowParentDiv]: true,
+        [classes.editRowParentNormal]: !relatedPartsStore.docIdExists,
+        [classes.editRowParentError]: relatedPartsStore.docIdExists,
+      })}>
         <div className={classes.editRowChildDivOne}>
           <label >{documentRevision?.document?.docId} - </label>
           <TextField
@@ -327,7 +331,10 @@ const RelatedPartEditRow: React.FunctionComponent<{
             variant="outlined"
             onChange = {(e: ChangeEvent<HTMLInputElement>) =>
               setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
+            onBlur = {checkForDuplicateDocIds}
             value={relatedPartDetails.docId}
+            error = {relatedPartsStore.docIdExists}
+            helperText={relatedPartsStore.docIdExists ? "Duplicate Entry" : ""}
           />
         </div>
         <div
@@ -341,18 +348,20 @@ const RelatedPartEditRow: React.FunctionComponent<{
               setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}/>
         </div>
       </div>
-      <div className={classes.actionButtonParentDiv}>
-        <div className={classes.actionButtonChildDiv}>
-          <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
-            <ClearIcon className={classes.iconButton}/>
-          </Button>
-          <Button className={classes.actionButton} onClick = {(e) => createNewDocument(relatedPartDetails)}>
-            <DoneIcon className={classes.iconButton} />
-          </Button>
+      {!relatedPartsStore.docIdExists &&
+        <div className={classes.actionButtonParentDiv}>
+          <div className={classes.actionButtonChildDiv}>
+            <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
+              <ClearIcon className={classes.iconButton}/>
+            </Button>
+            <Button className={classes.actionButton} onClick = {(e) => createNewDocument(relatedPartDetails)}>
+              <DoneIcon className={classes.iconButton} />
+            </Button>
+          </div>
         </div>
-      </div>
+      }
     </>
-  );
+  ));
 };
 
 

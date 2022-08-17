@@ -6,6 +6,7 @@ import { RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/ty
 
 export class RelatedPartsStore {
   @observable relatedPartsList: RelatedPartsListItem[] = [];
+  @observable docIdExists = false;
 
   @action setRelatedPartsList(list: RelatedPartsListItem[]) {
     this.relatedPartsList = list;
@@ -33,6 +34,13 @@ export class RelatedPartsStore {
     };
 
     this.relatedPartsList.push(newRelatedPart);
+  }
+
+  @action checkForDuplicateDocIds(docId) {
+    const idExists = this.relatedPartsList.filter(
+      (listItem: RelatedPartsListItem) => listItem.rootDocId === docId).length > 0;
+
+    this.docIdExists = idExists;
   }
 }
 

@@ -62,16 +62,20 @@ export const styles = makeStyles({
   dividerStyle: {
     margin: "0 0 12px 0",
   },
-  tableHeadHieght: {
-    height: "40px",
-  },
   editRowParentDiv: {
     display: "flex",
     width: "100%",
-    alignItems: "center",
-    // justifyContent: "center",
-    border: "1px solid #01A6C7",
+    alignItems: "flex-start",
     borderRadius: "0 0 5px 5px",
+  },
+  editRowParentNormal: {
+    border: "1px solid #01A6C7",
+  },
+  editRowParentError: {
+    border: "1px solid red",
+  },
+  labelError: {
+    color: "red",
   },
   editRowChildDivOne: {
     width: "30%",
@@ -125,7 +129,7 @@ export const styles = makeStyles({
     cursor: "pointer",
   },
   tableHeadHeight: {
-    height: "34px",
+    height: "40px",
   },
   tabelCell: {
     backgroundColor: "#e2e8f0",
@@ -167,6 +171,10 @@ export const styles = makeStyles({
       padding: 10,
       fontSize: 14,
       fontWeight: "bold",
+    },
+    "& .MuiFormHelperText-root": {
+      lineHeight: "1.15rem",
+      margin: "8px 0 0 4px",
     },
   },
 });
