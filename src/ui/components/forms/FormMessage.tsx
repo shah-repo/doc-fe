@@ -12,7 +12,7 @@ const FormMessage: React.FunctionComponent<FormMessageProps> = ({ asyncState, ..
     if (asyncState.message) {
       toastError(asyncState.message);
     }
-  }, [asyncState]);
+  }, [asyncState.message]);
 
   return null;
 };
