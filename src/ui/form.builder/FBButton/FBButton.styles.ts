@@ -3,15 +3,16 @@ import Colors from "../../layout/theme/utils/colors";
 
 export default makeStyles(() =>
   createStyles({
-    root: ({ isHover }) => ({
+    root: (params) => ({
       "margin": "0px",
       "border": `1px dashed ${Colors.navy}`,
       "borderRadius": "100px",
-      "background": isHover ? Colors.navy : Colors.white,
-      "color": isHover ? Colors.white : Colors.navy,
+      "background": params.isHover ? (params.color === "secondary" ? Colors.dodger_blue : Colors.navy) : Colors.white,
+      "color": params.isHover ? Colors.white : (params.color === "secondary" ? Colors.dodger_blue : Colors.navy),
       "&:hover": {
-        background: Colors.navy,
-        color: Colors.white,
+        background: params.color === "secondary" ? Colors.white : Colors.navy,
+        color: params.color === "secondary" ? Colors.dodger_blue : Colors.white,
+        boxShadow: params.color === "secondary" ? "none" : "",
       },
     }),
     label: {

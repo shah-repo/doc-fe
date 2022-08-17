@@ -17,7 +17,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   className,
   ...props
 }) => {
-  const classes = FBButtonStyles({ isHover });
+  const classes = FBButtonStyles({ isHover, color });
   if (showNewButton) {
     return (
       <Button
