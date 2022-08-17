@@ -6,9 +6,9 @@ import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import { find, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalStatusIdent, FBLHRStepProps, FBProvider, FBText } from "..";
+import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalStatusIdent, FBLHRStepProps, FBProvider, FBText } from "..";
 import { ReactComponent as CollapseMoreIcon } from "../../../assets/images/CollapseMoreIcon.svg";
 import { ReactComponent as ExpandMoreIcon } from "../../../assets/images/ExpandMoreIcon.svg";
 import { ReactComponent as OperatorApprovedIcon } from "../../../assets/images/OperatorApproved.svg";
@@ -22,6 +22,7 @@ import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedure
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { FBLHRStepStyles } from "./FBLHRStep.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
+import { User } from "../../../state/ducks/common/types";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -49,17 +50,22 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   lhrBuildTypeExist,
   ...props
 }) => {
+  const { workspaceState } = FB.useStores();
+  const classes = FBLHRStepStyles();
+
+  const documentOperators = workspaceState?.document?.document?.operators
+    ?.map(({ user }) => user) as User[];
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
+  const stepOperators = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]
+    ?.map((id) => getUserDetails(id)?.user) as User[];
+  const operators = (stepOperators ?? documentOperators)
+    ?.map((user) => ({ stepId: user.id, user }));
+
   const getStatusInfo = (opert, operatorId: string) => {
     const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];
     return find(approvers, (o) => o.approverId === operatorId && o.status !== "ABANDONED");
   };
-  const [operatorList] = useState(stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((e) => ({
-    stepId: e,
-    user: getUserDetails(e)?.user,
-  })));
-  const classes = FBLHRStepStyles();
   const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
     : `LHR Step ${stepIndex}`;
   const [expand, setExpand] = React.useState(false);
@@ -279,7 +285,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               <Text translation="common.operators" />
             </Box>
             <List>
-              {map(operatorList, (operator, index) => (
+              {map(operators, (operator, index) => (
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
                   <ListItemAvatar>
                     {operator.user.avatar ? (

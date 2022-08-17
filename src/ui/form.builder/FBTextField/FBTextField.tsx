@@ -22,10 +22,11 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   mode,
   className,
   value,
+  customHeight,
   ...props
 }) =>
 {
-  const classes = FBTextFieldStyles({ rows });
+  const classes = FBTextFieldStyles({ rows, customHeight });
   className = className ? className : classes.textfield;
   return (
     <FBInput {...props} {...{ error, defaultValue }}
