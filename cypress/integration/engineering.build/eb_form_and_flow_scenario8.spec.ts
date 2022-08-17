@@ -845,7 +845,6 @@ context("Procedure and parts flow test", () => {
       });
 
       it("move Component", () => {
-        cy.pause();
         cy.get(`[class="drag-handle"]`).eq(4)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
