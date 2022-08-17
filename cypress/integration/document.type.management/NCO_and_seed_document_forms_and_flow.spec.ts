@@ -269,6 +269,23 @@ context("NCO document type management with record doc type", () => {
       cy.fbAddField();
     });
 
+    it("move Component", () => {
+      cy.get(`[class="drag-handle"]`).eq(33)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(32)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+    });
+    it("move Component again", () => {
+      cy.get(`[class="drag-handle"]`).eq(32)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(33)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+    });
+
     it("Edit Component", () => {
       cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
@@ -365,6 +382,23 @@ context("NCO document type management with record doc type", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for bulk import test" });
       cy.fbAddField();
+    });
+
+    it("move Component", () => {
+      cy.get(`[class="drag-handle"]`).eq(33)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(32)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+    });
+    it("move Component again", () => {
+      cy.get(`[class="drag-handle"]`).eq(32)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(33)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
     });
 
     it("Edit Component", () => {
@@ -472,7 +506,7 @@ context("NCO document type management with record doc type", () => {
 
   context("'Add' & 'Move' & 'Edit' & Remove component", () => {
     it("Navigate to overview tab", () => {
-      cy.drSelectOverviewTab();
+      cy.drSelectDetailsTab();
     });
 
     it("Add component", () => {
@@ -480,6 +514,23 @@ context("NCO document type management with record doc type", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for bulk import test" });
       cy.fbAddField();
+    });
+
+    it("move Component", () => {
+      cy.get(`[class="drag-handle"]`).eq(9)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(8)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+    });
+    it("move Component again", () => {
+      cy.get(`[class="drag-handle"]`).eq(8)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(9)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
     });
 
     it("Edit Component", () => {
@@ -556,7 +607,7 @@ context("NCO document type management with record doc type", () => {
 
   context("'Add' & 'Move' & 'Edit' & Remove component", () => {
     it("Navigate to overview tab", () => {
-      cy.drSelectOverviewTab();
+      cy.drSelectDetailsTab();
     });
 
     it("Add component", () => {
@@ -564,6 +615,23 @@ context("NCO document type management with record doc type", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for bulk import test" });
       cy.fbAddField();
+    });
+
+    it("move Component", () => {
+      cy.get(`[class="drag-handle"]`).eq(9)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(8)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+    });
+    it("move Component again", () => {
+      cy.get(`[class="drag-handle"]`).eq(8)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(9)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
     });
 
     it("Edit Component", () => {
@@ -639,12 +707,12 @@ context("NCO document type management with record doc type", () => {
 
   context("Fill out all the fields", () => {
     it("Enters document title 'Second document'", () => {
-      cy.get("[data-cy^=document-title-]").arrowType("Second document");
+      cy.get("[data-cy^=document-title-]").arrowType("Seed document");
     });
 
     it("Enters document description 'Second document description'", () => {
       cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-        .click({ force: true }).arrowType("Second document description", { force: true });
+        .click({ force: true }).arrowType("Seed document description", { force: true });
       cy.get("[data-cy^=document-title-]").arrowClick();
     });
 
@@ -764,7 +832,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Upload correct DAM JSON", () => {
-      cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
+      cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
       // cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
     });
 
@@ -773,7 +841,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Upload Page Details JSON", () => {
-      cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+      cy.atchUploadPageDetailsJSONForNCO({ fileName: "doc_type_page_details.json", queue: 0 });
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
@@ -781,7 +849,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Upload Navigation JSON", () => {
-      cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
+      cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
     });
 
     it("Upload Users List JSON", () => {
@@ -820,6 +888,16 @@ context("NCO document type management with record doc type", () => {
 
     it("Logo field is empty and Verify default company logo", () => {
       cy.get(`img[alt="Company logo"]`).should("have.attr", "src", "/logo_enlil.svg");
+    });
+
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Check Seed document is created", () => {
+      cy.dlClearFilters();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`[aria-colindex="1"] input`).arrowType("FM-00003").should("exist");
     });
   });
 });
