@@ -543,15 +543,16 @@ context("Change Ownership of Paper LHR", () => {
 
       it(`Assign operator '${USERS[2].name}'`, () => {
         cy.drAssignDocumentTo({ username: USERS[2].name });
+        cy.wait(2000);
       });
 
       it("Add an Approver 1", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
         cy.unClick();
       });
 
       it("Add an Approver 2", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[3].email });
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[3].name);
         cy.unClick();
       });
 
@@ -604,10 +605,6 @@ context("Change Ownership of Paper LHR", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    // it("Change ownership of LHR", () => {
-    //   cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
-    // });
-
     it("Verify 2 approvers should exist", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
         .find(".MuiChip-deletable").should("have.length", 2);
@@ -629,7 +626,7 @@ context("Change Ownership of Paper LHR", () => {
     });
 
     it(`Add ${USERS[1].name} approver`, () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
       cy.unClick();
     });
 
@@ -678,7 +675,7 @@ context("Change Ownership of Paper LHR", () => {
     });
 
     it(`Operator can add ${USERS[4].name} approver`, () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[4].email });
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[4].name);
       cy.unClick();
     });
 
