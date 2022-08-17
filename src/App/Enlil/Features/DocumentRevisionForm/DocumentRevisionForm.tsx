@@ -14,7 +14,7 @@ import AttachmentsField from "../../../../ui/document.revision/form/attachments"
 import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace } from "../../../../ui/form.builder";
+import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -225,7 +225,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             <>
                               {tabInfo.tabId === "lineitems" && (
                                 <Box pb={3.75}>
-                                  {mode === "form" &&
+                                  {mode === FBWorkspaceModeOptions.FORM &&
                                     <FBSection name={`fb-po-section-po-items-built-in`}
                                       label="form.builder.po.details"  />}
                                   <AttachmentsField
