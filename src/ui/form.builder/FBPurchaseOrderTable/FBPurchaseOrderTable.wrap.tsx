@@ -115,6 +115,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       disabled,
       items,
       name,
+      isReceivable,
     });
   };
 

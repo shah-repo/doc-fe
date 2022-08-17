@@ -70,12 +70,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
-  useEffect(() => {
-    if (documentRevision.document?.id) {
-      dispatch(documentRevisionsActions.loadDocument(documentRevision.document?.id));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const formDocumentId = documentRevision.formDocument?.document?.id || "";
   const groupOptions = documentRevision.document?.documentType?.groupOptions;

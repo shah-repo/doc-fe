@@ -19,7 +19,7 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
 }) => {
   const classes = FBFieldTopBarStyles();
   return (
-    <Box display="flex" flexDirection="row-reverse" {...{ visibility, mb }}>
+    <Box display={visibility === "visible" ? "flex" : "none"} flexDirection="row-reverse"  mb={mb}>
       <Grid
         container
         justify="space-between"

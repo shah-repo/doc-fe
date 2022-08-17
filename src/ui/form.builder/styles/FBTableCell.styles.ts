@@ -30,4 +30,19 @@ export const FBTableCellStyles = makeStyles(() =>
       color: Colors.almost_black,
       paddingLeft: 7,
     },
+    cellHeader: {
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "18px",
+      color: Colors.almost_black,
+    },
+    cellValueHeight: {
+      height: "25px",
+    },
+    cell: {
+      background: Colors.white,
+    },
+    cellEmpty: {
+      borderBottom: 0,
+    },
   }));
