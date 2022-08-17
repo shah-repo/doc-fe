@@ -24,11 +24,7 @@ declare global {
       verifyReferenceTab({ user, formId, shortName }): Chainable;
       verifyAddRemoveReference({ formId }): Chainable;
       verifyHistoryTab(history, groupOne, groupTwo): Chainable;
-      drVerifyDescriptionToolBar(): Chainable<Subject>;
-      drVerifytabIsFixed(): Chainable<Subject>;
-      drSelectBookmarksTab(): Chainable<Subject>;
-      drSelectRevisionHistoryTab(): Chainable<Subject>;
-      drSelectMigrateFormTab(): Chainable<Subject>;
+      verifyDescriptionToolbar(): Chainable;
     }
   }
 }
@@ -191,7 +187,7 @@ Cypress.Commands.add("verifyHistoryTab", (history, groupOne, groupTwo) => {
   });
 });
 
-Cypress.Commands.add("drVerifyDescriptionToolBar", () => {
+Cypress.Commands.add("verifyDescriptionToolbar", () => {
   cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
   cy.get("div[class^=\"rdw-editor-toolbar\"]").should("exist");
   cy.get("div[title=\"Bold\"]").should("exist");
