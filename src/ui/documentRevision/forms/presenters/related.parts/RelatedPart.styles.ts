@@ -5,10 +5,13 @@ export const styles = makeStyles({
     marginBottom: "2rem",
   },
   title: {
-    flex: "1 1 100%",
-    padding: "4px",
+    display: "flex",
+    padding: "5px",
     paddingLeft: "16px",
-    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  formControlPad: {
+    paddingLeft: "16px",
   },
   fullWidth: {
     width: "100%",
@@ -49,9 +52,6 @@ export const styles = makeStyles({
     marginRight: "10px",
     display: "inline-block",
   },
-  formControlPad: {
-    paddingLeft: "12px",
-  },
   partsGrid: {
     paddingLeft: "12px",
     marginBottom: "1rem",
@@ -63,7 +63,7 @@ export const styles = makeStyles({
     margin: "0 0 12px 0",
   },
   tableHeadHieght: {
-    height: "34px",
+    height: "40px",
   },
   editRowParentDiv: {
     display: "flex",
@@ -78,7 +78,7 @@ export const styles = makeStyles({
     display: "grid",
     gridTemplateColumns: "1fr 2fr",
     justifyContent: "space-evenly",
-    padding: "0 15px",
+    padding: "0 12px",
     alignItems: "center",
     columnGap: "4px",
   },
@@ -161,10 +161,12 @@ export const styles = makeStyles({
     "& .MuiInputBase-root": {
       marginTop: 0,
       padding: 0,
+      // width: "150px",
     },
     "& .MuiOutlinedInput-input": {
       padding: 10,
       fontSize: 14,
+      fontWeight: "bold",
     },
   },
 });

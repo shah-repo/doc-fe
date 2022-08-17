@@ -30,7 +30,7 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
-import RelatedParts from "./presenters/related.parts/RelatedParts";
+import RelatedPartsContainer from "./presenters/related.parts/RelatedParts.wrap";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -307,10 +307,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {isPart &&
           <Grid item xs={12}>
-            <RelatedParts
+            <RelatedPartsContainer
               documentRevision={documentRevision}
               parentPartStatus= {documentRevision?.relatedStatus}
-            ></RelatedParts>
+            ></RelatedPartsContainer>
           </Grid>
         }
         {isEB && documentRevision?.parent && (

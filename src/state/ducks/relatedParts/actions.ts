@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { apiAction } from "../../factories";
 import { DOCUMENT_REVISION_ROOT_URL } from "../documentRevisions/constants";
-import { DocumentRevisionEditRequestBody } from "../documentRevisions/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody } from "../documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "./constants";
 import { RelatedPartsChoiceRequestBody } from "./types";
 
@@ -40,8 +40,8 @@ const voidRelatedPart =
   (documentRevisionId: string, async) => apiAction({
     url: `${DOCUMENT_REVISION_ROOT_URL}/void/${documentRevisionId}`,
     method: "patch",
-    onSuccess: (documentRevision) => {
-      async.successHandler?.callback(documentRevisionId);
+    onSuccess: (documentRevision: DocumentRevision) => {
+      async.successHandler?.callback({ docRevId: documentRevisionId, name: documentRevision.name });
     },
   });
 

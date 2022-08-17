@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import {
   Button,
@@ -6,7 +5,7 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  Grid, Link, Radio,
+  Grid, Radio,
   RadioGroup,
   Table,
   TableBody,
@@ -20,7 +19,6 @@ import {
 
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions/index";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
 import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
@@ -28,7 +26,6 @@ import { FBButton } from "../../../../form.builder";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 
-import { toastSuccess } from "../../../../../ui/components/notifications/index";
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
@@ -37,17 +34,7 @@ import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
 import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
-import { get } from "lodash";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { documentPreviewPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./RelatedPart.styles";
-
-interface Props {
-  documentRevision: DocumentRevision;
-  parentPartStatus: RELATED_STATUS | undefined;
-}
-
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_STATUS | undefined;
@@ -157,19 +144,20 @@ const RelatedPartGrid: React.FunctionComponent<{
   const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
   const fetchRelatedPartsAsync = useAsync({
     onSuccess: (relatedPartsList) => {
-      console.log(relatedPartsList);
+      // console.log(relatedPartsList);
       setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
     },
   });
 
   const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
   const voidRelatedPartAsync = useAsync({
-    onSuccess: (docRevId) => {
+    onSuccess: ({ docRevId, name }: any) => {
       setRelatedPartsList(
         relatedPartsList.map(
           (item) => {
             if (item.documentRevisionId === docRevId) {
               item.status = DocumentRevisionStatus.Voided;
+              item.name = name;
             }
             return item;
           }
@@ -392,127 +380,16 @@ const RelatedPartEditRow: React.FunctionComponent<{
 };
 
 
-const RelatedParts: React.FunctionComponent<Props> = ({
+const RelatedParts = ({
   documentRevision,
-  parentPartStatus,
+  parentStatus,
+  parentStatusChanged,
+  createNewDocument,
+  newRelatedPart,
+  viewRelatedPart,
 }) => {
 
   const classes = styles();
-  const dispatch = useDispatch();
-  const history = useHistory();
-
-  const [parentStatus, setParentStatus] = useState(parentPartStatus);
-
-  const [newRelatedPart, setNewRelatedPart] = useState<RelatedPartsListItem>();
-
-  const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
-  const createPartAsync = useAsync({
-    onSuccess: (createdDocumentRevision?) => {
-      if (createdDocumentRevision) {
-        console.log(createdDocumentRevision);
-        if (parentStatus === RELATED_STATUS.PARENT_SEPARATE) {
-          // Show a toast
-          showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
-
-        } else if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
-          // populate the list with the new added part
-          setNewRelatedPart({
-            documentId: get(createdDocumentRevision, "documentId"),
-            rootDocId: get(createdDocumentRevision, "document.docId"),
-            name: get(createdDocumentRevision, "name"),
-            documentRevisionId: get(createdDocumentRevision, "id"),
-            status: get(createdDocumentRevision, "displayStatus"),
-          });
-
-        }
-      }
-    },
-  });
-
-  const showSuccessToast = (
-    docRevision: DocumentRevision,
-    viewRelatedPart: (docRevId: string, documentId: string) => void) => {
-
-    if (docRevision && docRevision.document) {
-      toastSuccess(<SuccessMsg docId={docRevision.document.docId}
-        viewRelatedPart={viewRelatedPart} documentRevisionId={docRevision.id}
-        documentId={docRevision.document.id}/>, {
-        closeButton: false,
-      });
-    }
-
-  };
-
-  const createParentPartChoiceAction = useActionCreator(relatedPartsActions.parentPartChoiceAction);
-  const parentChoiceAsync = useAsync<any>({
-    onSuccess: (data) => {
-      // console.log(data);
-      if (data) {
-        setParentStatus(data.relatedStatus);
-        dispatch(documentRevisionsActions.reload(documentRevision.id));
-      }
-    },
-  });
-
-  const createNewDocument = (relatedPartDetails?) => {
-    let docDto = {
-      formDocument: {
-        id: get(documentRevision, "formDocumentId"),
-      },
-      description: "",
-      name: "",
-      suffixName: "",
-      attachments: [],
-      referenceTo: [],
-      revisionChangeType: get(documentRevision, "revisionChangeType"),
-      document: {
-        docId: "",
-        securityList: {
-          securityEmployees: (get(documentRevision, "document.securityEmployees") || [])
-            .map((employee) => ({ id: employee.value })),
-          securityGroups: (get(documentRevision, "document.securityGroups") || [])
-            .map((group) => ({ id: group.id })),
-          operators: get(documentRevision, "document.operators"),
-        },
-        documentType: {
-          id: get(documentRevision, "document.documentType.id"),
-        },
-      },
-    };
-
-    if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
-      docDto = {
-        ...docDto,
-        name: `${documentRevision.name}-${relatedPartDetails?.name}`,
-        suffixName: relatedPartDetails?.name,
-        document: { ...docDto.document, docId: `${documentRevision.document.docId}-${relatedPartDetails?.docId}` },
-      };
-    }
-
-    // console.log(documentRevision, docDto);
-    createPartAsync.start(createRelatedPartAction, documentRevision.document.id, docDto, createPartAsync);
-  };
-
-
-  const parentStatusChanged = (value) => {
-    // setParentStatus(value);
-
-    // Make an API call to persist the parent row.
-    if (value) {
-      parentChoiceAsync.start(createParentPartChoiceAction, {
-        documentId: documentRevision.documentId,
-        rootDocId: documentRevision.document?.docId,
-        relatedStatus: value,
-      }, parentChoiceAsync);
-    }
-  };
-
-
-  const viewRelatedPart = (docRevId: string, documentId: string) => {
-    const urlPath = documentPreviewPath(docRevId, documentId);
-    history.push(urlPath);
-  };
-
 
   return (
     <>
@@ -531,38 +408,6 @@ const RelatedParts: React.FunctionComponent<Props> = ({
           />
         )}
       </div>}
-    </>
-  );
-};
-
-
-const SuccessMsg: React.FunctionComponent<{
-  docId: string;
-  documentRevisionId: string;
-  documentId: string;
-  viewRelatedPart: (docRevId: string, documentId: string) => void;
-}> = ({
-  docId,
-  documentRevisionId,
-  documentId,
-  viewRelatedPart,
-}) => {
-  const classes = styles();
-  return (
-    <>
-      <Typography variant="body1">
-          Related Part created successfully
-      </Typography>
-      <div className={classes.successMessage}>
-        <Typography variant="subtitle1">
-            Part <b>{docId}</b> has been created
-        </Typography>
-        <Link onClick={(event) => viewRelatedPart(documentRevisionId, documentId)}
-          tabIndex={0} style={{ fontWeight: "normal" }}
-          variant="subtitle1" color="textSecondary">
-              View
-        </Link>
-      </div>
     </>
   );
 };
