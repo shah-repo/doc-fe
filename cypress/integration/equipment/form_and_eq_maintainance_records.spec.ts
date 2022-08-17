@@ -227,10 +227,27 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for equipment test" });
         cy.fbAddField();
+      });
+
+      it("move Component", () => {
+        cy.get(`[class="drag-handle"]`).eq(1)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+      });
+      it("move Component again", () => {
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(1)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
       });
 
       it("Edit Component", () => {
@@ -247,7 +264,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for equipment test" });
         cy.fbAddField();
@@ -341,10 +358,27 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for new equipment test" });
         cy.fbAddField();
+      });
+
+      it("move Component", () => {
+        cy.get(`[class="drag-handle"]`).eq(2)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+      });
+      it("move Component again", () => {
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(2)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
       });
 
       it("Edit Component", () => {
@@ -435,10 +469,19 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for PM " });
         cy.fbAddField();
+      });
+
+      it("move Component", () => {
+        cy.get(`[class="drag-handle"]`).eq(1)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
       });
 
       it("Edit Component", () => {
@@ -455,7 +498,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for PM test" });
         cy.fbAddField();
@@ -543,10 +586,27 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for New PM " });
         cy.fbAddField();
+      });
+
+      it("move Component", () => {
+        cy.get(`[class="drag-handle"]`).eq(2)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+      });
+      it("move Component again", () => {
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(2)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
       });
 
       it("Edit Component", () => {
@@ -633,10 +693,19 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for CAL " });
         cy.fbAddField();
+      });
+
+      it("move Component", () => {
+        cy.get(`[class="drag-handle"]`).eq(1)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
       });
 
       it("Edit Component", () => {
@@ -653,7 +722,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for CAL test" });
         cy.fbAddField();
@@ -736,10 +805,27 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for New CAL " });
         cy.fbAddField();
+      });
+
+      it("move Component", () => {
+        cy.get(`[class="drag-handle"]`).eq(2)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+      });
+      it("move Component again", () => {
+        cy.get(`[class="drag-handle"]`).eq(0)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(2)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
       });
 
       it("Edit Component", () => {
