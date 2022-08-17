@@ -215,6 +215,7 @@
   "common.cancel": "Cancel",
   "common.proceed": "Proceed",
   "common.confirm": "Confirm",
+  "common.confirm.change": "Confirm Change",
   "common.ok": "Ok",
   "common.edit": "Edit",
   "common.status": "Status",
