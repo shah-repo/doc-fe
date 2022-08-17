@@ -39,6 +39,7 @@ enum Colors {
   medium_blue = "#5C9DFC",
   background_blue = "#DBE9FF",
   navy = "#011FBB",
+  navy_active = "#011994",
   sky_blue = "#F5F8FF",
   latest_blue_varient = "#3080EA",
   bright_blue="#0075FF",
