@@ -241,10 +241,12 @@ context("Export Part Lot", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
-      cy.dragAndDrop({
-        fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-        toSelector: `[class="drag-handle"]`,
-      });
+      cy.get(`[class="drag-handle"]`).eq(1)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(0)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
     });
 
 
@@ -301,16 +303,7 @@ context("Export Part Lot", () => {
 
   context("import", () => {
     it("Import template", () => {
-      cy.pause();
       cy.get("#fb-import-schema").attachFile("../downloads/CPL_Form_Template.json");
-      // cy.fixture("../downloads/CPL_Form_Template.json").then((fileContent) => {
-      //   // cy.wrapWithWaitOnApiCalls([CyRoutes.ImportTemplate], () => {
-      //   // cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").arrowClick({ force: true });
-      //   cy.pause();
-      //   cy.get("#fb-import-schema").attachFile({
-      //     fileContent: fileContent.toString(),
-      //   });
-      // });
     });
 
     it("Verify TextField attributes", () => {
@@ -338,9 +331,7 @@ context("Export Part Lot", () => {
       cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
     });
-
   });
-
 
   context("Create a CSL from inline form", () => {
     it("Turn off autosave", () => {
