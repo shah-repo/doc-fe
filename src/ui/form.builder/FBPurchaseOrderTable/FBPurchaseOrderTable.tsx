@@ -51,15 +51,18 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
       </TableRow>
       {!disabled && (
         <TableRow>
-          <FBButton
-            label="form.builder.add.line.item"
-            onClick={() => handleItem && handleItem()}
-            color="secondary"
-            showNewButton
-            startIcon={<PlusIcon />}
-            className={classes?.button}
-            {...{ disabled }}
-          />
+          <FBTableCell colSpan={10}>
+            <FBButton
+              label="form.builder.add.line.item"
+              onClick={() => handleItem && handleItem()}
+              color="secondary"
+              fullWidth
+              showNewButton
+              startIcon={<PlusIcon />}
+              className={classes?.button}
+              {...{ disabled }}
+            />
+          </FBTableCell>
         </TableRow>
       )}
       {mode === "form" && (
