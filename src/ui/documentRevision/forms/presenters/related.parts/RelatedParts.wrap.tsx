@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { Link, Typography } from "@material-ui/core";
 import { get } from "lodash";
+import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -14,6 +15,7 @@ import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import { styles } from "./RelatedPart.styles";
 import RelatedParts from "./RelatedParts";
+import { relatedPartsStore, RelatedPartsStoreContext, useRelatedPartsStore } from "./RelatedParts.state";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -21,14 +23,16 @@ interface Props {
 }
 
 
-interface RelatedPartsProps {
-  documentRevision: DocumentRevision;
-  parentStatus: RELATED_STATUS | undefined;
-  parentStatusChanged;
-  createNewDocument: (relatedPartDetails: any) => void;
-  newRelatedPart;
-  viewRelatedPart;
-}
+// interface RelatedPartsProps {
+//   documentRevision: DocumentRevision;
+//   parentStatus: RELATED_STATUS | undefined;
+//   parentStatusChanged;
+//   createNewDocument: (relatedPartDetails: any) => void;
+//   newRelatedPart;
+//   viewRelatedPart;
+//   fetchRelatedParts;
+//   voidRelatedPart;
+// }
 
 
 const SuccessMsg: React.FunctionComponent<{
@@ -70,9 +74,9 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [parentStatus, setParentStatus] = useState(parentPartStatus);
+  const { relatedPartsStore } = useRelatedPartsStore();
 
-  const [newRelatedPart, setNewRelatedPart] = useState<RelatedPartsListItem>();
+  const [parentStatus, setParentStatus] = useState(parentPartStatus);
 
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
 
@@ -86,14 +90,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
         } else if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
           // populate the list with the new added part
-          setNewRelatedPart({
-            documentId: get(createdDocumentRevision, "documentId"),
-            rootDocId: get(createdDocumentRevision, "document.docId"),
-            name: get(createdDocumentRevision, "name"),
-            documentRevisionId: get(createdDocumentRevision, "id"),
-            status: get(createdDocumentRevision, "displayStatus"),
-          });
-
+          relatedPartsStore.addNewRelatedPart(createdDocumentRevision);
         }
       }
     },
@@ -123,6 +120,30 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       }
     },
   });
+
+
+  const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
+  const fetchRelatedPartsAsync = useAsync({
+    onSuccess: (relatedPartsList) => {
+      // console.log(relatedPartsList);
+      relatedPartsStore.setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
+    },
+  });
+
+  const fetchRelatedParts = (documentId) => {
+    fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentId, fetchRelatedPartsAsync);
+  };
+
+  const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
+  const voidRelatedPartAsync = useAsync({
+    onSuccess: ({ docRevId, name }: any) => {
+      relatedPartsStore.updateRelatedPartsList(docRevId, name);
+    },
+  });
+
+  const voidRelatedPart = (listItem: RelatedPartsListItem) => {
+    voidRelatedPartAsync.start(voidRelatedPartAction, listItem.documentRevisionId, voidRelatedPartAsync);
+  };
 
 
   const createNewDocument = (relatedPartDetails?) => {
@@ -185,15 +206,30 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   };
 
 
-  return (
+  return useObserver(() => (
     <RelatedParts documentRevision={documentRevision}
       parentStatus = {parentStatus}
       parentStatusChanged = {parentStatusChanged}
       createNewDocument = {createNewDocument}
-      newRelatedPart = {newRelatedPart}
-      viewRelatedPart = {viewRelatedPart} />
-  );
+      viewRelatedPart = {viewRelatedPart}
+      fetchRelatedParts = {fetchRelatedParts}
+      voidRelatedPart = {voidRelatedPart}
+    />
+  ));
 };
 
 
-export default RelatedPartsContainer;
+const RelatedPartsWrapper: React.FunctionComponent<Props> = ({
+  documentRevision,
+  parentPartStatus,
+}) => (
+  <RelatedPartsStoreContext.Provider value={relatedPartsStore}>
+    <RelatedPartsContainer
+      documentRevision={documentRevision}
+      parentPartStatus = {parentPartStatus}
+    />
+  </RelatedPartsStoreContext.Provider>
+);
+
+
+export default RelatedPartsWrapper;

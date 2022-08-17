@@ -20,11 +20,8 @@ import {
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
-import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
 import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton } from "../../../../form.builder";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
 
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
@@ -34,7 +31,10 @@ import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
 import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
+import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
 import { styles } from "./RelatedPart.styles";
+import { useRelatedPartsStore } from "./RelatedParts.state";
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_STATUS | undefined;
@@ -125,76 +125,53 @@ const ParentPartSelector: React.FunctionComponent<{
 
 
 const RelatedPartGrid: React.FunctionComponent<{
-  newRelatedPart?: RelatedPartsListItem;
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
+  fetchRelatedParts;
+  voidRelatedPart;
 }> = ({
-  newRelatedPart,
   documentRevision,
   createNewDocument,
   viewRelatedPart,
+  fetchRelatedParts,
+  voidRelatedPart,
 }) => {
   const classes = styles();
+  const { relatedPartsStore } = useRelatedPartsStore();
 
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
-  const [relatedPartsList, setRelatedPartsList] = useState<RelatedPartsListItem[]>([]);
-
-  const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
-  const fetchRelatedPartsAsync = useAsync({
-    onSuccess: (relatedPartsList) => {
-      // console.log(relatedPartsList);
-      setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
-    },
-  });
-
-  const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
-  const voidRelatedPartAsync = useAsync({
-    onSuccess: ({ docRevId, name }: any) => {
-      setRelatedPartsList(
-        relatedPartsList.map(
-          (item) => {
-            if (item.documentRevisionId === docRevId) {
-              item.status = DocumentRevisionStatus.Voided;
-              item.name = name;
-            }
-            return item;
-          }
-        ));
-    },
-  });
 
   const showEditRow = () => {
+    console.log("showing Edit Row");
     setIsEditRowVisible(true);
     setShowButton(false);
   };
 
   useEffect(() => {
-    fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentRevision.document.id, fetchRelatedPartsAsync);
+    fetchRelatedParts(documentRevision.document.id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   useEffect(() => {
-    if (newRelatedPart && newRelatedPart.documentId) {
-      setRelatedPartsList([...relatedPartsList, newRelatedPart]);
-      setIsEditRowVisible(false);
-      setShowButton(true);
-    }
+    reaction(
+      () => relatedPartsStore.relatedPartsList.length,
+      (length) => {
+        console.log("length changed : ", length);
+        setIsEditRowVisible(false);
+        setShowButton(true);
+      });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newRelatedPart]);
+  }, []);
 
   const cancelEdit = () => {
     setIsEditRowVisible(false);
     setShowButton(true);
   };
 
-  const voidRelatedPart = (listItem: RelatedPartsListItem) => {
-    // console.log(listItem);
-    voidRelatedPartAsync.start(voidRelatedPartAction, listItem.documentRevisionId, voidRelatedPartAsync);
-  };
-
-  return (
+  return useObserver(() => (
     <div className={classes.partsGrid}>
       <div>
         <Grid style={{ justifyContent: "space-between", alignItems: "center" }} container>
@@ -222,7 +199,7 @@ const RelatedPartGrid: React.FunctionComponent<{
         <Divider className={classes.dividerStyle} />
       </div>
       <div>
-        <RelatedPartList list={relatedPartsList} voidRelatedPart = {voidRelatedPart}
+        <RelatedPartList voidRelatedPart = {voidRelatedPart}
           viewRelatedPart={viewRelatedPart}></RelatedPartList>
         {isEditRowVisible && <RelatedPartEditRow documentRevision={documentRevision}
           createNewDocument={createNewDocument} cancelEdit={cancelEdit}/>}
@@ -238,21 +215,20 @@ const RelatedPartGrid: React.FunctionComponent<{
         }
       </div>
     </div>
-  );
+  ));
 };
 
 
 const RelatedPartList: React.FunctionComponent<{
-  list: RelatedPartsListItem[];
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
 }> = ({
-  list,
   voidRelatedPart,
   viewRelatedPart,
 }) => {
+  const { relatedPartsStore } = useRelatedPartsStore();
   const classes = styles();
-  return (
+  return useObserver(() => (
     <div className={classes.fullWidth}>
       <Table stickyHeader aria-label="related parts table">
         <TableHead className={classes.tableHeadHeight}>
@@ -268,14 +244,14 @@ const RelatedPartList: React.FunctionComponent<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {list.map((listItem: RelatedPartsListItem) => (
+          {relatedPartsStore.relatedPartsList.map((listItem: RelatedPartsListItem) => (
             <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
               key={listItem.documentRevisionId}/>
           ))}
         </TableBody>
       </Table>
     </div>
-  );
+  ));
 };
 
 
@@ -385,8 +361,9 @@ const RelatedParts = ({
   parentStatus,
   parentStatusChanged,
   createNewDocument,
-  newRelatedPart,
   viewRelatedPart,
+  fetchRelatedParts,
+  voidRelatedPart,
 }) => {
 
   const classes = styles();
@@ -404,7 +381,8 @@ const RelatedParts = ({
         )}
         {parentStatus === RELATED_STATUS.PARENT_TOGETHER && (
           <RelatedPartGrid documentRevision={documentRevision} createNewDocument={createNewDocument}
-            newRelatedPart = {newRelatedPart} viewRelatedPart={viewRelatedPart}
+            viewRelatedPart={viewRelatedPart} fetchRelatedParts = {fetchRelatedParts}
+            voidRelatedPart = {voidRelatedPart}
           />
         )}
       </div>}
