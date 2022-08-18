@@ -18,7 +18,8 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   ...props
 }) => (
   <FBProvider {...{ fieldWrapperState }}>
-    <Box {...{ onMouseOver, onMouseLeave }} className={`fb-field-wrapper-${inputProps?.name}`}>
+    <Box {...{ onMouseOver, onMouseLeave }} className={`fb-field-wrapper-${inputProps?.name}`}
+      marginTop={inputProps?.name === "training-details-section" ? `21px ` : "2px"}>
       <FBFieldTopBar
         visibility={toolsVisible}
         mb={topBarMargin}
