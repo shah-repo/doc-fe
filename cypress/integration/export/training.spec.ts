@@ -346,13 +346,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-<<<<<<< HEAD
       cy.drClickCreateDocumentWithoutApiCall();
-=======
-      // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      // });
->>>>>>> 3174f3d88d4cf48c691728b773da2c31a9b2d2f2
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -364,13 +358,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-<<<<<<< HEAD
       cy.drClickCreateDocumentWithoutApiCall();
-=======
-      // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      // });
->>>>>>> 3174f3d88d4cf48c691728b773da2c31a9b2d2f2
     });
 
     it("Open details tab", () => {
@@ -413,13 +401,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-<<<<<<< HEAD
       cy.drClickCreateDocumentWithoutApiCall();
-=======
-      // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      // });
->>>>>>> 3174f3d88d4cf48c691728b773da2c31a9b2d2f2
     });
   });
 
@@ -529,13 +511,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-<<<<<<< HEAD
       cy.drClickCreateDocumentWithoutApiCall();
-=======
-      // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      // });
->>>>>>> 3174f3d88d4cf48c691728b773da2c31a9b2d2f2
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -590,13 +566,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-<<<<<<< HEAD
       cy.drClickCreateDocumentWithoutApiCall();
-=======
-      // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      // });
->>>>>>> 3174f3d88d4cf48c691728b773da2c31a9b2d2f2
     });
 
     it("Click Void button", () => {
@@ -684,13 +654,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-<<<<<<< HEAD
       cy.drClickCreateDocumentWithoutApiCall();
-=======
-      // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      // });
->>>>>>> 3174f3d88d4cf48c691728b773da2c31a9b2d2f2
     });
 
     it("Click Submit for Approval", () => {
