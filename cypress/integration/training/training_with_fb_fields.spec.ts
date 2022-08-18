@@ -7,6 +7,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { GeneralDocumentDocType } from "../../utils/constants/documentTypes/generalDocument";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -14,7 +15,9 @@ let createdCompany;
 let loginResponse;
 let adminEmployee;
 let secondEmployee;
+let thirdEmployee;
 let developersGroup;
+let releasedDoc1Id;
 
 context("Export training curriculum", () => {
   before(() => {
@@ -45,6 +48,7 @@ context("Export training curriculum", () => {
             documentTypes: [
               ClinicalProtocolNotRedline,
               TrainingCurriculum,
+              GeneralDocumentDocType,
               OneTimeTrainingTest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -52,6 +56,7 @@ context("Export training curriculum", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           done();
         });
       });
@@ -271,6 +276,17 @@ context("Export training curriculum", () => {
       });
     });
 
+    it("[API] Create Group1", () => {
+      cy.grpAPICreateNewGroup({
+        payload: {
+          name: "Group1",
+          permissions: [],
+          employees: [{ id: adminEmployee.id }, { id: secondEmployee.id }],
+        },
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId,
+      });
+    });
   });
 
   context("Login user", () => {
@@ -361,29 +377,42 @@ context("Export training curriculum", () => {
   });
 
   context("Add Form fields and Release", () => {
-    it("Add TextField", () => {
-      cy.fbAddNewField();
+    it("Add TextField 1", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
       cy.fbEnterNameValue({ name: "rows", value: "2" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add TextField 2", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbSelectRadioButtonValue({ value: "visibility" });
       cy.fbAddNewFieldButton();
     });
 
 
     it("Verify Edit, Move and Remove", () => {
-      cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+      cy.get(`[data-cy="edit-schema-item"]`).last().arrowClick({ force: true });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
       cy.fbAddNewFieldButton();
-      cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-      cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
-      cy.dragAndDrop({
-        fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-        toSelector: `[class="drag-handle"]`,
-      });
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
+      cy.get(`[class="drag-handle"]`).eq(1)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(0)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
     });
 
 
@@ -393,7 +422,11 @@ context("Export training curriculum", () => {
   });
 
   context("export here", () => {
-    // write code here
+    it("Export template", () => {
+      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
+      cy.get(`[data-cy="fb-template-name"]`).arrowType("TC_Template");
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
   });
 
   context("Create Training Curriculum form 2", () => {
@@ -436,7 +469,90 @@ context("Export training curriculum", () => {
   });
 
   context("import here", () => {
-    // write code here
+    it("Import template", () => {
+      cy.get("#fb-import-schema").attachFile("../downloads/TC_Template.json");
+    });
+  });
+
+  context("verify fields", () => {
+    it("Verify TextField attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbVerifyNameValue({ name: "placeholder", value: "fb-textfield placeholder 1" });
+      cy.fbVerifyNameValue({ name: "rows", value: "2" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+    });
+  });
+
+  context("Verify predefined fields size", () => {
+    it("Verify Approvals Section", () => {
+      cy.get(`input[data-cy^=\"fb-approvals-fb-approvals\"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Verify Periodic Training", () => {
+      cy.get(`[data-cy="Periodic Training"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Documents to Train on", () => {
+      cy.get(`[data-cy="Documents to Train on"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Refresh/repeat training periodically?", () => {
+      cy.get(`[data-cy="Refresh/repeat training periodically?"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Training Frequency (in days)", () => {
+      cy.get(`[data-cy="Training Frequency (in days)"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Trainees Details", () => {
+      cy.get(`[data-cy="Trainees Details"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Groups to Train", () => {
+      cy.get(`[data-cy="Groups to Train"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Users to Train (if applicable)", () => {
+      cy.get(`[data-cy="Users to Train (if applicable)"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+  });
+
+  context("add and verify", () => {
+    it("Add TextField 2", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbSelectRadioButtonValue({ value: "visibility" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Verify Edit, Move and Remove", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
+      cy.fbAddNewFieldButton();
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      cy.get(`[class="drag-handle"]`).eq(1)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(0)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+    });
   });
 
   context("Create One time training form", () => {
@@ -518,29 +634,42 @@ context("Export training curriculum", () => {
   });
 
   context("Add Form fields and Release", () => {
-    it("Add TextField", () => {
-      cy.fbAddNewField();
+    it("Add TextField 1", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
       cy.fbEnterNameValue({ name: "rows", value: "2" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click();
-      cy.fbSelectRadioButtonValue({ value: "Show/Hide" });
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add TextField 2", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbSelectRadioButtonValue({ value: "visibility" });
       cy.fbAddNewFieldButton();
     });
 
 
     it("Verify Edit, Move and Remove", () => {
-      cy.get(`[data-cy="edit-schema-item"]`).arrowClick();
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder changed" });
+      cy.get(`[data-cy="edit-schema-item"]`).last().arrowClick({ force: true });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
       cy.fbAddNewFieldButton();
-      cy.get(`textarea[placeholder^="fb-textfield placeholder changed"]`).should("exist");
-      cy.get(`[data-cy="remove-schema-item"]`).arrowClick();
-      cy.dragAndDrop({
-        fromSelector: `[class="MuiFormControl-root MuiFormControl-fullWidth"]`,
-        toSelector: `[class="drag-handle"]`,
-      });
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
+      cy.get(`[class="drag-handle"]`).eq(1)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(0)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
     });
 
 
@@ -550,7 +679,11 @@ context("Export training curriculum", () => {
   });
 
   context("export here", () => {
-    // write code here
+    it("Export template", () => {
+      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
+      cy.get(`[data-cy="fb-template-name"]`).arrowType("One_Time_Training_Template");
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
   });
 
   context("Create One time training form 2", () => {
@@ -593,9 +726,108 @@ context("Export training curriculum", () => {
   });
 
   context("import here", () => {
-    // write code here
+    it("Import template", () => {
+      cy.get("#fb-import-schema").attachFile("../downloads/One_Time_Training_Template.json");
+    });
   });
 
+  context("verify fields", () => {
+    it("Verify TextField attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbVerifyNameValue({ name: "placeholder", value: "fb-textfield placeholder 1" });
+      cy.fbVerifyNameValue({ name: "rows", value: "2" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+    });
+  });
+
+  context("Check predefined fields", () => {
+    it("Verify Approvals Section", () => {
+      cy.get(`input[data-cy^=\"fb-approvals-fb-approvals\"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Verify Forced Retraining / One-Time Training", () => {
+      cy.get(`[data-cy="Forced Retraining / One-Time Training"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Documents to Train on", () => {
+      cy.get(`[data-cy="Documents to Train on"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Force retraining (everyone will be retrained regardless of their current status)", () => {
+      cy.get(`[data-cy="Force retraining (everyone will be retrained regardless of their current status)"]`)
+        .should("exist").should("have.length", "1");
+    });
+
+    it("Verify Trainees Details", () => {
+      cy.get(`[data-cy="Trainees Details"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Groups to Train", () => {
+      cy.get(`[data-cy="Groups to Train"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Verify Users to Train (if applicable)", () => {
+      cy.get(`[data-cy="Users to Train (if applicable)"]`).should("exist").should("have.length", "1");
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+  });
+
+  context("add and verify", () => {
+    it("Add TextField 2", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 2" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbSelectRadioButtonValue({ value: "visibility" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Verify Edit, Move and Remove", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
+      cy.fbAddNewFieldButton();
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      cy.get(`[class="drag-handle"]`).eq(1)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(0)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+    });
+  });
+
+  context("Create a document", () => {
+    it("Doc1 with Released status", () => {
+      cy.navigToDocumentList();
+      cy.cmpClickCreateNewDocument();
+      cy.drEnterDocumentTitle({ name: "released doc1" });
+      cy.drEnterDocumentDescription({ description: "test description" });
+      cy.drSelectDocumentType({ documentType: "Form" });
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.get("#Checkbox-box").arrowClick();
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get(`[data-cy="HeaderInfo-docId"]`).then((x) => { releasedDoc1Id = x.text(); });
+    });
+  });
 
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
@@ -607,16 +839,160 @@ context("Export training curriculum", () => {
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test");
+    });
+
+    it("Verify Text Field 1", () => {
+      cy.get(`[data-cy="fb-textfield-1"]`).should("exist");
     });
 
     it("Enter training title 'training'", () => {
       cy.drEnterDocumentTitle({ name: "test training" });
+    });
+
+    it("type a description", () => {
+      cy.drEnterDocumentDescription({ description: "Description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Periodic training should be displayed", () => {
+      cy.get("#training-curriculum-details-section").should("have.text", "Periodic Training");
+    });
+
+    it("Validate Documents to train On", () => {
+      cy.get("[name=\"training-document-to-be-trained-on\"]").parent().parent()
+        .should("contain.text", "The Documents to Train on is a required field.");
+    });
+
+    it("Select document to be trained on", () => {
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
+    });
+
+    it("Select refresh training periodically 'Yes'", () => {
+      cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
+    });
+
+    it("Enter training refresh period days", () => {
+      cy.get("[name=training-validity]").arrowType("5");
+    });
+
+    it("Trainee Details should be present", () => {
+      cy.get("#training-details-section").should("have.text", "Trainees Details");
+    });
+
+    it("Select Groups to train 'Group 1'", () => {
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
+    });
+
+    it("Select User to train", () => {
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
+        });
+    });
+
+    it(`Verify training status should be '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+
+    it("Click Submit for Approval", () => {
+      cy.pmSubmitForApproval();
+      cy.wait(3000);
+    });
+
+    it("Click Approve", () => {
+      cy.trApproveTraining();
+    });
+  });
+
+  context("Check training notification for user 1", () => {
+    it("Navigate to Dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it(`Verify training notification ${releasedDoc1Id}`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
+    });
+
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+  });
+
+  context("Check training notifications for other users", () => {
+    it(`Login user ${USERS[2].name} to dashboard`, () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+    });
+
+    it("Verify training notification", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
+    });
+
+    it(`Login user ${USERS[3].name} to dashboard`, () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
+    });
+
+    it("Verify training notification", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
+    });
+  });
+
+  context(`Complete Training for ${USERS[2].name}`, () => {
+    it(`Login as ${USERS[2].name}`, () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+    });
+
+    it(`Complete training for ${USERS[2].name}`, () => {
+      cy.contains("My Feed").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
+      cy.trCompleteTraining();
+    });
+
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+  });
+
+  context(`Login for ${USERS[1].name}`, () => {
+    it(`Login as ${USERS[1].name}`, () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+  });
+
+  context("Create One Time Training record", () => {
+    it("Navigate to Training Curriculums", () => {
+      cy.navigToTrainingCurriculums();
+    });
+
+    it("Create new Training Curriculum", () => {
+      cy.recCreateRecordFromLandingPage();
+    });
+
+    it("Select 'One-Time Training test' as document type", () => {
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("One-Time Training test");
+    });
+
+    it("Verify Text Field 1", () => {
+      cy.get(`[data-cy="fb-textfield-1"]`).should("exist");
+    });
+
+    it("Enter training title 'training'", () => {
+      cy.drEnterDocumentTitle({ name: "one time test training" });
     });
 
     it("type a description", () => {
@@ -647,34 +1023,22 @@ context("Export training curriculum", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Periodic training should be displayed", () => {
-      cy.get("#training-curriculum-details-section").should("have.text", "Periodic Training");
-    });
-
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR form");
+      cy.get(`[name="training-document-to-be-trained-on"]`).autocompleteSelect("released doc1");
     });
 
-    it("Select refresh training periodically 'Yes'", () => {
-      cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
+    it("Select force training option 'Yes'", () => {
+      cy.get(`[name="training-force-retraining-for-everyone"]`).eq(0).arrowClick();
     });
 
-    it("Enter training refresh period days", () => {
-      cy.get("[name=training-validity]").arrowType("5");
-    });
-
-    it("Trainee Details should be present", () => {
-      cy.get("#training-details-section").should("have.text", "Trainees Details");
-    });
-
-    it("Select Groups to train 'Developers'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Developers");
+    it("Select Groups to train 'Group1'", () => {
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
     });
 
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
         });
     });
 
@@ -682,10 +1046,44 @@ context("Export training curriculum", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
-    it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+    it("Click Submit for Approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Click Approve", () => {
+      cy.trApproveTraining();
+    });
+  });
+
+  context("Check training notification for user 1", () => {
+    it("Navigate to Dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it(`Verify training notification ${releasedDoc1Id}`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
+    });
+
+    it("Logout user", () => {
+      cy.authLogout();
+    });
+  });
+
+  context("Check training notifications for other users", () => {
+    it(`Login user ${USERS[2].name} to dashboard`, () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+    });
+
+    it("Verify training notification", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
+    });
+
+    it(`Login user ${USERS[3].name} to dashboard`, () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
+    });
+
+    it("Verify training notification", () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
     });
   });
 });
