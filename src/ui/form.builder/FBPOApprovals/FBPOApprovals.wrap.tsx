@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import { compact, concat, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
@@ -57,7 +57,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     let availableApprovers: string[] = [];
     const hasPOItems = useRef(false);
     const dispatch = useDispatch();
-    const [prevRequester, setPrevRequester] = useState(workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME));
+    const prevRequester = useRef<string>();
 
     isIncluded = (group: FBRequiredApprover): boolean =>
       (includes(map(poApprovalsState?.checkedGroups, "id"), group.id));
@@ -118,11 +118,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
       const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
       const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      const prevRequesterValue = prevRequester.current;
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
 
       const hasProductPart = checkProductPartsExist(poItems);
       const hasRequesterInApprovers = approvers?.includes(requester);
-      const hasPrevRequesterInApprovers = approvers?.includes(prevRequester);
+      const hasPrevRequesterInApprovers = approvers?.includes(prevRequesterValue);
 
       if (requester && !hasRequesterInApprovers && hasProductPart) {
         return addApprover([requester]);
@@ -132,8 +133,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         return removeApprover([requester]);
       }
 
-      if (!requester && hasPrevRequesterInApprovers) {
-        return removeApprover([prevRequester]);
+      if (!requester && prevRequesterValue && hasPrevRequesterInApprovers) {
+        return removeApprover([prevRequesterValue]);
       }
     }
 
@@ -188,15 +189,24 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // Store previous requester value.
+    useEffect(
+      () => {
+        prevRequester.current = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      []
+    );
+
     // On requester change.
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requester) => {
         checkLineItems();
-        setPrevRequester(requester);
+        prevRequester.current = requester;
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), [prevRequester]);
+    ), []);
 
     // On poItems change.
     useEffect(() => {
