@@ -1487,7 +1487,8 @@ context("LHR flow", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wait(2000);
     });
 
     it("Add note to'End Quantity'", () => {
@@ -1764,7 +1765,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
           cy.wait(2000);
         });
 

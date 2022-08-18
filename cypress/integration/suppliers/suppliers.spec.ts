@@ -835,7 +835,7 @@ context("Create company via API and create Suppliers document", () => {
 
       it("Click 'Save' button", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("exist");
-        cy.recClickCreateDocumentWithApiCall();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

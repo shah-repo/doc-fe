@@ -288,10 +288,6 @@ context("Add/Remove users from Training Curriculum", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -415,6 +411,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[4].name}`);
+      cy.wait(2000);
     });
 
     it("Navigate to Overview tab", () => {
@@ -483,10 +480,6 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.navigToTrainingCurriculums();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Select training", () => {
       cy.trSelectFirstDocument();
     });
@@ -506,6 +499,7 @@ context("Add/Remove users from Training Curriculum", () => {
 
     it("Add new User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[7].name}`);
+      cy.wait(2000);
     });
 
     it(`Remove users ${USERS[1].name} and ${USERS[3].name}`, () => {
@@ -516,10 +510,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Navigate to Overview tab", () => {

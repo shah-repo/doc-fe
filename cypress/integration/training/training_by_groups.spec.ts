@@ -328,10 +328,6 @@ context("Training by Groups", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -452,6 +448,7 @@ context("Training by Groups", () => {
     it("Select Groups to train 'Group1 and Group2'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
+      cy.wait(2000);
     });
 
     it("Navigate to Overview tab", () => {
@@ -499,10 +496,6 @@ context("Training by Groups", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
     });
@@ -530,18 +523,17 @@ context("Training by Groups", () => {
 
     it("Add new Group to train 'Group3'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
+      cy.wait(2000);
     });
 
     it("Remove group Group1", () => {
       cy.get("[data-cy=training-select-groups-to-train]").parent()
         .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick();
+      cy.wait(2000);
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
 
@@ -577,6 +569,7 @@ context("Training by Groups", () => {
     });
 
     it("Click Approve", () => {
+      cy.wait(2000);
       cy.trApproveTraining();
     });
   });
