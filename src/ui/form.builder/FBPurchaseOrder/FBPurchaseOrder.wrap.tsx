@@ -7,7 +7,7 @@ import { SM } from "../../../App";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
@@ -29,6 +29,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
+    const isPO = checkIsDocumentPO(workspaceState?.document?.document.documentType.groupOptions);
     purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, {
       ...formValue,
       documentId: isReceivable ? poReceiveState?.data?.documentId : workspaceState?.document?.document?.id,
@@ -99,6 +100,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       disabled,
       name,
       isReceivable,
+      isPO,
     });
   };
 

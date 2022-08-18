@@ -6,6 +6,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBDialogState, FBInputType, FBPOReceiveCreateLot, FBPOReceiveCreateLotActions, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
 import { stripTags } from "../../../common/utils/helpers";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
 
@@ -101,6 +102,11 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       schema = schema.reduce((reduced: FBSchemaProps[], item) => {
         if (item.name && !(/requestor|po-supplier-built-in|po-items-built-in/.test(item.name)
         && item.type !== "section")) {
+          return reduced;
+        }
+
+        if (workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.RECEIVABLE) {
+          reduced.push(setSchemaItem(item));
           return reduced;
         }
 
