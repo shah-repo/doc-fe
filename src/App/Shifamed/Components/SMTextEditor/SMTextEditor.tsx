@@ -66,7 +66,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
-            <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseDown">
+            <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseDown" >
               <Box
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
@@ -91,8 +91,10 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                             _documentRevisionFormState?.setExpanded(moreThanTwoLines);
                           });
                         }}
-                        onChange={() => showToggleButton && showToggleButton()}
-                        onBlur={(ev) => onBlur?.(ev) }
+                        onChange={() =>  showToggleButton && showToggleButton() }
+                        onBlur={(ev) => { onBlur?.(ev);
+                          _textEditorState?.setPreviewMode(true);
+                        }}
                         {...{ editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
                         toolbar={{
