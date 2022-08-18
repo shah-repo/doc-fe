@@ -156,7 +156,7 @@ context("DAM and POAM", () => {
         });
 
         it("Verify that Form Options should appear for this tab", () => {
-          cy.verifyFormOptionsVisibility({ visibility: true });
+          cy.verifyFormOptionsVisibility();
         });
       });
 
