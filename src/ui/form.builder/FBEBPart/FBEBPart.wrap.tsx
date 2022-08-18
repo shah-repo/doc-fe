@@ -1,4 +1,4 @@
-import { first, omit } from "lodash";
+import { first } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -70,7 +70,6 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         if ((childPartId !== ebPartState.childrenParts && ebPartState.childrenParts)) { return; }
         const childrenParts = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
         const body = {
-          formInput: omit(formState?.getValues(), "childrenPartsForRevise"),
           childrenParts,
         };
         ebPartState.addExistingPartChild(
@@ -89,7 +88,6 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         const body = {
           childrenParts: [],
           formInput: {
-            ...formState?.getValues(),
             childrenPartsForRevise,
           },
         };

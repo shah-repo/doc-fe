@@ -35,9 +35,7 @@ class FBEBPartState {
   public addExistingPartChild = (docRevId?: string, body?: EBPartPatchBody) => {
     if (!docRevId) { return; }
     body = {
-      ...body, formInput: omit(body?.formInput,
-        Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
-      ),
+      ...body,
     } as EBPartPatchBody;
 
     this.existingChildApi.set({
