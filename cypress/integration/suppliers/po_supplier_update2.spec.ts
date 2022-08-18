@@ -565,7 +565,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
 
@@ -634,7 +634,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click Save button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Release supplier", () => {
