@@ -31,6 +31,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
       <Box display="flex" alignItems="flex-end" mt={2.5}>
         <Box flexGrow={1}>
           <FBAutocompleteAsync
+            key={childrenPartsValue}
             label="form.builder.part"
             placeholder="form.builder.select.existing.part"
             gutter={false}
@@ -50,6 +51,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
           />
           <FBAutocompleteAsync
             label="form.builder.part"
+            key={childForReviseValue}
             placeholder="form.builder.select.existing.part"
             gutter={false}
             shouldReloadOnInit
