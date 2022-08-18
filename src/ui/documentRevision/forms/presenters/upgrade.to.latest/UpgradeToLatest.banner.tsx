@@ -28,12 +28,13 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
         shouldShowUpgrade && showBanner &&
         <Portal container={bannerPortal?.current}>
           <Box
-            bgcolor="secondary.main"
+            bgcolor={Colors.blue}
             color={Colors.white}
             fontWeight="bold"
             padding="10px"
             display="flex"
             alignItems="center"
+            margin="88px 10px 14px 10px"
           >
             <WarningOutlinedIcon color="disabled" />
             <Box component="span" marginLeft="10px" color={Colors.white}>
