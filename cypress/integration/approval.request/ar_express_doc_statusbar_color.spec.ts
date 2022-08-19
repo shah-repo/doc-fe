@@ -9,7 +9,6 @@ import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { currentTime } from "../../utils/constants/dateHandler";
 import { MPITestProcedureDeletable } from "../../utils/constants/documentTypes/mpi";
 import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -27,9 +26,6 @@ let materialsDocumentType;
 let equipmentDocument;
 let materialsDocument;
 let developersGroup;
-let MPIDocId;
-let lastSavedTime;
-
 
 context("Status Bar of New Enlil items approved via express AR", () => {
   before(() => {
@@ -401,7 +397,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     it("Click save document", () => {
       SystemRequirement("REQ-3120");
       cy.drClickCreateDocumentWithApiCallForForms();
-      lastSavedTime = currentTime;
+      // lastSavedTime = currentTime;
     });
 
     it(`Check doc Draft status as ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -553,9 +549,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     it("Check MPI doc released status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
-      cy.drGetDocIdElementFromUI().should("contain.text", "MPI-").then(($docIdElement: JQuery<HTMLElement>) => {
-        MPIDocId = $docIdElement.text();
-      });
+      // cy.drGetDocIdElementFromUI().should("contain.text", "MPI-").then(($docIdElement: JQuery<HTMLElement>) => {
+      //   MPIDocId = $docIdElement.text();
+      // });
     });
   });
 
