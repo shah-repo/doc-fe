@@ -1833,7 +1833,11 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Add first Approver as ${USERS[1].name}`, () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().focused().autocompleteSelect(USERS[1].name);
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -1875,7 +1879,7 @@ context("Dashboard notification font test", () => {
         .contains(USERS[1].name).should("have.css", "font-family", "Sora, sans-serif");
     });
 
-    it(`Close training status popup window`, () => {
+    it(`Close the popup window`, () => {
       cy.get("[class^=\"MuiButtonBase-root MuiIconButton-root makeStyles-closemodel\"]")
         .arrowClick();
     });
