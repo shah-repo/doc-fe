@@ -1,7 +1,5 @@
 /* eslint-disable max-len */
 
-import { CONFIG } from "../../config";
-
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -24,8 +22,6 @@ declare global {
       fbAddNewFieldWhenHidden2ndLastPlace(): Chainable<Subject>;
       fbCheckboxGroupField(): Chainable<Subject>;
       fbRadioBtnGroupField(): Chainable<Subject>;
-      fbImportTemplate(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
-      fbExportTemplate(params: { name: string }): Chainable<Subject>;
       fbGroupName(params: { name: string }): Chainable<Subject>;
       fbGroupOptions(...list: string[]): Chainable<Subject>;
       fbSelectAutoComplete(): Chainable<Subject>;
@@ -34,7 +30,6 @@ declare global {
       fbOpenValidation(): Chainable<Subject>;
       fbFieldRequired(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
-      fbRemoveComponent(): Chainable<Subject>;
       fbSelectField(): Chainable<Subject>;
       fbAddLabelName(params: { name: string }): Chainable<Subject>;
       fbAddApproverToInlineDialog(params: { approverName: string }): Chainable<Subject>;
@@ -176,40 +171,6 @@ Cypress.Commands.add("fbGroupName", (params: { name: string }) => {
   cy.get("[name=\"label\"]").arrowType(params.name);
 });
 
-Cypress.Commands.add("fbImportTemplate", (params: {fileName: string; saveFileName: string }) => {
-  cy.intercept({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
-    req.reply((res) => {
-      if (res.body !== "") {
-        const response = res.body;
-        res.send(response.url);
-      }
-    });
-  }).as("attach");
-  cy.get("button[data-cy=\"FBWorkspace-importTemplate\"]").eq(0).contains(params.fileName).rightclick();
-  cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").arrowClick();
-  cy.get("body").then(($body) => {
-    if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
-      cy.get("[id=\"passwordConfirm\"]").arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-    }
-  });
-  cy.wait("@attach").then((res) => {
-    const fileUrl = res.response?.body.toString();
-    cy.downloadFile({
-      url: fileUrl,
-      directory: "cypress/downloads",
-      fileName: params.saveFileName,
-    });
-  });
-});
-
-Cypress.Commands.add("fbExportTemplate", (params: { name: string }) => {
-  cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").eq(0).arrowClick();
-  cy.get("[name^=\"fb-template-name\"]").arrowType(params.name);
-  cy.get("[data-cy=\"common.add\"]").arrowClick();
-});
-
 Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
   cy.get("button[data-cy^=\"form.builder\"]").contains(params.name).arrowClick();
 });
@@ -330,9 +291,6 @@ Cypress.Commands.add("fbFieldRequired", () =>
 
 Cypress.Commands.add("fbAddField", () =>
   cy.get("button[data-cy=\"fb-editor-actions-add\"]").arrowClick());
-
-Cypress.Commands.add("fbRemoveComponent", () =>
-  cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true }));
 
 Cypress.Commands.add("fbEditHiddenBtn", () =>
   cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }));
