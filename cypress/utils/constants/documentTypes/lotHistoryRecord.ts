@@ -32,6 +32,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       name: "lhr-selected-part",
       type: "partsselection",
       index: 0,
+      rules: "required",
       label: "Part to be Manufactured",
       deleteDisabled: true,
       deleteInFormDisabled: true,
@@ -71,6 +72,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       type: "radiogroup",
       index: 3,
       label: "Build Type",
+      rules: "required",
       options: [
         {
           text: "R&D",
@@ -109,6 +111,7 @@ export const LotHistoryRecordTest: IdocumentTypeDto = {
       type: "lhrstep",
       index: 5,
       label: "LHR Step",
+      rules: "required",
       applicableOn: [
         "ON_STATE_TO_IN_REVIEW",
       ],
