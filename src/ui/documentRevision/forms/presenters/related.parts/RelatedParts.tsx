@@ -159,7 +159,7 @@ const RelatedPartGrid: React.FunctionComponent<{
     reaction(
       () => relatedPartsStore.relatedPartsList.length,
       (length) => {
-        console.log("length changed : ", length);
+        // console.log("length changed : ", length);
         setIsEditRowVisible(false);
         setShowButton(true);
       });
@@ -199,8 +199,10 @@ const RelatedPartGrid: React.FunctionComponent<{
         <Divider className={classes.dividerStyle} />
       </div>
       <div>
-        <RelatedPartList voidRelatedPart = {voidRelatedPart}
-          viewRelatedPart={viewRelatedPart}></RelatedPartList>
+        <RelatedPartList
+          voidRelatedPart = {voidRelatedPart}
+          viewRelatedPart={viewRelatedPart}
+          rootPartName= {documentRevision.name} />
         {isEditRowVisible && <RelatedPartEditRow documentRevision={documentRevision}
           createNewDocument={createNewDocument} cancelEdit={cancelEdit}/>}
         {
@@ -222,9 +224,11 @@ const RelatedPartGrid: React.FunctionComponent<{
 const RelatedPartList: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
+  rootPartName: string;
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
+  rootPartName,
 }) => {
   const { relatedPartsStore } = useRelatedPartsStore();
   const classes = styles();
@@ -246,7 +250,7 @@ const RelatedPartList: React.FunctionComponent<{
         <TableBody>
           {relatedPartsStore.relatedPartsList.map((listItem: RelatedPartsListItem) => (
             <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
-              key={listItem.documentRevisionId}/>
+              key={listItem.documentRevisionId} rootPartName={rootPartName}/>
           ))}
         </TableBody>
       </Table>
@@ -259,10 +263,12 @@ const RelatedPartViewRow: React.FunctionComponent<{
   listItem: RelatedPartsListItem;
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
+  rootPartName: string;
 }> = ({
   listItem,
   voidRelatedPart,
   viewRelatedPart,
+  rootPartName,
 }) => {
   const classes = styles();
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
@@ -273,7 +279,8 @@ const RelatedPartViewRow: React.FunctionComponent<{
         {listItem.rootDocId}
       </TableCell>
       <TableCell align="left">
-        {listItem.name}
+        {isVoided && <span>{listItem.name}</span>}
+        {!isVoided && <span>{rootPartName} - <b>{listItem.suffixName}</b></span>}
       </TableCell>
       <TableCell align="center">
         <Checkbox
