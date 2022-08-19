@@ -68,7 +68,7 @@ const References = ({
       )}
       <>
         <Typography component="span" className={classes.releaseDate}>
-          <Text translation="common.training" />
+          <Text dataCy="training" translation="common.training" />
         </Typography>
         <Typography className={classes.released}>
           {retrain ? (
