@@ -15,18 +15,6 @@ let loginResponse;
 let secondEmployee;
 let clinicalProtocolDocumentType;
 let group;
-// let releasedFormId;
-// let emailsFromInbox;
-// const pages = ["", "", ""];
-// let downloadUrl;
-// let tmpRegex;
-// let downloadFile;
-// let dateAfterEmailShouldArrive;
-// let fileId;
-
-// const dateOffset = (5 * 1000);
-// const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-// const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
@@ -243,21 +231,18 @@ context("Approval request form", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
-      // cy.pause();
     });
 
 
   });
 
   context("Verify `Approval request form`", () => {
-
     it("Verify Form for Approval request has two tabs Change Details and Documents", () => {
       cy.get("[data-cy=\"tabId.changedetails\"]").should("exist");
       cy.get("[data-cy=\"tabId.documents\"]").should("exist");
     });
 
     context("Verify that Change details tab should be opened by default and that contains`", () => {
-
       it("predefine schema fields except Approval request details", () => {
         cy.verifyPredefiendFields();
       });
@@ -267,16 +252,12 @@ context("Approval request form", () => {
         cy.get("[data-cy=\"fb.add.document\"]").should("exist");
 
       });
-
       it("Verify that Form Options should appear on the Change Details Tab", () => {
         cy.get(".formOptionsBox").should("exist");
       });
-
     });
 
-
     context("Verify that predefined fields for Document tab`", () => {
-
       it("Navigate to document tab", () => {
         cy.drSelectDocumentTab();
       });
@@ -313,10 +294,7 @@ context("Approval request form", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
-
-
   });
-
 
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
@@ -335,9 +313,7 @@ context("Approval request form", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-
     it("Enter description 'AR from New form template for approval request'", () => {
-      // cy.pause();
       cy.get("[data-cy=\"field-description\"]").click();
       cy.get("[data-cy=\"field-description\"]").arrowType("AR from New form template for approval request").wait(2000);
       cy.unClick();
@@ -434,11 +410,9 @@ context("Approval request form", () => {
       cy.get("div[class^=\"rdw-editor-toolbar\"]").should("be.visible");
     });
 
-
   });
 
   context("Validate Right Side Panel", () => {
-
     it("Verify It is expanded and collpased", () => {
       cy.verifyExpandCollpase();
     });
@@ -519,7 +493,6 @@ context("Approval request form", () => {
 
   context("Verify Created AR request layout", () => {
     it("Navigate to Receivable", () => {
-      // cy.navigToDocumentList();
       cy.navigToApprovalRequestList();
       cy.dlClearFilters();
     });
@@ -584,15 +557,11 @@ context("Approval request form", () => {
       cy.get("[data-cy=\"description\"] button").arrowClick();
       cy.get("div[class^=\"rdw-editor-toolbar\"]").should("be.visible");
     });
-
-
   });
 
   xcontext("Verify Layout for created receiving record in draft state", () => {
 
-
     xit("Verify that two tabs are displayed, Change Reqest, Documents", () => {
-      // cy.pause();
       cy.get("[data-cy=\"tabId.changedetails\"]").should("exist");
       cy.get("[data-cy=\"tabId.documents\"]").should("exist");
     });
@@ -621,16 +590,6 @@ context("Approval request form", () => {
     xit("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
     });
-
-    // it("Select Purchase order", () => {
-    //   cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
-    //     .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
-    // });
-
-    // it("Save the  form", () => {
-    //   cy.drClickCreateDocumentWithoutApiCall();
-    //   cy.wait(2000);
-    // });
 
     xit("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
       cy.get("[data-cy=\"porec-receivable-test\"]").should("exist");
@@ -662,13 +621,10 @@ context("Approval request form", () => {
   context("Validate Right Side Panel", () => {
 
     it("Verify Reference tab Info", () => {
-      // cy.pause();
       cy.verifyReferenceTab({ user: USERS[2], formId: "", shortName: "HB" });
     });
 
-
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
-      // cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
       cy.get("[data-cy='common.revision']").parent().should("contain.text",
@@ -691,7 +647,6 @@ context("Approval request form", () => {
     xcontext("Verify User able to add Groups or other user permissions", () => {
       it("Open permissions tab", () => {
         cy.drSelectPermissionTab();
-        // cy.pause();
       });
 
       it("Add another user permission", () => {
@@ -744,10 +699,7 @@ context("Approval request form", () => {
         cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
       });
     });
-
-
   });
-
 });
 
 export { };

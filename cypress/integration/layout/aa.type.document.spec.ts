@@ -115,7 +115,6 @@ context("AA Document Layout verification", () => {
 
 
   context("Add new Doc Type", () => {
-
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
     });
@@ -218,8 +217,6 @@ context("AA Document Layout verification", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
-
-
   });
 
   context("Verify Document content and Tabs", () => {
@@ -275,19 +272,21 @@ context("AA Document Layout verification", () => {
 
     it("Verify Added fields in overview tab ", () => {
       cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
-      // cy.get("[data-cy=\"textfield-for-inline-l6d6wdtx\"]").should("exist");
-      // cy.get("[name=\"checkbox-group-for-inline-l6d6wfla\"]").should("exist");
-      // cy.get(".fb-field-wrapper-radio-btn-group-for-inline-l6d6wh8g").should("exist");
+      cy.get("[data-cy^=\"textfield-for-inline-l6d6wdtx\"]").should("exist");
+      cy.get("[name^=\"checkbox-group-for-inline-l6d6wfla\"]").should("exist");
+      cy.get("[class^='fb-field-wrapper-radio-btn-group-for-inline']").should("exist");
     });
 
-    // it("Verify that Title are lighter color when they are hovered over", () => {
-    //   cy.get("[data-cy=\"field-name\"]").should("have.css", "background-color", "rgb(18, 27, 33)");
-    //   cy.get("[data-cy=\"field-name\"]")
-    //     .realHover().wait(500).should("have.css", "background-color", "rgb()");
-    // });
+    xit("Verify that Title are lighter color when they are hovered over", () => {
+      cy.get("[data-cy=\"field-name\"]").should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get("[data-cy=\"field-name\"]")
+        .realHover().wait(500).should("have.css", "background-color", "rgb()");
+    });
+
     it("Verify row with the Tabs is fixed, and that user should not be able to add/edit new Tabs", () => {
       cy.verifyFixedTab();
     });
+
     it("Click Training Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy=\"tabId.training\"]").arrowClick({ force: true });
       cy.verifyFixedTab();
@@ -343,9 +342,6 @@ context("AA Document Layout verification", () => {
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
     });
-
-    // To Do Title and Description field is no longer highlighted when user hover over
-
   });
 
 
@@ -402,7 +398,6 @@ context("AA Document Layout verification", () => {
   });
 
   context("Verify Create New Document from Release Document", () => {
-
     it("verify Click Training Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy=\"tabId.training\"]").arrowClick({ force: true });
     });
@@ -448,9 +443,6 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy=\"generalInfo\"]>li>div>p").should("contain.text", USERS[1].name);
       cy.get("[data-cy=\"generalInfo\"]>li>div>span").should("have.text", "Owner");
       cy.get("[data-cy=\"common.revision\"]").parent().should("contain.text", scriptData.formId);
-      // TODO - Referenced By, Training, Release Date,
-      // - Form Info,
-
     });
 
     it("Verify References selection", () => {
@@ -458,8 +450,6 @@ context("AA Document Layout verification", () => {
       cy.drSelectReferences( "FM-00001" );
       cy.drRemoveReferences({ reference: "FM-00001" });
     });
-
-
   });
 
   context("Verify Revisions", () => {
@@ -468,6 +458,7 @@ context("AA Document Layout verification", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
+
     it("Revise Record", () => {
       cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -508,8 +499,8 @@ context("AA Document Layout verification", () => {
   });
 
   context("Check document history", () => {
+
     it("Open history drawer and compare history values", () => {
-      SystemRequirement("REQ-0360", "REQ-2670", "REQ-4000", "REQ-4250");
       cy.drSelectHistoryTab();
     });
 
@@ -518,11 +509,11 @@ context("AA Document Layout verification", () => {
       cy.get(`[data-cy="History-detail"]`).realHover();
       cy.get("[data-cy=\"History-detail\"]").scrollTo("bottom");
     });
+
     history.forEach((element, groupIndex) => {
       it(`Check owner name for group ${groupIndex + 1}`, () => {
         cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
       });
-
       element.actions.forEach((action, index, identifier) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
           const typeOfChange = action.key;
@@ -616,7 +607,6 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy=\"field-name\"]").arrowClick();
       cy.get("input[value=\"AA Title\"]").should("not.exist");
     });
-
   });
 
 
@@ -695,8 +685,6 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
       cy.get("[data-cy=\"cr-icon\"]").should("be.visible");
     });
-
-
   });
 
   // right side pannel verification
@@ -784,7 +772,6 @@ context("AA Document Layout verification", () => {
       cy.wait(2000);
       cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 2");
     });
-
   });
 
   context("Check document history", () => {
@@ -882,10 +869,7 @@ context("AA Document Layout verification", () => {
     it("Verify form option box exist", () => {
       cy.get(".formOptionsBox").should("exist");
     });
-
   });
-
-
 });
 
 export { };
