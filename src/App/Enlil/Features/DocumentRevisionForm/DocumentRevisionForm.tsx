@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-key */
+import { Box } from "@material-ui/core";
 import { filter, get, includes, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
@@ -14,7 +15,7 @@ import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisp
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import UpgradeToLatestContainer from "../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBWorkspace } from "../../../../ui/form.builder";
+import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -232,17 +233,22 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
                             <>
                               {tabInfo.tabId === "lineitems" && (
-                                <AttachmentsField
-                                  isDisabled={isDisabledInput}
-                                  isNewVersion={false}
-                                  docRevId={docRevId}
-                                  isAttachmentEmpty={isAttachmentEmpty}
-                                  containsRedline={false}
-                                  docRevStatus={documentRevision?.status}
-                                  documentRevision={documentRevision}
-                                  documentTypeId={documentTypeId || ""}
-                                  labeld={"Supporting Documents"}
-                                />
+                                <Box pb={3.75}>
+                                  {mode === FBWorkspaceModeOptions.FORM &&
+                                    <FBSection name={`fb-po-section-po-items-built-in`}
+                                      label="form.builder.po.details"  />}
+                                  <AttachmentsField
+                                    isDisabled={isDisabledInput}
+                                    isNewVersion={false}
+                                    docRevId={docRevId}
+                                    isAttachmentEmpty={isAttachmentEmpty}
+                                    containsRedline={false}
+                                    docRevStatus={documentRevision?.status}
+                                    documentRevision={documentRevision}
+                                    documentTypeId={documentTypeId || ""}
+                                    labeld={"Supporting Documents"}
+                                  />
+                                </Box>
                               )}
                               <FBWorkspace
                                 isPortal={false}
