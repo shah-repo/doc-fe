@@ -92,13 +92,11 @@ context("Receiving landing page test", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
-          // secondEmployee = createdCompany.employees.find((employee) => employee.user.email === SECOND_USER.email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable test");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
-          // CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots test");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           done();
         });
@@ -118,7 +116,6 @@ context("Receiving landing page test", () => {
       cy.authApiLogin({
         email: SECOND_USER.email,
       }).then((response) => {
-        // loginResponseSecondTester = response;
         done();
       });
     });
@@ -728,8 +725,6 @@ context("Receiving landing page test", () => {
         });
       });
     });
-
-
   });
 
   context("Login user", () => {
@@ -856,14 +851,6 @@ context("Receiving landing page test", () => {
         cy.get(`input[type="checkbox"][value="1"]`).should("exist");
       });
 
-      xit("Quantity, Part Number, Comment, Usable Quantity", () => {
-        cy.get("[data-cy=\"field-renderHTML\"]").should("be.visible");
-        //  cy.get("#SMBodyTmpl").scrollTo("top");
-        cy.get("[name=\"lot_quantity\"]").should("be.visible");
-        cy.get("[name=\"lot_usable_quantity\"]").should("be.visible");
-        cy.get("[data-cy=\"lot_part\"]").should("be.visible");
-      });
-
       it("Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
         cy.get("[name=\"lot_expiry_date\"]").should("exist");
         cy.get("[name=\"100-inspection-override\"]").should("exist");
@@ -892,7 +879,6 @@ context("Receiving landing page test", () => {
 
       it("Select Part", () => {
         cy.drEnterDocumentTitle({ name: "LFPO form document" });
-        // cy.get("#SMBodyTmpl").scrollTo("top");
         cy.get("[data-cy=\"lot_part\"]").autocompleteSelect(`PRT-00006 - rev 1 - Part second document`);
         cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
@@ -920,13 +906,10 @@ context("Receiving landing page test", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
-
-
     });
   });
 
   context("Create Draft state Document", () => {
-
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
     });
@@ -964,21 +947,16 @@ context("Receiving landing page test", () => {
       cy.get("[name^=\"received\"]").arrowType("200");
       cy.get("[data-cy=\"lotType\"]").arrowClick({ force: true })
         .autocompleteSelect("Lots");
-
       cy.wrapWithWaitOnApiCalls([], () => {
         cy.get("[data-cy='lotForm']").arrowClick({ force: true })
           .autocompleteSelect("LFPO Document Title");
       });
-
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Create Lot").first().arrowClick();
-
-
     });
 
   });
 
   context("Receving flow", () => {
-
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
     });
@@ -1023,10 +1001,7 @@ context("Receiving landing page test", () => {
       });
 
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Create Lot").first().arrowClick();
-
-
     });
-
   });
 
   context("Verify created lot", () => {
@@ -1083,7 +1058,6 @@ context("Receiving landing page test", () => {
   });
 
   context("Validate Right Side Panel", () => {
-
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy=\"References\"]").should("exist");
       cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
@@ -1133,7 +1107,6 @@ context("Receiving landing page test", () => {
     context("Verify User able to add Groups or other user permissions", () => {
       it("Open permissions tab", () => {
         cy.drSelectPermissionTab();
-        // cy.pause();
       });
 
       it("Add another user permission", () => {
@@ -1169,7 +1142,6 @@ context("Receiving landing page test", () => {
       ];
       it("Verify Doc history", () => {
         cy.drSelectHistoryTab();
-        // cy.pause();
       });
       history.forEach((element, groupIndex) => {
         it(`Check owner name for group ${groupIndex + 1}`, () => {
@@ -1210,17 +1182,6 @@ context("Receiving landing page test", () => {
       });
     });
 
-
-    xcontext("Verify Revision History", () => {
-      it.skip("Verify Revision History Items", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-      });
-    });
-
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
         cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
@@ -1251,7 +1212,6 @@ context("Receiving landing page test", () => {
   });
 
   context("Fill in the fields and Release", () => {
-
     it("Checked chebox value", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
@@ -1279,15 +1239,13 @@ context("Receiving landing page test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
-
-
   });
-
 
   context("Verify After release", () => {
     it("Navigate to Lot landing page", () => {
       cy.navigToLots();
     });
+
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
       cy.dlFilterByDocId({ docId: "LOT #22081702" });
@@ -1328,12 +1286,9 @@ context("Receiving landing page test", () => {
       cy.get("[data-cy=\"References\"]").should("exist");
       cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
     });
-
   });
 
-
-  // / verify draft state Lots
-
+  // verify draft state Lots
   context("Verify created lot", () => {
     it("Navigate to Lot landing page", () => {
       cy.navigToLots();
@@ -1343,13 +1298,6 @@ context("Receiving landing page test", () => {
       cy.dlFilterByDocId({ docId: "LOT #22081703" });
       cy.dlSelectFirstDocument();
     });
-
-    // it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (WIP)", () => {
-    //   cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
-    //   cy.get("header li>p>div>a>div").should("have.text", "Lots");
-    //   cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LOT #22081703");
-    //   cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-    // });
 
     it("Verify that it contains only Details tab", () => {
       cy.get("[data-cy=\"tabId.details\"]").should("exist");
@@ -1384,11 +1332,9 @@ context("Receiving landing page test", () => {
     it("Verify Form option", () => {
       cy.get(".formOptionsBox").should("exist");
     });
-
   });
 
   context("Validate Right Side Panel", () => {
-
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy=\"References\"]").should("exist");
       cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
@@ -1431,14 +1377,12 @@ context("Receiving landing page test", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
         cy.wait(2000);
         cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-
       });
     });
 
     context("Verify User able to add Groups or other user permissions", () => {
       it("Open permissions tab", () => {
         cy.drSelectPermissionTab();
-        // cy.pause();
       });
 
       it("Add another user permission", () => {
@@ -1452,7 +1396,6 @@ context("Receiving landing page test", () => {
           cy.drAddGroupFromPermissionTab("Developers");
         });
       });
-
     });
 
     context("Check document history", () => {
@@ -1474,7 +1417,6 @@ context("Receiving landing page test", () => {
       ];
       it("Verify Doc history", () => {
         cy.drSelectHistoryTab();
-        // cy.pause();
       });
       history.forEach((element, groupIndex) => {
         it(`Check owner name for group ${groupIndex + 1}`, () => {
@@ -1515,17 +1457,6 @@ context("Receiving landing page test", () => {
       });
     });
 
-
-    xcontext("Verify Revision History", () => {
-      it.skip("Verify Revision History Items", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-      });
-    });
-
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
         cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
@@ -1542,7 +1473,6 @@ context("Receiving landing page test", () => {
         cy.get("[data-cy=\"references-icon\"]").arrowClick();
       });
     });
-
   });
 
   context("Verify Scroll", () => {
@@ -1556,7 +1486,6 @@ context("Receiving landing page test", () => {
   });
 
   context("Fill in the fields and Release", () => {
-
     it("Enter value in textfield", () => {
       cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("Test");
       cy.get("[data-cy=\"lot_usable_quantity\"]").arrowType("200");
@@ -1598,9 +1527,5 @@ context("Receiving landing page test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
-
-
   });
-
-
 });

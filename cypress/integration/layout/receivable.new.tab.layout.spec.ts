@@ -34,7 +34,6 @@ let supplierDocumentType;
 let createdSupplierFormDocument;
 let createdSupplierDocument;
 let partDocumentType;
-let loginResponseSecondTester;
 let createdPartDocument;
 let createdPartDocument2;
 let createdPODocument;
@@ -91,13 +90,11 @@ context("Receiving landing page test", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
-          // secondEmployee = createdCompany.employees.find((employee) => employee.user.email === SECOND_USER.email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable test");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
-          // CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots test");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           done();
         });
@@ -117,7 +114,6 @@ context("Receiving landing page test", () => {
       cy.authApiLogin({
         email: SECOND_USER.email,
       }).then((response) => {
-        loginResponseSecondTester = response;
         done();
       });
     });
@@ -670,7 +666,6 @@ context("Receiving landing page test", () => {
 
     it("Navigate to Records", () => {
       cy.navigToDocumentList();
-      // cy.navigToRecords();
       cy.dlClearFilters();
     });
 
@@ -678,12 +673,9 @@ context("Receiving landing page test", () => {
       cy.dlFilterByDocId({ docId: "FM-00004" });
       cy.dlSelectFirstDocument();
     });
-
   });
 
-
   context("Verify Tab Layout for Receivable form", () => {
-
     it("Verify Predefined Fields Appear", () => {
       cy.verifyPredefiendFields();
       cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
@@ -700,7 +692,6 @@ context("Receiving landing page test", () => {
     });
 
     context("Verify Overview  Tab", () => {
-
       it("Verify Header Info", () => {
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("header li>p>div>a>div").should("have.text", "Document List");
@@ -734,7 +725,6 @@ context("Receiving landing page test", () => {
       it("Approve and release document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-
     });
   });
 
@@ -755,13 +745,13 @@ context("Receiving landing page test", () => {
           .autocompleteSelect("Receivable test");
       });
     });
+
     it("Save the  form", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
   context("Create Released Receiving record", () => {
-
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
     });
@@ -796,20 +786,10 @@ context("Receiving landing page test", () => {
     it("Reload the page", () => {
       cy.reload();
     });
-
-
   });
 
   context("Verify Layout for created receiving record in draft state", () => {
-
-    xit("Verify Predefined Fields Appear", () => {
-      cy.verifyPredefiendFields();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
-      cy.get("[data-cy=\"referenceTo\"]").should("exist");
-    });
-
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      // cy.pause();
       cy.get("[data-cy=\"tabId.overview\"]").should("exist");
       cy.get("[data-cy=\"tabId.details\"]").should("exist");
     });
@@ -832,16 +812,6 @@ context("Receiving landing page test", () => {
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
     });
-
-    // it("Select Purchase order", () => {
-    //   cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
-    //     .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
-    // });
-
-    // it("Save the  form", () => {
-    //   cy.drClickCreateDocumentWithoutApiCall();
-    //   cy.wait(2000);
-    // });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
       cy.drSelectDetailsTab();
@@ -868,10 +838,9 @@ context("Receiving landing page test", () => {
     it("Verify that right side panel Expand and collapse", () => {
       cy.verifyExpandCollpase();
     });
-
   });
 
-  xcontext("Login user", () => {
+  xcontext("Login user", () => { // for testing purpose
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
@@ -886,7 +855,6 @@ context("Receiving landing page test", () => {
   context("Validate Right Side Panel", () => {
 
     it("Verify Reference tab Info", () => {
-      // cy.pause();
       cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
     });
 
@@ -917,7 +885,6 @@ context("Receiving landing page test", () => {
     context("Verify User able to add Groups or other user permissions", () => {
       it("Open permissions tab", () => {
         cy.drSelectPermissionTab();
-        // cy.pause();
       });
 
       it("Add another user permission", () => {
@@ -953,8 +920,8 @@ context("Receiving landing page test", () => {
       ];
       it("Verify Doc history", () => {
         cy.drSelectHistoryTab();
-        // cy.pause();
       });
+
       history.forEach((element, groupIndex) => {
         it(`Check owner name for group ${groupIndex + 1}`, () => {
           cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
@@ -1025,7 +992,6 @@ context("Receiving landing page test", () => {
   });
 
   context("Release document", () => {
-
     it("Navigate to overview tab", () => {
       cy.drSelectOverviewTab();
     });
@@ -1045,7 +1011,6 @@ context("Receiving landing page test", () => {
     });
 
     it("Approve the record", () => {
-      // cy.drSelectDetailsTab();
       cy.listLoadingElementShouldNotExist();
       cy.get("button[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
       cy.listLoadingElementShouldNotExist();
@@ -1065,7 +1030,6 @@ context("Receiving landing page test", () => {
   });
 
   // verify Draft state
-
   context("Open Receivable Draft state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
@@ -1088,7 +1052,6 @@ context("Receiving landing page test", () => {
     });
 
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      // cy.pause();
       cy.get("[data-cy=\"tabId.overview\"]").should("exist");
       cy.get("[data-cy=\"tabId.details\"]").should("exist");
     });
@@ -1111,16 +1074,6 @@ context("Receiving landing page test", () => {
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
     });
-
-    // it("Select Purchase order", () => {
-    //   cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
-    //     .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
-    // });
-
-    // it("Save the  form", () => {
-    //   cy.drClickCreateDocumentWithoutApiCall();
-    //   cy.wait(2000);
-    // });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
       cy.get("[data-cy=\"porec-receivable-test\"]").should("exist");
@@ -1152,7 +1105,6 @@ context("Receiving landing page test", () => {
   xcontext("Validate Right Side Panel", () => {
 
     it("Verify Reference tab Info", () => {
-      // cy.pause();
       cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
     });
 
@@ -1183,7 +1135,6 @@ context("Receiving landing page test", () => {
     context("Verify User able to add Groups or other user permissions", () => {
       it("Open permissions tab", () => {
         cy.drSelectPermissionTab();
-        // cy.pause();
       });
 
       it("Add another user permission", () => {
@@ -1197,7 +1148,6 @@ context("Receiving landing page test", () => {
           cy.drAddGroupFromPermissionTab("Developers");
         });
       });
-
     });
 
     context("Check document history", () => {
@@ -1219,7 +1169,6 @@ context("Receiving landing page test", () => {
       ];
       it("Verify Doc history", () => {
         cy.drSelectHistoryTab();
-        // cy.pause();
       });
       history.forEach((element, groupIndex) => {
         it(`Check owner name for group ${groupIndex + 1}`, () => {
@@ -1304,19 +1253,10 @@ context("Receiving landing page test", () => {
       cy.dlFilterByDocId({ docId: "RCT-00002" });
       cy.dlSelectFirstDocument();
     });
-
   });
 
   context("Verify Layout for created receiving record in draft state", () => {
-
-    xit("Verify Predefined Fields Appear", () => {
-      cy.verifyPredefiendFields();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
-      cy.get("[data-cy=\"referenceTo\"]").should("exist");
-    });
-
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      // cy.pause();
       cy.get("[data-cy=\"tabId.overview\"]").should("exist");
       cy.get("[data-cy=\"tabId.details\"]").should("exist");
     });
@@ -1339,16 +1279,6 @@ context("Receiving landing page test", () => {
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
     });
-
-    // it("Select Purchase order", () => {
-    //   cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
-    //     .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
-    // });
-
-    // it("Save the  form", () => {
-    //   cy.drClickCreateDocumentWithoutApiCall();
-    //   cy.wait(2000);
-    // });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
       cy.get("[data-cy=\"porec-receivable-test\"]").should("exist");
@@ -1380,10 +1310,8 @@ context("Receiving landing page test", () => {
   context("Validate Right Side Panel", () => {
 
     it("Verify Reference tab Info", () => {
-      // cy.pause();
       cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
     });
-
 
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
       cy.verifyReferenceInfo();
@@ -1401,14 +1329,12 @@ context("Receiving landing page test", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
         cy.wait(2000);
         cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-
       });
     });
 
     context("Verify User able to add Groups or other user permissions", () => {
       it("Open permissions tab", () => {
         cy.drSelectPermissionTab();
-        // cy.pause();
       });
 
       it("Add another user permission", () => {
@@ -1422,7 +1348,6 @@ context("Receiving landing page test", () => {
           cy.drAddGroupFromPermissionTab("Can be approver");
         });
       });
-
     });
 
     context("Check document history", () => {
@@ -1444,7 +1369,6 @@ context("Receiving landing page test", () => {
       ];
       it("Verify Doc history", () => {
         cy.drSelectHistoryTab();
-        // cy.pause();
       });
       history.forEach((element, groupIndex) => {
         it(`Check owner name for group ${groupIndex + 1}`, () => {
@@ -1502,9 +1426,5 @@ context("Receiving landing page test", () => {
         cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
       });
     });
-
-
   });
-
-
 });
