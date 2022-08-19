@@ -371,7 +371,7 @@ Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
 });
 
 Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
-  cy.get("div[data-cy=addedDocuments]>div:nth-child(2)>button>span>a").arrowClick();
+  cy.get(`tr[data-grid-row-index="0"]`).arrowClick();
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
