@@ -528,7 +528,7 @@ context("Training by Groups", () => {
 
     it("Remove group Group1", () => {
       cy.get("[data-cy=training-select-groups-to-train]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick();
+        .find(".MuiAutocomplete-tag").eq(1).find(".MuiChip-deleteIcon").arrowClick();
       cy.wait(2000);
     });
 
