@@ -26,6 +26,7 @@ declare global {
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
       ebWithdrawSubmisison(): Chainable<Subject>;
+      ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
     }
   }
 }
@@ -160,6 +161,15 @@ Cypress.Commands.add("ebWithdrawSubmisison", () => {
     cy.get("#AlertDialog-continueButton").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+  });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
