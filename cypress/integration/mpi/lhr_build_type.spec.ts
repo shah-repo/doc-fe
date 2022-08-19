@@ -962,13 +962,8 @@ context("LHR Build type flow", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
-          });
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
