@@ -740,7 +740,7 @@ context("Procedure and parts flow test", () => {
 
     context("select EB procedure component", () => {
       it("select EB procedure component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
         cy.get("[value=\"copyableValue\"]").check();
         cy.fbAddField();
@@ -753,28 +753,27 @@ context("Procedure and parts flow test", () => {
       cy.get(`[class="drag-handle"]`).eq(2)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(3)
+      cy.get(`[class="drag-handle"]`).eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
 
     it("Edit Component", () => {
       cy.wait(2000);
-      cy.get("[data-cy=\"edit-schema-item\"]").eq(3).arrowClick({ force: true });
+      cy.get("[data-cy=\"edit-schema-item\"]").eq(2).arrowClick({ force: true });
       cy.get("[data-cy=\"label\"]").clear();
       cy.fbEnterLabel({ label: "EB Procedure Edited" });
       cy.fbAddField();
     });
 
     it("remove Component EB procedure Edited ", () => {
-      cy.fbRemoveComponent();
+      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.fbRemoveComponent();
+      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.fbRemoveComponent();
-    });
+      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });    });
 
     it("Add component again", () => {
       cy.fbAddNewFieldWhenHidden();
@@ -794,7 +793,9 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Export and save the template", () => {
-      cy.fbExportTemplate({ name: "EB_Document" });
+      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").eq(0).arrowClick();
+      cy.get("[name^=\"fb-template-name\"]").arrowType("EB_Document");
+      cy.get("[data-cy=\"common.add\"]").arrowClick();
     });
   });
 
