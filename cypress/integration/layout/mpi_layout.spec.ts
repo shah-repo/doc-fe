@@ -1,7 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-// import moment from "moment";
 import moment from "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -464,14 +463,6 @@ context("Mpi Layout", () => {
             expect(attachName).to.be.oneOf(["image", "test", "video"]);
           });
         });
-
-        xit("Remove step", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
-          });
-          cy.progressBarShouldNotExist();
-          cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
-        });
       });
 
       context("Add another step and fill the fields", () => {
@@ -785,9 +776,7 @@ context("Mpi Layout", () => {
       cy.get("[data-cy=\"updateRecord\"]").should("be.visible");
       cy.get("[data-cy=\"changeOwner\"]").should("be.visible");
     });
-
   });
-
 });
 
 export { };

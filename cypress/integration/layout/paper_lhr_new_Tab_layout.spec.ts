@@ -40,12 +40,6 @@ let approvalRequestDocumentType;
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 
-
-// const PART_DOCUMENT_TYPE_NAME = "Part";
-// const SupplierFormTitle = "Supplier form";
-// const todaysDate = moment().tz("America/Los_Angeles");
-// const todaysDateFormated = moment().tz("America/Los_Angeles").format("L");
-
 context("LHR tab Layout", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -86,7 +80,6 @@ context("LHR tab Layout", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
-          // secondEmployee = createdCompany.employees.find((employee) => employee.user.email === SECOND_USER.email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -465,7 +458,6 @@ context("LHR tab Layout", () => {
       cy.authApiLogin({
         email: SECOND_USER.email,
       }).then((response) => {
-        // loginResponseSecondTester = response;
         done();
       });
     });
@@ -718,7 +710,6 @@ context("LHR tab Layout", () => {
       });
 
       context("Verify Schema Fields", () => {
-
         it("Verify Default fields up to attachment", () => {
           cy.get("[data-cy=\"field-document.docId\"]").should("exist");
         });
@@ -745,14 +736,10 @@ context("LHR tab Layout", () => {
           cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
         });
       });
-
     });
-
   });
 
-
   context("Validate Right Side Panel", () => {
-
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy=\"References\"]").should("exist");
       cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
@@ -803,7 +790,6 @@ context("LHR tab Layout", () => {
     context("Verify User able to add Groups or other user permissions", () => {
       it("Open permissions tab", () => {
         cy.drSelectPermissionTab();
-        // cy.pause();
       });
 
       it("Add another user permission", () => {
@@ -879,17 +865,6 @@ context("LHR tab Layout", () => {
       });
     });
 
-
-    xcontext("Verify Revision History", () => {
-      it.skip("Verify Revision History Items", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-      });
-    });
-
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
         cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
@@ -911,7 +886,6 @@ context("LHR tab Layout", () => {
 
 
   context("Fill in the fields and Release", () => {
-
     it("Select Part 0005", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("PRT-00005 - rev 1 - Part document");
     });
@@ -971,14 +945,11 @@ context("LHR tab Layout", () => {
         cy.listLoadingElementShouldNotExist();
       });
     });
-
-
   });
 
   // verification of exisitng records in draft and relase state
 
   context("Verify Layout for Draft state", () => {
-
     it("Navigate to Record landing Page", () => {
       cy.navigToLHR();
       cy.dlClearFilters();
@@ -1084,7 +1055,6 @@ context("LHR tab Layout", () => {
       context("Verify User able to add Groups or other user permissions", () => {
         it("Open permissions tab", () => {
           cy.drSelectPermissionTab();
-          // cy.pause();
         });
 
         it("Add another user permission", () => {
@@ -1160,25 +1130,12 @@ context("LHR tab Layout", () => {
         });
       });
 
-
-      xcontext("Verify Revision History", () => {
-        it.skip("Verify Revision History Items", () => {
-          cy.get("[data-cy='note-icon']").arrowClick();
-          cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-          cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-          cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-          cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-        });
-      });
-
       context("Verify Book Mark", () => {
         it("Verify Book Mark Navigation", () => {
           cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
           cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
         });
       });
-
-
     });
 
     context("Verify Scroll", () => {
@@ -1218,7 +1175,6 @@ context("LHR tab Layout", () => {
   });
 
   context("Verify Layout for Released record", () => {
-
     it("Navigate to Record landing Page", () => {
       cy.navigToLHR();
       cy.dlClearFilters();
@@ -1276,7 +1232,6 @@ context("LHR tab Layout", () => {
     });
 
     context("Validate Right Side Panel", () => {
-
       it("Verify that right side panel opens by default to the References tab", () => {
         cy.get("[data-cy=\"References\"]").should("exist");
         cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
@@ -1324,7 +1279,6 @@ context("LHR tab Layout", () => {
       context("Verify User able to add Groups or other user permissions", () => {
         it("Open permissions tab", () => {
           cy.drSelectPermissionTab();
-          // cy.pause();
         });
 
         it("Add another user permission", () => {
@@ -1400,25 +1354,12 @@ context("LHR tab Layout", () => {
         });
       });
 
-
-      xcontext("Verify Revision History", () => {
-        it.skip("Verify Revision History Items", () => {
-          cy.get("[data-cy='note-icon']").arrowClick();
-          cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-          cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-          cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-          cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-        });
-      });
-
       context("Verify Book Mark", () => {
         it("Verify Book Mark Navigation", () => {
           cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
           cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
         });
       });
-
-
     });
 
     context("Verify Scroll", () => {
@@ -1439,11 +1380,9 @@ context("LHR tab Layout", () => {
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
         cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
       });
-
     });
   });
-
-
 });
 
+export { };
 
