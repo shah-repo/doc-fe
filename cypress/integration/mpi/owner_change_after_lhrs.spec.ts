@@ -835,12 +835,10 @@ context("Change owner after starting LHRs", () => {
   });
 
   context("Change owner of LHR", () => {
-    // it("Navigate to LHR", () => {
-    //   cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-    //     cy.get("a").contains("LHR-00004").arrowClick();
-    //   });
-    //   cy.listLoadingElementShouldNotExist();
-    // });
+    it("Navigate to LHR", () => {
+      cy.get("a").contains("LHR-00004").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+    });
 
     it(`Change owner of LHR to ${USERS[4].name}`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
