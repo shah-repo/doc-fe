@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
+import { PO_REQUESTOR_COMPONENT_NAME, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
@@ -95,15 +95,15 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
-    const checkProductPartsExist = (poItems: FBPurchaseOrderValue) =>
+    const checkProductPartExists = (poItems: FBPurchaseOrderValue) =>
       poItems?.items?.some((item) => item.type === "product" && item.partNumberDocId
     );
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
       (poItems) => {
         const previousPOItems = poApprovalsState.getPrevPOItems;
-        const isProductPartsExist = checkProductPartsExist(poItems);
-        const isPrevProductPartsExist = checkProductPartsExist(previousPOItems);
+        const isProductPartsExist = checkProductPartExists(poItems);
+        const isPrevProductPartsExist = checkProductPartExists(previousPOItems);
         poApprovalsState.setPrevPOItems(poItems);
         hasPOItems.current = !(isProductPartsExist || isPrevProductPartsExist);
         outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
@@ -116,12 +116,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         return;
       }
 
-      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
       const prevRequesterValue = prevRequester.current;
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
 
-      const hasProductPart = checkProductPartsExist(poItems);
+      const hasProductPart = checkProductPartExists(poItems);
       const hasRequesterInApprovers = approvers?.includes(requester);
       const hasPrevRequesterInApprovers = approvers?.includes(prevRequesterValue);
 
@@ -196,7 +196,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     useEffect(() => {
-      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       poApprovalsState.setPrevPOItems(poItems);
 
       checkLineItems();
@@ -311,9 +311,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         ? formState?.inputState.get(name)?.value
         : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
 
-      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
-      const proceedToNewReq = poItems?.items.some((item) => item.type === "product" && item.partNumberDocId);
-      if (!proceedToNewReq) {
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      if (!checkProductPartExists(poItems)) {
         disabledOptions = [];
       }
     }
