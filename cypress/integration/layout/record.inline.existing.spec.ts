@@ -157,24 +157,16 @@ context("Record inline Flow", () => {
     });
   });
 
-  xcontext("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Blue Goyette - Adams 88879", multiple: true });
-    });
-  });
-
-
-  // export const LFPO: IdocumentTypeDto = {
-  //   documentTypeName: "Lot From Purchase Order Form",
-  //   documentTypeAcronym: "LFPO",
-  //   group: DOC_TYPE_GROUP.FORM,
-  //   isQms: true,
-  // };
+  // xcontext("Login user", () => { // for testing purpose
+  //   it("Logs user in", () => {
+  //     cy.authLogin({
+  //       email: USERS[2].email,
+  //     });
+  //   });
+  //   it("Selects company", () => {
+  //     cy.cmpSelectCompany({ name: "Blue Goyette - Adams 88879", multiple: true });
+  //   });
+  // });
 
   context("FORM document creation flow", () => {
     context("Start document creation flow", () => {
@@ -221,10 +213,6 @@ context("Record inline Flow", () => {
         });
       });
 
-      // it("Click create document", () => {
-      //   cy.drClickCreateDocumentWithApiCall();
-      // });
-
       it("Verify Overview Tab Selected by default", () => {
         cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
         cy.get("#sm-tabpanel-0").should("be.visible");
@@ -244,7 +232,6 @@ context("Record inline Flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "First inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
-        // cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
@@ -352,7 +339,6 @@ context("Record inline Flow", () => {
     });
 
     xcontext("Verify Overview  Tab", () => {
-
       it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("header li>p>div>a>div").should("have.text", "Document List");
@@ -375,7 +361,6 @@ context("Record inline Flow", () => {
 
     context("Release document", () => {
       it("Approve and release document", () => {
-        //  cy.pause();
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
@@ -404,7 +389,6 @@ context("Record inline Flow", () => {
         cy.progressBarShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
-
 
       it("Checkbox option 1 checked", () => {
         cy.get(`input[type="checkbox"][value="1"]`).last().check();
@@ -462,7 +446,6 @@ context("Record inline Flow", () => {
         cy.unClick();
       });
 
-
       it("Select approver for first inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
@@ -478,8 +461,6 @@ context("Record inline Flow", () => {
         });
       });
     });
-
-
   });
 
   context("Create record and Relesed it", () => {
@@ -496,7 +477,6 @@ context("Record inline Flow", () => {
     it("Verify Predefiend Tabs overview and details Exist", () => {
       cy.get("[data-cy=\"tabId.overview\"]").should("exist");
       cy.get("[data-cy=\"tabId.details\"]").should("exist");
-      // cy.pause();
     });
 
     context("Verify added fields in the tabs", () => {
@@ -524,7 +504,6 @@ context("Record inline Flow", () => {
         cy.progressBarShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
-
 
       it("Check Checkbox option 1 ", () => {
         cy.get(`input[type="checkbox"][value="1"]`).last().check();
@@ -834,17 +813,9 @@ context("Record inline Flow", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
-
-    // it("Click on Save", () => {
-    //   cy.wrapWithWaitOnApiCalls([], () => {
-    //     cy.drClickCreateDocumentWithApiCall();
-    //   });
-    // });
-
   });
 
   context("Verify Layout for relesed Record", () => {
-
     it("Navigate to Record landing Page", () => {
       cy.navigToRecords();
       cy.dlClearFilters();
@@ -880,7 +851,6 @@ context("Record inline Flow", () => {
     it("Verify Tabs are fixed and order not changable", () => {
       cy.verifyFixedTab();
     });
-
   });
 
 });

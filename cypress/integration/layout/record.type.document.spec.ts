@@ -104,7 +104,7 @@ context("Record type Document Layout verification", () => {
     });
   });
 
-  // context("Login user", () => {
+  // context("Login user", () => { // for testing purpose
   //   it("Logs user in", () => {
   //     cy.authLogin({
   //       email: USERS[1].email,
@@ -223,7 +223,6 @@ context("Record type Document Layout verification", () => {
           cy.get("header li>p>div>a>div").should("have.text", "Document List");
           cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "FM-00002");
           cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
-          // To Do check Icon
         });
 
         it("Navigate to details Tab", () => {
@@ -253,13 +252,11 @@ context("Record type Document Layout verification", () => {
   });
 
   context("Create a required document from release form Verify the layout and Release It", () => {
-
     context("Create New Document from Release form", () => {
       it("Click 'Create New'", () => {
         cy.drCreateNewDocumentFromForm();
       });
     });
-
     context("Fill the form", () => {
       it("Fill the record details'", () => {
         cy.drEnterDocumentTitle({ name: "Record one Doc" });
@@ -269,7 +266,6 @@ context("Record type Document Layout verification", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
-
     context("Validate Tabs", () => {
       it("Verify Predefiend Tabs Exist", () => {
         cy.get("[data-cy=\"tabId.overview\"]").should("exist");
@@ -312,12 +308,10 @@ context("Record type Document Layout verification", () => {
         cy.get("#sm-tabpanel-0").should("be.hidden");
         cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
       });
-
     });
 
-
     context("Validate Newly Added form builder fields in Details tab", () => {
-      it.skip("Verify fields in detail tab", () => {
+      xit("Verify fields in detail tab", () => {
         cy.get("[data-cy^=textfield-for-inline-]").eq(0).should("exist");
         cy.get("[data-cy^=textfield-for-inline-]").eq(1).should("exist");
         cy.get("[data-cy^=fb-ia-inline-field-]").eq(0).should("exist");
@@ -336,11 +330,9 @@ context("Record type Document Layout verification", () => {
       it("Verify Expand and Collpase Right Side Panel", () => {
         cy.verifyExpandCollpase();
       });
-
     });
 
     context("Validate Right Side Panel", () => {
-
       it("Verify Reference tab Info", () => {
         cy.verifyReferenceTab({ user: USERS[1], formId: "FM-00002", shortName: "GR" });
       });
@@ -373,7 +365,7 @@ context("Record type Document Layout verification", () => {
           cy.drSelectHistoryTab();
         });
 
-        it.skip("Verify scroll to on history tab", () => {
+        xit("Verify scroll to on history tab", () => {
           cy.drSelectHistoryTab();
           cy.get(`[data-cy="History-detail"]`).realHover();
           cy.get("[data-cy=\"History-detail\"]").scrollTo("bottom");
@@ -401,7 +393,6 @@ context("Record type Document Layout verification", () => {
             });
           });
         });
-
       });
 
       context("Verify User able to add Groups or other user permissions", () => {
@@ -420,11 +411,10 @@ context("Record type Document Layout verification", () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });
-
       });
 
       context("Verify Revision History", () => {
-        it.skip("Verify Revision History Items", () => {
+        xit("Verify Revision History Items", () => {
           cy.get("[data-cy='note-icon']").arrowClick();
           cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
           cy.get("[data-cy='common.docId']>div").should("contain.text", "");
@@ -457,12 +447,8 @@ context("Record type Document Layout verification", () => {
         });
 
       });
-
     });
-
-
   });
-
 
   context("Validate Released Record", () => {
     it("Navigate to Records", () => {
@@ -553,11 +539,8 @@ context("Record type Document Layout verification", () => {
           cy.drAddGroupFromPermissionTab("Developers");
         });
       });
-
     });
-
   });
-
 });
 
 export { };

@@ -179,7 +179,6 @@ context("Record inline Flow", () => {
       });
     });
 
-
     context("Fill in document attributes", () => {
       it("Enter title 'Inline Form Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Inline Form Document Revision" });
@@ -212,10 +211,6 @@ context("Record inline Flow", () => {
           cy.drClickCreateDocumentWithApiCall();
         });
       });
-
-      // it("Click create document", () => {
-      //   cy.drClickCreateDocumentWithApiCall();
-      // });
 
       it("Verify Overview Tab Selected by default", () => {
         cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
@@ -328,16 +323,13 @@ context("Record inline Flow", () => {
         cy.get("#sm-tabpanel-0").should("be.hidden");
         cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
       });
-
     });
-
 
     context("Release document", () => {
       it("Approve and release document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
-
   });
 
   context("Create record", () => {
@@ -453,7 +445,6 @@ context("Record inline Flow", () => {
     });
 
     context("Verify Layout After record creation", () => {
-
       it("Navigate to Details tab", () => {
         cy.drSelectOverviewTab();
       });
@@ -473,7 +464,6 @@ context("Record inline Flow", () => {
       });
 
       context("Verify Overview  Tab", () => {
-
         it("Verify Header Info", () => {
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
           cy.get("header li>p>div>a>div").should("have.text", "Records");
@@ -497,12 +487,10 @@ context("Record inline Flow", () => {
           cy.get("#sm-tabpanel-0").should("be.hidden");
           cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
         });
-
       });
     });
 
     context("Validate Right Side Panel", () => {
-
       it("Verify Reference tab Info", () => {
         cy.verifyReferenceTab({ user: USERS[2], formId: "FM-00002", shortName: "HB" });
       });
@@ -524,7 +512,6 @@ context("Record inline Flow", () => {
           cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
           cy.wait(2000);
           cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
-
         });
       });
 
@@ -547,7 +534,6 @@ context("Record inline Flow", () => {
         ];
         it("Verify Doc history", () => {
           cy.drSelectHistoryTab();
-          // cy.pause();
         });
         history.forEach((element, groupIndex) => {
           it(`Check owner name for group ${groupIndex + 1}`, () => {
@@ -591,7 +577,6 @@ context("Record inline Flow", () => {
       context("Verify User able to add Groups or other user permissions", () => {
         it("Open permissions tab", () => {
           cy.drSelectPermissionTab();
-          // cy.pause();
         });
 
         it("Add another user permission", () => {
@@ -605,11 +590,10 @@ context("Record inline Flow", () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });
-
       });
 
       context("Verify Revision History", () => {
-        it.skip("Verify Revision History Items", () => {
+        xit("Verify Revision History Items", () => {
           cy.get("[data-cy='note-icon']").arrowClick();
           cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
           cy.get("[data-cy='common.docId']>div").should("contain.text", "");
@@ -617,9 +601,7 @@ context("Record inline Flow", () => {
           cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
         });
       });
-
     });
-
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
@@ -718,14 +700,12 @@ context("Record inline Flow", () => {
         });
       });
 
-
       context("Approve and Release document", () => {
         it("Approve and release it", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
           });
-
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
@@ -750,7 +730,6 @@ context("Record inline Flow", () => {
 
     it("Verify Predefined Fields", () => {
       cy.get("[data-cy=\"field-name\"]").should("exist");
-      // cy.get("[data-cy=\"description\"]").should("exist");
     });
 
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
@@ -884,11 +863,8 @@ context("Record inline Flow", () => {
           cy.drAddGroupFromPermissionTab("Can be approver");
         });
       });
-
     });
-
   });
-
 });
 
 export { };

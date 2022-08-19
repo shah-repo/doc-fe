@@ -156,16 +156,16 @@ context("Record inline Flow", () => {
     });
   });
 
-  xcontext("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Blue Goyette - Adams 88879", multiple: true });
-    });
-  });
+  // xcontext("Login user", () => { // for testing purpose
+  //   it("Logs user in", () => {
+  //     cy.authLogin({
+  //       email: USERS[2].email,
+  //     });
+  //   });
+  //   it("Selects company", () => {
+  //     cy.cmpSelectCompany({ name: "Blue Goyette - Adams 88879", multiple: true });
+  //   });
+  // });
 
   context("FORM document creation flow", () => {
     context("Start document creation flow", () => {
@@ -249,7 +249,6 @@ context("Record inline Flow", () => {
         cy.fbAddNewFieldButton();
       });
 
-
       it("Add select field", () => {
         cy.fbAddNewFieldWhenHidden();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
@@ -279,7 +278,6 @@ context("Record inline Flow", () => {
 
     context("Release document", () => {
       it("Approve and release document", () => {
-        //  cy.pause();
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
@@ -300,7 +298,6 @@ context("Record inline Flow", () => {
     it("Verify Predefiend Tabs overview and details Exist", () => {
       cy.get("[data-cy=\"tabId.overview\"]").should("exist");
       cy.get("[data-cy=\"tabId.details\"]").should("exist");
-      // cy.pause();
     });
 
     it("Verify Form opens to the “Overview” tab by default ", () => {
@@ -330,7 +327,6 @@ context("Record inline Flow", () => {
     });
 
     context("Fill in document attributes", () => {
-
       it("Navigate to details tab", () => {
         cy.drSelectOverviewTab();
       });
@@ -525,11 +521,8 @@ context("Record inline Flow", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
-
     });
-
   });
-
 });
 
 export { };
