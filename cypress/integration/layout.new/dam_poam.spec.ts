@@ -541,5 +541,218 @@ context("DAM and POAM", () => {
         });
       });
     });
+
+    context("Scenario 12c - Newly Created POAM", () => {
+      context("Go to Document List and create a document", () => {
+        it("Navigates to document list", () => {
+          cy.navigToDocumentList();
+        });
+
+        it("Clicks on 'create a document' button", () => {
+          cy.cmpClickCreateNewDocument();
+        });
+      });
+
+      context("Create PO Approval Matrix FORM", () => {
+        it("Enters title", () => {
+          cy.drEnterDocumentTitle({ name: `PO Approval Matrix FORM` });
+        });
+
+        it("Enters description", () => {
+          cy.drEnterDocumentDescription({ description: "PO Approval Matrix FORM Description" });
+        });
+
+        it("Select 'Form' document type from dropdown", () => {
+          cy.drSelectDocumentType({ documentType: "Form" });
+        });
+
+        it("Selects output document type: PO Approval Matrix", () => {
+          cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+        });
+
+        it("Select 'Numeric' revision stage", () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+
+        it("Verify that predefined field appears", () => {
+          cy.verifyDefaultFields();
+        });
+
+        it("Verify 'Selected Users' field is visible", () => {
+          cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+        });
+
+        it("Verify 'Selected Groups' field is visible", () => {
+          cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+        });
+
+        it("Click CREATE DOCUMENT", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it(`Verify that the top left of the page displays: Icon and document type, 
+        Doc ID, Rev stage, status (Draft)`, () => {
+          cy.verifyDocumentHeaderDetails();
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+        });
+
+        it("Verify that it contains Overview and Matrix Details tab", () => {
+          cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+          cy.get("[data-cy=\"tabId.matrixdetails\"]").should("exist");
+        });
+      });
+
+      context("Verify Form opens to the Overview tab by default", () => {
+        it("Verify Overview as default selected tab", () => {
+          cy.verifySelectedTab({ tab: "overview" });
+        });
+
+        it("Verify that predefined field appears", () => {
+          cy.verifyDefaultFields();
+        });
+
+        it("Verify that Form Options should appear for this tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
+        });
+      });
+
+      context("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
+        it("Navigate to Matrix Details Tab", () => {
+          cy.drSelectMatrixDetailsTab();
+          cy.verifySelectedTab({ tab: "matrixdetails" });
+        });
+      });
+
+      context("Verify that Matrix Details tab contain", () => {
+        // Not Present
+        // FB control for PO Approval Matrix - PO approval matrix for New companies (NCO) will
+        // be added as predefined schema
+        it("Verify that Form Options should appear for this tab", () => {
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
+        });
+      });
+
+      context("Verify that right side panel opens by default to the References tab", () => {
+        it("Verify that right side panel opens by default to the References tab", () => {
+          cy.get("[data-cy=\"References\"]").should("exist");
+          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        });
+
+        it("Verify Right side panel Can be expanded or collapsed", () => {
+          cy.verifyExpandCollpase();
+        });
+
+        it("Verify References tab is fixed as the user scrolls up or down", () => {
+          cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+        });
+      });
+
+      context("Release the form", () => {
+        it("'Approve and Release' the PO Approval Matrix Form", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+      context("Click 'Create New' and new POAM should be created", () => {
+        it("Create New Document out of the Form", () => {
+          cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+        });
+      });
+
+      context("Verify that POAM contains Overview and Matrix Details tab", () => {
+        it("Verify that it contains Overview and Matrix Details tab", () => {
+          cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+          cy.get("[data-cy=\"tabId.matrixdetails\"]").should("exist");
+        });
+      });
+
+      context("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+        it("Verify there is no ADD A FIELD button", () => {
+          cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
+        });
+
+        it("Verify there is no EDIT A FIELD button", () => {
+          cy.get("button[data-cy=\"edit-schema-item\"]").should("not.exist");
+        });
+      });
+
+      context("Verify that user should not be able to rearrange the order of the Tabs", () => {
+        it("should not be able to rearrange the order of the Tabs", () => {
+          cy.verifyFixedTab();
+        });
+      });
+
+      context("Verify opens to the Overview tab by default", () => {
+        it("Verify Overview as default selected tab", () => {
+          cy.verifySelectedTab({ tab: "overview" });
+        });
+
+        it("Verify Document ID exist", () => {
+          cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+        });
+
+        it("Verify Training required exist", () => {
+          cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        });
+
+        it("Verify Attachments exist", () => {
+          cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+        });
+
+        it("Verify that Form Options should appear for this tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
+        });
+      });
+      context("Verify that Matrix Details tab contain", () => {
+        it("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
+          cy.drSelectMatrixDetailsTab();
+          cy.verifySelectedTab({ tab: "matrixdetails" });
+        });
+
+        it(`Verify PO Approval Matrix and table header contains: Level Name, Limit, Signature 1, 
+        Signature 2 and Signature 3`, () => {
+          cy.contains("Purchase Order Approval Matrix").should("exist");
+          cy.get("table").contains("th", "Level Name");
+          cy.get("table").contains("th", "Limit");
+          cy.get("table").contains("th", "Signature 1");
+          cy.get("table").contains("th", "Signature 2");
+          cy.get("table").contains("th", "Signature 3");
+        });
+
+        it(`Click add line items and Verify fields - Level Name, Limit, Signature 1, 
+        Signature 2 and Signature 3`, () => {
+          cy.get("button[data-cy=\"fb-control-btn\"]").eq(0).arrowClick({ multiple: true, force: true });
+          cy.contains("Level name").should("exist");
+          cy.contains("Limit").should("exist");
+          cy.contains("Signature 1").should("exist");
+          cy.contains("Signature 2").should("exist");
+          cy.contains("Signature 3").should("exist");
+        });
+        // approval levels  missing
+
+        it("Fill in the fields - Level Name, Limit, Signature 1, Signature 2 and Signature 3", () => {
+          cy.poAMEnterLevelName({ name: "Level Name" });
+          cy.poAMEnterLimit({ limit: "200" });
+          cy.get("[name=\"signatures.0.employees\"]").autocompleteSelect(USERS[1].name);
+          cy.get("[name=\"signatures.1.employees\"]").autocompleteSelect(USERS[2].name);
+          cy.get("[name=\"signatures.2.employees\"]").autocompleteSelect(USERS[3].name);
+          cy.poAddPOButtonClick();
+        });
+        it(" Verify that data is save in table", () => {
+          cy.get("table").contains("tr", "Level Name");
+          cy.get("table").contains("tr", "200");
+          cy.get("table").contains("tr", USERS[1].name);
+          cy.get("table").contains("tr", USERS[2].name);
+          cy.get("table").contains("tr", USERS[3].name);
+        });
+
+        it("Verify that Form Options should appear for this tab", () => {
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
+        });
+      });
+    });
   });
 });
