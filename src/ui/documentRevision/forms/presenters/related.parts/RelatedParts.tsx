@@ -273,10 +273,13 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const classes = styles();
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
   || listItem.status === DocumentRevisionStatus.Voided;
+
+  const lastIndexOfDash = listItem.rootDocId.lastIndexOf("-");
+
   return (
     <TableRow hover key={listItem.documentRevisionId}>
       <TableCell align="left">
-        {listItem.rootDocId}
+        {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
       </TableCell>
       <TableCell align="left">
         {isVoided && <span>{listItem.name}</span>}

@@ -81,7 +81,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
 
   const createPartAsync = useAsync({
-    onSuccess: (createdDocumentRevision?) => {
+    onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
       if (createdDocumentRevision) {
         console.log(createdDocumentRevision);
         if (parentStatus === RELATED_STATUS.PARENT_SEPARATE) {
@@ -90,7 +90,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
         } else if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
           // populate the list with the new added part
-          relatedPartsStore.addNewRelatedPart(createdDocumentRevision);
+          relatedPartsStore.addNewRelatedPart(createdDocumentRevision, suffixName);
         }
       }
     },
@@ -182,7 +182,8 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     }
 
     // console.log(documentRevision, docDto);
-    createPartAsync.start(createRelatedPartAction, documentRevision.document.id, docDto, createPartAsync);
+    createPartAsync.start(createRelatedPartAction, documentRevision.document.id, docDto,
+      relatedPartDetails?.name, createPartAsync);
   };
 
 

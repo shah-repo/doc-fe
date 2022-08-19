@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { get } from "lodash";
 import { action, observable } from "mobx";
 import { createContext, useContext } from "react";
@@ -24,13 +25,14 @@ export class RelatedPartsStore {
     );
   }
 
-  @action addNewRelatedPart(createdDocumentRevision) {
+  @action addNewRelatedPart(createdDocumentRevision, suffixName) {
     const newRelatedPart = {
       documentId: get(createdDocumentRevision, "documentId"),
       rootDocId: get(createdDocumentRevision, "document.docId"),
       name: get(createdDocumentRevision, "name"),
       documentRevisionId: get(createdDocumentRevision, "id"),
       status: get(createdDocumentRevision, "displayStatus"),
+      suffixName,
     };
 
     this.relatedPartsList.push(newRelatedPart);
