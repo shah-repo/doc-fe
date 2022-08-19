@@ -49,7 +49,7 @@ context("Verify New Layout for Bulk Import Document", () => {
       });
     });
 
-    it("[API]Login second tester", (done: any) => {
+    it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
       }).then((response) => {
@@ -678,6 +678,7 @@ context("Approve and Release bulk import record", () => {
 
   it("Approve bulk import record", () => {
     cy.ebApprove();
+    // TO DO: User is getting logged out on Approve, needs to be fixed
   });
 });
 
