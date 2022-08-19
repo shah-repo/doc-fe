@@ -138,19 +138,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
     }
 
-    // On required approval API call
-    useEffect(() => reaction(
-      () => poApprovalsState.getIsRequiredApprovals,
-      () => {
-        if (hasPOItems.current) {
-          return;
-        }
-
-        checkLineItems();
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
     // On add approver
     useEffect(() => reaction(
       () => poApprovalsState?.approvalApi.data,
@@ -208,7 +195,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // On poItems change.
     useEffect(() => {
       const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
       poApprovalsState.setPrevPOItems(poItems);
