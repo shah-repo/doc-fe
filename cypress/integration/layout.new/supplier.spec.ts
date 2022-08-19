@@ -381,8 +381,8 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Fill Text Field and check for autosave", () => {
-        cy.get("[name^=fb-textfield-]").arrowType("Supplier Text Field");
-        cy.unClick();
+      cy.get("[name^=fb-textfield-]").arrowType("Supplier Text Field");
+      cy.unClick();
     });
 
     it("Select radio button option", () => {
