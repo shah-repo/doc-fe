@@ -151,14 +151,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           ),
         }}
       >
-      <UpgradeToLatestContainer
-        type="banner"
-        docRevId={documentRevision?.id}
-        {...{
-          bannerPortal,
-          shouldShowUpgrade,
-        }}
-      />
+        <UpgradeToLatestContainer
+          type="banner"
+          docRevId={documentRevision?.id}
+          {...{
+            bannerPortal,
+            shouldShowUpgrade,
+          }}
+        />
         <Observer>
           {() => (
             <SMTemplate
