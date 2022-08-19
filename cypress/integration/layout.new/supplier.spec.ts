@@ -49,7 +49,7 @@ context("Verify New Layout for Supplier Document", () => {
       });
     });
 
-    it("[API]Login second tester", (done: any) => {
+    it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
       }).then((response) => {
@@ -59,13 +59,13 @@ context("Verify New Layout for Supplier Document", () => {
     });
   });
 
-  context("Login user", () => {
+  context("Login admin user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
-  // Scenario 11a - Newly Created Supplier
+  // Scenario 11a - Newly Created Supplier Document
 
   context("Create supplier form", () => {
     it("Navigate to document list", () => {
@@ -160,6 +160,14 @@ context("Verify New Layout for Supplier Document", () => {
           cy.fbAddNewFieldButton();
         });
 
+        it("Add Radio Button group", () => {
+          cy.fbAddNewFieldWhenHiddenLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+          cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+          cy.fbGroupOptions("Option 1", "Option 2");
+          cy.fbAddNewFieldButton();
+        });
+
         it("Save Form", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
         });
@@ -169,6 +177,10 @@ context("Verify New Layout for Supplier Document", () => {
         it("Verify Text Field", () => {
           cy.get("#sm-tabpanel-1").should("exist");
           cy.contains("fb-textfield").should("exist");
+        });
+
+        it("Verify Radio Button Group", () => {
+          cy.contains("fb-radiobutton-group").should("exist");
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
@@ -256,6 +268,10 @@ context("Verify New Layout for Supplier Document", () => {
         it("Verify Text Field", () => {
           cy.get("#sm-tabpanel-1").should("exist");
           cy.contains("fb-textfield").should("exist");
+        });
+
+        it("Verify Radio Button Group", () => {
+          cy.contains("fb-radiobutton-group").should("exist");
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
@@ -352,16 +368,6 @@ context("Verify New Layout for Supplier Document", () => {
       });
     });
 
-    context("Verify Migrate Form tab", () => {
-      it("Open migrate form tab", () => {
-        cy.drSelectMigrateFormTab();
-      });
-
-      it("Select migration form", () => {
-        cy.get("[data-cy=\"field-changeDocumentForm\"]").eq(0).arrowClick();
-      });
-    });
-
     context("Verify History tab content scroll", () => {
       it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
         cy.verifyHistoryScroll();
@@ -375,10 +381,16 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Fill Text Field and check for autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^=fb-textfield-]").arrowType("Supplier Name");
+        cy.get("[name^=fb-textfield-]").arrowType("Supplier Text Field");
         cy.unClick();
-      });
+    });
+
+    it("Select radio button option", () => {
+      cy.get("[name^=\"fb-radiobutton-group-\"]").last().arrowClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
@@ -453,6 +465,10 @@ context("Verify New Layout for Supplier Document", () => {
         it("Verify Text Field", () => {
           cy.get("#sm-tabpanel-1").should("exist");
           cy.contains("fb-textfield").should("exist");
+        });
+
+        it("Verify Radio Button Group", () => {
+          cy.contains("fb-radiobutton-group").should("exist");
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
@@ -548,16 +564,6 @@ context("Verify New Layout for Supplier Document", () => {
         });
       });
 
-      context("Verify Migrate Form tab", () => {
-        it("Open migrate form tab", () => {
-          cy.drSelectMigrateFormTab();
-        });
-
-        it("Select migration form", () => {
-          cy.get("[data-cy=\"field-changeDocumentForm\"]").eq(0).arrowClick();
-        });
-      });
-
       context("Verify History tab content scroll", () => {
         it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
           cy.verifyHistoryScroll();
@@ -643,6 +649,10 @@ context("Verify New Layout for Supplier Document", () => {
         it("Verify Text Field", () => {
           cy.get("#sm-tabpanel-1").should("exist");
           cy.contains("fb-textfield").should("exist");
+        });
+
+        it("Verify Radio Button Group", () => {
+          cy.contains("fb-radiobutton-group").should("exist");
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
@@ -732,12 +742,6 @@ context("Verify New Layout for Supplier Document", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
           cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
-        });
-      });
-
-      context("Verify Migrate Form tab", () => {
-        it("Migrate Form tab should not present", () => {
-          cy.get("[data-cy=\"form-migration-icon\"]").should("not.exist");
         });
       });
 
