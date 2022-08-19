@@ -6,12 +6,13 @@ import React, { useEffect } from "react";
 import { FormattedNumber } from "react-intl";
 import { FB, FBPurchaseOrderProps, FBText } from "..";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import Colors from "../../layout/theme/utils/colors";
 import FBStore from "../FBStore/FBStore";
 
 const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({ defaultValue, name, ...props }) => {
   const requiredKeys = ["subTotal", "tax", "currency", "totalAmount"];
-  const { formState } = FB.useStores();
+  const { formState, workspaceState } = FB.useStores();
   const { _tabsState } = SM.useStores();
   const formInputName = props?.lineItem ? props?.lineItem : "po-items-built-in";
   const formValue = formState?.getFieldValue(formInputName, defaultValue);
@@ -36,6 +37,11 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
     subTotal: "SubTotal",
     tax: "Tax Total",
   };
+
+  if (workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.RECEIVABLE)  {
+    return null;
+  }
+
   return (
     <Box color={Colors.almost_black} width={242} fontSize={12}>
       <Box mb={1.25} fontWeight={600} fontSize={12}>
