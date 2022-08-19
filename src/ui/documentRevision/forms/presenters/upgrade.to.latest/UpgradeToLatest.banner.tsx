@@ -1,4 +1,4 @@
-import { Box, Link, Portal } from "@material-ui/core";
+import { Box, Link } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import WarningOutlinedIcon from "@material-ui/icons/WarningOutlined";
 import React from "react";
@@ -26,7 +26,7 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
     <>
       {
         shouldShowUpgrade && showBanner &&
-        <Portal container={bannerPortal?.current}>
+        <>
           <Box
             bgcolor={Colors.blue}
             color={Colors.white}
@@ -34,7 +34,7 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
             padding="10px"
             display="flex"
             alignItems="center"
-            margin="88px 10px 14px 10px"
+            margin="10px"
           >
             <WarningOutlinedIcon color="disabled" />
             <Box component="span" marginLeft="10px" color={Colors.white}>
@@ -64,7 +64,7 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
             <CloseIcon onClick={hideBanner} style={{ cursor: "pointer", marginLeft: "auto" }} />
           </Box>
           <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }}/>
-        </Portal>
+        </>
       }
     </>
   );
