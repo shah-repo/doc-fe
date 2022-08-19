@@ -885,17 +885,18 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
-      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
+      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
     });
 
     it(`Select '${USERS[1].name}' for Coordinator`, () => {
-      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
+      cy.wait(2000);
+      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("navigate to overview", () => {
@@ -903,7 +904,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
     });
 
     it("Save document", () => {
@@ -915,7 +916,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select document 'NO' for preventative maintenance required", () => {
-      cy.get("[value=\"No\"]").eq(1).arrowClick();
+      cy.get("[value=\"No\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Button should have text Justifications", () => {
@@ -956,7 +957,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select document 'No' for calibration required", () => {
-      cy.get("[value=\"No\"]").eq(1).arrowClick();
+      cy.get("[value=\"No\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Button should have text Justifications", () => {
