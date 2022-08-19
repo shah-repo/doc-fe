@@ -11,7 +11,6 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let adminEmployee;
-let secondEmployee;
 
 context("Verify New Layout for Bulk Import Document", () => {
   before(() => {
@@ -45,7 +44,6 @@ context("Verify New Layout for Bulk Import Document", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -671,39 +669,20 @@ context("Approve and Release bulk import record", () => {
   });
 
   it("Add Approver", () => {
-    cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+    cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
   });
 
   it("Submit for approval", () => {
     cy.pmSubmitForApproval();
   });
 
-  it("Logout admin user", () => {
-    cy.authLogout();
-  });
-
-  it("Login second user to dashboard", () => {
-    cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
-  });
-
-  it("Click approve for Record", () => {
-    cy.wait(2000);
-    cy.dashApproverFirstFromList();
-  });
-
-  it("Logout second user", () => {
-    cy.pause();
-    cy.authLogout();
+  it("Approve bulk import record", () => {
+    cy.ebApprove();
   });
 });
 
 context("Select exisiting released bulk import record", () => {
-  it("Login admin user to dashboard", () => {
-    cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-  });
-
   it("Navigate to Records", () => {
-    cy.pause();
     cy.navigToRecords();
   });
 
