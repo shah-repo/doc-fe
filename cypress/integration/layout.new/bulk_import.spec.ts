@@ -68,7 +68,7 @@ context("Verify New Layout for Bulk Import Document", () => {
   // Scenario 9a - Newly Created Bulk Import Document
 
   context("Create Bulk Import form", () => {
-    it("Navigate to record list", () => {
+    it("Navigate to Document List", () => {
       cy.navigToDocumentList();
     });
 
