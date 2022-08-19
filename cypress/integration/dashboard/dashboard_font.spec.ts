@@ -1605,9 +1605,12 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it("Verify training assigned font-size as 14p and form-family as Sora, sans-serif", () => {
+    // eslint-disable-next-line max-len
+    it("Verify training assigned font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
       cy.contains(trainingFormId).first().should("have.css", "font-size", "14.4px");
       cy.contains(trainingFormId).first().should("have.css", "font-family", "Sora, sans-serif");
+      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
+      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
     });
   });
 
@@ -1631,9 +1634,12 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it("Verify training COMPLETED font-size as 14p and form-family as Sora, sans-serif", () => {
+    // eslint-disable-next-line max-len
+    it("Verify training COMPLETED font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
       cy.contains(trainingFormId).first().should("have.css", "font-size", "14.4px");
       cy.contains(trainingFormId).first().should("have.css", "font-family", "Sora, sans-serif");
+      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
+      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
     });
   });
 
@@ -1645,9 +1651,13 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it("Verify Releasing Approval Request font-size as 14p and form-family as Sora, sans-serif", () => {
+    // eslint-disable-next-line max-len
+    it("Verify Releasing Approval Request font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
       cy.contains(arId).first().should("have.css", "font-size", "14.4px");
       cy.contains(arId).first().should("have.css", "font-family", "Sora, sans-serif");
+      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
+      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
+
     });
   });
 
@@ -1659,9 +1669,12 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it("Verify Purchase Order font-size as 14p and form-family as Sora, sans-serif", () => {
+    // eslint-disable-next-line max-len
+    it("Verify Purchase Order font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
       cy.contains("pending approvals from").first().should("have.css", "font-size", "14px");
       cy.contains("pending approvals from").first().should("have.css", "font-family", "Sora, sans-serif");
+      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
+      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
     });
   });
 
@@ -1673,9 +1686,12 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it("Verify LHR step completed font-size as 14.4px and form-family as Sora, sans-serif", () => {
+    // eslint-disable-next-line max-len
+    it("Verify LHR step completed font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
       cy.contains(lhrsid).first().should("have.css", "font-size", "14.4px");
       cy.contains(lhrsid).first().should("have.css", "font-family", "Sora, sans-serif");
+      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
+      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
     });
   });
 
@@ -1687,9 +1703,12 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it("Verify LHR approved font-size as 14.4px and form-family as Sora, sans-serif", () => {
+    // eslint-disable-next-line max-len
+    it("Verify LHR approved font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
       cy.contains(lhrid).first().should("have.css", "font-size", "14.4px");
       cy.contains(lhrid).first().should("have.css", "font-family", "Sora, sans-serif");
+      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
+      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
     });
   });
 
@@ -1701,9 +1720,12 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it("Verify CLOSED Approval Request font-size as 14p and form-family as Sora, sans-serif", () => {
+    // eslint-disable-next-line max-len
+    it("Verify CLOSED Approval Request font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
       cy.contains("Releasing FM-00002, released doc1").last().should("have.css", "font-size", "14.4px");
       cy.contains("Releasing FM-00002, released doc1").last().should("have.css", "font-family", "Sora, sans-serif");
+      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
+      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
     });
   });
 
@@ -1872,11 +1894,16 @@ context("Dashboard notification font test", () => {
         .contains("PENDING");
     });
 
-    it(`Verify ${USERS[1].name} font-size as 14px and form-family as Sora, sans-serif`, () => {
+    // eslint-disable-next-line max-len
+    it(`Verify ${USERS[1].name} font-size 14px form-family 'Sora, sans-serif' line-height 18px font-weight 400`, () => {
       cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
         .contains(USERS[1].name).should("have.css", "font-size", "14px");
       cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
         .contains(USERS[1].name).should("have.css", "font-family", "Sora, sans-serif");
+      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
+        .should("have.css", "line-height", "18px");
+      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
+        .should("have.css", "font-weight", "400");
     });
 
     it(`Close the popup window`, () => {
