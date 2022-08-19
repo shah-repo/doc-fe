@@ -833,7 +833,6 @@ context("NCO document type management with record doc type", () => {
 
     it("Upload correct DAM JSON", () => {
       cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
-      // cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
@@ -901,4 +900,3 @@ context("NCO document type management with record doc type", () => {
     });
   });
 });
-
