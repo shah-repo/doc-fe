@@ -106,8 +106,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       ); }}
   </FBMapWrapper>;
 
-  // const autocompletePopper = (props) => (<Popper {...props} />);
-
   return (
     <>
       {includeQRScan && (
@@ -161,7 +159,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           ListboxComponent={groupByKey ? undefined : ListBoxComponent }
           renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
           renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
-          id={props.name}
           PopperComponent={(props) => (<Popper {...props} />)}
         />}
       </FBInput>
