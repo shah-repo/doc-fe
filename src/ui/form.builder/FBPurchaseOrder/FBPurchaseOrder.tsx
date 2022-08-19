@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable } from "..";
+import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
@@ -15,11 +15,13 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   disabled,
   isReceivable,
   name,
+  isPO,
 }) => (
   <FBProvider {...{ purchaseOrderState, dialogState }}>
     <FBDialog />
     <FBInput {...{ name, disabled }} type="purchaseorder">
       <Box mb={gutter ? 5 : 0}>
+        {mode === "form" && !isPO && <FBSection name={`fb-po-section-${name}`} {...{ label }}  />}
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
         {isReceivable && (
           <FBButton
