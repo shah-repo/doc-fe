@@ -476,7 +476,6 @@ context("Procedure and parts flow test", () => {
             }],
             schema: [],
           },
-
         },
         employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
@@ -860,6 +859,7 @@ context("Procedure and parts flow test", () => {
         cy.get(`[class="drag-handle"]`).eq(4)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
+
       });
 
       it("Edit Component", () => {
@@ -1094,4 +1094,3 @@ context("Procedure and parts flow test", () => {
     });
   });
 });
-
