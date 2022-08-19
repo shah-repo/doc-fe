@@ -266,8 +266,8 @@ context("LHRs email notifications", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("[data-cy=\"lhrstep-built-in\"]").arrowType(MPIDocumentTitle);
-          cy.get(dataCyOptions).contains(MPIDocumentTitle).arrowClick();
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect(MPIDocumentTitle);
         });
       });
 
