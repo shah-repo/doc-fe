@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment-timezone";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -12,6 +13,7 @@ const paperlhrTitle = "Paper LHR form";
 const txtFieldTitle1 = "fb-textfield";
 const txtFieldTitle2 = "fb-textfield-1";
 const fileUploadFieldTitle = "fb-fileupload";
+const currentDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
 
 context("Document Approval Matrix Revise", () => {
   before(() => {
@@ -234,7 +236,7 @@ context("Document Approval Matrix Revise", () => {
       cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
       cy.dlVerifyFilterByStatus({ status: "Released" });
       cy.dlVerifyFilterByArId({ arId: "AR-00001" });
-      cy.dlVerifyFilterByEffectiveDate({ effectiveDate: "8/18/2022" });
+      cy.dlVerifyFilterByEffectiveDate({ effectiveDate: currentDate });
     });
   });
 
