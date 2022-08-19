@@ -470,290 +470,89 @@ context("Verify New Layout for Bulk Import Document", () => {
       });
     });
   });
-});
 
-// Scenario 9b - Existing Bulk Import Record
 
-context("Select exisiting WIP bulk import record", () => {
-  it("Navigate to Records", () => {
-    cy.navigToRecords();
+  // Scenario 9b - Existing Bulk Import Record
+
+  context("Select exisiting WIP bulk import record", () => {
+    it("Navigate to Records", () => {
+      cy.navigToRecords();
+    });
+
+    it("Filter the WIP record", () => {
+      cy.dlClearFilters();
+      cy.filterRecordState({ state: "WIP" });
+    });
+
+    it("Filter by Record Id", () => {
+      cy.dlFilterByDocId({ docId: "BLC-00003" });
+    });
+
+    it("Select first record", () => {
+      cy.dlSelectFirstDocument();
+    });
   });
 
-  it("Filter the WIP record", () => {
-    cy.dlClearFilters();
-    cy.filterRecordState({ state: "WIP" });
-  });
+  context("Verify WIP bulk import record", () => {
+    it("Verify predefined fields", () => {
+      cy.get("[data-cy=\"field-name\"]").should("exist");
+      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+    });
 
-  it("Filter by Record Id", () => {
-    cy.dlFilterByDocId({ docId: "BLC-00003" });
-  });
+    it("Verify record header details", () => {
+      cy.verifyDocumentHeaderDetails();
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+    });
 
-  it("Select first record", () => {
-    cy.dlSelectFirstDocument();
-  });
-});
+    it("Verify tabs", () => {
+      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+    });
 
-context("Verify WIP bulk import record", () => {
-  it("Verify predefined fields", () => {
-    cy.get("[data-cy=\"field-name\"]").should("exist");
-    cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
-  });
-
-  it("Verify record header details", () => {
-    cy.verifyDocumentHeaderDetails();
-    cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
-  });
-
-  it("Verify tabs", () => {
-    cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-    cy.get("[data-cy=\"tabId.details\"]").should("exist");
-  });
-
-  context("Verify WIP bulk import record tabs content", () => {
-    context("Verify Overview tab content", () => {
-      it("Verify Overview as default selected tab", () => {
-        cy.verifySelectedTab({ tab: "overview" });
-      });
-
-      it("Verify tab as fixed", () => {
-        cy.verifyFixedTab();
-      });
-
+    context("Verify WIP bulk import record tabs content", () => {
       context("Verify Overview tab content", () => {
-        it("Verify Overview tab default fields", () => {
-          cy.get("#sm-tabpanel-0").should("exist");
-          cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+        it("Verify Overview as default selected tab", () => {
+          cy.verifySelectedTab({ tab: "overview" });
         });
 
-        it("Verify Approvals field", () => {
-          cy.verifyApprovalsField();
+        it("Verify tab as fixed", () => {
+          cy.verifyFixedTab();
         });
 
-        it("Verify that Form Options should appear for Overview tab", () => {
-          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
-          cy.verifyFormOptionsVisibility();
-        });
-      });
-    });
+        context("Verify Overview tab content", () => {
+          it("Verify Overview tab default fields", () => {
+            cy.get("#sm-tabpanel-0").should("exist");
+            cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+          });
 
-    context("Verify Details tab content", () => {
-      it("Navigate to Details tab", () => {
-        cy.drSelectDetailsTab();
-      });
+          it("Verify Approvals field", () => {
+            cy.verifyApprovalsField();
+          });
 
-      it("Verify predefined schema fields", () => {
-        cy.get("#sm-tabpanel-1").should("exist");
-        cy.contains("Select Form Document For Import").should("exist");
-        cy.contains("Select Output Document Type").should("exist");
-        cy.contains("EXCEL FOR IMPORT").should("exist");
-        cy.contains("Column Document/Record Id?").should("exist");
-        cy.contains("Download Excel Template").should("exist");
-        cy.contains("Upload excel with data for import").should("exist");
-        cy.contains("Mass Create Logs").should("exist");
-        cy.contains("Logs").should("exist");
-      });
-
-      it("Verify Text Field", () => {
-        cy.contains("fb-textfield").should("exist");
-      });
-
-      it("Verify Radio Button Group", () => {
-        cy.contains("fb-radiobutton-group").should("exist");
-      });
-
-      it("Verify that Form Options should appear for Details tab", () => {
-        cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
-        cy.verifyFormOptionsVisibility();
-      });
-    });
-  });
-
-  context("Verify Right side panel", () => {
-    it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
-    });
-
-    it("Verify Right side panel Can be expanded or collapsed", () => {
-      cy.verifyExpandCollpase();
-    });
-
-    it("Verify References tab is fixed as the user scrolls up or down", () => {
-      cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
-    });
-
-    context("Verify References tab", () => {
-      it("Verify References tab General Info", () => {
-        cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
-      });
-
-      it("Verify Add/Remove References", () => {
-        cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
-        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-        cy.drSelectReferences( "FM-00001" );
-        cy.drRemoveReferences({ reference: "FM-00001" });
-      });
-
-      it("Verify Referenced By, Training, Release Date and Form Info", () => {
-        cy.verifyReferencesOtherInfo();
-      });
-    });
-
-    context("Verify Revisions tab", () => {
-      it("Open revisions tab, click and verify current revision", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drClickRevisionsSidePanel();
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          cy.recCheckRevisionStage({ stage: "Revision A" });
-          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A");
-        });
-      });
-    });
-
-    context("Verify History tab", () => {
-      it("Open history tab and verify changes are being captured", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-          cy.drSelectHistoryTab();
-          cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-        });
-      });
-    });
-
-    context("Verify Access Permissions tab", () => {
-      it("Open access permissions tab", () => {
-        cy.drSelectPermissionTab();
-      });
-
-      it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
+          it("Verify that Form Options should appear for Overview tab", () => {
+            cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+            cy.verifyFormOptionsVisibility();
+          });
         });
       });
 
-      it("Open access permissions tab", () => {
-        cy.drSelectPermissionTab();
-      });
-
-      it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Company Admin");
+      context("Verify Details tab content", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
         });
-      });
-    });
 
-    context("Verify Bookmarks tab", () => {
-      it("Open bookmarks tab", () => {
-        cy.drSelectBookmarksTab();
-        cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
-      });
-    });
+        it("Verify predefined schema fields", () => {
+          cy.get("#sm-tabpanel-1").should("exist");
+          cy.contains("Select Form Document For Import").should("exist");
+          cy.contains("Select Output Document Type").should("exist");
+          cy.contains("EXCEL FOR IMPORT").should("exist");
+          cy.contains("Column Document/Record Id?").should("exist");
+          cy.contains("Download Excel Template").should("exist");
+          cy.contains("Upload excel with data for import").should("exist");
+          cy.contains("Mass Create Logs").should("exist");
+          cy.contains("Logs").should("exist");
+        });
 
-    context("Verify Revision History tab", () => {
-      it("Open revision history tab", () => {
-        cy.drSelectRevisionHistoryTab();
-        cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
-      });
-    });
-
-    context("Verify History tab content scroll", () => {
-      it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
-        cy.verifyHistoryScroll();
-      });
-    });
-  });
-});
-
-context("Approve and Release bulk import record", () => {
-  it("Navigate to Overview tab", () => {
-    cy.drSelectOverviewTab();
-  });
-
-  it("Add Approver", () => {
-    cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-  });
-
-  it("Submit for approval", () => {
-    cy.pmSubmitForApproval();
-  });
-
-  it("Approve bulk import record", () => {
-    cy.ebApprove();
-    // TO DO: User is getting logged out on Approve, needs to be fixed
-  });
-});
-
-context("Select exisiting released bulk import record", () => {
-  it("Navigate to Records", () => {
-    cy.navigToRecords();
-  });
-
-  it("Filter the Released record", () => {
-    cy.dlClearFilters();
-    cy.filterRecordState({ state: "Released" });
-  });
-
-  it("Filter by Record Id", () => {
-    cy.dlFilterByDocId({ docId: "BLC-00003" });
-  });
-
-  it("Select first record", () => {
-    cy.dlSelectFirstDocument();
-  });
-});
-
-context("Verify released bulk import record", () => {
-  it("Verify predefined fields", () => {
-    cy.get("[id='field-name']").contains("Test Bulk Import");
-  });
-
-  it("Verify record header details", () => {
-    cy.verifyDocumentHeaderDetails();
-    cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-  });
-
-  it("Verify tabs", () => {
-    cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-    cy.get("[data-cy=\"tabId.details\"]").should("exist");
-  });
-
-  context("Verify released bulk import record tabs content", () => {
-    context("Verify Overview tab content", () => {
-      it("Verify Overview as default selected tab", () => {
-        cy.verifySelectedTab({ tab: "overview" });
-      });
-
-      it("Verify tab as fixed", () => {
-        cy.verifyFixedTab();
-      });
-
-      it("Verify Approvals field", () => {
-        cy.verifyApprovalsField();
-      });
-
-      it("Verify that Form Options should appear for Overview tab", () => {
-        cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
-        cy.verifyFormOptionsVisibility();
-      });
-    });
-
-    context("Verify Details tab content", () => {
-      it("Navigate to Details tab", () => {
-        cy.drSelectDetailsTab();
-      });
-
-      it("Verify predefined schema fields", () => {
-        cy.get("#sm-tabpanel-1").should("exist");
-        cy.contains("Select Form Document For Import").should("exist");
-        cy.contains("Select Output Document Type").should("exist");
-        cy.contains("EXCEL FOR IMPORT").should("exist");
-        cy.contains("Column Document/Record Id?").should("exist");
-        cy.contains("Download Excel Template").should("exist");
-        cy.contains("Upload excel with data for import").should("exist");
-        cy.contains("Mass Create Logs").should("exist");
-        cy.contains("Logs").should("exist");
-      });
-
-      context("Verify Details tab added fields", () => {
         it("Verify Text Field", () => {
           cy.contains("fb-textfield").should("exist");
         });
@@ -768,95 +567,297 @@ context("Verify released bulk import record", () => {
         });
       });
     });
+
+    context("Verify Right side panel", () => {
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy=\"References\"]").should("exist");
+        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      });
+
+      it("Verify Right side panel Can be expanded or collapsed", () => {
+        cy.verifyExpandCollpase();
+      });
+
+      it("Verify References tab is fixed as the user scrolls up or down", () => {
+        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+      });
+
+      context("Verify References tab", () => {
+        it("Verify References tab General Info", () => {
+          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+        });
+
+        it("Verify Add/Remove References", () => {
+          cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
+          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+          cy.drSelectReferences( "FM-00001" );
+          cy.drRemoveReferences({ reference: "FM-00001" });
+        });
+
+        it("Verify Referenced By, Training, Release Date and Form Info", () => {
+          cy.verifyReferencesOtherInfo();
+        });
+      });
+
+      context("Verify Revisions tab", () => {
+        it("Open revisions tab, click and verify current revision", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drClickRevisionsSidePanel();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+            cy.recCheckRevisionStage({ stage: "Revision A" });
+            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A");
+          });
+        });
+      });
+
+      context("Verify History tab", () => {
+        it("Open history tab and verify changes are being captured", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+            cy.drSelectHistoryTab();
+            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+          });
+        });
+      });
+
+      context("Verify Access Permissions tab", () => {
+        it("Open access permissions tab", () => {
+          cy.drSelectPermissionTab();
+        });
+
+        it("Add another user permission", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+            cy.drAddUserFromPermissionTab(USERS[3].name);
+          });
+        });
+
+        it("Open access permissions tab", () => {
+          cy.drSelectPermissionTab();
+        });
+
+        it("Add another group permission", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.drAddGroupFromPermissionTab("Company Admin");
+          });
+        });
+      });
+
+      context("Verify Bookmarks tab", () => {
+        it("Open bookmarks tab", () => {
+          cy.drSelectBookmarksTab();
+          cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+        });
+      });
+
+      context("Verify Revision History tab", () => {
+        it("Open revision history tab", () => {
+          cy.drSelectRevisionHistoryTab();
+          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+        });
+      });
+
+      context("Verify History tab content scroll", () => {
+        it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
+          cy.verifyHistoryScroll();
+        });
+      });
+    });
   });
 
-  context("Verify Right side panel", () => {
-    it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+  context("Approve and Release bulk import record", () => {
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
-    it("Verify Right side panel Can be expanded or collapsed", () => {
-      cy.verifyExpandCollpase();
+    it("Add Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Verify References tab is fixed as the user scrolls up or down", () => {
-      cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
     });
 
-    context("Verify References tab", () => {
-      it("Verify References tab General Info", () => {
-        cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+    it("Approve bulk import record", () => {
+      cy.ebApprove();
+    // TO DO: User is getting logged out on Approve, needs to be fixed
+    });
+  });
+
+  context("Select exisiting released bulk import record", () => {
+    it("Navigate to Records", () => {
+      cy.navigToRecords();
+    });
+
+    it("Filter the Released record", () => {
+      cy.dlClearFilters();
+      cy.filterRecordState({ state: "Released" });
+    });
+
+    it("Filter by Record Id", () => {
+      cy.dlFilterByDocId({ docId: "BLC-00003" });
+    });
+
+    it("Select first record", () => {
+      cy.dlSelectFirstDocument();
+    });
+  });
+
+  context("Verify released bulk import record", () => {
+    it("Verify predefined fields", () => {
+      cy.get("[id='field-name']").contains("Test Bulk Import");
+    });
+
+    it("Verify record header details", () => {
+      cy.verifyDocumentHeaderDetails();
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
+
+    it("Verify tabs", () => {
+      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+    });
+
+    context("Verify released bulk import record tabs content", () => {
+      context("Verify Overview tab content", () => {
+        it("Verify Overview as default selected tab", () => {
+          cy.verifySelectedTab({ tab: "overview" });
+        });
+
+        it("Verify tab as fixed", () => {
+          cy.verifyFixedTab();
+        });
+
+        it("Verify Approvals field", () => {
+          cy.verifyApprovalsField();
+        });
+
+        it("Verify that Form Options should appear for Overview tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
+        });
       });
 
-      it("Verify References", () => {
-        cy.get("[data-cy=\"generalInfo\"]").should("contain.text", "References");
-      });
+      context("Verify Details tab content", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
 
-      it("Verify Referenced By, Training, Release Date and Form Info", () => {
-        cy.verifyReferencesOtherInfo();
-      });
-    });
+        it("Verify predefined schema fields", () => {
+          cy.get("#sm-tabpanel-1").should("exist");
+          cy.contains("Select Form Document For Import").should("exist");
+          cy.contains("Select Output Document Type").should("exist");
+          cy.contains("EXCEL FOR IMPORT").should("exist");
+          cy.contains("Column Document/Record Id?").should("exist");
+          cy.contains("Download Excel Template").should("exist");
+          cy.contains("Upload excel with data for import").should("exist");
+          cy.contains("Mass Create Logs").should("exist");
+          cy.contains("Logs").should("exist");
+        });
 
-    context("Verify Revisions tab", () => {
-      it("Open revisions tab, click and verify current revision", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drClickRevisionsSidePanel();
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          cy.recCheckRevisionStage({ stage: "Revision A" });
-          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A");
+        context("Verify Details tab added fields", () => {
+          it("Verify Text Field", () => {
+            cy.contains("fb-textfield").should("exist");
+          });
+
+          it("Verify Radio Button Group", () => {
+            cy.contains("fb-radiobutton-group").should("exist");
+          });
+
+          it("Verify that Form Options should appear for Details tab", () => {
+            cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+            cy.verifyFormOptionsVisibility();
+          });
         });
       });
     });
 
-    context("Verify History tab", () => {
-      it("Open history tab and verify changes are being captured", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-          cy.drSelectHistoryTab();
-          cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+    context("Verify Right side panel", () => {
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy=\"References\"]").should("exist");
+        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      });
+
+      it("Verify Right side panel Can be expanded or collapsed", () => {
+        cy.verifyExpandCollpase();
+      });
+
+      it("Verify References tab is fixed as the user scrolls up or down", () => {
+        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+      });
+
+      context("Verify References tab", () => {
+        it("Verify References tab General Info", () => {
+          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+        });
+
+        it("Verify References", () => {
+          cy.get("[data-cy=\"generalInfo\"]").should("contain.text", "References");
+        });
+
+        it("Verify Referenced By, Training, Release Date and Form Info", () => {
+          cy.verifyReferencesOtherInfo();
         });
       });
-    });
 
-    context("Verify Access Permissions tab", () => {
-      it("Open access permissions tab", () => {
-        cy.drSelectPermissionTab();
-      });
-
-      it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[4].name);
+      context("Verify Revisions tab", () => {
+        it("Open revisions tab, click and verify current revision", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drClickRevisionsSidePanel();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+            cy.recCheckRevisionStage({ stage: "Revision A" });
+            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A");
+          });
         });
       });
 
-      it("Open access permissions tab", () => {
-        cy.drSelectPermissionTab();
-      });
-
-      it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("User Management");
+      context("Verify History tab", () => {
+        it("Open history tab and verify changes are being captured", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+            cy.drSelectHistoryTab();
+            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+          });
         });
       });
-    });
 
-    context("Verify Bookmarks tab", () => {
-      it("Open bookmarks tab", () => {
-        cy.drSelectBookmarksTab();
-        cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+      context("Verify Access Permissions tab", () => {
+        it("Open access permissions tab", () => {
+          cy.drSelectPermissionTab();
+        });
+
+        it("Add another user permission", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+            cy.drAddUserFromPermissionTab(USERS[4].name);
+          });
+        });
+
+        it("Open access permissions tab", () => {
+          cy.drSelectPermissionTab();
+        });
+
+        it("Add another group permission", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.drAddGroupFromPermissionTab("User Management");
+          });
+        });
       });
-    });
 
-    context("Verify Revision History tab", () => {
-      it("Open revision history tab", () => {
-        cy.drSelectRevisionHistoryTab();
-        cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+      context("Verify Bookmarks tab", () => {
+        it("Open bookmarks tab", () => {
+          cy.drSelectBookmarksTab();
+          cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+        });
       });
-    });
 
-    context("Verify History tab content scroll", () => {
-      it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
-        cy.verifyHistoryScroll();
+      context("Verify Revision History tab", () => {
+        it("Open revision history tab", () => {
+          cy.drSelectRevisionHistoryTab();
+          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+        });
+      });
+
+      context("Verify History tab content scroll", () => {
+        it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
+          cy.verifyHistoryScroll();
+        });
       });
     });
   });
