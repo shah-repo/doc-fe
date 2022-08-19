@@ -49,7 +49,7 @@ context("Verify New Layout for Seed Document", () => {
       });
     });
 
-    it("[API]Login second tester", (done: any) => {
+    it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
       }).then((response) => {
@@ -102,7 +102,6 @@ context("Verify New Layout for Seed Document", () => {
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
-
   });
 
   context("Verify created form document", () => {
@@ -139,7 +138,6 @@ context("Verify New Layout for Seed Document", () => {
         });
 
         it("Verify that Form Options should appear for Overview tab", () => {
-
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
           cy.verifyFormOptionsVisibility();
         });
@@ -205,7 +203,6 @@ context("Verify New Layout for Seed Document", () => {
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
           cy.verifyFormOptionsVisibility();
         });
@@ -247,6 +244,10 @@ context("Verify New Layout for Seed Document", () => {
   });
 
   context("Create Seed document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromForm();
     });
@@ -259,7 +260,7 @@ context("Verify New Layout for Seed Document", () => {
       cy.drEnterDocumentDescription({ description: "Test Seed Description" });
     });
 
-    it("Click create document after filling document", () => {
+    it("Save document", () => {
       cy.drClickCreateSupplierWithApiCall();
     });
   });
@@ -303,7 +304,6 @@ context("Verify New Layout for Seed Document", () => {
         });
       });
 
-
       context("Verify Details tab content", () => {
         it("Navigate to Details tab", () => {
           cy.drSelectDetailsTab();
@@ -336,7 +336,6 @@ context("Verify New Layout for Seed Document", () => {
           });
 
           it("Verify that Form Options should appear for Details tab", () => {
-
             cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
             cy.verifyFormOptionsVisibility();
           });
@@ -404,7 +403,6 @@ context("Verify New Layout for Seed Document", () => {
       it("Add another user permission", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
           cy.drAddUserFromPermissionTab(USERS[2].name);
-
         });
       });
 
@@ -430,16 +428,6 @@ context("Verify New Layout for Seed Document", () => {
       it("Open revision history tab", () => {
         cy.drSelectRevisionHistoryTab();
         cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
-      });
-    });
-
-    context("Verify Migrate Form tab", () => {
-      it("Open migrate form tab", () => {
-        cy.drSelectMigrateFormTab();
-      });
-
-      it("Select migration form", () => {
-        cy.get("[data-cy=\"field-changeDocumentForm\"]").eq(0).arrowClick();
       });
     });
 
@@ -510,6 +498,10 @@ context("Verify New Layout for Seed Document", () => {
       it("Save document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+
+      it("Turn on autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
     });
   });
 });
@@ -565,7 +557,6 @@ context("Verify draft seed document", () => {
         });
 
         it("Verify that Form Options should appear for Overview tab", () => {
-
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
           cy.verifyFormOptionsVisibility();
         });
@@ -603,7 +594,6 @@ context("Verify draft seed document", () => {
       });
 
       it("Verify that Form Options should appear for Details tab", () => {
-
         cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
         cy.verifyFormOptionsVisibility();
       });
@@ -694,16 +684,6 @@ context("Verify draft seed document", () => {
       it("Open revision history tab", () => {
         cy.drSelectRevisionHistoryTab();
         cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
-      });
-    });
-
-    context("Verify Migrate Form tab", () => {
-      it("Open migrate form tab", () => {
-        cy.drSelectMigrateFormTab();
-      });
-
-      it("Select migration form", () => {
-        cy.get("[data-cy=\"field-changeDocumentForm\"]").eq(0).arrowClick();
       });
     });
 
@@ -802,7 +782,6 @@ context("Verify released seed document", () => {
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
-
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
           cy.verifyFormOptionsVisibility();
         });
@@ -891,12 +870,6 @@ context("Verify released seed document", () => {
       it("Open revision history tab", () => {
         cy.drSelectRevisionHistoryTab();
         cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
-      });
-    });
-
-    context("Verify Migrate Form tab", () => {
-      it("Migrate Form tab should not present", () => {
-        cy.get("[data-cy=\"form-migration-icon\"]").should("not.exist");
       });
     });
 
