@@ -889,6 +889,18 @@ context("Create new LHRT Layout Verification", () => {
     });
   });
 
+  context("Verify Book Mark", () => {
+    it("Verify Book Mark Navigation for Approval block", () => {
+      cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
+      cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+      cy.get("[data-cy=\"Bookmarks-detail\"] P").arrowClick();
+      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
+      cy.get("#sm-tabpanel-0").should("be.visible");
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").scrollIntoView();
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("be.visible");
+    });
+  });
+
 
   context("Release LHRT", () => {
     it("Approve and release MPI document", () => {
@@ -897,6 +909,7 @@ context("Create new LHRT Layout Verification", () => {
       });
     });
   });
+
 
   context("Verify Scroll", () => {
     it("Navigate to history tab", () => {
@@ -972,16 +985,6 @@ context("Create new LHRT Layout Verification", () => {
 
   });
 
-  context("Verify Book Mark", () => {
-    it("Verify Book Mark Navigation for Approval block", () => {
-      cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-      cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
-      cy.get("[data-cy=\"Bookmarks-detail\"] P").arrowClick();
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("be.visible");
-    });
-  });
 
 });
 
