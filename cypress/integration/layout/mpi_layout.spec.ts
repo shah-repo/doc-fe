@@ -340,7 +340,6 @@ context("Mpi Layout", () => {
 
       context("Verify that Procedure tab contains", () => {
         it("PI Procedure, Notes, Start, Accept, Rejected Qty - Predefined schema fields", () => {
-          cy.pause();
           cy.get(".fb-field-wrapper-mpi-procedure-built-in").should("exist");
           cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").should("exist");
           cy.get("[data-cy=\"form.builder.attachments\"]").should("exist");
