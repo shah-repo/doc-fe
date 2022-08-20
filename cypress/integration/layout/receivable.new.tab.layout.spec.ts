@@ -700,7 +700,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify Predefiend fields and form Options", () => {
-        cy.get(".formOptionsBox").should("not.exist");
+        cy.get(".formOptionsBox").should("exist");
       });
 
       it("Navigate to details Tab", () => {
@@ -979,16 +979,6 @@ context("Receiving landing page test", () => {
       });
     });
 
-    context("Verify Migrate Form", () => {
-      it("Verify Form Migration", () => {
-        cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Migrate Form-detail\"]").should("be.visible");
-        cy.get("[data-cy=\"field-changeDocumentForm\"]").should("be.visible");
-        cy.get("[data-cy=\"confirmButton\"]").should("be.visible");
-        cy.get("[data-cy=\"references-icon\"]").arrowClick();
-      });
-    });
-
   });
 
   context("Release document", () => {
@@ -1045,11 +1035,6 @@ context("Receiving landing page test", () => {
 
   context("Verify Layout for created receiving record in draft state", () => {
 
-    xit("Verify Predefined Fields Appear", () => {
-      cy.verifyPredefiendFields();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
-      cy.get("[data-cy=\"referenceTo\"]").should("exist");
-    });
 
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
       cy.get("[data-cy=\"tabId.overview\"]").should("exist");
@@ -1067,12 +1052,11 @@ context("Receiving landing page test", () => {
       cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
     });
 
-    xit("Verify Predefiend fields and form Options", () => {
-      cy.get(".formOptionsBox").should("not.exist");
-    });
 
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
+      cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
+        .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
     });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
@@ -1102,142 +1086,6 @@ context("Receiving landing page test", () => {
 
   });
 
-  xcontext("Validate Right Side Panel", () => {
-
-    it("Verify Reference tab Info", () => {
-      cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
-    });
-
-    it("Verify References selection Add Remove", () => {
-      cy.verifyAddRemoveReference({ formId: "FM-00001" });
-    });
-
-    it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
-      cy.verifyReferenceInfo();
-      cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00004");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", moment().format("YYYY.MM.DD"));
-    });
-
-    context("Verify Revision", () => {
-      it("open revision tab", () => {
-        cy.get("[data-cy=\"note-icon\"]").arrowClick();
-      });
-
-      it("Verify revision Rev Document open or not", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        cy.wait(2000);
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-
-      });
-    });
-
-    context("Verify User able to add Groups or other user permissions", () => {
-      it("Open permissions tab", () => {
-        cy.drSelectPermissionTab();
-      });
-
-      it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
-        });
-      });
-
-      it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Developers");
-        });
-      });
-    });
-
-    context("Check document history", () => {
-      const groupOne = "Developers";
-      let groupTwo;
-      const history = [
-        {
-          owner: USERS[1].name,
-          actions: [
-            { key: "Access granted to group", value: `Developers` },
-          ],
-        },
-        {
-          owner: USERS[1].name,
-          actions: [
-            { key: "Access granted to user", value: `${USERS[3].name}` },
-          ],
-        },
-      ];
-      it("Verify Doc history", () => {
-        cy.drSelectHistoryTab();
-      });
-      history.forEach((element, groupIndex) => {
-        it(`Check owner name for group ${groupIndex + 1}`, () => {
-          cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-        });
-        element.actions.forEach((action, index, identifier) => {
-          it(`'${action.key}' as '${action.value}' exists`, () => {
-            const typeOfChange = action.key;
-            let contentOfChange = action.value;
-
-            if (action.key === "New description" || action.key === "Description changed" ) {
-              contentOfChange = "\n" + action.value + "\n";
-            }
-
-            if (typeOfChange === "s3Link added") {
-              cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-              cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-            }
-            else {
-              if (action.key === "Access granted to group") {
-                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                  expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                });
-              }
-              else {
-                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                  .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                  .parent()
-                  .parent()
-                  .within(() => {
-                    cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                    cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                  });
-              }
-            }
-          });
-        });
-      });
-    });
-
-
-    xcontext("Verify Revision History", () => {
-      it.skip("Verify Revision History Items", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-      });
-    });
-
-    context("Verify Book Mark", () => {
-      it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
-      });
-    });
-
-    context("Verify Migrate Form", () => {
-      it("Verify Form Migration", () => {
-        cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Migrate Form-detail\"]").should("be.visible");
-        cy.get("[data-cy=\"field-changeDocumentForm\"]").should("be.visible");
-        cy.get("[data-cy=\"confirmButton\"]").should("be.visible");
-        cy.get("[data-cy=\"references-icon\"]").arrowClick();
-      });
-    });
-
-  });
 
   // End of draft state verification
 
@@ -1272,9 +1120,6 @@ context("Receiving landing page test", () => {
       cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
     });
 
-    xit("Verify Predefiend fields and form Options", () => {
-      cy.get(".formOptionsBox").should("not.exist");
-    });
 
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
@@ -1409,16 +1254,6 @@ context("Receiving landing page test", () => {
       });
     });
 
-
-    xcontext("Verify Revision History", () => {
-      it.skip("Verify Revision History Items", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-      });
-    });
 
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
