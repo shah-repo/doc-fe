@@ -890,11 +890,15 @@ context("Receiving landing page test", () => {
       it("Fill in Approval block and  Approve and release Record", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.wait(2000);
       });
 
       it("Approve and Release", () => {
+        // cy.pause();
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
+        // cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        // cy.listLoadingElementShouldNotExist();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
@@ -991,7 +995,7 @@ context("Receiving landing page test", () => {
 
     it("Click on create lot", () => {
       cy.get("[name=\"po-items-built-in\"] button").contains("Create Lot").first().arrowClick();
-      cy.get("[name^=\"received\"]").arrowType("200");
+      cy.get("[name^=\"received\"]").arrowType("100");
       cy.get("[data-cy=\"lotType\"]").arrowClick({ force: true })
         .autocompleteSelect("Lots");
 
@@ -1010,14 +1014,14 @@ context("Receiving landing page test", () => {
     });
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
-      cy.dlFilterByDocId({ docId: "LOT #22081702" });
+      cy.get(`[aria-colindex="5"] input`).arrowType("LFPO00002").wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
     });
 
     it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (WIP)", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
       cy.get("header li>p>div>a>div").should("have.text", "Lots");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LOT #22081702");
       cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
     });
 
@@ -1189,15 +1193,6 @@ context("Receiving landing page test", () => {
       });
     });
 
-    context("Verify Migrate Form", () => {
-      it("Verify Form Migration", () => {
-        cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Migrate Form-detail\"]").should("be.visible");
-        cy.get("[data-cy=\"field-changeDocumentForm\"]").should("be.visible");
-        cy.get("[data-cy=\"confirmButton\"]").should("be.visible");
-        cy.get("[data-cy=\"references-icon\"]").arrowClick();
-      });
-    });
 
   });
 
@@ -1248,14 +1243,13 @@ context("Receiving landing page test", () => {
 
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
-      cy.dlFilterByDocId({ docId: "LOT #22081702" });
+      cy.get(`[aria-colindex="5"] input`).arrowType("LFPO00002").wait(500);
       cy.dlSelectFirstDocument();
     });
 
     it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (ACCEPTED)", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.ACCEPTED });
       cy.get("header li>p>div>a>div").should("have.text", "Lots");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LOT #22081702");
       cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
     });
 
@@ -1295,7 +1289,9 @@ context("Receiving landing page test", () => {
     });
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
-      cy.dlFilterByDocId({ docId: "LOT #22081703" });
+      cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick();
+      cy.get("li").contains("WIP").arrowClick().wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
     });
 
@@ -1463,16 +1459,6 @@ context("Receiving landing page test", () => {
         cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
       });
     });
-
-    context("Verify Migrate Form", () => {
-      it("Verify Form Migration", () => {
-        cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Migrate Form-detail\"]").should("be.visible");
-        cy.get("[data-cy=\"field-changeDocumentForm\"]").should("be.visible");
-        cy.get("[data-cy=\"confirmButton\"]").should("be.visible");
-        cy.get("[data-cy=\"references-icon\"]").arrowClick();
-      });
-    });
   });
 
   context("Verify Scroll", () => {
@@ -1506,21 +1492,24 @@ context("Receiving landing page test", () => {
 
     it("Fill in Approval block and  Approve and release Record", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
     });
 
     it("Save the document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("click for approval", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
     });
 
     it("Approve and Release", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostApprovalsApprove,
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
       cy.checkToastMessage({ exists: false });
