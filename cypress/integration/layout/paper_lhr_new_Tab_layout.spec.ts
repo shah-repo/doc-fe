@@ -40,7 +40,7 @@ let approvalRequestDocumentType;
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 
-context("LHR tab Layout", () => {
+context("Paper LHR tab Layout", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
