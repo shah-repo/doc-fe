@@ -589,6 +589,7 @@ context("LHR tab Layout", () => {
       });
 
       it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
+        cy.get("[data-cy=\"lhr-selected-part\"]").scrollIntoView();
         cy.get("[data-cy=\"lhr-selected-part\"]").should("be.visible");
         cy.get("[name=\"lhr_initial_quantity\"]").should("be.visible");
         cy.get("[name=\"lhr-end-quantity\"]").should("be.visible");
@@ -872,16 +873,6 @@ context("LHR tab Layout", () => {
       });
     });
 
-    context("Verify Migrate Form", () => {
-      it("Verify Form Migration", () => {
-        cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Migrate Form-detail\"]").should("be.visible");
-        cy.get("[data-cy=\"field-changeDocumentForm\"]").should("be.visible");
-        cy.get("[data-cy=\"confirmButton\"]").should("be.visible");
-        cy.get("[data-cy=\"references-icon\"]").arrowClick();
-      });
-    });
-
   });
 
 
@@ -956,7 +947,8 @@ context("LHR tab Layout", () => {
     });
 
     it("Select the LHR", () => {
-      cy.dlFilterByDocId({ docId: "LOT #22081701RD" });
+      cy.get(`[aria-colindex="9"] input`).arrowType("LHR-00001").wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
     });
 
@@ -989,6 +981,7 @@ context("LHR tab Layout", () => {
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
+          cy.get("[data-cy=\"lhr-selected-part\"]").scrollIntoView();
           cy.get("[data-cy=\"lhr-selected-part\"]").should("be.visible");
           cy.get("[name=\"lhr_initial_quantity\"]").should("be.visible");
           cy.get("[name=\"lhr-end-quantity\"]").should("be.visible");
@@ -1181,7 +1174,8 @@ context("LHR tab Layout", () => {
     });
 
     it("Select the LHR", () => {
-      cy.dlFilterByDocId({ docId: "LOT #22081701RD" });
+      cy.get(`[aria-colindex="9"] input`).arrowType("LHR-00002").wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
     });
 
@@ -1193,7 +1187,7 @@ context("LHR tab Layout", () => {
       it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Relsd)", () => {
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.get("header li>p>div>a>div").should("have.text", "LHR");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LHR-00001");
+        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LHR-00002");
         cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
       });
 
