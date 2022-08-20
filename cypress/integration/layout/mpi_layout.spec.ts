@@ -333,13 +333,14 @@ context("Mpi Layout", () => {
 
           it("Click on view less description should be collapsed", () => {
             cy.get("[data-cy=\"description\"] button").arrowClick();
-            cy.get("div[class^=\"rdw-editor-toolbar\"]").should("not.exist");
+            cy.get("[data-cy=\"description\"] .rdw-editor-toolbar").should("not.exist");
           });
         });
       });
 
       context("Verify that Procedure tab contains", () => {
         it("PI Procedure, Notes, Start, Accept, Rejected Qty - Predefined schema fields", () => {
+          cy.pause();
           cy.get(".fb-field-wrapper-mpi-procedure-built-in").should("exist");
           cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").should("exist");
           cy.get("[data-cy=\"form.builder.attachments\"]").should("exist");
