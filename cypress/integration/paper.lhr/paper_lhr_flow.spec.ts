@@ -403,7 +403,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context.skip("Verify email form notification", () => {
+  context("Verify email form notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -437,7 +437,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context.skip("Verify that zip file containing pdf downloaded", () => {
+  context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing Approval request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -473,7 +473,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context.skip("Verify PDF file content", () => {
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content from form", () => {
       cy.pdfparseFile(
         {
@@ -591,7 +591,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context.skip("Verify all data and predefined fields are present", () => {
+  context("Verify all data and predefined fields are present", () => {
     it("Verify 'Part to be Manufactured' is displayed", () => {
       cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist")
         .parent().parent().parent().parent().next()
@@ -681,7 +681,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context.skip("Verify email form notification", () => {
+  context("Verify email form notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -715,7 +715,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context.skip("Verify that zip file containing pdf downloaded", () => {
+  context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing Approval request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -751,7 +751,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context.skip("Verify PDF file content", () => {
+  context("Verify PDF file content", () => {
     it("Extract texts from PDF file content from form", () => {
       cy.pdfparseFile(
         {
