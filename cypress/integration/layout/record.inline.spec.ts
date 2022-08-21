@@ -207,7 +207,7 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
           cy.drClickCreateDocumentWithApiCall();
         });
       });
@@ -357,9 +357,7 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Navigate to Details tab", () => {
@@ -438,7 +436,7 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
           cy.drClickCreateDocumentWithApiCall();
         });
       });
@@ -515,39 +513,57 @@ context("Record inline Flow", () => {
         });
       });
 
+      context("Verify User able to add Groups or other user permissions", () => {
+        it("Open permissions tab", () => {
+          cy.drSelectPermissionTab();
+        });
+
+        it("Add another user permission", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+            cy.drAddUserFromPermissionTab(USERS[3].name);
+          });
+        });
+
+        it("Add another group permission", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.drAddGroupFromPermissionTab("Developers");
+          });
+        });
+      });
+
       context("Check document history", () => {
-        let groupOne;
+        const groupOne = "Developers";
         let groupTwo;
         const history = [
           {
             owner: USERS[2].name,
             actions: [
-              { key: "Approver Removed", value: `${USERS[3].name}` },
+              { key: "Access granted to group", value: `Developers` },
             ],
           },
           {
             owner: USERS[2].name,
             actions: [
-              { key: "Approver Added", value: `${USERS[3].name}` },
+              { key: "Access granted to user", value: `${USERS[3].name}` },
             ],
           },
         ];
         it("Verify Doc history", () => {
           cy.drSelectHistoryTab();
         });
+
         history.forEach((element, groupIndex) => {
           it(`Check owner name for group ${groupIndex + 1}`, () => {
             cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
           });
+
           element.actions.forEach((action, index, identifier) => {
             it(`'${action.key}' as '${action.value}' exists`, () => {
               const typeOfChange = action.key;
               let contentOfChange = action.value;
-
               if (action.key === "New description" || action.key === "Description changed" ) {
                 contentOfChange = "\n" + action.value + "\n";
               }
-
               if (typeOfChange === "s3Link added") {
                 cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
                 cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
@@ -574,23 +590,6 @@ context("Record inline Flow", () => {
         });
       });
 
-      context("Verify User able to add Groups or other user permissions", () => {
-        it("Open permissions tab", () => {
-          cy.drSelectPermissionTab();
-        });
-
-        it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
-          });
-        });
-
-        it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Developers");
-          });
-        });
-      });
 
       context("Verify Revision History", () => {
         xit("Verify Revision History Items", () => {

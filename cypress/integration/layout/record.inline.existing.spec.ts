@@ -323,7 +323,7 @@ context("Record inline Flow", () => {
       });
     });
 
-    xcontext("Verify Predefiend fields and tabs", () => {
+    context("Verify Predefiend fields and tabs", () => {
       it("Verify Predefiend Tabs Exist", () => {
         cy.get("[data-cy=\"tabId.overview\"]").should("exist");
         cy.get("[data-cy=\"tabId.details\"]").should("exist");
@@ -338,7 +338,7 @@ context("Record inline Flow", () => {
       });
     });
 
-    xcontext("Verify Overview  Tab", () => {
+    context("Verify Overview  Tab", () => {
       it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("header li>p>div>a>div").should("have.text", "Document List");
@@ -586,7 +586,6 @@ context("Record inline Flow", () => {
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
@@ -595,13 +594,28 @@ context("Record inline Flow", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Change text to  'Second entry' in textfield for inline", () => {
+      it("Change text to 'Second entry' in textfield for inline", () => {
         cy.get("[name^=\"first-textfield-for-inline\"]").arrowType("Second entry");
-        cy.unClick();
+        cy.wait(2000);
       });
 
       it("Approve Second Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.PostApprovalsApprove,
+          CyRoutes.SessionDetails], () => {
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      xit("Approve Second Inline Approval", () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick({ force: true });
+
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
@@ -626,7 +640,7 @@ context("Record inline Flow", () => {
       });
 
       it("Approve Second Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
@@ -722,8 +736,6 @@ context("Record inline Flow", () => {
       cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
       cy.get("#sm-tabpanel-0").should("be.visible");
       cy.get("[data-cy=\"attachment\"]").should("exist");
-      cy.get("[data-cy=\"attachment\"]").should("exist");
-      cy.get("[data-cy=\"documentType\"]").should("exist");
     });
 
     it("Verify that the existing fields were migrated properly and that content for both the tabs", () => {
@@ -754,7 +766,6 @@ context("Record inline Flow", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostApprovalsApprove,
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.SessionDetails], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
@@ -773,7 +784,6 @@ context("Record inline Flow", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostApprovalsApprove,
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.SessionDetails], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
@@ -788,23 +798,6 @@ context("Record inline Flow", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostApprovalsApprove,
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.SessionDetails], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    xit("Approve all the Inlines", () => {
-      cy.drSelectOverviewTab();
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostApprovalsApprove,
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.SessionDetails], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
@@ -823,6 +816,8 @@ context("Record inline Flow", () => {
 
     it("Select the Records", () => {
       cy.dlFilterByDocId({ docId: "RD-00004" });
+      cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+      cy.get("li").contains("Released").arrowClick().wait(500);
       cy.dlSelectFirstDocument();
     });
 
@@ -830,16 +825,14 @@ context("Record inline Flow", () => {
       cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
       cy.get("#sm-tabpanel-0").should("be.visible");
       cy.get("[data-cy=\"attachment\"]").should("exist");
-      cy.get("[data-cy=\"documentType\"]").should("exist");
     });
 
     it("Verify that the existing fields were migrated properly and that content for both the tabs", () => {
       cy.get("[name^=\"fb-select-field\"]").should("have.attr", "value", "option2");
       cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
-      cy.get("[data-cy^=\"fb-ia-first-inline-field\"]").should("exist");
-      cy.get("[data-cy^=\"fb-ia-second-inline-field\"]").should("exist");
+      cy.get("[name^=\"first-textfield-for-inline\"]").should("exist");
       cy.drSelectDetailsTab();
-      cy.get("[data-cy^=\"fb-ia-firstd-inline-field\"]").should("exist");
+      cy.get("[data-cy=\"Textfield for inline\"]").should("exist");
       cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
     });
 
@@ -852,7 +845,6 @@ context("Record inline Flow", () => {
       cy.verifyFixedTab();
     });
   });
-
 });
 
 export { };

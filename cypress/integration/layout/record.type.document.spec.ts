@@ -98,7 +98,7 @@ context("Record type Document Layout verification", () => {
 
   });
 
-  context.skip("Login user", () => {
+  context("Login user", () => {
     it("Logs user in", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
@@ -277,7 +277,10 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Verify Predefiend fields up to attachment", () => {
-        cy.verifyPredefiendFields();
+        cy.get("[data-cy=\"field-name\"]").should("exist");
+        cy.get("[data-cy=\"description\"]").should("exist");
+        cy.get("[data-cy=\"select.document.documentType.id\"]").should("exist");
+        cy.get("[data-cy=\"field-document.docId\"]").should("exist");
       });
     });
 
@@ -360,41 +363,6 @@ context("Record type Document Layout verification", () => {
         });
       });
 
-      context("Check document history", () => {
-        it("Open history drawer and compare history values", () => {
-          cy.drSelectHistoryTab();
-        });
-
-        xit("Verify scroll to on history tab", () => {
-          cy.drSelectHistoryTab();
-          cy.get(`[data-cy="History-detail"]`).realHover();
-          cy.get("[data-cy=\"History-detail\"]").scrollTo("bottom");
-        });
-        history.forEach((element, groupIndex) => {
-          it(`Check owner name for group ${groupIndex + 1}`, () => {
-            cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-          });
-
-          element.actions.forEach((action, index) => {
-            it(`'${action.key}' as '${action.value}' exists`, () => {
-              const typeOfChange = action.key;
-              let contentOfChange = action.value;
-              if (action.key === "New description" || action.key === "Description changed" ) {
-                contentOfChange = "\n" + action.value + "\n";
-              }
-              cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                .parent()
-                .parent()
-                .within(() => {
-                  cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                  cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                });
-            });
-          });
-        });
-      });
-
       context("Verify User able to add Groups or other user permissions", () => {
         it("Open permissions tab", () => {
           cy.drSelectPermissionTab();
@@ -402,7 +370,7 @@ context("Record type Document Layout verification", () => {
 
         it("Add another user permission", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[2].name);
+            cy.drAddUserFromPermissionTab(USERS[3].name);
           });
         });
 
@@ -413,14 +381,68 @@ context("Record type Document Layout verification", () => {
         });
       });
 
-      context("Verify Revision History", () => {
-        xit("Verify Revision History Items", () => {
-          cy.get("[data-cy='note-icon']").arrowClick();
-          cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-          cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-          cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[1].name);
-          cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
+      context("Check document history", () => {
+        const groupOne = "Developers";
+        let groupTwo;
+        const history = [
+          {
+            owner: USERS[1].name,
+            actions: [
+              { key: "Access granted to group", value: `Developers` },
+            ],
+          },
+          {
+            owner: USERS[1].name,
+            actions: [
+              { key: "Access granted to user", value: `${USERS[3].name}` },
+            ],
+          },
+        ];
+        it("Verify Doc history", () => {
+          cy.drSelectHistoryTab();
         });
+
+        history.forEach((element, groupIndex) => {
+          it(`Check owner name for group ${groupIndex + 1}`, () => {
+            cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
+          });
+
+          element.actions.forEach((action, index, identifier) => {
+            it(`'${action.key}' as '${action.value}' exists`, () => {
+              const typeOfChange = action.key;
+              let contentOfChange = action.value;
+              if (action.key === "New description" || action.key === "Description changed" ) {
+                contentOfChange = "\n" + action.value + "\n";
+              }
+              if (typeOfChange === "s3Link added") {
+                cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
+                cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
+              }
+              else {
+                if (action.key === "Access granted to group") {
+                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
+                    expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
+                  });
+                }
+                else {
+                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
+                    .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
+                    .parent()
+                    .parent()
+                    .within(() => {
+                      cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
+                      cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
+                    });
+                }
+              }
+            });
+          });
+        });
+      });
+
+
+      context("Fill and Approve Released", () => {
+
 
         it("Checkbox option 1 checked", () => {
           cy.drSelectDetailsTab();
@@ -464,7 +486,6 @@ context("Record type Document Layout verification", () => {
 
     it("Verify Predefined Fields", () => {
       cy.get("[data-cy=\"field-name\"]").should("exist");
-      cy.get("[data-cy=\"description\"]").should("exist");
     });
 
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
@@ -523,23 +544,6 @@ context("Record type Document Layout verification", () => {
       cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
     });
 
-    context("Verify User able to add Groups or other user permissions", () => {
-      it("Open permissions tab", () => {
-        cy.drSelectPermissionTab();
-      });
-
-      it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
-        });
-      });
-
-      it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Developers");
-        });
-      });
-    });
   });
 });
 

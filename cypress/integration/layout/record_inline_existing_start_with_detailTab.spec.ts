@@ -14,7 +14,7 @@ let secondEmployee;
 let adminEmployee;
 let RDdocumentType;
 
-context("Record inline Flow", () => {
+context("Record inline Flow with detail ", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -505,16 +505,17 @@ context("Record inline Flow", () => {
       it("Fill in Approval block and  Approve and release Record", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[2].name}`);
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and Release", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
