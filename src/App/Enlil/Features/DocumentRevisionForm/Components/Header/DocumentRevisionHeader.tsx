@@ -24,7 +24,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
           />
         )}
       </Observer>
-      <RedlineBanner/>      
+      <RedlineBanner/>
     </Box>
   );
 };

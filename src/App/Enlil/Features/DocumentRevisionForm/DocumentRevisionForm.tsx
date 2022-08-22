@@ -159,7 +159,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
             bannerPortal,
             shouldShowUpgrade,
           }}
-        />       
+        />
         <Observer>
           {() => (
             <SMTemplate
