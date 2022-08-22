@@ -204,16 +204,11 @@ Cypress.Commands.add("verifyDescriptionToolbar", () => {
   cy.get("div[title=\"Outdent\"]").should("exist");
   cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
   cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
-  cy.get("[title=\"Block Type\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
-  cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+  cy.get("[data-cy=\"description\"][aria-label=\"rdw-font-size-control\"]").should("not.exist");
+  cy.get("[data-cy=\"description\"][aria-label=\"rdw-font-family-control\"]").should("not.exist");
   cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
   cy.get("[aria-label=\"rdw-color-picker\"]").should("exist");
   cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
-  cy.get("[title=\"Block Type\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
 });
 
 
