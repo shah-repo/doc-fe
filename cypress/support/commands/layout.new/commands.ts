@@ -25,6 +25,8 @@ declare global {
       verifyAddRemoveReference({ formId }): Chainable;
       verifyHistoryTab(history, groupOne, groupTwo): Chainable;
       verifyDescriptionToolbar(): Chainable;
+      verifyHeaderInfoContent(HeaderInfo): Chainable;
+      isTabActive(tabInfo): Chainable;
     }
   }
 }
@@ -209,6 +211,23 @@ Cypress.Commands.add("verifyDescriptionToolbar", () => {
   cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
   cy.get("[aria-label=\"rdw-color-picker\"]").should("exist");
   cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyHeaderInfoContent", (HeaderInfo) => {
+  if (HeaderInfo.status) {
+    cy.drCheckDocumentStatus({ status: HeaderInfo.status });
+  }
+  cy.get("[data-cy=\"Header-listIcon\"]").should("exist");
+  cy.get("[data-cy=\"Header-listTitle\"]").should("have.text", HeaderInfo.title);
+  if (HeaderInfo.docId) {
+    cy.get("[data-cy='HeaderInfo-docId']").should("contain.text", HeaderInfo.docId);
+  }
+  cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", HeaderInfo.revision);
+});
+
+Cypress.Commands.add("isTabActive", (tabInfo) => {
+  cy.get(`[data-cy="tabCon-tabId.${tabInfo.name}"]`).should("have.attr", "aria-selected", "true");
+  cy.get(`#sm-tabpanel-${tabInfo.index}`).should("be.visible");
 });
 
 
