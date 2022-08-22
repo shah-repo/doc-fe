@@ -571,7 +571,7 @@ context("Export maintenance record", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
       cy.unClick();
     });
 
@@ -749,7 +749,6 @@ context("Export maintenance record", () => {
 
       it("Save the document", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
