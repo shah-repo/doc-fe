@@ -21,11 +21,11 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   const dropDownData = [
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
-      value: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
+      value: true,
     },
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
-      value: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
+      value: false,
     },
   ];
   const isEdit = dataItem.inEdit;
@@ -45,7 +45,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
       dataItem,
       field,
       syntheticEvent: e.syntheticEvent,
-      value: e.target.value.value === "Active",
+      value: e.target.value.value,
     });
   };
   field = field || "";
@@ -64,7 +64,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
           disabled={disabled}
           onChange={handleChange}
           value={
-            dropDownData.find((c) => c.value === dropDownValue ) || dropDownData[0]
+            dropDownData.find((c) => c.value === dataValue ) || dropDownData[0]
           }
           data={dropDownData}
           textField="text"
