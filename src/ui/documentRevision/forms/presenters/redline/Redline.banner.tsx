@@ -1,17 +1,12 @@
-import { Box, Portal } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { companyActions, companySelectors } from "../../../../../state/ducks/company";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 
-interface Props {
-  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
-}
 
-const RedlineBanner: React.FunctionComponent<Props> = ({
-  bannerPortal,
-}) => {
+const RedlineBanner: React.FunctionComponent = () => {
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const dispatch = useDispatch();
 
@@ -27,10 +22,8 @@ const RedlineBanner: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {
-        <Portal container={bannerPortal?.current}>
-          <Box
-            bgcolor="secondary.main"
+      <Box
+            bgcolor={Colors.red}
             color={Colors.white}
             fontWeight="bold"
             padding="10px"
@@ -39,9 +32,6 @@ const RedlineBanner: React.FunctionComponent<Props> = ({
           >
             <Text translation="common.redline.message" />
           </Box>
-        </Portal>
-
-      }
     </>
   ); };
 
