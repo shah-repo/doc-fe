@@ -269,10 +269,18 @@ context("Verify Paper LHR", () => {
       it("navigate to matrix details tab", () => {
         cy.drSelectMatrixDetailsTab();
       });
+
+      it(`Verify '${paperLhrDocType}' have acronym 'LHR-'`, () => {
+        cy.contains(paperLhrDocType).parent()
+          .prev().prev().should("have.text", "LHR-");
+      });
+
+      it(`Verify '${paperLhrDocType}' have internal group 'PAPER_LHR'`, () => {
+        cy.contains(paperLhrDocType).parent()
+          .prev().should("have.text", "PAPER_LHR");
+      });
     });
   });
-
-
 });
 
 export { };
