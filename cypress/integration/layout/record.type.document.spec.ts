@@ -12,16 +12,6 @@ let loginResponse;
 
 let developersGroup;
 let adminEmployee;
-const owner = USERS[1].name;
-
-const history = [
-  {
-    owner,
-    actions: [
-      { key: "Description changed", value: `Test Description for record one` },
-    ],
-  },
-];
 
 context("Record type Document Layout verification", () => {
   before(() => {
