@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_FILTER_TEXT } from "../../../src/state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -109,7 +110,7 @@ context("Verify New Layout for Supplier Document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
       cy.verifyDefaultFields();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+      cy.get(`[data-cy="field-outputDocumentTypes"]`).should("exist");
     });
 
     it("Verify document header details", () => {
@@ -118,12 +119,11 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     it("Verify Overview as default selected tab", () => {
-      cy.verifySelectedTab({ tab: "overview" });
+      cy.isTabActive({ name: "overview", index: 0 });
     });
 
     it("Verify tab as fixed", () => {
@@ -135,7 +135,7 @@ context("Verify New Layout for Supplier Document", () => {
         it("Verify Overview tab default fields", () => {
           cy.get("#sm-tabpanel-0").should("exist");
           cy.verifyDefaultFields();
-          cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+          cy.get(`[data-cy="field-outputDocumentTypes"]`).should("exist");
         });
 
         it("Verify Approvals field as predefined schema", () => {
@@ -218,8 +218,8 @@ context("Verify New Layout for Supplier Document", () => {
   context("Verify created supplier document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+      cy.get(`[data-cy="field-revisionStage"]`).should("exist");
+      cy.get(`[data-cy="AttachmentFieldPresenter-field"]`).should("exist");
     });
 
     it("Verify document header details", () => {
@@ -228,14 +228,14 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.get(`[data-cy="tabId.overview"]`).should("exist");
+      cy.get(`[data-cy="tabId.details"]`).should("exist");
     });
 
     context("Verify created supplier document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -245,8 +245,8 @@ context("Verify New Layout for Supplier Document", () => {
         context("Verify Overview tab content", () => {
           it("Verify Overview tab default fields", () => {
             cy.get("#sm-tabpanel-0").should("exist");
-            cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-            cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+            cy.get(`[data-cy="field-revisionStage"]`).should("exist");
+            cy.get(`[data-cy="AttachmentFieldPresenter-field"]`).should("exist");
           });
 
           it("Verify Approvals field", () => {
@@ -284,8 +284,7 @@ context("Verify New Layout for Supplier Document", () => {
 
   context("Verify Right side panel", () => {
     it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.verifyReferencesTabAsActive();
     });
 
     it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -293,7 +292,7 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Verify References tab is fixed as the user scrolls up or down", () => {
-      cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+      cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
     });
 
     context("Verify References tab", () => {
@@ -302,10 +301,7 @@ context("Verify New Layout for Supplier Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
-        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-        cy.drSelectReferences( "FM-00001" );
-        cy.drRemoveReferences({ reference: "FM-00001" });
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -315,12 +311,7 @@ context("Verify New Layout for Supplier Document", () => {
 
     context("Verify Revisions tab", () => {
       it("Open revisions tab, click and verify current revision", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drClickRevisionsSidePanel();
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          cy.recCheckRevisionStage({ stage: "Revision 1" });
-          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-        });
+        cy.openRevisionsTabAndVerifyCurrentRevision("1");
       });
     });
 
@@ -328,7 +319,7 @@ context("Verify New Layout for Supplier Document", () => {
       it("Open history tab and verify changes are being captured", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
           cy.drSelectHistoryTab();
-          cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+          cy.get(`[data-cy="History-detail"]`).should("be.visible");
         });
       });
     });
@@ -357,14 +348,14 @@ context("Verify New Layout for Supplier Document", () => {
       });
 
       it("Verify if Approvals bookmark is present", () => {
-        cy.get("[data-cy=\"Bookmarks-detail\"]").find("p").should("contain.text", "Approvals");
+        cy.get(`[data-cy="Bookmarks-detail"]`).find("p").should("contain.text", "Approvals");
       });
     });
 
     context("Verify Revision History tab", () => {
       it("Open revision history tab", () => {
         cy.drSelectRevisionHistoryTab();
-        cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+        cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
       });
     });
 
@@ -381,12 +372,12 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Fill Text Field and check for autosave", () => {
-      cy.get("[name^=fb-textfield-]").arrowType("Supplier Text Field");
+      cy.get(`[name^=fb-textfield-]`).arrowType("Supplier Text Field");
       cy.unClick();
     });
 
     it("Select radio button option", () => {
-      cy.get("[name^=\"fb-radiobutton-group-\"]").last().arrowClick();
+      cy.get(`[name^="fb-radiobutton-group-"]`).last().arrowClick();
     });
 
     it("Save document", () => {
@@ -403,7 +394,7 @@ context("Verify New Layout for Supplier Document", () => {
 
     it("Filter the Draft document", () => {
       cy.dlClearFilters();
-      cy.supFilterByState({ state: "Draft" });
+      cy.supFilterByState({ state: STATUS_FILTER_TEXT.DRAFT });
     });
 
     it("Select 'Test Supplier' document'", () => {
@@ -415,8 +406,8 @@ context("Verify New Layout for Supplier Document", () => {
   context("Verify supplier draft document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+      cy.get(`[data-cy="field-revisionStage"]`).should("exist");
+      cy.get(`[data-cy="AttachmentFieldPresenter-field"]`).should("exist");
     });
 
     it("Verify document header details", () => {
@@ -425,14 +416,13 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify draft supplier document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -442,8 +432,8 @@ context("Verify New Layout for Supplier Document", () => {
         context("Verify Overview tab content", () => {
           it("Verify Overview tab default fields", () => {
             cy.get("#sm-tabpanel-0").should("exist");
-            cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-            cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+            cy.get(`[data-cy="field-revisionStage"]`).should("exist");
+            cy.get(`[data-cy="AttachmentFieldPresenter-field"]`).should("exist");
           });
 
           it("Verify Approvals field", () => {
@@ -480,8 +470,7 @@ context("Verify New Layout for Supplier Document", () => {
 
     context("Verify Right side panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.verifyReferencesTabAsActive();
       });
 
       it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -489,7 +478,7 @@ context("Verify New Layout for Supplier Document", () => {
       });
 
       it("Verify References tab is fixed as the user scrolls up or down", () => {
-        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+        cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
       });
 
       context("Verify References tab", () => {
@@ -498,10 +487,7 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
-          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-          cy.drSelectReferences( "FM-00001" );
-          cy.drRemoveReferences({ reference: "FM-00001" });
+          cy.verifyAddRemoveReference({ formId: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -511,12 +497,7 @@ context("Verify New Layout for Supplier Document", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision 1" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-          });
+          cy.openRevisionsTabAndVerifyCurrentRevision("1");
         });
       });
 
@@ -524,7 +505,7 @@ context("Verify New Layout for Supplier Document", () => {
         it("Open history tab and verify changes are being captured", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
             cy.drSelectHistoryTab();
-            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+            cy.get(`[data-cy="History-detail"]`).should("be.visible");
           });
         });
       });
@@ -553,14 +534,14 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify if Approvals bookmark is present", () => {
-          cy.get("[data-cy=\"Bookmarks-detail\"]").find("p").should("contain.text", "Approvals");
+          cy.get(`[data-cy="Bookmarks-detail"]`).find("p").should("contain.text", "Approvals");
         });
       });
 
       context("Verify Revision History tab", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
-          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+          cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
         });
       });
 
@@ -593,7 +574,7 @@ context("Verify New Layout for Supplier Document", () => {
 
     it("Filter the Released document", () => {
       cy.dlClearFilters();
-      cy.supFilterByState({ state: "Released" });
+      cy.supFilterByState({ state: STATUS_FILTER_TEXT.RELEASED });
     });
 
     it("Select 'Test Supplier' document'", () => {
@@ -604,8 +585,8 @@ context("Verify New Layout for Supplier Document", () => {
 
   context("Verify supplier released document", () => {
     it("Verify predefined fields", () => {
-      cy.get("[id='field-name']").contains("Test Supplier");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Test Supplier Description");
+      cy.get(`[id='field-name']`).contains("Test Supplier");
+      cy.get(`[data-cy="BaseWithhtml-editor"]`).contains("Test Supplier Description");
     });
 
     it("Verify document header details", () => {
@@ -614,14 +595,13 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify released supplier document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -664,8 +644,7 @@ context("Verify New Layout for Supplier Document", () => {
 
     context("Verify Right side panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.verifyReferencesTabAsActive();
       });
 
       it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -673,7 +652,7 @@ context("Verify New Layout for Supplier Document", () => {
       });
 
       it("Verify References tab is fixed as the user scrolls up or down", () => {
-        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+        cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
       });
 
       context("Verify References tab", () => {
@@ -682,7 +661,7 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify References", () => {
-          cy.get("[data-cy=\"generalInfo\"]").should("contain.text", "References");
+          cy.get(`[data-cy="generalInfo"]`).should("contain.text", "References");
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -692,12 +671,7 @@ context("Verify New Layout for Supplier Document", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision 1" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-          });
+          cy.openRevisionsTabAndVerifyCurrentRevision("1");
         });
       });
 
@@ -705,7 +679,7 @@ context("Verify New Layout for Supplier Document", () => {
         it("Open history tab and verify changes are being captured", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
             cy.drSelectHistoryTab();
-            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
+            cy.get(`[data-cy="History-detail"]`).should("be.visible");
           });
         });
       });
@@ -734,14 +708,14 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify if Approvals bookmark is present", () => {
-          cy.get("[data-cy=\"Bookmarks-detail\"]").find("p").should("contain.text", "Approvals");
+          cy.get(`[data-cy="Bookmarks-detail"]`).find("p").should("contain.text", "Approvals");
         });
       });
 
       context("Verify Revision History tab", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
-          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+          cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
         });
       });
 
