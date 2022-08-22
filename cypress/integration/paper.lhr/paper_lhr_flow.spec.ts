@@ -47,7 +47,7 @@ const currentDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
 const arID = "AR-00003";
 const partDocumentTitle = "Material one";
 
-context("Document Approval Matrix Revise", () => {
+context("Paper Lot History Record", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -325,7 +325,9 @@ context("Document Approval Matrix Revise", () => {
         .parent().parent().parent().parent().next()
         .should("have.text", "The End Quantity is a required field.");
     });
+  });
 
+  context("Add fields into the form", () => {
     it("Add TextField with validation", () => {
       cy.fbAddNewFieldWhenHidden2ndLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
@@ -639,7 +641,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context("Navigate to document list and check data on landing page", () => {
+  context("Navigate to document list and check data on landing page and open it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -681,7 +683,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context("Verify email form notification", () => {
+  context("Verify email notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -871,7 +873,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context("Click to revise Verify all data and predefined fields are present", () => {
+  context("Click to revise and Verify all data and predefined fields are present", () => {
     it("Click Revise document", () => {
       cy.drClickReviseDocument();
     });
@@ -921,7 +923,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context(`Remove ${fileUploadFieldTitle} and approve and release form`, () => {
+  context(`Remove ${fileUploadFieldTitle} approve and verify Released form`, () => {
     it(`Remove ${fileUploadFieldTitle}`, () => {
       cy.get("[data-cy=\"remove-schema-item\"]").eq(-4).arrowClick({ force: true });
     });
@@ -944,7 +946,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context(`Revise form and Add upload and approve and release form`, () => {
+  context(`Revise the form, upload file, approve and release it`, () => {
     it("Click Revise document", () => {
       cy.drClickReviseDocument();
     });
@@ -978,7 +980,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context("Create LHR document form the FM", () => {
+  context("Create paper LHR document from newly created form", () => {
     it("Navigate to Document list", () => {
       cy.navigToDocumentList();
     });
@@ -1004,14 +1006,22 @@ context("Document Approval Matrix Revise", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Upload attachment and check for autosave", () => {
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Upload attachment test.docx", () => {
       cy.fixture("test.docx").then((fileContent) => {
         cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
           cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
             fileContent: fileContent.toString(),
-            fileName: "image.jpg",
+            fileName: "test.docx",
             mimeType: "*",
-            filePath: `fixtures/image.jpg`,
+            filePath: `fixtures/test.docx`,
           });
         });
       });
@@ -1067,7 +1077,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context("Verify email notification for LHR", () => {
+  context("Verify email notification for paper LHR", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -1135,22 +1145,32 @@ context("Document Approval Matrix Revise", () => {
         `${releasedFormId}-A.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
+
+
+    it("Verify attached file length more than 50 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 50);
+    });
   });
 
   context("Verify PDF file content", () => {
-    it("Extract texts from PDF file content from form", () => {
+    it("Extract texts from PDF file content", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-A.pdf`,
         }).then((cdata) => {
-        expect(cdata.numpages).eq(1);
-        expect(cdata.text).match(/Page 1 of 1/);
+        expect(cdata.numpages).eq(2);
+        expect(cdata.text).match(/Page 1 of 2/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
         arr.forEach((element) => {
-          if (element.includes("Page 1 of 1")) {
+          if (element.includes("Page 1 of 2")) {
             pages[0] = element;
+          }
+          if (element.includes("Page 2 of 2")) {
+            pages[1] = element;
           }
         });
       });
@@ -1158,12 +1178,12 @@ context("Document Approval Matrix Revise", () => {
 
     it("Verify page 1 for paper LHR", () => {
       const el = pages[0];
-      if (el.includes("Page 1 of 1")) {
+      if (el.includes("Page 1 of 2")) {
         // eslint-disable-next-line max-len
         tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nMT-00004, REV 1, MATERIAL ONE`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nNone/);
+        expect(el).match(/image.jpg\ntest.docx\nAttachments/);
 
         expect(el).match(/Part to be Manufactured\nMT-00004 - 1 Material one/);
 
@@ -1189,9 +1209,30 @@ context("Document Approval Matrix Revise", () => {
 
         // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
         tmpRegex  = (el).match(/\((.*)\)\sfb-fileupload/);
-        imageFile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""), tmpRegex[1], "image.jpg");
+        imageFile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""), tmpRegex[1], "test.docx");
+        expect(el).match(/test.docx/);
 
-        expect(el).match(/image.jpg/);
+        expect(el).match(/WIP/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 3, ${pdfDocRelDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 2/);
+      }
+    });
+
+    it("Verify page 2 for paper LHR", () => {
+      const el = pages[2];
+      if (el.includes("Page 2 of 2")) {
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nMT-00004, REV 1, MATERIAL ONE`, "gi" );
+        expect(el).match(tmpRegex);
 
         expect(el).match(/APPROVALS\nNone/);
 
@@ -1206,7 +1247,7 @@ context("Document Approval Matrix Revise", () => {
         tmpRegex = new RegExp(`Form Info: FM-00002, Revision 3, ${pdfDocRelDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 1/);
+        expect(el).match(/Page 2 of 2/);
       }
     });
 
@@ -1216,7 +1257,6 @@ context("Document Approval Matrix Revise", () => {
   });
 
   context("Release LHR", () => {
-
     it("Checkbox option 3 checked only", () => {
       cy.get(`[type="checkbox"][value="1"]`).last().uncheck();
       cy.get(`[type="checkbox"][value="2"]`).last().uncheck();
@@ -1244,7 +1284,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.lhrApprove();
     });
   });
 
@@ -1334,6 +1374,12 @@ context("Document Approval Matrix Revise", () => {
         `${releasedFormId}-A.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
+
+    it("Verify attached file length more than 50 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 50);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -1366,7 +1412,7 @@ context("Document Approval Matrix Revise", () => {
         tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nMT-00004, REV 1, MATERIAL ONE`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Attachments\nNone/);
+        expect(el).match(/image.jpg\nAttachments/);
 
         expect(el).match(/Part to be Manufactured\nMT-00004 - 1 Material one/);
 
@@ -1392,9 +1438,7 @@ context("Document Approval Matrix Revise", () => {
 
         // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
         tmpRegex  = (el).match(/\((.*)\)\sfb-fileupload/);
-        imageFile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""), tmpRegex[1], "image.jpg");
-
-        expect(el).match(/image.jpg/);
+        imageFile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""), tmpRegex[1], "test.docx");
 
         expect(el).match(/Released/);
 
@@ -1417,6 +1461,8 @@ context("Document Approval Matrix Revise", () => {
         // eslint-disable-next-line max-len
         tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nMT-00004, REV 1, MATERIAL ONE`, "gi" );
         expect(el).match(tmpRegex);
+
+        expect(el).match(/test.docx/);
 
         // eslint-disable-next-line max-len
         tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}.*`);
@@ -1442,7 +1488,44 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context(`Void LHR and verify document status as VOIDED and Send to Email`, () => {
+  context(`Revise paper LHR document`, () => {
+    it("Click Revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Choose 'Void OBS' option", () => {
+      cy.get(`[name="revisionChangeType"][value="OBSOLETE"]`).arrowClick();
+    });
+
+    it("Add approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+
+    it("Save it", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Submit for approval", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Enter description in the dialog box", () => {
+      cy.get(`[name="voidDescription"]`).arrowType("void description entered");
+    });
+
+    it("Click on Yes button", () => {
+      cy.get(`button[data-cy="fb-control-btn"]`).contains("Yes").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Approve record", () => {
+      cy.lhrApprove();
+    });
+  });
+
+  context(`Void paper LHR and verify document status as VOIDED and Send to Email`, () => {
     it(`Click 'Void' and 'Yes, Im sure'`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"void-button\"]").arrowClick();
@@ -1466,7 +1549,7 @@ context("Document Approval Matrix Revise", () => {
     });
   });
 
-  context("Verify email notification for LHR", () => {
+  context("Verify email notification for paper LHR", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
