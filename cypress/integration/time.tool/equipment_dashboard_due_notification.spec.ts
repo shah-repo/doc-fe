@@ -485,7 +485,7 @@ context("'Equipment' test with time tool", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
     });
 
     it("Click create document after filling document", () => {
