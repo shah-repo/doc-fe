@@ -38,7 +38,6 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   const classes = styles();
   const handleChange = (e) => {
     if (!onChange) {
-
       return;
     }
     onChange({
@@ -66,7 +65,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
           disabled={disabled}
           onChange={handleChange}
           value={
-            dropDownData.find((c) => c.value === dataValue ) || dropDownData[0]
+            dropDownData.find((c) => c.value === dataValue) || dropDownData[0]
           }
           data={dropDownData}
           textField="text"
