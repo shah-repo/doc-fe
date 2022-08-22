@@ -225,12 +225,15 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy=\"tabId.training\"]").should("exist");
       cy.get("[data-cy=\"tabId.details\"]").should("not.exist");
     });
+
     it("Verify Description tool bar option", () => {
       cy.verifyDescriptionToolbar();
     });
+
     it("Verify form option box exist", () => {
       cy.get(".formOptionsBox").should("exist");
     });
+
     it("Verify Add field button", () => {
       cy.get("[data-cy=\"form.builder.add.field\"]").should("exist");
     });
@@ -272,16 +275,11 @@ context("AA Document Layout verification", () => {
 
     it("Verify Added fields in overview tab ", () => {
       cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
-      cy.get("[data-cy^=\"textfield-for-inline-l6d6wdtx\"]").should("exist");
-      cy.get("[name^=\"checkbox-group-for-inline-l6d6wfla\"]").should("exist");
-      cy.get("[class^='fb-field-wrapper-radio-btn-group-for-inline']").should("exist");
+      cy.get("[data-cy^=\"textfield-for-inline\"]").should("exist");
+      cy.get("[name^=\"checkbox-group-for-inline\"]").should("exist");
+      cy.get("[data-cy='RadioBtnGroup for inline']").should("exist");
     });
 
-    xit("Verify that Title are lighter color when they are hovered over", () => {
-      cy.get("[data-cy=\"field-name\"]").should("have.css", "background-color", "rgb(18, 27, 33)");
-      cy.get("[data-cy=\"field-name\"]")
-        .realHover().wait(500).should("have.css", "background-color", "rgb()");
-    });
 
     it("Verify row with the Tabs is fixed, and that user should not be able to add/edit new Tabs", () => {
       cy.verifyFixedTab();
@@ -323,8 +321,6 @@ context("AA Document Layout verification", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
-
-    // trCompleteTraining
 
     it("Check for training text inside dialog box and complete training", () => {
       cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
@@ -432,7 +428,6 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy=\"References\"]").should("not.exist");
       cy.get("main span>button").eq(0).arrowClick();
       cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").scrollTo("top");
       cy.get("[data-cy=\"References\"]").should("be.visible");
     });
 
@@ -637,10 +632,6 @@ context("AA Document Layout verification", () => {
       cy.dlSelectFirstDocument();
     });
     it("Verify Predefined Fields are Appear", () => {
-      cy.get("[data-cy=\"description\"]").realHover().wait(500)
-        .should("have.css", "background-color", "rgb(235, 237, 242)");
-      cy.get("[data-cy=\"field-name\"]").realHover().wait(500)
-        .should("have.css", "background-color", "rgb(235, 237, 242)");
       cy.get("[data-cy=\"field-name\"]").should("exist");
       cy.get("[data-cy=\"description\"]").should("exist");
       cy.get("[data-cy=\"tabId.overview\"]").should("exist");
@@ -710,7 +701,6 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy=\"References\"]").should("not.exist");
       cy.get("main span>button").eq(0).arrowClick();
       cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").scrollTo("top");
       cy.get("[data-cy=\"References\"]").should("be.visible");
     });
 
@@ -834,7 +824,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
   });
