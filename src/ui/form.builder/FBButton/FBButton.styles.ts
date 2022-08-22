@@ -7,12 +7,12 @@ export default makeStyles(() =>
       "margin": "0px",
       "border": `1px dashed ${Colors.navy}`,
       "borderRadius": "100px",
-      "background": params.isHover ? (params.color === "secondary" ? Colors.dodger_blue : Colors.navy) : Colors.white,
-      "color": params.isHover ? Colors.white : (params.color === "secondary" ? Colors.dodger_blue : Colors.navy),
+      "background": params.isHover ? (params.newVariant ? Colors.dodger_blue : Colors.navy) : Colors.white,
+      "color": params.isHover ? Colors.white : (params.newVariant ? Colors.dodger_blue : Colors.navy),
       "&:hover": {
-        background: params.color === "secondary" ? Colors.white : Colors.navy,
-        color: params.color === "secondary" ? Colors.dodger_blue : Colors.white,
-        boxShadow: params.color === "secondary" ? "none" : "",
+        background: params.newVariant ? Colors.white : Colors.navy,
+        color: params.newVariant ? Colors.dodger_blue : Colors.white,
+        boxShadow: params.newVariant ? "none" : "",
       },
     }),
     label: {
