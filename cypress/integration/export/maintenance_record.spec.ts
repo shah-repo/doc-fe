@@ -586,11 +586,11 @@ context("Export maintenance record", () => {
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
-      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Save document", () => {

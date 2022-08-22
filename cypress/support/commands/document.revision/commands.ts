@@ -636,7 +636,7 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
 
 Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOption: string}) => {
   cy.get("[data-cy^=\"common.\"]");
-  cy.get("label").contains(new RegExp("^" + params.revisionStageOption + "$", "g")).arrowClick();
+  cy.get("label").contains(new RegExp("^" + params.revisionStageOption + "$", "g")).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
