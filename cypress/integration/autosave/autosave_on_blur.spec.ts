@@ -803,7 +803,7 @@ context("Autosave on blur", () => {
     });
 
     it("Add PO service item and check for autosave", () => {
-      cy.get("[data-cy='fb-control-btn']").eq(-1).arrowClick();
+      cy.get("[data-cy='form.builder.add.line.item']").arrowClick({ force: true });
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
           cy.poSelectOption({ optionName: "service" });
