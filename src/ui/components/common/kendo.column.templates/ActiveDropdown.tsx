@@ -18,6 +18,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   columnIndex,
 }) => {
   const intl = useIntl();
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const dropDownData = [
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
@@ -50,7 +51,8 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   };
   field = field || "";
   const dataValue = dataItem[field] === null ? "" : dataItem[field];
-  const dropDownValue = dataValue ? "Active" : "Inactive";
+  const dropDownValue = dataValue ? getTranslatedText(TranslatedText[DisplayText.ACTIVE]) :
+    getTranslatedText(TranslatedText[DisplayText.INACTIVE]);
   return (
     <td
       colSpan={colSpan}
