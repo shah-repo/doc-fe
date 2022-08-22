@@ -23,7 +23,7 @@ const RedlineBanner: React.FunctionComponent = () => {
   return (
     <>
       <Box
-        bgcolor={Colors.red}
+        bgcolor="secondary.main"
         color={Colors.white}
         fontWeight="bold"
         padding="10px"
