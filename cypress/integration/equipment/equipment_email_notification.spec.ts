@@ -410,11 +410,11 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
-        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick({ force: true });
         cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
       });
 
@@ -662,7 +662,7 @@ context("Test Equipment maintenance email notifications", () => {
 
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
@@ -905,7 +905,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
@@ -1147,7 +1147,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
