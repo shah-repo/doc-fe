@@ -130,8 +130,9 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -139,8 +140,9 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
 
 Cypress.Commands.add("lhrAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("[data-cy^=\"fb-approvals\"]").click().focused().autocompleteSelect(params.approver);
+    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
