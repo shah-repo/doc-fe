@@ -241,6 +241,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               component="span"
                               variant="body2"
                               color="textPrimary"
+                              data-cy="Selected-Users"
                               className={`${classes.userName} marginLeft7`}
                             >
                               {user.name}
@@ -306,6 +307,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                           component="span"
                           variant="body2"
                           color="textPrimary"
+                          data-cy="Selected-Groups"
                           className={classes.userName}
                         >
                           {e.name}
