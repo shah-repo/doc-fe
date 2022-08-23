@@ -30,7 +30,6 @@ const endOfMonth   = moment().endOf("month").format("MM/DD/YYYY");
 const oneDayBeforeEndOfMonth   = moment().endOf("month").subtract(1, "days").format("MM/DD/YYYY");
 const twoDayBeforeEndOfMonth   = moment().endOf("month").subtract(2, "days").format("MM/DD/YYYY");
 const threeDayBeforeEndOfMonth   = moment().endOf("month").subtract(3, "days").format("MM/DD/YYYY");
-const fourDayBeforeEndOfMonth   = moment().endOf("month").subtract(4, "days").format("MM/DD/YYYY");
 const ninthDayBeforeEndOfMonth   = moment().endOf("month").subtract(9, "days").format("MM/DD/YYYY");
 const eleventhDayBeforeEndOfMonth   = moment().endOf("month").subtract(11, "days").format("MM/DD/YYYY");
 
@@ -362,9 +361,6 @@ context("Search PO item with correct order date format", () => {
           it("Select Order Date", () => {
             cy.get("input[name^=ordered]").parent().find("button").arrowClick();
             cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").eq(-1).arrowClick();
-            cy.get("input[name^=ordered]").then(($btn) => {
-              cy.log($btn.text());
-            });
           });
 
           it("Clicks Save button", () => {
@@ -417,7 +413,7 @@ context("Search PO item with correct order date format", () => {
 
           it("Add an Approval", () => {
             cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-              cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[1].name);
+              cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(USERS[1].name);
             });
           });
 
@@ -480,7 +476,7 @@ context("Search PO item with correct order date format", () => {
 
           it("Add an Approval", () => {
             cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-              cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[1].name);
+              cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(USERS[1].name);
             });
           });
 
@@ -545,7 +541,7 @@ context("Search PO item with correct order date format", () => {
 
           it("Add an Approval", () => {
             cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-              cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[1].name);
+              cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(USERS[1].name);
             });
           });
 
@@ -688,7 +684,7 @@ context("Search PO item with correct order date format", () => {
 
       it("Add an Approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[1].name);
+          cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(USERS[1].name);
         });
       });
 
