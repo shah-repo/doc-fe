@@ -17,7 +17,6 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   return (
     <Box minHeight={isCreateUrl ? 64 : 84 }>
-      <RedlineBanner {...{ bannerPortal }}/>
       <Observer>
         {() => (
           <FormHeader
@@ -25,6 +24,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
           />
         )}
       </Observer>
+      <RedlineBanner/>
     </Box>
   );
 };
