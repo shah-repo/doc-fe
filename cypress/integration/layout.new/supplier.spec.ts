@@ -2,7 +2,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { STATUS_FILTER_TEXT } from "../../../src/state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -433,7 +432,7 @@ context("Verify New Layout for Supplier Document", () => {
 
     it("Filter the Draft document", () => {
       cy.dlClearFilters();
-      cy.supFilterByState({ state: STATUS_FILTER_TEXT.DRAFT });
+      cy.supFilterByState({ state: "Draft" });
     });
 
     it(`Select ${docTitle} document`, () => {
@@ -628,7 +627,7 @@ context("Verify New Layout for Supplier Document", () => {
 
     it("Filter the Released document", () => {
       cy.dlClearFilters();
-      cy.supFilterByState({ state: STATUS_FILTER_TEXT.RELEASED });
+      cy.supFilterByState({ state: "Released" });
     });
 
     it(`Select ${docTitle} document`, () => {
