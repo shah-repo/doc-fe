@@ -26,6 +26,8 @@ declare global {
       lhrAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       pmDeleteApproverFromApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
+      pmClearFilters(): Chainable<Subject>;
+      pmSelectFirstDocument(): Chainable<Subject>;
       lhrSubmitForApproval(): Chainable<Subject>;
       ptClickCreateNewPart(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
@@ -36,6 +38,11 @@ declare global {
         unit: string;}): Chainable<Subject>;
       lhrClickReviseDocument(): Chainable<Subject>;
       lhrClickSaveDocument(): Chainable<Subject>;
+      lhrClearFilters(): Chainable<Subject>;
+      lhrVerifyDocumentCount(params: {numberOfDoc: integerType }): Chainable<Subject>;
+      lhrVerifyFilterByStatus(params: {status: string }): Chainable<Subject>;
+      lhrFilterByOwner(params: {owner: string }): Chainable<Subject>;
+      lhrSelectFirstDocument(): Chainable<Subject>;
     }
   }
 }
@@ -180,7 +187,7 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
 });
 
 Cypress.Commands.add("lhrSubmitForApproval", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
   cy.saveBarShouldNotExist();
@@ -189,6 +196,19 @@ Cypress.Commands.add("lhrSubmitForApproval", () => {
 
 Cypress.Commands.add("pmToggleChangesFromPrevBuild", () => {
   cy.get("[name=\"fb-procedure-diff\"]").arrowClick();
+});
+
+Cypress.Commands.add("pmClearFilters", () => {
+  cy.get("button[data-cy=clearFilter]").arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("pmSelectFirstDocument", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+    cy.get("tr.k-master-row").first().arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("lhrClickReviseDocument", () => {
@@ -205,4 +225,30 @@ Cypress.Commands.add("lhrClickSaveDocument", () => {
   cy.checkToastMessage({ exists: false });
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrClearFilters", () => {
+  cy.get("button[data-cy=clearFilter]").arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrVerifyDocumentCount", (params: {numberOfDoc: integerType }) => {
+  cy.get("tr.k-master-row").should("have.length", params.numberOfDoc);
+});
+
+Cypress.Commands.add("lhrVerifyFilterByStatus", (params: {status: string }) => {
+  cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", params.status);
+});
+
+Cypress.Commands.add("lhrFilterByOwner", (params: {owner: string }) => {
+  cy.get("tr.k-master-row").first().find("td").eq(2).contains(params.owner);
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrSelectFirstDocument", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+    cy.get("tr.k-master-row").first().arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
