@@ -930,7 +930,12 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({force: true}).wait(500);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add attachment", () => {
@@ -1136,7 +1141,12 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({force: true}).wait(500);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add attachment", () => {
