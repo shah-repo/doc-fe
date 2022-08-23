@@ -643,7 +643,7 @@ context("LHR Display More Details", () => {
         });
 
         it("Click 'LHR Step'", () => {
-          cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+          cy.get("[data-cy^=\"LHR Step\"]").arrowClick({ force: true });
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
@@ -721,7 +721,7 @@ context("LHR Display More Details", () => {
         });
 
         it("Click 'LHR Step'", () => {
-          cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+          cy.get("[data-cy^=\"LHR Step\"]").arrowClick({ force: true });
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
