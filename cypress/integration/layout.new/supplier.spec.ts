@@ -638,7 +638,7 @@ context("Verify New Layout for Supplier Document", () => {
 
   context("Verify supplier released document", () => {
     it("Verify predefined fields", () => {
-      cy.get(`[id='field-name']`).contains(docTitle);
+      cy.get("#field-name").contains(docTitle);
       cy.get(`[data-cy="BaseWithhtml-editor"]`).contains(docDescription);
     });
 
