@@ -25,6 +25,11 @@ declare global {
       verifyAddRemoveReference({ formId }): Chainable;
       verifyHistoryTab(history, groupOne, groupTwo): Chainable;
       verifyDescriptionToolbar(): Chainable;
+      verifyHeaderInfoContent(HeaderInfo): Chainable;
+      isTabActive(tabInfo: {name: string; index: number}): Chainable;
+      verifyTabs(...tabs: string[]): Chainable;
+      verifyReferencesTabAsActive(): Chainable;
+      openRevisionsTabAndVerifyCurrentRevision(rev: string): Chainable;
     }
   }
 }
@@ -135,15 +140,13 @@ Cypress.Commands.add("verifyReferenceTab", ({ user, formId, shortName }) => {
 });
 
 Cypress.Commands.add("verifyAddRemoveReference", ({ formId }) => {
-  cy.get("[data-cy=\"references-icon\"]").arrowClick();
-  cy.wait(1000);
+  cy.get("[data-cy=\"references-icon\"]").arrowClick().wait(500);
   cy.get("[data-cy=\"referenceTo\"]").arrowClick();
   cy.drSelectReferences(formId);
   cy.drRemoveReferences({ reference: formId });
 });
 
 Cypress.Commands.add("verifyHistoryTab", (history, groupOne, groupTwo) => {
-
   it("Open history drawer and compare history values", () => {
     cy.drSelectHistoryTab();
   });
@@ -204,16 +207,49 @@ Cypress.Commands.add("verifyDescriptionToolbar", () => {
   cy.get("div[title=\"Outdent\"]").should("exist");
   cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
   cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
-  cy.get("[title=\"Block Type\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
-  cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+  cy.get("[data-cy=\"description\"][aria-label=\"rdw-font-size-control\"]").should("not.exist");
+  cy.get("[data-cy=\"description\"][aria-label=\"rdw-font-family-control\"]").should("not.exist");
   cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
   cy.get("[aria-label=\"rdw-color-picker\"]").should("exist");
   cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
-  cy.get("[title=\"Block Type\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
+});
+
+Cypress.Commands.add("verifyHeaderInfoContent", (HeaderInfo) => {
+  if (HeaderInfo.status) {
+    cy.drCheckDocumentStatus({ status: HeaderInfo.status });
+  }
+  cy.get("[data-cy=\"Header-listIcon\"]").should("exist");
+  cy.get("[data-cy=\"Header-listTitle\"]").should("have.text", HeaderInfo.title);
+  if (HeaderInfo.docId) {
+    cy.get("[data-cy='HeaderInfo-docId']").should("contain.text", HeaderInfo.docId);
+  }
+  cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", HeaderInfo.revision);
+});
+
+Cypress.Commands.add("isTabActive", (tabInfo) => {
+  cy.get(`[data-cy="tabCon-tabId.${tabInfo.name}"]`).should("have.attr", "aria-selected", "true");
+  cy.get(`#sm-tabpanel-${tabInfo.index}`).should("be.visible");
+});
+
+Cypress.Commands.add("verifyTabs", (...tabs: string[]) => {
+  tabs.forEach((tab) => {
+    cy.get(`[data-cy="tabId.${tab}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("verifyReferencesTabAsActive", () => {
+  cy.get(`[data-cy="references-icon"]`).should("be.visible");
+  cy.get(`[data-cy="References-detail"]`).should("exist");
+  cy.get(`[data-cy="generalInfo"]`).should("be.visible");
+});
+
+Cypress.Commands.add("openRevisionsTabAndVerifyCurrentRevision", (rev) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+    cy.drClickRevisionsSidePanel();
+    cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).arrowClick();
+    cy.recCheckRevisionStage({ stage: `Revision ${rev}` });
+    cy.get(`[data-cy="HeaderInfo-Rev"]`).contains(`Rev ${rev}`);
+  });
 });
 
 
