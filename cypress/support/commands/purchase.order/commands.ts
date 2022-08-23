@@ -96,7 +96,7 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").contains("Add item").arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick();
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
