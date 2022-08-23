@@ -128,7 +128,7 @@ Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
@@ -140,7 +140,7 @@ Cypress.Commands.add("lhrApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
