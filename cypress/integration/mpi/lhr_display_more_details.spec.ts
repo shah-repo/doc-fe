@@ -25,13 +25,10 @@ let equipmentDocument;
 let materialsDocument;
 let mpiDocumentType;
 let createdPartDocument;
-let LHRDocumentType;
-let LHRtDocumentType;
 let createdMPIDocument;
-let createdLHRtDocument;
 const CSPartDocumentTitle = "Part document";
 
-context("Autosave LHR", () => {
+context("LHR Display More Details", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -71,9 +68,6 @@ context("Autosave LHR", () => {
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           mpiDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
-          LHRtDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "LHR template");
-          LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record");
-
           done();
         });
       });
@@ -393,260 +387,6 @@ context("Autosave LHR", () => {
       });
     });
 
-    it("[API]Create LHRt document", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>LHRt created with API</p>",
-          document: {
-            docId: "LHRT-00003",
-            documentType: {
-              id: LHRtDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "API LHRt document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [
-              { id: LHRDocumentType[0].id },
-            ],
-            schema: [
-              {
-                name: "lhr-selected-part",
-                type: "partsselection",
-                index: 0,
-                label: "Part to be Manufactured",
-                tabId: "overview",
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-                editorConfig: {
-                  id: createdPartDocument.documentId,
-                },
-              },
-              {
-                name: "lhr_initial_quantity",
-                type: "quantity",
-                index: 1,
-                label: "Initial Quantity",
-                tabId: "overview",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationAttribute: "Initial Quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lhr-end-quantity",
-                type: "quantity",
-                index: 2,
-                label: "End Quantity",
-                tabId: "overview",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                outputDisabled: true,
-                validationAttribute: "End Quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lhr-build-type",
-                type: "radiogroup",
-                index: 3,
-                label: "Build Type",
-                tabId: "overview",
-                options: [
-                  {
-                    text: "R&D",
-                    value: "R&D",
-                  },
-                  {
-                    text: "Production",
-                    value: "Production",
-                  },
-                ],
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                validationAttribute: "Build Type",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lhr-due-date",
-                type: "datepicker",
-                index: 4,
-                label: "Due Date",
-                tabId: "overview",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                validationMode: "default",
-                validationAttribute: "Due Date",
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lhrstep-built-in",
-                type: "lhrstep",
-                index: 5,
-                label: "LHR Step",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                validationMode: "default",
-                applicableValidationSchema: true,
-                stepIndex: 1,
-                editorConfig: {
-                  value: createdMPIDocument.id,
-                },
-              },
-              {
-                label: "form.builder.approvals",
-                type: "approvals",
-                tabId: "overview",
-                deleteDisabled: true,
-                name: "fb-approvals-kvateryo",
-                uniqueSchemaItem: true,
-                index: 6,
-              },
-            ],
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdLHRtDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdLHRtDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => {
-          done();
-        });
-      });
-    });
-
-    it("[API]Create LHR document", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>LHR created with API</p>",
-          document: {
-            docId: "LHR-00004",
-            documentType: {
-              id: LHRDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "API LHR document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formDocument: { id: createdLHRtDocument.id },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then(() => done());
-    });
-
-    it("[API]Create LHR document2", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>LHR created with API2</p>",
-          document: {
-            docId: "LHR-00005",
-            documentType: {
-              id: LHRDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "API LHR document2",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formDocument: { id: createdLHRtDocument.id },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then(() => done());
-    });
-
-    it("[API]Create LHR document3", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>LHR created with API3</p>",
-          document: {
-            docId: "LHR-00008",
-            documentType: {
-              id: LHRDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "API LHR document3",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formDocument: { id: createdLHRtDocument.id },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then(() => done());
-
-    });
-
     it("[API]API request for updating company navigation", (done: any) => {
       cy.cmpUpdateCompany({
         employeeId: adminEmployee.id,
@@ -889,14 +629,12 @@ context("Autosave LHR", () => {
           cy.drClickCreateDocumentWithApiCall();
         });
 
-
         it("Select 'Part document' for Part to be Manufactured", () => {
           cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
             cy.get("ul>li[role=option]").contains("Part document").arrowClick();
           });
         });
-
       });
 
       context("Select created MPI in LHR template", () => {
@@ -920,7 +658,6 @@ context("Autosave LHR", () => {
           cy.listLoadingElementShouldNotExist();
         });
       });
-
     });
 
     context("Release LHRt", () => {
@@ -931,7 +668,6 @@ context("Autosave LHR", () => {
       it("Approve and release LHRt document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-
     });
 
     context("Create LHRt document 1", () => {
@@ -977,7 +713,6 @@ context("Autosave LHR", () => {
             cy.get("ul>li[role=option]").contains("Part document").arrowClick();
           });
         });
-
       });
 
       context("Select created MPI in LHR template", () => {
@@ -1001,10 +736,9 @@ context("Autosave LHR", () => {
           cy.listLoadingElementShouldNotExist();
         });
       });
-
     });
 
-    context("Release LHRt", () => {
+    context("Release LHRt 1", () => {
       it("Click save document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
@@ -1012,7 +746,6 @@ context("Autosave LHR", () => {
       it("Approve and release LHRt document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-
     });
 
     context("Create LHR document", () => {
@@ -1036,7 +769,6 @@ context("Autosave LHR", () => {
           cy.get("[data-cy=\"lhr-selected-part\"]")
             .should("have.attr", "value", `CS-00005 - rev 1 - ${CSPartDocumentTitle}`);
         });
-
       });
     });
   });
