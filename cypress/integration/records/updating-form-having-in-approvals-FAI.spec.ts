@@ -283,6 +283,7 @@ context(testName, () => {
 
     it("Verify revision", () => {
       cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev A");
     });
   });
 
@@ -306,7 +307,7 @@ context(testName, () => {
     });
 
     it("Click Approve And Release", () => {
-      cy.get("[data-cy=ApproveAndRelease-button]").arrowClick({ force: true });
+      cy.drApproveAndReleaseDialog();
       cy.wait(2000);
     });
 
@@ -320,6 +321,7 @@ context(testName, () => {
 
     it("Verify revision", () => {
       cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev A");
     });
   });
 });
