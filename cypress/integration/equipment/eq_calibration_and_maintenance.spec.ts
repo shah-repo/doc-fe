@@ -1191,7 +1191,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1217,7 +1217,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Select 'Calibration form' for calibration required", () => {
