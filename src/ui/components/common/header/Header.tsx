@@ -39,14 +39,13 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
   const headerBackgroundClasses = headerBackgroundStyles();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const classes = styles(isCreateUrl);
-  const { _documentRevisionFormState } = SM.useStores();
   if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
-      <AppBar color="primary" className={classes.appbar}>
+      <AppBar color="primary" className={classes.appbar} position="static">
         <Toolbar className={classes.toolbar}>
           <Observer>
             {() => (
-              <Box width={_documentRevisionFormState?.leftPanelOpen ? "calc(100% - 540px)" : "calc(100% - 240px)"}>
+              <Box width="100%">
                 <Grid
                   container={true}
                   className={`${classes.headerSection} ${
