@@ -147,6 +147,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (audit.nextValue as DocumentType).documentTypeName;
         break;
       case "approvals.status":
+        if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
+          returnValue = (audit.nextValue as Employee).user?.name;
+          break;
+        }
       case "status":
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
