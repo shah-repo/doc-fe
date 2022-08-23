@@ -7,7 +7,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -35,7 +34,6 @@ context("Approval request implementation tasks", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -319,7 +317,6 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add Checkbox group", () => {
-      SystemRequirement("FB-0120");
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
