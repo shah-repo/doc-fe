@@ -11,6 +11,7 @@ import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
@@ -188,18 +189,6 @@ context("Mpi Layout", () => {
     });
   });
 
-  xcontext("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Plum Murphy, Zulauf and Kuphal 77604", multiple: true });
-    });
-  });
-
-
   context("Create MPI document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
@@ -219,7 +208,7 @@ context("Mpi Layout", () => {
       });
 
       it("Verify that it contains Overview Tab", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+        cy.get("[data-cy='tabId.overview']").should("exist");
       });
     });
 
@@ -241,7 +230,7 @@ context("Mpi Layout", () => {
       });
 
       it("Verify Training checkbox should be unchecked", () => {
-        cy.get("[data-cy=\"field-revisionStage\"]").should("not.be.checked");
+        cy.get("[data-cy='field-revisionStage']").should("not.be.checked");
       });
 
       it("Click create document", () => {
@@ -250,30 +239,29 @@ context("Mpi Layout", () => {
 
       context("Verify Layout of document", () => {
         it("Verify that it contains Overview, Procedure, Material and Equipment", () => {
-          cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-          cy.get("[data-cy=\"tabId.procedure\"]").should("exist");
-          cy.get("[data-cy=\"tabId.materialsandequipment\"]").should("exist");
+          cy.verifyTabs("overview", "procedure", "materialsandequipment");
         });
 
         it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
-          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-          cy.get("header li>p>div>a>div").should("have.text", "Document List");
-          cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "MPI-00001");
-          cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.DRAFT,
+            title: "Document List",
+            docId: "MPI-00001",
+            revision: "Rev 1",
+          });
         });
 
         it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
           cy.verifyFixedTab();
         });
 
-        it("Verify Form opens to the Details tab by default and it contains", () => {
-          cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-          cy.get("#sm-tabpanel-0").should("be.visible");
+        it("Verify Form opens to the Overview tab by default and it contains", () => {
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify overview tab predefiend fields and approval block", () => {
           cy.verifyPredefiendFields();
-          cy.get("[name^=\"fb-approvals-approvals-built-in\"]").should("exist");
+          cy.get("[name^='fb-approvals-approvals-built-in']").should("exist");
         });
 
         it("Navigate to Procedure tab", () => {
@@ -290,34 +278,34 @@ context("Mpi Layout", () => {
               description: "This is description test to check length. Checking length of characters and lines.",
             });
             cy.unClick();
-            cy.get("[data-cy=\"description\"] button").should("not.exist");
-            cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
+            cy.get("[data-cy='description'] button").should("not.exist");
+            cy.get("[data-cy='description']").first().scrollIntoView({ ensureScrollable: false });
           });
 
           it("Add 2nd line description", () => {
-            cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+            cy.get("[data-cy='description']").first().arrowClick().wait(1000);
             cy.get(`[data-cy="description"] [contenteditable]`)
               .first()
               .arrowType(
                 "{moveToEnd}{enter}This is description test to check length. Checking length of characters and lines."
               );
             cy.unClick();
-            cy.get("[data-cy=\"description\"] button").should("not.exist");
-            cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
+            cy.get("[data-cy='description'] button").should("not.exist");
+            cy.get("[data-cy='description']").first().scrollIntoView({ ensureScrollable: false });
           });
 
           it("Add 3rd line description", () => {
-            cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+            cy.get("[data-cy='description']").first().arrowClick().wait(1000);
             cy.get(`[data-cy="description"] [contenteditable]`)
               .first()
               .arrowType("{moveToEnd}{enter}This is description test to check length.");
             cy.unClick();
-            cy.get("[data-cy=\"description\"] button").should("exist");
-            cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
+            cy.get("[data-cy='description'] button").should("exist");
+            cy.get("[data-cy='description']").first().scrollIntoView({ ensureScrollable: false });
           });
 
           it("Enter a description longer than 3 lines and over 245 characters", () => {
-            cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+            cy.get("[data-cy='description']").first().arrowClick().wait(1000);
             cy.get(`[data-cy="description"] [contenteditable]`)
               .first()
               .arrowType("{moveToEnd}{enter}Checking length of characters and lines ends here.");
@@ -327,13 +315,13 @@ context("Mpi Layout", () => {
           });
 
           it("Click on view more description should be expanded", () => {
-            cy.get("[data-cy=\"description\"] button").arrowClick();
-            cy.get("div[class^=\"rdw-editor-toolbar\"]").should("exist");
+            cy.get("[data-cy='description'] button").arrowClick();
+            cy.get("div[class^='rdw-editor-toolbar']").should("exist");
           });
 
           it("Click on view less description should be collapsed", () => {
-            cy.get("[data-cy=\"description\"] button").arrowClick();
-            cy.get("[data-cy=\"description\"] .rdw-editor-toolbar").should("not.exist");
+            cy.get("[data-cy='description'] button").arrowClick();
+            cy.get("[data-cy='description'] .rdw-editor-toolbar").should("not.exist");
           });
         });
       });
@@ -341,18 +329,18 @@ context("Mpi Layout", () => {
       context("Verify that Procedure tab contains", () => {
         it("PI Procedure, Notes, Start, Accept, Rejected Qty - Predefined schema fields", () => {
           cy.get(".fb-field-wrapper-mpi-procedure-built-in").should("exist");
-          cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").should("exist");
-          cy.get("[data-cy=\"form.builder.attachments\"]").should("exist");
-          cy.get("[data-cy=\"mediaUploadField\"]").should("exist");
-          cy.get("[data-cy=\"form.builder.materials\"]").should("exist");
-          cy.get("[data-cy=\"form.builder.equipment\"]").should("exist");
-          cy.get("[name=\"lhrs-start-quantity\"]").should("exist");
-          cy.get("[name=\"lhrs-accepted-quantity\"]").should("exist");
-          cy.get("[name=\"lhrs-rejected-quantity\"]").should("exist");
+          cy.get("[data-cy='mpi-procedure-built-in.description']").should("exist");
+          cy.get("[data-cy='form.builder.attachments']").should("exist");
+          cy.get("[data-cy='mediaUploadField']").should("exist");
+          cy.get("[data-cy='form.builder.materials']").should("exist");
+          cy.get("[data-cy='form.builder.equipment']").should("exist");
+          cy.get("[name='lhrs-start-quantity']").should("exist");
+          cy.get("[name='lhrs-accepted-quantity']").should("exist");
+          cy.get("[name='lhrs-rejected-quantity']").should("exist");
         });
 
         it("Option to add FB field ", () => {
-          cy.get("[data-cy=\"form.builder.add.field\"]").should("exist");
+          cy.get("[data-cy='form.builder.add.field']").should("exist");
         });
 
         it("Add Text field, Insert label and click ADD. ", () => {
@@ -363,11 +351,11 @@ context("Mpi Layout", () => {
         });
 
         it("Verify that fields are added", () => {
-          cy.get("[data-cy^=\"textfield\"]").should("exist");
+          cy.get("[data-cy^='textfield']").should("exist");
         });
 
         it("Verify Step #1 exists ", () => {
-          cy.get("[data-cy=\"form.builder.step.number\"]>div").should("contain.text", "Step #1");
+          cy.get("[data-cy='form.builder.step.number']>div").should("contain.text", "Step #1");
         });
 
         it("Verify that Form Options should appear for this tab if FB fields are added", () => {
@@ -390,7 +378,7 @@ context("Mpi Layout", () => {
 
 
         it("Upload attachment 'video.mp4'", () => {
-          cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+          cy.get("[data-cy='albumMediaButton']").arrowClick();
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
             cy.pmUploadAttachment({ fileName: "video.mp4" });
           });
@@ -427,7 +415,7 @@ context("Mpi Layout", () => {
             CyRoutes.GetAttachments,
             CyRoutes.GetAttachmentsAttached,
           ], () => {
-            cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
+            cy.get("[data-cy='form.builder.clone.step']").arrowClick();
           });
           cy.wait(10000);
           cy.progressBarShouldNotExist();
@@ -437,28 +425,27 @@ context("Mpi Layout", () => {
       context("Verify 'Clone Step' feature", () => {
 
         it("Verify description is copied", () => {
-          cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).scrollIntoView();
+          cy.get("[data-cy='form.builder.step.number']").eq(1).scrollIntoView();
 
-          cy.get("div[id^=\"fb-mpiprocedure\"] p")
+          cy.get("div[id^='fb-mpiprocedure'] p")
             .eq(1)
             .should("have.text", "Step #1 description");
         });
 
         it("Verify materials are copied", () => {
-          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]").eq(1).scrollIntoView();
-          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]>div")
+          cy.get("[data-cy='form.builder.mpi.procedure.materials.title']").eq(1).scrollIntoView();
+          cy.get("[data-cy='form.builder.mpi.procedure.materials.title']>div")
             .eq(1).should("have.text", "MT-00004 - Material one | Qty: 3 each");
-
         });
 
         it("Verify equipments are copied", () => {
-          cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title\"]>div")
+          cy.get("[data-cy='form.builder.mpi.procedure.equipment.title']>div")
             .eq(1).should("have.text", "ET-00003 - Equipment one");
         });
 
         it("Verify attachments are copied", () => {
-          cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(5).arrowClick();
-          cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
+          cy.get("[data-cy='mediaUploadField']>div>div>div>div>div").eq(5).arrowClick();
+          cy.get("[data-cy='mediaUploadField'] ul>li div[title]").each(($el) => {
             const attachName = $el.text();
             expect(attachName).to.be.oneOf(["image", "test", "video"]);
           });
@@ -467,18 +454,18 @@ context("Mpi Layout", () => {
 
       context("Add another step and fill the fields", () => {
         it("Add another step", () => {
-          cy.get("[data-cy=\"form.builder.add.step\"]").eq(1).arrowClick();
+          cy.get("[data-cy='form.builder.add.step']").eq(1).arrowClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify Step #3 exists ", () => {
-          cy.get("[data-cy=\"form.builder.step.number\"]>div").eq(2).should("contain.text", "Step #3");
+          cy.get("[data-cy='form.builder.step.number']>div").eq(2).should("contain.text", "Step #3");
         });
 
         context("Fill in the fields", () => {
           it("Fill step #3 description", () => {
-            cy.get("[data-cy=\"form.builder.step.number\"]").eq(2).scrollIntoView();
+            cy.get("[data-cy='form.builder.step.number']").eq(2).scrollIntoView();
             cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Step #3 description" });
           });
 
@@ -491,7 +478,7 @@ context("Mpi Layout", () => {
           });
 
           it("Upload attachment 'video.mp4'", () => {
-            cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+            cy.get("[data-cy='albumMediaButton']").arrowClick();
             cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
               cy.pmUploadAttachment({ fileName: "video.mp4" });
             });
@@ -531,19 +518,9 @@ context("Mpi Layout", () => {
 
       });
 
-      xcontext("Verify Material tab", () => {
-        it("Should display aggregate of materials in Procedure tab in one line", () => {
-          // cy.mpiEnterDescriptionToStep({ numbOfStep: 3, description: "Step #3 description" });
-        });
-
-        it("should display aggregate of equipment in Procedure tab in one line", () => {
-          // cy.mpiAddMaterialDocumentToStep({ numbOfStep: 3, material: "Material one3", quntity: "3", unit: "Each" });
-        });
-      });
-
       context("Verification related to training", () => {
         it("Verify Training Tab visiblility", () => {
-          cy.get("[data-cy=\"tabId.training\"]").should("be.visible");
+          cy.get("[data-cy='tabId.training']").should("be.visible");
         });
 
         it("Navigate to overview Tab", () => {
@@ -551,21 +528,21 @@ context("Mpi Layout", () => {
         });
 
         it("Uncheck the training chekbox", () => {
-          cy.get("[data-cy=\"field-retrain\"] input[type=checkbox]").uncheck();
-          cy.get("[data-cy=\"tabId.training\"]").should("not.exist");
+          cy.get("[data-cy='field-retrain'] input[type=checkbox]").uncheck();
+          cy.get("[data-cy='tabId.training']").should("not.exist");
         });
 
         it("check the training chekbox", () => {
-          cy.get("[data-cy=\"field-retrain\"] input[type=checkbox]").check();
-          cy.get("[data-cy=\"tabId.training\"]").should("exist");
+          cy.get("[data-cy='field-retrain'] input[type=checkbox]").check();
+          cy.get("[data-cy='tabId.training']").should("exist");
         });
       });
 
       context("Validate Right Side Panel", () => {
 
         it("Verify that right side panel opens by default to the References tab", () => {
-          cy.get("[data-cy=\"References\"]").should("exist");
-          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+          cy.get("[data-cy='References']").should("exist");
+          cy.get("[data-cy='generalInfo']").should("be.visible");
         });
 
         it("Verify Reference tab Info", () => {
@@ -573,7 +550,7 @@ context("Mpi Layout", () => {
         });
 
         it("Verify Eye Icon", () => {
-          cy.get("[data-cy=\"references-icon\"]").should("exist");
+          cy.get("[data-cy='references-icon']").should("exist");
         });
 
         it("Verify Expand and collapse", () => {
@@ -596,16 +573,9 @@ context("Mpi Layout", () => {
             moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
         });
 
-        context("Verify Revision", () => {
-          it("open revision tab", () => {
-            cy.get("[data-cy=\"note-icon\"]").arrowClick();
-          });
-
-          it("Verify revision Rev Document open or not", () => {
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.wait(2000);
-            cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
-
+        context("Verify Revisions tab", () => {
+          it("Open revisions tab, click and verify current revision", () => {
+            cy.openRevisionsTabAndVerifyCurrentRevision("1");
           });
         });
 
@@ -625,12 +595,10 @@ context("Mpi Layout", () => {
               cy.drAddGroupFromPermissionTab("Developers");
             });
           });
-
         });
 
         context("Check document history", () => {
           const groupOne = "Developers";
-          let groupTwo;
           const history = [
             {
               owner: USERS[1].name,
@@ -648,50 +616,13 @@ context("Mpi Layout", () => {
           it("Verify Doc history", () => {
             cy.drSelectHistoryTab();
           });
-          history.forEach((element, groupIndex) => {
-            it(`Check owner name for group ${groupIndex + 1}`, () => {
-              cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-            });
-            element.actions.forEach((action, index, identifier) => {
-              it(`'${action.key}' as '${action.value}' exists`, () => {
-                const typeOfChange = action.key;
-                let contentOfChange = action.value;
-
-                if (action.key === "New description" || action.key === "Description changed" ) {
-                  contentOfChange = "\n" + action.value + "\n";
-                }
-
-                if (typeOfChange === "s3Link added") {
-                  cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-                  cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-                }
-                else {
-                  if (action.key === "Access granted to group") {
-                    cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                      expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                    });
-                  }
-                  else {
-                    cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                      .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                      .parent()
-                      .parent()
-                      .within(() => {
-                        cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                        cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`)
-                          .should("contain.text", contentOfChange);
-                      });
-                  }
-                }
-              });
-            });
-          });
+          verifyHistoryContent(history, groupOne);
         });
 
         context("Verify Book Mark", () => {
           it("Verify Book Mark Navigation", () => {
-            cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-            cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+            cy.get("[data-cy='bookmark-icon']").arrowClick();
+            cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
           });
         });
 
@@ -712,13 +643,11 @@ context("Mpi Layout", () => {
       });
 
       context("Release MPI", () => {
-
         it("Approve and release MPI document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
             cy.drApproveAndReleaseDocumentWithoutSelectingForm();
           });
         });
-
       });
     });
   });
@@ -726,16 +655,16 @@ context("Mpi Layout", () => {
   context("Verify all fields are displayed in the tabs as it should", () => {
 
     it("Verify that it contains Overview, Procedure, Material and Equipment", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.procedure\"]").should("exist");
-      cy.get("[data-cy=\"tabId.materialsandequipment\"]").should("exist");
+      cy.verifyTabs("overview", "procedure", "materialsandequipment");
     });
 
-    it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-      cy.get("header li>p>div>a>div").should("have.text", "Document List");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "MPI-00001");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+    it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Released)", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.RELEASED,
+        title: "Document List",
+        docId: "MPI-00001",
+        revision: "Rev 1",
+      });
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -743,14 +672,13 @@ context("Mpi Layout", () => {
     });
 
     it("Verify Form opens to the overview tab by default and it contains", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
+      cy.isTabActive({ name: "overview", index: 0 });
     });
 
     it("Verify overview tab fields and approval block", () => {
-      cy.get("[data-cy=\"field-name\"]").should("exist");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").should("exist");
-      cy.get("[name^=\"fb-approvals-approvals-built-in\"]").should("exist");
+      cy.get("[data-cy='field-name']").should("exist");
+      cy.get("[data-cy='BaseWithhtml-editor']").should("exist");
+      cy.get("[name^='fb-approvals-approvals-built-in']").should("exist");
     });
 
     it("Navigate to Procedure tab", () => {
@@ -758,26 +686,25 @@ context("Mpi Layout", () => {
     });
 
     it("Click on view more description should be expanded", () => {
-      cy.get("[data-cy=\"BaseWithhtml-editor\"] button").arrowClick();
+      cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
     });
 
     it("Verify on scroll The top bar with “Revise document” and “Change owner” are fixed", () => {
-      cy.get("[data-cy=\"form.builder.step.number\"]").eq(2).scrollIntoView();
-      cy.get("[data-cy=\"updateRecord\"]").should("be.visible");
-      cy.get("[data-cy=\"changeOwner\"]").should("be.visible");
+      cy.get("[data-cy='form.builder.step.number']").eq(2).scrollIntoView();
+      cy.get("[data-cy='updateRecord']").should("be.visible");
+      cy.get("[data-cy='changeOwner']").should("be.visible");
     });
 
     it("Click on view less description and scroll", () => {
-      cy.get("[data-cy=\"BaseWithhtml-editor\"] button").arrowClick();
-      cy.get("[data-cy=\"lhrs-start-quantity\"]").scrollIntoView();
+      cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
+      cy.get("[data-cy='lhrs-start-quantity']").scrollIntoView();
     });
 
     it("Verify on scroll The top bar with “Revise document” and “Change owner” are fixed", () => {
-      cy.get("[data-cy=\"updateRecord\"]").should("be.visible");
-      cy.get("[data-cy=\"changeOwner\"]").should("be.visible");
+      cy.get("[data-cy='updateRecord']").should("be.visible");
+      cy.get("[data-cy='changeOwner']").should("be.visible");
     });
   });
 });
 
 export { };
-

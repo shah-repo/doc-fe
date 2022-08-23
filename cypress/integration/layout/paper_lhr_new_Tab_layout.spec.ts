@@ -13,6 +13,7 @@ import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -22,11 +23,9 @@ const THIRD_USER = USERS[4];
 let createdCompany;
 let adminEmployeeLoginResponse;
 let adminEmployee;
-// let secondEmployee;
 let loginResponse;
 
 let group;
-// let receivableDocumentType;
 let supplierDocumentType;
 let createdSupplierFormDocument;
 let createdSupplierDocument;
@@ -457,7 +456,7 @@ context("Paper LHR tab Layout", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: SECOND_USER.email,
-      }).then((response) => {
+      }).then(() => {
         done();
       });
     });
@@ -467,18 +466,6 @@ context("Paper LHR tab Layout", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-
-  });
-
-  xcontext("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Olive Schamberger, O'Connell and Gleichner 9122", multiple: true });
     });
   });
 
@@ -496,21 +483,20 @@ context("Paper LHR tab Layout", () => {
     context("Verify form and tabs", () => {
       it("Verify Predefined fields up to attachment", () => {
         cy.verifyPredefiendFields();
-        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        cy.get("[data-cy='field-retrain']").should("exist");
       });
 
       it("Verify Title, Description, Document Type, References, Document ID, output document", () => {
         cy.verifyPredefiendFields();
-        cy.get("[data-cy=\"field-retrain\"]").should("exist");
       });
     });
 
     context("Fill in document attributes", () => {
-      it("Enter title 'Inline Form Document Revision'", () => {
+      it("Enter title 'Paper LHR Document Title'", () => {
         cy.drEnterDocumentTitle({ name: "Paper LHR Document Title" });
       });
 
-      it("Enter description 'LFPO Document'", () => {
+      it("Enter description 'Paper LHR Document form  description'", () => {
         cy.drEnterDocumentDescription({ description: "Paper LHR Document form  description" });
       });
 
@@ -558,14 +544,17 @@ context("Paper LHR tab Layout", () => {
       cy.fbAddNewFieldButton();
     });
     it("Verify that it contains only Details tab", () => {
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.get("[data-cy='tabId.details']").should("exist");
+      cy.get("#sm-tabpanel-1").should("not.exist");
     });
 
     it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      cy.get("header li>p>div>a>div").should("have.text", "Document List");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "FM-00002");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Document List",
+        docId: "FM-00002",
+        revision: "Rev 1",
+      });
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -573,28 +562,28 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Verify Form opens to the Details tab by default and it contains", () => {
-      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       cy.get("#sm-tabpanel-0").should("be.visible");
     });
 
-    context("Verify Schema Fields", () => {
+    context("Verify Fields", () => {
 
       it("Verify Default fields up to attachment", () => {
         cy.verifyPredefiendFields();
       });
 
       it("Verify Added FB Fields checkbox, textfield", () => {
-        cy.get("[name^=\"textfield-for-inline\"]").should("exist");
+        cy.get("[name^='textfield-for-inline']").should("exist");
         cy.get(`input[type="checkbox"][value="1"]`).should("exist");
       });
 
       it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").scrollIntoView();
-        cy.get("[data-cy=\"lhr-selected-part\"]").should("be.visible");
-        cy.get("[name=\"lhr_initial_quantity\"]").should("be.visible");
-        cy.get("[name=\"lhr-end-quantity\"]").should("be.visible");
+        cy.get("[data-cy='lhr-selected-part']").scrollIntoView();
+        cy.get("[data-cy='lhr-selected-part']").should("be.visible");
+        cy.get("[name='lhr_initial_quantity']").should("be.visible");
+        cy.get("[name='lhr-end-quantity']").should("be.visible");
         cy.get("#sm-tabpanel-0").scrollTo("bottom");
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("be.visible");
+        cy.get("[data-cy^='fb-approvals-fb-approvals']").should("be.visible");
       });
 
       it("Verify Form option", () => {
@@ -602,8 +591,8 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
       });
 
       it("Submit for approval", () => {
@@ -618,7 +607,7 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Click 'Initiate New LHR'", () => {
-      cy.get("[id=\"DocumentByTypeListPresenter-openDocRev\"]").arrowClick();
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
     });
 
     it("Select a document type Paper Lot History Record and select a Form released", () => {
@@ -633,24 +622,24 @@ context("Paper LHR tab Layout", () => {
     context("Fill in the fields", () => {
 
       it("Select Part 0005", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("PRT-00005 - rev 1 - Part document");
+        cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("PRT-00005 - rev 1 - Part document");
       });
 
       it("Enter value in textfield", () => {
-        cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("Test");
+        cy.get("[data-cy^='textfield-for-inline']").arrowType("Test");
       });
 
       it("Select 'R&D' build type", () => {
         cy.unClick();
-        cy.get("[value=\"R&D\"]").check();
+        cy.get("[value='R&D']").check();
       });
 
       it("Enter initial quantity", () => {
-        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.get("[name='lhr_initial_quantity']").arrowType("10");
       });
 
       it("Enter end quantity", () => {
-        cy.get("[data-cy=\"lhr-end-quantity\"] input").arrowType("10");
+        cy.get("[data-cy='lhr-end-quantity'] input").arrowType("10");
       });
 
 
@@ -660,14 +649,12 @@ context("Paper LHR tab Layout", () => {
 
       it("Fill in Approval block and  Approve and release Record", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
 
       it("Save the document", () => {
         cy.drSaveDocumentWithoutaudit();
       });
-
-
     });
   });
 
@@ -677,7 +664,7 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Click 'Initiate New LHR'", () => {
-      cy.get("[id=\"DocumentByTypeListPresenter-openDocRev\"]").arrowClick();
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
     });
 
     it("Select a document type Paper Lot History Record and select a Form released", () => {
@@ -691,14 +678,17 @@ context("Paper LHR tab Layout", () => {
 
     context("Verify Created LHR Doc", () => {
       it("Verify that it contains only Details tab", () => {
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.get("[data-cy='tabId.details']").should("exist");
+        cy.get("#sm-tabpanel-1").should("not.exist");
       });
 
-      it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
-        cy.get("header li>p>div>a>div").should("have.text", "LHR");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LHR-00002");
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+      it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (WIP)", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.WIP,
+          title: "LHR",
+          docId: "LHR-00002",
+          revision: "Rev A",
+        });
       });
 
       it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -706,26 +696,25 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Verify Form opens to the Details tab by default and it contains", () => {
-        cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
-        cy.get("#sm-tabpanel-0").should("be.visible");
+        cy.isTabActive({ name: "details", index: 0 });
       });
 
       context("Verify Schema Fields", () => {
         it("Verify Default fields up to attachment", () => {
-          cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+          cy.get("[data-cy='field-document.docId']").should("exist");
         });
 
         it("Verify Added FB Fields checkbox, textfield", () => {
-          cy.get("[name^=\"textfield-for-inline\"]").should("exist");
+          cy.get("[name^='textfield-for-inline']").should("exist");
           cy.get(`input[type="checkbox"][value="1"]`).should("exist");
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-          cy.get("[data-cy=\"lhr-selected-part\"]").should("be.visible");
-          cy.get("[name=\"lhr_initial_quantity\"]").should("be.visible");
-          cy.get("[name=\"lhr-end-quantity\"]").should("be.visible");
+          cy.get("[data-cy='lhr-selected-part']").should("be.visible");
+          cy.get("[name='lhr_initial_quantity']").should("be.visible");
+          cy.get("[name='lhr-end-quantity']").should("be.visible");
           cy.get("#sm-tabpanel-0").scrollTo("bottom");
-          cy.get("[name^=\"fb-approvals-fb-approvals\"]").should("be.visible");
+          cy.get("[name^='fb-approvals-fb-approvals']").should("be.visible");
         });
 
         it("Verify Form option", () => {
@@ -733,8 +722,8 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify that right side panel opens by default to the References tab", () => {
-          cy.get("[data-cy=\"References\"]").should("exist");
-          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+          cy.get("[data-cy='References']").should("exist");
+          cy.get("[data-cy='generalInfo']").should("be.visible");
         });
       });
     });
@@ -742,8 +731,8 @@ context("Paper LHR tab Layout", () => {
 
   context("Validate Right Side Panel", () => {
     it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
     it("Verify Reference tab Info", () => {
@@ -751,7 +740,7 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Verify Eye Icon", () => {
-      cy.get("[data-cy=\"references-icon\"]").should("exist");
+      cy.get("[data-cy='references-icon']").should("exist");
     });
 
     it("Verify Expand and collapse", () => {
@@ -775,16 +764,9 @@ context("Paper LHR tab Layout", () => {
         moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
     });
 
-    context("Verify Revision", () => {
-      it("open revision tab", () => {
-        cy.get("[data-cy=\"note-icon\"]").arrowClick();
-      });
-
-      it("Verify revision Rev Document open or not", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        cy.wait(2000);
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-
+    context("Verify Revisions tab", () => {
+      it("Open revisions tab, click and verify current revision", () => {
+        cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
     });
 
@@ -804,12 +786,10 @@ context("Paper LHR tab Layout", () => {
           cy.drAddGroupFromPermissionTab("Developers");
         });
       });
-
     });
 
     context("Check document history", () => {
       const groupOne = "Developers";
-      let groupTwo;
       const history = [
         {
           owner: USERS[1].name,
@@ -827,77 +807,39 @@ context("Paper LHR tab Layout", () => {
       it("Verify Doc history", () => {
         cy.drSelectHistoryTab();
       });
-      history.forEach((element, groupIndex) => {
-        it(`Check owner name for group ${groupIndex + 1}`, () => {
-          cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-        });
-        element.actions.forEach((action, index, identifier) => {
-          it(`'${action.key}' as '${action.value}' exists`, () => {
-            const typeOfChange = action.key;
-            let contentOfChange = action.value;
-
-            if (action.key === "New description" || action.key === "Description changed" ) {
-              contentOfChange = "\n" + action.value + "\n";
-            }
-
-            if (typeOfChange === "s3Link added") {
-              cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-              cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-            }
-            else {
-              if (action.key === "Access granted to group") {
-                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                  expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                });
-              }
-              else {
-                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                  .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                  .parent()
-                  .parent()
-                  .within(() => {
-                    cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                    cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                  });
-              }
-            }
-          });
-        });
-      });
+      verifyHistoryContent(history, groupOne);
     });
 
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+        cy.get("[data-cy='bookmark-icon']").arrowClick();
+        cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
     });
-
   });
 
 
   context("Fill in the fields and Release", () => {
     it("Select Part 0005", () => {
-      cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("PRT-00005 - rev 1 - Part document");
+      cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("PRT-00005 - rev 1 - Part document");
     });
 
     it("Enter value in textfield", () => {
-      cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("Test");
+      cy.get("[data-cy^='textfield-for-inline']").arrowType("Test");
     });
 
     it("Select 'R&D' build type", () => {
       cy.unClick();
-      cy.get("[value=\"R&D\"]").check();
+      cy.get("[value='R&D']").check();
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      cy.get("[name='lhr_initial_quantity']").arrowType("10");
     });
 
     it("Enter end quantity", () => {
-      cy.get("[data-cy=\"lhr-end-quantity\"] input").arrowType("10");
+      cy.get("[data-cy='lhr-end-quantity'] input").arrowType("10");
     });
-
 
     it("Checked chebox value", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
@@ -905,7 +847,7 @@ context("Paper LHR tab Layout", () => {
 
     it("Fill in Approval block and  Approve and release Record", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
     });
 
     it("Save the document", () => {
@@ -922,14 +864,14 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Approve and Release", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
@@ -954,14 +896,17 @@ context("Paper LHR tab Layout", () => {
 
     context("Verify Created LHR Doc", () => {
       it("Verify that it contains only Details tab", () => {
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.get("[data-cy='tabId.details']").should("exist");
+        cy.get("#sm-tabpanel-1").should("not.exist");
       });
 
-      it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
-        cy.get("header li>p>div>a>div").should("have.text", "LHR");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LHR-00001");
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+      it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage,(IN_REVIEW)", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.IN_REVIEW,
+          title: "LHR",
+          docId: "LHR-00001",
+          revision: "Rev A",
+        });
       });
 
       it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -969,22 +914,21 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Verify Form opens to the Details tab by default and it contains", () => {
-        cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
-        cy.get("#sm-tabpanel-0").should("be.visible");
+        cy.isTabActive({ name: "details", index: 0 });
       });
 
       context("Verify Schema Fields", () => {
 
         it("Verify Added FB Fields checkbox, textfield", () => {
-          cy.get("[name^=\"textfield-for-inline\"]").should("exist");
+          cy.get("[name^='textfield-for-inline']").should("exist");
           cy.get(`input[type="checkbox"][value="1"]`).should("exist");
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-          cy.get("[data-cy=\"lhr-selected-part\"]").scrollIntoView();
-          cy.get("[data-cy=\"lhr-selected-part\"]").should("be.visible");
-          cy.get("[name=\"lhr_initial_quantity\"]").should("be.visible");
-          cy.get("[name=\"lhr-end-quantity\"]").should("be.visible");
+          cy.get("[data-cy='lhr-selected-part']").scrollIntoView();
+          cy.get("[data-cy='lhr-selected-part']").should("be.visible");
+          cy.get("[name='lhr_initial_quantity']").should("be.visible");
+          cy.get("[name='lhr-end-quantity']").should("be.visible");
         });
 
         it("Verify Form option", () => {
@@ -992,8 +936,8 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify that right side panel opens by default to the References tab", () => {
-          cy.get("[data-cy=\"References\"]").should("exist");
-          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+          cy.get("[data-cy='References']").should("exist");
+          cy.get("[data-cy='generalInfo']").should("be.visible");
         });
       });
 
@@ -1002,8 +946,8 @@ context("Paper LHR tab Layout", () => {
     context("Validate Right Side Panel", () => {
 
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
       });
 
       it("Verify Reference tab Info", () => {
@@ -1011,7 +955,7 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Verify Eye Icon", () => {
-        cy.get("[data-cy=\"references-icon\"]").should("exist");
+        cy.get("[data-cy='references-icon']").should("exist");
       });
 
       it("Verify Expand and collapse", () => {
@@ -1034,11 +978,11 @@ context("Paper LHR tab Layout", () => {
 
       context("Verify Revision", () => {
         it("open revision tab", () => {
-          cy.get("[data-cy=\"note-icon\"]").arrowClick();
+          cy.get("[data-cy='note-icon']").arrowClick();
         });
 
         it("Verify revision Rev Document open or not", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+          cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick();
           cy.wait(2000);
           cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
 
@@ -1066,7 +1010,6 @@ context("Paper LHR tab Layout", () => {
 
       context("Check document history", () => {
         const groupOne = "Developers";
-        let groupTwo;
         const history = [
           {
             owner: USERS[1].name,
@@ -1084,49 +1027,13 @@ context("Paper LHR tab Layout", () => {
         it("Verify Doc history", () => {
           cy.drSelectHistoryTab();
         });
-        history.forEach((element, groupIndex) => {
-          it(`Check owner name for group ${groupIndex + 1}`, () => {
-            cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-          });
-          element.actions.forEach((action, index, identifier) => {
-            it(`'${action.key}' as '${action.value}' exists`, () => {
-              const typeOfChange = action.key;
-              let contentOfChange = action.value;
-
-              if (action.key === "New description" || action.key === "Description changed" ) {
-                contentOfChange = "\n" + action.value + "\n";
-              }
-
-              if (typeOfChange === "s3Link added") {
-                cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-                cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-              }
-              else {
-                if (action.key === "Access granted to group") {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                    expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                  });
-                }
-                else {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                    .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                    .parent()
-                    .parent()
-                    .within(() => {
-                      cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                      cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                    });
-                }
-              }
-            });
-          });
-        });
+        verifyHistoryContent(history, groupOne);
       });
 
       context("Verify Book Mark", () => {
         it("Verify Book Mark Navigation", () => {
-          cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-          cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
       });
     });
@@ -1151,14 +1058,14 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Approve and Release", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
@@ -1181,14 +1088,17 @@ context("Paper LHR tab Layout", () => {
 
     context("Verify Created LHR Doc", () => {
       it("Verify that it contains only Details tab", () => {
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.get("[data-cy='tabId.details']").should("exist");
+        cy.get("#sm-tabpanel-1").should("not.exist");
       });
 
-      it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Relsd)", () => {
-        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-        cy.get("header li>p>div>a>div").should("have.text", "LHR");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LHR-00002");
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+      it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage,(Released)", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "LHR",
+          docId: "LHR-00002",
+          revision: "Rev A",
+        });
       });
 
       it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -1196,21 +1106,21 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Verify Form opens to the Details tab by default and it contains", () => {
-        cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+        cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
         cy.get("#sm-tabpanel-0").should("be.visible");
       });
 
       context("Verify Schema Fields", () => {
 
         it("Verify Added FB Fields checkbox, textfield", () => {
-          cy.get("[name^=\"textfield-for-inline\"]").should("exist");
+          cy.get("[name^='textfield-for-inline']").should("exist");
           cy.get(`input[type="checkbox"][value="1"]`).should("exist");
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-          cy.get("[data-cy=\"lhr-selected-part\"]").should("be.visible");
-          cy.get("[name=\"lhr_initial_quantity\"]").should("be.visible");
-          cy.get("[name=\"lhr-end-quantity\"]").should("be.visible");
+          cy.get("[data-cy='lhr-selected-part']").should("be.visible");
+          cy.get("[name='lhr_initial_quantity']").should("be.visible");
+          cy.get("[name='lhr-end-quantity']").should("be.visible");
         });
 
         it("Verify Form option", () => {
@@ -1218,8 +1128,8 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify that right side panel opens by default to the References tab", () => {
-          cy.get("[data-cy=\"References\"]").should("exist");
-          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+          cy.get("[data-cy='References']").should("exist");
+          cy.get("[data-cy='generalInfo']").should("be.visible");
         });
       });
 
@@ -1227,8 +1137,8 @@ context("Paper LHR tab Layout", () => {
 
     context("Validate Right Side Panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
       });
 
       it("Verify Reference tab Info", () => {
@@ -1236,7 +1146,7 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Verify Eye Icon", () => {
-        cy.get("[data-cy=\"references-icon\"]").should("exist");
+        cy.get("[data-cy='references-icon']").should("exist");
       });
 
       it("Verify Expand and collapse", () => {
@@ -1257,16 +1167,9 @@ context("Paper LHR tab Layout", () => {
           moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
       });
 
-      context("Verify Revision", () => {
-        it("open revision tab", () => {
-          cy.get("[data-cy=\"note-icon\"]").arrowClick();
-        });
-
-        it("Verify revision Rev Document open or not", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          cy.wait(2000);
-          cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-
+      context("Verify Revisions tab", () => {
+        it("Open revisions tab, click and verify current revision", () => {
+          cy.openRevisionsTabAndVerifyCurrentRevision("A");
         });
       });
 
@@ -1291,7 +1194,6 @@ context("Paper LHR tab Layout", () => {
 
       context("Check document history", () => {
         const groupOne = "Can be approver";
-        let groupTwo;
         const history = [
           {
             owner: USERS[1].name,
@@ -1309,49 +1211,13 @@ context("Paper LHR tab Layout", () => {
         it("Verify Doc history", () => {
           cy.drSelectHistoryTab();
         });
-        history.forEach((element, groupIndex) => {
-          it(`Check owner name for group ${groupIndex + 1}`, () => {
-            cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-          });
-          element.actions.forEach((action, index, identifier) => {
-            it(`'${action.key}' as '${action.value}' exists`, () => {
-              const typeOfChange = action.key;
-              let contentOfChange = action.value;
-
-              if (action.key === "New description" || action.key === "Description changed" ) {
-                contentOfChange = "\n" + action.value + "\n";
-              }
-
-              if (typeOfChange === "s3Link added") {
-                cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-                cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-              }
-              else {
-                if (action.key === "Access granted to group") {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                    expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                  });
-                }
-                else {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                    .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                    .parent()
-                    .parent()
-                    .within(() => {
-                      cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                      cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                    });
-                }
-              }
-            });
-          });
-        });
+        verifyHistoryContent(history, groupOne);
       });
 
       context("Verify Book Mark", () => {
         it("Verify Book Mark Navigation", () => {
-          cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-          cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
       });
     });

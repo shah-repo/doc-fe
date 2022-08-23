@@ -31,6 +31,8 @@ let mpiDocument;
 let mpiDocumentType;
 let createdPartDocument;
 
+// TO Do MEQ related steps need to add after bug fix ENC-12522
+
 
 context("Create new LHRT Layout Verification", () => {
   before(() => {
@@ -750,16 +752,16 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Verify Layout of document and Tabs", () => {
     it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      cy.get("header li>p>div>a>div").should("have.text", "Document List");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "LHRT-00002");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Document List",
+        docId: "LHRT-00002",
+        revision: "Rev 1",
+      });
     });
 
     it("Verify that it contains Overview, details, Material and Equipment", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
-      cy.get("[data-cy=\"tabId.materialsandequipment\"]").should("exist");
+      cy.verifyTabs("overview", "details", "materialsandequipment");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -767,8 +769,7 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Verify LHRT opens to the Overview tab by default", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
+      cy.isTabActive({ name: "overview", index: 0 });
     });
 
     it("Verify overview tab predefiend fields up to attachment", () => {
@@ -776,33 +777,33 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Verify Part field exist", () => {
-      cy.get("[data-cy=\"lhr-selected-part\"]").should("exist");
+      cy.get("[data-cy='lhr-selected-part']").should("exist");
     });
 
     it("Verify 'R&D' build type field exist", () => {
       cy.unClick();
-      cy.get("[value=\"R&D\"]").should("exist");
+      cy.get("[value='R&D']").should("exist");
     });
 
     it("Verify initial quantity field exist", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").should("exist");
+      cy.get("[name='lhr_initial_quantity']").should("exist");
     });
 
     it("Verify  end quantity field exist", () => {
-      cy.get("[data-cy=\"lhr-end-quantity\"] input").should("exist");
+      cy.get("[data-cy='lhr-end-quantity'] input").should("exist");
     });
 
     it("Verify approval block exist", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
+      cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
     });
 
-    it("Verify that Form Options should not appear for this tab ", () => {
+    it("Verify that Form Options", () => {
       cy.get(".formOptionsBox").should("exist");
     });
 
     context("fill the fields", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("CS-00005 - Part document");
+        cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("CS-00005 - Part document");
       });
       it("Save the document", () => {
         cy.drSaveDocumentWithoutaudit();
@@ -818,52 +819,52 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Verify Click details Tab, clicking on it should open that tab and close the other one", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
-      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
     it("Verify Step 1 Exist in detail tab", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").should("be.visible");
+      cy.get("[data-cy='LHR Step 1']").should("be.visible");
     });
 
     it("Select MPI document for step #1 in LHRt", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick({ force: true });
-      cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+      cy.get("[data-cy='LHR Step 1']").arrowClick({ force: true });
+      cy.get("input[data-cy='lhrstep-built-in']").then(($el) => {
         $el.trigger("click");
       });
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("PI-00008");
+        cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify Add field /add step button Exist in detail tab", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").should("exist");
-      cy.get("[data-cy=\"form.builder.add.step\"]").should("exist");
+    it("Verify Add field/add step button Exist in detail tab", () => {
+      cy.get("[data-cy='form.builder.add.field']").should("exist");
+      cy.get("[data-cy='form.builder.add.step']").should("exist");
     });
 
     it("Add LHR step", () => {
-      cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
+      cy.get("[data-cy='form.builder.add.step']").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.unClick();
     });
 
     it("Verify Step 2 Added to detail tab", () => {
-      cy.get("[data-cy=\"LHR Step 2\"]").should("be.visible");
+      cy.get("[data-cy='LHR Step 2']").should("be.visible");
     });
 
     it("Select MPI document created with API for step #2 in LHRt", () => {
-      cy.get("[data-cy=\"LHR Step 2\"]").arrowClick({ force: true });
-      cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
+      cy.get("[data-cy='LHR Step 2']").arrowClick({ force: true });
+      cy.get("input[data-cy^='lhr-step']").then(($el) => {
         $el.trigger("click");
       });
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("PI-00009");
+        cy.get("input[data-cy^='lhr-step']").autocompleteSelect("PI-00009");
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -874,30 +875,22 @@ context("Create new LHRT Layout Verification", () => {
     });
   });
 
-  context("Navigate to Materials & Equipment tab and verify that", () => {
-    it("Should display aggregate of materials in Details tab in one line", () => {
-      // step is blocked due to bug
-    });
-
-    it("should display aggregate of equipment in Details tab in one line", () => {
-      // step is blocked due to bug
-    });
-
+  context("Verify right side pannel", () => {
     it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
     });
   });
 
   context("Verify Book Mark", () => {
     it("Verify Book Mark Navigation for Approval block", () => {
-      cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-      cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
-      cy.get("[data-cy=\"Bookmarks-detail\"] P").arrowClick();
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='bookmark-icon']").arrowClick();
+      cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+      cy.get("[data-cy='Bookmarks-detail'] P").arrowClick();
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "true");
       cy.get("#sm-tabpanel-0").should("be.visible");
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").scrollIntoView();
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("be.visible");
+      cy.get("[data-cy^='fb-approvals-fb-approvals']").scrollIntoView();
+      cy.get("[data-cy^='fb-approvals-fb-approvals']").should("be.visible");
     });
   });
 
@@ -927,9 +920,9 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Verify that it contains Overview, details, Material and Equipment", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
-      cy.get("[data-cy=\"tabId.materialsandequipment\"]").should("exist");
+      cy.get("[data-cy='tabId.overview']").should("exist");
+      cy.get("[data-cy='tabId.details']").should("exist");
+      cy.get("[data-cy='tabId.materialsandequipment']").should("exist");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -937,37 +930,36 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Verify LHRT opens to the Overview tab by default", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
+      cy.isTabActive({ name: "overview", index: 0 });
     });
 
     it("Verify overview tab predefiend fields up to attachment", () => {
-      cy.get("[data-cy=\"field-name\"]").should("exist");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").should("exist");
+      cy.get("[data-cy='field-name']").should("exist");
+      cy.get("[data-cy='BaseWithhtml-editor']").should("exist");
     });
 
     it("Verify Part field exist", () => {
-      cy.get("[data-cy=\"lhr-selected-part\"]").should("exist");
+      cy.get("[data-cy='lhr-selected-part']").should("exist");
     });
 
     it("Verify 'R&D' build type field exist", () => {
       cy.unClick();
-      cy.get("[value=\"R&D\"]").should("exist");
+      cy.get("[value='R&D']").should("exist");
     });
 
     it("Verify initial quantity field exist", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").should("exist");
+      cy.get("[name='lhr_initial_quantity']").should("exist");
     });
 
     it("Verify  end quantity field exist", () => {
-      cy.get("[data-cy=\"lhr-end-quantity\"] input").should("exist");
+      cy.get("[data-cy='lhr-end-quantity'] input").should("exist");
     });
 
     it("Verify approval block exist", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
+      cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
     });
 
-    it("Verify that Form Options should not appear for this tab ", () => {
+    it("Verify Form Options exist", () => {
       cy.get(".formOptionsBox").should("exist");
     });
 
@@ -976,11 +968,11 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Verify Step 1 visible in detail tab", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").should("be.visible");
+      cy.get("[data-cy='LHR Step 1']").should("be.visible");
     });
 
     it("Verify Step 2 visible in detail tab", () => {
-      cy.get("[data-cy=\"LHR Step 2\"]").should("be.visible");
+      cy.get("[data-cy='LHR Step 2']").should("be.visible");
     });
 
   });
