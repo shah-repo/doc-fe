@@ -1106,14 +1106,7 @@ context("LFPO new layout verification", () => {
 
     context("Verify Revision", () => {
       it("open revision tab", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-      });
-
-      it("Verify revision Rev Document open or not", () => {
-        cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick();
-        cy.wait(2000);
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-
+        cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
     });
 
@@ -1329,13 +1322,7 @@ context("LFPO new layout verification", () => {
 
     context("Verify Revision", () => {
       it("open revision tab", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-      });
-
-      it("Verify revision Rev Document open or not", () => {
-        cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick();
-        cy.wait(2000);
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+        cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
     });
 

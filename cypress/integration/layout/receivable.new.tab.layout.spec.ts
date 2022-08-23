@@ -860,10 +860,6 @@ context("Receiving landing page test", () => {
 
     context("Verify Revision", () => {
       it("open revision tab", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-      });
-
-      it("Verify revision Rev Document open or not", () => {
         cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
     });
@@ -1139,10 +1135,6 @@ context("Receiving landing page test", () => {
 
     context("Verify Revision", () => {
       it("open revision tab", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-      });
-
-      it("Verify revision Rev Document open or not", () => {
         cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
     });
