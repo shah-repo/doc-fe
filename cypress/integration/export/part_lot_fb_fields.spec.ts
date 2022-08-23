@@ -206,7 +206,7 @@ context("Export Part Lot", () => {
     });
 
     it("Verify Approvals Section", () => {
-      cy.get(`input[data-cy^=\"fb-approvals-fb-approvals\"]`).should("exist");
+      cy.get(`input[data-cy^="fb-approvals-fb-approvals"]`).should("exist");
     });
   });
 
@@ -241,10 +241,10 @@ context("Export Part Lot", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
@@ -357,7 +357,7 @@ context("Export Part Lot", () => {
     });
 
     it("Enter text in textfield", () => {
-      cy.get("[name^=\"fb-textfield-1\"]").arrowType("Test one");
+      cy.get(`[name^="fb-textfield-1"]`).arrowType("Test one");
     });
 
     it("Navigate to Details tab", () => {
@@ -365,24 +365,24 @@ context("Export Part Lot", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").arrowType("2");
+      cy.get(`[name="lot_quantity"]`).arrowType("2");
     });
 
     it("Enter usable received", () => {
-      cy.get("[name=\"lot_usable_quantity\"]").arrowType("1");
+      cy.get(`[name="lot_usable_quantity"]`).arrowType("1");
     });
 
     it("Enter Expiration date", () => {
-      cy.get("input[name^=\"lot_expiry_date\"]").parent().find("button").arrowClick({ force: true });
+      cy.get(`input[name^="lot_expiry_date"]`).parent().find("button").arrowClick({ force: true });
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
     it("Select Part", () => {
-      cy.get("[data-cy=\"lot_part\"]").autocompleteSelect("Part document");
+      cy.get(`[data-cy="lot_part"]`).autocompleteSelect("Part document");
     });
 
     it("Check 100% override", () => {
-      cy.get("[value=\"100% Inspection Override\"]").check();
+      cy.get(`[value="100% Inspection Override"]`).check();
     });
 
     it("Navigate to Overview tab", () => {
