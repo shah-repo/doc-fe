@@ -1,6 +1,5 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -8,6 +7,7 @@ import { CyRoutes } from "../../support/routes";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
+import { verifyHistoryContent } from "./../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
@@ -30,7 +30,6 @@ context("Record inline Flow", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0410", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -157,17 +156,6 @@ context("Record inline Flow", () => {
     });
   });
 
-  // context("Login user", () => {
-  //   it("Logs user in", () => {
-  //     cy.authLogin({
-  //       email: USERS[1].email,
-  //     });
-  //   });
-  //   it("Selects company", () => {
-  //     cy.cmpSelectCompany({ name: "Plum Wilderman, Raynor and Wiegand 76152", multiple: true });
-  //   });
-  // });
-
   context("FORM document creation flow", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
@@ -213,8 +201,7 @@ context("Record inline Flow", () => {
       });
 
       it("Verify Overview Tab Selected by default", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-        cy.get("#sm-tabpanel-0").should("be.visible");
+        cy.isTabActive({ name: "overview", index: 0 });
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("exist");
         cy.verifyPredefiendFields();
       });
@@ -240,7 +227,7 @@ context("Record inline Flow", () => {
         cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
-        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+        cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
 
@@ -259,7 +246,7 @@ context("Record inline Flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.fbOpenValidation();
-        cy.get("input[value^=\"visibility\"]").check();
+        cy.get("input[value^='visibility']").check();
         cy.fbFieldRequiredIfIn({ name: "Checkbox" });
         cy.fbSelectCheckboxValue("3");
         cy.fbAddNewFieldButton();
@@ -278,7 +265,7 @@ context("Record inline Flow", () => {
         cy.fbEnterNameValue({ name: "label", value: "Second inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
-        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+        cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddField();
       });
     });
@@ -291,9 +278,8 @@ context("Record inline Flow", () => {
     });
 
     context("Verify Predefiend fields and tabs", () => {
-      it("Verify Predefiend Tabs Exist", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      it("Verify Predefiend Tabs overview, details Exist", () => {
+        cy.verifyTabs("overview", "details");
       });
 
       it("Verify Tabs are fixed and order not changable", () => {
@@ -308,10 +294,12 @@ context("Record inline Flow", () => {
     context("Verify Overview  Tab", () => {
 
       it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-        cy.get("header li>p>div>a>div").should("have.text", "Document List");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "FM-00002");
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.DRAFT,
+          title: "Document List",
+          docId: "FM-00002",
+          revision: "Rev 1",
+        });
       });
 
       it("Navigate to details Tab", () => {
@@ -319,9 +307,9 @@ context("Record inline Flow", () => {
       });
 
       it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+        cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
         cy.get("#sm-tabpanel-0").should("be.hidden");
-        cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+        cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
     });
 
@@ -338,7 +326,6 @@ context("Record inline Flow", () => {
     });
 
     it("Click on create new and chose 'Record one'", () => {
-      SystemRequirement("REQ-2760");
       cy.recCreateRecordFromLandingPage();
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Record one" });
     });
@@ -347,13 +334,6 @@ context("Record inline Flow", () => {
       it("Enter title 'Record Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Record Document Revision" });
         cy.unClick();
-      });
-
-      it("Upload attachment 'image.jpg'", () => {
-        cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
-        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click().wait(500);
-        cy.progressBarShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Click on Save", () => {
@@ -369,12 +349,12 @@ context("Record inline Flow", () => {
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
+        cy.get("[data-cy^='textfield-for-inline'] input").arrowType("First entry");
         cy.unClick();
       });
 
       it("Enter text 'First entry' in second textfield for inline", () => {
-        cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
+        cy.get("[data-cy^='second-textfield-for-inline'] input")
           .type("First entry");
         cy.unClick();
       });
@@ -383,7 +363,7 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-inline-field\"] input")
+            cy.get("[name*='fb-ia-inline-field'] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -392,8 +372,8 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name^=\"fb-ia-inline-field\"] input").arrowClick();
-            cy.get("[name^=\"fb-ia-inline-field\"] input")
+            cy.get("[name^='fb-ia-inline-field'] input").arrowClick();
+            cy.get("[name^='fb-ia-inline-field'] input")
               .autocompleteSelect(`${USERS[3].name}`, { force: true });
           });
       });
@@ -405,7 +385,7 @@ context("Record inline Flow", () => {
       it("Select approver for second inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
-            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+            cy.get("[name*='fb-ia-second-inline-field'] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -413,7 +393,7 @@ context("Record inline Flow", () => {
       it("Select second approver for second inline", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
-            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+            cy.get("[name*='fb-ia-second-inline-field'] input")
               .autocompleteSelect("enlil.testmail+cy3");
           });
       });
@@ -423,7 +403,7 @@ context("Record inline Flow", () => {
       });
 
       it("Send request for approval", () => {
-        cy.get("[data-cy=\"form.builder.request.approval\"]").first().arrowClick();
+        cy.get("[data-cy='form.builder.request.approval']").first().arrowClick();
       });
 
       it("Check inline record creation default to numeric revision", () => {
@@ -432,7 +412,7 @@ context("Record inline Flow", () => {
       });
 
       it("Check approve button is not disabled", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
+        cy.get("[data-cy='fb-control-btn']").contains("Approve").should("not.be.disabled");
       });
 
       it("Click on Save", () => {
@@ -448,13 +428,11 @@ context("Record inline Flow", () => {
       });
 
       it("Verify Overview Tab and Predefined fields", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-        cy.get("#sm-tabpanel-0").should("be.visible");
+        cy.isTabActive({ name: "overview", index: 0 });
       });
 
       it("Verify Predefiend Tabs Exist", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.verifyTabs("overview", "details");
       });
 
       it("Verify Tabs are fixed and order not changable", () => {
@@ -463,10 +441,12 @@ context("Record inline Flow", () => {
 
       context("Verify Overview  Tab", () => {
         it("Verify Header Info", () => {
-          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
-          cy.get("header li>p>div>a>div").should("have.text", "Records");
-          cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "RD-00003");
-          cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.WIP,
+            title: "Records",
+            docId: "RD-00003",
+            revision: "Rev 1",
+          });
         });
 
         it("Navigate to details Tab", () => {
@@ -475,15 +455,15 @@ context("Record inline Flow", () => {
 
         it("Verify Added fields are exist in detail tab or not", () => {
           cy.get(`input[type="checkbox"][value="1"]`).should("exist");
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").should("exist");
-          cy.get("[data-cy^=\"second-textfield-for-inline\"] input").should("exist");
+          cy.get("[data-cy^='textfield-for-inline'] input").should("exist");
+          cy.get("[data-cy^='second-textfield-for-inline'] input").should("exist");
           cy.get(".formOptionsBox").should("exist");
         });
 
         it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-          cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+          cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
           cy.get("#sm-tabpanel-0").should("be.hidden");
-          cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+          cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
         });
       });
     });
@@ -502,14 +482,8 @@ context("Record inline Flow", () => {
       });
 
       context("Verify Revision", () => {
-        it("open revision tab", () => {
-          cy.get("[data-cy=\"note-icon\"]").arrowClick();
-        });
-
-        it("Verify revision Rev Document open or not", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          cy.wait(2000);
-          cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+        it("open revision", () => {
+          cy.openRevisionsTabAndVerifyCurrentRevision("1");
         });
       });
 
@@ -533,7 +507,6 @@ context("Record inline Flow", () => {
 
       context("Check document history", () => {
         const groupOne = "Developers";
-        let groupTwo;
         const history = [
           {
             owner: USERS[2].name,
@@ -551,54 +524,7 @@ context("Record inline Flow", () => {
         it("Verify Doc history", () => {
           cy.drSelectHistoryTab();
         });
-
-        history.forEach((element, groupIndex) => {
-          it(`Check owner name for group ${groupIndex + 1}`, () => {
-            cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-          });
-
-          element.actions.forEach((action, index, identifier) => {
-            it(`'${action.key}' as '${action.value}' exists`, () => {
-              const typeOfChange = action.key;
-              let contentOfChange = action.value;
-              if (action.key === "New description" || action.key === "Description changed" ) {
-                contentOfChange = "\n" + action.value + "\n";
-              }
-              if (typeOfChange === "s3Link added") {
-                cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-                cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-              }
-              else {
-                if (action.key === "Access granted to group") {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                    expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                  });
-                }
-                else {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                    .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                    .parent()
-                    .parent()
-                    .within(() => {
-                      cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                      cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                    });
-                }
-              }
-            });
-          });
-        });
-      });
-
-
-      context("Verify Revision History", () => {
-        xit("Verify Revision History Items", () => {
-          cy.get("[data-cy='note-icon']").arrowClick();
-          cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-          cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-          cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-          cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-        });
+        verifyHistoryContent(history, groupOne);
       });
     });
 
@@ -606,15 +532,15 @@ context("Record inline Flow", () => {
       it("Approve first Inline Approval", () => {
         cy.drSelectDetailsTab();
         cy.listLoadingElementShouldNotExist();
-        cy.get("button[data-cy=\"fb-control-btn\"]").first().contains("Approve").first().arrowClick();
+        cy.get("button[data-cy='fb-control-btn']").first().contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.SessionDetails,
           CyRoutes.GetRequiredApproversDocRev,
         ], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
@@ -643,7 +569,7 @@ context("Record inline Flow", () => {
             CyRoutes.SessionDetails,
             CyRoutes.GetRequiredApproversDocRev,
           ], () => {
-            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
+            cy.get("[data-cy^='textfield-for-inline'] input").arrowType(", Second entry");
             cy.unClick();
             cy.progressBarShouldNotExist();
           });
@@ -658,21 +584,20 @@ context("Record inline Flow", () => {
         });
 
         it("Verify system asks for another approval afer changing section", () => {
-          SystemRequirement("REQ-1050", "REQ-0990", "REQ-1100", "REQ-1090");
-          cy.get("[data-cy^=\"form.builder.approval.pending\"]")
+          cy.get("[data-cy^='form.builder.approval.pending']")
             .first()
             .should("have.text", "Inline approval pending");
         });
 
         it("Approve first Inline Approval", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+          cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
           cy.listLoadingElementShouldNotExist();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+            cy.get("[data-cy='common.confirm']").arrowClick();
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -684,14 +609,14 @@ context("Record inline Flow", () => {
         });
 
         it("Approve second Inline Approval", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+          cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
           cy.listLoadingElementShouldNotExist();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+            cy.get("[data-cy='common.confirm']").arrowClick();
           });
           cy.checkToastMessage({ exists: false });
           cy.progressBarShouldNotExist();
@@ -703,11 +628,11 @@ context("Record inline Flow", () => {
         it("Approve and release it", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
+            cy.get("[data-cy='DocumentRevisionList-item']").eq(1).arrowClick();
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+            cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick();
           });
           cy.recApproveAndReleaseInlineRecord();
         });
@@ -728,16 +653,11 @@ context("Record inline Flow", () => {
     });
 
     it("Verify Predefined Fields", () => {
-      cy.get("[data-cy=\"field-name\"]").should("exist");
+      cy.get("[data-cy='field-name']").should("exist");
     });
 
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
-    });
-
-    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
-      cy.verifyFixedTab();
+      cy.verifyTabs("overview", "details");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -745,32 +665,33 @@ context("Record inline Flow", () => {
     });
 
     it("Verify Form opens to the “Overview” tab by default and schema field and no Approval block", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
+      cy.isTabActive({ name: "overview", index: 0 });
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("not.exist");
     });
 
     it("Verify Header Info", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-      cy.get("header li>p>div>a>div").should("have.text", "Records");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "RD-00003");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.RELEASED,
+        title: "Records",
+        docId: "RD-00003",
+        revision: "Rev A",
+      });
     });
 
     it("Click Details Tab, clicking on it should open that tab and close the other one", () => {
       cy.drSelectDetailsTab();
-      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
     });
 
     it("Verify that Details tab contains FB fields then Form Options should appear for this tab", () => {
       cy.get(".formOptionsBox").should("exist");
-      cy.get("[data-cy=\"Checkbox\"]").should("be.visible");
+      cy.get("[data-cy='Checkbox']").should("be.visible");
     });
 
     it("Verify that right side panel opens by default to the References tab and that", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
     it("Verify Right side Pannel Can be expanded or collapsed", () => {
@@ -783,13 +704,12 @@ context("Record inline Flow", () => {
 
     it("Verify Book Mark Navigation", () => {
       cy.verifyReferenceTab({ user: USERS[2], formId: "", shortName: "HB" });
-      cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-      cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+      cy.get("[data-cy='bookmark-icon']").arrowClick();
+      cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
     });
 
     context("Check document history", () => {
       const groupOne = "Developers";
-      let groupTwo;
       const history = [
         {
           owner: USERS[2].name,
@@ -807,43 +727,8 @@ context("Record inline Flow", () => {
       it("Verify Doc history", () => {
         cy.drSelectHistoryTab();
       });
-      history.forEach((element, groupIndex) => {
-        it(`Check owner name for group ${groupIndex + 1}`, () => {
-          cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-        });
-        element.actions.forEach((action, index, identifier) => {
-          it(`'${action.key}' as '${action.value}' exists`, () => {
-            const typeOfChange = action.key;
-            let contentOfChange = action.value;
+      verifyHistoryContent(history, groupOne);
 
-            if (action.key === "New description" || action.key === "Description changed" ) {
-              contentOfChange = "\n" + action.value + "\n";
-            }
-
-            if (typeOfChange === "s3Link added") {
-              cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-              cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-            }
-            else {
-              if (action.key === "Access granted to group") {
-                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                  expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                });
-              }
-              else {
-                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                  .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                  .parent()
-                  .parent()
-                  .within(() => {
-                    cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                    cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                  });
-              }
-            }
-          });
-        });
-      });
     });
 
     context("Verify User able to add Groups or other user permissions", () => {

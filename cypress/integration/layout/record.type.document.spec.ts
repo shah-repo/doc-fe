@@ -6,6 +6,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
@@ -94,21 +95,8 @@ context("Record type Document Layout verification", () => {
     });
   });
 
-  // context("Login user", () => { // for testing purpose
-  //   it("Logs user in", () => {
-  //     cy.authLogin({
-  //       email: USERS[1].email,
-  //     });
-  //   });
-  //   it("Selects company", () => {
-  //     cy.cmpSelectCompany({ name: "Grey Christiansen - Weissnat 60415", multiple: true });
-  //   });
-  // });
-
   context("Create a required form for Record Document", () => {
-
     context("Start document creation flow", () => {
-
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -173,7 +161,6 @@ context("Record type Document Layout verification", () => {
     });
 
     context("Validate created form document", () => {
-
       context("Validate Predefined fields", () => {
         it("Verify Predefiend fields up to attachment", () => {
           cy.verifyPredefiendFields();
@@ -182,8 +169,7 @@ context("Record type Document Layout verification", () => {
 
       context("Validate Tabs", () => {
         it("Verify Predefiend Tabs Exist", () => {
-          cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-          cy.get("[data-cy=\"tabId.details\"]").should("exist");
+          cy.verifyTabs("overview", "details");
         });
 
         it("Verify Tabs are fixed and order not changable", () => {
@@ -196,23 +182,22 @@ context("Record type Document Layout verification", () => {
 
       context("Verify Overview  Tab", () => {
         it("Verify Overview Tab Selected", () => {
-          cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-          cy.get("#sm-tabpanel-0").should("be.visible");
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("exist");
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify Tabs is fixed and order not changable", () => {
           cy.verifyFixedTab();
         });
-
       });
 
       context("Verify header and tabs", () => {
         it("Verify Header Info Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-          cy.get("header li>p>div>a>div").should("have.text", "Document List");
-          cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "FM-00002");
-          cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.DRAFT,
+            title: "Document List",
+            docId: "FM-00002",
+            revision: "Rev 1",
+          });
         });
 
         it("Navigate to details Tab", () => {
@@ -220,18 +205,19 @@ context("Record type Document Layout verification", () => {
         });
 
         it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-          cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+          cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
           cy.get("#sm-tabpanel-0").should("be.hidden");
-          cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+          cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
           cy.get("#sm-tabpanel-1").should("be.visible");
         });
       });
 
       context("Validate Newly Added  form builder fields in Details tab", () => {
         it("Validate Right Side Panel Open by default to Reference tab", () => {
-          cy.get("[data-cy=\"References\"]").should("exist");
-          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+          cy.get("[data-cy='References']").should("exist");
+          cy.get("[data-cy='generalInfo']").should("be.visible");
         });
+
         it("Approve and release FORM document", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
             cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -258,8 +244,7 @@ context("Record type Document Layout verification", () => {
     });
     context("Validate Tabs", () => {
       it("Verify Predefiend Tabs Exist", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.verifyTabs("overview", "details");
       });
 
       it("Verify Tabs are fixed and order not changable", () => {
@@ -267,16 +252,16 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Verify Predefiend fields up to attachment", () => {
-        cy.get("[data-cy=\"field-name\"]").should("exist");
-        cy.get("[data-cy=\"description\"]").should("exist");
-        cy.get("[data-cy=\"select.document.documentType.id\"]").should("exist");
-        cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+        cy.get("[data-cy='field-name']").should("exist");
+        cy.get("[data-cy='description']").should("exist");
+        cy.get("[data-cy='select.document.documentType.id']").should("exist");
+        cy.get("[data-cy='field-document.docId']").should("exist");
       });
     });
 
     context("Verify Overview  Tab", () => {
       it("Verify Overview Tab Selected", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
+        cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "true");
         cy.get("#sm-tabpanel-0").should("be.visible");
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("exist");
       });
@@ -286,10 +271,12 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-        cy.get("header li>p>div>a>div").should("have.text", "Records");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "RD-00003");
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.DRAFT,
+          title: "Records",
+          docId: "RD-00003",
+          revision: "Rev A",
+        });
       });
 
       it("Navigate to details Tab", () => {
@@ -297,9 +284,9 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+        cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
         cy.get("#sm-tabpanel-0").should("be.hidden");
-        cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+        cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
     });
 
@@ -316,8 +303,8 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Validate Right Side Panel Open by default to Reference tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
       });
 
       it("Verify Expand and Collpase Right Side Panel", () => {
@@ -331,8 +318,8 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Verify References selection", () => {
-        cy.get("[data-cy=\"references-icon\"]").arrowClick();
-        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+        cy.get("[data-cy='references-icon']").arrowClick();
+        cy.get("[data-cy='referenceTo']").arrowClick();
         cy.drSelectReferences( "FM-00001" );
         cy.drRemoveReferences({ reference: "FM-00001" });
       });
@@ -343,13 +330,7 @@ context("Record type Document Layout verification", () => {
 
       context("Verify Revision", () => {
         it("open revision tab", () => {
-          cy.get("[data-cy=\"note-icon\"]").arrowClick();
-        });
-
-        it("Verify revision Rev Document open or not", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          cy.wait(2000);
-          cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+          cy.openRevisionsTabAndVerifyCurrentRevision("A").wait(2000);
         });
       });
 
@@ -373,7 +354,6 @@ context("Record type Document Layout verification", () => {
 
       context("Check document history", () => {
         const groupOne = "Developers";
-        let groupTwo;
         const history = [
           {
             owner: USERS[1].name,
@@ -391,52 +371,15 @@ context("Record type Document Layout verification", () => {
         it("Verify Doc history", () => {
           cy.drSelectHistoryTab();
         });
-
-        history.forEach((element, groupIndex) => {
-          it(`Check owner name for group ${groupIndex + 1}`, () => {
-            cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-          });
-
-          element.actions.forEach((action, index, identifier) => {
-            it(`'${action.key}' as '${action.value}' exists`, () => {
-              const typeOfChange = action.key;
-              let contentOfChange = action.value;
-              if (action.key === "New description" || action.key === "Description changed" ) {
-                contentOfChange = "\n" + action.value + "\n";
-              }
-              if (typeOfChange === "s3Link added") {
-                cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-                cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-              }
-              else {
-                if (action.key === "Access granted to group") {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                    expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                  });
-                }
-                else {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                    .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                    .parent()
-                    .parent()
-                    .within(() => {
-                      cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                      cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                    });
-                }
-              }
-            });
-          });
-        });
+        verifyHistoryContent(history, groupOne);
       });
 
 
       context("Fill and Approve Released", () => {
 
-
         it("Checkbox option 1 checked", () => {
           cy.drSelectDetailsTab();
-          cy.get("[data-cy=\"Checkbox\"]").should("be.visible");
+          cy.get("[data-cy='Checkbox']").should("be.visible");
           cy.get(`input[type="checkbox"][value="1"]`).last().check();
         });
 
@@ -450,14 +393,12 @@ context("Record type Document Layout verification", () => {
 
         it("release button click'", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
           });
         });
-
         it("Approve record button click", () => {
           cy.ebApprove();
         });
-
       });
     });
   });
@@ -475,16 +416,11 @@ context("Record type Document Layout verification", () => {
     });
 
     it("Verify Predefined Fields", () => {
-      cy.get("[data-cy=\"field-name\"]").should("exist");
+      cy.get("[data-cy='field-name']").should("exist");
     });
 
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
-    });
-
-    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
-      cy.verifyFixedTab();
+      cy.verifyTabs("overview", "details");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -492,32 +428,33 @@ context("Record type Document Layout verification", () => {
     });
 
     it("Verify Form opens to the “Overview” tab by default and schema field Approval block", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
+      cy.isTabActive({ name: "overview", index: 0 });
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("exist");
     });
 
     it("Verify Header Info", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-      cy.get("header li>p>div>a>div").should("have.text", "Records");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "RD-00003");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.RELEASED,
+        title: "Records",
+        docId: "RD-00003",
+        revision: "Rev A",
+      });
     });
 
     it("Click Details Tab, clicking on it should open that tab and close the other one", () => {
       cy.drSelectDetailsTab();
-      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
     });
 
     it("Verify that Details tab contains FB fields then Form Options should appear for this tab", () => {
       cy.get(".formOptionsBox").should("exist");
-      cy.get("[data-cy=\"Checkbox\"]").should("be.visible");
+      cy.get("[data-cy='Checkbox']").should("be.visible");
     });
 
     it("Verify that right side panel opens by default to the References tab and that", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
     it("Verify Right side Pannel Can be expanded or collapsed", () => {
@@ -530,8 +467,8 @@ context("Record type Document Layout verification", () => {
 
     it("Verify Book Mark Navigation", () => {
       cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
-      cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-      cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+      cy.get("[data-cy='bookmark-icon']").arrowClick();
+      cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
     });
 
   });

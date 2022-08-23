@@ -157,17 +157,6 @@ context("Record inline Flow", () => {
     });
   });
 
-  // xcontext("Login user", () => { // for testing purpose
-  //   it("Logs user in", () => {
-  //     cy.authLogin({
-  //       email: USERS[2].email,
-  //     });
-  //   });
-  //   it("Selects company", () => {
-  //     cy.cmpSelectCompany({ name: "Blue Goyette - Adams 88879", multiple: true });
-  //   });
-  // });
-
   context("FORM document creation flow", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
@@ -193,7 +182,7 @@ context("Record inline Flow", () => {
         cy.drSelectDocumentType({ documentType: "Form" });
       });
 
-      it("Select 'Record Document' output document type from dropdown", () => {
+      it("Select 'Record one' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Record one" });
       });
 
@@ -207,15 +196,22 @@ context("Record inline Flow", () => {
         cy.landingPageLoadingElementShouldNotExist();
       });
 
+      xit("Upload attachement picture 'image.jpg'", () => {
+        cy.get("#AttachmentFieldPresenter-field").attachFile("image.jpg");
+        cy.get("[data-cy='AttachmentFieldPresenter-field']").click().wait(500);
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
       it("Click on Save", () => {
         cy.wrapWithWaitOnApiCalls([], () => {
+          cy.pause();
           cy.drClickCreateDocumentWithApiCall();
         });
       });
 
       it("Verify Overview Tab Selected by default", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-        cy.get("#sm-tabpanel-0").should("be.visible");
+        cy.isTabActive({ name: "overview", index: 0 });
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("exist");
         cy.verifyPredefiendFields();
       });
@@ -232,7 +228,7 @@ context("Record inline Flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "First inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
-        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+        cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
 
@@ -259,7 +255,7 @@ context("Record inline Flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Second inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
-        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+        cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
 
@@ -294,7 +290,7 @@ context("Record inline Flow", () => {
         cy.fbEnterNameValue({ name: "label", value: "firstd Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
-        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+        cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
 
@@ -325,8 +321,7 @@ context("Record inline Flow", () => {
 
     context("Verify Predefiend fields and tabs", () => {
       it("Verify Predefiend Tabs Exist", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.verifyTabs("overview", "details");
       });
 
       it("Verify Tabs are fixed and order not changable", () => {
@@ -340,10 +335,12 @@ context("Record inline Flow", () => {
 
     context("Verify Overview  Tab", () => {
       it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-        cy.get("header li>p>div>a>div").should("have.text", "Document List");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "FM-00002");
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.DRAFT,
+          title: "Document List",
+          docId: "FM-00002",
+          revision: "Rev 1",
+        });
       });
 
       it("Navigate to details Tab", () => {
@@ -351,20 +348,18 @@ context("Record inline Flow", () => {
       });
 
       it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+        cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
         cy.get("#sm-tabpanel-0").should("be.hidden");
-        cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+        cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
 
     });
-
 
     context("Release document", () => {
       it("Approve and release document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
-
   });
 
   context("Create record WIP", () => {
@@ -383,7 +378,7 @@ context("Record inline Flow", () => {
         cy.unClick();
       });
 
-      it("Upload attachment 'image.jpg'", () => {
+      it("Upload attachement picture 'image.jpg'", () => {
         cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
         cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click().wait(500);
         cy.progressBarShouldNotExist();
@@ -395,14 +390,14 @@ context("Record inline Flow", () => {
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        cy.get("[name^=\"first-textfield-for-inline\"]").arrowType("First entry");
+        cy.get("[name^='first-textfield-for-inline']").arrowType("First entry");
         cy.unClick();
       });
 
       it("Select another value for select field and check for autosave", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[id^=\"mui-component-select-fb-select-field\"]").arrowClick();
-          cy.get("[data-value=\"option2\"]").arrowClick();
+          cy.get("[id^='mui-component-select-fb-select-field']").arrowClick();
+          cy.get("[data-value='option2']").arrowClick();
           cy.unClick();
         });
       });
@@ -411,8 +406,8 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name^=\"fb-ia-first-inline-field\"] input").arrowClick();
-            cy.get("[name*=\"fb-ia-first-inline-field\"] input")
+            cy.get("[name^='fb-ia-first-inline-field'] input").arrowClick();
+            cy.get("[name*='fb-ia-first-inline-field'] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -421,8 +416,8 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name^=\"fb-ia-second-inline-field\"] input").arrowClick();
-            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+            cy.get("[name^='fb-ia-second-inline-field'] input").arrowClick();
+            cy.get("[name*='fb-ia-second-inline-field'] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -442,7 +437,7 @@ context("Record inline Flow", () => {
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
+        cy.get("[data-cy^='textfield-for-inline'] input").arrowType("First entry");
         cy.unClick();
       });
 
@@ -450,7 +445,7 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-firstd-inline-field\"] input")
+            cy.get("[name*='fb-ia-firstd-inline-field'] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -469,26 +464,26 @@ context("Record inline Flow", () => {
     });
 
     it("Click on create new and chose 'Record one'", () => {
-      SystemRequirement("REQ-2760");
       cy.recCreateRecordFromLandingPage();
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Record one" });
     });
 
     it("Verify Predefiend Tabs overview and details Exist", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify added fields in the tabs", () => {
       it("Verify check box exist'", () => {
         cy.get(`input[type="checkbox"][value="1"]`).should("exist");
       });
+
       it("Verify Inline Inputs'", () => {
-        cy.get("[name^=\"first-textfield-for-inline\"]").should("exist");
+        cy.get("[name^='first-textfield-for-inline']").should("exist");
       });
+
       it("Verify Inline Approval Inputs'", () => {
-        cy.get("[name^=\"fb-ia-first-inline-field\"] input").should("exist");
-        cy.get("[name^=\"fb-ia-second-inline-field\"] input").should("exist");
+        cy.get("[name^='fb-ia-first-inline-field'] input").should("exist");
+        cy.get("[name^='fb-ia-second-inline-field'] input").should("exist");
       });
     });
 
@@ -498,7 +493,13 @@ context("Record inline Flow", () => {
         cy.unClick();
       });
 
-      it("Upload attachment 'image.jpg'", () => {
+      xit("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
         cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
         cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click().wait(500);
         cy.progressBarShouldNotExist();
@@ -510,14 +511,14 @@ context("Record inline Flow", () => {
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        cy.get("[name^=\"first-textfield-for-inline\"]").arrowType("First entry");
+        cy.get("[name^='first-textfield-for-inline']").arrowType("First entry");
         cy.unClick();
       });
 
       it("Select another value for select field and check for autosave", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[id^=\"mui-component-select-fb-select-field\"]").arrowClick();
-          cy.get("[data-value=\"option2\"]").arrowClick();
+          cy.get("[id^='mui-component-select-fb-select-field']").arrowClick();
+          cy.get("[data-value='option2']").arrowClick();
           cy.unClick();
         });
       });
@@ -526,8 +527,8 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name^=\"fb-ia-first-inline-field\"] input").arrowClick();
-            cy.get("[name*=\"fb-ia-first-inline-field\"] input")
+            cy.get("[name^='fb-ia-first-inline-field'] input").arrowClick();
+            cy.get("[name*='fb-ia-first-inline-field'] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -536,8 +537,8 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name^=\"fb-ia-second-inline-field\"] input").arrowClick();
-            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+            cy.get("[name^='fb-ia-second-inline-field'] input").arrowClick();
+            cy.get("[name*='fb-ia-second-inline-field'] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -557,7 +558,7 @@ context("Record inline Flow", () => {
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
+        cy.get("[data-cy^='textfield-for-inline'] input").arrowType("First entry");
         cy.unClick();
       });
 
@@ -565,7 +566,7 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-firstd-inline-field\"] input")
+            cy.get("[name*='fb-ia-firstd-inline-field'] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
       });
@@ -581,13 +582,13 @@ context("Record inline Flow", () => {
       });
 
       it("Approve First Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
@@ -595,34 +596,17 @@ context("Record inline Flow", () => {
       });
 
       it("Change text to 'Second entry' in textfield for inline", () => {
-        cy.get("[name^=\"first-textfield-for-inline\"]").arrowType("Second entry");
-        cy.wait(2000);
+        cy.get("[name^='first-textfield-for-inline']").arrowType("Second entry").wait(2000);
       });
 
       it("Approve Second Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick({ force: true });
+        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.SessionDetails], () => {
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      xit("Approve Second Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick({ force: true });
-
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
@@ -640,14 +624,14 @@ context("Record inline Flow", () => {
       });
 
       it("Approve Second Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick({ force: true });
+        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
@@ -656,14 +640,14 @@ context("Record inline Flow", () => {
 
       it("Approve all the Inlines", () => {
         cy.drSelectOverviewTab();
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
@@ -671,15 +655,15 @@ context("Record inline Flow", () => {
       });
 
       it("Send request for approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").first().arrowClick();
+        cy.get("[data-cy='ApproveAndRelease-button']").first().arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.ReleaseDocRevWithoutAr], () => {
-          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+          cy.get("[data-cy='AlertDialog-continueButton']").arrowClick();
         });
       });
 
       it("Revise record / update record ", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"updateRecord\"]").click();
+          cy.get("[data-cy='updateRecord']").click();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -690,18 +674,13 @@ context("Record inline Flow", () => {
       });
 
       it("Approval block should be displayed in the Overview tab", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
-      });
-
-      xit("Edit the fields", () => {
-        cy.get("[name^=\"first-textfield-for-inline\"] input").arrowType("First entry");
-        cy.unClick();
+        cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
       });
 
       it("Select another value for select field", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[id^=\"mui-component-select-fb-select-field\"]").arrowClick();
-          cy.get("[data-value=\"option1\"]").arrowClick();
+          cy.get("[id^='mui-component-select-fb-select-field']").arrowClick();
+          cy.get("[data-value='option1']").arrowClick();
           cy.unClick();
         });
       });
@@ -714,7 +693,7 @@ context("Record inline Flow", () => {
 
       it("Fill in Approval block and  Approve and release Record", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[2].name}`);
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
     });
 
@@ -733,24 +712,22 @@ context("Record inline Flow", () => {
     });
 
     it("Verify Overview Tab and Predefined fields", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
-      cy.get("[data-cy=\"attachment\"]").should("exist");
+      cy.isTabActive({ name: "overview", index: 0 });
+      cy.get("[data-cy='attachment']").should("exist");
     });
 
     it("Verify that the existing fields were migrated properly and that content for both the tabs", () => {
-      cy.get("[name^=\"fb-select-field\"]").should("have.attr", "value", "option2");
+      cy.get("[name^='fb-select-field']").should("have.attr", "value", "option2");
       cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
-      cy.get("[data-cy^=\"fb-ia-first-inline-field\"]").should("exist");
-      cy.get("[data-cy^=\"fb-ia-second-inline-field\"]").should("exist");
+      cy.get("[data-cy^='fb-ia-first-inline-field']").should("exist");
+      cy.get("[data-cy^='fb-ia-second-inline-field']").should("exist");
       cy.drSelectDetailsTab();
-      cy.get("[data-cy^=\"fb-ia-firstd-inline-field\"]").should("exist");
+      cy.get("[data-cy^='fb-ia-firstd-inline-field']").should("exist");
       cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
     });
 
     it("Verify Predefiend Tabs Exist", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     it("Verify Tabs are fixed and order not changable", () => {
@@ -762,13 +739,13 @@ context("Record inline Flow", () => {
     });
 
     it("Approve Second Inline Approval", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+      cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
       cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.SessionDetails], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.get("[data-cy='common.confirm']").arrowClick();
       });
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
@@ -780,13 +757,13 @@ context("Record inline Flow", () => {
     });
 
     it("Approve First Inline Approval", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+      cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
       cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.SessionDetails], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.get("[data-cy='common.confirm']").arrowClick();
       });
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
@@ -794,13 +771,13 @@ context("Record inline Flow", () => {
     });
 
     it("Approve Second Inline Approval", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+      cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
       cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.SessionDetails], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.get("[data-cy='common.confirm']").arrowClick();
       });
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
@@ -816,29 +793,28 @@ context("Record inline Flow", () => {
 
     it("Select the Records", () => {
       cy.dlFilterByDocId({ docId: "RD-00004" });
-      cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
-      cy.get("li").contains("Released").arrowClick().wait(500);
+      cy.get(`[aria-colindex="3"] .k-input`).arrowClick();
+      cy.get("li").contains(STATUS_TYPES_LABEL.RELEASED).arrowClick().wait(500);
       cy.dlSelectFirstDocument();
     });
 
     it("Verify Overview Tab and Predefined fields", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
-      cy.get("[data-cy=\"attachment\"]").should("exist");
+      cy.isTabActive({ name: "overview", index: 0 });
+      cy.get("[data-cy='attachment']").should("exist");
     });
 
     it("Verify that the existing fields were migrated properly and that content for both the tabs", () => {
-      cy.get("[name^=\"fb-select-field\"]").should("have.attr", "value", "option2");
+      cy.get("[name^='fb-select-field']").should("have.attr", "value", "option2");
       cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
-      cy.get("[name^=\"first-textfield-for-inline\"]").should("exist");
+      cy.get("[name^='first-textfield-for-inline']").should("exist");
       cy.drSelectDetailsTab();
-      cy.get("[data-cy=\"Textfield for inline\"]").should("exist");
+      cy.get("[data-cy='Textfield for inline']").should("exist");
       cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
     });
 
     it("Verify Predefiend Tabs Exist", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.get("[data-cy='tabId.overview']").should("exist");
+      cy.get("[data-cy='tabId.details']").should("exist");
     });
 
     it("Verify Tabs are fixed and order not changable", () => {
