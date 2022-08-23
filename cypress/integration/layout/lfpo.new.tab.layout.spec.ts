@@ -11,6 +11,7 @@ import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 import { STATUS_TYPES_LABEL } from "./../../../src/state/ducks/dashboard.new/my.feeds/types";
 
 const ADMIN_USER = USERS[1];
@@ -918,7 +919,7 @@ context("LFPO new layout verification", () => {
     });
 
     it("Click 'Create Receipt Record'", () => {
-      cy.get("[id='DocumentByTypeListPresenter-openDocRev']").arrowClick();
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
     });
 
     it("Create Receiving Record", () => {
@@ -965,7 +966,7 @@ context("LFPO new layout verification", () => {
     });
 
     it("Click 'Create Receipt Record'", () => {
-      cy.get("[id='DocumentByTypeListPresenter-openDocRev']").arrowClick();
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
     });
 
     it("Create Receiving Record", () => {
@@ -1033,7 +1034,7 @@ context("LFPO new layout verification", () => {
 
     it("Verify that it contains only Details tab", () => {
       cy.get("[data-cy='tabId.details']").should("exist");
-      cy.get("[id='sm-tabpanel-1']").should("not.exist");
+      cy.get("#sm-tabpanel-1").should("not.exist");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -1137,9 +1138,10 @@ context("LFPO new layout verification", () => {
     });
 
     context("Check document history", () => {
-      it("Verify history tab", () => {
-        cy.verifyHistoryTab(history, groupOne, groupTwo);
+      it("Verify Doc history", () => {
+        cy.drSelectHistoryTab();
       });
+      verifyHistoryContent(history, groupOne);
     });
 
     context("Verify Book Mark Exist or not", () => {
@@ -1211,7 +1213,7 @@ context("LFPO new layout verification", () => {
 
     it("Verify that it contains only Details tab", () => {
       cy.get("[data-cy='tabId.details']").should("exist");
-      cy.get("[id='sm-tabpanel-1']").should("not.exist");
+      cy.get("#sm-tabpanel-1").should("not.exist");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -1249,7 +1251,7 @@ context("LFPO new layout verification", () => {
     });
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick();
+      cy.get(`[aria-colindex="2"] .k-input`).arrowClick();
       cy.get("li").contains(STATUS_TYPES_LABEL.WIP).arrowClick().wait(500);
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
@@ -1257,7 +1259,7 @@ context("LFPO new layout verification", () => {
 
     it("Verify that it contains only Details tab", () => {
       cy.get("[data-cy='tabId.details']").should("exist");
-      cy.get("[id='sm-tabpanel-1']").should("not.exist");
+      cy.get("#sm-tabpanel-1").should("not.exist");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -1357,9 +1359,10 @@ context("LFPO new layout verification", () => {
     });
 
     context("Check document history", () => {
-      it("Verify history tab", () => {
-        cy.verifyHistoryTab(history, groupOne, groupTwo);
+      it("Verify Doc history", () => {
+        cy.drSelectHistoryTab();
       });
+      verifyHistoryContent(history, groupOne);
     });
 
     context("Verify Book Mark", () => {

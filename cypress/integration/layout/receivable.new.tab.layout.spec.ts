@@ -13,6 +13,7 @@ import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -678,13 +679,12 @@ context("Receiving landing page test", () => {
   context("Verify Tab Layout for Receivable form", () => {
     it("Verify Predefined Fields Appear", () => {
       cy.verifyPredefiendFields();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
-      cy.get("[data-cy=\"referenceTo\"]").should("exist");
+      cy.get("[data-cy='field-outputDocumentTypes']").should("exist");
+      cy.get("[data-cy='referenceTo']").should("exist");
     });
 
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -693,10 +693,12 @@ context("Receiving landing page test", () => {
 
     context("Verify Overview  Tab", () => {
       it("Verify Header Info", () => {
-        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-        cy.get("header li>p>div>a>div").should("have.text", "Document List");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "FM-00004");
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.DRAFT,
+          title: "Document List",
+          docId: "FM-00004",
+          revision: "Rev 1",
+        });
       });
 
       it("Verify Predefiend fields and form Options", () => {
@@ -712,14 +714,14 @@ context("Receiving landing page test", () => {
       });
 
       it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+        cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
         cy.get("#sm-tabpanel-0").should("be.hidden");
-        cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+        cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
 
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
       });
 
       it("Approve and release document", () => {
@@ -734,7 +736,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Create Receiving Record", () => {
-      cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
@@ -757,10 +759,10 @@ context("Receiving landing page test", () => {
     });
 
     it("Create Receiving Record", () => {
-      cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
     });
 
-    it("Select 'Training Curriculum test' as document type", () => {
+    it("Select 'Receivable test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
@@ -775,7 +777,7 @@ context("Receiving landing page test", () => {
 
     it("Select Purchase order", () => {
       cy.drSelectDetailsTab();
-      cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
+      cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
         .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
     });
 
@@ -790,8 +792,8 @@ context("Receiving landing page test", () => {
 
   context("Verify Layout for created receiving record in draft state", () => {
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.get("[data-cy='tabId.overview']").should("exist");
+      cy.get("[data-cy='tabId.details']").should("exist");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -799,14 +801,12 @@ context("Receiving landing page test", () => {
     });
 
     it("Verify Header Info", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
-      cy.get("header li>p>div>a>div").should("have.text", "Receiving");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "RCT-00002");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-    });
-
-    xit("Verify Predefiend fields and form Options", () => {
-      cy.get(".formOptionsBox").should("not.exist");
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.WIP,
+        title: "Receiving",
+        docId: "RCT-00002",
+        revision: "Rev A",
+      });
     });
 
     it("Navigate to details Tab", () => {
@@ -815,39 +815,28 @@ context("Receiving landing page test", () => {
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
       cy.drSelectDetailsTab();
-      cy.get("[data-cy=\"porec-receivable-test\"]").should("exist");
-      cy.get("[data-cy=\"po-requestor-autocomplete\"]").should("exist");
-      cy.get("[data-cy=\"po-supplier-built-in\"]").should("exist");
+      cy.get("[data-cy='porec-receivable-test']").should("exist");
+      cy.get("[data-cy='po-requestor-autocomplete']").should("exist");
+      cy.get("[data-cy='po-supplier-built-in']").should("exist");
     });
 
     it("Verify form option visible in detail tab", () => {
       cy.get(".formOptionsBox").should("exist");
     });
 
-    it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+    it("Clicking on  other tabs should be closed and details tab should open", () => {
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
-      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
     it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
     it("Verify that right side panel Expand and collapse", () => {
       cy.verifyExpandCollpase();
-    });
-  });
-
-  xcontext("Login user", () => { // for testing purpose
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Green Deckow, Stanton and Denesik 7544", multiple: true });
     });
   });
 
@@ -871,14 +860,11 @@ context("Receiving landing page test", () => {
 
     context("Verify Revision", () => {
       it("open revision tab", () => {
-        cy.get("[data-cy=\"note-icon\"]").arrowClick();
+        cy.get("[data-cy='note-icon']").arrowClick();
       });
 
       it("Verify revision Rev Document open or not", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        cy.wait(2000);
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-
+        cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
     });
 
@@ -961,21 +947,10 @@ context("Receiving landing page test", () => {
       });
     });
 
-
-    xcontext("Verify Revision History", () => {
-      it.skip("Verify Revision History Items", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-      });
-    });
-
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+        cy.get("[data-cy='bookmark-icon']").arrowClick();
+        cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
     });
 
@@ -988,7 +963,7 @@ context("Receiving landing page test", () => {
 
     it("Add an Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("[data-cy=\"fb-po-approvals\"]").autocompleteSelect(USERS[1].name);
+        cy.get("[data-cy='fb-po-approvals']").autocompleteSelect(USERS[1].name);
       });
     });
 
@@ -1002,15 +977,15 @@ context("Receiving landing page test", () => {
 
     it("Approve the record", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("button[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+      cy.get("button[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
       cy.listLoadingElementShouldNotExist();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostApprovalsApprove,
         CyRoutes.SessionDetails,
         CyRoutes.GetRequiredApproversDocRev,
       ], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.get("[data-cy='common.confirm']").arrowClick();
       });
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
@@ -1034,11 +1009,9 @@ context("Receiving landing page test", () => {
   });
 
   context("Verify Layout for created receiving record in draft state", () => {
-
-
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.get("[data-cy='tabId.overview']").should("exist");
+      cy.get("[data-cy='tabId.details']").should("exist");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -1046,23 +1019,24 @@ context("Receiving landing page test", () => {
     });
 
     it("Verify Header Info", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
-      cy.get("header li>p>div>a>div").should("have.text", "Receiving");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "RCT-00001");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.WIP,
+        title: "Receiving",
+        docId: "RCT-00001",
+        revision: "Rev A",
+      });
     });
-
 
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
-      cy.get("[data-cy=\"porec-receivable-test\"]").arrowClick({ force: true })
+      cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
         .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
     });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
-      cy.get("[data-cy=\"porec-receivable-test\"]").should("exist");
-      cy.get("[data-cy=\"po-requestor-autocomplete\"]").should("exist");
-      cy.get("[data-cy=\"po-supplier-built-in\"]").should("exist");
+      cy.get("[data-cy='porec-receivable-test']").should("exist");
+      cy.get("[data-cy='po-requestor-autocomplete']").should("exist");
+      cy.get("[data-cy='po-supplier-built-in']").should("exist");
     });
 
     it("Verify form option visible in detail tab", () => {
@@ -1070,14 +1044,14 @@ context("Receiving landing page test", () => {
     });
 
     it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
-      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
     it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
     it("Verify that right side panel Expand and collapse", () => {
@@ -1086,11 +1060,8 @@ context("Receiving landing page test", () => {
 
   });
 
-
   // End of draft state verification
-
   // verify release state
-
   context("Open Receivable Draft state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
@@ -1105,8 +1076,8 @@ context("Receiving landing page test", () => {
 
   context("Verify Layout for created receiving record in draft state", () => {
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.get("[data-cy='tabId.overview']").should("exist");
+      cy.get("[data-cy='tabId.details']").should("exist");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -1114,21 +1085,22 @@ context("Receiving landing page test", () => {
     });
 
     it("Verify Header Info", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-      cy.get("header li>p>div>a>div").should("have.text", "Receiving");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "RCT-00002");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.RELEASED,
+        title: "Receiving",
+        docId: "RCT-00002",
+        revision: "Rev A",
+      });
     });
-
 
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
     });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
-      cy.get("[data-cy=\"porec-receivable-test\"]").should("exist");
-      cy.get("[data-cy=\"po-requestor-autocomplete\"]").should("exist");
-      cy.get("[data-cy=\"po-supplier-built-in\"]").should("exist");
+      cy.get("[data-cy='porec-receivable-test']").should("exist");
+      cy.get("[data-cy='po-requestor-autocomplete']").should("exist");
+      cy.get("[data-cy='po-supplier-built-in']").should("exist");
     });
 
     it("Verify form option visible in detail tab", () => {
@@ -1136,14 +1108,14 @@ context("Receiving landing page test", () => {
     });
 
     it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
-      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
     it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
     it("Verify that right side panel Expand and collapse", () => {
@@ -1167,13 +1139,11 @@ context("Receiving landing page test", () => {
 
     context("Verify Revision", () => {
       it("open revision tab", () => {
-        cy.get("[data-cy=\"note-icon\"]").arrowClick();
+        cy.get("[data-cy='note-icon']").arrowClick();
       });
 
       it("Verify revision Rev Document open or not", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        cy.wait(2000);
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
+        cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
     });
 
@@ -1197,7 +1167,6 @@ context("Receiving landing page test", () => {
 
     context("Check document history", () => {
       const groupOne = "Can be approver";
-      let groupTwo;
       const history = [
         {
           owner: USERS[1].name,
@@ -1215,50 +1184,13 @@ context("Receiving landing page test", () => {
       it("Verify Doc history", () => {
         cy.drSelectHistoryTab();
       });
-      history.forEach((element, groupIndex) => {
-        it(`Check owner name for group ${groupIndex + 1}`, () => {
-          cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-        });
-        element.actions.forEach((action, index, identifier) => {
-          it(`'${action.key}' as '${action.value}' exists`, () => {
-            const typeOfChange = action.key;
-            let contentOfChange = action.value;
-
-            if (action.key === "New description" || action.key === "Description changed" ) {
-              contentOfChange = "\n" + action.value + "\n";
-            }
-
-            if (typeOfChange === "s3Link added") {
-              cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-              cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-            }
-            else {
-              if (action.key === "Access granted to group") {
-                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                  expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                });
-              }
-              else {
-                cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                  .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                  .parent()
-                  .parent()
-                  .within(() => {
-                    cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                    cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-                  });
-              }
-            }
-          });
-        });
-      });
+      verifyHistoryContent(history, groupOne);
     });
-
 
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+        cy.get("[data-cy='bookmark-icon']").arrowClick();
+        cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
     });
   });
