@@ -8,10 +8,22 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+const owner = USERS[1].name;
+const userOne = USERS[2].name;
+const userTwo = USERS[3].name;
+const userThree = USERS[4].name;
+const groupOne = "Developers";
+const groupTwo = "Company Admin";
+const groupThree = "User Management";
+const docTitle = "Test Supplier";
+const docDescription = "Test Supplier Description";
+const formTitle = "New Supplier Form";
+const formDescription = "New Supplier Form Description";
 
 context("Verify New Layout for Supplier Document", () => {
   before(() => {
@@ -77,13 +89,13 @@ context("Verify New Layout for Supplier Document", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Supplier Form'", () => {
-      cy.drEnterDocumentTitle({ name: "New Supplier Form" });
+    it(`Enter title ${formTitle}`, () => {
+      cy.drEnterDocumentTitle({ name: formTitle });
     });
 
-    it("Enter description 'New Supplier Form description'", () => {
+    it(`Enter description ${formDescription}`, () => {
       cy.drEnterDocumentDescription({
-        description: "New Supplier Form description",
+        description: formDescription,
       });
     });
 
@@ -203,11 +215,11 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Enter title", () => {
-      cy.drEnterDocumentTitle({ name: "Test Supplier" });
+      cy.drEnterDocumentTitle({ name: docTitle });
     });
 
     it("Enter description", () => {
-      cy.drEnterDocumentDescription({ description: "Test Supplier Description" });
+      cy.drEnterDocumentDescription({ description: docDescription });
     });
 
     it("Click create document after filling document", () => {
@@ -297,7 +309,7 @@ context("Verify New Layout for Supplier Document", () => {
 
     context("Verify References tab", () => {
       it("Verify References tab General Info", () => {
-        cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+        cy.verifyReferencesGeneralInfo({ user: owner });
       });
 
       it("Verify Add/Remove References", () => {
@@ -315,15 +327,6 @@ context("Verify New Layout for Supplier Document", () => {
       });
     });
 
-    context("Verify History tab", () => {
-      it("Open history tab and verify changes are being captured", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-          cy.drSelectHistoryTab();
-          cy.get(`[data-cy="History-detail"]`).should("be.visible");
-        });
-      });
-    });
-
     context("Verify Access Permissions tab", () => {
       it("Open access permissions tab", () => {
         cy.drSelectPermissionTab();
@@ -331,15 +334,51 @@ context("Verify New Layout for Supplier Document", () => {
 
       it("Add another user permission", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[2].name);
+          cy.drAddUserFromPermissionTab(userOne);
         });
       });
 
       it("Add another group permission", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Developers");
+          cy.drAddGroupFromPermissionTab(groupOne);
         });
       });
+    });
+
+    context("Verify History tab", () => {
+      const history = [
+        {
+          owner,
+          actions: [
+            { key: "Access granted to group", value: groupOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Access granted to user", value: userOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Description changed", value: docDescription },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Name changed", value: docTitle },
+          ],
+        },
+      ];
+
+      it("Open history tab and verify changes are being captured", () => {
+        cy.drSelectHistoryTab();
+        cy.get(`[data-cy="History-detail"]`).should("be.visible");
+      });
+
+      verifyHistoryContent(history, groupOne);
     });
 
     context("Verify Bookmarks tab", () => {
@@ -397,8 +436,8 @@ context("Verify New Layout for Supplier Document", () => {
       cy.supFilterByState({ state: STATUS_FILTER_TEXT.DRAFT });
     });
 
-    it("Select 'Test Supplier' document'", () => {
-      cy.supFilterByDocTitle({ docTitle: "Test Supplier" });
+    it(`Select ${docTitle} document`, () => {
+      cy.supFilterByDocTitle({ docTitle });
       cy.dlSelectFirstDocument();
     });
   });
@@ -483,7 +522,7 @@ context("Verify New Layout for Supplier Document", () => {
 
       context("Verify References tab", () => {
         it("Verify References tab General Info", () => {
-          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+          cy.verifyReferencesGeneralInfo({ user: owner });
         });
 
         it("Verify Add/Remove References", () => {
@@ -501,15 +540,6 @@ context("Verify New Layout for Supplier Document", () => {
         });
       });
 
-      context("Verify History tab", () => {
-        it("Open history tab and verify changes are being captured", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-            cy.get(`[data-cy="History-detail"]`).should("be.visible");
-          });
-        });
-      });
-
       context("Verify Access Permissions tab", () => {
         it("Open access permissions tab", () => {
           cy.drSelectPermissionTab();
@@ -517,15 +547,39 @@ context("Verify New Layout for Supplier Document", () => {
 
         it("Add another user permission", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
+            cy.drAddUserFromPermissionTab(userTwo);
           });
         });
 
         it("Add another group permission", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Company Admin");
+            cy.drAddGroupFromPermissionTab(groupTwo);
           });
         });
+      });
+
+      context("Verify History tab", () => {
+        const history = [
+          {
+            owner,
+            actions: [
+              { key: "Access granted to group", value: groupTwo },
+            ],
+          },
+          {
+            owner,
+            actions: [
+              { key: "Access granted to user", value: userTwo },
+            ],
+          },
+        ];
+
+        it("Open history tab and verify changes are being captured", () => {
+          cy.drSelectHistoryTab();
+          cy.get(`[data-cy="History-detail"]`).should("be.visible");
+        });
+
+        verifyHistoryContent(history, groupTwo);
       });
 
       context("Verify Bookmarks tab", () => {
@@ -555,7 +609,7 @@ context("Verify New Layout for Supplier Document", () => {
 
   context("Approve and Release supplier document", () => {
     it("Add Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: owner });
     });
 
     it("Submit for approval", () => {
@@ -577,16 +631,16 @@ context("Verify New Layout for Supplier Document", () => {
       cy.supFilterByState({ state: STATUS_FILTER_TEXT.RELEASED });
     });
 
-    it("Select 'Test Supplier' document'", () => {
-      cy.supFilterByDocTitle({ docTitle: "Test Supplier" });
+    it(`Select ${docTitle} document`, () => {
+      cy.supFilterByDocTitle({ docTitle });
       cy.dlSelectFirstDocument();
     });
   });
 
   context("Verify supplier released document", () => {
     it("Verify predefined fields", () => {
-      cy.get(`[id='field-name']`).contains("Test Supplier");
-      cy.get(`[data-cy="BaseWithhtml-editor"]`).contains("Test Supplier Description");
+      cy.get(`[id='field-name']`).contains(docTitle);
+      cy.get(`[data-cy="BaseWithhtml-editor"]`).contains(docDescription);
     });
 
     it("Verify document header details", () => {
@@ -657,7 +711,7 @@ context("Verify New Layout for Supplier Document", () => {
 
       context("Verify References tab", () => {
         it("Verify References tab General Info", () => {
-          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+          cy.verifyReferencesGeneralInfo({ user: owner });
         });
 
         it("Verify References", () => {
@@ -675,15 +729,6 @@ context("Verify New Layout for Supplier Document", () => {
         });
       });
 
-      context("Verify History tab", () => {
-        it("Open history tab and verify changes are being captured", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-            cy.get(`[data-cy="History-detail"]`).should("be.visible");
-          });
-        });
-      });
-
       context("Verify Access Permissions tab", () => {
         it("Open access permissions tab", () => {
           cy.drSelectPermissionTab();
@@ -691,15 +736,39 @@ context("Verify New Layout for Supplier Document", () => {
 
         it("Add another user permission", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[4].name);
+            cy.drAddUserFromPermissionTab(userThree);
           });
         });
 
         it("Add another group permission", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("User Management");
+            cy.drAddGroupFromPermissionTab(groupThree);
           });
         });
+      });
+
+      context("Verify History tab", () => {
+        const history = [
+          {
+            owner,
+            actions: [
+              { key: "Access granted to group", value: groupThree },
+            ],
+          },
+          {
+            owner,
+            actions: [
+              { key: "Access granted to user", value: userThree },
+            ],
+          },
+        ];
+
+        it("Open history tab and verify changes are being captured", () => {
+          cy.drSelectHistoryTab();
+          cy.get(`[data-cy="History-detail"]`).should("be.visible");
+        });
+
+        verifyHistoryContent(history, groupThree);
       });
 
       context("Verify Bookmarks tab", () => {
