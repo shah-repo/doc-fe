@@ -22,7 +22,8 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
   >
     <Box
       color={Colors.almost_black}
-      my={0.625}
+      mt={3}
+      mb={0.625}
       mx={0}
       fontSize={16}
       lineHeight="24px"
