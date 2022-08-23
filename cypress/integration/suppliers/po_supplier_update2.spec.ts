@@ -518,6 +518,10 @@ context("DAM approvals in LHR", () => {
     });
 
     context("Create Purchase Order document and verify supplier", () => {
+      it("Turn on autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
+
       it("Create new document from form", () => {
         cy.drCreateNewDocumentFromForm();
       });
@@ -607,10 +611,6 @@ context("DAM approvals in LHR", () => {
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
       });
 
       it("Update Supplier name", () => {
