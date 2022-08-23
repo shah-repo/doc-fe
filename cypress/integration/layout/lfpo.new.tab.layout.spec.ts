@@ -45,7 +45,6 @@ const SupplierFormTitle = "Supplier form";
 const todaysDate = moment().tz("America/Los_Angeles");
 const todaysDateFormated = moment().tz("America/Los_Angeles").format("L");
 const groupOne = "Developers";
-let groupTwo;
 const history = [
   {
     owner: USERS[1].name,
