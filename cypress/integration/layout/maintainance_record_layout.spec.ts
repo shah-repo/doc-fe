@@ -18,18 +18,10 @@ let adminEmployee;
 let approvalRequestDocumentType;
 let equipmentDocumentType;
 let formDocumentType;
-<<<<<<< HEAD
-=======
-// let maintenanceRecordDocumentType;
->>>>>>> a0754935e3493085cf86c303a34f27302a65236f
 let initialArDocument;
 let group;
 let createdEquipmentFormDocument;
 let createdEqDocument;
-<<<<<<< HEAD
-=======
-let createdEqDocument2;
->>>>>>> a0754935e3493085cf86c303a34f27302a65236f
 
 context("Layout Verification of maintainance records", () => {
   before(() => {
