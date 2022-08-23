@@ -228,10 +228,10 @@ context("Approval request implementation tasks", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      cy.get(`[class="drag-handle"]`).eq(2)
+      cy.get(".drag-handle").eq(2)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
@@ -248,7 +248,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Verify Add Document disabled", () => {
-      cy.get("[data-cy=\"fb.add.document\"]").should("have.attr", "disabled");
+      cy.get(`[data-cy="fb.add.document"]`).should("have.attr", "disabled");
     });
 
     it("Approve and release document", () => {
@@ -353,16 +353,16 @@ context("Approval request implementation tasks", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(".drag-handle").eq(1)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
 
     it("Click on ‘Approve & Release’", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
+      cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(1000);
     });
 
     it("Select document template as 'AR form'", () => {
@@ -374,7 +374,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Approve and Release the document", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+      cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick();
     });
   });
 
@@ -403,7 +403,6 @@ context("Approval request implementation tasks", () => {
 
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
-      SystemRequirement("REQ-0680");
       cy.navigToApprovalRequestList();
     });
 
@@ -412,7 +411,6 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Choose newly AR Form template", () => {
-      SystemRequirement("REQ-0690", "REQ-0700");
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
@@ -424,10 +422,6 @@ context("Approval request implementation tasks", () => {
       cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
     });
 
-    /*     it("Select Documents tab", () => {
-      cy.drSelectDocumentTab();
-    }); */
-
     it("Add created document revision", () => {
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
@@ -437,7 +431,6 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click Create Approval Request", () => {
-      SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
@@ -454,7 +447,6 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Approve AR", () => {
-      SystemRequirement("REQ-0920");
       cy.arApproveAR();
       cy.landingPageLoadingElementShouldNotExist();
     });
