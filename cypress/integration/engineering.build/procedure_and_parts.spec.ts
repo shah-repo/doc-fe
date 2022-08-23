@@ -475,10 +475,6 @@ context("Procedure and parts flow test", () => {
   });
 
   context("Create lot document", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to Lots", () => {
       cy.navigToLots();
     });
@@ -514,9 +510,9 @@ context("Procedure and parts flow test", () => {
     it("Enter Usable Quantity", () => {
       cy.get("[name=\"lot_usable_quantity\"]").arrowType("12");
     });
-
     it("Reload Page", () => {
       cy.reload();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to details tab", () => {
@@ -700,6 +696,10 @@ context("Procedure and parts flow test", () => {
 
 
   context("Create EB from created FORM document", () => {
+    it("Reload Page", () => {
+      cy.reload();
+      cy.progressBarShouldNotExist();
+    });
     it("Click create new document from FORM", () => {
       cy.drCreateNewDocumentFromForm();
     });
@@ -716,7 +716,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListNw({ approver: USERS[1].email });
       });
 
       it("Verify step can be added", () => {
@@ -992,9 +992,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-        });
+        cy.pmAddApproverOnApproverListNw({ approver: USERS[1].email });
       });
     });
 

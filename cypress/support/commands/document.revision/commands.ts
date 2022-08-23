@@ -428,7 +428,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
   }
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
     });
   if (params === undefined)
   {
