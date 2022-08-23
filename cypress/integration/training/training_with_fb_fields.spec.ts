@@ -336,7 +336,7 @@ context("Export training curriculum", () => {
 
   context("Check predefined fields", () => {
     it("Verify Approvals Section", () => {
-      cy.get(`input[data-cy^=\"fb-approvals-fb-approvals\"]`).should("exist");
+      cy.get(`input[data-cy^="fb-approvals-fb-approvals"]`).should("exist");
     });
 
     it("Select Details tab", () => {
@@ -407,10 +407,10 @@ context("Export training curriculum", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
@@ -487,7 +487,7 @@ context("Export training curriculum", () => {
 
   context("Verify predefined fields size", () => {
     it("Verify Approvals Section", () => {
-      cy.get(`input[data-cy^=\"fb-approvals-fb-approvals\"]`).should("exist").should("have.length", "1");
+      cy.get(`input[data-cy^="fb-approvals-fb-approvals"]`).should("exist").should("have.length", "1");
     });
 
     it("Select Details tab", () => {
@@ -546,10 +546,10 @@ context("Export training curriculum", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
@@ -596,7 +596,7 @@ context("Export training curriculum", () => {
 
   context("Check predefined fields", () => {
     it("Verify Approvals Section", () => {
-      cy.get(`input[data-cy^=\"fb-approvals-fb-approvals\"]`).should("exist");
+      cy.get(`input[data-cy^="fb-approvals-fb-approvals"]`).should("exist");
     });
 
     it("Select Details tab", () => {
@@ -664,10 +664,10 @@ context("Export training curriculum", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
@@ -744,7 +744,7 @@ context("Export training curriculum", () => {
 
   context("Check predefined fields", () => {
     it("Verify Approvals Section", () => {
-      cy.get(`input[data-cy^=\"fb-approvals-fb-approvals\"]`).should("exist").should("have.length", "1");
+      cy.get(`input[data-cy^="fb-approvals-fb-approvals"]`).should("exist").should("have.length", "1");
     });
 
     it("Select Details tab", () => {
@@ -800,10 +800,10 @@ context("Export training curriculum", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
@@ -872,7 +872,7 @@ context("Export training curriculum", () => {
     });
 
     it("Validate Documents to train On", () => {
-      cy.get("[name=\"training-document-to-be-trained-on\"]").parent().parent()
+      cy.get(`[name="training-document-to-be-trained-on"]`).parent().parent()
         .should("contain.text", "The Documents to Train on is a required field.");
     });
 
