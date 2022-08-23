@@ -295,6 +295,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                             {tabType === TabTypeOptions.MIXED && <>
                               <DocumentRevisionFormPresenter
                                 {...formValues}
+                                isPreview={true}
                                 redlineActive={false}
                                 releasedDocRev={_documentRevisionFormState?.releasedDocRev}
                                 documentRevision={documentRevision}
