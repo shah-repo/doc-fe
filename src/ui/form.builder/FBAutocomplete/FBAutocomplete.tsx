@@ -1,4 +1,4 @@
-import { Box, IconButton, TextField, Typography } from "@material-ui/core";
+import { Box, IconButton, Popper, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
@@ -105,6 +105,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         />
       ); }}
   </FBMapWrapper>;
+
   return (
     <>
       {includeQRScan && (
@@ -158,6 +159,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           ListboxComponent={groupByKey ? undefined : ListBoxComponent }
           renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
           renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
+          PopperComponent={(props) => (<Popper {...props} />)}
         />}
       </FBInput>
     </>
