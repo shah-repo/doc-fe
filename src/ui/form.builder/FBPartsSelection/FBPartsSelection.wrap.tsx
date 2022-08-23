@@ -37,6 +37,10 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     useEffect(() => reaction(
       () => formState?.inputState.get(name || "")?.value,
       (value) => {
+        if (isOutput) {
+          return;
+        }
+
         const schemeItem = workspaceState?.getSchemaItemAt(index);
         workspaceState?.setSchemaItem({
           ...schemeItem,
