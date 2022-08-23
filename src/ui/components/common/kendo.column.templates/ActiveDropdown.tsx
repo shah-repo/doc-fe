@@ -21,11 +21,11 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   const dropDownData = [
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
-      value: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
+      value: true,
     },
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
-      value: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
+      value: false,
     },
   ];
   const isEdit = dataItem.inEdit;
@@ -49,7 +49,10 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   };
   field = field || "";
   const dataValue = dataItem[field] === null ? "" : dataItem[field];
-
+  const dropDownValue = intl.formatMessage({
+    id: TranslatedText[dataValue ? DisplayText.ACTIVE
+      : DisplayText.INACTIVE],
+  });
   return (
     <td
       colSpan={colSpan}
@@ -70,6 +73,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
         />
       ) : (
         <div className={classes.topButton}>
+          {dropDownValue}
           <span className={`${classes.dot} ${classes[formattedValue]}`}></span>
           <Tooltip customClass={classes.value} data={formattedValue} />
         </div>
