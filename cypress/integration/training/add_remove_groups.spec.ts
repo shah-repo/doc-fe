@@ -540,8 +540,9 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Remove group Group1", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick();
+      cy.get("[data-cy=training-select-groups-to-train]").parent().parent()
+        .find(".MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable")
+        .contains("Group1").parent().parent().find("svg").arrowClick();
     });
 
     it("Save training", () => {

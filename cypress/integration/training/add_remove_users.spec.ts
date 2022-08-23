@@ -503,10 +503,13 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Remove users ${USERS[1].name} and ${USERS[3].name}`, () => {
-      cy.get("[data-cy=training-select-users-to-train]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick();
-      cy.get("[data-cy=training-select-users-to-train]").parent()
-        .find(".MuiAutocomplete-tag").eq(1).find(".MuiChip-deleteIcon").arrowClick();
+      cy.get("[data-cy=training-select-users-to-train]").parent().parent()
+        .find(".MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable")
+        .contains(USERS[1].name).parent().parent().find("svg").arrowClick();
+
+      cy.get("[data-cy=training-select-users-to-train]").parent().parent()
+        .find(".MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable")
+        .contains(USERS[3].name).parent().parent().find("svg").arrowClick();
     });
 
     it("Save training", () => {
