@@ -8,11 +8,23 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
 let developersGroup;
+const owner = USERS[1].name;
+const userOne = USERS[2].name;
+const userTwo = USERS[3].name;
+const userThree = USERS[4].name;
+const groupOne = "Developers";
+const groupTwo = "Company Admin";
+const groupThree = "User Management";
+const docTitle = "Test Training Curriculum";
+const docDescription = "Test Training Curriculum";
+const formTitle = "New Training Curriculum Form";
+const formDescription = "New Training Curriculum Form Description";
 
 context("Verify New Layout for Training Curriculum Document", () => {
   before(() => {
@@ -62,7 +74,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
     it("[API]Get group", (done: any) => {
       cy.grpGetGroupByName({
-        groupName: "Developers",
+        groupName: groupOne,
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
       }).then((response) => {
@@ -272,7 +284,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
   });
 
-  // Scenario 9a - Newly Created Training Curriculum Document
+  // Scenario 7a - Newly Created Training Curriculum Document
 
   context("Create Training Curriculum form", () => {
     it("Navigate to Document List", () => {
@@ -283,13 +295,13 @@ context("Verify New Layout for Training Curriculum Document", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Training Curriculum Form'", () => {
-      cy.drEnterDocumentTitle({ name: "New Training Curriculum Form" });
+    it(`Enter title ${formTitle}`, () => {
+      cy.drEnterDocumentTitle({ name: formTitle });
     });
 
-    it("Enter description 'New Training Curriculum Form description'", () => {
+    it(`Enter description ${formDescription}`, () => {
       cy.drEnterDocumentDescription({
-        description: "New Training Curriculum Form description",
+        description: formDescription,
       });
     });
 
@@ -297,7 +309,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Training Curriculum ' document type", () => {
+    it("Click on 'Training Curriculum' document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
     });
@@ -315,7 +327,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
       cy.verifyDefaultFields();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+      cy.get(`[data-cy="field-outputDocumentTypes"]`).should("exist");
     });
 
     it("Verify document header details", () => {
@@ -324,12 +336,11 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     it("Verify Overview as default selected tab", () => {
-      cy.verifySelectedTab({ tab: "overview" });
+      cy.isTabActive({ name: "overview", index: 0 });
     });
 
     it("Verify tab as fixed", () => {
@@ -341,7 +352,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
         it("Verify Overview tab default fields", () => {
           cy.get("#sm-tabpanel-0").should("exist");
           cy.verifyDefaultFields();
-          cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+          cy.get(`[data-cy="field-outputDocumentTypes"]`).should("exist");
         });
 
         it("Verify Approvals field as predefined schema", () => {
@@ -409,17 +420,16 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
       context("Verify Right side panel", () => {
         it("Verify that right side panel opens by default to the References tab", () => {
-          cy.get("[data-cy=\"References\"]").should("exist");
-          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+          cy.verifyReferencesTabAsActive();
         });
 
         context("Verify References tab", () => {
           it("Verify References tab General Info", () => {
-            cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+            cy.verifyReferencesGeneralInfo({ user: owner });
           });
 
           it("Verify References", () => {
-            cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
+            cy.get(`[data-cy="field-referenceTo"]`).should("exist");
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -451,12 +461,12 @@ context("Verify New Layout for Training Curriculum Document", () => {
       cy.drCreateNewDocumentFromForm();
     });
 
-    it("Enter title", () => {
-      cy.drEnterDocumentTitle({ name: "Test Training Curriculum" });
+    it(`Enter title ${docTitle}`, () => {
+      cy.drEnterDocumentTitle({ name: docTitle });
     });
 
-    it("Enter description", () => {
-      cy.drEnterDocumentDescription({ description: "Test Training Curriculum Description" });
+    it(`Enter description ${docDescription}`, () => {
+      cy.drEnterDocumentDescription({ description: docDescription });
     });
 
     it("Save document", () => {
@@ -467,9 +477,9 @@ context("Verify New Layout for Training Curriculum Document", () => {
   context("Verify created training curriculum document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
-      cy.get("[data-cy=\"field-document.docId\"]").should("exist");
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+      cy.get(`[data-cy="field-document.docId"]`).should("exist");
+      cy.get(`[data-cy="field-revisionStage"]`).should("exist");
+      cy.get(`[data-cy="AttachmentFieldPresenter-field"]`).should("exist");
     });
 
     it("Verify document header details", () => {
@@ -478,14 +488,13 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify created training curriculum document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -495,9 +504,9 @@ context("Verify New Layout for Training Curriculum Document", () => {
         context("Verify Overview tab content", () => {
           it("Verify Overview tab default fields", () => {
             cy.get("#sm-tabpanel-0").should("exist");
-            cy.get("[data-cy=\"field-document.docId\"]").should("exist");
-            cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-            cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+            cy.get(`[data-cy="field-document.docId"]`).should("exist");
+            cy.get(`[data-cy="field-revisionStage"]`).should("exist");
+            cy.get(`[data-cy="AttachmentFieldPresenter-field"]`).should("exist");
           });
 
           it("Verify Approvals field", () => {
@@ -548,8 +557,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
   context("Verify Right side panel", () => {
     it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.verifyReferencesTabAsActive();
     });
 
     it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -557,16 +565,15 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Verify References tab is fixed as the user scrolls up or down", () => {
-      cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+      cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
     });
 
     context("Verify References tab", () => {
       it("Verify References tab General Info", () => {
-        cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+        cy.verifyReferencesGeneralInfo({ user: owner });
       });
 
       it("Verify Add/Remove References", () => {
-        cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
         cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
 
@@ -577,21 +584,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
     context("Verify Revisions tab", () => {
       it("Open revisions tab, click and verify current revision", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drClickRevisionsSidePanel();
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          cy.recCheckRevisionStage({ stage: "Revision A" });
-          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A");
-        });
-      });
-    });
-
-    context("Verify History tab", () => {
-      it("Open history tab and verify changes are being captured", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-          cy.drSelectHistoryTab();
-          cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-        });
+        cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
     });
 
@@ -602,32 +595,59 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
       it("Add another user permission", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[2].name);
+          cy.drAddUserFromPermissionTab(userOne);
         });
-      });
-
-      it("Open access permissions tab", () => {
-        cy.drSelectPermissionTab();
       });
 
       it("Add another group permission", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Developers");
+          cy.drAddGroupFromPermissionTab(groupOne);
         });
       });
+    });
+
+    context("Verify History tab", () => {
+      const history = [
+        {
+          owner,
+          actions: [
+            { key: "Access granted to group", value: groupOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Access granted to user", value: userOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Description changed", value: docDescription },
+            { key: "Name changed", value: docTitle },
+          ],
+        },
+      ];
+
+      it("Open history tab and verify changes are being captured", () => {
+        cy.drSelectHistoryTab();
+        cy.get(`[data-cy="History-detail"]`).should("be.visible");
+      });
+
+      verifyHistoryContent(history, groupOne);
     });
 
     context("Verify Bookmarks tab", () => {
       it("Open bookmarks tab", () => {
         cy.drSelectBookmarksTab();
-        cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+        cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
       });
     });
 
     context("Verify Revision History tab", () => {
       it("Open revision history tab", () => {
         cy.drSelectRevisionHistoryTab();
-        cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+        cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
       });
     });
 
@@ -644,8 +664,8 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     context("Enter values for Details tab predefined schema fields", () => {
-      it("Select Documents to Train on 'New Training Curriculum Form'", () => {
-        cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("New Training Curriculum Form");
+      it(`Select Documents to Train on ${formTitle}`, () => {
+        cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(formTitle);
       });
 
       it("Select Refresh/repeat training periodically? 'Yes'", () => {
@@ -656,12 +676,12 @@ context("Verify New Layout for Training Curriculum Document", () => {
         cy.get("[name=training-validity]").arrowType("5");
       });
 
-      it("Select Groups to train 'Developers'", () => {
-        cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Developers");
+      it(`Select Groups to train ${groupOne}`, () => {
+        cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect(groupOne);
       });
 
       it("Select Users to train", () => {
-        cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+        cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(owner);
       });
     });
 
@@ -672,7 +692,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
       });
 
       it("Select radio button option", () => {
-        cy.get("[name^=\"fb-radiobutton-group-\"]").last().arrowClick();
+        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
       });
 
       it("Save document", () => {
@@ -685,7 +705,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
   });
 
-  // Scenario 9b - Existing Training Curriculum Record
+  // Scenario 7b - Existing Training Curriculum Record
 
   context("Select exisiting Draft training curriculum document", () => {
     it("Navigate to Training Curriculum", () => {
@@ -705,9 +725,9 @@ context("Verify New Layout for Training Curriculum Document", () => {
   context("Verify Draft training curriculum document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
-      cy.get("[data-cy=\"field-document.docId\"]").should("exist");
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+      cy.get(`[data-cy="field-document.docId"]`).should("exist");
+      cy.get(`[data-cy="field-revisionStage"]`).should("exist");
+      cy.get(`[data-cy="AttachmentFieldPresenter-field"]`).should("exist");
     });
 
     it("Verify document header details", () => {
@@ -716,14 +736,13 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify Draft training curriculum document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -733,9 +752,9 @@ context("Verify New Layout for Training Curriculum Document", () => {
         context("Verify Overview tab content", () => {
           it("Verify Overview tab default fields", () => {
             cy.get("#sm-tabpanel-0").should("exist");
-            cy.get("[data-cy=\"field-document.docId\"]").should("exist");
-            cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
-            cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+            cy.get(`[data-cy="field-document.docId"]`).should("exist");
+            cy.get(`[data-cy="field-revisionStage"]`).should("exist");
+            cy.get(`[data-cy="AttachmentFieldPresenter-field"]`).should("exist");
           });
 
           it("Verify Approvals field", () => {
@@ -782,8 +801,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
     context("Verify Right side panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.verifyReferencesTabAsActive();
       });
 
       it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -791,16 +809,15 @@ context("Verify New Layout for Training Curriculum Document", () => {
       });
 
       it("Verify References tab is fixed as the user scrolls up or down", () => {
-        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+        cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
       });
 
       context("Verify References tab", () => {
         it("Verify References tab General Info", () => {
-          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+          cy.verifyReferencesGeneralInfo({ user: owner });
         });
 
         it("Verify Add/Remove References", () => {
-          cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
           cy.verifyAddRemoveReference({ formId: "FM-00001" });
         });
 
@@ -811,21 +828,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision A" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A");
-          });
-        });
-      });
-
-      context("Verify History tab", () => {
-        it("Open history tab and verify changes are being captured", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-          });
+          cy.openRevisionsTabAndVerifyCurrentRevision("A");
         });
       });
 
@@ -836,32 +839,52 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
         it("Add another user permission", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
+            cy.drAddUserFromPermissionTab(userTwo);
           });
-        });
-
-        it("Open access permissions tab", () => {
-          cy.drSelectPermissionTab();
         });
 
         it("Add another group permission", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Company Admin");
+            cy.drAddGroupFromPermissionTab(groupTwo);
           });
         });
+      });
+
+      context("Verify History tab", () => {
+        const history = [
+          {
+            owner,
+            actions: [
+              { key: "Access granted to group", value: groupTwo },
+            ],
+          },
+          {
+            owner,
+            actions: [
+              { key: "Access granted to user", value: userTwo },
+            ],
+          },
+        ];
+
+        it("Open history tab and verify changes are being captured", () => {
+          cy.drSelectHistoryTab();
+          cy.get(`[data-cy="History-detail"]`).should("be.visible");
+        });
+
+        verifyHistoryContent(history, groupTwo);
       });
 
       context("Verify Bookmarks tab", () => {
         it("Open bookmarks tab", () => {
           cy.drSelectBookmarksTab();
-          cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+          cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
         });
       });
 
       context("Verify Revision History tab", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
-          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+          cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
         });
       });
 
@@ -879,7 +902,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Add Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: owner });
     });
 
     it("Submit for approval", () => {
@@ -908,8 +931,8 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
   context("Verify released training curriculum document", () => {
     it("Verify predefined fields", () => {
-      cy.get("[id='field-name']").contains("Test Training Curriculum");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Test Training Curriculum Description");
+      cy.get("#field-name").contains(docTitle);
+      cy.get(`[data-cy="BaseWithhtml-editor"]`).contains(docDescription);
     });
 
     it("Verify document header details", () => {
@@ -918,14 +941,13 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify released training curriculum document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -977,8 +999,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
     context("Verify Right side panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.verifyReferencesTabAsActive();
       });
 
       it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -986,16 +1007,16 @@ context("Verify New Layout for Training Curriculum Document", () => {
       });
 
       it("Verify References tab is fixed as the user scrolls up or down", () => {
-        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+        cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
       });
 
       context("Verify References tab", () => {
         it("Verify References tab General Info", () => {
-          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+          cy.verifyReferencesGeneralInfo({ user: owner });
         });
 
         it("Verify References", () => {
-          cy.get("[data-cy=\"generalInfo\"]").should("contain.text", "References");
+          cy.get(`[data-cy="generalInfo"]`).should("contain.text", "References");
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -1005,21 +1026,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision A" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A");
-          });
-        });
-      });
-
-      context("Verify History tab", () => {
-        it("Open history tab and verify changes are being captured", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-          });
+          cy.openRevisionsTabAndVerifyCurrentRevision("A");
         });
       });
 
@@ -1030,32 +1037,52 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
         it("Add another user permission", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[4].name);
+            cy.drAddUserFromPermissionTab(userThree);
           });
-        });
-
-        it("Open access permissions tab", () => {
-          cy.drSelectPermissionTab();
         });
 
         it("Add another group permission", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("User Management");
+            cy.drAddGroupFromPermissionTab(groupThree);
           });
         });
+      });
+
+      context("Verify History tab", () => {
+        const history = [
+          {
+            owner,
+            actions: [
+              { key: "Access granted to group", value: groupThree },
+            ],
+          },
+          {
+            owner,
+            actions: [
+              { key: "Access granted to user", value: userThree },
+            ],
+          },
+        ];
+
+        it("Open history tab and verify changes are being captured", () => {
+          cy.drSelectHistoryTab();
+          cy.get(`[data-cy="History-detail"]`).should("be.visible");
+        });
+
+        verifyHistoryContent(history, groupThree);
       });
 
       context("Verify Bookmarks tab", () => {
         it("Open bookmarks tab", () => {
           cy.drSelectBookmarksTab();
-          cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+          cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
         });
       });
 
       context("Verify Revision History tab", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
-          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+          cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
         });
       });
 
