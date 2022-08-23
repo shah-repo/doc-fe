@@ -14,6 +14,7 @@ export type FBPurchaseOrderProps =
   isReceivable?: boolean;
   receivableName?: string;
   lineItem?: string;
+  isPO: boolean;
 };
 
 type FBPurchaseOrderItemType = "product" | "service";

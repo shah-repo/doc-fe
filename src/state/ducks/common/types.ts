@@ -10,6 +10,30 @@ export enum ApprovalStatus {
   Abandoned = "ABANDONED",
 }
 
+export enum STATUS_FILTER_TEXT {
+  OPEN = "Open",
+  WIP = "WIP",
+  DRAFT = "Draft",
+  IN_REVIEW = "In Review",
+  RELEASED = "Released",
+  APPROVED = "Approved",
+  REJECTED = "Rejected",
+  PENDING = "Pending",
+  CLOSED = "Closed",
+  VOID = "Void",
+  VOIDED = "Voided",
+  IMPLEMENTATION = "Implementation",
+  PENDING_CHANGE = "Pending Change",
+  PENDING_APPROVAL = "Pending Approval",
+  OBSOLETE = "Obsolete",
+  CURRENT = "Current",
+  CANCELED = "Canceled",
+  ARCHIVE = "Archive",
+  LAST_SIGNED = "Last Signed",
+  SUPERSEDED = "Superseded",
+  ACCEPTED = "Accepted"
+}
+
 export interface Owner {
   id: string;
   user: User;

@@ -252,7 +252,7 @@ export const withFBInput = <T extends FBInputProps>(
     useEffect(() => {
       if (!formState && !inputState) { return; }
       // Input states
-      formState!.inputState.set(name, inputState!);
+      formState?.inputState.set(name, inputState!);
 
       // Validation settings
       let attr = (label as string) || placeholder || validationAttribute || name;
