@@ -21,9 +21,6 @@ let initialArDocument;
 let group;
 let createdEquipmentFormDocument;
 let createdCalibrationForm;
-let createdEqDocument;
-let createdPMRecord;
-let createdCalibrationRecord;
 let createdEquipmentNumericRevision;
 let createdPMForm;
 let maintenanceRecordDocumentType;
@@ -562,122 +559,6 @@ context("Layout Verification of maintainance records", () => {
         }).then(() => done());
       });
     });
-
-    it("[API]Create PM record for equipment in numeric version", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          formDocument: {
-            id: createdPMForm.id,
-          },
-          formInput: {
-            "equipment_id": createdEquipmentNumericRevision.id,
-            "equipment_maintainer": adminEmployee.id,
-            "fb-approvals-kybkhbpt": [],
-            "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
-          },
-          parentEquipment: {
-            id: createdEquipmentNumericRevision.id,
-          },
-          equipmentSection: "pm-ki5wtk5l",
-          description: "",
-          name: "Preventative maintenance document",
-          attachments: [],
-          referenceTo: [],
-          revisionStage: 1,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          retrain: false,
-          document: {
-            docId: "MR-00001",
-            securityList: {
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-              operators: [],
-            },
-            documentType: {
-              id: maintenanceRecordDocumentType[0].id,
-            },
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdPMRecord = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdPMRecord.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
-      });
-    });
-
-
-    it("[API]Create Calibration record for equipment in numeric version", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          formDocument: {
-            id: createdCalibrationForm.id,
-          },
-          formInput: {
-            "equipment_id": createdEquipmentNumericRevision.id,
-            "equipment_maintainer": adminEmployee.id,
-            "fb-approvals-kybkhbpt": [],
-            "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
-          },
-          parentEquipment: {
-            id: createdEquipmentNumericRevision.id,
-          },
-          equipmentSection: "calibration-ki5wtyj0",
-          description: "",
-          name: "Calibration record",
-          attachments: [],
-          referenceTo: [],
-          revisionStage: 1,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          retrain: false,
-          document: {
-            docId: "MR-00002",
-            securityList: {
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-              operators: [],
-            },
-            documentType: {
-              id: maintenanceRecordDocumentType[0].id,
-            },
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdCalibrationRecord = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdCalibrationRecord.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
-      });
-    });
-
 
   });
 
