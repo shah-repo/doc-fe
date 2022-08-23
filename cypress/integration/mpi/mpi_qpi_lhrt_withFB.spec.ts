@@ -12,7 +12,6 @@ import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHis
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -380,10 +379,10 @@ context("Mpi Template", () => {
         cy.fbAddNewFieldButton();
         cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
         cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-        cy.get(`[class="drag-handle"]`).eq(1)
+        cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(0)
+        cy.get(".drag-handle").eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
       });
@@ -425,7 +424,7 @@ context("Mpi Template", () => {
 
       it("Add attachment and check autosave", () => {
         cy.contains("Step #1").parentsUntil("li")
-          .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          .find(`[data-cy="albumMediaButton"]`).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.elUploadAttachment({
             fileName: "image.jpg",
@@ -445,12 +444,11 @@ context("Mpi Template", () => {
 
     context("Add step and clone step", () => {
       it("Verify step can be added and add step 2", () => {
-        SystemRequirement("REQ-2970");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
+          cy.get(`[data-cy="form.builder.add.step"]`).arrowClick();
         });
         cy.progressBarShouldNotExist();
-        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("have.text", "Step #2");
+        cy.get(`[data-cy="form.builder.step.number"]`).eq(1).should("have.text", "Step #2");
       });
 
       it("Fill step #2 description", () => {
@@ -459,7 +457,7 @@ context("Mpi Template", () => {
 
       it("Add attachment and check autosave", () => {
         cy.contains("Step #2").parentsUntil("li")
-          .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          .find(`[data-cy="albumMediaButton"]`).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.elUploadAttachment({
             fileName: "image.jpg",
@@ -477,19 +475,14 @@ context("Mpi Template", () => {
       });
 
       it("Clone Step #1", () => {
-        SystemRequirement("REQ-3070");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachments,
           CyRoutes.GetAttachmentsAttached ], () => {
-          cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).arrowClick();
+          cy.get(`[data-cy="form.builder.clone.step"]`).eq(0).arrowClick();
         });
       });
 
       it("Edit Cloned step #1 clone description", () => {
         cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of Cloned step 1" });
-      });
-
-      it("Add one more attachment", () => {
-        // add one more attachment here
       });
 
       it("Add 'Material two' to Cloned step #1", () => {
@@ -629,10 +622,10 @@ context("Mpi Template", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
@@ -739,10 +732,10 @@ context("Mpi Template", () => {
         cy.fbAddNewFieldButton();
         cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
         cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-        cy.get(`[class="drag-handle"]`).eq(1)
+        cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(0)
+        cy.get(".drag-handle").eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
       });
@@ -784,7 +777,7 @@ context("Mpi Template", () => {
 
       it("Add attachment and check autosave", () => {
         cy.contains("Step #1").parentsUntil("li")
-          .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          .find(`[data-cy="albumMediaButton"]`).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.elUploadAttachment({
             fileName: "image.jpg",
@@ -804,12 +797,11 @@ context("Mpi Template", () => {
 
     context("Add step and clone step", () => {
       it("Verify step can be added and add step 2", () => {
-        SystemRequirement("REQ-2970");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
+          cy.get(`[data-cy="form.builder.add.step"]`).arrowClick();
         });
         cy.progressBarShouldNotExist();
-        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("have.text", "Step #2");
+        cy.get(`[data-cy="form.builder.step.number"]`).eq(1).should("have.text", "Step #2");
       });
 
       it("Fill step #2 description", () => {
@@ -818,7 +810,7 @@ context("Mpi Template", () => {
 
       it("Add attachment and check autosave", () => {
         cy.contains("Step #2").parentsUntil("li")
-          .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          .find(`[data-cy="albumMediaButton"]`).arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.elUploadAttachment({
             fileName: "image.jpg",
@@ -836,19 +828,14 @@ context("Mpi Template", () => {
       });
 
       it("Clone Step #1", () => {
-        SystemRequirement("REQ-3070");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachments,
           CyRoutes.GetAttachmentsAttached ], () => {
-          cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).arrowClick();
+          cy.get(`[data-cy="form.builder.clone.step"]`).eq(0).arrowClick();
         });
       });
 
       it("Edit Cloned step #1 clone description", () => {
         cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of Cloned step 1" });
-      });
-
-      it("Add one more attachment", () => {
-        // add one more attachment
       });
 
       it("Add 'Material two' to Cloned step #1", () => {
@@ -987,10 +974,10 @@ context("Mpi Template", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
@@ -1093,16 +1080,15 @@ context("Mpi Template", () => {
         });
 
         it("Verify Edit, Move and Remove", () => {
-          SystemRequirement("FB-0310");
           cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
           cy.fbEnterPlaceholder({ placeholder: " changed" });
           cy.fbAddNewFieldButton();
           cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
           cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-          cy.get(`[class="drag-handle"]`).eq(1)
+          cy.get(".drag-handle").eq(1)
             .realMouseDown({ position: "center", button: "left" });
           cy.wait(3000);
-          cy.get(`[class="drag-handle"]`).eq(0)
+          cy.get(".drag-handle").eq(0)
             .realMouseMove(0, 0, { position: "center" })
             .realMouseUp();
         });
@@ -1230,12 +1216,12 @@ context("Mpi Template", () => {
 
       context("Check Validations of fields", () => {
         it("Validate part to be manufactured", () => {
-          cy.get("[name=\"lhr-selected-part\"]").parent().parent()
+          cy.get(`[name="lhr-selected-part"]`).parent().parent()
             .should("contain.text", "The Part to be Manufactured is a required field.");
         });
 
         it("Validate Build Type", () => {
-          cy.get("[label=\"Build Type\"]").parent().parent()
+          cy.get(`[label="Build Type"]`).parent().parent()
             .should("contain.text", "The Build Type is a required field.");
         });
 
@@ -1244,11 +1230,11 @@ context("Mpi Template", () => {
         });
 
         it("Click 'LHR Step'", () => {
-          cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+          cy.get(`[data-cy^="LHR Step"]`).arrowClick();
         });
 
         it("Validate LHR Step", () => {
-          cy.get("[name=\"lhrstep-built-in\"]").parent().parent()
+          cy.get(`[name="lhrstep-built-in"]`).parent().parent()
             .should("contain.text", "The LHR Step is a required field.");
         });
       });
@@ -1287,10 +1273,10 @@ context("Mpi Template", () => {
           cy.fbAddNewFieldButton();
           cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
           cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-          cy.get(`[class="drag-handle"]`).eq(1)
+          cy.get(".drag-handle").eq(1)
             .realMouseDown({ position: "center", button: "left" });
           cy.wait(3000);
-          cy.get(`[class="drag-handle"]`).eq(0)
+          cy.get(".drag-handle").eq(0)
             .realMouseMove(0, 0, { position: "center" })
             .realMouseUp();
         });
@@ -1326,7 +1312,7 @@ context("Mpi Template", () => {
 
       context("select part", () => {
         it("Select 'Part document' for Part to be Manufactured", () => {
-          cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Material one");
+          cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Material one");
           cy.get("ul>li[role=option]").contains("Material one").arrowClick();
         });
       });
@@ -1337,16 +1323,16 @@ context("Mpi Template", () => {
         });
 
         it("Click 'LHR Step 1'", () => {
-          cy.get("[data-cy^=\"LHR Step 1\"]").arrowClick();
+          cy.get(`[data-cy^="LHR Step 1"]`).arrowClick({ force: true });
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+          cy.get(`input[data-cy="lhrstep-built-in"]`).then(($el) => {
             $el.trigger("click");
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+            cy.get(`input[data-cy="lhrstep-built-in"]`).autocompleteSelect("MPI document");
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -1355,20 +1341,20 @@ context("Mpi Template", () => {
 
       context("Select created QPI in LHR template", () => {
         it("Click 'Add Step'", () => {
-          cy.get("[data-cy^=\"form.builder.add.step\"]").arrowClick().wait(1000);
+          cy.get(`[data-cy^="form.builder.add.step"]`).arrowClick().wait(1000);
         });
 
         it("Click 'LHR Step 2'", () => {
-          cy.get("[data-cy^=\"LHR Step 2\"]").arrowClick();
+          cy.get(`[data-cy^="LHR Step 2"]`).arrowClick({ force: true });
         });
 
         it("Select QPI document for step #2 in LHRt", () => {
-          cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
+          cy.get(`input[data-cy^="lhr-step"]`).then(($el) => {
             $el.trigger("click");
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("QPI document");
+            cy.get(`input[data-cy^="lhr-step"]`).autocompleteSelect("QPI document");
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -1513,10 +1499,10 @@ context("Mpi Template", () => {
           cy.fbAddNewFieldButton();
           cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
           cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-          cy.get(`[class="drag-handle"]`).eq(1)
+          cy.get(".drag-handle").eq(1)
             .realMouseDown({ position: "center", button: "left" });
           cy.wait(3000);
-          cy.get(`[class="drag-handle"]`).eq(0)
+          cy.get(".drag-handle").eq(0)
             .realMouseMove(0, 0, { position: "center" })
             .realMouseUp();
         });
