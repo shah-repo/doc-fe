@@ -7,10 +7,22 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { Seed } from "../../utils/constants/documentTypes/seed";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+const owner = USERS[1].name;
+const userOne = USERS[2].name;
+const userTwo = USERS[3].name;
+const userThree = USERS[4].name;
+const groupOne = "Developers";
+const groupTwo = "Company Admin";
+const groupThree = "User Management";
+const docTitle = "Test Seed";
+const docDescription = "Test Seed Description";
+const formTitle = "New Seed Form";
+const formDescription = "New Seed Form Description";
 
 context("Verify New Layout for Seed Document", () => {
   before(() => {
@@ -76,13 +88,13 @@ context("Verify New Layout for Seed Document", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Seed Form'", () => {
-      cy.drEnterDocumentTitle({ name: "New Seed Form" });
+    it(`Enter title ${formTitle}`, () => {
+      cy.drEnterDocumentTitle({ name: formTitle });
     });
 
-    it("Enter description 'New Seed Form description'", () => {
+    it(`Enter description ${formDescription}`, () => {
       cy.drEnterDocumentDescription({
-        description: "New Seed Form description",
+        description: formDescription,
       });
     });
 
@@ -108,7 +120,7 @@ context("Verify New Layout for Seed Document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
       cy.verifyDefaultFields();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+      cy.get(`[data-cy=\"field-outputDocumentTypes\"]`).should("exist");
     });
 
     it("Verify document header details", () => {
@@ -117,12 +129,11 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     it("Verify Overview as default selected tab", () => {
-      cy.verifySelectedTab({ tab: "overview" });
+      cy.isTabActive({ name: "overview", index: 0 });
     });
 
     it("Verify tab as fixed", () => {
@@ -134,7 +145,7 @@ context("Verify New Layout for Seed Document", () => {
         it("Verify Overview tab default fields", () => {
           cy.get("#sm-tabpanel-0").should("exist");
           cy.verifyDefaultFields();
-          cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+          cy.get(`[data-cy=\"field-outputDocumentTypes\"]`).should("exist");
         });
 
         it("Verify that Form Options should appear for Overview tab", () => {
@@ -210,17 +221,16 @@ context("Verify New Layout for Seed Document", () => {
 
       context("Verify Right side panel", () => {
         it("Verify that right side panel opens by default to the References tab", () => {
-          cy.get("[data-cy=\"References\"]").should("exist");
-          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+          cy.verifyReferencesTabAsActive();
         });
 
         context("Verify References tab", () => {
           it("Verify References tab General Info", () => {
-            cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+            cy.verifyReferencesGeneralInfo({ user: owner });
           });
 
           it("Verify References", () => {
-            cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
+            cy.get(`[data-cy=\"field-referenceTo\"]`).should("exist");
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -252,12 +262,12 @@ context("Verify New Layout for Seed Document", () => {
       cy.drCreateNewDocumentFromForm();
     });
 
-    it("Enter title", () => {
-      cy.drEnterDocumentTitle({ name: "Test Seed" });
+    it(`Enter title ${docTitle}`, () => {
+      cy.drEnterDocumentTitle({ name: docTitle });
     });
 
-    it("Enter description", () => {
-      cy.drEnterDocumentDescription({ description: "Test Seed Description" });
+    it(`Enter description ${docDescription}`, () => {
+      cy.drEnterDocumentDescription({ description: docDescription });
     });
 
     it("Save document", () => {
@@ -277,14 +287,13 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify created seed document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -346,8 +355,7 @@ context("Verify New Layout for Seed Document", () => {
 
   context("Verify Right side panel", () => {
     it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+      cy.verifyReferencesTabAsActive();
     });
 
     it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -355,19 +363,16 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Verify References tab is fixed as the user scrolls up or down", () => {
-      cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+      cy.get(`[data-cy=\"References\"]`).scrollIntoView({ ensureScrollable: false });
     });
 
     context("Verify References tab", () => {
       it("Verify References tab General Info", () => {
-        cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+        cy.verifyReferencesGeneralInfo({ user: owner });
       });
 
       it("Verify Add/Remove References", () => {
-        cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
-        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-        cy.drSelectReferences( "FM-00001" );
-        cy.drRemoveReferences({ reference: "FM-00001" });
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -377,21 +382,7 @@ context("Verify New Layout for Seed Document", () => {
 
     context("Verify Revisions tab", () => {
       it("Open revisions tab, click and verify current revision", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drClickRevisionsSidePanel();
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          cy.recCheckRevisionStage({ stage: "Revision 1" });
-          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-        });
-      });
-    });
-
-    context("Verify History tab", () => {
-      it("Open history tab and verify changes are being captured", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-          cy.drSelectHistoryTab();
-          cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-        });
+        cy.openRevisionsTabAndVerifyCurrentRevision("1");
       });
     });
 
@@ -402,32 +393,59 @@ context("Verify New Layout for Seed Document", () => {
 
       it("Add another user permission", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[2].name);
+          cy.drAddUserFromPermissionTab(userOne);
         });
-      });
-
-      it("Open access permissions tab", () => {
-        cy.drSelectPermissionTab();
       });
 
       it("Add another group permission", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Developers");
+          cy.drAddGroupFromPermissionTab(groupOne);
         });
       });
+    });
+
+    context("Verify History tab", () => {
+      const history = [
+        {
+          owner,
+          actions: [
+            { key: "Access granted to group", value: groupOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Access granted to user", value: userOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Description changed", value: docDescription },
+            { key: "Name changed", value: docTitle },
+          ],
+        },
+      ];
+
+      it("Open history tab and verify changes are being captured", () => {
+        cy.drSelectHistoryTab();
+        cy.get(`[data-cy="History-detail"]`).should("be.visible");
+      });
+
+      verifyHistoryContent(history, groupOne);
     });
 
     context("Verify Bookmarks tab", () => {
       it("Open bookmarks tab", () => {
         cy.drSelectBookmarksTab();
-        cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+        cy.get(`[data-cy=\"bookmark-icon\"]`).should("be.visible");
       });
     });
 
     context("Verify Revision History tab", () => {
       it("Open revision history tab", () => {
         cy.drSelectRevisionHistoryTab();
-        cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+        cy.get(`[data-cy=\"Revision History-detail\"]`).should("be.visible");
       });
     });
 
@@ -461,7 +479,7 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Enters document description 'First document description'", () => {
-        cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
+        cy.get(`[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div`)
           .click({ force: true }).arrowType("First document description", { force: true });
       });
 
@@ -483,7 +501,7 @@ context("Verify New Layout for Seed Document", () => {
 
     context("Enter values for Details tab added fields", () => {
       it("Fill text field", () => {
-        cy.get("[name^=fb-textfield-]").arrowType("Test Seed");
+        cy.get("[name^=fb-textfield-]").arrowType("Seed Text Field");
         cy.unClick();
       });
 
@@ -517,8 +535,8 @@ context("Verify New Layout for Seed Document", () => {
       cy.dlFilterByStatus({ status: "Draft" });
     });
 
-    it("Select 'Test Seed' document'", () => {
-      cy.dlFilterByDocTitle({ docTitle: "Test Seed" });
+    it(`Select ${docTitle} document`, () => {
+      cy.dlFilterByDocTitle({ docTitle });
       cy.dlSelectFirstDocument();
     });
   });
@@ -535,14 +553,13 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify draft seed document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -601,8 +618,7 @@ context("Verify New Layout for Seed Document", () => {
 
     context("Verify Right side panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.verifyReferencesTabAsActive();
       });
 
       it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -610,19 +626,16 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Verify References tab is fixed as the user scrolls up or down", () => {
-        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+        cy.get(`[data-cy=\"References\"]`).scrollIntoView({ ensureScrollable: false });
       });
 
       context("Verify References tab", () => {
         it("Verify References tab General Info", () => {
-          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+          cy.verifyReferencesGeneralInfo({ user: owner });
         });
 
         it("Verify Add/Remove References", () => {
-          cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
-          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-          cy.drSelectReferences( "FM-00001" );
-          cy.drRemoveReferences({ reference: "FM-00001" });
+          cy.verifyAddRemoveReference({ formId: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -632,21 +645,7 @@ context("Verify New Layout for Seed Document", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision 1" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-          });
-        });
-      });
-
-      context("Verify History tab", () => {
-        it("Open history tab and verify changes are being captured", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-          });
+          cy.openRevisionsTabAndVerifyCurrentRevision("1");
         });
       });
 
@@ -657,32 +656,52 @@ context("Verify New Layout for Seed Document", () => {
 
         it("Add another user permission", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
+            cy.drAddUserFromPermissionTab(userTwo);
           });
-        });
-
-        it("Open access permissions tab", () => {
-          cy.drSelectPermissionTab();
         });
 
         it("Add another group permission", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Company Admin");
+            cy.drAddGroupFromPermissionTab(groupTwo);
           });
         });
+      });
+
+      context("Verify History tab", () => {
+        const history = [
+          {
+            owner,
+            actions: [
+              { key: "Access granted to group", value: groupTwo },
+            ],
+          },
+          {
+            owner,
+            actions: [
+              { key: "Access granted to user", value: userTwo },
+            ],
+          },
+        ];
+
+        it("Open history tab and verify changes are being captured", () => {
+          cy.drSelectHistoryTab();
+          cy.get(`[data-cy="History-detail"]`).should("be.visible");
+        });
+
+        verifyHistoryContent(history, groupTwo);
       });
 
       context("Verify Bookmarks tab", () => {
         it("Open bookmarks tab", () => {
           cy.drSelectBookmarksTab();
-          cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+          cy.get(`[data-cy=\"bookmark-icon\"]`).should("be.visible");
         });
       });
 
       context("Verify Revision History tab", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
-          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+          cy.get(`[data-cy=\"Revision History-detail\"]`).should("be.visible");
         });
       });
 
@@ -710,16 +729,16 @@ context("Verify New Layout for Seed Document", () => {
       cy.dlFilterByStatus({ status: "Released" });
     });
 
-    it("Select 'Test Seed' document'", () => {
-      cy.dlFilterByDocTitle({ docTitle: "Test Seed" });
+    it(`Select ${docTitle} document`, () => {
+      cy.dlFilterByDocTitle({ docTitle });
       cy.dlSelectFirstDocument();
     });
   });
 
   context("Verify released seed document", () => {
     it("Verify predefined fields", () => {
-      cy.get("[id='field-name']").contains("Test Seed");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Test Seed Description");
+      cy.get("#field-name").contains("Test Seed");
+      cy.get(`[data-cy=\"BaseWithhtml-editor\"]`).contains("Test Seed Description");
     });
 
     it("Verify document header details", () => {
@@ -728,14 +747,13 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.details\"]").should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify released seed document tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify tab as fixed", () => {
@@ -790,8 +808,7 @@ context("Verify New Layout for Seed Document", () => {
 
     context("Verify Right side panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.verifyReferencesTabAsActive();
       });
 
       it("Verify Right side panel Can be expanded or collapsed", () => {
@@ -799,16 +816,16 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Verify References tab is fixed as the user scrolls up or down", () => {
-        cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+        cy.get(`[data-cy=\"References\"]`).scrollIntoView({ ensureScrollable: false });
       });
 
       context("Verify References tab", () => {
         it("Verify References tab General Info", () => {
-          cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+          cy.verifyReferencesGeneralInfo({ user: owner });
         });
 
         it("Verify References", () => {
-          cy.get("[data-cy=\"generalInfo\"]").should("contain.text", "References");
+          cy.get(`[data-cy=\"generalInfo\"]`).should("contain.text", "References");
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -818,21 +835,7 @@ context("Verify New Layout for Seed Document", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision 1" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-          });
-        });
-      });
-
-      context("Verify History tab", () => {
-        it("Open history tab and verify changes are being captured", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-          });
+          cy.openRevisionsTabAndVerifyCurrentRevision("1");
         });
       });
 
@@ -843,32 +846,52 @@ context("Verify New Layout for Seed Document", () => {
 
         it("Add another user permission", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[4].name);
+            cy.drAddUserFromPermissionTab(userThree);
           });
-        });
-
-        it("Open access permissions tab", () => {
-          cy.drSelectPermissionTab();
         });
 
         it("Add another group permission", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("User Management");
+            cy.drAddGroupFromPermissionTab(groupThree);
           });
         });
+      });
+
+      context("Verify History tab", () => {
+        const history = [
+          {
+            owner,
+            actions: [
+              { key: "Access granted to group", value: groupThree },
+            ],
+          },
+          {
+            owner,
+            actions: [
+              { key: "Access granted to user", value: userThree },
+            ],
+          },
+        ];
+
+        it("Open history tab and verify changes are being captured", () => {
+          cy.drSelectHistoryTab();
+          cy.get(`[data-cy="History-detail"]`).should("be.visible");
+        });
+
+        verifyHistoryContent(history, groupThree);
       });
 
       context("Verify Bookmarks tab", () => {
         it("Open bookmarks tab", () => {
           cy.drSelectBookmarksTab();
-          cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+          cy.get(`[data-cy=\"bookmark-icon\"]`).should("be.visible");
         });
       });
 
       context("Verify Revision History tab", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
-          cy.get("[data-cy=\"Revision History-detail\"]").should("be.visible");
+          cy.get(`[data-cy=\"Revision History-detail\"]`).should("be.visible");
         });
       });
 
