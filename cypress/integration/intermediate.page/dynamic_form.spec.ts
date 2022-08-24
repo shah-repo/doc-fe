@@ -150,8 +150,6 @@ context(
           cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist");
           cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist");
         });
-
-        // The design matches the Figma
       });
 
     });
