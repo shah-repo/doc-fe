@@ -210,17 +210,6 @@ context(
           cy.unClick();
         });
 
-        // it("Verify Description for Underline", () => {
-        //   cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
-        //   cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Underline\"]").arrowClick().wait(2000);
-        //   cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
-        //   cy.get("[data-cy=\"description\"]").contains("I am here").
-        // should("have.css",  "text-decoration", "underline");
-        //   cy.unClick();
-
-        //   // this is failing: Underline, Strikethrough other are unable to add
-        // });
-
         it("Verify Description for Monospace", () => {
           cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
           cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Monospace\"]").arrowClick().wait(2000);
@@ -249,8 +238,6 @@ context(
           cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
         });
 
-      // The design matches the Figma
-      //  Description
       });
 
     });
