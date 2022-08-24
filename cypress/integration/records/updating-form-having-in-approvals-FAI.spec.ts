@@ -185,6 +185,11 @@ context(testName, () => {
       cy.inlineApproval();
     });
 
+    it("Verify previous revision", () => {
+      cy.get("[data-cy=note-icon]").click();
+      cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(1).should("contain", "Last Signed");
+    });
+
     it("Add inline approver 2", () => {
       cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).autocompleteSelect(`${ADMIN_USER.email}`);
     });
@@ -195,6 +200,12 @@ context(testName, () => {
 
     it("Approve inline approval", () => {
       cy.inlineApproval();
+    });
+
+    it("Verify previous revision", () => {
+      cy.get("[data-cy=note-icon]").click();
+      cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(1).should("contain", "Last Signed");
+      cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(2).should("contain", "Superseded");
     });
 
     it("Save document", () => {
