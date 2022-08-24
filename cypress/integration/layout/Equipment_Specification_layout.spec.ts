@@ -344,7 +344,6 @@ context("Verification of Equipment Specification", () => {
 
       context("Check document history", () => {
         const groupOne = "Developers";
-        let groupTwo;
         const history = [
           {
             owner: USERS[1].name,
