@@ -23,7 +23,6 @@ declare global {
       verifyReferenceInfo(): Chainable;
       verifyReferenceTab({ user, formId, shortName }): Chainable;
       verifyAddRemoveReference({ formId }): Chainable;
-      verifyHistoryTab(history, groupOne, groupTwo): Chainable;
       verifyDescriptionToolbar(): Chainable;
       verifyHeaderInfoContent(HeaderInfo): Chainable;
       isTabActive(tabInfo: {name: string; index: number}): Chainable;
@@ -144,50 +143,6 @@ Cypress.Commands.add("verifyAddRemoveReference", ({ formId }) => {
   cy.get("[data-cy=\"referenceTo\"]").arrowClick();
   cy.drSelectReferences(formId);
   cy.drRemoveReferences({ reference: formId });
-});
-
-Cypress.Commands.add("verifyHistoryTab", (history, groupOne, groupTwo) => {
-  it("Open history drawer and compare history values", () => {
-    cy.drSelectHistoryTab();
-  });
-
-  history.forEach((element, groupIndex) => {
-    it(`Check owner name for group ${groupIndex + 1}`, () => {
-      cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-    });
-    element.actions.forEach((action, index, identifier) => {
-      it(`'${action.key}' as '${action.value}' exists`, () => {
-        const typeOfChange = action.key;
-        let contentOfChange = action.value;
-
-        if (action.key === "New description" || action.key === "Description changed" ) {
-          contentOfChange = "\n" + action.value + "\n";
-        }
-
-        if (typeOfChange === "s3Link added") {
-          cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-          cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-        }
-        else {
-          if (action.key === "Access granted to group") {
-            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-              expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-            });
-          }
-          else {
-            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-              .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-              .parent()
-              .parent()
-              .within(() => {
-                cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-              });
-          }
-        }
-      });
-    });
-  });
 });
 
 Cypress.Commands.add("verifyDescriptionToolbar", () => {
