@@ -104,8 +104,7 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.value);
-  cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.name).arrowClick();
+  cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
@@ -114,8 +113,7 @@ Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; val
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.value);
-  cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.name).arrowClick();
+  cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
