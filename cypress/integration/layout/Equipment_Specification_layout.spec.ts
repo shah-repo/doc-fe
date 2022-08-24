@@ -8,11 +8,11 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
-
 
 context("Verification of Equipment Specification", () => {
   before(() => {
@@ -28,7 +28,6 @@ context("Verification of Equipment Specification", () => {
   });
 
   context("[API]Prepare company", () => {
-
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -113,15 +112,16 @@ context("Verification of Equipment Specification", () => {
 
   context("Verify Layout of document and Tabs", () => {
     it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      cy.get("header li>p>div>a>div").should("have.text", "Document List");
-      cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "FM-00002");
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Document List",
+        docId: "FM-00002",
+        revision: "Rev 1",
+      });
     });
 
     it("Verify that it contains Overview, specification", () => {
-      cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-      cy.get("[data-cy=\"tabId.specification\"]").should("exist");
+      cy.verifyTabs("overview", "specification");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -129,8 +129,7 @@ context("Verification of Equipment Specification", () => {
     });
 
     it("Verify ES opens to the Overview tab by default", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
+      cy.isTabActive({ name: "overview", index: 0 });
     });
 
     it("Verify overview tab predefiend fields up to attachment", () => {
@@ -138,13 +137,12 @@ context("Verification of Equipment Specification", () => {
     });
 
     it("Verify Render HTML or comment field ", () => {
-      cy.get("[data-cy=\"field-renderHTML\"]").should("exist");
+      cy.get("[data-cy='field-renderHTML']").should("exist");
     });
 
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
-
   });
 
   context("Add FB Fields", () => {
@@ -180,19 +178,17 @@ context("Verification of Equipment Specification", () => {
     });
 
     it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
-      cy.get("[data-cy=\"tabCon-tabId.specification\"]").should("have.attr", "aria-selected", "true");
+      cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
     });
 
     it("Verify Add field button Exist in Specification tab", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").should("exist");
-
+      cy.get("[data-cy='form.builder.add.field']").should("exist");
     });
 
     it("Verify Add field button Exist in Specification tab", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").should("exist");
-
+      cy.get("[data-cy='form.builder.add.field']").should("exist");
     });
 
     it("Verify add FB Field Checked chebox", () => {
@@ -223,15 +219,16 @@ context("Verification of Equipment Specification", () => {
 
     context("Verify Layout of document and Tabs", () => {
       it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
-        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-        cy.get("header li>p>div>a>div").should("have.text", "Document List");
-        cy.get("[data-cy='HeaderInfo'] span").should("contain.text", "ES-00003");
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.DRAFT,
+          title: "Document List",
+          docId: "ES-00003",
+          revision: "Rev 1",
+        });
       });
 
       it("Verify that it contains Overview, specification", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
-        cy.get("[data-cy=\"tabId.specification\"]").should("exist");
+        cy.verifyTabs("overview", "specification");
       });
 
       it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -239,8 +236,7 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Verify ES opens to the Overview tab by default", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "true");
-        cy.get("#sm-tabpanel-0").should("be.visible");
+        cy.isTabActive({ name: "overview", index: 0 });
       });
 
       it("Verify overview tab predefiend fields up to attachment", () => {
@@ -254,14 +250,13 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
-        cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
+        cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
         cy.get("#sm-tabpanel-0").should("be.hidden");
-        cy.get("[data-cy=\"tabCon-tabId.specification\"]").should("have.attr", "aria-selected", "true");
+        cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
       });
 
       it("Verify Add field button Exist in Specification tab", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").should("exist");
-
+        cy.get("[data-cy='form.builder.add.field']").should("exist");
       });
 
       it("Verify add FB Field Checked chebox", () => {
@@ -269,7 +264,7 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Verify add FB Field  textfield", () => {
-        cy.get("[name^=\"es-speciffication-textfield\"]").should("exist");
+        cy.get("[name^='es-speciffication-textfield']").should("exist");
       });
 
       it("Verify that Form Options should  appear for this tab ", () => {
@@ -288,13 +283,10 @@ context("Verification of Equipment Specification", () => {
       });
     });
 
-
     context("Validate Right Side Panel", () => {
-
-
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
       });
 
       it("Verify Reference tab Info", () => {
@@ -306,9 +298,8 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Verify Eye Icon", () => {
-        cy.get("[data-cy=\"references-icon\"]").should("exist");
+        cy.get("[data-cy='references-icon']").should("exist");
       });
-
 
       it("Verify References selection Add Remove", () => {
         cy.verifyAddRemoveReference({ formId: "FM-00001" });
@@ -323,11 +314,11 @@ context("Verification of Equipment Specification", () => {
 
       context("Verify Revision", () => {
         it("open revision tab", () => {
-          cy.get("[data-cy=\"note-icon\"]").arrowClick();
+          cy.get("[data-cy='note-icon']").arrowClick();
         });
 
         it("Verify revision Rev Document open or not", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+          cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick();
           cy.wait(2000);
           cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
         });
@@ -368,53 +359,18 @@ context("Verification of Equipment Specification", () => {
             ],
           },
         ];
+
         it("Verify Doc history", () => {
           cy.drSelectHistoryTab();
         });
-        history.forEach((element, groupIndex) => {
-          it(`Check owner name for group ${groupIndex + 1}`, () => {
-            cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-          });
-          element.actions.forEach((action, index, identifier) => {
-            it(`'${action.key}' as '${action.value}' exists`, () => {
-              const typeOfChange = action.key;
-              let contentOfChange = action.value;
 
-              if (action.key === "New description" || action.key === "Description changed" ) {
-                contentOfChange = "\n" + action.value + "\n";
-              }
-
-              if (typeOfChange === "s3Link added") {
-                cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-                cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-              }
-              else {
-                if (action.key === "Access granted to group") {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-                    expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-                  });
-                }
-                else {
-                  cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-                    .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                    .parent()
-                    .parent()
-                    .within(() => {
-                      cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                      cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`)
-                        .should("contain.text", contentOfChange);
-                    });
-                }
-              }
-            });
-          });
-        });
+        verifyHistoryContent(history, groupOne);
       });
 
       context("Verify Book Mark", () => {
         it("Verify Book Mark Navigation", () => {
-          cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-          cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
       });
 
@@ -427,7 +383,6 @@ context("Verification of Equipment Specification", () => {
           cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
         });
       });
-
     });
 
 
@@ -451,7 +406,7 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Enter value in textfield", () => {
-        cy.get("[name^=\"es-speciffication-textfield\"]").arrowType("Test");
+        cy.get("[name^='es-speciffication-textfield']").arrowType("Test");
       });
 
       it("Click on Save", () => {

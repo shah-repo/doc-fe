@@ -10,6 +10,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
@@ -37,7 +38,6 @@ context("Layout Verification of EQ", () => {
   });
 
   context("[API]Prepare company", () => {
-
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -63,7 +63,6 @@ context("Layout Verification of EQ", () => {
         });
       });
     });
-
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
@@ -353,7 +352,6 @@ context("Layout Verification of EQ", () => {
         }).then(() => done());
       });
     });
-
   });
 
   context("Login user", () => {
@@ -416,10 +414,7 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Verify that it contains Overview, Specification, calpmhistory", () => {
-      cy.get("[data-cy='tabId.overview']").should("exist");
-      cy.get("[data-cy='tabId.specification']").should("exist");
-      cy.get("[data-cy='tabId.calpmhistory']").should("exist");
-      // cy.pause();
+      cy.verifyTabs("overview", "specification", "calpmhistory");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -441,27 +436,15 @@ context("Layout Verification of EQ", () => {
   });
 
   context("Add FB Fields", () => {
-
     it("Add autocomplete of “Approvers” and set validation", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
-      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Approvers");
+      cy.get("[data-cy='optionId']").autocompleteSelect("Approvers");
       cy.fbOpenValidation();
       cy.fbFieldRequired();
       cy.fbAddField();
     });
-
-    // it("Add select field and set validation ", () => {
-    //   cy.fbAddNewFieldWhenHiddenLastPlace();
-    //   cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
-    //   cy.fbEnterNameValue({ name: "label", value: "Select field" });
-    //   cy.fbGroupOptions("option1", "option2");
-    //   cy.fbOpenValidation();
-    //   cy.get("input[value^=\"visibility\"]").check();
-    //   cy.fbFieldRequiredIf({ name: "Autocomplete-Approvers", value: USERS[1].email });
-    //   cy.fbAddField();
-    // });
 
     it("Upload attachement picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
@@ -499,7 +482,7 @@ context("Layout Verification of EQ", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
-      cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
+      cy.get("input[value='preventativeMaintenance']").arrowClick();
       cy.fbAddField();
     });
 
@@ -507,7 +490,7 @@ context("Layout Verification of EQ", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "Calibration" });
-      cy.get("input[value=\"calibration\"]").arrowClick();
+      cy.get("input[value='calibration']").arrowClick();
       cy.fbAddField();
     });
 
@@ -519,14 +502,12 @@ context("Layout Verification of EQ", () => {
   context("Verify overview specification tab fb and schema fields", () => {
     it("Navigate to Specification tab", () => {
       cy.drSelectSpecificationTab();
-      // cy.pause();
     });
 
     it("Verify Click on EQ  Specification Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
-      cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-1").should("be.visible");
+      cy.isTabActive({ name: "specification", index: 1 });
     });
 
     it("Verify Primary owner and co-ordinator fields", () => {
@@ -536,7 +517,6 @@ context("Layout Verification of EQ", () => {
 
     it("Verify Add field button Exist in detail tab", () => {
       cy.get("[data-cy='form.builder.add.field']").should("exist");
-
     });
 
     it("Verify add FB Field Checked chebox", () => {
@@ -551,11 +531,9 @@ context("Layout Verification of EQ", () => {
       cy.get("[class*='fb-field-wrapper-calibration']").should("exist");
     });
 
-
     it("Verify that Form Options should  appear for this tab ", () => {
       cy.get(".formOptionsBox").should("exist");
     });
-
   });
 
   context("Release ES", () => {
@@ -567,7 +545,6 @@ context("Layout Verification of EQ", () => {
   });
 
   context("Create a required document from release form, Verify the layout and Release It", () => {
-
     context("Create New Document from Release form", () => {
       it("Click 'Create New'", () => {
         cy.drCreateNewDocumentFromForm();
@@ -575,21 +552,17 @@ context("Layout Verification of EQ", () => {
     });
 
     context("Verify Layout of document and Tabs", () => {
-
       it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (DRAFT)", () => {
-        // cy.pause();
         cy.verifyHeaderInfoContent({
           status: STATUS_TYPES_LABEL.DRAFT,
           title: "Equipment",
           docId: "EQ-00001",
           revision: "Rev 1",
         });
-
       });
 
       it("Verify that it contains Overview, Specification tab", () => {
-        cy.get("[data-cy='tabId.overview']").should("exist");
-        cy.get("[data-cy='tabId.specification']").should("exist");
+        cy.verifyTabs("overview", "specification");
       });
 
       it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -603,7 +576,6 @@ context("Layout Verification of EQ", () => {
       it("Verify overview tab predefiend fields up to attachment and FB fields Approver,Eq status", () => {
         cy.get("[data-cy='field-name']").should("exist");
         cy.get("[name='fb-default-eq-status']").should("exist");
-        // cy.get("[name='select-field']").should("exist");
         cy.get("[data-cy^='autocomplete-approvers']").should("exist");
         cy.get("[data-cy='select.document.documentType.id']").should("exist");
       });
@@ -649,11 +621,9 @@ context("Layout Verification of EQ", () => {
       it("Verify that Form Options should  appear for this tab ", () => {
         cy.get(".formOptionsBox").should("exist");
       });
-
     });
 
     context("Fill the form", () => {
-
       it("Navigate to overview tab", () => {
         cy.drSelectOverviewTab();
       });
@@ -664,14 +634,12 @@ context("Layout Verification of EQ", () => {
 
       it("Fill the Description details'", () => {
         cy.drEnterDocumentDescription({ description: "EQ Test Description" });
-
       });
 
       it("Fill the Eq status and Approver'", () => {
         cy.get("[name='fb-default-eq-status']").eq(0).arrowClick({ force: true });
         cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
       });
-
 
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
@@ -689,9 +657,8 @@ context("Layout Verification of EQ", () => {
         cy.drSelectSpecificationTab();
       });
 
-
       it(`Enter text field value`, () => {
-        cy.get("[data-cy^=\"eq-textfield\"]").arrowType("Test");
+        cy.get("[data-cy^='eq-textfield']").arrowType("Test");
         cy.get(`input[type="checkbox"][value="1"]`).check({ force: true }).wait(2000);
       });
 
@@ -700,50 +667,50 @@ context("Layout Verification of EQ", () => {
       });
 
       it(`Select '${USERS[2].name}' for Coordinator`, () => {
-        cy.get("input[data-cy=\"fb-coordinator-eq\"]").autocompleteSelect(USERS[2].name);
+        cy.get("input[data-cy='fb-coordinator-eq']").autocompleteSelect(USERS[2].name);
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true }).wait(2000);
+        cy.get("[value='Yes']").eq(0).arrowClick({ force: true }).wait(2000);
       });
 
       it("Select 'Preventative Maintenance form' for preventative maintenance required", () => {
-        cy.get("[name$=\"preventativeForm\"] button").eq(2).arrowClick();
+        cy.get("[name$='preventativeForm'] button").eq(2).arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.unClick();
-        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains("Preventative Maintenance form").arrowClick();
+        cy.get("[data-cy*='preventativeForm']").eq(0).arrowClick();
+        cy.get("ul>li[role='option']").contains("Preventative Maintenance form").arrowClick();
       });
 
       it("Select preventative maintenance frequency", () => {
-        cy.get("[name*=\"frequency\"]").eq(0).arrowType(`5`);
+        cy.get("[name*='frequency']").eq(0).arrowType(`5`);
         cy.unClick();
       });
 
       it("Type preventative maintenance instruction", () => {
-        cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]")
+        cy.get("[data-cy^='preventative-maintenance']>div>div>div>div>div[contenteditable]")
           .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
         cy.unClick();
       });
 
       it("Select document 'Yes' for calibration required", () => {
-        cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true }).wait(2000);
+        cy.get("[value='Yes']").eq(1).arrowClick({ force: true }).wait(2000);
       });
 
       it("Select 'Calibration form' for calibration required", () => {
-        cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick();
+        cy.get("[name$='preventativeForm'] button").eq(5).arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.unClick();
-        cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
-        cy.get("ul>li[role=\"option\"]").contains("Calibration form").arrowClick();
+        cy.get("[data-cy*='preventativeForm']").eq(1).arrowClick();
+        cy.get("ul>li[role='option']").contains("Calibration form").arrowClick();
       });
 
       it("Select calibration frequency", () => {
-        cy.get("[name*=\"frequency\"]").eq(1).arrowType(`5`);
+        cy.get("[name*='frequency']").eq(1).arrowType(`5`);
       });
 
       it("Type calibration maintenance instruction", () => {
-        cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]")
+        cy.get("[data-cy^='calibration']>div>div>div>div>div[contenteditable]")
           .click({ force: true }).clear().arrowType("Instructions for calibration");
         cy.unClick();
       });
@@ -759,9 +726,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify tabs should visible Overview, Specification, calpmhistory", () => {
-        cy.get("[data-cy='tabId.overview']").should("exist");
-        cy.get("[data-cy='tabId.specification']").should("exist");
-        cy.get("[data-cy='tabId.calpmhistory']").should("exist");
+        cy.verifyTabs("overview", "specification", "calpmhistory");
       });
 
       it("Button ‘New Cal’ should be displayed", () => {
@@ -769,7 +734,6 @@ context("Layout Verification of EQ", () => {
         cy.get("[data-cy='fb-control-btn']").contains("New Cal").should("exist");
       });
     });
-
 
     context("Navigate to EQ and Verify", () => {
       it("Navigate back to EQ", () => {
@@ -782,9 +746,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify tabs should visible Overview, Specification, calpmhistory", () => {
-        cy.get("[data-cy='tabId.overview']").should("exist");
-        cy.get("[data-cy='tabId.specification']").should("exist");
-        cy.get("[data-cy='tabId.calpmhistory']").should("exist");
+        cy.verifyTabs("overview", "specification", "calpmhistory");
       });
     });
 
@@ -821,8 +783,7 @@ context("Layout Verification of EQ", () => {
         });
 
         it("Verify revision Rev Document open or not", () => {
-          cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick();
-          cy.wait(2000);
+          cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick().wait(2000);
           cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
         });
       });
@@ -847,12 +808,11 @@ context("Layout Verification of EQ", () => {
 
       context("Check document history", () => {
         const groupOne = "Developers";
-        let groupTwo;
         const history = [
           {
             owner: USERS[1].name,
             actions: [
-              { key: "Access granted to group", value: `Developers` },
+              { key: "Access granted to group", value: "Developers" },
             ],
           },
           {
@@ -862,11 +822,10 @@ context("Layout Verification of EQ", () => {
             ],
           },
         ];
-
-        it("Verify history tab", () => {
-          cy.verifyHistoryTab(history, groupOne, groupTwo);
+        it("Verify Doc history", () => {
+          cy.drSelectHistoryTab();
         });
-
+        verifyHistoryContent(history, groupOne);
       });
 
       context("Verify Book Mark", () => {
@@ -885,10 +844,7 @@ context("Layout Verification of EQ", () => {
           cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
         });
       });
-
     });
-
-
   });
 });
 
