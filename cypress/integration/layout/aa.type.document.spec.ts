@@ -321,7 +321,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Click Training Tab, clicking on it should open that tab and close the other one", () => {
-      cy.get("[data-cy='tabId.training']").arrowClick({ force: true });
+      cy.drSelectTrainingTab();
       cy.get("[data-cy='tabCon-tabId.training']").should("have.attr", "aria-selected", "true");
       cy.get("#sm-tabpanel-0").should("be.hidden");
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
@@ -484,7 +484,7 @@ context("AA Document Layout verification", () => {
 
   context("Verify Created New Document from Release Document", () => {
     it("verify Click Training Tab, clicking on it should open that tab and close the other one", () => {
-      cy.get("[data-cy='tabId.training']").arrowClick({ force: true });
+      cy.drSelectTrainingTab();
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
       cy.get("[data-cy='tabCon-tabId.training']").should("have.attr", "aria-selected", "true");
@@ -840,11 +840,9 @@ context("AA Document Layout verification", () => {
     });
 
     it("Navigate to training and verify completed training", () => {
-      cy.get("[data-cy='tabId.training']").arrowClick({ force: true });
+      cy.drSelectTrainingTab();
       cy.get("[data-cy='training-status'] span").should("contain.text", "Complete");
     });
-
-
   });
 });
 

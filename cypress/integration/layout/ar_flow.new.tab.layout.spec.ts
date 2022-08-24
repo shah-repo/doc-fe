@@ -2,20 +2,13 @@
 /// <reference types="Cypress" />
 import "moment-timezone";
 import moment from "moment-timezone";
-import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
-import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let secondEmployee;
-let clinicalProtocolDocumentType;
-let group;
-const documentRevisionName = "New document for testing AR";
+let adminEmployee;
 const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
 
@@ -34,7 +27,6 @@ context("Approval request form", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -55,8 +47,7 @@ context("Approval request form", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response: any) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -70,93 +61,11 @@ context("Approval request form", () => {
         done();
       });
     });
-
-    xit("[API]Creates document revision for approval", (done: any) => {
-      cy.grpGetGroupByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: secondEmployee.id,
-        groupName: "Everyone",
-      }).then((response) => {
-        group = response;
-        cy.drCreateDocumentRevision({
-          payload: {
-            attachments: [],
-            description: "<p>Test Doc Rev Description</p>",
-            document: {
-              docId: "CP-00004",
-              documentType: {
-                id: clinicalProtocolDocumentType[0].id,
-              },
-              securityList: {
-                operators: [],
-                securityEmployees: [],
-                securityGroups: [
-                  {
-                    id: group.body[0].id,
-                  },
-                ],
-              },
-            },
-            name: documentRevisionName,
-            referenceTo: [],
-            retrain: false,
-            revisionChangeType: RevisionChangeType.NextRevision,
-            revisionStage: 1,
-
-          },
-          employeeId: secondEmployee.id as unknown as string,
-          sessionId: loginResponse.sessionId as unknown as string,
-        }).then(() => {
-          done();
-        });
-      });
-    });
-
-    xit("[API]Creates another document revision for approval", (done: any) => {
-      cy.grpGetGroupByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: secondEmployee.id,
-        groupName: "Everyone",
-      }).then((response) => {
-        group = response;
-        cy.drCreateDocumentRevision({
-          payload: {
-            attachments: [],
-            description: "<p>Test Doc Rev Description 2 </p>",
-            document: {
-              docId: "CP-00005",
-              documentType: {
-                id: clinicalProtocolDocumentType[0].id,
-              },
-              securityList: {
-                operators: [],
-                securityEmployees: [],
-                securityGroups: [
-                  {
-                    id: group.body[0].id,
-                  },
-                ],
-              },
-            },
-            name: documentRevisionName,
-            referenceTo: [],
-            retrain: false,
-            revisionChangeType: RevisionChangeType.NextRevision,
-            revisionStage: 1,
-
-          },
-          employeeId: secondEmployee.id as unknown as string,
-          sessionId: loginResponse.sessionId as unknown as string,
-        }).then(() => {
-          done();
-        });
-      });
-    });
   });
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -208,8 +117,8 @@ context("Approval request form", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
       cy.fbGroupOptions("1", "2", "3");
-      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
-      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
+      cy.get("[data-cy='fb-control-required']").arrowClick();
       cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -219,12 +128,12 @@ context("Approval request form", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
-      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
-      cy.get("input[value^=\"visibility\"]").check();
+      cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
+      cy.get("input[value^='visibility']").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).first().check();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").first().contains("Add").arrowClick();
+      cy.get("button[data-cy='fb-editor-actions-add']").first().contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -232,14 +141,11 @@ context("Approval request form", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
-
-
   });
 
   context("Verify `Approval request form`", () => {
     it("Verify Form for Approval request has two tabs Change Details and Documents", () => {
-      cy.get("[data-cy=\"tabId.changedetails\"]").should("exist");
-      cy.get("[data-cy=\"tabId.documents\"]").should("exist");
+      cy.verifyTabs("changedetails", "documents");
     });
 
     context("Verify that Change details tab should be opened by default and that contains`", () => {
@@ -248,10 +154,12 @@ context("Approval request form", () => {
       });
 
       it("Verify FB fields added to AR form ", () => {
-        cy.get("[id=\"change-request-details\"]").should("exist");
-        cy.get("[data-cy=\"fb.add.document\"]").should("exist");
+        cy.get("[data-cy^='text-field']").should("exist");
+        cy.get("[data-cy='Checkbox']").should("exist");
+        cy.get("[data-cy='fb.add.document']").should("exist");
 
       });
+
       it("Verify that Form Options should appear on the Change Details Tab", () => {
         cy.get(".formOptionsBox").should("exist");
       });
@@ -263,7 +171,7 @@ context("Approval request form", () => {
       });
 
       it("Verify that predefined fields for Document tab is only Approval request details", () => {
-        cy.get("[data-cy=\"fb.add.document\"]").should("exist");
+        cy.get("[data-cy='fb.add.document']").should("exist");
       });
 
       it("Verify FB fields added to AR form ", () => {
@@ -276,18 +184,18 @@ context("Approval request form", () => {
       });
 
       it("predefine schema fields for approvals (Approval Block)", () => {
-        cy.get("[data-cy=\"fb.add.document\"]").should("exist");
+        cy.get("[data-cy='fb.add.document']").should("exist");
       });
 
       it("Verify Click Documents Tab, clicking on it should open that tab and close the other one", () => {
-        cy.get("[data-cy=\"tabCon-tabId.changedetails\"]").should("have.attr", "aria-selected", "false");
+        cy.get("[data-cy='tabCon-tabId.changedetails']").should("have.attr", "aria-selected", "false");
         cy.get("#sm-tabpanel-0").should("be.hidden");
-        cy.get("[data-cy=\"tabCon-tabId.documents\"]").should("have.attr", "aria-selected", "true");
+        cy.get("[data-cy='tabCon-tabId.documents']").should("have.attr", "aria-selected", "true");
       });
 
       it("Verify that right side panel opens by default to the References tab", () => {
-        cy.get("[data-cy=\"References\"]").should("exist");
-        cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
       });
 
       it("Approve and release document", () => {
@@ -296,7 +204,7 @@ context("Approval request form", () => {
     });
   });
 
-  context("Create approval request with newly created form", () => {
+  context("Create approval request from released  form", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
@@ -314,100 +222,28 @@ context("Approval request form", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.get("[data-cy=\"field-description\"]").click();
-      cy.get("[data-cy=\"field-description\"]").arrowType("AR from New form template for approval request").wait(2000);
+      cy.get("[data-cy='field-description']").click();
+      cy.get("[data-cy='field-description']").arrowType("AR from New form template for approval request").wait(2000);
       cy.unClick();
-    });
-
-    xit("Add created document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
     it("Checkbox option 2 checked", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
+
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.wrapWithWaitOnApiCalls(
+        [], () => {
+          cy.get("[data-cy='navigation.createChangeRequest']").arrowClick();
+        });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add first Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
-    it("Click on Save", () => {
-      cy.arSaveApiCall();
-    });
-  });
-
-  xcontext("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "White Willms, Bartell and Boehm 7330", multiple: true });
-    });
-  });
-
-  xcontext("Verify description field", () => {
-    it("Verify DescriptionToolBar", () => {
-      cy.verifyDescriptionToolbar();
-    });
-
-    it("Enter a 1 line description", () => {
-      cy.drEnterDocumentDescription({
-        description: "This is description test to check length. Checking length of characters and lines.",
-      });
-      cy.unClick();
-      cy.get("[data-cy=\"description\"] button").should("not.exist");
-      cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
-    });
-
-    it("Add 2nd line description", () => {
-      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-      cy.get(`[data-cy="description"] [contenteditable]`)
-        .first()
-        .arrowType(
-          "{moveToEnd}{enter}This is description test to check length. Checking length of characters and lines."
-        );
-      cy.unClick();
-      cy.get("[data-cy=\"description\"] button").should("not.exist");
-      cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
-    });
-
-    it("Add 3rd line description", () => {
-      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-      cy.get(`[data-cy="description"] [contenteditable]`)
-        .first()
-        .arrowType("{moveToEnd}{enter}This is description test to check length.");
-      cy.unClick();
-      cy.get("[data-cy=\"description\"] button").should("exist");
-      cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
-    });
-
-    it("Enter a description longer than 3 lines and over 245 characters", () => {
-      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-      cy.get(`[data-cy="description"] [contenteditable]`)
-        .first()
-        .arrowType("{moveToEnd}{enter}Checking length of characters and lines ends here.");
-      cy.unClick();
-      cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
-      cy.unClick();
-    });
-
-    it("Click on view less description should be collapsed", () => {
-      cy.get("div[class^=\"rdw-editor-toolbar\"]").should("not.exist");
-    });
-
-    it("Click on view more description should be expanded", () => {
-      cy.get("[data-cy=\"description\"] button").arrowClick();
-      cy.get("div[class^=\"rdw-editor-toolbar\"]").should("be.visible");
+      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
   });
@@ -418,7 +254,7 @@ context("Approval request form", () => {
     });
 
     it("Verify Reference tab Info", () => {
-      cy.verifyReferenceTab({ user: USERS[2], formId: "", shortName: "HB" });
+      cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
     });
 
     it("Verify Reference Info form Info, Created Info", () => {
@@ -433,9 +269,9 @@ context("Approval request form", () => {
     context("Check document history", () => {
       const history = [
         {
-          owner: USERS[2].name,
+          owner: USERS[1].name,
           actions: [
-            { key: "Approver Added", value: `${USERS[1].name}` },
+            { key: "Approver Added", value: `${USERS[2].name}` },
           ],
         },
       ];
@@ -451,177 +287,29 @@ context("Approval request form", () => {
 
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+        cy.get("[data-cy='bookmark-icon']").arrowClick();
+        cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
     });
 
   });
 
-  context("Tabs verification", () => {
-
-    xit("Verify all tabs are displayed in tabs Change Details and Documents", () => {
-      cy.get("[data-cy=\"tabId.changedetails\"]").should("exist");
-      cy.get("[data-cy=\"tabId.documents\"]").should("exist");
-    });
-
-    xit("Verify Hover over the history panel in overview tab", () => {
-      cy.get(".formOptionsBox").should("be.visible");
-    });
-
-    xit("Verify that Form Options should appear on the Change Details Tab", () => {
-      cy.get(".formOptionsBox").should("be.visible");
-    });
-
-    xit("Verify that scroll bar appearing only on hover", () => {
-      cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: true });
-    });
-
-    xit("Training Required is unchecked, there should be no Training Tab", () => {
-      cy.get("[data-cy=\"field-retrain\"] input[type=checkbox]").should("not.be.checked");
-      cy.get("[data-cy=\"tabId.training\"]").should("not.exist");
-    });
-
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-  });
-
-
   context("Verify Created AR request layout", () => {
-    it("Navigate to Receivable", () => {
+    it("Navigate to AR", () => {
       cy.navigToApprovalRequestList();
       cy.dlClearFilters();
     });
 
     it("Select the Records", () => {
       cy.dlFilterByDocId({ docId: "AR-00002" });
-      cy.dlSelectFirstDocument();
+      cy.get("tr.k-master-row").first().arrowClick();
     });
-  });
-
-  xcontext("Verify description field", () => {
-    it("Verify DescriptionToolBar", () => {
-      cy.verifyDescriptionToolbar();
-    });
-
-    it("Enter a 1 line description", () => {
-      cy.drEnterDocumentDescription({
-        description: "This is description test to check length. Checking length of characters and lines.",
-      });
-      cy.unClick();
-      cy.get("[data-cy=\"description\"] button").should("not.exist");
-      cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
-    });
-
-    it("Add 2nd line description", () => {
-      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-      cy.get(`[data-cy="description"] [contenteditable]`)
-        .first()
-        .arrowType(
-          "{moveToEnd}{enter}This is description test to check length. Checking length of characters and lines."
-        );
-      cy.unClick();
-      cy.get("[data-cy=\"description\"] button").should("not.exist");
-      cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
-    });
-
-    it("Add 3rd line description", () => {
-      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-      cy.get(`[data-cy="description"] [contenteditable]`)
-        .first()
-        .arrowType("{moveToEnd}{enter}This is description test to check length.");
-      cy.unClick();
-      cy.get("[data-cy=\"description\"] button").should("exist");
-      cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
-    });
-
-    it("Enter a description longer than 3 lines and over 245 characters", () => {
-      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
-      cy.get(`[data-cy="description"] [contenteditable]`)
-        .first()
-        .arrowType("{moveToEnd}{enter}Checking length of characters and lines ends here.");
-      cy.unClick();
-      cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
-      cy.unClick();
-    });
-
-    it("Click on view less description should be collapsed", () => {
-      cy.get("div[class^=\"rdw-editor-toolbar\"]").should("not.exist");
-    });
-
-    it("Click on view more description should be expanded", () => {
-      cy.get("[data-cy=\"description\"] button").arrowClick();
-      cy.get("div[class^=\"rdw-editor-toolbar\"]").should("be.visible");
-    });
-  });
-
-  xcontext("Verify Layout for created receiving record in draft state", () => {
-
-    xit("Verify that two tabs are displayed, Change Reqest, Documents", () => {
-      cy.get("[data-cy=\"tabId.changedetails\"]").should("exist");
-      cy.get("[data-cy=\"tabId.documents\"]").should("exist");
-    });
-
-    xit("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
-      cy.verifyFixedTab();
-    });
-
-    xit("Verify Form opens to the “Change Details” tab by default", () => {
-      cy.get("[data-cy=\"tabCon-tabId.changedetails\"]").should("have.attr", "aria-selected", "true");
-    });
-
-    xit("Verify Predefined Fields for change detail tab", () => {
-      cy.verifyPredefiendFields();
-
-    });
-
-    it("Verify form Options should present in Tab", () => {
-      cy.get(".formOptionsBox").should("exist");
-    });
-
-    xit("Verify Predefiend fields and form Options", () => {
-      cy.get(".formOptionsBox").should("not.exist");
-    });
-
-    xit("Navigate to details Tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    xit("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
-      cy.get("[data-cy=\"porec-receivable-test\"]").should("exist");
-      cy.get("[data-cy=\"po-requestor-autocomplete\"]").should("exist");
-      cy.get("[data-cy=\"po-supplier-built-in\"]").should("exist");
-    });
-
-    it("Verify form option visible in detail tab", () => {
-      cy.get(".formOptionsBox").should("exist");
-    });
-
-    it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
-      cy.get("[data-cy=\"tabCon-tabId.overview\"]").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
-      cy.get("[data-cy=\"tabCon-tabId.details\"]").should("have.attr", "aria-selected", "true");
-    });
-
-    it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy=\"References\"]").should("exist");
-      cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
-    });
-
-    it("Verify that right side panel Expand and collapse", () => {
-      cy.verifyExpandCollpase();
-    });
-
   });
 
   context("Validate Right Side Panel", () => {
 
     it("Verify Reference tab Info", () => {
-      cy.verifyReferenceTab({ user: USERS[2], formId: "", shortName: "HB" });
+      cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
     });
 
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
@@ -631,44 +319,12 @@ context("Approval request form", () => {
         moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
     });
 
-    xcontext("Verify Revision", () => {
-      it("open revision tab", () => {
-        cy.get("[data-cy=\"note-icon\"]").arrowClick();
-      });
-
-      it("Verify revision Rev Document open or not", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-        cy.wait(2000);
-        cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev A");
-
-      });
-    });
-
-    xcontext("Verify User able to add Groups or other user permissions", () => {
-      it("Open permissions tab", () => {
-        cy.drSelectPermissionTab();
-      });
-
-      it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[4].name);
-        });
-      });
-
-      it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Can be approver");
-        });
-      });
-
-    });
-
     context("Check document history", () => {
       const history = [
         {
-          owner: USERS[2].name,
+          owner: USERS[1].name,
           actions: [
-            { key: "Approver Added", value: `${USERS[1].name}` },
+            { key: "Approver Added", value: `${USERS[2].name}` },
           ],
         },
       ];
@@ -682,21 +338,10 @@ context("Approval request form", () => {
       });
     });
 
-
-    xcontext("Verify Revision History", () => {
-      it.skip("Verify Revision History Items", () => {
-        cy.get("[data-cy='note-icon']").arrowClick();
-        cy.get("[data-cy='common.docId']").should("contain.text", "RD-00003");
-        cy.get("[data-cy='common.docId']>div").should("contain.text", "");
-        cy.get("[data-cy='common.docId']>div>div").should("contain.text", USERS[2].name);
-        cy.get("[data-cy='common.docId']>div>div>").should("contain.text", "Effective Date");
-      });
-    });
-
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
-        cy.get("[data-cy=\"Bookmarks-detail\"]").should("be.visible");
+        cy.get("[data-cy='bookmark-icon']").arrowClick();
+        cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
     });
   });
