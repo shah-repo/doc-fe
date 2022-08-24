@@ -28,24 +28,20 @@ let tmpRegex;
 let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
-let materialsDocumentType;
-let materialsDocument;
+let partsDocumentType;
 let approvalRequestDocumentType;
 let initialArDocument;
 let group;
 let developersGroup;
-let equipmentDocumentType;
-let equipmentDocument;
 let imageFile;
-
+let createdPartDocument;
 
 const paperlhrTitle = "Paper LHR form";
 const txtFieldTitle1 = "fb-textfield";
 const txtFieldTitle2 = "fb-textfield-1";
 const fileUploadFieldTitle = "fb-fileupload";
 const currentDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-const arID = "AR-00003";
-const partDocumentTitle = "Material one";
+const arID = "AR-00002";
 
 context("Paper Lot History Record", () => {
   before(() => {
@@ -86,8 +82,7 @@ context("Paper Lot History Record", () => {
           adminEmployee = company.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = company.employees.find((employee) => employee.user.email === USERS[2].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(company, "Approval Request");
-          equipmentDocumentType = cmpFilterDocumentTypeIdByName(company, "Equipment");
-          materialsDocumentType = cmpFilterDocumentTypeIdByName(company, "Parts");
+          partsDocumentType = cmpFilterDocumentTypeIdByName(company, "Parts");
           done();
         });
       });
@@ -128,7 +123,7 @@ context("Paper Lot History Record", () => {
       });
     });
 
-    it("[API]Create equipment one", () => {
+    it("[API]Create part document", () => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
@@ -144,11 +139,11 @@ context("Paper Lot History Record", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Equipment one</p>",
+              description: "<p>Part document1</p>",
               document: {
-                docId: "ET-00003",
+                docId: "PRT-00001",
                 documentType: {
-                  id: equipmentDocumentType[0].id,
+                  id: partsDocumentType[0].id,
                 },
                 securityList: {
                   operators: [],
@@ -160,7 +155,7 @@ context("Paper Lot History Record", () => {
                   ],
                 },
               },
-              name: "Equipment one",
+              name: "Part document1",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -169,9 +164,9 @@ context("Paper Lot History Record", () => {
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
           }).then((response) => {
-            equipmentDocument = response;
+            createdPartDocument = response;
             cy.drAPIApproveAndRelease({
-              documentId: equipmentDocument.id,
+              documentId: createdPartDocument.id,
               payload: {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
@@ -186,47 +181,163 @@ context("Paper Lot History Record", () => {
       });
     });
 
-    it("[API]Create material one", () => {
-      cy.drCreateDocumentRevision({
+    it("[API]API request for updating company navigation", (done: any) => {
+      cy.cmpUpdateCompany({
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId as unknown as string,
         payload: {
-          attachments: [],
-          description: "<p>Materials document</p>",
-          document: {
-            docId: "MT-00004",
-            documentType: {
-              id: materialsDocumentType[0].id,
+          navigation: [
+            {
+              icon: "/navigation_icons/dashboard.svg",
+              path: "/",
+              type: "LINK",
+              label: "Dashboard",
             },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              menu: [
                 {
-                  id: group.body[0].id,
+                  icon: "/navigation_icons/document.svg",
+                  path: "/document_revision",
+                  type: "LINK",
+                  label: "Document List",
+                },
+                {
+                  icon: "/navigation_icons/cr.svg",
+                  path: "/change_request",
+                  type: "LINK",
+                  label: "Approval Requests",
+                },
+                {
+                  icon: "/navigation_icons/text-paper.svg",
+                  type: "CATEGORY",
+                  label: "Records",
+                  category: "Record",
                 },
               ],
+              type: "MENU",
+              label: "Document Control",
             },
-          },
-          name: partDocumentTitle,
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              type: "CATEGORY",
+              label: "Equipment",
+              category: "Equipment",
+            },
+            {
+              icon: "/navigation_icons/supplier-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/supplier-list.svg",
+                  type: "CATEGORY",
+                  label: "Supplier List",
+                  category: "Supplier",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Supplier Management",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/receipt_list.svg",
+              type: "CATEGORY",
+              label: "Purchase Orders",
+              category: "Purchase Order",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/cart-simple-in.svg",
+              type: "CATEGORY",
+              label: "Receiving",
+              category: "Receive",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/tools.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/icon_parts.svg",
+                  type: "CATEGORY",
+                  label: "Parts",
+                  category: "Parts",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/eb_icon.svg",
+                  type: "CATEGORY",
+                  label: "Engineering Builds",
+                  category: "EB",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/tag-check.svg",
+                  type: "CATEGORY",
+                  label: "Lots",
+                  category: "Lot",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/lhr_icon.svg",
+                  type: "CATEGORY",
+                  label: "LHR",
+                  category: "Lhr",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Manufacturing",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/group-management.svg",
+              path: "/group_management",
+              type: "LINK",
+              label: "Group Management",
+              restrictedToUsersWithTags: [
+                GroupTag.GROUP_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/user-management.svg",
+              path: "/user_management",
+              type: "LINK",
+              label: "User Management",
+              restrictedToUsersWithTags: [
+                GroupTag.USER_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              path: "/document_type_management",
+              type: "LINK",
+              label: "Document Type Management",
+              restrictedToUsersWithTags: [
+                GroupTag.DOCUMENT_TYPE_MANAGEMENT,
+              ],
+            },
+          ],
         },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        materialsDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: materialsDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        });
+      }).then(() => {
+        done();
       });
     });
   });
@@ -234,10 +345,6 @@ context("Paper Lot History Record", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -275,28 +382,6 @@ context("Paper Lot History Record", () => {
     });
   });
 
-  context("Navigate to document list and check data on landing page", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Filter draft 'Paper LHR' document", () => {
-      cy.dlClearFilters();
-      cy.dlFilterByDocTitle({ docTitle: paperlhrTitle });
-    });
-
-    it("Filter draft 'Paper LHR' document", () => {
-      cy.dlVerifyFilterByRev({ revision: "1" });
-      cy.dlVerifyFilterByType({ type: "FM" });
-      cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
-      cy.dlVerifyFilterByStatus({ status: "Draft" });
-    });
-
-    it("Click and open the FM", () => {
-      cy.dlSelectFirstDocument();
-    });
-  });
-
   context("Verify predefined fields are displayed", () => {
     it("Check 'Part to be Manufactured' is not displayed", () => {
       cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist")
@@ -324,6 +409,10 @@ context("Paper Lot History Record", () => {
       cy.get("[data-cy=\"End Quantity\"]").should("exist")
         .parent().parent().parent().parent().next()
         .should("have.text", "The End Quantity is a required field.");
+    });
+
+    it("Check 'Approvals' is displayed", () => {
+      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
     });
   });
 
@@ -376,10 +465,6 @@ context("Paper Lot History Record", () => {
       cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Check 'Approvals' is displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
     });
 
     it("Click save document", () => {
@@ -593,48 +678,6 @@ context("Paper Lot History Record", () => {
     });
   });
 
-  context("Verify all data and predefined fields are present", () => {
-    it("Verify 'Part to be Manufactured' is displayed", () => {
-      cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Part to be Manufactured is a required field.");
-    });
-
-    it("Verify 'Build Type' is displayed", () => {
-      cy.get("[data-cy=\"Build Type\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Build Type is a required field.");
-    });
-
-    it("Verify 'Initial Quantity' is displayed", () => {
-      cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Initial Quantity is a required field.");
-    });
-
-    it("Verify 'End Quantity' is displayed", () => {
-      cy.get("[data-cy=\"End Quantity\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The End Quantity is a required field.");
-    });
-
-    it("Verify TextField with validation is diplayed", () => {
-      cy.get(`[data-cy="${txtFieldTitle1}"]`).should("exist");
-    });
-
-    it("Verify TextField without validation is displayed", () => {
-      cy.get(`[data-cy="${txtFieldTitle2}"]`).should("exist");
-    });
-
-    it("Verify File Upload is diplayed", () => {
-      cy.get(`[data-cy="${fileUploadFieldTitle}"]`).should("exist");
-    });
-
-    it("Verify 'Approvals' is displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
-    });
-  });
-
   context("Approve and release form", () => {
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -646,12 +689,12 @@ context("Paper Lot History Record", () => {
       cy.navigToDocumentList();
     });
 
-    it("Filter draft 'Paper LHR' document", () => {
+    it("Filter Released 'Paper LHR' form", () => {
       cy.dlClearFilters();
       cy.dlFilterByDocTitle({ docTitle: paperlhrTitle });
     });
 
-    it("Filter draft 'Paper LHR' document", () => {
+    it("Verify data on landing page", () => {
       cy.dlVerifyFilterByRev({ revision: "1" });
       cy.dlVerifyFilterByType({ type: "FM" });
       cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
@@ -878,7 +921,7 @@ context("Paper Lot History Record", () => {
       cy.drClickReviseDocument();
     });
 
-    it("Save document", () => {
+    it("Save form", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
@@ -928,7 +971,7 @@ context("Paper Lot History Record", () => {
       cy.get("[data-cy=\"remove-schema-item\"]").eq(-4).arrowClick({ force: true });
     });
 
-    it("Save it", () => {
+    it("Save form", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
@@ -936,7 +979,7 @@ context("Paper Lot History Record", () => {
       cy.get(`[data-cy="${fileUploadFieldTitle}"]`).should("not.exist");
     });
 
-    it("Approve and release document", () => {
+    it("Approve and release form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
@@ -951,6 +994,10 @@ context("Paper Lot History Record", () => {
       cy.drClickReviseDocument();
     });
 
+    it("Save form", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add File Upload", () => {
       cy.fbAddNewFieldWhenHidden2ndLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
@@ -959,7 +1006,7 @@ context("Paper Lot History Record", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Save it", () => {
+    it("Save form", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
@@ -967,7 +1014,7 @@ context("Paper Lot History Record", () => {
       cy.get(`[data-cy="${fileUploadFieldTitle}"]`).should("exist");
     });
 
-    it("Approve and release document", () => {
+    it("Approve and release form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
@@ -989,7 +1036,7 @@ context("Paper Lot History Record", () => {
       cy.dlClearFilters();
     });
 
-    it("Filters document by name and status, and select it", () => {
+    it("Filter form by name and status, and select it", () => {
       cy.drFilterDocListByNameAndStatus({ title: "Paper LHR form", status: "Released" });
     });
 
@@ -997,19 +1044,69 @@ context("Paper Lot History Record", () => {
       cy.drCreateNewDocumentFromForm();
       cy.listLoadingElementShouldNotExist();
     });
+  });
 
-    it(`Select ${partDocumentTitle} for Part to be Manufactured`, () => {
-      cy.get("[name=\"lhr-selected-part\"]").arrowClick();
-      cy.get("[name=\"lhr-selected-part\"]").autocompleteSelect(`${partDocumentTitle}{downarrow}{enter}`);
-      cy.unClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+  context("Verify predefined fields and FB fields are present", () => {
+    it(`Verify status is ${STATUS_TYPES_LABEL.WIP}`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.WIP });
     });
 
-    it("Upload attachement picture 'image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    it(`Verify lot is assigned`, () => {
+      cy.get("#HeaderInfo-subtitle").should("contain.text", `${lotIdRef}01`);
+    });
+
+    it("Verify 'Part to be Manufactured' is displayed", () => {
+      cy.get(`[data-cy="Part to be Manufactured"]`).should("exist")
+        .parent().parent().parent().parent().next()
+        .should("have.text", "The Part to be Manufactured is a required field.");
+    });
+
+    it("Verify 'Build Type' is displayed", () => {
+      cy.get(`[data-cy="Build Type"]`).should("exist")
+        .parent().parent().parent().parent().next()
+        .should("have.text", "The Build Type is a required field.");
+    });
+
+    it("Verify 'Initial Quantity' is displayed", () => {
+      cy.get(`[data-cy="Initial Quantity"]`).should("exist")
+        .parent().parent().parent().parent().next()
+        .should("have.text", "The Initial Quantity is a required field.");
+    });
+
+    it("Verify 'End Quantity' is displayed", () => {
+      cy.get(`[data-cy="End Quantity"]`).should("exist")
+        .parent().parent().parent().parent().next()
+        .should("have.text", "The End Quantity is a required field.");
+    });
+
+    it("Verify TextField with validation is diplayed", () => {
+      cy.get(`[data-cy="${txtFieldTitle1}"]`).should("exist");
+    });
+
+    it("Verify TextField without validation is displayed", () => {
+      cy.get(`[data-cy="${txtFieldTitle2}"]`).should("exist");
+    });
+
+    it("Verify 'Approvals' is displayed", () => {
+      cy.get(`[data-cy="form.builder.approvals"]`).should("exist");
+    });
+  });
+
+  context("Fill the document", () => {
+    it("Select 'Part document' for Part to be Manufactured", () => {
+      cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+      });
+
+      cy.get("[data-cy=\"Part to be Manufactured\"]")
+        .parent().parent().parent().parent().next("p")
+        .should("not.exist");
+    });
+
+    it("Upload attachement picture 'dummy.pdf'", () => {
+      cy.atchUploadAttachment({ fileName: "dummy.pdf" });
       cy.unClick();
-      cy.progressBarShouldNotExist();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1028,6 +1125,22 @@ context("Paper Lot History Record", () => {
       cy.unClick();
     });
 
+    it("Select 'Production' build type", () => {
+      cy.get(`[value="Production"]`).check();
+
+      cy.get(`[data-cy="Build Type"]`)
+        .parent().parent().parent().parent().next("p")
+        .should("not.exist");
+    });
+
+    it("Select 'R&D' build type", () => {
+      cy.get(`[value="R&D"]`).check();
+      cy.get(`[data-cy="form.builder.lhr.build.switch"]`).last().arrowClick();
+      cy.get(`[name="lhr-build-type"]`).eq(1).should("have.value", "Production").should("be.disabled");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Enter Intial Quantity field value", () => {
       cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
       cy.progressBarShouldNotExist();
@@ -1040,22 +1153,63 @@ context("Paper Lot History Record", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Select 'R&D' build type", () => {
-      cy.get("[name=\"lhr-build-type\"]").first().arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Checkbox option 1 checked", () => {
       cy.get(`[type="checkbox"][value="1"]`).last().check();
     });
 
     it("Enter text in fb-textfield", () => {
-      cy.get(`[name^="fb-textfield"]`).first().arrowType("LHR textfield");
+      cy.get(`[name^="fb-textfield"]`).first().arrowType("LHR textfield").wait(2000);
     });
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Verify 'Paper LHR' document details on LHR landing page", () => {
+    it("Navigate to LHR landing page", () => {
+      cy.navigToLHR();
+    });
+
+    it("Verify 'Lot #'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(0).should("contain.text", `${lotIdRef}01RD`);
+    });
+
+    it("Verify 'Status'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(1).should("contain.text", `WIP`);
+    });
+
+    it("Verify 'Owner'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[1].name);
+    });
+
+    it("Verify 'Part number/rev'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("contain.text", `PRT-00001.1 Part document1`);
+    });
+
+    it("Verify 'Start Quantily'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("contain.text", `10`);
+    });
+
+    it("Verify 'End Quantily'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("contain.text", `20`);
+    });
+
+    it("Verify 'Template'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("contain.text", `FM-00002`);
+    });
+
+    it("Verify 'ID'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("contain.text", `LHR-00001`);
+    });
+  });
+
+  context("Click on 'Paper LHR' document and insert the Approval", () => {
+    it("Select first LHR", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+        cy.get("tr.k-master-row").first().arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1149,7 +1303,7 @@ context("Paper Lot History Record", () => {
 
     it("Verify attached file length more than 50 bytes", () => {
       const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "image.jpg");
+        downloadFile.replace(".zip", ""), "dummy.pdf");
       cy.readFile(attachedFile).its("length").should("be.gt", 50);
     });
   });
@@ -1180,12 +1334,12 @@ context("Paper Lot History Record", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nMT-00004, REV 1, MATERIAL ONE`, "gi" );
+        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nPRT-00001, REV 1, PART DOCUMENT1`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/image.jpg\ntest.docx\nAttachments/);
+        expect(el).match(/dummy.pdf\ntest.docx\nAttachments/);
 
-        expect(el).match(/Part to be Manufactured\nMT-00004 - 1 Material one/);
+        expect(el).match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
 
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
 
@@ -1377,7 +1531,7 @@ context("Paper Lot History Record", () => {
 
     it("Verify attached file length more than 50 bytes", () => {
       const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "image.jpg");
+        downloadFile.replace(".zip", ""), "dummy.pdf");
       cy.readFile(attachedFile).its("length").should("be.gt", 50);
     });
   });
@@ -1409,12 +1563,12 @@ context("Paper Lot History Record", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nMT-00004, REV 1, MATERIAL ONE`, "gi" );
+        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nPRT-00001, REV 1, PART DOCUMENT1`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/image.jpg\nAttachments/);
+        expect(el).match(/dummy.pdf\nAttachments/);
 
-        expect(el).match(/Part to be Manufactured\nMT-00004 - 1 Material one/);
+        expect(el).match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
 
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
 
@@ -1459,7 +1613,7 @@ context("Paper Lot History Record", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nMT-00004, REV 1, MATERIAL ONE`, "gi" );
+        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nPRT-00001, REV 1, PART DOCUMENT1`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/test.docx/);
@@ -1487,6 +1641,135 @@ context("Paper Lot History Record", () => {
       cy.readFile(imageFile).its("length").should("be.gt", 0);
     });
   });
+
+  context("Verify 'Paper LHR' document details on LHR landing page", () => {
+    it("Navigate to LHR landing page", () => {
+      cy.navigToLHR();
+    });
+
+    it("Verify 'Lot #'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(0).should("contain.text", `${lotIdRef}01RD`);
+    });
+
+    it("Verify 'Status'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(1).should("contain.text", `Released`);
+    });
+
+    it("Verify 'Owner'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[1].name);
+    });
+
+    it("Verify 'Part number/rev'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("contain.text", `PRT-00001.1 Part document1`);
+    });
+
+    it("Verify 'Start Quantily'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("contain.text", `10`);
+    });
+
+    it("Verify 'End Quantily'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("contain.text", `20`);
+    });
+
+    it("Verify 'Template'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("contain.text", `FM-00002`);
+    });
+
+    it("Verify 'ID'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("contain.text", `LHR-00001`);
+    });
+  });
+
+  context("Select on 'Paper LHR' document", () => {
+    it("Select first LHR", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+        cy.get("tr.k-master-row").first().arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context(`Revise paper LHR document, make some changes and Approve`, () => {
+    it("Click Revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Enter End Quantity field value", () => {
+      cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+
+    it("Save it", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Submit for approval", () => {
+      cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
+    });
+
+    it(`Verify that FM is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
+
+    it(`Verify lot is same as earlier release`, () => {
+      cy.get("#HeaderInfo-subtitle").should("contain.text", `${lotIdRef}01`);
+    });
+  });
+
+  context("Verify 'Paper LHR' document details on LHR landing page", () => {
+    it("Navigate to LHR landing page", () => {
+      cy.navigToLHR();
+    });
+
+    it("Verify document is searchable with ID", () => {
+      cy.dlClearFilters();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`[aria-colindex="9"] input`).arrowType("LHR-00001").wait(500);
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify 'Lot #'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(0).should("contain.text", `${lotIdRef}01RD`);
+    });
+
+    it("Verify 'Status'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(1).should("contain.text", `Released`);
+    });
+
+    it("Verify 'Owner'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[1].name);
+    });
+
+    it("Verify 'Part number/rev'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("contain.text", `PRT-00001.1 Part document1`);
+    });
+
+    it("Verify 'Start Quantily'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("contain.text", `10`);
+    });
+
+    it("Verify 'End Quantily'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("contain.text", `25`);
+    });
+
+    it("Verify 'Template'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("contain.text", `FM-00002`);
+    });
+
+    it("Verify 'ID'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("contain.text", `LHR-00001`);
+    });
+  });
+  // TODO: further code need to be validated once void document related issue (ENC-12647) gets fixed
 
   context(`Revise paper LHR document`, () => {
     it("Click Revise document", () => {
@@ -1521,12 +1804,13 @@ context("Paper Lot History Record", () => {
     });
 
     it("Approve record", () => {
-      cy.lhrApprove();
+      cy.ebApprove();
     });
   });
 
   context(`Void paper LHR and verify document status as VOIDED and Send to Email`, () => {
     it(`Click 'Void' and 'Yes, Im sure'`, () => {
+
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"void-button\"]").arrowClick();
       cy.get("[data-cy=\"AlertDialog-continueButton\"]").contains("Yes, I'm sure").arrowClick();
@@ -1642,7 +1926,7 @@ context("Paper Lot History Record", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nMT-00004, REV 1, MATERIAL ONE`, "gi" );
+        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nPRT-00001, REV 1, PART DOCUMENT1`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
@@ -1650,13 +1934,13 @@ context("Paper Lot History Record", () => {
 
         expect(el).match(/Attachments\nNone/);
 
-        expect(el).match(/Part to be Manufactured\nMT-00004 - 1 Material one/);
+        expect(el).match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
 
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
 
         expect(el).match(/Initial Quantity\n10/);
 
-        expect(el).match(/End Quantity\n20/);
+        expect(el).match(/End Quantity\n25/);
 
         expect(el).match(/fb-textfield\nLHR textfield/);
 
@@ -1670,9 +1954,9 @@ context("Paper Lot History Record", () => {
 
         // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
         tmpRegex  = (el).match(/\((.*)\)\sfb-fileupload/);
-        imageFile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""), tmpRegex[1], "image.jpg");
+        imageFile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""), tmpRegex[1], "dummy.pdf");
 
-        expect(el).match(/image.jpg/);
+        expect(el).match(/dummy.pdf/);
 
         expect(el).match(/APPROVALS\nNone/);
 
