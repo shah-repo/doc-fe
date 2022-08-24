@@ -1233,35 +1233,35 @@ context("Paper Lot History Record", () => {
     });
 
     it("Verify 'Lot #'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(0).should("contain.text", `${lotIdRef}01RD`);
+      cy.lhrVerifyFilterByLot({ lot: `${lotIdRef}01RD` });
     });
 
     it("Verify 'Status'", () => {
-      cy.lhrVerifyFilterByStatus({ status: "WIP" });
+      cy.lhrVerifyFilterByStatus({ status: `WIP` });
     });
 
     it("Verify 'Owner'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[1].name);
+      cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
     });
 
     it("Verify 'Part number/rev'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(3).should("contain.text", `PRT-00001.1 Part document1`);
+      cy.lhrVerifyFilterByPartNumberRev({ part: `PRT-00001.1 Part document1` });
     });
 
     it("Verify 'Start Quantily'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(5).should("contain.text", `10`);
+      cy.lhrVerifyFilterByStartQuantity({ quantity: `10` });
     });
 
     it("Verify 'End Quantily'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(6).should("contain.text", `20`);
+      cy.lhrVerifyFilterByEndQuantity({ quantity: `20` });
     });
 
     it("Verify 'Template'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(7).should("contain.text", `FM-00002`);
+      cy.lhrVerifyFilterByTemplate({ template: `FM-00002` });
     });
 
     it("Verify 'ID'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(8).should("contain.text", `LHR-00001`);
+      cy.lhrVerifyFilterById({ id: `LHR-00001` });
     });
   });
 
@@ -1709,35 +1709,39 @@ context("Paper Lot History Record", () => {
     });
 
     it("Verify 'Lot #'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(0).should("contain.text", `${lotIdRef}01RD`);
+      cy.lhrVerifyFilterByLot({ lot: `${lotIdRef}01RD` });
     });
 
     it("Verify 'Status'", () => {
-      cy.lhrVerifyFilterByStatus({ status: "Released" });
+      cy.lhrVerifyFilterByStatus({ status: `Released` });
     });
 
     it("Verify 'Owner'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[1].name);
+      cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
     });
 
     it("Verify 'Part number/rev'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(3).should("contain.text", `PRT-00001.1 Part document1`);
+      cy.lhrVerifyFilterByPartNumberRev({ part: `PRT-00001.1 Part document1` });
+    });
+
+    it("Verify 'Completion date'", () => {
+      cy.lhrVerifyFilterByCompletionDate({ date: currentDate });
     });
 
     it("Verify 'Start Quantily'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(5).should("contain.text", `10`);
+      cy.lhrVerifyFilterByStartQuantity({ quantity: "10" });
     });
 
     it("Verify 'End Quantily'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(6).should("contain.text", `20`);
+      cy.lhrVerifyFilterByEndQuantity({ quantity: "20" });
     });
 
     it("Verify 'Template'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(7).should("contain.text", `FM-00002`);
+      cy.lhrVerifyFilterByTemplate({ template: `FM-00002` });
     });
 
     it("Verify 'ID'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(8).should("contain.text", `LHR-00001`);
+      cy.lhrVerifyFilterById({ id: `LHR-00001` });
     });
   });
 
@@ -1799,35 +1803,39 @@ context("Paper Lot History Record", () => {
     });
 
     it("Verify 'Lot #'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(0).should("contain.text", `${lotIdRef}01RD`);
+      cy.lhrVerifyFilterByLot({ lot: `${lotIdRef}01RD` });
     });
 
     it("Verify 'Status'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(1).should("contain.text", `Released`);
+      cy.lhrVerifyFilterByStatus({ status: `Released` });
     });
 
     it("Verify 'Owner'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[1].name);
+      cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
     });
 
     it("Verify 'Part number/rev'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(3).should("contain.text", `PRT-00001.1 Part document1`);
+      cy.lhrVerifyFilterByPartNumberRev({ part: `PRT-00001.1 Part document1` });
+    });
+
+    it("Verify 'Completion date'", () => {
+      cy.lhrVerifyFilterByCompletionDate({ date: currentDate });
     });
 
     it("Verify 'Start Quantily'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(5).should("contain.text", `10`);
+      cy.lhrVerifyFilterByStartQuantity({ quantity: "10" });
     });
 
     it("Verify 'End Quantily'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(6).should("contain.text", `25`);
+      cy.lhrVerifyFilterByEndQuantity({ quantity: "25" });
     });
 
     it("Verify 'Template'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(7).should("contain.text", `FM-00002`);
+      cy.lhrVerifyFilterByTemplate({ template: `FM-00002` });
     });
 
     it("Verify 'ID'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(8).should("contain.text", `LHR-00001`);
+      cy.lhrVerifyFilterById({ id: `LHR-00001` });
     });
   });
 
@@ -1843,7 +1851,6 @@ context("Paper Lot History Record", () => {
 
   context(`Revise paper LHR document`, () => {
     it("Click Revise document", () => {
-      cy.pause();
       cy.drClickReviseDocument();
     });
 
