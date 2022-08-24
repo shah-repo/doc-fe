@@ -292,3 +292,4 @@ Cypress.Commands.add("lhrSelectFirstDocument", () => {
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
 });
+
