@@ -1176,6 +1176,18 @@ context("Create company with JSON's", () => {
       cy.get("[data-cy='poTotal']").should("have.text", "$52.77");
     });
   });
+
+  context("Submit for Approval", () => {
+    it("Click 'Submit for Approval' button", () => {
+      SystemRequirement("REQ-1490");
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.ebApprove();
+    });
+  });
 });
 
 export { };
