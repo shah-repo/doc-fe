@@ -841,7 +841,7 @@ context("AA Document Layout verification", () => {
 
     it("Navigate to training and verify completed training", () => {
       cy.get("[data-cy='tabId.training']").arrowClick({ force: true });
-      cy.get("#Presenter-FBWorkspace").contains("Training Completed");
+      cy.get("[data-cy='training-status'] span").should("contain.text", "Complete");
     });
 
 
