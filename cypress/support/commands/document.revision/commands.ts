@@ -19,9 +19,11 @@ declare global {
       drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
       drSelectDetailsTab(): Chainable<Subject>;
+      drSelectTrainingTab(): Chainable<Subject>;
       drSelectProcedureTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectDocumentTab(): Chainable<Subject>;
+      drSelectChangeDetailsTab(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
@@ -115,6 +117,9 @@ declare global {
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom(): Chainable<Subject>;
       drSelectHistoryTab(): Chainable<Subject>;
+      drSelectBookmarksTab(): Chainable<Subject>;
+      drSelectRevisionHistoryTab(): Chainable<Subject>;
+      drSelectMigrateFormTab(): Chainable<Subject>;
       drOpenCloseSidebarDrawer(): Chainable<Subject>;
       drSelectPermissionTab(): Chainable<Subject>;
       drSelectApprovalRolesTab(): Chainable<Subject>;
@@ -253,6 +258,11 @@ Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drSelectTrainingTab", () => {
+  cy.get("[data-cy=\"tabId.training\"]").arrowClick({ force: true });
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectProcedureTab", () => {
   cy.get("[data-cy=\"tabId.procedure\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
@@ -260,6 +270,11 @@ Cypress.Commands.add("drSelectProcedureTab", () => {
 
 Cypress.Commands.add("drSelectDocumentTab", () => {
   cy.get("[data-cy=\"tabId.documents\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectChangeDetailsTab", () => {
+  cy.get("[data-cy=\"tabId.changedetails\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -817,6 +832,17 @@ Cypress.Commands.add("drIsTrainingRequired", (params: {shouldBe: boolean}) => {
 Cypress.Commands.add("drSelectHistoryTab", () => {
   cy.get("[data-cy=\"timeline-icon\"]").arrowClick();
 });
+
+Cypress.Commands.add("drSelectBookmarksTab", () => {
+  cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
+});
+Cypress.Commands.add("drSelectRevisionHistoryTab", () => {
+  cy.get("[data-cy=\"cr-icon\"]").arrowClick();
+});
+Cypress.Commands.add("drSelectMigrateFormTab", () => {
+  cy.get("[data-cy=\"form-migration-icon\"]").arrowClick();
+});
+
 
 Cypress.Commands.add("drOpenCloseSidebarDrawer", () => {
   cy.get("[aria-label=\"Open drawer\"]>span>svg").arrowClick();

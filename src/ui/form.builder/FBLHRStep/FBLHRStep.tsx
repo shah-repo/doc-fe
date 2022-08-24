@@ -6,13 +6,14 @@ import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import { find, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalStatusIdent, FBLHRStepProps, FBProvider, FBText } from "..";
+import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalStatusIdent, FBLHRStepProps, FBProvider, FBText } from "..";
 import { ReactComponent as CollapseMoreIcon } from "../../../assets/images/CollapseMoreIcon.svg";
 import { ReactComponent as ExpandMoreIcon } from "../../../assets/images/ExpandMoreIcon.svg";
 import { ReactComponent as OperatorApprovedIcon } from "../../../assets/images/OperatorApproved.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { User } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
@@ -49,17 +50,22 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   lhrBuildTypeExist,
   ...props
 }) => {
+  const { workspaceState } = FB.useStores();
+  const classes = FBLHRStepStyles();
+
+  const documentOperators = workspaceState?.document?.document?.operators
+    ?.map(({ user }) => user) as User[];
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
+  const stepOperators = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]
+    ?.map((id) => getUserDetails(id)?.user) as User[];
+  const operators = (stepOperators ?? documentOperators)
+    ?.map((user) => ({ stepId: user.id, user }));
+
   const getStatusInfo = (opert, operatorId: string) => {
     const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];
     return find(approvers, (o) => o.approverId === operatorId && o.status !== "ABANDONED");
   };
-  const [operatorList] = useState(stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((e) => ({
-    stepId: e,
-    user: getUserDetails(e)?.user,
-  })));
-  const classes = FBLHRStepStyles();
   const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
     : `LHR Step ${stepIndex}`;
   const [expand, setExpand] = React.useState(false);
@@ -249,37 +255,37 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           <Box mb={3.75} mt={3.75}>
             <Grid container spacing={3}>
               <Grid item xs={4}>
-                <Typography className={classes.fontTitle}>
+                <Typography className={classes.fontTitle} data-cy={`start-quantity-${stepIndex}`}>
                   <Text translation="form.builder.start.quantity" />
                 </Typography>
-                <Typography className={classes.subTitle}>
+                <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
                   {stepLHRs?.formInput?.["lhrs-start-quantity"]}
                 </Typography>
               </Grid>
               <Grid item xs={4}>
-                <Typography className={classes.fontTitle}>
+                <Typography className={classes.fontTitle}  data-cy={`accepted-quantity-${stepIndex}`}>
                   <Text translation="form.builder.accepted.quantity" />
                 </Typography>
-                <Typography className={classes.subTitle}>
+                <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
                   {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
                 </Typography>
               </Grid>
               <Grid item xs={4}>
-                <Typography className={classes.fontTitle}>
+                <Typography className={classes.fontTitle} data-cy={`rejected-quantity-${stepIndex}`}>
                   <Text translation="form.builder.rejected.quantity" />
                 </Typography>
-                <Typography className={classes.subTitle}>
+                <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
                   {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
                 </Typography>
               </Grid>
             </Grid>
           </Box>
           <Box>
-            <Box className={classes.fontTitle}>
+            <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>
               <Text translation="common.operators" />
             </Box>
             <List>
-              {map(operatorList, (operator, index) => (
+              {map(operators, (operator, index) => (
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
                   <ListItemAvatar>
                     {operator.user.avatar ? (
