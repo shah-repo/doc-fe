@@ -122,6 +122,7 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
                                     variant="h6"
                                     component="h6"
                                     id="simple-modal-title"
+                                    data-cy="training-status"
                                     className={classes.stateText}
                                   >
                                     <Text message={item.state} />
@@ -138,6 +139,7 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
                                     variant="h6"
                                     component="h6"
                                     id="simple-modal-title"
+                                    data-cy="training-status"
                                     className={classes.stateText}
                                   >
                                     <EmailSuccessIcon
