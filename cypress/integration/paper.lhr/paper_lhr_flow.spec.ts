@@ -382,6 +382,28 @@ context("Paper Lot History Record", () => {
     });
   });
 
+  context("Navigate to document list and check data on landing page and open it", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filter Released 'Paper LHR' form", () => {
+      cy.dlClearFilters();
+      cy.dlFilterByDocTitle({ docTitle: paperlhrTitle });
+    });
+
+    it("Verify data on landing page", () => {
+      cy.dlVerifyFilterByRev({ revision: "1" });
+      cy.dlVerifyFilterByType({ type: "FM" });
+      cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
+      cy.dlVerifyFilterByStatus({ status: "Draft" });
+    });
+
+    it("Click and open the FM", () => {
+      cy.dlSelectFirstDocument();
+    });
+  });
+
   context("Verify predefined fields are displayed", () => {
     it("Check 'Part to be Manufactured' is not displayed", () => {
       cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist")
@@ -678,6 +700,47 @@ context("Paper Lot History Record", () => {
     });
   });
 
+  context("Verify all data and predefined fields are present", () => {
+    it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+      cy.get(`[name="lhr-selected-part"]`).parent().parent()
+        .contains("The Part to be Manufactured is a required field.");
+    });
+
+    it("Verify 'Build Type' is displayed", () => {
+      cy.get("[data-cy=\"Build Type\"]").should("exist")
+        .parent().parent().parent().parent().next()
+        .should("have.text", "The Build Type is a required field.");
+    });
+
+    it("Verify 'Initial Quantity' is displayed", () => {
+      cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
+        .parent().parent().parent().parent().next()
+        .should("have.text", "The Initial Quantity is a required field.");
+    });
+
+    it("Verify 'End Quantity' is displayed", () => {
+      cy.get("[data-cy=\"End Quantity\"]").should("exist")
+        .parent().parent().parent().parent().next()
+        .should("have.text", "The End Quantity is a required field.");
+    });
+
+    it("Verify TextField with validation is diplayed", () => {
+      cy.get(`[data-cy="${txtFieldTitle1}"]`).should("exist");
+    });
+
+    it("Verify TextField without validation is displayed", () => {
+      cy.get(`[data-cy="${txtFieldTitle2}"]`).should("exist");
+    });
+
+    it("Verify File Upload is diplayed", () => {
+      cy.get(`[data-cy="${fileUploadFieldTitle}"]`).should("exist");
+    });
+
+    it("Verify 'Approvals' is displayed", () => {
+      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+    });
+  });
+
   context("Approve and release form", () => {
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -925,10 +988,9 @@ context("Paper Lot History Record", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Verify 'Part to be Manufactured' is displayed", () => {
-      cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Part to be Manufactured is a required field.");
+    it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+      cy.get(`[name="lhr-selected-part"]`).parent().parent()
+        .contains("The Part to be Manufactured is a required field.");
     });
 
     it("Verify 'Build Type' is displayed", () => {
@@ -1055,10 +1117,9 @@ context("Paper Lot History Record", () => {
       cy.get("#HeaderInfo-subtitle").should("contain.text", `${lotIdRef}01`);
     });
 
-    it("Verify 'Part to be Manufactured' is displayed", () => {
-      cy.get(`[data-cy="Part to be Manufactured"]`).should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Part to be Manufactured is a required field.");
+    it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+      cy.get(`[name="lhr-selected-part"]`).parent().parent()
+        .contains("The Part to be Manufactured is a required field.");
     });
 
     it("Verify 'Build Type' is displayed", () => {
@@ -1126,7 +1187,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Select 'Production' build type", () => {
-      cy.get(`[value="Production"]`).check();
+      cy.get(`[name="lhr-build-type"]`).last().should("have.value", "Production").check();
 
       cy.get(`[data-cy="Build Type"]`)
         .parent().parent().parent().parent().next("p")
@@ -1134,7 +1195,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Select 'R&D' build type", () => {
-      cy.get(`[value="R&D"]`).check();
+      cy.get(`[name="lhr-build-type"]`).first().should("have.value", "R&D").check();
       cy.get(`[data-cy="form.builder.lhr.build.switch"]`).last().arrowClick();
       cy.get(`[name="lhr-build-type"]`).eq(1).should("have.value", "Production").should("be.disabled");
       cy.progressBarShouldNotExist();
@@ -1176,7 +1237,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Verify 'Status'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(1).should("contain.text", `WIP`);
+      cy.lhrVerifyFilterByStatus({ status: "WIP" });
     });
 
     it("Verify 'Owner'", () => {
@@ -1652,7 +1713,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Verify 'Status'", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(1).should("contain.text", `Released`);
+      cy.lhrVerifyFilterByStatus({ status: "Released" });
     });
 
     it("Verify 'Owner'", () => {
@@ -1769,10 +1830,20 @@ context("Paper Lot History Record", () => {
       cy.get("tr.k-master-row").first().find("td").eq(8).should("contain.text", `LHR-00001`);
     });
   });
+
+  context("Select on 'Paper LHR' document", () => {
+    it("Select first LHR", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+        cy.get("tr.k-master-row").first().arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
   // TODO: further code need to be validated once void document related issue (ENC-12647) gets fixed
 
   context(`Revise paper LHR document`, () => {
     it("Click Revise document", () => {
+      cy.pause();
       cy.drClickReviseDocument();
     });
 
