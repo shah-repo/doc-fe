@@ -501,6 +501,11 @@ context("Mpi/Qpi test", () => {
         cy.drSelectDetailsTab();
       });
 
+      it("Select Order Date", () => {
+        cy.get("input[name^=ordered]").parent().find("button").arrowClick();
+        cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+      });
+
       it("Add an Approval", () => {
         cy.wait(5000);
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
@@ -511,10 +516,16 @@ context("Mpi/Qpi test", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Save PO document", () => {
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.PatchDocRev], () => {
+            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+          });
+        cy.checkToastMessage({ exists: false });
+      });
+
       it("Click 'Submit for Approval' button", () => {
-        SystemRequirement("REQ-1490");
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        cy.listLoadingElementShouldNotExist();
+        cy.pmSubmitForApproval();
       });
 
       it("Click 'Approve' button", () => {
