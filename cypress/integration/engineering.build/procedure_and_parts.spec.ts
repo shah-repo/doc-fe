@@ -510,10 +510,6 @@ context("Procedure and parts flow test", () => {
     it("Enter Usable Quantity", () => {
       cy.get("[name=\"lot_usable_quantity\"]").arrowType("12");
     });
-    it("Reload Page", () => {
-      cy.reload();
-      cy.progressBarShouldNotExist();
-    });
 
     it("Navigate to details tab", () => {
       cy.drSelectDetailsTab();
@@ -789,21 +785,21 @@ context("Procedure and parts flow test", () => {
       it("Upload attachment 'video.mp4'", () => {
         SystemRequirement("REQ-2990");
         cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
           cy.pmUploadAttachment({ fileName: "video.mp4" });
         });
         cy.progressBarShouldNotExist();
       });
 
       it("Upload attachment 'image.jpg'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
           cy.pmUploadAttachment({ fileName: "image.jpg" });
         });
         cy.progressBarShouldNotExist();
       });
 
       it("Upload attachment 'test.docx'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
           cy.pmUploadAttachment({ fileName: "test.docx" });
         });
         cy.progressBarShouldNotExist();
