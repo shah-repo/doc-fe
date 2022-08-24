@@ -935,10 +935,6 @@ context("Procedure and parts flow test", () => {
           cy.listLoadingElementShouldNotExist();
         });
 
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
-
         it("Add material document", () => {
           // eslint-disable-next-line max-len
           cy.ebAddStep2MaterialDocument({ title: "PRT-00002 - rev 1 - Part for EB document", value: "5", name: "As Needed" });
