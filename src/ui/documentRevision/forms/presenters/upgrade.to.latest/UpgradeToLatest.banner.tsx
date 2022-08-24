@@ -9,13 +9,11 @@ import { UpgradeToLatestDialog } from "./UpgradeToLatestDialog";
 
 interface Props {
   shouldShowUpgrade: boolean;
-  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   onUpgradeClick: () => void;
 }
 
 const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
   shouldShowUpgrade,
-  bannerPortal,
   onUpgradeClick,
 }) => {
   const [showBanner, setShowBanner] = React.useState(true);
@@ -31,13 +29,16 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
             bgcolor={Colors.blue}
             color={Colors.white}
             fontWeight="bold"
-            padding="10px"
             display="flex"
             alignItems="center"
             margin="10px"
+            marginTop={0}
+            borderRadius={6}
+            px={2}
+            py={1}
           >
-            <WarningOutlinedIcon color="disabled" />
-            <Box component="span" marginLeft="10px" color={Colors.white}>
+            <WarningOutlinedIcon color="inherit" />
+            <Box component="span" ml={1.5}>
               <Text
                 translation="document.revision.upgrade.form.banner"
                 values={{
@@ -52,7 +53,7 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
                         fontWeight: "bold",
                         textDecoration: "underline",
                         fontSize: "inherit",
-                        marginBottom: 4,
+                        verticalAlign: "baseline",
                       }}
                     >
                       <Text translation="common.click.here" />
