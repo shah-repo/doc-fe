@@ -19,9 +19,11 @@ declare global {
       drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
       drSelectDetailsTab(): Chainable<Subject>;
+      drSelectTrainingTab(): Chainable<Subject>;
       drSelectProcedureTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectDocumentTab(): Chainable<Subject>;
+      drSelectChangeDetailsTab(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
@@ -256,6 +258,11 @@ Cypress.Commands.add("drSelectDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drSelectTrainingTab", () => {
+  cy.get("[data-cy=\"tabId.training\"]").arrowClick({ force: true });
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectProcedureTab", () => {
   cy.get("[data-cy=\"tabId.procedure\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
@@ -263,6 +270,11 @@ Cypress.Commands.add("drSelectProcedureTab", () => {
 
 Cypress.Commands.add("drSelectDocumentTab", () => {
   cy.get("[data-cy=\"tabId.documents\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drSelectChangeDetailsTab", () => {
+  cy.get("[data-cy=\"tabId.changedetails\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
