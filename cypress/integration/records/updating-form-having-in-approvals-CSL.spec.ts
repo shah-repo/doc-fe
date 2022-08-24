@@ -255,6 +255,15 @@ context(testName, () => {
       cy.get(`[data-cy=DocumentRevisionForm-submit]`).arrowClick();
     });
 
+    it("Verify revision", () => {
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
+    });
+
+    it("Verify previous revision", () => {
+      cy.get("[data-cy=note-icon]").click();
+      cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(1).should("contain", "Released");
+    });
+
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
