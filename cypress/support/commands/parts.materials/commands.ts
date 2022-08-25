@@ -51,6 +51,9 @@ declare global {
       lhrVerifyFilterById(params: {id: string }): Chainable<Subject>;
       lhrFilterByOwner(params: {owner: string }): Chainable<Subject>;
       lhrSelectFirstDocument(): Chainable<Subject>;
+      lhrSelectBuildTypeRnD(): Chainable<Subject>;
+      lhrSelectBuildTypeProduction(): Chainable<Subject>;
+      lhrChangeBuildTypeToRnd(): Chainable<Subject>;
     }
   }
 }
@@ -291,5 +294,18 @@ Cypress.Commands.add("lhrSelectFirstDocument", () => {
   });
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("lhrSelectBuildTypeRnD", () => {
+  cy.get(`[name="lhr-build-type"]`).first().should("have.value", "R&D").check();
+});
+
+Cypress.Commands.add("lhrSelectBuildTypeProduction", () => {
+  cy.get(`[name="lhr-build-type"]`).last().should("have.value", "Production").check();
+});
+
+Cypress.Commands.add("lhrChangeBuildTypeToRnd", () => {
+  cy.get(`[name="lhr-build-type"]`).first().should("have.value", "R&D").check();
+  cy.get(`[data-cy="form.builder.lhr.build.switch"]`).arrowClick();
 });
 
