@@ -185,9 +185,13 @@ context(testName, () => {
       cy.inlineApproval();
     });
 
-    it("Verify previous revision", () => {
-      cy.get("[data-cy=note-icon]").click();
-      cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(1).should("contain", "Last Signed");
+    it("Verify Revision 1", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.get("[data-cy=revision]").eq(1).click();
+      cy.drCheckDocumentStatus({ status: "LAST SIGNED" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
+      cy.drClickRevisionsSidePanel();
+      cy.get("[data-cy=revision]").eq(0).click();
     });
 
     it("Add inline approver 2", () => {
@@ -202,10 +206,22 @@ context(testName, () => {
       cy.inlineApproval();
     });
 
-    it("Verify previous revision", () => {
-      cy.get("[data-cy=note-icon]").click();
-      cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(1).should("contain", "Last Signed");
-      cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(2).should("contain", "Archive");
+    it("Verify Revision 2", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.get("[data-cy=revision]").eq(1).click();
+      cy.drCheckDocumentStatus({ status: "LAST SIGNED" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 2");
+      cy.drClickRevisionsSidePanel();
+      cy.get("[data-cy=revision]").eq(0).click();
+    });
+
+    it("Verify Revision 1", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.get("[data-cy=revision]").eq(2).click();
+      cy.drCheckDocumentStatus({ status: "ARCHIVE" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
+      cy.drClickRevisionsSidePanel();
+      cy.get("[data-cy=revision]").eq(0).click();
     });
 
     it("Save document", () => {
@@ -259,9 +275,13 @@ context(testName, () => {
       cy.drCheckDocumentStatus({ status: "DRAFT" });
     });
 
-    it("Verify previous revision", () => {
-      cy.get("[data-cy=note-icon]").click();
-      cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(1).should("contain", "Released");
+    it("Verify Revision 1", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.get("[data-cy=revision]").eq(1).click();
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
+      cy.drClickRevisionsSidePanel();
+      cy.get("[data-cy=revision]").eq(0).click();
     });
 
     it("Approve and release document", () => {
