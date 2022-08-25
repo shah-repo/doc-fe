@@ -1144,12 +1144,13 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
-      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
     });
 
     it(`Select '${USERS[1].name}' for Coordinator`, () => {
-      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
+      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
     });
 
@@ -1349,7 +1350,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
     it("Verify filter for Cal Due Date", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="6"] input`).arrowType("N/A").wait(500);
+      cy.get(`[aria-colindex="6"] input`).arrowType("N/A").wait(2000);
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       cy.wait(500);
     });

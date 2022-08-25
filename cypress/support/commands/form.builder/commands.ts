@@ -104,7 +104,7 @@ Cypress.Commands.add("fbAddNewFieldOption", () => {
 
 Cypress.Commands.add("fbAddNewField", () => {
   cy.unClick();
-  cy.get("button[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true, multiple: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {

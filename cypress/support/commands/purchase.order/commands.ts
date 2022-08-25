@@ -201,7 +201,7 @@ Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
-  cy.get("input[value=" + params.optionName + "]").arrowClick();
+  cy.get("input[value=" + params.optionName + "]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poEnterServiceID", (params: {serviceId: string}) => {

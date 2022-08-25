@@ -726,7 +726,7 @@ context("Checkboxes test2", () => {
 
   context("Create Document", () => {
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
 });
