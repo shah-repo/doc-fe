@@ -10,7 +10,7 @@ export const FBTextFieldStyles = makeStyles(() =>
         "fontWeight": 400,
         "fontSize": 14,
         "&.MuiInputBase-multiline": {
-          height: params && params.rows > 1 ? params.rows * 17 : 40,
+          height: "auto",
           padding: 0,
         },
         "& fieldset": {
@@ -20,10 +20,6 @@ export const FBTextFieldStyles = makeStyles(() =>
       },
       "& .MuiOutlinedInput-input": {
         padding: "13px",
-      },
-      "& .MuiInputBase-inputMultiline": {
-        height: "16px",
-        overflow: "hidden",
       },
     }),
     error: {
