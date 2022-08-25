@@ -1,6 +1,7 @@
 import { createStyles, Theme } from "@material-ui/core";
 import EnlilLogo from "../../assets/images/enlil_logo.svg";
 import Colors from "../layout/theme/utils/colors";
+import { HeaderPresenterProps } from "./Header.presenter";
 import { DRAWER_WIDTH } from "./Navigation.styles";
 
 export const HEADER_HEIGHT = 48;
@@ -16,9 +17,7 @@ export default (theme: Theme) =>
       color: Colors.white,
       zIndex: 1,
     },
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    toolbar: (props) => ({
+    toolbar: (props: HeaderPresenterProps) => ({
       "marginLeft": DRAWER_WIDTH,
       "minHeight": props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
       "paddingBottom": props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,

@@ -7,7 +7,7 @@ import Text from "../components/Text";
 import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
 
-interface Props extends WithStyles<typeof styles> {
+export interface HeaderPresenterProps {
   name: string;
   fullHeight?: boolean;
   toggleCustomLabels: () => void;
@@ -15,7 +15,7 @@ interface Props extends WithStyles<typeof styles> {
   canToggleCustomLabels: boolean;
 }
 
-const Header: React.FunctionComponent<Props> = ({
+const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof styles>> = ({
   classes,
   name,
   fullHeight,
