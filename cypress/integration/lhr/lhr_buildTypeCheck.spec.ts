@@ -811,6 +811,7 @@ context("Create new LHR and verify start step with and without selecting build t
 
   context("Create new and verify User can start step or not using build type selection", () => {
     it("Click 'Create New'", () => {
+      cy.pause();
       cy.drCreateNewDocumentFromForm();
     });
 
