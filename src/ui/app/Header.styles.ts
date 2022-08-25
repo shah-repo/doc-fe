@@ -11,7 +11,7 @@ export default (theme: Theme) =>
   createStyles({
     appBar: {
       position: "absolute",
-      background: `linear-gradient(260deg, ${Colors.cerulean}, ${Colors.ultramarine_blue} 17%, #011FBB 85%)`,
+      background: `linear-gradient(260deg, ${Colors.cerulean}, ${Colors.ultramarine_blue} 17%, ${Colors.navy} 85%)`,
       marginLeft: DRAWER_WIDTH,
       color: Colors.white,
       zIndex: 1,
