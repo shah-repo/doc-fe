@@ -596,7 +596,7 @@ context("Create company with JSON's", () => {
     });
 
     it("PO Status is a Select Field", () => {
-      cy.get(`[id="mui-component-select-po-status-built-in"]`).should("exist");
+      cy.get("#mui-component-select-po-status-built-in").should("exist");
     });
 
     it("PO Status is labeled 'PO Status'", () => {
@@ -910,11 +910,11 @@ context("Create company with JSON's", () => {
 
   context("Make sure all predefined fields are present", () => {
     it("PO Status is a Select Field", () => {
-      cy.get(`[id="mui-component-select-po-status-built-in"]`).should("exist");
+      cy.get("#mui-component-select-po-status-built-in").should("exist");
     });
 
     it("General Information exists", () => {
-      cy.get(`[id="general-information-to-be-completed-by-requester-kc3oqlpn"]`).should("exist");
+      cy.get("#general-information-to-be-completed-by-requester-kc3oqlpn").should("exist");
     });
 
     it("Requestor exists", () => {
@@ -1012,13 +1012,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wait(5000);
-      cy.get("[data-cy^='fb-po-approvals-']").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.poAddApproverOnApproverList({ approver: USERS[1].email });
     });
 
     it("navigate to Line Items", () => {
