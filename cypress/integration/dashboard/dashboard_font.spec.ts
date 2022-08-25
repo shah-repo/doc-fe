@@ -1,6 +1,7 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
 // eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
@@ -56,6 +57,18 @@ const poOrder = "PO-00001";
 const lhrsid = "LHRS-00001";
 const lhrid = "LHR-00007";
 const rejArId = "AR-00009";
+const tcId = "TC-00001";
+const soraSansserif = "Sora, sans-serif";
+const FONT_SIZE_12 = "12px";
+const FONT_SIZE_14 = "14px";
+const FONT_SIZE_14_4 = "14.4px";
+const FONT_WT_400 = "400";
+const FONT_WT_700 = "700";
+const LINE_HT_1 = "20.02px";
+const LINE_HT_2 = "20.592px";
+const LINE_HT_3 = "15px";
+const LINE_HT_4 = "21.6px";
+
 
 context("Dashboard notification font test", () => {
   before(() => {
@@ -1594,20 +1607,18 @@ context("Dashboard notification font test", () => {
   });
 
   context(`Verify ${trainingFormId} and 'training is assigned to you' font`, () => {
-    // eslint-disable-next-line max-len
-    it(`Verify ${trainingFormId} for 'training is assigned to you' has font-size 14.4px font-family 'Sora, sans-serif' line-height 20.592px font-weight 400`, () => {
-      cy.contains(trainingFormId).first().should("have.css", "font-size", "14.4px");
-      cy.contains(trainingFormId).first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
-      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
+    it(`Verify ${trainingFormId} for 'training is assigned to you' has font-size ${FONT_SIZE_14_4} font-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: trainingFormId,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'training is assigned to you' font-size 14px font-family 'Sora, sans-serif' line-height 20.02px font-weight 400", () => {
-      cy.contains("training is assigned to you").first().should("have.css", "font-size", "14px");
-      cy.contains("training is assigned to you").first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("training is assigned to you").first().should("have.css", "line-height", "20.02px");
-      cy.contains("training is assigned to you").first().should("have.css", "font-weight", "400");
+    it(`Verify 'training is assigned to you' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_1} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "training is assigned to you",
+        props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_1, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
@@ -1621,7 +1632,6 @@ context("Dashboard notification font test", () => {
     });
   });
 
-  // eslint-disable-next-line max-len
   context(`Verify COMPLETED training notification exists as '${trainingFormId} Rev 1 released doc1 is COMPLETED'`, () => {
     it("Navigate to Dashboard", () => {
       cy.grpNavigateToDashboard();
@@ -1635,22 +1645,19 @@ context("Dashboard notification font test", () => {
     });
   });
 
-  // eslint-disable-next-line max-len
   context(`Verify ${trainingFormId} and 'COMPLETED' font`, () => {
-    // eslint-disable-next-line max-len
-    it(`Verify COMPLETED training id ${trainingFormId} has font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400`, () => {
-      cy.contains(trainingFormId).first().should("have.css", "font-size", "14.4px");
-      cy.contains(trainingFormId).first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains(trainingFormId).first().should("have.css", "line-height", "20.592px");
-      cy.contains(trainingFormId).first().should("have.css", "font-weight", "400");
+    it(`Verify COMPLETED training id ${trainingFormId} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: trainingFormId,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'COMPLETED' has font-size 12px form-family 'Sora, sans-serif' line-height 15px font-weight 700", () => {
-      cy.contains("COMPLETED").first().should("have.css", "font-size", "12px");
-      cy.contains("COMPLETED").first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("COMPLETED").first().should("have.css", "line-height", "15px");
-      cy.contains("COMPLETED").first().should("have.css", "font-weight", "700");
+    it(`Verify 'COMPLETED' has font-size ${FONT_SIZE_12} form-family ${soraSansserif} line-height ${LINE_HT_3} font-weight ${FONT_WT_700}`, () => {
+      cy.checkStylePropExists({
+        content: "COMPLETED",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_3, "font-weight": FONT_WT_700 },
+      });
     });
   });
 
@@ -1662,12 +1669,11 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify Releasing Approval Request ID ${arId} has font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400`, () => {
-      cy.contains(arId).first().should("have.css", "font-size", "14.4px");
-      cy.contains(arId).first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains(arId).first().should("have.css", "line-height", "20.592px");
-      cy.contains(arId).first().should("have.css", "font-weight", "400");
+    it(`Verify Releasing Approval Request ID ${arId} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: arId,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
@@ -1679,20 +1685,18 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify Purchase Order 'pending approvals from' font-size 14.4px form-family 'Sora, sans-serif' line-height 20.02px font-weight 400", () => {
-      cy.contains("pending approvals from").first().should("have.css", "font-size", "14px");
-      cy.contains("pending approvals from").first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("pending approvals from").first().should("have.css", "line-height", "20.02px");
-      cy.contains("pending approvals from").first().should("have.css", "font-weight", "400");
+    it(`Verify Purchase Order 'pending approvals from' font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_1} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "pending approvals from",
+        props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_1, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify Purchase Order 'IN REVIEW' font-size 12px form-family 'Sora, sans-serif' line-height 15px font-weight 700", () => {
-      cy.contains("IN REVIEW").first().should("have.css", "font-size", "12px");
-      cy.contains("IN REVIEW").first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("IN REVIEW").first().should("have.css", "line-height", "15px");
-      cy.contains("IN REVIEW").first().should("have.css", "font-weight", "700");
+    it(`Verify Purchase Order 'IN REVIEW' font-size ${FONT_SIZE_12} form-family ${soraSansserif} line-height ${LINE_HT_3} font-weight ${FONT_WT_700}`, () => {
+      cy.checkStylePropExists({
+        content: "IN REVIEW",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_3, "font-weight": FONT_WT_700 },
+      });
     });
   });
 
@@ -1704,12 +1708,11 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify LHR step ID ${lhrsid} has font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400`, () => {
-      cy.contains(lhrsid).first().should("have.css", "font-size", "14.4px");
-      cy.contains(lhrsid).first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains(lhrsid).first().should("have.css", "line-height", "20.592px");
-      cy.contains(lhrsid).first().should("have.css", "font-weight", "400");
+    it(`Verify LHR step ID ${lhrsid} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: lhrsid,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
@@ -1721,12 +1724,11 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify APPROVED LHR ID ${lhrid} has font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400`, () => {
-      cy.contains(lhrid).first().should("have.css", "font-size", "14.4px");
-      cy.contains(lhrid).first().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains(lhrid).first().should("have.css", "line-height", "20.592px");
-      cy.contains(lhrid).first().should("have.css", "font-weight", "400");
+    it(`Verify APPROVED LHR ID ${lhrid} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: lhrid,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
@@ -1738,12 +1740,11 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify CLOSED AR 'Releasing FM-00002, released doc1' has font-size 14.4px form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
-      cy.contains("Releasing FM-00002, released doc1").last().should("have.css", "font-size", "14.4px");
-      cy.contains("Releasing FM-00002, released doc1").last().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Releasing FM-00002, released doc1").first().should("have.css", "line-height", "20.592px");
-      cy.contains("Releasing FM-00002, released doc1").first().should("have.css", "font-weight", "400");
+    it(`Verify CLOSED AR 'Releasing ${trainingFormId}, released doc1' has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: `Releasing ${trainingFormId}, released doc1`,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
@@ -1912,28 +1913,18 @@ context("Dashboard notification font test", () => {
         .contains("PENDING");
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify the PENDING has font-size 14px form-family 'Sora, sans-serif' line-height 18px font-weight 400`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]")
-        .contains("PENDING").should("have.css", "font-size", "12px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]")
-        .contains("PENDING").should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]")
-        .contains("PENDING").should("have.css", "line-height", "15px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]")
-        .contains("PENDING").should("have.css", "font-weight", "700");
+    it(`Verify the PENDING has font-size ${FONT_SIZE_12} form-family ${soraSansserif} line-height 18px font-weight ${FONT_WT_700}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]").checkStylePropExists({
+        content: "PENDING",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_3, "font-weight": FONT_WT_700 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify ${USERS[1].name} has font-size 14px form-family 'Sora, sans-serif' line-height 18px font-weight 400`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
-        .contains(USERS[1].name).should("have.css", "font-size", "14px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
-        .contains(USERS[1].name).should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
-        .should("have.css", "line-height", "18px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
-        .should("have.css", "font-weight", "400");
+    it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_14} form-family ${soraSansserif} line-height 18px font-weight ${FONT_WT_400}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]").checkStylePropExists({
+        content: USERS[1].name,
+        props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": "18px", "font-weight": FONT_WT_400 },
+      });
     });
 
     it(`Close the popup window`, () => {
@@ -1982,32 +1973,29 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify 'Rev A Approval Record title' has font-size 14.4px form-family 'Sora, sans-serif' line-height "20.592px font-weight 400`, () => {
-      cy.contains("Rev A Approval Record title").last().should("have.css", "font-size", "14.4px");
-      cy.contains("Rev A Approval Record title").last().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Rev A Approval Record title").last().should("have.css", "line-height", "20.592px");
-      cy.contains("Rev A Approval Record title").last().should("have.css", "font-weight", "400");
+    it(`Verify 'Rev A Approval Record title' has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height "20.592px font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Rev A Approval Record title",
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
   context("Verify font for Outstanding Training Chart", () => {
-    // eslint-disable-next-line max-len
-    it("Verify Outstanding Training Chart font-size 16px and form-family 'Sora, sans-serif' line-height 20px font-weight 600", () => {
-      cy.contains("TRAININGS OUTSTANDING").should("have.css", "font-size", "16px");
-      cy.contains("TRAININGS OUTSTANDING").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("TRAININGS OUTSTANDING").should("have.css", "line-height", "20px");
-      cy.contains("TRAININGS OUTSTANDING").should("have.css", "font-weight", "600");
+    it(`Verify Outstanding Training Chart font-size 16px and form-family ${soraSansserif} line-height 20px font-weight 600`, () => {
+      cy.checkStylePropExists({
+        content: "TRAININGS OUTSTANDING",
+        props: { "font-size": "16px", "font-family": soraSansserif, "line-height": "20px", "font-weight": "600" },
+      });
     });
   });
 
   context("Verify font for Welcome back, Username!", () => {
-    // eslint-disable-next-line max-len
-    it("Verify Welcome back, Username! font-size as 27px and form-family as 'Sora, sans-serif' line-height 34px font-weight 300", () => {
-      cy.contains("Welcome Back, Giovanni Reynolds!").last().should("have.css", "font-size", "27px");
-      cy.contains("Welcome Back, Giovanni Reynolds!").last().should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Welcome Back, Giovanni Reynolds!").last().should("have.css", "line-height", "34px");
-      cy.contains("Welcome Back, Giovanni Reynolds!").last().should("have.css", "font-weight", "300");
+    it(`Verify Welcome back, Username! font-size as 27px and form-family as ${soraSansserif} line-height 34px font-weight 300`, () => {
+      cy.checkStylePropExists({
+        content: "Welcome Back, Giovanni Reynolds!",
+        props: { "font-size": "27px", "font-family": soraSansserif, "line-height": "34px", "font-weight": "300" },
+      });
     });
   });
 
@@ -2040,12 +2028,11 @@ context("Dashboard notification font test", () => {
   });
 
   context("Verify font for DUE IN 7 DAYS", () => {
-    // eslint-disable-next-line max-len
-    it("Verify DUE IN 7 DAYS font-size as 12px and form-family 'Sora, sans-serif' line-height 15px font-weight 700", () => {
-      cy.contains("DUE IN 7 DAYS").should("have.css", "font-size", "12px");
-      cy.contains("DUE IN 7 DAYS").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("DUE IN 7 DAYS").should("have.css", "line-height", "15px");
-      cy.contains("DUE IN 7 DAYS").should("have.css", "font-weight", "700");
+    it(`Verify DUE IN 7 DAYS font-size as ${FONT_SIZE_12} and form-family ${soraSansserif} line-height ${LINE_HT_3} font-weight ${FONT_WT_700}`, () => {
+      cy.checkStylePropExists({
+        content: "DUE IN 7 DAYS",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_3, "font-weight": FONT_WT_700 },
+      });
     });
   });
 
@@ -2078,12 +2065,11 @@ context("Dashboard notification font test", () => {
   });
 
   context("Verify font for OVERDUE", () => {
-    // eslint-disable-next-line max-len
-    it("Verify OVERDUE font-size as 12px and form-family as Sora, sans-serif line-height 15px font-weight 700", () => {
-      cy.contains("OVERDUE").should("have.css", "font-size", "12px");
-      cy.contains("OVERDUE").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("OVERDUE").should("have.css", "line-height", "15px");
-      cy.contains("OVERDUE").should("have.css", "font-weight", "700");
+    it(`Verify OVERDUE font-size as ${FONT_SIZE_12} and form-family ${soraSansserif} line-height ${LINE_HT_3} font-weight ${FONT_WT_700}`, () => {
+      cy.checkStylePropExists({
+        content: "OVERDUE",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_3, "font-weight": FONT_WT_700 },
+      });
     });
   });
 
@@ -2094,24 +2080,20 @@ context("Dashboard notification font test", () => {
         .should("have.text", "OVERDUE").arrowClick();
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify training status 'EMAIL ALL' font-size as 11px and form-family as Sora, sans-serif line-height 14px and font-weight 700", () => {
+    it(`Verify training status 'EMAIL ALL' font-size as 11px and form-family as ${soraSansserif} line-height ${FONT_SIZE_14} and font-weight ${FONT_WT_700}`, () => {
       cy.get("[class^=\"MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-emailbutton\"]")
-        .contains("EMAIL ALL").should("have.css", "font-size", "11px");
-      cy.get("[class^=\"MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-emailbutton\"]")
-        .contains("EMAIL ALL").should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-emailbutton\"]")
-        .contains("EMAIL ALL").should("have.css", "line-height", "14px");
-      cy.get("[class^=\"MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-emailbutton\"]")
-        .contains("EMAIL ALL").should("have.css", "font-weight", "700");
+        .checkStylePropExists({
+          content: "EMAIL ALL",
+          props: { "font-size": "11px", "font-family": soraSansserif, "line-height": FONT_SIZE_14, "font-weight": FONT_WT_700 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify training status ${USERS[2].name} font-size as 14px and form-family as Sora, sans-serif`, () => {
+    it(`Verify training status ${USERS[2].name} font-size as ${FONT_SIZE_14} and form-family as ${soraSansserif}`, () => {
       cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
-        .contains(USERS[2].name).should("have.css", "font-size", "14px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
-        .contains(USERS[2].name).should("have.css", "font-family", "Sora, sans-serif");
+        .checkStylePropExists({
+          content: USERS[2].name,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif },
+        });
     });
 
     it(`Close training status popup window`, () => {
@@ -2127,36 +2109,32 @@ context("Dashboard notification font test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify TC font-size as 14.4px and form-family 'Sora, sans-serif' line-height 21.6px font-weight 400", () => {
-      cy.contains("TC-00001").should("have.css", "font-size", "14.4px");
-      cy.contains("TC-00001").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("TC-00001").should("have.css", "line-height", "21.6px");
-      cy.contains("TC-00001").should("have.css", "font-weight", "400");
+    it(`Verify TC id ${tcId} font-size as 14.4px and form-family ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: tcId,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_4, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify PO font-size as 14.4px and form-family as 'Sora, sans-serif' line-height 21.6px font-weight 400", () => {
-      cy.contains("PO-00001").should("have.css", "font-size", "14.4px");
-      cy.contains("PO-00001").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("PO-00001").should("have.css", "line-height", "21.6px");
-      cy.contains("PO-00001").should("have.css", "font-weight", "400");
+    it(`Verify PO id ${poOrder} has font-size as 14.4px and form-family as ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: poOrder,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_4, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify form font-size as 14.4px and form-family as 'Sora, sans-serif' line-height 21.6px font-weight 400", () => {
-      cy.contains("FM-00002").should("have.css", "font-size", "14.4px");
-      cy.contains("FM-00002").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("FM-00002").should("have.css", "line-height", "21.6px");
-      cy.contains("FM-00002").should("have.css", "font-weight", "400");
+    it(`Verify form id ${trainingFormId} font-size as 14.4px and form-family as ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: trainingFormId,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_4, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify document font-size as 14.4px and form-family as 'Sora, sans-serif' line-height 21.6pxfont-weight 400", () => {
-      cy.contains(lhrid).should("have.css", "font-size", "14.4px");
-      cy.contains(lhrid).should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains(lhrid).should("have.css", "line-height", "21.6px");
-      cy.contains(lhrid).should("have.css", "font-weight", "400");
+    it(`Verify document LHR ID ${lhrid} font-size as 14.4px and form-family as ${soraSansserif} line-height ${LINE_HT_4}font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: lhrid,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_4, "font-weight": FONT_WT_400 },
+      });
     });
 
     it("Select 'My Feed' tab", () => {
@@ -2207,12 +2185,11 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify REJECTED Approval Request font-size 14p and form-family 'Sora, sans-serif' line-height 20.592px font-weight 400", () => {
-      cy.contains(rejArId).should("have.css", "font-size", "14.4px");
-      cy.contains(rejArId).should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains(rejArId).should("have.css", "line-height", "20.592px");
-      cy.contains(rejArId).should("have.css", "font-weight", "400");
+    it(`Verify REJECTED Approval Request ID ${rejArId} font-size 14p and form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: rejArId,
+        props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
+      });
     });
   });
 });
