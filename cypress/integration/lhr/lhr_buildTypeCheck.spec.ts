@@ -832,7 +832,7 @@ context("Create new LHR and verify start step with and without selecting build t
       cy.drSelectOverviewTab();
     });
 
-    it("Select buid type Prod", () => {
+    it("Select build type Prod", () => {
       cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
     });
 
