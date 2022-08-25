@@ -122,7 +122,6 @@ context("Verify Paper LHR", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-      cy.pause();
     });
   });
 
