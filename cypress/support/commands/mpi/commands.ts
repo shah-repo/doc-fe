@@ -63,8 +63,7 @@ Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
   cy.get("ul>li[role=option]").contains(params.material).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.quntity);
   cy.wait(500);
-  cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.unit).arrowClick();
+  cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.unit);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
