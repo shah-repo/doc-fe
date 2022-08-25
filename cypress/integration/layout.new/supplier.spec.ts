@@ -209,15 +209,19 @@ context("Verify New Layout for Supplier Document", () => {
   });
 
   context("Create supplier document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromForm();
     });
 
-    it("Enter title", () => {
+    it(`Enter title ${docTitle}`, () => {
       cy.drEnterDocumentTitle({ name: docTitle });
     });
 
-    it("Enter description", () => {
+    it(`Enter description ${docDescription}`, () => {
       cy.drEnterDocumentDescription({ description: docDescription });
     });
 
@@ -239,8 +243,7 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Verify tabs", () => {
-      cy.get(`[data-cy="tabId.overview"]`).should("exist");
-      cy.get(`[data-cy="tabId.details"]`).should("exist");
+      cy.verifyTabs("overview", "details");
     });
 
     context("Verify created supplier document tabs content", () => {
@@ -362,11 +365,6 @@ context("Verify New Layout for Supplier Document", () => {
           owner,
           actions: [
             { key: "Description changed", value: docDescription },
-          ],
-        },
-        {
-          owner,
-          actions: [
             { key: "Name changed", value: docTitle },
           ],
         },
@@ -410,16 +408,20 @@ context("Verify New Layout for Supplier Document", () => {
     });
 
     it("Fill Text Field and check for autosave", () => {
-      cy.get(`[name^=fb-textfield-]`).arrowType("Supplier Text Field");
+      cy.get("[name^=fb-textfield-]").arrowType("Supplier Text Field");
       cy.unClick();
     });
 
     it("Select radio button option", () => {
-      cy.get(`[name^="fb-radiobutton-group-"]`).last().arrowClick();
+      cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
     });
 
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
   });
 
