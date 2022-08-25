@@ -1052,12 +1052,12 @@ context("NCO document type management", () => {
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
-      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Select 'Maintenance record form' for preventative maintenance required", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains("Preventative Maintenance form").arrowClick();
     });
 
@@ -1072,13 +1072,14 @@ context("NCO document type management", () => {
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Select 'Maintenance record form' for calibration required", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Calibration form").arrowClick();
+      cy.unClick();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick({ force: true });
+      cy.get("ul>li[role=\"option\"]").contains("Calibration form").arrowClick({ force: true });
     });
 
     it("Select calibration frequency", () => {
@@ -1100,12 +1101,12 @@ context("NCO document type management", () => {
     });
 
     it("Select Portable Location", () => {
-      cy.get("[id*=select-location]").eq(0).arrowClick();
+      cy.get("[id*=select-location]").eq(0).arrowClick({ force: true });
       cy.get("ul>li[data-value='Portable']").arrowClick();
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
     });
 
     it("Save document", () => {
@@ -1159,7 +1160,7 @@ context("NCO document type management", () => {
       });
 
       it("Change Location to IQC", () => {
-        cy.get("[id*=select-location]").eq(0).arrowClick();
+        cy.get("[id*=select-location]").eq(0).arrowClick({ force: true });
         cy.get("ul>li[data-value='IQC']").arrowClick();
       });
 
@@ -1229,7 +1230,7 @@ context("NCO document type management", () => {
       });
 
       it("Change Location to Portable", () => {
-        cy.get("[id*=select-location]").eq(0).arrowClick();
+        cy.get("[id*=select-location]").eq(0).arrowClick({ force: true });
         cy.get("ul>li[data-value='Portable']").arrowClick();
       });
 
@@ -1560,7 +1561,7 @@ context("NCO document type management", () => {
       });
 
       it("Change Location to IQC", () => {
-        cy.get("[id*=select-location]").eq(0).arrowClick();
+        cy.get("[id*=select-location]").eq(0).arrowClick({ force: true });
         cy.get("ul>li[data-value='IQC']").arrowClick();
       });
 
@@ -1631,7 +1632,7 @@ context("NCO document type management", () => {
       });
 
       it("Change Location to Portable", () => {
-        cy.get("[id*=select-location]").eq(0).arrowClick();
+        cy.get("[id*=select-location]").eq(0).arrowClick({ force: true });
         cy.get("ul>li[data-value='Portable']").arrowClick();
       });
 
