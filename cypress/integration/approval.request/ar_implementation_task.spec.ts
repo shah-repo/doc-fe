@@ -246,7 +246,7 @@ context("Approval request implementation tasks", () => {
   context("Add implementation task and continue AR creation flow", () => {
     it("Fill all fields and add 'Implementation Task'", () => {
       SystemRequirement("REQ-0710");
-      cy.get("[data-cy=\"fb-control-btn\"]").arrowClick();
+      cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
       cy.get("[data-cy=\"title\"]").arrowType("Task One");
       cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
       cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);

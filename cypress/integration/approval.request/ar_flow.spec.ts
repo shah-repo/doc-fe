@@ -508,7 +508,9 @@ context("Approval request form", () => {
     });
 
     it("Remove second Approver'", () => {
-      cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick();
+      cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("check first approvers exists and second Approver removed", () => {

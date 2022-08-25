@@ -284,25 +284,37 @@ context("Autosave EB test", () => {
     it("Add second Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
       cy.reload();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("check approvers after reload page", () => {
-      cy.get(".MuiAutocomplete-tag span div").eq(0)
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
         .should("contain", `${USERS[2].name} - ${USERS[2].email}`);
-      cy.get(".MuiAutocomplete-tag span div").eq(1)
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
         .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.unClick();
     });
 
     it("Remove second Approver'", () => {
-      cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
+      cy.get(`[class*="MuiChip-root MuiAutocomplete-tag MuiChip-deletable"] div`).contains(USERS[2].email)
+        .parent().parent().find("svg").arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.reload();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("check approvers after reload page", () => {
-      cy.get(".MuiAutocomplete-tag span div").eq(0)
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
         .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
-      cy.get(".MuiAutocomplete-tag span div").eq(1)
-        .should("not.exist");
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
     });
   });
 

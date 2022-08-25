@@ -17,6 +17,7 @@ declare global {
       dtmUncheckQMS(): Chainable<Subject>;
       dtmUncheckNeedsSignature(): Chainable<Subject>;
       dtmUncheckTraining(): Chainable<Subject>;
+      dtmCloseDialogButton(): Chainable<Subject>;
       dtmSelectGroup(params: { group: string }): Chainable;
       dtmSelectUsersWithoutTags(params: { usersWithoutTags: string }): Chainable;
       dtmSelectRevisionStage(params: { revisionStage: string }): Chainable;
@@ -74,6 +75,10 @@ Cypress.Commands.add("dtmUncheckNeedsSignature", () => {
 
 Cypress.Commands.add("dtmUncheckTraining", () => {
   cy.get("[data-grid-row-index='0']>td>span>input").eq(4).uncheck();
+});
+
+Cypress.Commands.add("dtmCloseDialogButton", () => {
+  cy.get("#DialogContent-close").arrowClick();
 });
 
 Cypress.Commands.add("dtmSelectGroup", (params: { group: string }) => {
