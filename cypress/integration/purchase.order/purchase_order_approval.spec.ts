@@ -218,7 +218,7 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Add Item'", () => {
-      cy.poAddNewFieldItem();
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
     });
 
     it("Enter Level Name value to be '1'", () => {
@@ -238,7 +238,7 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Add Item'", () => {
-      cy.poAddNewFieldItem();
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
     });
 
     it("Enter Level Name value to be '2'", () => {
