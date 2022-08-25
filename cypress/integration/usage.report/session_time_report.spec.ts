@@ -64,6 +64,8 @@ let createdPMForm;
 let createdCalibrationForm;
 let createdReleasedRecord;
 let createdEBRecord;
+let createdMPIDocument;
+let MPIDocumentType;
 
 const todaysDate = momentInPST();
 const todaysDateFormated = momentInPST().format("L");
@@ -148,12 +150,12 @@ const numberOfCreatedDocsForComany1: StructureFromPerCompanyReport[] = [
   },
   {
     name: "Documents",
-    releasedCompleted: 13,
+    releasedCompleted: 14,
     draftPending: 8,
   },
   {
     name: "Approval Requests",
-    releasedCompleted: 27,
+    releasedCompleted: 28,
     draftPending: 0,
   },
   {
@@ -285,6 +287,7 @@ context("Test usage report is correctly counting documents", () => {
           LHRtDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "LHR template");
           LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
+          MPIDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           done();
         });
       });
@@ -573,6 +576,7 @@ context("Test usage report is correctly counting documents", () => {
                       {
                         index: 0,
                         type: "textfield",
+                        tabId: "details",
                         name: "textfield-for-inline-l39qj0uv",
                         hidden: false,
                         outputDisabled: false,
@@ -593,6 +597,7 @@ context("Test usage report is correctly counting documents", () => {
                       {
                         index: 1,
                         type: "inlineapproval",
+                        tabId: "details",
                         name: "inline-field-l39qj2f2",
                         hidden: false,
                         outputDisabled: false,
@@ -616,6 +621,7 @@ context("Test usage report is correctly counting documents", () => {
                       {
                         index: 2,
                         type: "textfield",
+                        tabId: "details",
                         name: "second-textfield-for-inline-l39qj3i5",
                         hidden: false,
                         outputDisabled: false,
@@ -636,6 +642,7 @@ context("Test usage report is correctly counting documents", () => {
                       {
                         index: 3,
                         type: "inlineapproval",
+                        tabId: "details",
                         name: "second-inline-field-l39qj5nh",
                         hidden: false,
                         outputDisabled: false,
@@ -713,6 +720,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "fb-default-eq-status",
                     type: "radiogroup",
+                    tabId: "overview",
                     index: 0,
                     label: "EQ Status",
                     rules: "required",
@@ -735,6 +743,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "fb-primary-owner-eq",
                     type: "autocomplete",
+                    tabId: "specification",
                     index: 1,
                     label: "Primary Owner",
                     optionId: "13",
@@ -750,6 +759,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "fb-coordinator-eq",
                     type: "autocomplete",
+                    tabId: "specification",
                     index: 2,
                     label: "Coordinator",
                     optionId: "13",
@@ -817,6 +827,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "fb-approvals-l42iv0i2",
                     type: "approvals",
+                    tabId: "overview",
                     index: 3,
                     label: "form.builder.approvals",
                     deleteDisabled: true,
@@ -879,6 +890,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "po-status-built-in",
                     type: "select",
+                    tabId: "details",
                     index: 0,
                     label: "PO Status",
                     options: [
@@ -906,6 +918,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "po-general-information-to-be-completed-by-requester-section",
                     type: "section",
+                    tabId: "details",
                     index: 1,
                     label: "General Information",
                     applicableOn: [
@@ -915,6 +928,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "po-requestor-autocomplete",
                     type: "autocomplete",
+                    tabId: "details",
                     index: 2,
                     label: "Requestor",
                     rules: "required",
@@ -940,6 +954,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "po-supplier-built-in",
                     type: "supplier",
+                    tabId: "details",
                     index: 3,
                     label: "Supplier ",
                     applicableOn: [
@@ -953,6 +968,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "po-order-date",
                     type: "datepicker",
+                    tabId: "details",
                     index: 4,
                     label: "Order Date",
                     rules: "required",
@@ -977,6 +993,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "po-items-built-in",
                     type: "purchaseorder",
+                    tabId: "lineitems",
                     index: 5,
                     label: "Purchase Order",
                     applicableOn: [
@@ -990,6 +1007,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "fb-po-approvals",
                     type: "approvals",
+                    tabId: "details",
                     index: 6,
                     label: "Approvals",
                     applicableOn: [
@@ -1052,6 +1070,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "receive-po-kzqkr5yl",
                     type: "poreceive",
+                    tabId: "details",
                     index: 0,
                     label: "Receive PO",
                     rules: "",
@@ -1072,6 +1091,7 @@ context("Test usage report is correctly counting documents", () => {
                   {
                     name: "fb-approvals-kzqkpxqm",
                     type: "approvals",
+                    tabId: "overview",
                     index: 1,
                     label: "form.builder.approvals",
                     deleteDisabled: true,
@@ -1923,6 +1943,7 @@ context("Test usage report is correctly counting documents", () => {
                     {
                       name: "lhr-selected-part",
                       type: "partsselection",
+                      tabId: "overview",
                       index: 0,
                       label: "Part to be Manufactured",
                       deleteDisabled: true,
@@ -1934,6 +1955,7 @@ context("Test usage report is correctly counting documents", () => {
                     {
                       name: "lhr_initial_quantity",
                       type: "quantity",
+                      tabId: "overview",
                       index: 1,
                       label: "Initial Quantity",
                       applicableOn: [
@@ -1947,6 +1969,7 @@ context("Test usage report is correctly counting documents", () => {
                     {
                       name: "lhr-end-quantity",
                       type: "quantity",
+                      tabId: "overview",
                       index: 2,
                       label: "End Quantity",
                       applicableOn: [
@@ -1963,6 +1986,7 @@ context("Test usage report is correctly counting documents", () => {
                       type: "radiogroup",
                       index: 3,
                       label: "Build Type",
+                      tabId: "overview",
                       options: [
                         {
                           text: "R&D",
@@ -1985,6 +2009,7 @@ context("Test usage report is correctly counting documents", () => {
                     {
                       name: "lhr-due-date",
                       type: "datepicker",
+                      tabId: "overview",
                       index: 4,
                       label: "Due Date",
                       applicableOn: [
@@ -1997,6 +2022,7 @@ context("Test usage report is correctly counting documents", () => {
                     {
                       name: "lhrstep-built-in",
                       type: "lhrstep",
+                      tabId: "details",
                       index: 5,
                       label: "LHR Step",
                       applicableOn: [
@@ -2012,6 +2038,7 @@ context("Test usage report is correctly counting documents", () => {
                     {
                       label: "form.builder.approvals",
                       type: "approvals",
+                      tabId: "overview",
                       deleteDisabled: true,
                       name: "fb-approvals-kvateryo",
                       uniqueSchemaItem: true,
@@ -2398,6 +2425,169 @@ context("Test usage report is correctly counting documents", () => {
         });
       });
 
+      it("[API]Create MPI document", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>MPI created through API</p>",
+            document: {
+              docId: "PI-00001",
+              documentType: {
+                id: MPIDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "API MPI",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [],
+              schema: [
+                {
+                  name: "fb-mpi-procedure-section-built-in",
+                  type: "section",
+                  index: 0,
+                  label: "form.builder.mpiprocedure",
+                  tabId: "procedure",
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                },
+                {
+                  name: "mpi-procedure-built-in",
+                  type: "mpiprocedure",
+                  index: 1,
+                  tabId: "procedure",
+                  stepIndex: 1,
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                  editorProperties: [
+                    "includeNotes",
+                  ],
+                  includeNotes: true,
+                  editorConfig: {
+                    description: "<p>Description for step 1</p>",
+                    materials: [
+                      {
+                        id: "kvasuama",
+                        title: createdPartDocument.id,
+                        quantity: 3,
+                        unit: "each",
+                      },
+                    ],
+                    equipment: [
+                      {
+                        id: "kvasulmm",
+                        title: releasedequipmentDocument.id,
+                      },
+                    ],
+                  },
+                },
+                {
+                  name: "lhrs-start-quantity",
+                  type: "quantity",
+                  index: 2,
+                  label: "Start quantity",
+                  tabId: "procedure",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  editorProperties: [
+                    "includeNotes",
+                  ],
+                  validationAttribute: "Start quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                  includeNotes: true,
+                },
+                {
+                  name: "lhrs-accepted-quantity",
+                  type: "quantity",
+                  index: 3,
+                  label: "Accepted quantity",
+                  tabId: "procedure",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  editorProperties: [
+                    "includeNotes",
+                  ],
+                  validationAttribute: "Accepted quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                  includeNotes: true,
+                },
+                {
+                  name: "lhrs-rejected-quantity",
+                  type: "quantity",
+                  index: 4,
+                  label: "Rejected quantity",
+                  tabId: "procedure",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  editorProperties: [
+                    "includeNotes",
+                  ],
+                  validationAttribute: "Rejected quantity",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                  includeNotes: true,
+                },
+                {
+                  name: "approvals-built-in",
+                  type: "approvals",
+                  index: 5,
+                  label: "Approvals",
+                  tabId: "overview",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  uniqueSchemaItem: true,
+                  validationAttribute: "Approvals",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+              ],
+            },
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdMPIDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdMPIDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+            },
+            employeeId: secondEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+
       it("[API]Create PM form", (done: any) => {
         cy.drCreateDocumentRevision({
           payload: {
@@ -2431,6 +2621,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "fb-maintenance-details-section",
                   type: "section",
+                  tabId: "details",
                   index: 0,
                   label: "Maintenance Details",
                   applicableOn: [
@@ -2442,6 +2633,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "equipment_id",
                   type: "autocomplete",
+                  tabId: "details",
                   index: 1,
                   label: "Equipment",
                   rules: "required",
@@ -2457,6 +2649,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "equipment_maintainer",
                   type: "autocomplete",
+                  tabId: "details",
                   index: 2,
                   label: "Maintainer",
                   rules: "required",
@@ -2472,6 +2665,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "fb-equipment_due_date",
                   type: "datepicker",
+                  tabId: "details",
                   index: 3,
                   label: "Completion Date",
                   rules: "required",
@@ -2485,6 +2679,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "fb-requipment-maintenance-section",
                   type: "textfield",
+                  tabId: "details",
                   index: 4,
                   label: "Equipment Maintenance Section",
                   rules: "required",
@@ -2499,6 +2694,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   label: "form.builder.approvals",
                   type: "approvals",
+                  tabId: "details",
                   deleteDisabled: true,
                   name: "fb-approvals-kybkhbpt",
                   uniqueSchemaItem: true,
@@ -2559,6 +2755,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "fb-maintenance-details-section",
                   type: "section",
+                  tabId: "details",
                   index: 0,
                   label: "Maintenance Details",
                   applicableOn: [
@@ -2570,6 +2767,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "equipment_id",
                   type: "autocomplete",
+                  tabId: "details",
                   index: 1,
                   label: "Equipment",
                   rules: "required",
@@ -2585,6 +2783,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "equipment_maintainer",
                   type: "autocomplete",
+                  tabId: "details",
                   index: 2,
                   label: "Maintainer",
                   rules: "required",
@@ -2600,6 +2799,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "fb-equipment_due_date",
                   type: "datepicker",
+                  tabId: "details",
                   index: 3,
                   label: "Completion Date",
                   rules: "required",
@@ -2613,6 +2813,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   name: "fb-requipment-maintenance-section",
                   type: "textfield",
+                  tabId: "details",
                   index: 4,
                   label: "Equipment Maintenance Section",
                   rules: "required",
@@ -2627,6 +2828,7 @@ context("Test usage report is correctly counting documents", () => {
                 {
                   label: "form.builder.approvals",
                   type: "approvals",
+                  tabId: "details",
                   deleteDisabled: true,
                   name: "fb-approvals-kybkhbpt",
                   uniqueSchemaItem: true,
@@ -3088,6 +3290,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "partsselection",
                     index: 0,
                     label: "Part to be Manufactured",
+                    tabId: "overview",
                     deleteDisabled: true,
                     deleteInFormDisabled: true,
                     editorConfig: {
@@ -3099,6 +3302,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 1,
                     label: "Initial Quantity",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -3112,6 +3316,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "quantity",
                     index: 2,
                     label: "End Quantity",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -3126,6 +3331,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "radiogroup",
                     index: 3,
                     label: "Build Type",
+                    tabId: "overview",
                     options: [
                       {
                         text: "R&D",
@@ -3150,6 +3356,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "datepicker",
                     index: 4,
                     label: "Due Date",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -3162,6 +3369,7 @@ context("Test usage report is correctly counting documents", () => {
                     type: "lhrstep",
                     index: 5,
                     label: "LHR Step",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -3169,12 +3377,13 @@ context("Test usage report is correctly counting documents", () => {
                     applicableValidationSchema: true,
                     stepIndex: 1,
                     editorConfig: {
-                      value: faker.random.uuid(),
+                      value: createdMPIDocument.id,
                     },
                   },
                   {
                     label: "form.builder.approvals",
                     type: "approvals",
+                    tabId: "overview",
                     deleteDisabled: true,
                     name: "fb-approvals-kvateryo",
                     uniqueSchemaItem: true,

@@ -583,11 +583,11 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
-      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Select 'Preventative Maintenance form' for preventative maintenance required", () => {
-      cy.get("[name$=\"preventativeForm\"] button").eq(2).arrowClick();
+      cy.get("[name$=\"preventativeForm\"] button").eq(2).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
       cy.unClick();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
@@ -606,11 +606,11 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Select 'Calibration form' for calibration required", () => {
-      cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick();
+      cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
       cy.unClick();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
@@ -636,7 +636,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
     });
 
     it("Autocomplete-Approvers", () => {

@@ -4041,7 +4041,7 @@ context("Test usage report is correctly counting documents", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
 
@@ -4059,7 +4059,7 @@ context("Test usage report is correctly counting documents", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Verify status is WIP", () => {
