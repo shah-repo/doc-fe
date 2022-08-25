@@ -2,10 +2,20 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+const owner = USERS[1].name;
+const userOne = USERS[2].name;
+const groupOne = "Developers";
+
+const tablePOAM = [
+  ["Level 1", 5000, "Everyone"],
+  ["Level 2", 25000, "Can be approver", "Groups Management UnofficialUser Management"],
+  ["Level 3", 100000, "Owner as approver", "User ManagementAsync Tasks", "Company Admin"],
+];
 
 context("DAM and POAM", () => {
   before(() => {
@@ -171,7 +181,6 @@ context("DAM and POAM", () => {
         it("Verify table header contains: Prefix, Internal type, Document Type, Training, Signature, Category", () => {
           cy.get("table").contains("th", "Prefix");
           cy.get("table").contains("th", "Internal type");
-          // cy.get("table").contains("th", "Document Type"); this is failing
           cy.get("table").contains("th", "Training");
           cy.get("table").contains("th", "Signature");
           cy.get("table").contains("th", "Category");
@@ -359,6 +368,15 @@ context("DAM and POAM", () => {
         });
       });
 
+      context("Verify Scroll", () => {
+        it("Navigate to history tab", () => {
+          cy.get("[data-cy='timeline-icon']").arrowClick();
+        });
+        it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+          cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+        });
+      });
+
       context("'Approve and Release' the document", () => {
         it("'Approve and Release' the document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -432,7 +450,6 @@ context("DAM and POAM", () => {
         it("Verify table header contains: Prefix, Internal type, Document Type, Training, Signature, Category", () => {
           cy.get("table").contains("th", "Prefix");
           cy.get("table").contains("th", "Internal type");
-          // cy.get("table").contains("th", "Document Type"); this is failing
           cy.get("table").contains("th", "Training");
           cy.get("table").contains("th", "Signature");
           cy.get("table").contains("th", "Category");
@@ -538,6 +555,15 @@ context("DAM and POAM", () => {
       context("Verify History tab content scroll", () => {
         it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
           cy.verifyHistoryScroll();
+        });
+      });
+
+      context("Verify Scroll", () => {
+        it("Navigate to history tab", () => {
+          cy.get("[data-cy='timeline-icon']").arrowClick();
+        });
+        it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+          cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
         });
       });
     });
@@ -654,6 +680,7 @@ context("DAM and POAM", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
+
       context("Click 'Create New' and new POAM should be created", () => {
         it("Create New Document out of the Form", () => {
           cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
@@ -730,27 +757,162 @@ context("DAM and POAM", () => {
           cy.contains("Signature 2").should("exist");
           cy.contains("Signature 3").should("exist");
         });
-        // approval levels  missing
 
-        it("Fill in the fields - Level Name, Limit, Signature 1, Signature 2 and Signature 3", () => {
-          cy.poAMEnterLevelName({ name: "Level Name" });
-          cy.poAMEnterLimit({ limit: "200" });
-          cy.get("[name=\"signatures.0.employees\"]").autocompleteSelect(USERS[1].name);
-          cy.get("[name=\"signatures.1.employees\"]").autocompleteSelect(USERS[2].name);
-          cy.get("[name=\"signatures.2.employees\"]").autocompleteSelect(USERS[3].name);
+        it("Fill in the fields - Level name: Level 1 / Limit 5000/ Signature 1 Everyone", () => {
+          cy.poAMEnterLevelName({ name: "Level 1" });
+          cy.poAMEnterLimit({ limit: "5000" });
+          cy.get("[name=\"signatures.0.groups\"]").autocompleteSelect("Everyone");
           cy.poAddPOButtonClick();
         });
+
+        it(`Fill in the fields - Level name: Level 2 / Limit 25000/ Signature 1 Can be approver / Signature 2 
+        Group Management, User Management`, () => {
+          cy.get("button[data-cy=\"fb-control-btn\"]").eq(0).arrowClick({ multiple: true, force: true });
+          cy.poAMEnterLevelName({ name: "Level 2" });
+          cy.poAMEnterLimit({ limit: "25000" });
+          cy.get("[name=\"signatures.0.groups\"]").autocompleteSelect("Can be approver");
+          cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("Groups Management");
+          cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("User Management");
+          cy.poAddPOButtonClick();
+        });
+
+        it(`Fill in the fields - Level name: Level 3 / Limit 100000/ Signature 1 Owner as approver / Signature 2 
+        User Management, QA / Signature 3 Company admin`, () => {
+          cy.get("button[data-cy=\"fb-control-btn\"]").eq(0).arrowClick({ multiple: true, force: true });
+          cy.poAMEnterLevelName({ name: "Level 3" });
+          cy.poAMEnterLimit({ limit: "100000" });
+          cy.get("[name=\"signatures.0.groups\"]").autocompleteSelect("Owner as approver");
+          cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("User Management");
+          cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("Async Task");
+          cy.get("[name=\"signatures.2.groups\"]").autocompleteSelect("Company admin");
+          cy.poAddPOButtonClick();
+        });
+
         it(" Verify that data is save in table", () => {
-          cy.get("table").contains("tr", "Level Name");
-          cy.get("table").contains("tr", "200");
-          cy.get("table").contains("tr", USERS[1].name);
-          cy.get("table").contains("tr", USERS[2].name);
-          cy.get("table").contains("tr", USERS[3].name);
+          cy.get("tbody tr").each(($row, rowIndex) => {
+            cy.wrap($row)
+              .find("td")
+              .each(($cell, cellIndex) => {
+                if ($cell.text()) {
+                  cy.wrap($cell).should("have.text", tablePOAM[rowIndex][cellIndex]);
+                }
+              });
+          });
         });
 
         it("Verify that Form Options should appear for this tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
           cy.verifyFormOptionsVisibility();
+        });
+      });
+
+      context("Verify Right side panel", () => {
+        it("Verify that right side panel opens by default to the References tab", () => {
+          cy.verifyReferencesTabAsActive();
+        });
+
+        it("Verify Right side panel Can be expanded or collapsed", () => {
+          cy.verifyExpandCollpase();
+        });
+
+        it("Verify References tab is fixed as the user scrolls up or down", () => {
+          cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
+        });
+
+        context("Verify References tab", () => {
+          it("Verify References tab General Info", () => {
+            cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+          });
+
+          it("Verify Add/Remove References", () => {
+            cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          });
+
+          it("Verify Referenced By, Training, Release Date and Form Info", () => {
+            cy.verifyReferencesOtherInfo();
+          });
+        });
+
+        context("Verify Revisions tab", () => {
+          it("Open revisions tab, click and verify current revision", () => {
+            cy.openRevisionsTabAndVerifyCurrentRevision("1");
+          });
+        });
+
+        context("Verify Access Permissions tab", () => {
+          it("Open access permissions tab", () => {
+            cy.drSelectPermissionTab();
+          });
+
+          it("Add another user permission", () => {
+            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+              cy.drAddUserFromPermissionTab(userOne);
+            });
+          });
+
+          it("Add another group permission", () => {
+            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+              cy.drAddGroupFromPermissionTab(groupOne);
+            });
+          });
+        });
+
+        context("Verify History tab", () => {
+          const history = [
+            {
+              owner,
+              actions: [{ key: "Access granted to group", value: groupOne }],
+            },
+            {
+              owner,
+              actions: [{ key: "Access granted to user", value: userOne }],
+            },
+          ];
+
+          it("Open history tab and verify changes are being captured", () => {
+            cy.drSelectHistoryTab();
+            cy.get(`[data-cy="History-detail"]`).should("be.visible");
+          });
+
+          verifyHistoryContent(history, groupOne);
+        });
+
+        context("Verify Bookmarks tab", () => {
+          it("Open bookmarks tab", () => {
+            cy.drSelectBookmarksTab();
+            cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
+          });
+        });
+
+        context("Verify Revision History tab", () => {
+          it("Open revision history tab", () => {
+            cy.drSelectRevisionHistoryTab();
+            cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
+          });
+        });
+
+        context("Training Required is unchecked, there should be no Training Tab", () => {
+          it("Training Required is unchecked", () => {
+            cy.get(`[data-cy="field-retrain"] input[type=checkbox]`).should("not.be.checked");
+          });
+        });
+
+        context("'Fill in the fields and Release", () => {
+          it("Enters title", () => {
+            cy.drEnterDocumentTitle({ name: `POAM Document title` });
+          });
+
+          it("Enters description", () => {
+            cy.drEnterDocumentDescription({ description: "POAM Document Description" });
+          });
+
+          it("'Approve and Release' the document", () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          });
+
+          it("Check doc rev 1 released status", () => {
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+          });
         });
       });
     });
