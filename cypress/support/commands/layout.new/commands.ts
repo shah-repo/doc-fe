@@ -10,7 +10,6 @@ declare global {
       verifyTitleDescriptionFields(): Chainable;
       verifyDefaultFields(): Chainable;
       verifyDocumentHeaderDetails(): Chainable;
-      verifySelectedTab(params: {tab: string}): Chainable;
       verifyFixedTab(): Chainable;
       verifyApprovalsField(): Chainable;
       verifyFormOptionsVisibility(): Chainable;
@@ -52,10 +51,6 @@ Cypress.Commands.add("verifyDocumentHeaderDetails", () => {
   cy.get("span[data-cy=\"HeaderInfo-docId\"]").should("exist");
   cy.get("div[data-cy=\"HeaderInfo-Rev\"]").should("exist");
   cy.get("div[data-cy=\"HeaderInfo-status\"]").should("exist");
-});
-
-Cypress.Commands.add("verifySelectedTab", (params: {tab: string}) => {
-  cy.get(`[data-cy="tabId.${params.tab}"]`).parent().parent().should("have.class", "Mui-selected");
 });
 
 Cypress.Commands.add("verifyFixedTab", () => {
