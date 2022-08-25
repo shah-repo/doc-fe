@@ -381,7 +381,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             )}
           </>
         ) : (
-         <Grid item xs={12}>
+          <Grid item xs={12}>
             <AttachmentsField
               isDisabled={isDisabledInput}
               isNewVersion={false}
