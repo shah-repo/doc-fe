@@ -1,0 +1,152 @@
+[
+  {
+      "name": "test name",
+      "type": "select",
+      "index": 0,
+      "Testing": "TestingNewKey",
+      "label": "PO Status",
+      "tabId": "details",
+      "options": [
+          {
+              "text": "Open",
+              "value": "Open"
+          },
+          {
+              "text": "Closed",
+              "value": "Closed"
+          },
+          {
+              "text": "Cancelled",
+              "value": "Cancelled"
+          }
+      ],
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": true,
+      "validationAttribute": "PO Status",
+      "deleteInFormDisabled": true,
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "po-general-information-to-be-completed-by-requester-section",
+      "type": "section",
+      "index": 1,
+      "label": "General Information",
+      "tabId": "details",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ]
+  },
+  {
+      "name": "po-requestor-autocomplete",
+      "type": "autocomplete",
+      "index": 2,
+      "label": "Requestor",
+      "rules": "required",
+      "tabId": "details",
+      "hidden": false,
+      "deleted": false,
+      "optionId": "3",
+      "optionPath": "/change_requests/available_approvers",
+      "placeholder": "[Select requestor here]",
+      "rulesObject": {},
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": false,
+      "optionLabelKey": "user.email",
+      "optionValueKey": "id",
+      "outputDisabled": false,
+      "validationMode": "default",
+      "formValuesRules": {},
+      "editorProperties": [
+          "deleteDisabled"
+      ],
+      "validationAttribute": "Requestor",
+      "deleteInFormDisabled": true,
+      "sampleItemsIndicator": {
+          "id": "",
+          "enabled": false,
+          "serialNumber": 0,
+          "sampleSection": false
+      },
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "po-supplier-built-in",
+      "type": "supplier",
+      "index": 3,
+      "label": "Supplier ",
+      "tabId": "details",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": true,
+      "validationAttribute": "Supplier",
+      "deleteInFormDisabled": true,
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "po-order-date",
+      "type": "datepicker",
+      "index": 4,
+      "label": "Order Date",
+      "rules": "required",
+      "tabId": "details",
+      "hidden": false,
+      "deleted": false,
+      "validators": {
+          "required": true
+      },
+      "rulesObject": {},
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": false,
+      "outputDisabled": false,
+      "validationMode": "default",
+      "formValuesRules": {},
+      "editorProperties": [
+          "deleteDisabled"
+      ],
+      "validationAttribute": "Order Date",
+      "deleteInFormDisabled": true,
+      "sampleItemsIndicator": {
+          "id": "",
+          "enabled": false,
+          "serialNumber": 0,
+          "sampleSection": false
+      },
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "po-items-built-in",
+      "type": "purchaseorder",
+      "index": 5,
+      "label": "Purchase Order",
+      "tabId": "lineitems",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": true,
+      "validationAttribute": "Purchase Order",
+      "deleteInFormDisabled": true,
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "po-items-built-in-summary",
+      "type": "purchaseordersummary",
+      "index": 6,
+      "label": "Purchase Order Summary",
+      "tabId": "details",
+      "lineItem": "po-items-built-in",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": true,
+      "validationAttribute": "Purchase Order Summary",
+      "deleteInFormDisabled": true,
+      "applicableValidationSchema": true
+  }
+]

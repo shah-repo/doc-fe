@@ -24,6 +24,8 @@ declare global {
       dtmAddAcronym(params: { acronym: string }): Chainable;
       dtmAddStartingNumber(params: { startingNumber: string }): Chainable;
       dtmAddCategory(params: { category: string }): Chainable;
+      dtmEditSchema(params: { index: number }): Chainable;
+      dtmUpdateTextField(params: { FilePath: string }): Chainable;
       filterDocTypeManagement(params: {status: string; documentType: string; acronym: string;
         privateNumber: string; redline: string; qms: string; needsSignature: string; training: string;
         startingNumber: string; revisionStage: string; usersWithoutTags?: string; group: string;
@@ -34,6 +36,22 @@ declare global {
 
 Cypress.Commands.add("dtmClickAddDocumentType", () => {
   cy.get("button").contains("Add Document Type").arrowClick();
+});
+
+Cypress.Commands.add("dtmUpdateTextField", (params: { FilePath: string }) => {
+  cy.fixture(params.FilePath).then((text)  => {
+    cy.get("textarea").eq(0).clear().arrowType(text, {
+      parseSpecialCharSequences: false,
+      delay: 1,
+    }).wait(2000);
+  });
+});
+
+Cypress.Commands.add("dtmEditSchema", (params: { index: number }) => {
+  cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span")
+    .eq(params.index).scrollIntoView().arrowClick().wait(1000);
+  cy.get("[data-grid-row-index='0']>td[data-grid-col-index='14']>span")
+    .eq(params.index).scrollIntoView().arrowClick().wait(1000);
 });
 
 Cypress.Commands.add("dtmSelectPrivateNumber", () => {
