@@ -261,7 +261,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Save the EB", () => {
@@ -341,7 +341,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Save the EB", () => {
@@ -382,11 +382,7 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () =>  {
       it("Save EB", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Submit for Approval", () => {
@@ -433,7 +429,7 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () => {
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for Approval", () => {

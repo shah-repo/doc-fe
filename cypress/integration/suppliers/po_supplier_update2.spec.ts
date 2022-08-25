@@ -518,6 +518,10 @@ context("DAM approvals in LHR", () => {
     });
 
     context("Create Purchase Order document and verify supplier", () => {
+      it("Turn on autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
+
       it("Create new document from form", () => {
         cy.drCreateNewDocumentFromForm();
       });
@@ -565,7 +569,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
 
@@ -609,10 +613,6 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Update Supplier name", () => {
         cy.drClickReviseDocument();
         cy.drEnterDocumentTitle({ name: "1" });
@@ -634,7 +634,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click Save button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Release supplier", () => {
