@@ -26,6 +26,7 @@ declare global {
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
       ebWithdrawSubmisison(): Chainable<Subject>;
+      ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
     }
   }
 }
@@ -61,7 +62,7 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
 Cypress.Commands.add("ebClickClone", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
+    cy.get("[data-cy=\"CloneEBButton\"]").arrowClick({ force: true });
     cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
@@ -98,7 +99,7 @@ Cypress.Commands.add("ebCloneClickContinue", () => {
 });
 
 Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: string; name: string }) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick({ force: true });
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.value);
@@ -160,6 +161,15 @@ Cypress.Commands.add("ebWithdrawSubmisison", () => {
     cy.get("#AlertDialog-continueButton").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+  });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

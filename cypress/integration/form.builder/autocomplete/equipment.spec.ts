@@ -11,7 +11,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocDraftDayMonth, pdfDocDraftyear, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -1089,7 +1089,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
     });
 
     it("Autocomplete-Approvers", () => {
@@ -1110,12 +1110,12 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it(`Select '${USERS[2].name}' for Coordinator`, () => {
-      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
+      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
-      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Select 'Preventative Maintenance form' for preventative maintenance required", () => {
@@ -1138,11 +1138,11 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Select 'Calibration form' for calibration required", () => {
-      cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick();
+      cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
       cy.unClick();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
@@ -2132,10 +2132,10 @@ context("Autocomplete 'Equipment' test", () => {
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
         expect(el).match(/History/);
-        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| `, "gi" );
+        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocDraftDayMonth},\n${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
+        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftDayMonth},\n${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
@@ -2159,8 +2159,6 @@ context("Autocomplete 'Equipment' test", () => {
 
         tmpRegex = new RegExp( `Calibration Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).not.match(/Select field/);
 
         expect(el).match(/Released/);
 
