@@ -9,7 +9,9 @@ let loginResponse;
 let adminEmployee;
 const owner = USERS[1].name;
 const userOne = USERS[2].name;
+const userTwo = USERS[3].name;
 const groupOne = "Developers";
+const groupTwo = "Company Admin";
 
 const tablePOAM = [
   ["Level 1", 5000, "Everyone"],
@@ -651,9 +653,6 @@ context("DAM and POAM", () => {
       });
 
       context("Verify that Matrix Details tab contain", () => {
-        // Not Present
-        // FB control for PO Approval Matrix - PO approval matrix for New companies (NCO) will
-        // be added as predefined schema
         it("Verify that Form Options should appear for this tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
           cy.verifyFormOptionsVisibility();
@@ -912,6 +911,209 @@ context("DAM and POAM", () => {
 
           it("Check doc rev 1 released status", () => {
             cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+          });
+        });
+      });
+    });
+
+    context("Scenario 12d - Existing POAM", () => {
+      context("Navigate to Document landing page and Open POAM state released", () => {
+        it("Navigate to document list landing page", () => {
+          cy.navigToDocumentList();
+        });
+
+        it("Filter document by name and status, and select it", () => {
+          cy.drFilterDocListByNameAndStatus({ title: "POAM Document title", status: "Released" });
+        });
+
+        it("Verify that POAM contains Overview and Matrix Details tab", () => {
+          cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+          cy.get("[data-cy=\"tabId.matrixdetails\"]").should("exist");
+        });
+      });
+
+      context("Verify POAM opens to the Overview tab by default ", () => {
+        it("Verify Overview as default selected tab", () => {
+          cy.verifySelectedTab({ tab: "overview" });
+        });
+
+        xit("Verify Training required exist", () => {
+          cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        });
+
+        xit("Verify Attachments exist", () => {
+          cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+        });
+
+        it("Verify that Form Options should not appear for Overview tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("not.exist");
+        });
+      });
+
+      context("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
+        it("Navigate to Matrix Details Tab", () => {
+          cy.drSelectMatrixDetailsTab();
+          cy.verifySelectedTab({ tab: "matrixdetails" });
+        });
+      });
+
+      context("Verify that Matrix Details tab contain", () => {
+        it("Verify that Form Options should appear for this tab", () => {
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
+        });
+      });
+
+      context("Verify that right side panel opens by default to the References tab", () => {
+        it("Verify that right side panel opens by default to the References tab", () => {
+          cy.get("[data-cy=\"References\"]").should("exist");
+          cy.get("[data-cy=\"generalInfo\"]").should("be.visible");
+        });
+
+        it("Verify Right side panel Can be expanded or collapsed", () => {
+          cy.verifyExpandCollpase();
+        });
+
+        it("Verify References tab is fixed as the user scrolls up or down", () => {
+          cy.get("[data-cy=\"References\"]").scrollIntoView({ ensureScrollable: false });
+        });
+      });
+
+      context("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+        it("Verify there is no ADD A FIELD button", () => {
+          cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
+        });
+
+        it("Verify there is no EDIT A FIELD button", () => {
+          cy.get("button[data-cy=\"edit-schema-item\"]").should("not.exist");
+        });
+      });
+
+      context("Verify that user should not be able to rearrange the order of the Tabs", () => {
+        it("should not be able to rearrange the order of the Tabs", () => {
+          cy.verifyFixedTab();
+        });
+      });
+
+      context("Verify that Matrix Details tab contain", () => {
+        it("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
+          cy.drSelectMatrixDetailsTab();
+          cy.verifySelectedTab({ tab: "matrixdetails" });
+        });
+
+        it(`Verify PO Approval Matrix and table header contains: Level Name, Limit, Signature 1, 
+        Signature 2 and Signature 3`, () => {
+          cy.contains("Purchase Order Approval Matrix").should("exist");
+          cy.get("table").contains("th", "Level Name");
+          cy.get("table").contains("th", "Limit");
+          cy.get("table").contains("th", "Signature 1");
+          cy.get("table").contains("th", "Signature 2");
+          cy.get("table").contains("th", "Signature 3");
+        });
+
+        it(" Verify that data is save in table", () => {
+          cy.get("tbody tr").each(($row, rowIndex) => {
+            cy.wrap($row)
+              .find("td")
+              .each(($cell, cellIndex) => {
+                if ($cell.text()) {
+                  cy.wrap($cell).should("have.text", tablePOAM[rowIndex][cellIndex]);
+                }
+              });
+          });
+        });
+
+        it("Verify that Form Options should appear for this tab", () => {
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
+        });
+      });
+
+      context("Verify Right side panel", () => {
+        it("Verify that right side panel opens by default to the References tab", () => {
+          cy.verifyReferencesTabAsActive();
+        });
+
+        it("Verify Right side panel Can be expanded or collapsed", () => {
+          cy.verifyExpandCollpase();
+        });
+
+        it("Verify References tab is fixed as the user scrolls up or down", () => {
+          cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
+        });
+
+        context("Verify References tab", () => {
+          it("Verify References tab General Info", () => {
+            cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
+          });
+
+          it("Verify Referenced By, Training, Release Date and Form Info", () => {
+            cy.verifyReferencesOtherInfo();
+          });
+        });
+
+        context("Verify Revisions tab", () => {
+          it("Open revisions tab, click and verify current revision", () => {
+            cy.openRevisionsTabAndVerifyCurrentRevision("1");
+          });
+        });
+
+        context("Verify Access Permissions tab", () => {
+          it("Open access permissions tab", () => {
+            cy.drSelectPermissionTab();
+          });
+
+          it("Verify Selected Users", () => {
+            cy.get("[data-cy=\"Selected-Users\"]").contains(userOne);
+          });
+
+          it("Verify Selected Groups", () => {
+            cy.get("[data-cy=\"Selected-Groups\"]").contains(groupOne);
+          });
+
+          it("Add another user permission", () => {
+            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+              cy.drAddUserFromPermissionTab(userTwo);
+            });
+          });
+
+          it("Add another group permission", () => {
+            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+              cy.drAddGroupFromPermissionTab(groupTwo);
+            });
+          });
+        });
+
+        context("Verify History tab", () => {
+          const history = [
+            {
+              owner,
+              actions: [{ key: "Access granted to group", value: groupTwo }],
+            },
+            {
+              owner,
+              actions: [{ key: "Access granted to user", value: userTwo }],
+            },
+          ];
+
+          it("Open history tab and verify changes are being captured", () => {
+            cy.drSelectHistoryTab();
+            cy.get(`[data-cy="History-detail"]`).should("be.visible");
+          });
+          verifyHistoryContent(history, groupTwo);
+        });
+
+        context("Verify Bookmarks tab", () => {
+          it("Open bookmarks tab", () => {
+            cy.drSelectBookmarksTab();
+            cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
+          });
+        });
+
+        context("Verify Revision History tab", () => {
+          it("Open revision history tab", () => {
+            cy.drSelectRevisionHistoryTab();
+            cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
           });
         });
       });
