@@ -115,11 +115,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case "approvals.approver":
         returnValue = (audit.nextValue as Employee).user?.name;
         break;
-      case "childrenParts":
-        // eslint-disable-next-line no-case-declarations
-        const { name, displayRevision, document } = audit.nextValue as DocumentRevision;
-        returnValue = `${document.docId} - rev ${displayRevision} - ${name}`;
-        break;
       case "tasks.assigned":
       case "owner":
       case "operators":
@@ -189,6 +184,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case "s3link":
         returnValue = <AuditDownloadS3link s3link={audit.nextValue as string}/>;
         break;
+      case "childrenParts":
       case "formDocument": {
         const { name, displayRevision, document } = audit.nextValue as DocumentRevision;
         returnValue = (<div data-cy={dataCy}>{`${document.docId} - revision ${displayRevision} - ${name}`}</div>);
