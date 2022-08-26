@@ -256,59 +256,6 @@ context("Records flow", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
-      it("Verify Add Field section", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbVerifySectionsOnAddField("Section", "Inputs", "Approvals", "Custom Controls",
-          "Instructions", "Buttons", "Actions");
-        cy.fbCheckFieldsExistSectionList("Section", "Subsection", "Step");
-        cy.fbCheckFieldsExistInputsList("Text field", "Checkbox group", "Autocomplete", "Text Editor",
-          "Date picker", "Hyperlink", "Select", "Radio Button group", "Paragraph", "File Upload",
-          "Blank Template Form", "Quantity", "Timer", "Purchase Order", "Receive Purchase Order",
-          "PO Approval Matrix", "Instructions Media upload", "Evidence Media upload", "EB Procedure",
-          "PI Procedure", "Equipment", "Text field with range", "Supplier");
-        // cy.fbCheckFieldsDoesntExistOnInputsList("LHR Step");
-        cy.fbCheckFieldsExistApprovalsList("Approvals", "Inline Approval", "Request Approval");
-        // cy.fbCheckFieldsExistCustomControlsList("Dynamic form");
-        cy.fbCheckFieldsExistInstructionsList("MPI", "Select Document(s)");
-        cy.fbCheckFieldsExistButtonsList("Checkpoint", "Create a Label", "Implementation Task");
-        cy.fbCheckFieldsExistActionsList("Action Button");
-        cy.contains("Form Builder Library").parent().find("button").arrowClick({ force: true });
-      });
-
-      it("Verify Search Field for `text`", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.get(`input[placeholder^="Search"]`).clear().arrowType("text").arrowClick();
-        cy.unClick();
-        cy.get(`[data-cy="Text field"]`).should("exist");
-        cy.get(`[data-cy="Text Editor"]`).should("exist");
-        cy.get(`[data-cy="Text field with range"]`).should("exist");
-      });
-
-      it("Verify Search Field for `upload`", () => {
-        cy.get(`input[placeholder^="Search"]`).clear().arrowType("upload").arrowClick();
-        cy.unClick();
-        cy.get(`[data-cy="File Upload"]`).should("exist");
-        cy.get(`[data-cy="Instructions Media upload"]`).should("exist");
-        cy.get(`[data-cy="Evidence Media upload"]`).should("exist");
-      });
-
-      it("Verify Search Field for `inline`", () => {
-        cy.get(`input[placeholder^="Search"]`).clear().arrowType("inline").arrowClick();
-        cy.unClick();
-        cy.get(`[data-cy="Inline Approval"]`).should("exist");
-        cy.get(`[data-cy="Inline Approval"]`).parent()
-          .find(`[class="MuiButtonBase-root MuiIconButton-root"]`).eq(0).click();
-        /* cy.get(`[data-cy="Inline Approval"]`).parent()
-          .find(`[class="MuiButtonBase-root MuiIconButton-root"]`)
-          .eq(0).should("have.css", "color", "rgb(252, 222, 222)"); */
-        cy.get(`input[placeholder^="Search"]`).clear();
-        cy.fbVerifySectionsOnAddField("Favorites");
-        cy.fbCheckFieldsExistFavoritesList("Inline Approval");
-        cy.get(`[data-cy="Inline Approval"]`).parent()
-          .find(`[class="MuiButtonBase-root MuiIconButton-root"]`).eq(0).click();
-        cy.fbVerifySectionsNotOnAddField("Favorites");
-      });
-
       it("Add Checkbox group", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
