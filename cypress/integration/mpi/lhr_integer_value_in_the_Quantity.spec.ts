@@ -75,6 +75,7 @@ context("LHR steps verification", () => {
           LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record");
           CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+
           done();
         });
       });
