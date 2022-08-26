@@ -117,6 +117,10 @@ Cypress.Commands.add("dtmClearFilters", () => {
   cy.landingPageLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("dtmCloseDialogButton", () => {
+  cy.get("#DialogContent-close").arrowClick();
+});
+
 Cypress.Commands.add("filterDocTypeManagement", (params: {status: string; documentType: string; acronym: string;
   privateNumber: string; redline: string; qms: string; needsSignature: string; training: string;
   startingNumber: string; revisionStage: string; usersWithoutTags?: string; group: string;
