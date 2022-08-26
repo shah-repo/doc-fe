@@ -335,9 +335,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       });
 
       it("Save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -483,13 +481,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
-          });
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -530,7 +523,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -793,13 +786,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document (revised EFM-10605)");
-          });
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document (revised EFM-10605)");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -840,7 +828,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
 

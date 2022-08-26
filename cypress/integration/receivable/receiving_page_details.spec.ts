@@ -2131,6 +2131,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Search for API PO document and select it", () => {
+      cy.drSelectDetailsTab();
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.DocRevPreview], () => {
           cy.get("input[data-cy^=\"porec-rece\"]").click().focused().autocompleteSelect("New Purchase Order");

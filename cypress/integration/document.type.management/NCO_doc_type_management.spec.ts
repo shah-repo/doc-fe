@@ -240,7 +240,7 @@ context("NCO document type management", () => {
     });
 
     it("Cancel newly created document creation", () => {
-      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick({ force: true });
     });
 
     it("Check filters for document type management", () => {
@@ -381,7 +381,7 @@ context("NCO document type management", () => {
   context("Delete newly added Doc type", () => {
     it("Click on delete Doc Type", () => {
       cy.wait(1500);
-      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick({ force: true });
     });
 
     it("Confirm deleted Doc Type is no longer in the list", () => {
