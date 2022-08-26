@@ -7,7 +7,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -53,6 +53,7 @@ interface Props
   mode: FBWorkspaceMode;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  isPreview?: boolean;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -77,6 +78,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   mode,
   doNotPrompt,
   onDirtyFlagChange,
+  isPreview,
 }) => {
   useScrollIntoView();
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
@@ -97,7 +99,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isCurrentUserOperator = React.useContext(isOperator);
   const groupOptions = documentRevision?.document.documentType.groupOptions;
-  const group = documentRevision?.document.documentType.group;
   // MARK: @helpers
   const isDocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
@@ -114,7 +115,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabled: boolean = initialValues.id !== undefined;
-  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isDisabledInput = isPreview || (values.id !== undefined && isCurrentUserOperator && !isOwner);
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
@@ -205,10 +206,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     FBWorkspaceModeOptions.FORMDESIGN,
   ].includes(_formState?.mode as FBWorkspaceModeOptions) || isEB);
 
-  const isAttachmentRequired = _documentRevisionFormState?.documentRevision?.id
-    || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(documentTypeById?.group as DOC_TYPE_GROUP);
-  const isAttachmentForOther = [DOC_TYPE_GROUP.OTHER].includes(group as DOC_TYPE_GROUP);
-
   const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
     i?.label?.includes("Purchase Order")) : [false];
 
@@ -262,6 +259,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               <>
                 {_documentRevisionFormState?.forceRender &&
                 <RevisionStage {...{
+                  isPreview,
                   isDisabled,
                   isDocRevFirstDraft,
                   shouldShowRevStageForDocType,
@@ -270,6 +268,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 }}/>}
                 {!_documentRevisionFormState?.forceRender &&
                 <RevisionStage {...{
+                  isPreview,
                   isDisabled,
                   isDocRevFirstDraft,
                   shouldShowRevStageForDocType,
@@ -339,12 +338,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {(!values.status || type === "newOutput") && (
           <Grid item xs={12}>
-            <DocumentSecurity documentTypeId={documentTypeId} />
+            <DocumentSecurity documentTypeId={documentTypeId} isDisabled={isPreview} />
           </Grid>
         )}
         {showOutputSection ? (
           <>
-            {isAttachmentRequired && (isPO || includes(outputDocumentTypeName, true)
+            {(isPO || includes(outputDocumentTypeName, true)
               ? _tabsState?.tabID !== "details" && (
               <Grid item xs={12}>
                 <AttachmentsField
@@ -386,7 +385,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             )}
           </>
         ) : (
-          isAttachmentForOther && <Grid item xs={12}>
+          <Grid item xs={12}>
             <AttachmentsField
               isDisabled={isDisabledInput}
               isNewVersion={false}

@@ -8,9 +8,10 @@ import { useAssignOperatorsToDocument } from "../../../hooks/docCustomization/us
 
 interface Props {
   documentTypeId: string;
+  isDisabled?: boolean;
 }
 
-const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId }) => {
+const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId, isDisabled }) => {
   const availableApprovers = useSelector((state: ApplicationState) => {
     const currentUserId = authSelectors.currentUserId(state);
     return changeRequestsSelectors.getApproversListWithoutCurrentUser(
@@ -34,6 +35,7 @@ const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId }) => {
         closeMenuOnSelect: false,
       }}
       options={availableApprovers}
+      isDisabled={isDisabled}
     />
   );
 };
