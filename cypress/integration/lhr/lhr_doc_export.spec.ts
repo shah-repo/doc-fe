@@ -47,7 +47,7 @@ let fileId;
 
 const exportPdfVerification = (stepInfo) => {
 
-  context(`Verify paper LHR form in ${STATUS_TYPES_LABEL.DRAFT} state`, () => {
+  context(`Verify paper LHR  in ${STATUS_TYPES_LABEL.DRAFT} state`, () => {
     it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
       cy.sendToEmail();
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
@@ -98,7 +98,6 @@ const exportPdfVerification = (stepInfo) => {
     it("Download zip file containing Approval request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      // LHR-00001-A-API-LHR-document
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
@@ -150,7 +149,7 @@ const exportPdfVerification = (stepInfo) => {
       });
     });
 
-    it("Verify page 1 for paper LHR form", () => {
+    it("Verify Step Info from exported Pdf", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new RegExp( `LHR STEP #1\n${stepInfo}`, "gi" );
