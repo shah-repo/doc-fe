@@ -23,11 +23,14 @@ const RedlineBanner: React.FunctionComponent = () => {
   return (
     <>
       <Box
-        bgcolor="secondary.main"
+        bgcolor={Colors.latest_red_varient}
         color={Colors.white}
         fontWeight="bold"
-        padding="10px"
+        padding={1}
+        margin="10px"
+        mt={0}
         display="flex"
+        borderRadius={6}
         justifyContent="center"
       >
         <Text translation="common.redline.message" />
