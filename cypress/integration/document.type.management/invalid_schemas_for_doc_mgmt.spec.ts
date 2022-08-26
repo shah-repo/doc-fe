@@ -134,7 +134,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "section => 0 => name should not be null or undefined; section => 0 => name must be a string",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -153,22 +155,15 @@ context("document type management error validations", () => {
         cy.wait(1000);
       });
 
-      it("Click on edit button", () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-        cy.wait(1000);
-      });
-
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
 
     context("Check validation after removing value", () => {
-      it("Click on edit", () => {
-        cy.dtmEditSchema({ index: 0 });
-      });
-
       it("Update Text field", () => {
         cy.dtmUpdateTextField({ FilePath: "invalid_schemas/approve_request/schema3.txt" });
       });
@@ -179,7 +174,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -195,7 +192,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
 
@@ -232,7 +231,10 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "autocomplete => 0 => name should not be null or undefined; " +
+           "autocomplete => 0 => name must be a string",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -251,22 +253,15 @@ context("document type management error validations", () => {
         cy.wait(1000);
       });
 
-      it("Click on edit button", () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-        cy.wait(1000);
-      });
-
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
 
     context("Check validation after removing value", () => {
-      it("Click on edit", () => {
-        cy.dtmEditSchema({ index: 0 });
-      });
-
       it("Update Text field", () => {
         cy.dtmUpdateTextField({ FilePath: "invalid_schemas/bulk_import/schema3.txt" });
       });
@@ -277,7 +272,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -293,7 +290,10 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
+        cy.closeAllAlertMessages();
         cy.closeAllAlertMessages();
       });
 
@@ -305,7 +305,6 @@ context("document type management error validations", () => {
   });
 
   context("Error Validation for Calibration", () => {
-
     it("Filter Document Type", () => {
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("Calibration").wait(1000);
       cy.listLoadingElementShouldNotExist();
@@ -331,7 +330,10 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "textfield => 0 => name should not be null or undefined; " +
+          "textfield => 0 => name must be a string",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -350,22 +352,15 @@ context("document type management error validations", () => {
         cy.wait(1000);
       });
 
-      it("Click on edit button", () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-        cy.wait(1000);
-      });
-
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
 
     context("Check validation after removing value", () => {
-      it("Click on edit", () => {
-        cy.dtmEditSchema({ index: 0 });
-      });
-
       it("Update Text field", () => {
         cy.dtmUpdateTextField({ FilePath: "invalid_schemas/calibration/schema3.txt" });
       });
@@ -376,7 +371,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -392,7 +389,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
 
@@ -429,7 +428,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageContains({
+          message: `An instance of SchemaItems has failed the validation`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -448,22 +449,15 @@ context("document type management error validations", () => {
         cy.wait(1000);
       });
 
-      it("Click on edit button", () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-        cy.wait(1000);
-      });
-
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
 
     context("Check validation after removing value", () => {
-      it("Click on edit", () => {
-        cy.dtmEditSchema({ index: 0 });
-      });
-
       it("Update Text field", () => {
         cy.dtmUpdateTextField({ FilePath: "invalid_schemas/one_time_training/schema3.txt" });
       });
@@ -474,7 +468,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -490,7 +486,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -511,7 +509,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Found duplicate index '1'.",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -543,7 +543,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageContains({
+          message: `An instance of SchemaItems has failed the validation`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -562,22 +564,15 @@ context("document type management error validations", () => {
         cy.wait(1000);
       });
 
-      it("Click on edit button", () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-        cy.wait(1000);
-      });
-
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
 
     context("Check validation after removing value", () => {
-      it("Click on edit", () => {
-        cy.dtmEditSchema({ index: 0 });
-      });
-
       it("Update Text field", () => {
         cy.dtmUpdateTextField({ FilePath: "invalid_schemas/lot/schema3.txt" });
       });
@@ -588,7 +583,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -604,7 +601,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: "Please Enter Valid Schema",
+        });
         cy.closeAllAlertMessages();
       });
 
@@ -641,7 +640,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageContains({
+          message: `An instance of SchemaItems has failed the validation`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -673,7 +674,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageContains({
+          message: `An instance of SchemaItems has failed the validation`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -705,7 +708,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageContains({
+          message: `each value in editorProperties must be one of the following values:`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -737,7 +742,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageContains({
+          message: `select => 0 => property Testing should not exist`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -769,7 +776,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageContains({
+          message: `textfield => 0 => property Testing should not exist`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -801,7 +810,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: `quantity => 0 => property Testing should not exist`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -813,7 +824,7 @@ context("document type management error validations", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    context("Check validation after removing key and value pair", () => {
+    context("Check validation after adding  key and value pair", () => {
       it("Click on edit", () => {
         cy.dtmEditSchema({ index: 0 });
       });
@@ -833,7 +844,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: `radiogroup => 0 => property placeholder should not exist`,
+        });
         cy.closeAllAlertMessages();
       });
     });
@@ -865,7 +878,9 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({
+          message: `quantity => 0 => property placeholder should not exist`,
+        });
         cy.closeAllAlertMessages();
       });
     });

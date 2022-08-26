@@ -1,6 +1,6 @@
 [
   {
-      "": "fb-requipment-maintenance-section",
+      : "fb-requipment-maintenance-section",
       "type": "textfield",
       "index": 4,
       "label": "Equipment Maintenance Section",

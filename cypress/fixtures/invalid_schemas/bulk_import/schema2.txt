@@ -1,6 +1,6 @@
 [
     {
-        "": "fb-form-document-to-be-used",
+        : "fb-form-document-to-be-used",
         "type": "autocomplete",
         "index": 0,
         "label": "Select Form Document For Import",

@@ -15,7 +15,7 @@
   },
   {
       "name": "training-document-to-be-trained-on",
-      "": "autocomplete",
+      : "autocomplete",
       "index": 1,
       "label": "Documents to Train on",
       "rules": "|required",

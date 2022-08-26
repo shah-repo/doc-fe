@@ -31,7 +31,7 @@
     },
     {
         "name": "lot_expiry_date",
-        "": "datepicker",
+        : "datepicker",
         "index": 2,
         "label": "Expiration Date",
         "tabId": "details",

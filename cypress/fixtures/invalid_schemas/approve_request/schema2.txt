@@ -1,6 +1,6 @@
 [
     {
-        "": "change-request-details",
+        : "change-request-details",
         "type": "section",
         "index": 0,
         "label": "Approval Request Details",
