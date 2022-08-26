@@ -74,11 +74,11 @@ context(
           });
 
           it("Verify 'Title' field is visible", () => {
-            cy.get("[data-cy=\"field-name\"]").should("exist");
+            cy.intPageVerifyTitleExist();
           });
 
           it("Verify 'Description' field is visible", () => {
-            cy.get("[data-cy=\"description\"]").should("exist");
+            cy.intPageVerifyDescriptionExist();
           });
 
           it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -101,29 +101,28 @@ context(
           });
 
           it("Verify 'Selected Users' field is visible", () => {
-            cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+            cy.intPageVerifySelectedUsersExist();
           });
 
           it("Verify 'Selected Groups' field is visible", () => {
-            cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+            cy.intPageVerifySelectedGroupsExist();
           });
 
           it("Verify Attachments and Output document type are not displayed", () => {
             cy.get("[data-cy=\"albumMediaButton\"]").should("not.exist");
-            cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("not.exist");
+            cy.intPageVerifyOutputDocTypeNotExist();
           });
 
           it("Verify no predefined fields are displayed", () => {
-            cy.get("[data-cy=\"field-securityGroups\"]").last().should("exist");
+            cy.intPageVerifySelectedGroupsExist();
           });
 
           it("Verify there is no ADD A FIELD button", () => {
-            cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
+            cy.intPageVerifyAddFieldNotExist();
           });
 
           it("Verify there are no options nor icons for Import and Export of the form JSON", () => {
-            cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
-            cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
+            cy.intPageVerifyFormOptionsNotExist();
           });
         }
       );
@@ -156,7 +155,7 @@ context(
             description: "This is description test to check length. Checking length of characters and lines.",
           });
           cy.unClick();
-          cy.get("[data-cy=\"description\"] button").should("not.exist");
+          cy.intPageVerifyDescriptionViewMoreNotExist();
           cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
         });
 
@@ -168,7 +167,7 @@ context(
               "{moveToEnd}{enter}This is description test to check length. Checking length of characters and lines."
             );
           cy.unClick();
-          cy.get("[data-cy=\"description\"] button").should("not.exist");
+          cy.intPageVerifyDescriptionViewMoreNotExist();
           cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
         });
 
@@ -178,7 +177,7 @@ context(
             .first()
             .arrowType("{moveToEnd}{enter}This is description test to check length.");
           cy.unClick();
-          cy.get("[data-cy=\"description\"] button").should("exist");
+          cy.intPageVerifyDescriptionViewMoreExist();
           cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
         });
 
@@ -229,7 +228,7 @@ context(
         });
 
         it("Verify there is ADD A FIELD button should not display", () => {
-          cy.get("button[data-cy=\"form.builder.add.field\"]").should("not.exist");
+          cy.intPageVerifyAddFieldNotExist();
         });
 
         it("Verify center bottom should not display: eye, import and export icons", () => {
