@@ -25,7 +25,7 @@ context("Intermediate page validation", () => {
     cy.saveLocalStorage();
   });
 
-  xcontext("[API]Prepare company", () => {
+  context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -58,22 +58,9 @@ context("Intermediate page validation", () => {
     });
   });
 
-  xcontext("Login company admin", () => {
+  context("Login company admin", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-  });
-
-  // just for testing purpose
-  context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: "Orange Hyatt Group 3660", multiple: true });
     });
   });
 
@@ -104,15 +91,15 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Title' field is displayed", () => {
-      cy.get("[data-cy=\"field-name\"]").should("exist");
+      cy.intPageVerifyTitleExist();
     });
 
     it("Verify 'Description' field is displayed", () => {
-      cy.get("[data-cy=\"description\"]").should("exist");
+      cy.intPageVerifyDescriptionExist();
     });
 
     it("Verify 'Document Type' field is displayed", () => {
-      cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+      cy.intPageVerifyDocTypeExist();
     });
 
     it("Verify 'Document Id' field is displayed", () => {
@@ -127,11 +114,11 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Revision Stage' field is displayed", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+      cy.intPageVerifyRevisionStageExist();
     });
 
     it("Verify 'Training required' field is displayed", () => {
-      cy.get("[data-cy=\"field-retrain\"]").should("exist");
+      cy.intPageVerifyTrainingRequiredExist();
     });
 
     it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -142,11 +129,11 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Selected Users' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+      cy.intPageVerifySelectedUsersExist();
     });
 
     it("Verify 'Selected Groups' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+      cy.intPageVerifySelectedGroupsExist();
     });
   });
 
@@ -279,16 +266,7 @@ context("Intermediate page validation", () => {
       cy.unClick();
     });
 
-    // it("Verify Description for Underline", () => {
-    //   cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
-    //   cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Underline\"]").arrowClick().wait(2000);
-    //   cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
-    //   cy.get("[data-cy=\"description\"]").contains("I am here")
-    //     .should("have.css", "text-decoration", "underline");
-    //   cy.unClick();
-
-    // // this is failing: Underline, Strikethrough other are unable to add
-    // });
+    // TODO: remaining options to be added
 
     it("Verify Description for Monospace", () => {
       cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
@@ -304,7 +282,7 @@ context("Intermediate page validation", () => {
       // eslint-disable-next-line max-len
       cy.drEnterDocumentDescription({ description: "This is description test to check length. Checking length of characters and lines." });
       cy.unClick().wait(3000);
-      cy.get("[data-cy=\"description\"] button").should("not.exist");
+      cy.intPageVerifyDescriptionViewMoreNotExist();
       cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
     });
 
@@ -314,7 +292,7 @@ context("Intermediate page validation", () => {
         // eslint-disable-next-line max-len
         .arrowType("{moveToEnd}{enter}This is description test to check length. Checking length of characters and lines.");
       cy.unClick().wait(3000);
-      cy.get("[data-cy=\"description\"] button").should("not.exist");
+      cy.intPageVerifyDescriptionViewMoreNotExist();
       cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
     });
 
@@ -323,7 +301,7 @@ context("Intermediate page validation", () => {
       cy.get(`[data-cy="description"] [contenteditable]`).first()
         .arrowType("{moveToEnd}{enter}This is description test to check length.");
       cy.unClick().wait(3000);
-      cy.get("[data-cy=\"description\"] button").should("exist");
+      cy.intPageVerifyDescriptionViewMoreExist();
       cy.get("[data-cy=\"description\"]").first().scrollIntoView({ ensureScrollable: false });
     });
 
@@ -337,29 +315,16 @@ context("Intermediate page validation", () => {
         .scrollIntoView({ ensureScrollable: false });
     });
 
-    // it("Verify scrolls down 'Create Document' button and 'Editor bar' is visible", () => {
-    //   cy.get("#sm-tabpanel-0").scrollTo("bottom");
-    //   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible");
-    //   cy.get(".rdw-editor-toolbar").should("be.visible");
-    //   cy.unClick();
-    // });
+    // TODO: scroll visibility to be added
   });
 
   context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
     it("Verify 'Add Field' button not displayed", () => {
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").should("not.exist");
+      cy.intPageVerifyAddFieldNotExist();
     });
 
-    it("Verify view option is not displayed", () => {
-      cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("not.exist");
-    });
-
-    it("check export option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
-    });
-
-    it("check import option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
+    it("Verify 'Form Options' are not displayed", () => {
+      cy.intPageVerifyFormOptionsNotExist();
     });
   });
 
@@ -373,16 +338,15 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify Document id is editable", () => {
-      cy.get("input[id='document.docId']").should("not.be.disabled");
+      cy.intPageVerifyDocIdIsEditable();
     });
 
     it("Verify 'Attachment' field is displayed", () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+      cy.intPageVerifyAttachmentExist();
     });
 
     it("Verify 'Preview Layout' button is disabled and grayed out", () => {
-      cy.contains("button", "Preview Layout").should("be.disabled")
-        .should("have.css", "background-color", "rgb(162, 162, 162)");
+      cy.intPageVerifyPreviewLayoutButtonDisabled();
     });
   });
 
@@ -401,64 +365,62 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Preview Layout' button gets colored", () => {
-      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
+      cy.intPageVerifyPreviewLayoutButtonEnabled();
     });
   });
 
   context("Verify predefined fields are not displayed", () => {
     it("Check 'PO Status' is not displayed", () => {
-      cy.get("[data-cy=\"PO Status\"]").should("not.exist");
+      cy.intPageVerifyPoStatusNotExist();
     });
 
     it("Check 'Requestor' is not displayed", () => {
-      cy.get("[data-cy=\"Requestor\"]").should("not.exist");
+      cy.intPageVerifyRequestorNotExist();
     });
 
     it("Check 'Supplier' is not displayed", () => {
-      cy.get("[data-cy=\"Supplier \"]").should("not.exist");
+      cy.intPageVerifySupplierNotExist();
     });
 
     it("Check 'Order Date' is not displayed", () => {
-      cy.get("[data-cy=\"Order Date\"]").should("not.exist");
+      cy.intPageVerifyOrderDateNotExist();
     });
 
     it("Check 'PO table' is not displayed", () => {
-      cy.get("[data-cy=\"common.summary.total\"]").should("not.exist");
+      cy.intPageVerifyPoTableNotExist();
     });
 
     it("Check 'Approvals' is not displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvers\"]").should("not.exist");
+      cy.intPageVerifyApproversNotExist();
     });
 
     it("Check 'Preview Layout' button gets colored", () => {
-      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
+      cy.intPageVerifyPreviewLayoutButtonEnabled();
     });
   });
 
   context("Click 'Preview Layout' button and verify predefined fields are displayed", () => {
     context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
-        cy.contains("Preview Layout").arrowClick();
-        cy.get(".MuiDialogContent-root").scrollTo("bottom");
+        cy.intPageClickPreviewLayout();
       });
 
       it("Verify 'Details' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.intPageVerifyDetailsTabExist();
       });
 
       it("Verify 'Line Items' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.lineitems\"]").should("exist");
+        cy.intPageVerifyLineItemsTabExist();
       });
     });
 
     context("verify default fields are displayed", () => {
       it("Verify Document type is displayed", () => {
-        cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+        cy.intPageVerifyDocTypeExist();
       });
 
       it("Verify Document id is editable", () => {
-        cy.get("input[id='document.docId']").should("exist")
-          .should("not.be.disabled");
+        cy.intPageVerifyDocIdIsEditable();
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -469,11 +431,11 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Revision Stage' field is displayed", () => {
-        cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+        cy.intPageVerifyRevisionStageExist();
       });
 
       it("Verify 'Training required' field is displayed", () => {
-        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        cy.intPageVerifyTrainingRequiredExist();
       });
 
       it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -484,41 +446,41 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Attachment' field is displayed", () => {
-        cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+        cy.intPageVerifyAttachmentExist();
       });
 
       it("Verify Output document type is displayed", () => {
-        cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+        cy.intPageVerifyOutputDocTypeExist();
       });
     });
 
     context("verify predefined fields are displayed", () => {
       it("Check 'PO Status' is displayed", () => {
-        cy.get("[data-cy=\"PO Status\"]").should("exist");
+        cy.intPageVerifyPoStatusExist();
       });
 
       it("Check 'Requestor' is displayed", () => {
-        cy.get("[data-cy=\"Requestor\"]").should("exist");
+        cy.intPageVerifyRequestorExist();
       });
 
       it("Check 'Supplier' is displayed", () => {
-        cy.get("[data-cy=\"Supplier \"]").should("exist");
+        cy.intPageVerifySupplierExist();
       });
 
       it("Check 'Order Date' is displayed", () => {
-        cy.get("[data-cy=\"Order Date\"]").should("exist");
+        cy.intPageVerifyOrderDateExist();
       });
 
       it("Check 'PO table' is displayed", () => {
-        cy.get("[data-cy=\"common.summary.total\"]").should("exist");
+        cy.intPageVerifyPoTableExist();
       });
 
       it("Check 'Approvals' is displayed", () => {
-        cy.get("[data-cy=\"form.builder.approvers\"]").should("exist");
+        cy.intPageVerifyApproversExist();
       });
 
       it("Close Preview dialog", () => {
-        cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+        cy.intPageClosePreviewDialog();
       });
     });
   });
@@ -529,57 +491,46 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'PO Status' is displayed", () => {
-      cy.get("[data-cy=\"PO Status\"]").should("exist");
+      cy.intPageVerifyPoStatusExist();
     });
 
     it("Check 'Requestor' is displayed", () => {
-      cy.get("[data-cy=\"Requestor\"]").should("exist");
+      cy.intPageVerifyRequestorExist();
     });
 
     it("Check 'Supplier' is displayed", () => {
-      cy.get("[data-cy=\"Supplier \"]").should("exist");
+      cy.intPageVerifySupplierExist();
     });
 
     it("Check 'Order Date' is displayed", () => {
-      cy.get("[data-cy=\"Order Date\"]").should("exist");
+      cy.intPageVerifyOrderDateExist();
     });
 
     it("Check 'PO table' is displayed", () => {
-      cy.get("[data-cy=\"common.summary.total\"]").should("exist");
+      cy.intPageVerifyPoTableExist();
     });
 
     it("Check 'Approvals' is displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvers\"]").should("exist");
+      cy.intPageVerifyApproversExist();
     });
   });
 
   context("Verify description", () => {
     it("Verify description is saved correctly", () => {
-      cy.get("[data-cy=\"description\"] button").should("exist");
+      cy.intPageVerifyDescriptionViewMoreExist();
     });
   });
 
   context("Verify form options and add field button is displayed in Details tab", () => {
     context("Check form options are displayed at center bottom", () => {
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
 
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        cy.intPageVerifyAddFieldExist();
       });
     });
   });

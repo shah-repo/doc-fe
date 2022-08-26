@@ -103,7 +103,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify Document id is editable", () => {
-      cy.get("input[id='document.docId']").should("not.be.disabled");
+      cy.intPageVerifyDocIdIsEditable();
     });
 
     it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -114,11 +114,11 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Revision Stage' field is displayed", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+      cy.intPageVerifyRevisionStageExist();
     });
 
     it("Verify 'Training required' field is displayed", () => {
-      cy.get("[data-cy=\"field-retrain\"]").should("exist");
+      cy.intPageVerifyTrainingRequiredExist();
     });
 
     it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -129,20 +129,19 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Selected Users' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+      cy.intPageVerifySelectedUsersExist();
     });
 
     it("Verify 'Selected Groups' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+      cy.intPageVerifySelectedGroupsExist();
     });
 
     it("Verify 'Attachment' field is displayed", () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+      cy.intPageVerifyAttachmentExist();
     });
 
     it("Verify 'Preview Layout' button is disabled and grayed out", () => {
-      cy.contains("button", "Preview Layout").should("be.disabled")
-        .should("have.css", "background-color", "rgb(162, 162, 162)");
+      cy.intPageVerifyPreviewLayoutButtonDisabled();
     });
   });
 
@@ -152,62 +151,52 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Preview Layout' button gets colored", () => {
-      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
+      cy.intPageVerifyPreviewLayoutButtonEnabled();
     });
   });
 
   context("Verify predefined fields are not displayed", () => {
     it("Check 'Approvals' is not displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvals\"]").should("not.exist");
+      cy.intPageVerifyApprovalsNotExist();
     });
   });
 
   context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
     it("Verify 'Add Field' button not displayed", () => {
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").should("not.exist");
+      cy.intPageVerifyAddFieldNotExist();
     });
 
-    it("Verify view option is not displayed", () => {
-      cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("not.exist");
-    });
-
-    it("check export option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
-    });
-
-    it("check import option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
+    it("Verify 'Form Options' are not displayed", () => {
+      cy.intPageVerifyFormOptionsNotExist();
     });
   });
 
   context("Click 'Preview Layout' button and verify predefined fields are displayed", () => {
     context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
-        cy.contains("Preview Layout").arrowClick();
-        cy.get(".MuiDialogContent-root").scrollTo("bottom");
+        cy.intPageClickPreviewLayout();
       });
 
       it("Verify 'Overview' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+        cy.intPageVerifyOverviewTabExist();
       });
 
       it("Verify 'Procedure' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.procedure\"]").should("exist");
+        cy.intPageVerifyProcedureTabExist();
       });
 
       it("Verify 'Materials & Equipment' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.materialsandequipment\"]").should("exist");
+        cy.intPageVerifyMaterialsAndEquipmentTabExist();
       });
     });
 
     context("verify default fields are displayed", () => {
       it("Verify Document type is displayed", () => {
-        cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+        cy.intPageVerifyDocTypeExist();
       });
 
       it("Verify Document id is editable", () => {
-        cy.get("input[id='document.docId']").should("exist")
-          .should("not.be.disabled");
+        cy.intPageVerifyDocIdIsEditable();
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -218,11 +207,11 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Revision Stage' field is displayed", () => {
-        cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+        cy.intPageVerifyRevisionStageExist();
       });
 
       it("Verify 'Training required' field is displayed", () => {
-        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        cy.intPageVerifyTrainingRequiredExist();
       });
 
       it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -233,21 +222,21 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Attachment' field is displayed", () => {
-        cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+        cy.intPageVerifyAttachmentExist();
       });
 
       it("Verify Output document type is displayed", () => {
-        cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+        cy.intPageVerifyOutputDocTypeExist();
       });
     });
 
     context("verify predefined fields are displayed", () => {
       it("Check 'Approvals' is displayed", () => {
-        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.intPageVerifyApprovalsExist();
       });
 
       it("Close Preview dialog", () => {
-        cy.get("svg[data-cy=\"dialog-close\"]").arrowClick();
+        cy.intPageClosePreviewDialog();
       });
     });
   });
@@ -258,31 +247,20 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Approvals' is displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+      cy.intPageVerifyApprovalsExist();
     });
   });
 
   context("Verify form options and add field button is displayed in Overview tab", () => {
     context("Check form options are displayed at center bottom", () => {
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
 
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        cy.intPageVerifyAddFieldExist();
       });
     });
   });
@@ -293,25 +271,14 @@ context("Intermediate page validation", () => {
         cy.drSelectProcedureTab();
       });
 
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
 
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        cy.intPageVerifyAddFieldExist();
       });
     });
   });

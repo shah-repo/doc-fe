@@ -103,7 +103,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify Document id is editable", () => {
-      cy.get("input[id='document.docId']").should("not.be.disabled");
+      cy.intPageVerifyDocIdIsEditable();
     });
 
     it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -114,11 +114,11 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Revision Stage' field is displayed", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+      cy.intPageVerifyRevisionStageExist();
     });
 
     it("Verify 'Training required' field is displayed", () => {
-      cy.get("[data-cy=\"field-retrain\"]").should("exist");
+      cy.intPageVerifyTrainingRequiredExist();
     });
 
     it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -129,20 +129,19 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Selected Users' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+      cy.intPageVerifySelectedUsersExist();
     });
 
     it("Verify 'Selected Groups' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+      cy.intPageVerifySelectedGroupsExist();
     });
 
     it("Verify 'Attachment' field is displayed", () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+      cy.intPageVerifyAttachmentExist();
     });
 
     it("Verify 'Preview Layout' button is disabled and grayed out", () => {
-      cy.contains("button", "Preview Layout").should("be.disabled")
-        .should("have.css", "background-color", "rgb(162, 162, 162)");
+      cy.intPageVerifyPreviewLayoutButtonDisabled();
     });
   });
 
@@ -152,94 +151,84 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Preview Layout' button gets colored", () => {
-      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
+      cy.intPageVerifyPreviewLayoutButtonEnabled();
     });
   });
 
   context("Verify predefined fields are not displayed", () => {
     it("Check 'Make vs Buy' is not displayed", () => {
-      cy.get("[data-cy=\"Make vs Buy\"]").should("not.exist");
+      cy.intPageVerifyMakeVsBuyNotExist();
     });
 
     it("Check 'Primary Supplier' is not displayed", () => {
-      cy.get("[data-cy=\"Primary Supplier\"]").should("not.exist");
+      cy.intPageVerifyPrimarySupplierNotExist();
     });
 
     it("Check 'Other Suppliers' is not displayed", () => {
-      cy.get("[data-cy=\"Other Suppliers\"]").should("not.exist");
+      cy.intPageVerifyOtherSuppliersNotExist();
     });
 
     it("Check 'Unit of measure' is not displayed", () => {
-      cy.get("[data-cy=\"Unit of measure\"]").should("not.exist");
+      cy.intPageVerifyUnitOfMeasureNotExist();
     });
 
     it("Check 'Traceability required' is not displayed", () => {
-      cy.get("[data-cy=\"Traceability required\"]").should("not.exist");
+      cy.intPageVerifyTraceabilityRequiredNotExist();
     });
 
     it("Check 'Serialized' is not displayed", () => {
-      cy.get("[data-cy=\"Serialized\"]").should("not.exist");
+      cy.intPageVerifySerializedNotExist();
     });
 
     it("Check 'Select serialization' is not displayed", () => {
-      cy.get("[data-cy=\"Select serialization\"]").should("not.exist");
+      cy.intPageVerifySelectSerializationNotExist();
     });
 
     it("Check 'IQC Required' is not displayed", () => {
-      cy.get("[data-cy=\"IQC Required\"]").should("not.exist");
+      cy.intPageVerifyIqcRequiredNotExist();
     });
 
     it("Check 'Limited Shelf Life' is not displayed", () => {
-      cy.get("[data-cy=\"Limited Shelf Life\"]").should("not.exist");
+      cy.intPageVerifyLimitedShelfLifeNotExist();
     });
 
     it("Check 'FAI Required' is not displayed", () => {
-      cy.get("[data-cy=\"FAI Required\"]").should("not.exist");
+      cy.intPageVerifyFaiRequiredNotExist();
     });
   });
 
   context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
     it("Verify 'Add Field' button not displayed", () => {
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").should("not.exist");
+      cy.intPageVerifyAddFieldNotExist();
     });
 
-    it("Verify view option is not displayed", () => {
-      cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("not.exist");
-    });
-
-    it("check export option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
-    });
-
-    it("check import option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
+    it("Verify 'Form Options' are not displayed", () => {
+      cy.intPageVerifyFormOptionsNotExist();
     });
   });
 
   context("Click 'Preview Layout' button and verify predefined fields are displayed", () => {
     context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
-        cy.contains("Preview Layout").arrowClick();
-        cy.get(".MuiDialogContent-root").scrollTo("bottom");
+        cy.intPageClickPreviewLayout();
       });
 
       it("Verify 'Overview' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+        cy.intPageVerifyOverviewTabExist();
       });
 
       it("Verify 'Specification' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.specification\"]").should("exist");
+        cy.intPageVerifySpecificationTabExist();
       });
     });
 
     context("verify default fields are displayed", () => {
       it("Verify Document type is displayed", () => {
-        cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+        cy.intPageVerifyDocTypeExist();
       });
 
       it("Verify Document id is editable", () => {
-        cy.get("input[id='document.docId']").should("exist")
-          .should("not.be.disabled");
+        cy.intPageVerifyDocIdIsEditable();
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -250,11 +239,11 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Revision Stage' field is displayed", () => {
-        cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+        cy.intPageVerifyRevisionStageExist();
       });
 
       it("Verify 'Training required' field is displayed", () => {
-        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        cy.intPageVerifyTrainingRequiredExist();
       });
 
       it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -265,11 +254,11 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Attachment' field is displayed", () => {
-        cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+        cy.intPageVerifyAttachmentExist();
       });
 
       it("Verify Output document type is displayed", () => {
-        cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+        cy.intPageVerifyOutputDocTypeExist();
       });
     });
 
@@ -279,47 +268,47 @@ context("Intermediate page validation", () => {
       });
 
       it("Check 'Make vs Buy' is displayed", () => {
-        cy.get("[data-cy=\"Make vs Buy\"]").should("exist");
+        cy.intPageVerifyMakeVsBuyExist();
       });
 
       it("Check 'Primary Supplier' is displayed", () => {
-        cy.get("[data-cy=\"Primary Supplier\"]").should("exist");
+        cy.intPageVerifyPrimarySupplierExist();
       });
 
       it("Check 'Other Suppliers' is displayed", () => {
-        cy.get("[data-cy=\"Other Suppliers\"]").should("exist");
+        cy.intPageVerifyOtherSuppliersExist();
       });
 
       it("Check 'Unit of measure' is displayed", () => {
-        cy.get("[data-cy=\"Unit of measure\"]").should("exist");
+        cy.intPageVerifyUnitOfMeasureExist();
       });
 
       it("Check 'Traceability required' is displayed", () => {
-        cy.get("[data-cy=\"Traceability required\"]").should("exist");
+        cy.intPageVerifyTraceabilityRequiredExist();
       });
 
       it("Check 'Serialized' is displayed", () => {
-        cy.get("[data-cy=\"Serialized\"]").should("exist");
+        cy.intPageVerifySerializedExist();
       });
 
       it("Check 'Select serialization' is displayed", () => {
-        cy.get("[data-cy=\"Select serialization\"]").should("exist");
+        cy.intPageVerifySelectSerializationExist();
       });
 
       it("Check 'IQC Required' is displayed", () => {
-        cy.get("[data-cy=\"IQC Required\"]").should("exist");
+        cy.intPageVerifyIqcRequiredExist();
       });
 
       it("Check 'Limited Shelf Life' is displayed", () => {
-        cy.get("[data-cy=\"Limited Shelf Life\"]").should("exist");
+        cy.intPageVerifyLimitedShelfLifeExist();
       });
 
       it("Check 'FAI Required' is displayed", () => {
-        cy.get("[data-cy=\"FAI Required\"]").should("exist");
+        cy.intPageVerifyFaiRequiredExist();
       });
 
       it("Close Preview dialog", () => {
-        cy.get("svg[data-cy=\"dialog-close\"]").arrowClick();
+        cy.intPageClosePreviewDialog();
       });
     });
   });
@@ -334,67 +323,56 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Make vs Buy' is displayed", () => {
-      cy.get("[data-cy=\"Make vs Buy\"]").should("exist");
+      cy.intPageVerifyMakeVsBuyExist();
     });
 
     it("Check 'Primary Supplier' is displayed", () => {
-      cy.get("[data-cy=\"Primary Supplier\"]").should("exist");
+      cy.intPageVerifyPrimarySupplierExist();
     });
 
     it("Check 'Other Suppliers' is displayed", () => {
-      cy.get("[data-cy=\"Other Suppliers\"]").should("exist");
+      cy.intPageVerifyOtherSuppliersExist();
     });
 
     it("Check 'Unit of measure' is displayed", () => {
-      cy.get("[data-cy=\"Unit of measure\"]").should("exist");
+      cy.intPageVerifyUnitOfMeasureExist();
     });
 
     it("Check 'Traceability required' is displayed", () => {
-      cy.get("[data-cy=\"Traceability required\"]").should("exist");
+      cy.intPageVerifyTraceabilityRequiredExist();
     });
 
     it("Check 'Serialized' is displayed", () => {
-      cy.get("[data-cy=\"Serialized\"]").should("exist");
+      cy.intPageVerifySerializedExist();
     });
 
     it("Check 'Select serialization' is displayed", () => {
-      cy.get("[data-cy=\"Select serialization\"]").should("exist");
+      cy.intPageVerifySelectSerializationExist();
     });
 
     it("Check 'IQC Required' is displayed", () => {
-      cy.get("[data-cy=\"IQC Required\"]").should("exist");
+      cy.intPageVerifyIqcRequiredExist();
     });
 
     it("Check 'Limited Shelf Life' is displayed", () => {
-      cy.get("[data-cy=\"Limited Shelf Life\"]").should("exist");
+      cy.intPageVerifyLimitedShelfLifeExist();
     });
 
     it("Check 'FAI Required' is displayed", () => {
-      cy.get("[data-cy=\"FAI Required\"]").should("exist");
+      cy.intPageVerifyFaiRequiredExist();
     });
   });
 
   context("Verify form options and add field button is displayed in Specification tab", () => {
     context("Check form options are displayed at center bottom", () => {
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
 
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        cy.intPageVerifyAddFieldExist();
       });
     });
   });
@@ -405,25 +383,14 @@ context("Intermediate page validation", () => {
         cy.drSelectOverviewTab();
       });
 
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
 
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        cy.intPageVerifyAddFieldExist();
       });
     });
   });

@@ -106,7 +106,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify Document id is editable", () => {
-      cy.get("input[id='document.docId']").should("not.be.disabled");
+      cy.intPageVerifyDocIdIsEditable();
     });
 
     it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -117,11 +117,11 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Revision Stage' field is displayed", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+      cy.intPageVerifyRevisionStageExist();
     });
 
     it("Verify 'Training required' field is displayed", () => {
-      cy.get("[data-cy=\"field-retrain\"]").should("exist");
+      cy.intPageVerifyTrainingRequiredExist();
     });
 
     it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -132,20 +132,19 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Selected Users' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+      cy.intPageVerifySelectedUsersExist();
     });
 
     it("Verify 'Selected Groups' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+      cy.intPageVerifySelectedGroupsExist();
     });
 
     it("Verify 'Attachment' field is displayed", () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+      cy.intPageVerifyAttachmentExist();
     });
 
     it("Verify 'Preview Layout' button is disabled and grayed out", () => {
-      cy.contains("button", "Preview Layout").should("be.disabled")
-        .should("have.css", "background-color", "rgb(162, 162, 162)");
+      cy.intPageVerifyPreviewLayoutButtonDisabled();
     });
   });
 
@@ -155,134 +154,124 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Preview Layout' button gets colored", () => {
-      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
+      cy.intPageVerifyPreviewLayoutButtonEnabled();
     });
   });
 
   context("Verify predefined fields are not displayed", () => {
     it("Check 'COMPANY DETAILS' is not displayed", () => {
-      cy.get("[data-cy=\"Company Details\"]").should("not.exist");
+      cy.intPageVerifyCompanyDetailsNotExist();
     });
 
     it("Check 'Company Name' is not displayed", () => {
-      cy.get("[data-cy=\"Company Name\"]").should("not.exist");
+      cy.intPageVerifyCompanyNameNotExist();
     });
 
     it("Check 'Company Abbreviation' is not displayed", () => {
-      cy.get("[data-cy=\"Company Abbreviation\"]").should("not.exist");
+      cy.intPageVerifyCompanyAbbreviationNotExist();
     });
 
     it("Check 'Company Admin Email' is not displayed", () => {
-      cy.get("[data-cy=\"Company Admin Email\"]").should("not.exist");
+      cy.intPageVerifyCompanyAdminEmailNotExist();
     });
 
     it("Check 'Client's Logo' is not displayed", () => {
-      cy.get(`[data-cy="Client's Logo (max 180px x 75px)"]`).should("not.exist");
+      cy.intPageVerifyClientLogoNotExist();
     });
 
     it("Check 'APPROVED DAM JSON' is not displayed", () => {
-      cy.get("[data-cy=\"APPROVED DAM JSON\"]").should("not.exist");
+      cy.intPageVerifyApprovedDamJsonNotExist();
     });
 
     it("Check 'Approved DAM json is used' is not displayed", () => {
-      cy.get("[data-cy=\"Approved DAM json is used\"]").should("not.exist");
+      cy.intPageVerifyApprovedDamJsonIsUsedNotExist();
     });
 
     it("Check 'DAM JSON' is not displayed", () => {
-      cy.get("[data-cy=\"DAM JSON \"]").should("not.exist");
+      cy.intPageVerifyDamJsonNotExist();
     });
 
     it("Check 'APPROVED PAGE DETAILS JSON' is not displayed", () => {
-      cy.get("[data-cy=\"APPROVED PAGE DETAILS JSON\"]").should("not.exist");
+      cy.intPageVerifyApprovedPageDetailsJsonNotExist();
     });
 
     it("Check 'Approved Page Details json is used' is not displayed", () => {
-      cy.get("[data-cy=\"Approved Page Details json is used\"]").should("not.exist");
+      cy.intPageVerifyApprovedPageDetailsJsonIsUsedNotExist();
     });
 
     it("Check 'Page Details JSON' is not displayed", () => {
-      cy.get("[data-cy=\"Page Details JSON\"]").should("not.exist");
+      cy.intPageVerifyPageDetailsJsonNotExist();
     });
 
     it("Check 'Approved Navigation json is used' is not displayed", () => {
-      cy.get("[data-cy=\"Approved Navigation json is used\"]").should("not.exist");
+      cy.intPageVerifyApprovedNavigationJsonIsUsedNotExist();
     });
 
     it("Check 'Navigation JSON' is not displayed", () => {
-      cy.get("[data-cy=\"Navigation JSON\"]").should("not.exist");
+      cy.intPageVerifyNavigationJsonNotExist();
     });
 
     it("Check 'LAUNCHING DETAILS' is not displayed", () => {
-      cy.get("[data-cy=\"Launching Details\"]").should("not.exist");
+      cy.intPageVerifyLaunchingDetailsNotExist();
     });
 
     it("Check 'Scheduled Go Live Date' is not displayed", () => {
-      cy.get("[data-cy=\"Scheduled Go Live Date\"]").should("not.exist");
+      cy.intPageVerifyScheduledGoLiveDateNotExist();
     });
 
     it("Check 'EMPLOYEES TEMPLATE LIST' is not displayed", () => {
-      cy.get("[data-cy=\"EMPLOYEES TEMPLATE LIST\"]").should("not.exist");
+      cy.intPageVerifyEmployeesTemplateListNotExist();
     });
 
     it("Check 'Users List' is not displayed", () => {
-      cy.get("[data-cy=\"Users List\"]").should("not.exist");
+      cy.intPageVerifyUsersListNotExist();
     });
 
     it("Check 'Seed documents to be included' is not displayed", () => {
-      cy.get("[data-cy=\"Seed documents to be included\"]").should("not.exist");
+      cy.intPageVerifySeedDocumentsToBeIncludedNotExist();
     });
 
     it("Check 'POST CREATION RECORDS' is not displayed", () => {
-      cy.get("[data-cy=\"Post Creation Records\"]").should("not.exist");
+      cy.intPageVerifyPostCreationRecordsNotExist();
     });
 
     it("Check 'Logs Created' is not displayed", () => {
-      cy.get("[data-cy=\"Logs Created\"]").should("not.exist");
+      cy.intPageVerifyLogsCreatedNotExist();
     });
   });
 
   context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
     it("Verify 'Add Field' button not displayed", () => {
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").should("not.exist");
+      cy.intPageVerifyAddFieldNotExist();
     });
 
-    it("Verify view option is not displayed", () => {
-      cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("not.exist");
-    });
-
-    it("check export option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
-    });
-
-    it("check import option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
+    it("Verify 'Form Options' are not displayed", () => {
+      cy.intPageVerifyFormOptionsNotExist();
     });
   });
 
   context("Click 'Preview Layout' button and verify predefined fields are displayed", () => {
     context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
-        cy.contains("Preview Layout").arrowClick();
-        cy.get(".MuiDialogContent-root").scrollTo("bottom");
+        cy.intPageClickPreviewLayout();
       });
 
       it("Verify 'Overview' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+        cy.intPageVerifyOverviewTabExist();
       });
 
       it("Verify 'Details' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.intPageVerifyDetailsTabExist();
       });
     });
 
     context("verify default fields are displayed", () => {
       it("Verify Document type is displayed", () => {
-        cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+        cy.intPageVerifyDocTypeExist();
       });
 
       it("Verify Document id is editable", () => {
-        cy.get("input[id='document.docId']").should("exist")
-          .should("not.be.disabled");
+        cy.intPageVerifyDocIdIsEditable();
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -293,11 +282,11 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Revision Stage' field is displayed", () => {
-        cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+        cy.intPageVerifyRevisionStageExist();
       });
 
       it("Verify 'Training required' field is displayed", () => {
-        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        cy.intPageVerifyTrainingRequiredExist();
       });
 
       it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -308,11 +297,11 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Attachment' field is displayed", () => {
-        cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+        cy.intPageVerifyAttachmentExist();
       });
 
       it("Verify Output document type is displayed", () => {
-        cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+        cy.intPageVerifyOutputDocTypeExist();
       });
     });
 
@@ -322,87 +311,87 @@ context("Intermediate page validation", () => {
       });
 
       it("Check 'COMPANY DETAILS' is displayed", () => {
-        cy.get("[data-cy=\"Company Details\"]").should("exist");
+        cy.intPageVerifyCompanyDetailsExist();
       });
 
       it("Check 'Company Name' is displayed", () => {
-        cy.get("[data-cy=\"Company Name\"]").should("exist");
+        cy.intPageVerifyCompanyNameExist();
       });
 
       it("Check 'Company Abbreviation' is displayed", () => {
-        cy.get("[data-cy=\"Company Abbreviation\"]").should("exist");
+        cy.intPageVerifyCompanyAbbreviationExist();
       });
 
       it("Check 'Company Admin Email' is displayed", () => {
-        cy.get("[data-cy=\"Company Admin Email\"]").should("exist");
+        cy.intPageVerifyCompanyAdminEmailExist();
       });
 
       it("Check 'Client's Logo' is displayed", () => {
-        cy.get(`[data-cy="Client's Logo (max 180px x 75px)"]`).should("exist");
+        cy.intPageVerifyClientLogoExist();
       });
 
       it("Check 'APPROVED DAM JSON' is displayed", () => {
-        cy.get("[data-cy=\"APPROVED DAM JSON\"]").should("exist");
+        cy.intPageVerifyApprovedDamJsonExist();
       });
 
       it("Check 'Approved DAM json is used' is displayed", () => {
-        cy.get("[data-cy=\"Approved DAM json is used\"]").should("exist");
+        cy.intPageVerifyApprovedDamJsonIsUsedExist();
       });
 
       it("Check 'DAM JSON' is displayed", () => {
-        cy.get("[data-cy=\"DAM JSON \"]").should("exist");
+        cy.intPageVerifyDamJsonExist();
       });
 
       it("Check 'APPROVED PAGE DETAILS JSON' is displayed", () => {
-        cy.get("[data-cy=\"APPROVED PAGE DETAILS JSON\"]").should("exist");
+        cy.intPageVerifyApprovedPageDetailsJsonExist();
       });
 
       it("Check 'Approved Page Details json is used' is displayed", () => {
-        cy.get("[data-cy=\"Approved Page Details json is used\"]").should("exist");
+        cy.intPageVerifyApprovedPageDetailsJsonIsUsedExist();
       });
 
       it("Check 'Page Details JSON' is displayed", () => {
-        cy.get("[data-cy=\"Page Details JSON\"]").should("exist");
+        cy.intPageVerifyPageDetailsJsonExist();
       });
 
       it("Check 'Approved Navigation json is used' is displayed", () => {
-        cy.get("[data-cy=\"Approved Navigation json is used\"]").should("exist");
+        cy.intPageVerifyApprovedNavigationJsonIsUsedExist();
       });
 
       it("Check 'Navigation JSON' is displayed", () => {
-        cy.get("[data-cy=\"Navigation JSON\"]").should("exist");
+        cy.intPageVerifyNavigationJsonExist();
       });
 
       it("Check 'LAUNCHING DETAILS' is displayed", () => {
-        cy.get("[data-cy=\"Launching Details\"]").should("exist");
+        cy.intPageVerifyLaunchingDetailsExist();
       });
 
       it("Check 'Scheduled Go Live Date' is displayed", () => {
-        cy.get("[data-cy=\"Scheduled Go Live Date\"]").should("exist");
+        cy.intPageVerifyScheduledGoLiveDateExist();
       });
 
       it("Check 'EMPLOYEES TEMPLATE LIST' is displayed", () => {
-        cy.get("[data-cy=\"EMPLOYEES TEMPLATE LIST\"]").should("exist");
+        cy.intPageVerifyEmployeesTemplateListExist();
       });
 
       it("Check 'Users List' is displayed", () => {
-        cy.get("[data-cy=\"Users List\"]").should("exist");
+        cy.intPageVerifyUsersListExist();
       });
 
       it("Check 'Seed documents to be included' is displayed", () => {
-        cy.get("[data-cy=\"Seed documents to be included\"]").should("exist");
+        cy.intPageVerifySeedDocumentsToBeIncludedExist();
       });
 
       it("Check 'POST CREATION RECORDS' is displayed", () => {
-        cy.get("[data-cy=\"Post Creation Records\"]").should("exist");
+        cy.intPageVerifyPostCreationRecordsExist();
       });
 
       it("Check 'Logs Created' is displayed", () => {
-        cy.get("[data-cy=\"Logs Created\"]").should("exist");
+        cy.intPageVerifyLogsCreatedExist();
       });
 
       it("Close Preview dialog", () => {
-        cy.get("svg[data-cy=\"dialog-close\"]").arrowClick();
+        cy.intPageClosePreviewDialog();
       });
     });
   });
@@ -417,107 +406,96 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'COMPANY DETAILS' is displayed", () => {
-      cy.get("[data-cy=\"Company Details\"]").should("exist");
+      cy.intPageVerifyCompanyDetailsExist();
     });
 
     it("Check 'Company Name' is displayed", () => {
-      cy.get("[data-cy=\"Company Name\"]").should("exist");
+      cy.intPageVerifyCompanyNameExist();
     });
 
     it("Check 'Company Abbreviation' is displayed", () => {
-      cy.get("[data-cy=\"Company Abbreviation\"]").should("exist");
+      cy.intPageVerifyCompanyAbbreviationExist();
     });
 
     it("Check 'Company Admin Email' is displayed", () => {
-      cy.get("[data-cy=\"Company Admin Email\"]").should("exist");
+      cy.intPageVerifyCompanyAdminEmailExist();
     });
 
     it("Check 'Client's Logo' is displayed", () => {
-      cy.get(`[data-cy="Client's Logo (max 180px x 75px)"]`).should("exist");
+      cy.intPageVerifyClientLogoExist();
     });
 
     it("Check 'APPROVED DAM JSON' is displayed", () => {
-      cy.get("[data-cy=\"APPROVED DAM JSON\"]").should("exist");
+      cy.intPageVerifyApprovedDamJsonExist();
     });
 
     it("Check 'Approved DAM json is used' is displayed", () => {
-      cy.get("[data-cy=\"Approved DAM json is used\"]").should("exist");
+      cy.intPageVerifyApprovedDamJsonIsUsedExist();
     });
 
     it("Check 'DAM JSON' is displayed", () => {
-      cy.get("[data-cy=\"DAM JSON \"]").should("exist");
+      cy.intPageVerifyDamJsonExist();
     });
 
     it("Check 'APPROVED PAGE DETAILS JSON' is displayed", () => {
-      cy.get("[data-cy=\"APPROVED PAGE DETAILS JSON\"]").should("exist");
+      cy.intPageVerifyApprovedPageDetailsJsonExist();
     });
 
     it("Check 'Approved Page Details json is used' is displayed", () => {
-      cy.get("[data-cy=\"Approved Page Details json is used\"]").should("exist");
+      cy.intPageVerifyApprovedPageDetailsJsonIsUsedExist();
     });
 
     it("Check 'Page Details JSON' is displayed", () => {
-      cy.get("[data-cy=\"Page Details JSON\"]").should("exist");
+      cy.intPageVerifyPageDetailsJsonExist();
     });
 
     it("Check 'Approved Navigation json is used' is displayed", () => {
-      cy.get("[data-cy=\"Approved Navigation json is used\"]").should("exist");
+      cy.intPageVerifyApprovedNavigationJsonIsUsedExist();
     });
 
     it("Check 'Navigation JSON' is displayed", () => {
-      cy.get("[data-cy=\"Navigation JSON\"]").should("exist");
+      cy.intPageVerifyNavigationJsonExist();
     });
 
     it("Check 'LAUNCHING DETAILS' is displayed", () => {
-      cy.get("[data-cy=\"Launching Details\"]").should("exist");
+      cy.intPageVerifyLaunchingDetailsExist();
     });
 
     it("Check 'Scheduled Go Live Date' is displayed", () => {
-      cy.get("[data-cy=\"Scheduled Go Live Date\"]").should("exist");
+      cy.intPageVerifyScheduledGoLiveDateExist();
     });
 
     it("Check 'EMPLOYEES TEMPLATE LIST' is displayed", () => {
-      cy.get("[data-cy=\"EMPLOYEES TEMPLATE LIST\"]").should("exist");
+      cy.intPageVerifyEmployeesTemplateListExist();
     });
 
     it("Check 'Users List' is displayed", () => {
-      cy.get("[data-cy=\"Users List\"]").should("exist");
+      cy.intPageVerifyUsersListExist();
     });
 
     it("Check 'Seed documents to be included' is displayed", () => {
-      cy.get("[data-cy=\"Seed documents to be included\"]").should("exist");
+      cy.intPageVerifySeedDocumentsToBeIncludedExist();
     });
 
     it("Check 'POST CREATION RECORDS' is displayed", () => {
-      cy.get("[data-cy=\"Post Creation Records\"]").should("exist");
+      cy.intPageVerifyPostCreationRecordsExist();
     });
 
     it("Check 'Logs Created' is displayed", () => {
-      cy.get("[data-cy=\"Logs Created\"]").should("exist");
+      cy.intPageVerifyLogsCreatedExist();
     });
   });
 
   context("Verify form options and add field button is displayed in Details tab", () => {
     context("Check form options are displayed at center bottom", () => {
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
 
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        cy.intPageVerifyAddFieldExist();
       });
     });
   });
@@ -528,25 +506,14 @@ context("Intermediate page validation", () => {
         cy.drSelectOverviewTab();
       });
 
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
 
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        cy.intPageVerifyAddFieldExist();
       });
     });
   });

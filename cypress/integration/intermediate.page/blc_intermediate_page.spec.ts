@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { BulkImport } from "../../utils/constants/documentTypes/bulkImport";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -10,7 +9,7 @@ let loginResponse;
 let adminEmployee;
 
 const docType = "Form";
-const bulkImportOutputDocType = "Bulk Import";
+const blcOutputDocType = "Bulk Create";
 
 context("Intermediate page validation", () => {
   before(() => {
@@ -38,9 +37,7 @@ context("Intermediate page validation", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [
-              BulkImport,
-            ],
+            documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -84,11 +81,11 @@ context("Intermediate page validation", () => {
 
   context("Enter title and select revision stage", () => {
     it("Enter document title", () => {
-      cy.drEnterDocumentTitle({ name: bulkImportOutputDocType + " title" });
+      cy.drEnterDocumentTitle({ name: blcOutputDocType + " title" });
     });
 
     it("Enter description", () => {
-      cy.drEnterDocumentDescription({ description: bulkImportOutputDocType + " description" });
+      cy.drEnterDocumentDescription({ description: blcOutputDocType + " description" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -106,7 +103,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify Document id is editable", () => {
-      cy.get("input[id='document.docId']").should("not.be.disabled");
+      cy.intPageVerifyDocIdIsEditable();
     });
 
     it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -117,11 +114,11 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Revision Stage' field is displayed", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+      cy.intPageVerifyRevisionStageExist();
     });
 
     it("Verify 'Training required' field is displayed", () => {
-      cy.get("[data-cy=\"field-retrain\"]").should("exist");
+      cy.intPageVerifyTrainingRequiredExist();
     });
 
     it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -132,81 +129,86 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Selected Users' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+      cy.intPageVerifySelectedUsersExist();
     });
 
     it("Verify 'Selected Groups' field is displayed", () => {
-      cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+      cy.intPageVerifySelectedGroupsExist();
     });
 
     it("Verify 'Attachment' field is displayed", () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+      cy.intPageVerifyAttachmentExist();
     });
 
     it("Verify 'Preview Layout' button is disabled and grayed out", () => {
-      cy.contains("button", "Preview Layout").should("be.disabled")
-        .should("have.css", "background-color", "rgb(162, 162, 162)");
+      cy.intPageVerifyPreviewLayoutButtonDisabled();
     });
   });
 
   context("Select output document type", () => {
-    it(`Select ${bulkImportOutputDocType} output document type`, () => {
-      cy.drSelectOutputDocumentType({ documentType: bulkImportOutputDocType });
+    it(`Select ${blcOutputDocType} output document type`, () => {
+      cy.drSelectOutputDocumentType({ documentType: blcOutputDocType });
     });
 
     it("Check 'Preview Layout' button gets colored", () => {
-      cy.contains("Preview Layout").should("have.css", "background-color", "rgb(1, 31, 187)");
+      cy.intPageVerifyPreviewLayoutButtonEnabled();
     });
   });
 
   context("Verify predefined fields are not displayed", () => {
     it("Check 'Approvals' is not displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvals\"]").should("not.exist");
+      cy.intPageVerifyApprovalsNotExist();
+    });
+
+    it("Check 'Select Form Document For Import' is not displayed", () => {
+      cy.intPageVerifySelectFormDocumentForImportNotExist();
+    });
+
+    it("Check 'Column Document/Record Id?' is not displayed", () => {
+      cy.intPageVerifyColumnDocumentRecordIdNotExist();
+    });
+
+    it("Check 'Select Output Document Type' is not displayed", () => {
+      cy.intPageVerifySelectOutputDocumentTypeNotExist();
+    });
+
+    it("Check 'DOWNLOAD EXCEL TEMPLATE button' is not displayed", () => {
+      cy.intPageVerifyDownloadExcelTemplateNotExist();
     });
   });
 
   context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
     it("Verify 'Add Field' button not displayed", () => {
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").should("not.exist");
+      cy.intPageVerifyAddFieldNotExist();
     });
 
-    it("Verify view option is not displayed", () => {
-      cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("not.exist");
-    });
-
-    it("check export option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("not.exist");
-    });
-
-    it("check import option is diplayed", () => {
-      cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("not.exist");
+    it("Verify 'Form Options' are not displayed", () => {
+      cy.intPageVerifyFormOptionsNotExist();
     });
   });
 
   context("Click 'Preview Layout' button and verify predefined fields are displayed", () => {
     context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
-        cy.contains("Preview Layout").arrowClick();
-        cy.get(".MuiDialogContent-root").scrollTo("bottom");
+        cy.intPageClickPreviewLayout();
       });
 
       it("Verify 'Overview' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.overview\"]").should("exist");
+        cy.intPageVerifyOverviewTabExist();
       });
 
       it("Verify 'Details' tab is displayed", () => {
-        cy.get("[data-cy=\"tabId.details\"]").should("exist");
+        cy.intPageVerifyDetailsTabExist();
       });
     });
 
-    context("verify default fields are displayed", () => {
+    context("Verify default fields are displayed", () => {
       it("Verify Document type is displayed", () => {
-        cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+        cy.intPageVerifyDocTypeExist();
       });
 
       it("Verify Document id is editable", () => {
-        cy.get("input[id='document.docId']").should("exist")
-          .should("not.be.disabled");
+        cy.intPageVerifyDocIdIsEditable();
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -217,11 +219,11 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Revision Stage' field is displayed", () => {
-        cy.get("[data-cy=\"field-revisionStage\"]").should("exist");
+        cy.intPageVerifyRevisionStageExist();
       });
 
       it("Verify 'Training required' field is displayed", () => {
-        cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        cy.intPageVerifyTrainingRequiredExist();
       });
 
       it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
@@ -232,21 +234,41 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Attachment' field is displayed", () => {
-        cy.get("#AttachmentFieldPresenter-linkButton").should("exist");
+        cy.intPageVerifyAttachmentExist();
       });
 
       it("Verify Output document type is displayed", () => {
-        cy.get("[data-cy=\"field-outputDocumentTypes\"]").should("exist");
+        cy.intPageVerifyOutputDocTypeExist();
       });
     });
 
-    context("verify predefined fields are displayed", () => {
+    context("Verify predefined fields are displayed", () => {
       it("Check 'Approvals' is displayed", () => {
-        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.intPageVerifyApprovalsExist();
+      });
+
+      it("Navigate to Detail Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Check 'Select Form Document For Import' is displayed", () => {
+        cy.intPageVerifySelectFormDocumentForImportExist();
+      });
+
+      it("Check 'Column Document/Record Id?' is displayed", () => {
+        cy.intPageVerifyColumnDocumentRecordIdExist();
+      });
+
+      it("Check 'Select Output Document Type' is displayed", () => {
+        cy.intPageVerifySelectOutputDocumentTypeExist();
+      });
+
+      it("Check 'DOWNLOAD EXCEL TEMPLATE button' is displayed (disabled)", () => {
+        cy.intPageVerifyDownloadExcelTemplateExistDisabled();
       });
 
       it("Close Preview dialog", () => {
-        cy.get("svg[data-cy=\"dialog-close\"]").arrowClick();
+        cy.intPageClosePreviewDialog();
       });
     });
   });
@@ -257,60 +279,58 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Approvals' is displayed", () => {
-      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
-    });
-  });
-
-  context("Verify form options and add field button is displayed in Overview tab", () => {
-    context("Check form options are displayed at center bottom", () => {
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
+      cy.intPageVerifyApprovalsExist();
     });
 
-    context("Verify add field button is displayed", () => {
-      it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
-      });
+    it("Navigate to Detail Tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Check 'Select Form Document For Import' is displayed", () => {
+      cy.intPageVerifySelectFormDocumentForImportExist();
+    });
+
+    it("Check 'Column Document/Record Id?' is displayed", () => {
+      cy.intPageVerifyColumnDocumentRecordIdExist();
+    });
+
+    it("Check 'Select Output Document Type' is displayed", () => {
+      cy.intPageVerifySelectOutputDocumentTypeExist();
+    });
+
+    it("Check 'DOWNLOAD EXCEL TEMPLATE button' is displayed (disabled)", () => {
+      cy.intPageVerifyDownloadExcelTemplateExistDisabled();
     });
   });
 
   context("Verify form options and add field button is displayed in Details tab", () => {
     context("Check form options are displayed at center bottom", () => {
-      it("Click on 'Details' tab", () => {
-        cy.drSelectDetailsTab();
-      });
-
-      it("check view option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-clickView\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check export option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
-      });
-
-      it("check import option is diplayed", () => {
-        cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("exist")
-          .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
 
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get("button[data-cy=\"form.builder.add.field\"]").should("exist");
+        cy.intPageVerifyAddFieldExist();
+      });
+    });
+  });
+
+  context("Verify form options and add field button is displayed in Overview tab", () => {
+    context("Check form options are displayed at center bottom", () => {
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
+      });
+    });
+
+    context("Verify add field button is displayed", () => {
+      it("Verify 'Add Field' button displayed", () => {
+        cy.intPageVerifyAddFieldExist();
       });
     });
   });
