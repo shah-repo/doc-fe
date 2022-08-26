@@ -193,8 +193,8 @@ Cypress.Commands.add("fbCheckFieldsExistSectionList", (...list: string[]) => {
   cy.get(`[data-cy="Section-btn"]`).arrowClick();
 
   list.forEach((item) => {
-    cy.get(`button[data-cy="${item}"]`).should("exist");
-    cy.get(`button[data-cy="${item}"]`).arrowClick();
+    cy.get(`[data-cy="${item}"]`).eq(0).should("exist");
+    cy.get(`[data-cy="${item}"]`).arrowClick();
     cy.get(`[data-cy="fb-editor-mode-config-0"]`).should("exist");
     cy.get(`[data-cy="fb-editor-mode-validation-1"]`).should("exist");
     cy.fbClickButton({ el: "fb-editor-actions-cancel" });
