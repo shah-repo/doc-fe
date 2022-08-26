@@ -1000,7 +1000,7 @@ context("LHR steps verification", () => {
     it("Select Approval", () => {
       cy.wrapWithWaitOnApiCalls([
       ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
+        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(USERS[1].name);
       });
     });
 
@@ -1031,7 +1031,7 @@ context("LHR steps verification", () => {
     it("Select Approval", () => {
       cy.wrapWithWaitOnApiCalls([
       ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
+        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(USERS[1].name);
       });
     });
 
@@ -1083,7 +1083,8 @@ context("LHR steps verification", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.get("[data-cy^='fb-approvals-approvals-built-in']").autocompleteSelect(USERS[1].name);
+      // cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
     });
 
     it("Save the document", () => {
