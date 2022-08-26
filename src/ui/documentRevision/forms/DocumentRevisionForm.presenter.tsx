@@ -336,9 +336,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {(!values.status || type === "newOutput") && (
+        {!isPreview && (!values.status || type === "newOutput") && (
           <Grid item xs={12}>
-            <DocumentSecurity documentTypeId={documentTypeId} isDisabled={isPreview} />
+            <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
         )}
         {showOutputSection ? (
