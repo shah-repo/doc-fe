@@ -3,39 +3,27 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { companyActions, companySelectors } from "../../../../../state/ducks/company";
 import Text from "../../../../components/Text";
-import Colors from "../../../../layout/theme/utils/colors";
-
+import useStyles from "./Redline.banner.styles";
 
 const RedlineBanner: React.FunctionComponent = () => {
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   // remove banner on unmount
   useEffect(() => () => {
     dispatch(companyActions.redlineConfig(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   if (!redlineActive) {
     return null;
   }
 
   return (
-    <>
-      <Box
-        bgcolor={Colors.latest_red_varient}
-        color={Colors.white}
-        fontWeight="bold"
-        padding={1}
-        margin="10px"
-        mt={0}
-        display="flex"
-        borderRadius={6}
-        justifyContent="center"
-      >
-        <Text translation="common.redline.message" />
-      </Box>
-    </>
-  ); };
+    <Box className={classes.root}>
+      <Text translation="common.redline.message" />
+    </Box>
+  );
+};
 
 export default RedlineBanner;
