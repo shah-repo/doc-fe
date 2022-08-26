@@ -103,7 +103,7 @@ const styles = makeStyles((theme: Theme) =>
       backgroundColor: Colors.white,
     },
     previewTabContent: {
-      paddingBottom: 12,
+      paddingBottom: theme.spacing(1.5),
     },
   }),
 );
