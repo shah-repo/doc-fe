@@ -1325,5 +1325,6 @@
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",
   "meq.chip.nextCalDate": "Next Callibration Due :",
-  "meq.chip.prevMaintance": "Preventive Maintenance Due : "
+  "meq.chip.prevMaintance": "Preventive Maintenance Due : ",
+  "form.builder.addEquiSpec": "Add CAL or PM"
 }

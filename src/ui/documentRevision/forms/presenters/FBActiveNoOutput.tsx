@@ -228,14 +228,6 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     }];
   }
 
-  if (formValues.values?.retrain) {
-    tabConfig = tabConfig && [...tabConfig, {
-      labelId: "tabId.training",
-      tabId: TabTypeOptions.TRAINING,
-      type: TabTypeOptions.TRAINING,
-    } ];
-  }
-
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
@@ -295,6 +287,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                             {tabType === TabTypeOptions.MIXED && <>
                               <DocumentRevisionFormPresenter
                                 {...formValues}
+                                isPreview={true}
                                 redlineActive={false}
                                 releasedDocRev={_documentRevisionFormState?.releasedDocRev}
                                 documentRevision={documentRevision}
