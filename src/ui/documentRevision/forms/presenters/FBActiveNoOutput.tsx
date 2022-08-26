@@ -100,7 +100,7 @@ const styles = makeStyles((theme: Theme) =>
       backgroundColor: `${Colors.dawn} !important`,
     },
     previewDialog: {
-      backgroundColor: Colors.alabaster,
+      backgroundColor: Colors.white,
     },
     previewTabContent: {
       paddingBottom: 12,
