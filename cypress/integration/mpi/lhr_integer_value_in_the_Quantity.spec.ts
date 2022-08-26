@@ -1084,7 +1084,6 @@ context("LHR steps verification", () => {
 
     it("Add an Approval", () => {
       cy.get("[data-cy^='fb-approvals-approvals-built-in']").autocompleteSelect(USERS[1].name);
-      // cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
     });
 
     it("Save the document", () => {
