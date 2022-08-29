@@ -1,9 +1,9 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core";
 
-export default makeStyles(() =>
-  createStyles({
-    content: {
-      overflowY: "auto",
-    },
-  })
-);
+export default makeStyles((theme: Theme) => ({
+  content: {
+    overflowY: "auto",
+    margin: theme.spacing(0, -2, 0),
+    padding: theme.spacing(0, 2, 0),
+  },
+}));
