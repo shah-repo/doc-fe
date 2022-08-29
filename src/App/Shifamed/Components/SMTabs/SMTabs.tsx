@@ -22,7 +22,6 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           value={_tabsState?.value}
           style={{
             zIndex: 1,
-            backgroundColor: Colors.alabaster,
             height: "auto",
             width: "100%",
             fontSize: "12px",
@@ -39,6 +38,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
             <Tab
               style={{ width: "auto", minWidth: 40, padding: 0, marginRight: 30 }}
               key={`sm-tabpanel-${tab}-${index}`}
+              data-cy={`tabCon-${tab}`}
               label={<SMText label={tab} />}
             />
           ))}

@@ -92,7 +92,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                           });
                         }}
                         onChange={() => showToggleButton && showToggleButton()}
-                        onBlur={(ev) => onBlur?.(ev) }
+                        onBlur={(ev) => { onBlur?.(ev); _textEditorState?.setPreviewMode(true); }}
                         {...{ editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
                         toolbar={{

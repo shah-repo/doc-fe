@@ -96,7 +96,7 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").contains("Add item").arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick();
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -200,7 +200,7 @@ Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
-  cy.get("input[value=" + params.optionName + "]").arrowClick();
+  cy.get("input[value=" + params.optionName + "]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poEnterServiceID", (params: {serviceId: string}) => {
@@ -327,7 +327,7 @@ Cypress.Commands.add("poRejectARNew", (params: {password: string}) => {
 });
 
 Cypress.Commands.add("poVerifyStatus", (params: { status: string }) => {
-  cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
+  cy.get("div[data-cy=\"HeaderInfo-status\"]>span").should("contain", params.status);
 });
 
 Cypress.Commands.add("poAPICreatePO", (params: {

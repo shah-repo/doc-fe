@@ -93,6 +93,8 @@ declare global {
       drReleaseDocAfterRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
       drNewTypeTrainingSelect(): Chainable<Subject>;
       drClickDAMEditBtn(): Chainable<Subject>;
+      drEditAddApprovingGroups(params: {eq: number}, ...groups: string[]): Chainable<Subject>;
+      drEditRemoveApprovingGroups(params: {eq: number}, ...groups: string[]): Chainable<Subject>;
 
       /* Document Approval Matrix End */
       drCreateNewDocumentFromForm(): Chainable<Subject>;
@@ -197,9 +199,22 @@ Cypress.Commands.add("drClickDAMEditBtn", () => {
   cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
 });
 
+Cypress.Commands.add("drEditAddApprovingGroups", (params: {eq: number}, ...groups: string[]) => {
+  groups.forEach((item) => {
+    cy.get(`[data-cy="dar-built-in.${params.eq}.groups"]`).autocompleteSelect(item);
+  });
+});
+
+Cypress.Commands.add("drEditRemoveApprovingGroups", (params: {eq: number}, ...groups: string[]) => {
+  groups.forEach((item) => {
+    cy.get(`[data-cy="dar-built-in.${params.eq}.groups"]`).parent()
+      .contains(item).parent().parent().find("svg").arrowClick();
+  });
+});
+
 Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string; status: string}) => {
   cy.get(" [data-cy=\"HeaderInfo-Rev\"]").should("have.text", params.revision);
-  cy.get(" [data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
+  cy.get(" div[data-cy=\"HeaderInfo-status\"]>span").should("contain", params.status);
 });
 
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
@@ -269,7 +284,7 @@ Cypress.Commands.add("drSelectOverviewTab", () => {
 });
 
 Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: bool }) => {
-  cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick();
+  cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick({ force: true });
   cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick();
 });
 
@@ -316,7 +331,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(params.documentType);
   cy.wait(1500);
-  cy.get(`div[id^="react-select"]`).contains(params.documentType).arrowClick();
+  cy.get(`div[id^="react-select"]`).contains(params.documentType).arrowClick({ force: true });
   cy.unClick();
 });
 
@@ -413,7 +428,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
   }
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
     });
   if (params === undefined)
   {
@@ -489,7 +504,7 @@ Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", params.status);
+  cy.get(`div[data-cy="HeaderInfo-status"]>span`).should("contain", params.status);
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {
@@ -541,7 +556,7 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick({ force: true });
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
@@ -621,14 +636,14 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
 
 Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOption: string}) => {
   cy.get("[data-cy^=\"common.\"]");
-  cy.get("label").contains(new RegExp("^" + params.revisionStageOption + "$", "g")).arrowClick();
+  cy.get("label").contains(new RegExp("^" + params.revisionStageOption + "$", "g")).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true });
-  cy.get("[data-cy='add-user'").eq(2).arrowClick();
+  cy.get("[data-cy='add-user'").eq(2).arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -667,7 +682,7 @@ Cypress.Commands.add("closeAllAlertMessages", () => {
 
 Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
-    cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+    cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
@@ -675,7 +690,7 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
 });
 
 Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
-  cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+  cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
@@ -808,7 +823,7 @@ Cypress.Commands.add("drOpenCloseSidebarDrawer", () => {
 });
 
 Cypress.Commands.add("drSelectPermissionTab", () => {
-  cy.get("[data-cy=\"permission-icon\"]").arrowClick();
+  cy.get("[data-cy=\"permission-icon\"]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drSelectApprovalRolesTab", () => {
@@ -969,4 +984,3 @@ Cypress.Commands.add("drPatchDocType", (params: {
   }).then((response) => response ? response.body : {})
     .then((response) => JSON.stringify(response));
 });
-

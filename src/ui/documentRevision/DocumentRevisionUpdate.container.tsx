@@ -22,6 +22,7 @@ import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from 
 import { DocumentRevisionFormValues } from "./forms/types";
 import { checkIsDocumentDAM } from "./helpers/checkDocumentGroup";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
+import FBDataStore from "../form.builder/FBStore/FBDataStore";
 
 interface Props {
   documentId?: string;
@@ -99,6 +100,11 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
           method: "get",
         });
       }
+
+      FBDataStore?.setRefreshData({
+        ...FBDataStore?.refreshData,
+        formInput: data.formInput ?? FBDataStore?.refreshData?.formInput,
+      });
     });
   };
 
@@ -106,7 +112,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     // Hack to take updated formInput
     const formStateContext = FBFormStateContext as any;
     if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
-      set(values, "formInput.formInput", formStateContext?._currentValue);
+      set(values, "formInput", formStateContext?._currentValue);
     }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     const formInput = get(dataToSubmit, "formInput");

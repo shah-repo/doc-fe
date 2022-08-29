@@ -2,7 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { LINE_ITEMS_STATUS_TYPES, STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -331,7 +331,7 @@ context("Export for Approval Request", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-AR-title",
-          pdfStatus: LINE_ITEMS_STATUS_TYPES.IN_REVIEW, type: "approval request",
+          pdfStatus: "In Review", type: "approval request",
         });
       });
     });

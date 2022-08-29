@@ -1806,15 +1806,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     context("Verify equipment select dialog on LHRs", () => {
       it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("[data-cy=\"form.builder.select\"]")
-            .eq(1)
-            .click({ force: true });
-        });
+        cy.get("[data-cy=\"form.builder.select\"]")
+          .eq(1)
+          .click({ force: true });
       });
 
       it("Open dropdown", () => {
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.wait(1000);
+        cy.get(`div[role=dialog] button[title="Open"]`).should("be.visible").arrowClick({ force: true });
       });
 
       it("Verify list item should have cal and pm ", () => {
@@ -1862,13 +1861,11 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       it("Verify background color is gray because it due is not expired", () => {
         SystemRequirement("REQ-4930");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
-          .should("have.css", "background-color", "rgb(212, 219, 225)");
+          .should("have.css", "background-color", "rgb(235, 237, 242)");
       });
 
       it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
-        cy.get(`div[data-cy="form.builder.change"]`).should("not.be.visible");
-        cy.get(`[data-cy="form.builder.lhrs.procedure.materials.title"]`).scrollIntoView();
-        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover();
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover().wait(1000);
         cy.get(`div[data-cy="form.builder.change"]`).should("be.visible");
       });
 
@@ -1917,7 +1914,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Add an Approval", () => {
@@ -1925,7 +1922,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Complete step", () => {
@@ -2038,15 +2035,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     context("Verify equipment select dialog on LHRs", () => {
       it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("[data-cy=\"form.builder.select\"]")
-            .eq(1)
-            .click({ force: true });
-        });
+        cy.get("[data-cy=\"form.builder.select\"]")
+          .eq(1)
+          .click({ force: true });
       });
 
       it("Open dropdown", () => {
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.wait(1000);
+        cy.get(`div[role=dialog] button[title="Open"]`).should("be.visible").arrowClick({ force: true });
       });
 
       it("Verify list item should have cal and pm ", () => {
@@ -2095,13 +2091,11 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       it("Verify background color is gray because it due is not expired", () => {
         SystemRequirement("REQ-4930");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
-          .should("have.css", "background-color", "rgb(212, 219, 225)");
+          .should("have.css", "background-color", "rgb(235, 237, 242)");
       });
 
       it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
-        cy.get(`div[data-cy="form.builder.change"]`).should("not.be.visible");
-        cy.get(`[data-cy="form.builder.lhrs.procedure.materials.title"]`).scrollIntoView();
-        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover();
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover().wait(1000);
         cy.get(`div[data-cy="form.builder.change"]`).should("be.visible");
       });
 
@@ -2151,7 +2145,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Add an Approval", () => {
@@ -2159,7 +2153,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Complete step", () => {

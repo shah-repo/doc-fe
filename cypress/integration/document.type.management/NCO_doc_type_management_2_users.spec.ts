@@ -681,7 +681,7 @@ context("NCO document type management multiple users", () => {
     context("Check that doc type can't be deleted", () => {
       it("Click on delete Doc Type", () => {
         cy.wait(500);
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick({ force: true });
       });
 
       // Currenty there is no error message from system when you try to delete - it should be

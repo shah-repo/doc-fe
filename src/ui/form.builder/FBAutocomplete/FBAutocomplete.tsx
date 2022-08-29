@@ -1,4 +1,4 @@
-import { Box, IconButton, TextField, Typography } from "@material-ui/core";
+import { Box, IconButton, Popper, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
@@ -97,13 +97,15 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       return (
         <StyledChip
           key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-          label={<Box whiteSpace="normal">{getOptionLabel && getOptionLabel(option)}</Box>}
+          label={ <Box whiteSpace="normal" style={{ wordBreak: "break-word" }}>
+            {getOptionLabel && getOptionLabel(option)} </Box> }
           style={{ minHeight: "32px", height: "auto" }}
           {...getTagProps({ index })}
           disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
         />
       ); }}
   </FBMapWrapper>;
+
   return (
     <>
       {includeQRScan && (
@@ -157,6 +159,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           ListboxComponent={groupByKey ? undefined : ListBoxComponent }
           renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
           renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
+          PopperComponent={(props) => (<Popper {...props} />)}
         />}
       </FBInput>
     </>
