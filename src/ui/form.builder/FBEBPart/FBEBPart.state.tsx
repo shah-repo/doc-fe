@@ -46,11 +46,11 @@ class FBEBPartState {
     }, (data, error) => {
       if (error) {
         this.existingChildApi.onError(error);
-      } else {
-        this.existingChildApi.data = data;
-        this.existingChildApi.onSuccess();
-        callback?.();
+        return;
       }
+      this.existingChildApi.data = data;
+      this.existingChildApi.onSuccess();
+      callback?.();
     });
   };
 
@@ -61,11 +61,11 @@ class FBEBPartState {
     this.newChildApi.set({ body, method: "post" }, (data, error) => {
       if (error) {
         this.newChildApi.onError(error);
-      } else {
-        this.newChildApi.data = data;
-        this.newChildApi.onSuccess();
-        callback?.();
+        return;
       }
+      this.newChildApi.data = data;
+      this.newChildApi.onSuccess();
+      callback?.();
     });
   };
 
