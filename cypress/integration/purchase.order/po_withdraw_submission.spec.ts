@@ -3,7 +3,6 @@
 
 import "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
-import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -31,12 +30,6 @@ let createdPOFormDocument;
 
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
-const LFPO =  {
-  documentTypeName: "Lot From Purchase Order Form",
-  documentTypeAcronym: "LFPO",
-  group: DOC_TYPE_GROUP.FORM,
-  isQms: true,
-};
 
 context("po withdraw submission", () => {
   before(() => {
@@ -70,7 +63,6 @@ context("po withdraw submission", () => {
             importerEmail: IMPORTER_USER.email,
             users: [],
             documentTypes: [
-              LFPO,
               Part,
               PurchaseOrderTest,
               ReceivableTest,
