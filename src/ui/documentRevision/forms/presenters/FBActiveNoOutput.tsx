@@ -100,7 +100,10 @@ const styles = makeStyles((theme: Theme) =>
       backgroundColor: `${Colors.dawn} !important`,
     },
     previewDialog: {
-      backgroundColor: Colors.alabaster,
+      backgroundColor: Colors.white,
+    },
+    previewTabContent: {
+      paddingBottom: theme.spacing(1.5),
     },
   }),
 );
@@ -283,7 +286,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                         const tabType = tabInfo.type;
                         const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                         return (
-                          <SMBox key={tabInfo.tabId}>
+                          <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
                             {tabType === TabTypeOptions.MIXED && <>
                               <DocumentRevisionFormPresenter
                                 {...formValues}
