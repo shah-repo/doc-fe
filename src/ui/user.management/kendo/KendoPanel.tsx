@@ -29,7 +29,6 @@ import { userManagementActions, userManagementSelectors } from "../../../state/d
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-// import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
