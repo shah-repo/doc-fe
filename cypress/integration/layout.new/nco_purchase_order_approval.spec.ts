@@ -8,7 +8,6 @@ import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -475,43 +474,35 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Click on 'Add Line Item' button", () => {
-      SystemRequirement("REQ-1360");
       cy.poAddNewFieldItem();
     });
 
     it("Enter Supplier Part Number", () => {
-      SystemRequirement("REQ-1410");
       cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
     });
 
     it("Enter Part Description", () => {
-      SystemRequirement("REQ-1410");
       cy.poEnterPartDescription({ partDescription: "Part Description" });
     });
 
     it("Enter Quantity Ordered", () => {
-      SystemRequirement("REQ-1410");
       cy.poEnterQuantityOrdered({ quantity: "5" });
     });
 
     it("Select Units", () => {
-      SystemRequirement("REQ-1410");
       cy.poSelectUnits();
     });
 
     it("Add Required Date", () => {
-      SystemRequirement("REQ-1410");
       cy.get("[name=\"date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
     it("Enter number of Units", () => {
-      SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
     });
 
     it("Check Tax option", () => {
-      SystemRequirement("REQ-1450");
       cy.poSelectTaxCheckbox();
     });
 
