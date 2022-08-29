@@ -5,7 +5,6 @@ import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
-import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -21,20 +20,11 @@ let adminEmployee;
 let developersGroup;
 let poCreationDate1;
 let poCreationDate2;
-const pages = ["", "", ""];
-let tmpRegex;
-let downloadUrl;
-let fileId;
-let purchaseOrderId;
-let downloadFile;
-let emailsFromInbox: IMAPEmail[];
-let dateAfterEmailShouldArrive;
 let poPageDetailsId;
 const apiCreatedCompany: any = {
   employees: [],
   documentTypes: [],
 };
-const dateOffset = (5 * 1000);
 const ADMIN_USER = USERS[1];
 const ncoFormName = "NCO Form";
 const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
@@ -719,9 +709,6 @@ context("Add Requestor as an approver of the PO", () => {
     it(`Check PO status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get(`[data-cy="field-name"]`).should("have.text", purchaseOrderFormName);
-      cy.get("[data-cy='HeaderInfo-docId']").then((x) => {
-        purchaseOrderId = x.text();
-      });
     });
   });
 
@@ -778,6 +765,7 @@ context("Add Requestor as an approver of the PO", () => {
     it(`Select '${USERS[1].name}' for Requestor`, () => {
       cy.get("[data-cy^=requestor]").arrowClick({ force: true });
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.wait(2000);
       poCreationDate1 = moment().tz("America/Los_Angeles").format("MMM D, YYYY hh:mm A");
       poCreationDate2 = moment().tz("America/Los_Angeles").add(1, "minutes").format("MMMM D, YYYY hh:mm A");
     });
