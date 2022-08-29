@@ -231,6 +231,14 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     }];
   }
 
+  if (formValues.values?.retrain && tabConfig) {
+    tabConfig = [...tabConfig, {
+      labelId: "tabId.training",
+      tabId: TabTypeOptions.TRAINING,
+      type: TabTypeOptions.TRAINING,
+    }];
+  }
+
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
