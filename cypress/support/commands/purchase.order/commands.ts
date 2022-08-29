@@ -62,6 +62,7 @@ declare global {
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
+      poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
     }
@@ -96,7 +97,7 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").contains("Add item").arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick();
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -200,7 +201,7 @@ Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
-  cy.get("input[value=" + params.optionName + "]").arrowClick();
+  cy.get("input[value=" + params.optionName + "]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poEnterServiceID", (params: {serviceId: string}) => {
@@ -363,6 +364,10 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
 
 Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string }) => {
   cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
+});
+
+Cypress.Commands.add("poListVerifyFilterByOrderDate", (params: {orderDate: string }) => {
+  cy.get(`[aria-colindex="9"] input`).arrowType(params.orderDate).wait(500);
 });
 
 Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {

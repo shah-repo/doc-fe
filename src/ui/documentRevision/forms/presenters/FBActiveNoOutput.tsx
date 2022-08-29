@@ -100,7 +100,10 @@ const styles = makeStyles((theme: Theme) =>
       backgroundColor: `${Colors.dawn} !important`,
     },
     previewDialog: {
-      backgroundColor: Colors.alabaster,
+      backgroundColor: Colors.white,
+    },
+    previewTabContent: {
+      paddingBottom: theme.spacing(1.5),
     },
   }),
 );
@@ -228,14 +231,6 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     }];
   }
 
-  if (formValues.values?.retrain) {
-    tabConfig = tabConfig && [...tabConfig, {
-      labelId: "tabId.training",
-      tabId: TabTypeOptions.TRAINING,
-      type: TabTypeOptions.TRAINING,
-    } ];
-  }
-
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
   const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
 
@@ -291,10 +286,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                         const tabType = tabInfo.type;
                         const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                         return (
-                          <SMBox key={tabInfo.tabId}>
+                          <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
                             {tabType === TabTypeOptions.MIXED && <>
                               <DocumentRevisionFormPresenter
                                 {...formValues}
+                                isPreview={true}
                                 redlineActive={false}
                                 releasedDocRev={_documentRevisionFormState?.releasedDocRev}
                                 documentRevision={documentRevision}
