@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState } from "react";
+import { FB } from "..";
 import { toastError } from "../../components/notifications";
-import { FB } from "../helpers";
 import { MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
 import FBMaterialInfoPresenter from "./FBMaterialEqInfo.presenter";
 import FBMeqState from "./FBMeq.state";
