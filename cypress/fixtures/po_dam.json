@@ -601,6 +601,7 @@
             "index": 2,
             "label": "Requestor",
             "tabId": "details",
+            "rules": "required",
             "optionId": "3",
             "optionPath": "/change_requests/available_approvers",
             "placeholder": "[Select requestor here]",
