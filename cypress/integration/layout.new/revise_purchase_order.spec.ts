@@ -20,6 +20,7 @@ let approvalRequestDocumentType;
 
 const PURCHASE_ORDER = "Purchase Order";
 const PO_FORM_DOCUMENT = "PO Form document";
+const TITLE = "API PO document";
 const groupOne = "Developers";
 const COLUMN_HEADERS = [
   "PO #",
@@ -433,7 +434,7 @@ add the requestor to the approvals field`,
                     attachments: [],
                     referenceTo: [],
                     formDocument: { id: createdPOFormDocument.id },
-                    description: "API PO document",
+                    description: TITLE,
                     revisionChangeType: RevisionChangeType.NextRevision,
                     document: {
                       docId: "PO-00001",
@@ -451,37 +452,6 @@ add the requestor to the approvals field`,
                       },
                     },
                     formInput: {
-                      // "po-items-built-in": {
-                      //   items: [
-                      //     {
-                      //       id: "kqqj708c",
-                      //       type: "service",
-                      //       date: new Date().toISOString(),
-                      //       tax: false,
-                      //       capitalEquipment: false,
-                      //       isTraceabilityRequired: false,
-                      //       description: "office cleaning",
-                      //       // serviceId: "cleaning",
-                      //       units: "hours",
-                      //       order: 5,
-                      //       glCode: "code 1",
-                      //       unitPrice: 30,
-                      //       received: 0,
-                      //       totalAmount: "150.00",
-                      //       formattedDate: new Date().toLocaleDateString("en-US"),
-                      //       index: 0,
-                      //     },
-                      //   ],
-                      //   tax: "0.00",
-                      //   taxRate: 9.25,
-                      //   subTotal: "150.00",
-                      //   totalAmount: "150.00",
-                      //   shippingCost: "0.00",
-                      //   currency: "USD",
-                      //   exchangeRate: 1,
-                      //   totalInUSD: "150.00",
-                      //   dateOfExchangeRate: "",
-                      // },
                       "po-status-built-in": "Open",
                       "po-requestor-autocomplete": adminEmployee.id,
                     },
@@ -517,7 +487,7 @@ add the requestor to the approvals field`,
       });
 
       it(`Filter document by status ${STATUS_TYPES_LABEL.RELEASED}, and select it`, () => {
-        cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+        cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick({ force: true });
         cy.get("li").contains("RELEASED").arrowClick().wait(500);
         cy.get(`td[data-grid-col-index="3"]`).eq(0).arrowClick();
       });
@@ -572,6 +542,53 @@ add the requestor to the approvals field`,
         });
       }
     );
+
+    context("Insert Approver to Approval Block", () => {
+      it(`Insert Approver '${USERS[1].name}' for Approval`, () => {
+        cy.get("[data-cy^=fb-po-approvals]").click({ force: true });
+        cy.get("ul>li[role=option]").contains(USERS[1].name).should("be.visible").click();
+      });
+    });
+
+    context("Check “Backspace” and “Clear all” option will not be available in the PO approval field", () => {
+      it(`Verify that “Backspace” and “Clear all” option will not be available in the PO approval field`, () => {
+        cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
+      });
+    });
+
+    context("Submit for Approval and verify PO can be released. ", () => {
+      it(`Click on Submit for approval button`, () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Verify document header details and status is in ${STATUS_TYPES_LABEL.PENDING_APPROVAL}`, () => {
+        cy.verifyHeaderInfoContent({
+          title: "Purchase Orders",
+          status: STATUS_TYPES_LABEL.PENDING_APPROVAL,
+          docId: "PO-00001",
+          revision: "Rev A.1",
+        });
+      });
+    });
+
+    context("Verify that data is saved", () => {
+      it(`Verify title is ${TITLE}`, () => {
+        cy.get("[data-cy=\"BaseWithhtml-editor\"]").should("exist").contains(TITLE);
+      });
+
+      it(`Verify PO status is Open`, () => {
+        cy.get("#mui-component-select-po-status-built-in").should("exist").contains("Open");
+      });
+
+      it(`Check the Requestor field contain ${USERS[2].name} - ${USERS[2].email}`, () => {
+        cy.get("[data-cy^=po-requestor-autocomplete]").should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
+      });
+
+      it(`Check the Approval field contain ${USERS[1].name} - ${USERS[1].email}`, () => {
+        cy.get("div.Mui-disabled.MuiChip-deletable").should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      });
+    });
   }
 );
 
