@@ -43,7 +43,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     );
     const { id: ebId } = workspaceState || {};
 
-    const fetchAudit = useCallback(() => {
+    const updateAudit = useCallback(() => {
       if (ebId) {
         dispatch(documentRevisionsActions.loadAudit(ebId));
       }
@@ -85,7 +85,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState.addExistingPartChild(
           ebId,
           body,
-          fetchAudit
+          updateAudit
         );
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,7 +105,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState.addExistingPartChild(
           ebId,
           body,
-          fetchAudit
+          updateAudit
         );
       }
     ));
