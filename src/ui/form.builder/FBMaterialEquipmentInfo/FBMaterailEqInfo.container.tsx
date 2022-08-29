@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FB } from "..";
+import { FBMeqState } from "..";
 import { toastError } from "../../components/notifications";
+import FB from "../helpers/FB";
 import { MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
 import FBMaterialInfoPresenter from "./FBMaterialEqInfo.presenter";
-import FBMeqState from "./FBMeq.state";
 
 const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProps> =
   ({ documentRevisionId, inView }) => {
