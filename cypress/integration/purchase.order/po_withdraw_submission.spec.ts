@@ -38,7 +38,7 @@ const LFPO =  {
   isQms: true,
 };
 
-context("Receiving landing page test", () => {
+context("po withdraw submission", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -729,7 +729,7 @@ context("Receiving landing page test", () => {
       cy.dlSelectFirstDocument();
     });
 
-    it("PO is in Draft", () => {
+    it("PO is in PENDING APPROVAL", () => {
       cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
     });
 
