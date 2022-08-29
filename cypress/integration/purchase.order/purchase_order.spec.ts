@@ -364,6 +364,7 @@ context("PO test", () => {
       SystemRequirement("REQ-1410");
       cy.get("[name=\"date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wait(2000);
     });
 
     it("Check Tax box", () => {
@@ -378,11 +379,11 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+      cy.poAddNewFieldItem();
     });
 
     it("Enter Quantity Ordered", () => {
@@ -414,6 +415,7 @@ context("PO test", () => {
       SystemRequirement("REQ-1410");
       cy.get("[name=\"date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wait(2000);
     });
 
     it("Check Tax box", () => {
@@ -428,7 +430,7 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Check line items have unique IDs", () => {
@@ -765,6 +767,7 @@ context("PO test", () => {
       SystemRequirement("REQ-1420");
       cy.get("[name=\"date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wait(2000);
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -776,7 +779,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+      cy.poAddNewFieldItem();
     });
 
     it("Click on 'Service' select option", () => {
@@ -789,7 +792,7 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("navigate to Details tab", () => {
@@ -801,7 +804,7 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("navigate to Line Items", () => {
@@ -871,6 +874,7 @@ context("PO test", () => {
     it("Add Required Date", () => {
       cy.get("[name^=\"ordered-\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wait(2000);
     });
 
     it("Add an Approval", () => {
