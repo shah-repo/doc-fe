@@ -5,7 +5,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover, FBPurchaseOrderItemType } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_REQUESTOR_COMPONENT_NAME, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
@@ -95,8 +95,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
-    const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue) =>
-      poItems?.items?.some((item) => item.type === "service" || (item.type === "product" && item.partNumberDocId)
+    const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue) => poItems?.items?.some((item) =>
+      item.type === FBPurchaseOrderItemType.SERVICE
+      || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
     );
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
