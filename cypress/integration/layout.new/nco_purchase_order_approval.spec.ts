@@ -499,11 +499,6 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.poSelectUnits();
     });
 
-    it("Select GL code", () => {
-      SystemRequirement("REQ-1410");
-      cy.poSelectGLCode();
-    });
-
     it("Add Required Date", () => {
       SystemRequirement("REQ-1410");
       cy.get("[name=\"date\"]").next().find("button").arrowClick();
