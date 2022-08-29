@@ -1,7 +1,7 @@
 import { first } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { EBPartRequestBody, FB, FBAutocompleteAsyncOption, FBDialogState, FBEBPartForm, FBEBPartProps, FBEBPartState, PartType } from "..";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -43,6 +43,12 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     );
     const { id: ebId } = workspaceState || {};
 
+    const fetchAudit = useCallback(() => {
+      if (ebId) {
+        dispatch(documentRevisionsActions.loadAudit(ebId));
+      }
+    }, [dispatch, ebId]);
+
     useEffect(() => reaction(
       () => ebPartState?.childrenParts,
       (data) => {
@@ -79,11 +85,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState.addExistingPartChild(
           ebId,
           body,
-          () => {
-            if (ebId) {
-              dispatch(documentRevisionsActions.loadAudit(ebId));
-            }
-          }
+          fetchAudit
         );
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,11 +105,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState.addExistingPartChild(
           ebId,
           body,
-          () => {
-            if (ebId) {
-              dispatch(documentRevisionsActions.loadAudit(ebId));
-            }
-          }
+          fetchAudit
         );
       }
     ));
