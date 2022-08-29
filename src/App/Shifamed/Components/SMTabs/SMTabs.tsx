@@ -22,7 +22,6 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           value={_tabsState?.value}
           style={{
             zIndex: 1,
-            backgroundColor: Colors.alabaster,
             height: "auto",
             width: "100%",
             fontSize: "12px",
