@@ -78,7 +78,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
       >
         {!isEmpty(completed) && (
           <>
-            <Box component="span" fontWeight={600}>
+            <Box component="span" fontWeight={600} data-cy="completed-steps">
               Step {uniq(completed)?.sort().map((e) => e + ",")}
             </Box>
             <Box component="span" fontWeight={400}>
@@ -88,7 +88,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
         )}
         {!isEmpty(inprogress) && (
           <>
-            <Box component="span" fontWeight={600}>
+            <Box component="span" fontWeight={600} data-cy="inprogress-steps">
               Step {uniq(inprogress)?.sort().map((e) => e + ",")}
             </Box>
             <Box component="span" fontWeight={400}>

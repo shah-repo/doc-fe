@@ -64,8 +64,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         //   // Until BE removes field approvals
         //   return;
       } else if (change.field !== "effectiveDate" || change.nextValue !== "null") {
-        const isRemovingApproverAction = change.field === "approvals.status" &&
-        change.nextValue === ApprovalStatus.Abandoned;
+        const isRemovingApproverAction = (
+          change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
+        );
         if (isRemovingApproverAction) {
           const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
           if (removedApproverById) {

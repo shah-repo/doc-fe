@@ -14,6 +14,7 @@ export default (theme: Theme) =>
       background: Colors.mirage,
       zIndex: theme.zIndex.drawer + 2,
       overflow: "hidden",
+      borderRight: "none",
     },
     toolbar: {
       backgroundColor: Colors.mirage,

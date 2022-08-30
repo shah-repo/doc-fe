@@ -204,6 +204,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           documentRevision.status !== DocumentRevisionStatus.Voided &&
                           <FBMaterialEqInfoContainer
                             documentRevisionId={documentRevision?.id}
+                            inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                           />
                           }
                           {tabType === TabTypeOptions.TRAINING &&

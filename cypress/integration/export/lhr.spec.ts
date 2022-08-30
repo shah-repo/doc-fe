@@ -752,7 +752,7 @@ context("Export for LHR", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("visit the LHR", () => {
@@ -826,7 +826,7 @@ context("Export for LHR", () => {
     });
 
     it("Save the document", () => {
-      cy.lhrClickSaveDocument();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Click on revisions tab on side panel", () => {

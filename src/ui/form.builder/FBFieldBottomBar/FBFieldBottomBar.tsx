@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import React, { useState } from "react";
 import { FBButton, FBFieldBottomBarProps } from "..";
+import { SM } from "../../../App";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBStarter } from "../FBStarter/FBStarter.wrap";
 
@@ -11,6 +12,7 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   index = 0,
   mt,
 }) => {
+  const { _tabsState } = SM.useStores();
   const [isHover, setIsHover] = useState(false);
   return (<Box display={visibility === "visible" ? "flex" : "none"} mt={mt}
     onMouseEnter={() => setIsHover(true)}
@@ -24,7 +26,7 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
       style={{ borderStyle: isHover ? "solid" : "dashed" }}
     />
     <FBButton
-      label="form.builder.add.field"
+      label={_tabsState?.tabID === "specification" ? "form.builder.addEquiSpec" : "form.builder.add.field"}
       dataCy="form.builder.add.field"
       size="medium"
       variant="contained"
