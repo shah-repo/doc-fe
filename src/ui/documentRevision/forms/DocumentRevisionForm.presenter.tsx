@@ -403,8 +403,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {_formState?.active && documentRevision && values.id && (
-          <Grid item xs={12}>
+        {values.formDocument?.renderHTMLDefined && _formState?.active && documentRevision && values.id && (
+          <Grid item xs={12} className="preview-html">
             <Box textAlign="right">
               <GenerateHtmlPreview
                 id={values.id}
