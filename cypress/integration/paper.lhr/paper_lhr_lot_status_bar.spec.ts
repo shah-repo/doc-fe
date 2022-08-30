@@ -3,7 +3,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -25,8 +24,6 @@ let equipmentDocument;
 let createdPartDocument;
 let MPIDocumentType;
 let createdMPIDocument;
-// let LHRtDocumentType;
-// let LHRDocumentType;
 let CSLDocumentType;
 let createdLotsFormDocument;
 let createdLot;
@@ -72,8 +69,6 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           MPIDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
-          // LHRtDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "LHR template");
-          // LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record Test");
           CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
@@ -711,7 +706,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22082901");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083001RD");
     });
 
     context("Right side:", () => {
@@ -739,13 +734,19 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
-        cy.wait(1000);
+        cy.closeAllAlertMessages();
       });
 
-      it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.poAMCheckForAlertMessage();
+      it(`Submit for Approval`, () => {
+        cy.wait(3000);
+        cy.get("#ApproveAndRelease-button").arrowClick();
+      });
+
+      it("Verify it is functional and Verify popup message Approvals not present", () => {
+        cy.checkToastMessageIsEqual({
+          message: "Approvals not present",
+        });
+        cy.closeAllAlertMessages();
       });
 
       context(`Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” options are displayed → 
@@ -766,19 +767,16 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     context("Check the status bar background color is BLUE & static", () => {
-      it("Color of Header status bar is BLUE", () => {
-        cy.get(".MuiBreadcrumbs-root").parent().parent().parent().parent()
-          .should("have.css", "background", "#4D88FF");
+      it(`Color of Header status bar is BLUE(rgb(77, 136, 255))`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
       });
 
-      it("Color of Header status bar is BLUE", () => {
-        cy.get(".MuiAppBar-positionStatic").should("have.css", "position", "static");
+      it(`Position of the status bar STATIC`, () => {
+        cy.verifyStatusbarPosition({ position: "static" });
       });
     });
 
     context("Fill the form content", () => {
-      xit("The status bar should be fixed", () => {});
-
       it("Add some reference", () => {
         cy.drSelectReferences("FM-00002");
       });
@@ -795,12 +793,13 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("PRT-00001 - rev 1 - Part document");
+      });
+
       it("Add an Approval", () => {
-        cy.wait(5000);
-        cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -813,12 +812,12 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     context("Check the status bar content:", () => {
       it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
         cy.verifyHeaderInfoContent({
-          status: STATUS_TYPES_LABEL.WIP,
+          status: STATUS_TYPES_LABEL.IN_REVIEW,
           title: "LHR",
           docId: "LHR-00001",
           revision: "Rev A",
         });
-        cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22082901");
+        cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083001RD");
       });
 
       context("Right Side:", () => {
@@ -828,8 +827,8 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
 
         it("Withdraw Submission", () => {
           SystemRequirement("REQ-0890");
-          cy.arWithdrawSubmission();
-          cy.checkToastMessage({ exists: false });
+          cy.get("[data-cy='document.revision.withdraw.alert']").arrowClick();
+          cy.get("#AlertDialog-cancelButton").arrowClick();
         });
 
         it("Send to email button visible & functional", () => {
@@ -837,36 +836,37 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
           cy.checkToastMessageContains({
             message: "File will be sent to your email shortly.",
           });
+          cy.closeAllAlertMessages();
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
-          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
       });
 
       context("Check The status bar background color is ORANGE & Static", () => {
-        it("Color of Header status bar is ORANGE", () => {
-          cy.get(".MuiBreadcrumbs-root").parent().parent().parent().parent()
-            .should("have.css", "background", "#EFA20B");
+        it(`Color of Header status bar is ORANGE(rgb(239, 162, 11))`, () => {
+          cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
         });
 
-        it("Color of Header status bar is ORANGE", () => {
-          cy.get(".MuiAppBar-positionStatic").should("have.css", "position", "static");
+        it(`Position of the status bar STATIC`, () => {
+          cy.verifyStatusbarPosition({ position: "static" });
         });
       });
 
       context("Approve the LHR → The LHR is in Released status", () => {
         it("Approve Paper LHR", () => {
-          cy.poApprove();
+          cy.lhrApprove();
         });
 
-        cy.verifyHeaderInfoContent({
-          status: STATUS_TYPES_LABEL.RELEASED,
-          title: "LHR",
-          docId: "LHR-00001",
-          revision: "Rev A",
+        it("Verify Header info content RELEASED", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.RELEASED,
+            title: "LHR",
+            docId: "LHR-00001",
+            revision: "Rev A",
+          });
         });
       });
     });
@@ -885,20 +885,168 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Check if 'Change Owner' button header menu and is functional", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
       cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-    });
-
-    it("Color of Header status bar is GREEN", () => {
-      cy.get(".MuiBreadcrumbs-root").parent().parent().parent().parent()
-        .should("have.css", "background", "#0DB78D");
     });
   });
 
   context("Scroll down the page → The status bar should be fixed", () => {
-    it("Color of Header status bar is ORANGE", () => {
-      cy.get(".MuiAppBar-positionStatic").should("have.css", "position", "static");
+    it(`Color of Header status bar is GREEN(rgb(13, 183, 141))`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+    });
+
+    it(`Position of the status bar STATIC`, () => {
+      cy.verifyStatusbarPosition({ position: "static" });
+    });
+  });
+
+  context("Click on the References → Referenced documents open in a new tab", () => {
+    // Click on the References → Referenced documents open in a new tab
+  });
+
+  context("Update the LHR & release the new revision", () => {
+    it("Release the new version", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve Paper LHR", () => {
+      cy.lhrApprove();
+    });
+
+    it("Open the Superseded revision", () => {
+      cy.get("[data-cy='note-icon']").arrowClick();
+    });
+
+    it("Open the SUPERSEDED version", () => {
+      cy.get("[data-cy='DocumentRevisionList-item']>a>span").contains("Revision A - Superseded").arrowClick();
+    });
+  });
+
+  context("Check the content of the status bar SUPERSEDED version:", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+        title: "LHR",
+        docId: "LHR-00001",
+        revision: "Rev A",
+      });
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083001RD");
+    });
+
+    context("Right Side:", () => {
+      it("Check Last save should be present in autosave", () => {
+        cy.contains("Last saved:").should("not.exist");
+      });
+
+      it("Send to email button visible & functional", () => {
+        cy.sendToEmailFromHeader();
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+        cy.closeAllAlertMessages();
+      });
+
+      it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+    });
+
+    context("Check The status bar background color is GREEN & Static", () => {
+      it(`Color of Header status bar is GREEN(rgb(13, 183, 141))`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+      });
+
+      it(`Position of the status bar STATIC`, () => {
+        cy.verifyStatusbarPosition({ position: "static" });
+      });
+    });
+  });
+
+  context(`Update the LHR and select revision stage "Void" → 
+    Complete the voiding process until the item goes to "Voided" state`, () => {
+    it("Open the SUPERSEDED version", () => {
+      cy.get("[data-cy='DocumentRevisionList-item']>a>span").contains("Revision A.1 - Released").arrowClick();
+    });
+
+    it("Revise document with 'Obsolete' option", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Select Obsolete revision option", () => {
+      cy.get("[id=\"RevisionTypeChange-obsolete\"]").arrowClick();
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Provide description & Click Yes", () => {
+      cy.get("[name='voidDescription']").arrowType("Voiding the document");
+      cy.get("button[data-cy='fb-control-btn]'").click();
+    });
+
+    it("Approve Paper LHR for VOIDED", () => {
+      cy.lhrApprove();
+    });
+  });
+
+  context("Check the content of the status bar VOIDED version:", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.VOIDED,
+        title: "LHR",
+        docId: "LHR-00001",
+        revision: "Rev A",
+      });
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083001RD");
+    });
+
+    context("Right Side:", () => {
+      it("Check Last save should be present in autosave", () => {
+        cy.contains("Last saved:").should("not.exist");
+      });
+
+      it("Send to email button visible & functional", () => {
+        cy.sendToEmailFromHeader();
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+        cy.closeAllAlertMessages();
+      });
+
+      it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+    });
+
+    context("Check The status bar background color is RED & Static", () => {
+      it(`Color of Header status bar is RED(rgb(236, 43, 0))`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
+      });
+
+      it(`Position of the status bar STATIC`, () => {
+        cy.verifyStatusbarPosition({ position: "static" });
+      });
     });
   });
 });
