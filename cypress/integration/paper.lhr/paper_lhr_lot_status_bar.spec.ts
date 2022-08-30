@@ -1001,7 +1001,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
 
     it("Provide description & Click Yes", () => {
       cy.get("[name='voidDescription']").arrowType("Voiding the document");
-      cy.get("button[data-cy='fb-control-btn]'").click();
+      cy.get("[data-cy='fb-control-btn]'").click();
     });
 
     it("Approve Paper LHR for VOIDED", () => {
