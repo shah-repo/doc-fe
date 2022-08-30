@@ -6,35 +6,37 @@ import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   fieldWrapperState,
-  inputProps: { index, designDisabled } = {},
+  inputProps: { index = 0, type } = {},
   toolsVisible = false,
   markDownVisible = false,
   onMouseOver,
   onMouseLeave,
-  topBarMargin,
   grabMargin,
   addToolVisible,
   inputProps,
   ...props
 }) => (
   <FBProvider {...{ fieldWrapperState }}>
-    <Box {...{ onMouseOver, onMouseLeave }} className={`fb-field-wrapper-${inputProps?.name}`}>
-      <FBFieldTopBar
-        visibility={toolsVisible}
-        mb={topBarMargin}
-        {...{ inputProps }}
-      />
+    <Box
+      {...{ onMouseOver, onMouseLeave }}
+      className={`fb-field-wrapper-${inputProps?.name}`}
+      position="relative"
+      mt={index === 0 ? 0 : type === "section" || type === "approvals" ? 6 : 3}
+      mb={2}
+    >
+      <FBFieldTopBar visibility={toolsVisible} {...{ inputProps }} />
       <Box
-        border={toolsVisible === "visible" ? `2px solid ${Colors.dodger_blue}` : "none"}
-        borderRadius={toolsVisible === "visible" ? "4px 0px 4px 4px" : 0}
-        p={1.25}
+        style={{
+          outline: toolsVisible === "visible" ? `2px solid ${Colors.dodger_blue}` : "none",
+          borderRadius: "4px 0 4px 4px",
+        }}
       >
         <Box display="flex" flexDirection="row">
           <Box width="100%">{props.children}</Box>
         </Box>
         {markDownVisible && <FBFieldMarkDown {...{ index }} />}
       </Box>
-      <FBFieldBottomBar visibility={toolsVisible} {...{ index }} mt={1.25} />
+      <FBFieldBottomBar visibility={toolsVisible} {...{ index }} />
     </Box>
   </FBProvider>
 );

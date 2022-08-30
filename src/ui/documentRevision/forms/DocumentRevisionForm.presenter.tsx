@@ -189,7 +189,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   );
 
-
   useObserver(() => {
     if (values.id || values.document?.documentType?.id) {
       dirty = _formState?.isDirty || _documentRevisionFormState?.isDirty || false;
@@ -230,7 +229,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
       />
-      <Grid container spacing={3} md={12} sm={12}>
+      <Grid container spacing={3}>
         {isVisible && <Grid item xs={6}>
           <DocumentTypeSelect
             outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
