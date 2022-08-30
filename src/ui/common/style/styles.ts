@@ -10,7 +10,7 @@ export default makeStyles((theme: Theme) =>
       padding: "0px",
       maxWidth: "100%",
       margin: "0px",
-      marginTop: "76px",
+      marginTop: "-10px",
     },
     appFrame: ({ isDrawerOpen }) => ( {
       flexGrow: 1,
