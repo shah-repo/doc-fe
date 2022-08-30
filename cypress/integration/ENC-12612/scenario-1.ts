@@ -152,7 +152,7 @@ context(testName, () => {
     it("Create Approval Role", () => {
       cy.get("[data-cy=\"tabId.approvalroles\"]").click();
       cy.get("[data-cy=\"form.builder.add.another.role\"] > .MuiBox-root").click();
-      cy.get("[data-cy=\"name\"]").arrowType("Role 1").wait(500);
+      cy.get("[data-cy=\"name\"]").arrowType("Role 1").wait(1000);
       cy.drEnterApprovingGroups("Groups Management");
       cy.get("[data-cy=\"common.add\"]").eq(0).click();
     });
