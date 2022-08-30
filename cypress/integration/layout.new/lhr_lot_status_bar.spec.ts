@@ -1,8 +1,10 @@
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -31,6 +33,10 @@ let createdLotsFormDocument;
 let createdLot;
 
 const groupOne = "Developers";
+const reference = {
+  value: "LOT #22041301 - A - API LOT 1",
+  valueCode: "LOT #22041301",
+};
 
 context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   before(() => {
@@ -837,7 +843,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22082901");
+      // cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22082901");
     });
 
     context("Right side:", () => {
@@ -865,41 +871,235 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
-        cy.wait(1000);
+        cy.wait(2000);
       });
 
       it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        cy.listLoadingElementShouldNotExist();
         cy.poAMCheckForAlertMessage();
       });
 
-      context(`Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” options are displayed → 
-      Verify they’re functional`, () => {
-        it("Clicks on VOID button in header menu and is functional", () => {
+      context(
+        `Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” options are displayed → 
+      Verify they’re functional`,
+        () => {
+          it("Clicks on VOID button in header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
+            cy.get("[data-cy=\"void-button\"]").arrowClick();
+            cy.get("#AlertDialog-cancelButton").arrowClick();
+            cy.checkToastMessage({ exists: false });
+          });
+
+          it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          });
+        }
+      );
+    });
+
+    context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
+      it(`Color of Header status bar is BLUE(${Colors.dodger_blue})`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+      });
+    });
+  });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+    });
+  });
+
+  context("Populate the fields - including adding some references and selecting R&D build type- ", () => {
+    it("Select 'R&D' build type", () => {
+      cy.contains("Build Type").should("be.visible");
+      cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
+      cy.get("[value=\"R&D\"]").check();
+    });
+
+    it("Add some references", () => {
+      cy.drSelectReferences(reference.value);
+    });
+
+    it("Add 'Due Date'", () => {
+      cy.poAddDateRequired();
+    });
+
+    it("Add Approver to approvals list", () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+    });
+  });
+
+  context("Start the step → LHR Step is created in WIP", () => {
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'START MPI'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      cy.mpiStartStep({ stepNumber: 1 });
+    });
+  });
+
+  context("Check the content of the status bar", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.WIP,
+        title: "LHR",
+        docId: "Step #1",
+        revision: "Rev A",
+      });
+      // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
+    });
+
+    context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
+      it(`Color of Header status bar is BLUE(${Colors.dodger_blue})`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+      });
+    });
+
+    context(
+      `Click on the redline → Verify the status bar continues working as specified in the previous step and there’s only a “Save” button next in it.`,
+      () => {
+        it(`Click on the redline`, () => {
           cy.get("#HeaderMenuButton").arrowClick();
-          cy.get("[data-cy=\"void-button\"]").arrowClick();
-          cy.get("#AlertDialog-cancelButton").arrowClick();
-          cy.checkToastMessage({ exists: false });
+          cy.get("[data-cy=\"redlineButton\"]").arrowClick();
         });
 
-        it("Check if 'Change Owner' button header menu and is functional", () => {
-          cy.get("#HeaderMenuButton").arrowClick();
-          cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+        it(`Save → Verify it is functional and the last saved should be updated every time there is a “save” event 
+      (manual or auto)`, () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        });
+      }
+    );
+
+    context("Right side:", () => {
+      it(`Complete step → Verify it is functional and Verify popup message Approvals not present`, () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.poAMCheckForAlertMessage();
+      });
+
+      it(`Save → Verify it is functional and the last saved should be updated every time there is a “save” event 
+      (manual or auto)`, () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
+
+      it("Add Approver to approvals list", () => {
+        cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(USERS[1].name);
+      });
+
+      it("Last save should be present", () => {
+        cy.contains("Last saved:").should("be.exist");
+      });
+
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Enter 'Start quantity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8");
+        cy.unClick();
+      });
+
+      it("Enter 'Accepted quantity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("5");
+        cy.unClick();
+      });
+
+      it("Enter 'Rejected quantity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("3");
+        cy.unClick();
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wait(2000);
+      });
+
+      it("Last save should be present", () => {
+        cy.contains("Last saved:").should("be.exist");
+      });
+
+      context(
+        `Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” options are displayed → 
+      Verify they’re functional`,
+        () => {
+          it("Clicks on VOID button in header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
+            cy.get("[data-cy=\"void-button\"]").arrowClick();
+            cy.get("#AlertDialog-cancelButton").arrowClick();
+            cy.checkToastMessage({ exists: false });
+          });
+
+          it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          });
+        }
+      );
+    });
+  });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+    });
+  });
+
+  context("Click on “Complete step” and submit for approval → LHRS is “In Review” state", () => {
+    it("Click on “Complete step", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it(`LHRS is ${STATUS_TYPES_LABEL.IN_REVIEW}  state`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
+    });
+  });
+
+  context("Check the content of the status bar", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+        title: "LHR",
+        docId: "Step #1",
+        revision: "Rev A",
+      });
+      // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
+    });
+
+    context(`The status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
+      it(`Color of Header status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+      });
+    });
+
+    context("Right side:", () => {
+      it("Last save should not be present", () => {
+        cy.contains("Last saved:").should("not.exist");
+      });
+
+      it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+
+      it("Click 'Withdraw Submission' button", () => {
+        cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
         });
       });
 
-
-    });
-
-    context("The status bar is BLUE", () => {
-      it("Color of Header status bar is BLUE", () => {
-        // WIP_STATUS
-        // background
-
-        cy.get("div.MuiBox-root.MuiBox-root>div > header > div > div > div").should("have.css", "background", "#4D88FF");
-        // cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      it(`Complete step → Verify it is functional and Verify status changed ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
       });
     });
   });
