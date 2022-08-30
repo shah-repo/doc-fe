@@ -1,7 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 //
-//
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -23,10 +22,8 @@ const documentType = "Form";
 const outputDocumentType = "Document Approval Matrix";
 
 const documentName = "ENC-12612 Scenario 1";
-
-const testName = "Updating form having inline approvals CSL";
-
-let documentUrl: string;
+const recordName = "Record 1";
+const testName = "Update the Internal Type for the following: LHRT";
 
 context(testName, () => {
   before(() => {
@@ -132,7 +129,6 @@ context(testName, () => {
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.url().then((url: string) => { documentUrl = url; });
     });
 
     it("Verify revision", () => {
@@ -140,179 +136,36 @@ context(testName, () => {
     });
   });
 
-  // context(`Create ${record1Name}`, () => {
-  //   it("Create new", () => {
-  //     cy.drCreateNewDocumentFromForm();
-  //   });
+  context(`Create ${recordName}`, () => {
+    it("Create new", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
 
-  //   it("Type a title", () => {
-  //     cy.drEnterDocumentTitle({ name: record1Name });
-  //   });
+    it("Type a title", () => {
+      cy.drEnterDocumentTitle({ name: recordName });
+    });
 
-  //   it("Verify revision", () => {
-  //     cy.drCheckDocumentStatus({ status: "WIP" });
-  //   });
+    it("Verify revision", () => {
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
+    });
 
-  //   it("Add inline approver 1", () => {
-  //     cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
-  //   });
+    it("Create Approval Role", () => {
+      cy.get("[data-cy=\"tabId.approvalroles\"]").click();
+      cy.get("[data-cy=\"form.builder.add.another.role\"] > .MuiBox-root").click();
+      cy.get("[data-cy=\"name\"]").arrowType("Role 1").wait(500);
+      cy.drEnterApprovingGroups("Groups Management");
+      cy.get("[data-cy=\"common.add\"]").eq(0).click();
+    });
+  });
 
-  //   it("Click Request Approval button", () => {
-  //     cy.contains("Request approval").arrowClick();
-  //   });
-
-  //   it("Approve inline approval", () => {
-  //     cy.inlineApproval();
-  //   });
-
-  //   it("Verify previous revision", () => {
-  //     cy.get("[data-cy=note-icon]").click();
-  //     cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(1).should("contain", "Last Signed");
-  //   });
-
-  //   it("Add inline approver 2", () => {
-  //     cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).autocompleteSelect(`${ADMIN_USER.email}`);
-  //   });
-
-  //   it("Click Request Approval button", () => {
-  //     cy.contains("Request approval").arrowClick();
-  //   });
-
-  //   it("Approve inline approval", () => {
-  //     cy.inlineApproval();
-  //   });
-
-  //   it("Verify previous revision", () => {
-  //     cy.get("[data-cy=note-icon]").click();
-  //     cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(1).should("contain", "Last Signed");
-  //     cy.get("[data-cy=revision] > .MuiTypography-root > span").eq(2).should("contain", "Archive");
-  //   });
-
-  //   it("Save document", () => {
-  //     cy.url().then((url: string) => { record1Url = url; });
-  //     cy.drClickCreateDocumentWithApiCallForForms();
-  //   });
-  // });
-
-  // context(`Create ${record2Name}`, () => {
-  //   it("Go to document", () => {
-  //     cy.visit(documentUrl);
-  //   });
-
-  //   it("Create new", () => {
-  //     cy.drCreateNewDocumentFromForm();
-  //   });
-
-  //   it("Verify revision", () => {
-  //     cy.drCheckDocumentStatus({ status: "WIP" });
-  //   });
-
-  //   it("Type a title", () => {
-  //     cy.drEnterDocumentTitle({ name: record2Name });
-  //   });
-
-  //   it("Save document", () => {
-  //     cy.url().then((url) => record2Url = url);
-  //     cy.drClickCreateDocumentWithApiCallForForms();
-  //   });
-  // });
-
-  // context("Revise and remove approvals", () => {
-  //   it("Go to document", () => {
-  //     cy.visit(documentUrl);
-  //   });
-
-  //   it("Revise document", () => {
-  //     cy.lhrClickReviseDocument();
-  //   });
-
-  //   it("Remove approvals", () => {
-  //     cy.get(`[data-cy="remove-schema-item"]`).eq(1).arrowClick({ force: true });
-  //     cy.get(`[data-cy="remove-schema-item"]`).eq(2).arrowClick({ force: true });
-  //   });
-
-  //   it("Save document", () => {
-  //     cy.get(`[data-cy=DocumentRevisionForm-submit]`).arrowClick();
-  //   });
-
-  //   it("Approve and release document", () => {
-  //     cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-  //   });
-  // });
-
-  // context(`Verify ${record1Name}`, () => {
-  //   it("Go to the record", () => {
-  //     cy.visit(record1Url);
-  //   });
-
-  //   it("Verify revision", () => {
-  //     cy.drCheckDocumentStatus({ status: "WIP" });
-  //   });
-
-  //   it("Upgrade to Latest ",  () => {
-  //     cy.get("[data-cy=HeaderMenuButton]").arrowClick();
-  //     cy.get("#UpgradeToLatest-upgrade").arrowClick();
-  //     cy.get("#UpgradeToLatest-proceed").arrowClick();
-  //   });
-
-  //   it("Select approvals", () => {
-  //     cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
-  //   });
-
-  //   it("Click Approve And Release", () => {
-  //     cy.drApproveAndReleaseDialog();
-  //     cy.wait(2000);
-  //   });
-
-  //   it("Verify revision", () => {
-  //     cy.drCheckDocumentStatus({ status: "IN REVIEW" });
-  //   });
-
-  //   it("Approve inline approval", () => {
-  //     cy.inlineApproval();
-  //   });
-
-  //   it("Verify revision", () => {
-  //     cy.drCheckDocumentStatus({ status: "RELEASED" });
-  //     cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev A");
-  //   });
-  // });
-
-  // context(`Verify ${record2Name}`, () => {
-  //   it("Go to the record", () => {
-  //     cy.visit(record2Url);
-  //   });
-
-  //   it("Verify revision", () => {
-  //     cy.drCheckDocumentStatus({ status: "WIP" });
-  //   });
-
-  //   it("Upgrade to Latest ",  () => {
-  //     cy.get("[data-cy=HeaderMenuButton]").arrowClick();
-  //     cy.get("#UpgradeToLatest-upgrade").arrowClick();
-  //     cy.get("#UpgradeToLatest-proceed").arrowClick();
-  //   });
-
-  //   it("Select approvals", () => {
-  //     cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
-  //   });
-
-  //   it("Click Approve And Release", () => {
-  //     cy.drApproveAndReleaseDialog();
-  //     cy.wait(2000);
-  //   });
-
-  //   it("Verify revision", () => {
-  //     cy.drCheckDocumentStatus({ status: "IN REVIEW" });
-  //   });
-
-  //   it("Approve inline approval", () => {
-  //     cy.inlineApproval();
-  //   });
-
-  //   it("Verify revision", () => {
-  //     cy.drCheckDocumentStatus({ status: "RELEASED" });
-  //     cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev A");
-  //   });
-  // });
+  context(`Virify ${recordName}`, () => {
+    it("Virify matrix details", () => {
+      cy.get("[data-cy=\"tabId.matrixdetails\"]").click();
+      cy.get(":nth-child(1) > .MuiIconButton-label > .MuiBox-root > .MuiSvgIcon-root").click();
+      cy.get(".MuiTableBody-root")
+        .should("contain", "LHRT-")
+        .and("contain", "LHRT")
+        .and("contain", "LHR Template");
+    });
+  });
 });
