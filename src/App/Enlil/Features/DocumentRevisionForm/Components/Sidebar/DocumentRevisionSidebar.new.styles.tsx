@@ -11,6 +11,7 @@ export const styles = makeStyles(() =>
       filter: `drop-shadow(0px 4px 24px rgba(22, 34, 41, 0.06))`,
       borderRadius: "7px",
       marginRight: "13px",
+      marginTop: "0px",
     }),
     iconBox: {
       minWidth: "48px",
