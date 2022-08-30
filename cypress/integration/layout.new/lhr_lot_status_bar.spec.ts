@@ -1103,6 +1103,223 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
     });
   });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+    });
+  });
+
+  context("Approve the submission → LHRS is in the “Completed” state ", () => {
+    it("Approve LHR", () => {
+      cy.wait(3000);
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.COMPLETED });
+    });
+  });
+
+  context("Check the content of the status bar", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.COMPLETED,
+        title: "LHR",
+        docId: "Step #1",
+        revision: "Rev A",
+      });
+      // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
+    });
+
+    context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
+      it(`Color of Header status bar is BLUE(${Colors.dodger_blue})`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+      });
+    });
+
+    context("Right side:", () => {
+      it("Last save should not be present", () => {
+        cy.contains("Last saved:").should("not.exist");
+      });
+
+      it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+
+      it("Click 'Revise document' button", () => {
+        cy.get("[data-cy=\"updateRecord\"]").click();
+      });
+    });
+  });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+    });
+  });
+
+  context(
+    `Revise LHRS → Select “Admin Change” and Complete the step again → New revision is Completed and 
+  Revision A is Superseded`,
+    () => {
+      it("Add Approver to approvals list", () => {
+        cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(USERS[1].name);
+      });
+
+      it("Click on Complete step to Complete the step again", () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+
+      it("Approve LHR", () => {
+        cy.wait(3000);
+        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        });
+        cy.checkToastMessage({ exists: false });
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.COMPLETED });
+      });
+
+      it("Open revisions tab, click and Revision A is Superseded", () => {
+        cy.drClickRevisionsSidePanel();
+        cy.get(`[data-cy="revision"]`).eq(1).should("have.text", "Revision A  - Superseded");
+      });
+    }
+  );
+
+  context(`Open the Superseded revision → Check the content of the status bar`, () => {
+    it("Open the Superseded revision", () => {
+      cy.get(`[data-cy="revision"]`).eq(1).click();
+    });
+
+    context("Check the content of the status bar", () => {
+      it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.SUPERSEDED,
+          title: "LHR",
+          docId: "Step #1",
+          revision: "Rev A",
+        });
+        // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
+      });
+
+      context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+        it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+          cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+        });
+      });
+
+      context("Right side:", () => {
+        it("Last save should not be present", () => {
+          cy.contains("Last saved:").should("not.exist");
+        });
+
+        it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+        });
+      });
+    });
+  });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+    });
+  });
+
+  context("Go back to the LHR and submit it for approval → LHR is “In Review”", () => {
+    it("Go back to the LHR", () => {
+      cy.get("#HeaderInfo-subtitle").click();
+    });
+
+    it(`Submit it for approval and Status is in ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
+    });
+  });
+
+  context("Check the content of the status bar", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+        title: "LHR",
+        docId: "LHR-00001",
+        revision: "Rev A",
+      });
+      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #22083001RD");
+    });
+
+    context(`The status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
+      it(`Color of Header status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+      });
+    });
+
+    context("Right side:", () => {
+      it("Last save should not be present", () => {
+        cy.contains("Last saved:").should("not.exist");
+      });
+
+      it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+
+      it("Click 'Withdraw Submission' button", () => {
+        cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+        });
+      });
+
+      it(`Submit it for approval and Verify status changed ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
+      });
+    });
+  });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+    });
+  });
+
+  context("Approve it → LHR is Released → Check the content of the status bar", () => {
+    it("Approve LHR", () => {
+      cy.wait(3000);
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`LHR is in the ${STATUS_TYPES_LABEL.RELEASED} state`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
+
+
+  });
 });
 
 export { };
