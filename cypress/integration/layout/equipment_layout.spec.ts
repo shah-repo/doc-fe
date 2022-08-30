@@ -440,13 +440,11 @@ context("Layout Verification of EQ", () => {
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
-
   });
 
   context("Add FB Fields", () => {
     it("Add autocomplete of “Approvers” and set validation", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
       cy.get("[data-cy='optionId']").autocompleteSelect("Approvers");
@@ -529,7 +527,7 @@ context("Layout Verification of EQ", () => {
     });
   });
 
-  context("Release ES", () => {
+  context("Release EQ", () => {
     it("Approve and release  document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -605,7 +603,7 @@ context("Layout Verification of EQ", () => {
         cy.fbAddField();
       });
 
-      it("Click create document", () => {
+      it("Save the document", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
         cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
         cy.wait("@response").then((res) => {
@@ -828,7 +826,6 @@ context("Layout Verification of EQ", () => {
       it("Fill 'Completion Date'", () => {
         const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
         cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
-
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
           .each(($el) => {
@@ -971,7 +968,6 @@ context("Layout Verification of EQ", () => {
 
 
     context("Validate Right Side Panel", () => {
-
       it("Verify that right side panel opens by default to the References tab", () => {
         cy.get("[data-cy='References']").should("exist");
         cy.get("[data-cy='generalInfo']").should("be.visible");
