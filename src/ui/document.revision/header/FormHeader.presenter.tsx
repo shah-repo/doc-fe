@@ -52,7 +52,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
   return (
-    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus} >
+    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
       {documentRevision &&
       <HeaderInfo
         revisionStage={documentRevision.revisionStage}
@@ -84,9 +84,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
             {(asyncState.status === AsyncStatus.Active ||
               workspaceState?.documentRevApi.loading ||
               _documentRevisionFormState?.loading) && (
-              <Box width="100%" pt={1}>
-                <LinearProgress className={classes.linearProgress} data-cy="Document-Save-Progress-Bar" />
-              </Box>
+              <LinearProgress className={classes.linearProgress} data-cy="Document-Save-Progress-Bar" />
             )}
           </>
         )}
