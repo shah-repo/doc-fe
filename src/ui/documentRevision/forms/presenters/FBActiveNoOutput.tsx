@@ -180,7 +180,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const isOutput = true;
   const showAdministrativeAndVoidChange = false;
   const type = DocumentCloneTypeOptions.none;
-  const mode = FBWorkspaceModeOptions.FORMPREVIEW;
+  const mode = FBWorkspaceModeOptions.FORM;
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const resetForm = () => {};
 
@@ -299,7 +299,6 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                   type,
                                   showAdministrativeAndVoidChange,
                                   isOutput,
-                                  isDisabled: true,
                                   email,
                                   isOwner,
                                   mode,
