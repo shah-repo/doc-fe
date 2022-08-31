@@ -31,7 +31,6 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
             minHeight: 44,
             maxHeight: 44,
             position: "sticky",
-            marginBottom: 10,
           }}
           TabIndicatorProps={{ style: { background: Colors.cerulean } }}
         >
