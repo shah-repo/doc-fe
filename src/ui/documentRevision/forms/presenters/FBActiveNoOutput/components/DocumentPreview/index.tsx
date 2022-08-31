@@ -6,8 +6,9 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   DocumentRevisionFormProgressBar, DocumentRevisionSummaryHeader,
-  SMBox, SMTabs, SMTemplate, SM,
+  SMBox, SMTabs, SMTemplate, SM, SMTabsState,
 } from "../../../../../../../App";
+import { withSMTabs } from "../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { authSelectors } from "../../../../../../../state/ducks/auth";
 import { documentTypeSelectors } from "../../../../../../../state/ducks/documentRevisions/documentType";
@@ -30,14 +31,16 @@ import styles from "./styles";
 
 interface Props {
   docRevId?: string;
+  _tabsState?: SMTabsState;
 }
 
 const DocumentPreview: React.FunctionComponent<Props> = ({
   docRevId,
+  _tabsState,
 }) => {
   const classes = styles();
   const formik = useFormikContext();
-  const { _documentRevisionFormState, _tabsState, _formState } = SM.useStores();
+  const { _documentRevisionFormState, _formState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   let schema = _documentRevisionFormState?.schema;
 
@@ -251,4 +254,4 @@ const DocumentPreview: React.FunctionComponent<Props> = ({
   );
 };
 
-export default DocumentPreview;
+export default withSMTabs(DocumentPreview);
