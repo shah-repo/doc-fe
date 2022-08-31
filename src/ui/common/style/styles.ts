@@ -9,6 +9,7 @@ export default makeStyles((theme: Theme) =>
       height: "calc(100vh - 125px)",
       padding: "0px",
       maxWidth: "100%",
+      margin: "0px",
     },
     appFrame: ({ isDrawerOpen }) => ( {
       flexGrow: 1,
