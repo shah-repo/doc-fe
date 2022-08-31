@@ -1,6 +1,6 @@
 import { Box, Button, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import cx from "classnames";
-import { FormikProps, useFormikContext } from "formik";
+import { Formik, FormikProps, useFormikContext } from "formik";
 import { filter, get, includes, isEmpty, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
@@ -182,7 +182,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const resetForm = () => {};
+  const emptyFunction = () => {};
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
@@ -263,76 +263,55 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       },
       content: (
         <Box>
-          <Observer>
-            {() => (
-              <SMTemplate
-                templateBoxProps={{ stretchY: "100%" }}
-                contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
-                header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
-                lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
-              >
-                <Observer>
-                  {() => (
-                    <SMTabs
-                      onChange={(ev, newValue) => onTabChange(ev, newValue, tabConfig)}
-                      tabs={tabLabels}
-                      boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
-                      panelProps={{ flex: 1 }}
-                    >
-                      {map(tabConfig, (tabInfo: TabInfo) => {
-                        const tabType = tabInfo.type;
-                        const showTabContent = _tabsState?.tabID === tabInfo.tabId;
-                        return (
-                          <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
-                            {tabType === TabTypeOptions.MIXED && <>
-                              <DocumentRevisionFormPresenter
-                                {...formValues}
-                                isPreview={true}
-                                redlineActive={false}
-                                releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                                documentRevision={documentRevision}
-                                proposedDocId={docRevId}
-                                documentTypesById={documentTypesById}
-                                canChangeOwnerShip={false}
-                                resetForm={resetForm}
-                                {...{
-                                  type,
-                                  showAdministrativeAndVoidChange,
-                                  isOutput,
-                                  email,
-                                  isOwner,
-                                  mode,
-                                }}
-                              />
-                              {documentRevision && showTabContent &&  <FBWorkspace
-                                withoutBottomBar
-                                isPortal={false}
-                                document={{
-                                  ...formValues.values as unknown as DocumentRevision,
-                                  ...documentRevision as unknown as DocumentRevision,
-                                }}
-                                {... { workspaceState }}
-                                initialValues={initialValues}
-                                schema={schema}
-                              />}
-                            </>}
-                            {tabType === TabTypeOptions.DYNAMIC && showTabContent
-                              && _formState?.mode !== FBWorkspaceModeOptions.NONE &&  (
-                              <>
-                                {tabInfo.tabId === "lineitems" && (
-                                  <AttachmentsField
-                                    isDisabled={isDisabledInput}
-                                    isNewVersion={false}
-                                    docRevId={docRevId || ""}
-                                    isAttachmentEmpty={isAttachmentEmpty}
-                                    containsRedline={false}
-                                    docRevStatus={documentRevision?.status}
-                                    documentRevision={documentRevision}
-                                    documentTypeId={docTypeId || ""}
-                                    labeld={"Supporting Documents"}
-                                  />
-                                )}
-                                <FBWorkspace
+          <Formik
+            initialValues={initialValues}
+            onSubmit={emptyFunction}
+          >
+            <Observer>
+              {() => (
+                <SMTemplate
+                  templateBoxProps={{ stretchY: "100%" }}
+                  contentBoxProps={{
+                    height: "auto",
+                    minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"),
+                  }}
+                  header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
+                  lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
+                >
+                  <Observer>
+                    {() => (
+                      <SMTabs
+                        onChange={(ev, newValue) => onTabChange(ev, newValue, tabConfig)}
+                        tabs={tabLabels}
+                        boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                        panelProps={{ flex: 1 }}
+                      >
+                        {map(tabConfig, (tabInfo: TabInfo) => {
+                          const tabType = tabInfo.type;
+                          const showTabContent = _tabsState?.tabID === tabInfo.tabId;
+                          return (
+                            <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
+                              {tabType === TabTypeOptions.MIXED && <>
+                                <DocumentRevisionFormPresenter
+                                  {...formValues}
+                                  isPreview={true}
+                                  redlineActive={false}
+                                  releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                                  documentRevision={documentRevision}
+                                  proposedDocId={docRevId}
+                                  documentTypesById={documentTypesById}
+                                  canChangeOwnerShip={false}
+                                  resetForm={emptyFunction}
+                                  {...{
+                                    type,
+                                    showAdministrativeAndVoidChange,
+                                    isOutput,
+                                    email,
+                                    isOwner,
+                                    mode,
+                                  }}
+                                />
+                                {documentRevision && showTabContent &&  <FBWorkspace
                                   withoutBottomBar
                                   isPortal={false}
                                   document={{
@@ -342,30 +321,58 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                                   {... { workspaceState }}
                                   initialValues={initialValues}
                                   schema={schema}
+                                />}
+                              </>}
+                              {tabType === TabTypeOptions.DYNAMIC && showTabContent
+                                && _formState?.mode !== FBWorkspaceModeOptions.NONE && (
+                                <>
+                                  {tabInfo.tabId === "lineitems" && (
+                                    <AttachmentsField
+                                      isDisabled={isDisabledInput}
+                                      isNewVersion={false}
+                                      docRevId={docRevId || ""}
+                                      isAttachmentEmpty={isAttachmentEmpty}
+                                      containsRedline={false}
+                                      docRevStatus={documentRevision?.status}
+                                      documentRevision={documentRevision}
+                                      documentTypeId={docTypeId || ""}
+                                      labeld={"Supporting Documents"}
+                                    />
+                                  )}
+                                  <FBWorkspace
+                                    withoutBottomBar
+                                    isPortal={false}
+                                    document={{
+                                      ...formValues.values as unknown as DocumentRevision,
+                                      ...documentRevision as unknown as DocumentRevision,
+                                    }}
+                                    {... { workspaceState }}
+                                    initialValues={initialValues}
+                                    schema={schema}
+                                  />
+                                </>
+                              )}
+                              {tabType === TabTypeOptions.TABS_MEQ && (
+                                <FBMaterialEqInfoContainer
+                                  documentRevisionId={documentRevision?.id}
+                                  inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                                 />
-                              </>
-                            )}
-                            {tabType === TabTypeOptions.TABS_MEQ && (
-                              <FBMaterialEqInfoContainer
-                                documentRevisionId={documentRevision?.id}
-                                inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
-                              />
-                            )}
-                            {tabType === TabTypeOptions.TRAINING &&
-                            _tabsState?.value === trainingTabIndex && (
-                              <FBTrainingInfoContainer
-                                documentRevisionId={documentRevision?.id}
-                              />
-                            )}
-                          </SMBox>
-                        );
-                      })}
-                    </SMTabs>
-                  )}
-                </Observer>
-              </SMTemplate>
-            )}
-          </Observer>
+                              )}
+                              {tabType === TabTypeOptions.TRAINING && _tabsState?.value === trainingTabIndex && (
+                                <FBTrainingInfoContainer
+                                  documentRevisionId={documentRevision?.id}
+                                />
+                              )}
+                            </SMBox>
+                          );
+                        })}
+                      </SMTabs>
+                    )}
+                  </Observer>
+                </SMTemplate>
+              )}
+            </Observer>
+          </Formik>
         </Box>
       ),
     });
