@@ -1,0 +1,254 @@
+import { Formik, FormikProps, useFormikContext } from "formik";
+import { filter, get, includes, map, size } from "lodash";
+import { Observer } from "mobx-react";
+import * as React from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import {
+  DocumentRevisionFormProgressBar, DocumentRevisionSummaryHeader,
+  SMBox, SMTabs, SMTemplate, SM,
+} from "../../../../../../../App";
+import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
+import { authSelectors } from "../../../../../../../state/ducks/auth";
+import { documentTypeSelectors } from "../../../../../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, SmartReferenceType } from "../../../../../../../state/ducks/documentRevisions/types";
+import { ApplicationState } from "../../../../../../../state/reducers";
+import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common/types";
+import AttachmentsField from "../../../../../../document.revision/form/attachments";
+import {
+  FB, FBEditorState, FBSchemaProps, FBWorkspace,
+  FBWorkspaceModeOptions,
+} from "../../../../../../form.builder";
+import FBMaterialEqInfoContainer from "../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
+import { DocumentCloneTypeOptions } from "../../../../../Clone.container";
+import { isOperator } from "../../../../../DocumentRevisionDisplay.container";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../../helpers/checkDocumentGroup";
+import DocumentRevisionFormPresenter from "../../../../DocumentRevisionForm.presenter";
+import { DocumentRevisionFormValues } from "../../../../types";
+import styles from "./styles";
+
+interface Props {
+  docRevId?: string;
+}
+
+const DocumentPreview: React.FunctionComponent<Props> = ({
+  docRevId,
+}) => {
+  const classes = styles();
+  const formik = useFormikContext();
+  const { _documentRevisionFormState, _tabsState, _formState } = SM.useStores();
+  const { workspaceState } = FB.useStores();
+  let schema = _documentRevisionFormState?.schema;
+
+  const documentTypesById = useSelector(documentTypeSelectors.byId);
+
+  // @todo: Mix between DocumentRevisionSummary and DocumentRevisionForm.
+  // @todo: Move these elements to one component to reuse.
+  // Create documentRevision and fill it
+  const documentRevision = get(formik, "values") as DocumentRevision;
+  const formValues = formik as FormikProps<DocumentRevisionFormValues>;
+  const initialValues = documentRevision as unknown as DocumentRevisionFormValues;
+
+  const docTypeId = documentRevision?.document?.documentType?.id as string;
+  const documentType = documentTypesById[docTypeId];
+  const docTypeGroup = get(documentType, "group", DOC_TYPE_GROUP.OTHER);
+
+  const outputTypeId = documentRevision?.outputDocumentTypes?.value as string;
+  const outputType = documentTypesById[outputTypeId];
+  const outputTypeGroup = get(outputType, "group");
+
+  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
+  const isLHR = checkIsDocumentLHR(documentType.groupOptions);
+  const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isOutput = true;
+  const showAdministrativeAndVoidChange = false;
+  const type = DocumentCloneTypeOptions.none;
+  const mode = FBWorkspaceModeOptions.FORM;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const emptyFunction = () => {};
+
+  const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
+    ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
+    schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
+
+  let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+
+  if (isLHR) {
+    schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
+      ...schemaItem,
+      index: i,
+      ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
+        stepIndex: size(
+          filter(
+            ro.slice(0, i + 1),
+            (step) =>
+              !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
+          )
+        ),
+      }),
+    }));
+
+    smartReferencesFrom?.forEach((ele) => {
+      const obj = schema?.filter((el) => ele?.metadata?.fieldId === el.name);
+      ele.stepIndex = obj?.[0]?.stepIndex;
+    });
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = [ ...tabConfig, {
+      labelId: "tabId.materialsandequipment",
+      tabId: TabTypeOptions.TABS_MEQ,
+      type: TabTypeOptions.TABS_MEQ,
+    }];
+  }
+
+  if (formValues.values?.retrain && tabConfig) {
+    tabConfig = [...tabConfig, {
+      labelId: "tabId.training",
+      tabId: TabTypeOptions.TRAINING,
+      type: TabTypeOptions.TRAINING,
+    }];
+  }
+
+  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+
+  useEffect(() => {
+    if (!tabConfig) {
+      return;
+    }
+    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabConfig]);
+
+  const onTabChange = (_ev, newValue, tabConfig) => {
+    if (!tabConfig) {
+      return;
+    }
+
+    _tabsState?.setValue(newValue);
+    _tabsState?.setTabID(tabConfig[newValue].tabId);
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={emptyFunction}
+    >
+      <Observer>
+        {() => (
+          <SMTemplate
+            templateBoxProps={{ stretchY: "100%" }}
+            contentBoxProps={{
+              height: "auto",
+              minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"),
+            }}
+            header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
+            lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
+          >
+            <Observer>
+              {() => (
+                <SMTabs
+                  onChange={(ev, newValue) => onTabChange(ev, newValue, tabConfig)}
+                  tabs={tabLabels}
+                  boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                  panelProps={{ flex: 1 }}
+                >
+                  {map(tabConfig, (tabInfo: TabInfo) => {
+                    const tabType = tabInfo.type;
+                    const showTabContent = _tabsState?.tabID === tabInfo.tabId;
+                    return (
+                      <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
+                        {tabType === TabTypeOptions.MIXED && <>
+                          <DocumentRevisionFormPresenter
+                            {...formValues}
+                            isPreview={true}
+                            redlineActive={false}
+                            releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                            documentRevision={documentRevision}
+                            proposedDocId={docRevId}
+                            documentTypesById={documentTypesById}
+                            canChangeOwnerShip={false}
+                            resetForm={emptyFunction}
+                            {...{
+                              type,
+                              showAdministrativeAndVoidChange,
+                              isOutput,
+                              email,
+                              isOwner,
+                              mode,
+                            }}
+                          />
+                          {documentRevision && showTabContent &&  <FBWorkspace
+                            withoutBottomBar
+                            isPortal={false}
+                            document={{
+                              ...formValues.values as unknown as DocumentRevision,
+                              ...documentRevision as unknown as DocumentRevision,
+                            }}
+                            {... { workspaceState }}
+                            initialValues={initialValues}
+                            schema={schema}
+                          />}
+                        </>}
+                        {tabType === TabTypeOptions.DYNAMIC && showTabContent
+                          && _formState?.mode !== FBWorkspaceModeOptions.NONE && (
+                          <>
+                            {tabInfo.tabId === "lineitems" && (
+                              <AttachmentsField
+                                isDisabled={isDisabledInput}
+                                isNewVersion={false}
+                                docRevId={docRevId || ""}
+                                isAttachmentEmpty={isAttachmentEmpty}
+                                containsRedline={false}
+                                docRevStatus={documentRevision?.status}
+                                documentRevision={documentRevision}
+                                documentTypeId={docTypeId || ""}
+                                labeld={"Supporting Documents"}
+                              />
+                            )}
+                            <FBWorkspace
+                              withoutBottomBar
+                              isPortal={false}
+                              document={{
+                                ...formValues.values as unknown as DocumentRevision,
+                                ...documentRevision as unknown as DocumentRevision,
+                              }}
+                              {... { workspaceState }}
+                              initialValues={initialValues}
+                              schema={schema}
+                            />
+                          </>
+                        )}
+                        {tabType === TabTypeOptions.TABS_MEQ && (
+                          <FBMaterialEqInfoContainer
+                            documentRevisionId={documentRevision?.id}
+                            inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
+                          />
+                        )}
+                        {tabType === TabTypeOptions.TRAINING && _tabsState?.value === trainingTabIndex && (
+                          <FBTrainingInfoContainer
+                            documentRevisionId={documentRevision?.id}
+                          />
+                        )}
+                      </SMBox>
+                    );
+                  })}
+                </SMTabs>
+              )}
+            </Observer>
+          </SMTemplate>
+        )}
+      </Observer>
+    </Formik>
+  );
+};
+
+export default DocumentPreview;
