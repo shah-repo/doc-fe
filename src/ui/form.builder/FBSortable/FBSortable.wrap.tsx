@@ -1,5 +1,5 @@
 import { map } from "lodash";
-import { useObserver, Observer } from "mobx-react";
+import { Observer, useObserver } from "mobx-react";
 import React from "react";
 import { arrayMove, SortableElement, SortEnd } from "react-sortable-hoc";
 import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState, FBSortableProps } from "..";
@@ -21,6 +21,7 @@ export const withFBSortable = <T extends FBSortableProps>(
         ...schemaItem,
         autosave: isUnderWorkspace && workspaceState?.autosave,
         disabled: workspaceState?.isMode("design"),
+        showErrorMsg: !workspaceState?.isMode("design"),
         gutter: false,
       });
     };
