@@ -14,7 +14,7 @@ export default makeStyles((theme: Theme) => ({
     margin: 0,
     borderRadius: theme.shape.borderRadius,
     borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
+    borderTopRightRadius: 0,
     width: theme.spacing(40),
     border: 0,
     background: Colors.dodger_blue,
