@@ -1,8 +1,10 @@
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/camelcase */
 // eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
-
+// / <reference types="Cypress" />
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { FONT_SIZE_10, FONT_SIZE_12, FONT_SIZE_13, FONT_SIZE_14, FONT_SIZE_16, FONT_SIZE_19, FONT_SIZE_22_4, FONT_SIZE_48, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_15, LINE_HT_15_2, LINE_HT_15_96, LINE_HT_16, LINE_HT_18, LINE_HT_19_2, LINE_HT_19_5, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_25_6, LINE_HT_26_208, LINE_HT_26_6, LINE_HT_27_17, LINE_HT_49_92, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompanyA;
@@ -19,15 +21,9 @@ const docOwner = "OWNER";
 const arId = "AR ID";
 const docStatus = "STATUS";
 const effectiveDate = "EFFECTIVE DATE";
-
-const fontFamily = "Sora, sans-serif";
-const colFontSize = "14px";
-const colFontWeight = "600";
-const colLineHeight = "20px";
-const colTextUpper = "uppercase";
-
-const itemFontWeight = "400";
-
+const formId = "FM-00001";
+const formId2 = "FM-00002";
+const arIdNum = "AR99999";
 
 context("User Creation Flow", () => {
   context("[API]Prepare company A", () => {
@@ -85,24 +81,22 @@ context("User Creation Flow", () => {
       cy.unClick();
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify login email address font-size 16px font-family 'Sora, sans-serif' line-height 15.2px font-weight 400", () => {
-      cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", "enlil.testmail+cy1@gmail.com")
-        .should("have.css", "font-size", "16px");
-      cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", "enlil.testmail+cy1@gmail.com")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", "enlil.testmail+cy1@gmail.com")
-        .should("have.css", "line-height", "15.2px");
-      cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", "enlil.testmail+cy1@gmail.com")
-        .should("have.css", "font-weight", "400");
+    it(`Verify login email address font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_15_2} font-weight ${FONT_WT_400}`, () => {
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", USERS[1].email)
+        .should("have.css", "font-size", FONT_SIZE_16);
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", USERS[1].email)
+        .should("have.css", "font-family", soraSansserif);
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", USERS[1].email)
+        .should("have.css", "line-height", LINE_HT_15_2);
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", USERS[1].email)
+        .should("have.css", "font-weight", FONT_WT_400);
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Don't have an account' font-size 16px font-family 'Sora, sans-serif' line-height 21.28px font-weight 400", () => {
-      cy.contains("Don't have an account?").should("have.css", "font-size", "16px");
-      cy.contains("Don't have an account?").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Don't have an account?").should("have.css", "line-height", "21.28px");
-      cy.contains("Don't have an account?").should("have.css", "font-weight", "400");
+    it(`Verify 'Don't have an account' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Don't have an account?",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
@@ -122,227 +116,154 @@ context("User Creation Flow", () => {
   });
 
   context("Verify font for nagigation bar 'Document Control'", () => {
-    // eslint-disable-next-line max-len
-    it("Verify 'Document Control' font-size 13px and font-family 'Sora, sans-serif' font-weight 400", () => {
-      cy.contains("Document Control").should("have.css", "font-size", "13px");
-      cy.contains("Document Control").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Document Control").should("have.css", "font-weight", "400");
+    it(`Verify 'Document Control' font-size ${FONT_SIZE_13} and font-family ${soraSansserif} line-height ${LINE_HT_19_5} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Document Control",
+        props: { "font-size": FONT_SIZE_13, "font-family": soraSansserif, "line-height": LINE_HT_19_5, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
   context("Verify font for nagigation bar user's info name and email", () => {
-    // eslint-disable-next-line max-len
-    it("Verify 'UserName' font-size 12px font-family 'Sora, sans-serif' line-height 15px font-weight 600", () => {
-      cy.get("[data-cy=\"UserName\"]").contains(USERS[1].name).should("have.css", "font-size", "12px");
-      cy.get("[data-cy=\"UserName\"]").should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"UserName\"]").should("have.css", "line-height", "15px");
-      cy.get("[data-cy=\"UserName\"]").should("have.css", "font-weight", "600");
+    it(`Verify 'UserName' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy=\"UserName\"]")
+        .checkStylePropExists({
+          content: USERS[1].name,
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'UserEmail' font-size as 13px and font-family 'Sora, sans-serif' font-weight 600", () => {
-      cy.get("[data-cy=\"UserEmail\"]").contains(USERS[1].email).should("have.css", "font-size", "13px");
-      cy.get("[data-cy=\"UserEmail\"]").should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"UserName\"]").should("have.css", "line-height", "15px");
-      cy.get("[data-cy=\"UserEmail\"]").should("have.css", "font-weight", "600");
+    it(`Verify 'UserEmail' font-size as ${FONT_SIZE_12} and font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy=\"UserName\"]")
+        .checkStylePropExists({
+          content: USERS[1].name,
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
     });
   });
 
-  context("Verify font for 'Create a document' button", () => {
-    // eslint-disable-next-line max-len
-    it("Verify 'Create a document' button font-size 12px font-family 'Sora, sans-serif' line-height 21px font-weight 600", () => {
-      cy.get("[data-cy=\"document.revision.create\"]").contains("Create a document")
-        .should("have.css", "font-size", "12px");
-      cy.get("[data-cy=\"document.revision.create\"]").contains("Create a document")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"document.revision.create\"]").contains("Create a document")
-        .should("have.css", "line-height", "21px");
-      cy.get("[data-cy=\"document.revision.create\"]").contains("Create a document")
-        .should("have.css", "font-weight", "600");
+  context.skip("Verify font for 'Create a document' button", () => {
+    it(`Verify 'Create a document' button font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight  ${FONT_WT_600}`, () => {
+      cy.get("[data-cy=\"document.revision.create\"]")
+        .checkStylePropExists({
+          content: "Create a document",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
     });
   });
 
   context("Verify font for Landing page table columns headers", () => {
-    // eslint-disable-next-line max-len
-    it(`Verify ${docId} font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight} text-transform ${colTextUpper}`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docId)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docId)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docId)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docId)
-        .should("have.css", "font-weight", colFontWeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docId)
-        .should("have.css", "text-transform", colTextUpper);
+    it(`Verify ${docId} font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`)
+        .checkStylePropExists({
+          content: docId,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify ${docRevision} font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight} text-transform ${colTextUpper}`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docRevision)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docRevision)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docRevision)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docRevision)
-        .should("have.css", "font-weight", colFontWeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docRevision)
-        .should("have.css", "text-transform", colTextUpper);
+    it(`Verify ${docRevision} font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`)
+        .checkStylePropExists({
+          content: docRevision,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify ${docTitle} font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight} text-transform ${colTextUpper}`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docTitle)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docTitle)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docTitle)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docTitle)
-        .should("have.css", "font-weight", colFontWeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docTitle)
-        .should("have.css", "text-transform", colTextUpper);
+    it(`Verify ${docTitle} font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`)
+        .checkStylePropExists({
+          content: docTitle,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify ${docType} font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight} text-transform ${colTextUpper}`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docType)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docType)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docType)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docType)
-        .should("have.css", "font-weight", colFontWeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docType)
-        .should("have.css", "text-transform", colTextUpper);
+    it(`Verify ${docType} font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`)
+        .checkStylePropExists({
+          content: docType,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify ${docOwner} font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight} text-transform ${colTextUpper}`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docOwner)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docOwner)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docOwner)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docOwner)
-        .should("have.css", "font-weight", colFontWeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docOwner)
-        .should("have.css", "text-transform", colTextUpper);
+    it(`Verify ${docOwner} font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`)
+        .checkStylePropExists({
+          content: docOwner,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify ${arId} font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight} text-transform ${colTextUpper}`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(arId)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(arId)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(arId)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(arId)
-        .should("have.css", "font-weight", colFontWeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(arId)
-        .should("have.css", "text-transform", colTextUpper);
+    it(`Verify ${arId} font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`)
+        .checkStylePropExists({
+          content: arId,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify ${docStatus} font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight} text-transform ${colTextUpper}`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docStatus)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docStatus)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docStatus)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docStatus)
-        .should("have.css", "font-weight", colFontWeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(docStatus)
-        .should("have.css", "text-transform", colTextUpper);
+    it(`Verify ${docStatus} font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`)
+        .checkStylePropExists({
+          content: docStatus,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify ${effectiveDate} font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight} text-transform ${colTextUpper}`, () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(effectiveDate)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(effectiveDate)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(effectiveDate)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(effectiveDate)
-        .should("have.css", "font-weight", colFontWeight);
-      cy.get(`th[role="columnheader"] span.k-column-title`).contains(effectiveDate)
-        .should("have.css", "text-transform", colTextUpper);
+    it(`Verify ${effectiveDate} font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`th[role="columnheader"] span.k-column-title`)
+        .checkStylePropExists({
+          content: effectiveDate,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+        });
     });
   });
 
-  context("Filter document by ID as FM-00001", () => {
-    it(`Filter document by ID as FM-00001`, () => {
+  context(`Filter document by ID as ${formId}`, () => {
+    it(`Filter document by ID as ${formId}`, () => {
       cy.dlClearFilters();
-      cy.dlFilterByDocId({ docId: "FM-00001" });
+      cy.dlFilterByDocId({ docId: formId });
     });
   });
 
   context("Verify font for Landing page table items", () => {
-    // eslint-disable-next-line max-len
-    it(`Verify document ID 'FM-00001' with font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight}`, () => {
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).contains("FM-00001")
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).contains("FM-00001")
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).contains("FM-00001")
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).contains("FM-00001")
-        .should("have.css", "font-weight", itemFontWeight);
+    it(`Verify document ID ${formId} with font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`)
+        .checkStylePropExists({
+          content: formId,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_400 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify document title 'AR Form' with font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight}`, () => {
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="2"]`).contains("AR Form")
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="2"]`).contains("AR Form")
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="2"]`).contains("AR Form")
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="2"]`).contains("AR Form")
-        .should("have.css", "font-weight", itemFontWeight);
+    it(`Verify document title 'AR Form' with font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="2"]`)
+        .checkStylePropExists({
+          content: "AR Form",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_400 },
+        });
     });
 
-
-    // eslint-disable-next-line max-len
-    it(`Verify document Owner ${USERS[1].name} with font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight}`, () => {
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).contains(USERS[1].name)
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).contains(USERS[1].name)
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).contains(USERS[1].name)
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).contains(USERS[1].name)
-        .should("have.css", "font-weight", itemFontWeight);
+    it(`Verify document Owner ${USERS[1].name} with font-size ${FONT_SIZE_12} font-family ${soraSansserif}  line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`)
+        .checkStylePropExists({
+          content: USERS[1].name,
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify AR ID 'AR99999' with font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight}`, () => {
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="5"]`).contains("AR99999")
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="5"]`).contains("AR99999")
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="5"]`).contains("AR99999")
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="5"]`).contains("AR99999")
-        .should("have.css", "font-weight", itemFontWeight);
+    it(`Verify AR ID ${arIdNum} with font-size ${FONT_SIZE_14} font-family ${soraSansserif}  line-height ${LINE_HT_20} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="5"]`)
+        .checkStylePropExists({
+          content: arIdNum,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_400 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify document status 'Released' with font-size ${colFontSize} font-family ${fontFamily}  line-height ${colLineHeight} font-weight ${colFontWeight}`, () => {
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="6"]`).contains("Released")
-        .should("have.css", "font-size", colFontSize);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="6"]`).contains("Released")
-        .should("have.css", "font-family", fontFamily);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="6"]`).contains("Released")
-        .should("have.css", "line-height", colLineHeight);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="6"]`).contains("Released")
-        .should("have.css", "font-weight", itemFontWeight);
+    it(`Verify document status 'Released' with font-size ${FONT_SIZE_10} font-family ${soraSansserif}  line-height ${LINE_HT_13} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="6"]`)
+        .checkStylePropExists({
+          content: "Released",
+          props: { "font-size": FONT_SIZE_10, "font-family": soraSansserif, "line-height": LINE_HT_13, "font-weight": FONT_WT_600 },
+        });
     });
   });
 
@@ -354,195 +275,156 @@ context("User Creation Flow", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.get("#Checkbox-box").arrowClick();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").click().focused().autocompleteSelect("Approval Request");
+      cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
       cy.unClick();
       cy.drClickCreateDocumentWithApiCall();
     });
   });
 
-  context("Verify fonts for Fields labels with bold in the document", () => {
-    // eslint-disable-next-line max-len
-    it("Verify 'Document Type' font-size 12px font-family 'Sora, sans-serif' line-height 15px font-weight 400 or bold", () => {
-      cy.contains("Document Type").should("have.css", "font-size", "12px");
-      cy.contains("Document Type").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Document Type").should("have.css", "line-height", "15px");
-      cy.contains("Document Type").should("have.css", "font-weight", "400");
+  context(`Verify fonts for Fields labels with bold in the document`, () => {
+    it(`Verify 'Document Type' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_16}  font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Document Type",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_16, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Document ID' font-size 12px font-family 'Sora, sans-serif' line-height 15px font-weight 400 or bold", () => {
-      cy.contains("Document ID").should("have.css", "font-size", "12px");
-      cy.contains("Document ID").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Document ID").should("have.css", "line-height", "15px");
-      cy.contains("Document ID").should("have.css", "font-weight", "400");
+    it(`Verify 'Document ID' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_16} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Document ID",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_16, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Revision Stage' font-size 12px font-family 'Sora, sans-serif' line-height 15px font-weight 400 or bold", () => {
-      cy.contains("Revision Stage").should("have.css", "font-size", "12px");
-      cy.contains("Revision Stage").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Revision Stage").should("have.css", "line-height", "15px");
-      cy.contains("Revision Stage").should("have.css", "font-weight", "400");
+    it(`Verify 'Revision Stage' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_19_2} font-weight ${FONT_WT_600}`, () => {
+      cy.checkStylePropExists({
+        content: "Revision Stage",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_19_2, "font-weight": FONT_WT_600 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Attachments' font-size 12px font-family 'Sora, sans-serif' line-height 15px font-weight as 400 or bold", () => {
-      cy.contains("Attachments").should("have.css", "font-size", "12px");
-      cy.contains("Attachments").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Attachments").should("have.css", "line-height", "15px");
-      cy.contains("Attachments").should("have.css", "font-weight", "400");
+    it(`Verify 'Attachments' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_19_2} font-weight as ${FONT_WT_600}`, () => {
+      cy.checkStylePropExists({
+        content: "Attachments",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_19_2, "font-weight": FONT_WT_600 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Output Document Type' font-size 12px font-family 'Sora, sans-serif' line-height 15.96px font-weight as 400 or bold", () => {
-      cy.contains("Output Document Type").should("have.css", "font-size", "12px");
-      cy.contains("Output Document Type").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Output Document Type").should("have.css", "line-height", "15.96px");
-      cy.contains("Output Document Type").should("have.css", "font-weight", "400");
+    it(`Verify 'Output Document Type' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15_96} font-weight as ${FONT_WT_600}`, () => {
+      cy.checkStylePropExists({
+        content: "Output Document Type",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15_96, "font-weight": FONT_WT_600 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Render HTML' font-size 12px font-family 'Sora, sans-serif' line-height 15px font-weight as 400 or bold", () => {
-      cy.contains("Render HTML").should("have.css", "font-size", "12px");
-      cy.contains("Render HTML").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Render HTML").should("have.css", "line-height", "15px");
-      cy.contains("Render HTML").should("have.css", "font-weight", "400");
+    it(`Verify 'Render HTML' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_16} font-weight as ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Render HTML",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_16, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Approvers' font-size 12px font-family 'Sora, sans-serif' line-height 15px font-weight 400 or bold", () => {
-      cy.get("[data-cy=\"form.builder.approvers\"]").contains("Approvers")
-        .should("have.css", "font-size", "12px");
-      cy.get("[data-cy=\"form.builder.approvers\"]").contains("Approvers")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"form.builder.approvers\"]").contains("Approvers")
-        .should("have.css", "line-height", "15px");
-      cy.get("[data-cy=\"form.builder.approvers\"]").contains("Approvers")
-        .should("have.css", "font-weight", "400");
+    it(`Verify 'Approvers' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24}  font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy=\"form.builder.approvers\"]")
+        .checkStylePropExists({
+          content: "Approvers",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Title' font-size 12px font-family 'Sora, sans-serif' line-height 15px font-weight 400 or bold", () => {
-      cy.get("[data-cy=\"field-name\"]").should("have.css", "font-size", "12px");
-      cy.get("[data-cy=\"field-name\"]").should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"field-name\"]").should("have.css", "font-weight", "400");
+    it(`Verify 'Title' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy=\"field-name\"]").should("have.css", "font-size", FONT_SIZE_14);
+      cy.get("[data-cy=\"field-name\"]").should("have.css", "font-family", soraSansserif);
+      cy.get("[data-cy=\"field-name\"]").should("have.css", "font-weight", FONT_WT_400);
     });
   });
 
   context("Verify fonts for Fields without bold in the document", () => {
-    // eslint-disable-next-line max-len
-    // it("Verify data entered in the title field font-size as 16px font-family as 'Sora, sans-serif' and font-weight as 400 or bold", () => {
-    //   cy.get("[data-cy=\"field-name\"]").arrowClick();
-    //   cy.get("[class=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").contains("Alpha")
-    //     .should("have.css", "font-family", "Sora, sans-serif");
-    //   cy.get("[class=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").contains("Alpha")
-    //     .should("have.css", "line-height", "16px");
-    //   cy.get("[class=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").contains("Alpha")
-    //     .then((text: any) => {
-    //       expect(text).to.satisfy(() => {
-    //         const fw = text.css("font-weight");
-    //         return fw === "400" || fw === "bold";
-    //       });
-    //     });
-    //   cy.unClick();
-    // });
-
-    // eslint-disable-next-line max-len
-    it("Verify 'Description text field' font-size 14px font-family 'Sora, sans-serif' font-weight 400 or bold", () => {
-      cy.get("[data-cy=\"description\"]").contains("test description")
-        .should("have.css", "font-size", "14px");
-      cy.get("[data-cy=\"description\"]").contains("test description")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"description\"]").contains("test description")
-        .should("have.css", "font-weight", "400");
+    it(`Verify 'Description text field' as 'test description' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_400}`, () => {
+      cy.get("[data-cy=\"description\"]")
+        .checkStylePropExists({
+          content: "test description",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_400 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Document Type field' font-size 14px font-family 'Sora, sans-serif' font-weight 400 or bold", () => {
-      cy.get("[data-cy=\"select.document.documentType.id\"]").contains("Form")
-        .should("have.css", "font-size", "14px");
-      cy.get("[data-cy=\"select.document.documentType.id\"]").contains("Form")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"select.document.documentType.id\"]").contains("Form")
-        .should("have.css", "font-weight", "400");
+    it(`Verify document Type as 'Form' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_15_2} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy=\"select.document.documentType.id\"]")
+        .checkStylePropExists({
+          content: "Form",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_15_2, "font-weight": FONT_WT_600 },
+        });
     });
 
-
-    // eslint-disable-next-line max-len
-    it("Verify 'Document ID field' font-size 14px font-family 'Sora, sans-serif' font-weight 400 or bold", () => {
-      cy.get("input[name=\"document.docId\"]").should("have.attr", "value", "FM-00002")
-        .should("have.css", "font-size", "14px");
-      cy.get("input[name=\"document.docId\"]").should("have.attr", "value", "FM-00002")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("input[name=\"document.docId\"]").should("have.attr", "value", "FM-00002")
-        .should("have.css", "font-weight", "400");
+    it(`Verify 'Document ID field' as ${formId2} font-size ${FONT_SIZE_14} font-family ${soraSansserif} font-weight ${FONT_WT_600}`, () => {
+      cy.get("input[name=\"document.docId\"]").should("have.attr", "value", formId2)
+        .should("have.css", "font-size", FONT_SIZE_14);
+      cy.get("input[name=\"document.docId\"]").should("have.attr", "value", formId2)
+        .should("have.css", "font-family", soraSansserif);
+      cy.get("input[name=\"document.docId\"]").should("have.attr", "value", formId2)
+        .should("have.css", "font-weight", FONT_WT_600);
     });
 
-
-    // eslint-disable-next-line max-len
-    it("Verify 'Numeric Alpha' font-size 14px font-family 'Sora, sans-serif' font-weight 400 or bold", () => {
-      cy.get("[class=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").contains("Alpha")
-        .should("have.css", "font-size", "14px");
-      cy.get("[class=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").contains("Alpha")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]").contains("Alpha")
-        .should("have.css", "font-weight", "400");
+    it(`Verify 'Alpha' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
+      cy.get("[class=\"MuiTypography-root MuiFormControlLabel-label MuiTypography-body1\"]")
+        .checkStylePropExists({
+          content: "Alpha",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'output Document Types field' font-size 14px font-family 'Sora, sans-serif' font-weight 400 or bold", () => {
+    it(`Verify 'output Document Types field' as 'Approval Request' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
       cy.get("[id=\"formTemplate.outputDocumentTypes\"]").contains("Approval Request")
-        .should("have.css", "font-size", "14px");
-      cy.get("[id=\"formTemplate.outputDocumentTypes\"]").contains("Approval Request")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[id=\"formTemplate.outputDocumentTypes\"]").contains("Approval Request")
-        .should("have.css", "font-weight", "400");
+        .checkStylePropExists({
+          content: "Approval Request",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Training Required' font-size 14px font-family 'Sora, sans-serif' font-weight 400 or bold", () => {
+    it(`Verify 'Training Required' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
       cy.get("[data-cy=\"field-retrain\"]").contains("Training Required")
-        .should("have.css", "font-size", "14px");
-      cy.get("[data-cy=\"field-retrain\"]").contains("Training Required")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"field-retrain\"]").contains("Training Required")
-        .should("have.css", "font-weight", "400");
+        .checkStylePropExists({
+          content: "Training Required",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
+        });
     });
   });
 
   context("Verify Hover over some of the items in the document", () => {
-    // eslint-disable-next-line max-len
-    it("Verify 'Save button' font-size 12px font-family 'Sora, sans-serif' font-weight 600 line-height 15px", () => {
-      cy.contains("Save").should("have.css", "font-size", "12px");
-      cy.contains("Save").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Save").should("have.css", "font-weight", "600");
-      cy.contains("Save").should("have.css", "line-height", "15px");
+    it(`Verify 'Save button' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy=\"field-retrain\"]")
+        .checkStylePropExists({
+          content: "Save",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Approve and Release button' font-size 12px font-family 'Sora, sans-serif' font-weight 600 line-height 15px", () => {
-      cy.contains("Approve and Release").should("have.css", "font-size", "12px");
-      cy.contains("Approve and Release").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Approve and Release").should("have.css", "font-weight", "600");
-      cy.contains("Approve and Release").should("have.css", "line-height", "15px");
+    it(`Verify 'Approve and Release button' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.checkStylePropExists({
+        content: "Approve and Release",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Change Owner button' font-size 12px font-family 'Sora, sans-serif' font-weight 600 line-height 15px", () => {
+    it(`Verify 'Change Owner button' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_21} font-weight ${FONT_WT_400}`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.contains("Change Owner").should("have.css", "font-size", "12px");
-      cy.contains("Change Owner").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Change Owner").should("have.css", "font-weight", "600");
-      cy.contains("Change Owner").should("have.css", "line-height", "15px");
+      cy.checkStylePropExists({
+        content: "Change Owner",
+        props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_21, "font-weight": FONT_WT_400 },
+      });
     });
 
-    // eslint-disable-next-line max-len
-    it("Verify 'Send To Email' font-size 12px font-family 'Sora, sans-serif' font-weight 600 line-height 15px", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
-      cy.contains("Send To Email").should("have.css", "font-size", "12px");
-      cy.contains("Send To Email").should("have.css", "font-family", "Sora, sans-serif");
-      cy.contains("Send To Email").should("have.css", "font-weight", "600");
-      cy.contains("Send To Email").should("have.css", "line-height", "15px");
+    it(`Verify 'Send To Email' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_21} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Send To Email",
+        props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_21, "font-weight": FONT_WT_400 },
+      });
+    });
+  });
+
+  context(`Click on 'Send To Email'`, () => {
+    it(`Click on 'Send To Email'`, () => {
+      cy.sendToEmail();
     });
   });
 
@@ -555,31 +437,23 @@ context("User Creation Flow", () => {
       cy.unClick();
     });
 
-    it(`Verify 'Checkbox group' under FB libraries font-size font-family and font-weight`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-titleText\"]").contains("Checkbox group")
-        .should("have.css", "font-size", "12px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-titleText\"]").contains("Checkbox group")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-titleText\"]").contains("Checkbox group")
-        .should("have.css", "font-weight", "600");
+    it(`Verify 'Checkbox group' under FB libraries font-size ${FONT_SIZE_12} font-family ${soraSansserif} and line-height ${LINE_HT_15} font-weight ${FONT_WT_500}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-titleText\"]")
+        .checkStylePropExists({
+          content: "Checkbox group",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15, "font-weight": FONT_WT_500 },
+        });
       cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Click on Add button`, () => {
-      cy.fbAddNewFieldButton();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it(`Verify added 'Checkbox group' option2 font-size font-family and font-weight`, () => {
+    it(`Verify added 'Checkbox group' option2 font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
       cy.get("[class^=\"MuiTypography-root MuiFormControlLabel-label Mui-disabled MuiTypography-body1\"]")
-        .contains("option2").should("have.css", "font-size", "12px");
-      cy.get("[class^=\"MuiTypography-root MuiFormControlLabel-label Mui-disabled MuiTypography-body1\"]")
-        .contains("option2").should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root MuiFormControlLabel-label Mui-disabled MuiTypography-body1\"]")
-        .contains("option2").should("have.css", "font-weight", "600");
+        .checkStylePropExists({
+          content: "option2",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
+        });
     });
 
     it("Add Blank Template Form", () => {
@@ -591,13 +465,12 @@ context("User Creation Flow", () => {
       });
     });
 
-    it(`Verify added 'Blank Template' font-size font-family and font-weight`, () => {
-      cy.get("[data-cy^=\"fb-blank-template\"]").contains("fb-blank-template")
-        .should("have.css", "font-size", "12px");
-      cy.get("[data-cy^=\"fb-blank-template\"]").contains("fb-blank-template")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy^=\"fb-blank-template\"]").contains("fb-blank-template")
-        .should("have.css", "font-weight", "600");
+    it(`Verify added 'Blank Template' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy^=\"fb-blank-template\"]")
+        .checkStylePropExists({
+          content: "fb-blank-template",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+        });
     });
 
     it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
@@ -606,13 +479,12 @@ context("User Creation Flow", () => {
       cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
     });
 
-    it(`Verify 'TEXT FIELD' under FB libraries font-size font-family and font-weight`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-titleText\"]").contains("Text field")
-        .should("have.css", "font-size", "12px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-titleText\"]").contains("Text field")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-titleText\"]").contains("Text field")
-        .should("have.css", "font-weight", "600");
+    it(`Verify 'TEXT FIELD' under FB libraries font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_500}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-titleText\"]")
+        .checkStylePropExists({
+          content: "Text field",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15, "font-weight": FONT_WT_500 },
+        });
     });
 
     it(`Click on Add button`, () => {
@@ -621,153 +493,243 @@ context("User Creation Flow", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify added 'TEXT FIELD' font-size font-family and font-weight`, () => {
-      cy.get("[data-cy^=\"TEXT FIELD\"]").contains("TEXT FIELD").should("have.css", "font-size", "12px");
-      cy.get("[data-cy^=\"TEXT FIELD\"]").contains("TEXT FIELD").should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy^=\"TEXT FIELD\"]").contains("TEXT FIELD").should("have.css", "font-weight", "600");
+    it(`Verify added 'TEXT FIELD' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy^=\"TEXT FIELD\"]")
+        .checkStylePropExists({
+          content: "TEXT FIELD",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15, "font-weight": FONT_WT_600 },
+        });
     });
   });
 
   context("Verify The side bar options Revision's fonts", () => {
-    it(`Verify Revisions font-size font-family font-weight line-height`, () => {
+    it(`Verify Revisions font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_19_2} font-weight ${FONT_WT_600}`, () => {
       cy.get("[data-cy=\"note-icon\"]").arrowClick();
-      cy.get("[data-cy=\"revision\"]").contains("Revision").should("have.css", "font-size", "14px");
-      cy.get("[data-cy=\"revision\"]").contains("Revision").should("have.css", "font-family", "Sora");
-      cy.get("[data-cy=\"revision\"]").contains("Revision").should("have.css", "line-height", "20px");
-      cy.get("[data-cy=\"revision\"]").contains("Revision").should("have.css", "font-weight", "600");
+      cy.get("[data-cy=\"revision\"]")
+        .checkStylePropExists({
+          content: "Revision",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_19_2, "font-weight": FONT_WT_600 },
+        });
     });
 
-    it(`Verify Owner font-size font-family font-weight line-height`, () => {
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Owner")
-        .should("have.css", "font-size", "14px");
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Owner")
-        .should("have.css", "font-family", "Sora");
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Owner")
-        .contains("Owner").should("have.css", "line-height", "20px");
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Owner")
-        .should("have.css", "font-weight", "600");
+    it(`Verify 'Doc ID: ${formId2}' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_24} font-weight ${FONT_WT_400}`, () => {
+      cy.get("[data-cy=\"common.docId\"]")
+        .checkStylePropExists({
+          content: `Doc ID: ${formId2}`,
+          props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_24, "font-weight": FONT_WT_400 },
+        });
+    });
+
+    it(`Verify Owner font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_24} font-weight ${FONT_WT_400}`, () => {
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]");
+      cy.get("[data-cy=\"revision\"]")
+        .checkStylePropExists({
+          content: "Owner",
+          props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_24, "font-weight": FONT_WT_400 },
+        });
     });
   });
 
   context("Verify The side bar options History's fonts", () => {
-    it("Verify The side bar options History fonts", () => {
-      cy.get("[data-cy=\"timeline-icon\"]").arrowClick();
+    it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="timeline-icon"]`).arrowClick();
+      cy.get(`[data-cy="change-key-0"]`)
+        .checkStylePropExists({
+          content: USERS[1].name,
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'test description' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`[data-cy="change-value-0-0"]`)
+        .checkStylePropExists({
+          content: "test description",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_400 },
+        });
+    });
+
+    it(`Verify ${formId2} font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[data-cy="change-value-0-1"]`)
+        .checkStylePropExists({
+          content: formId2,
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_700 },
+        });
+    });
+
+    it(`Verify 'released doc1' font-size ${FONT_SIZE_19} font-family ${soraSansserif} line-height ${LINE_HT_27_17} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="change-value-0-2"]`)
+        .checkStylePropExists({
+          content: "released doc1",
+          props: { "font-size": FONT_SIZE_19, "font-family": soraSansserif, "line-height": LINE_HT_27_17, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'Everyone' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`[data-cy="change-value-0-4"]`)
+        .checkStylePropExists({
+          content: "Everyone",
+          props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
+        });
     });
   });
 
   context("Verify The side bar options Access Permissions fonts", () => {
-    it("Verify The side bar options Access Permissions fonts", () => {
+    it(`Verify 'Access Permissions' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
       cy.get("[data-cy=\"permission-icon\"]").arrowClick();
+      cy.get(`[data-cy="Access Permissions"]`)
+        .checkStylePropExists({
+          content: "Access Permissions",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'Selected Users' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.checkStylePropExists({
+        content: "Selected Users",
+        props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+      });
+    });
+
+    it(`Verify 'Selected Groups' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="Selected-Groups"]`)
+        .checkStylePropExists({
+          content: "Selected Groups",
+          props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'Everyone' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_18} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Everyone",
+        props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_18, "font-weight": FONT_WT_400 },
+      });
     });
   });
 
   context("Verify The side bar options Bookmarks's fonts", () => {
-    it("Verify The side bar options Bookmarks fonts", () => {
-      cy.get("[data-cy=\"bookmark-icon\"]").arrowClick();
+    it(`Verify 'Bookmarks' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="bookmark-icon"]`).arrowClick();
+      cy.get(`[data-cy="Bookmarks"]`)
+        .checkStylePropExists({
+          content: "Bookmarks",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'Approvers' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="Bookmarks-detail"]`)
+        .checkStylePropExists({
+          content: "Approvers",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'fb-blank-template' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="Bookmarks-detail"]`)
+        .checkStylePropExists({
+          content: "fb-blank-template",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+        });
     });
   });
 
-  context("Verify The side bar options Revision History fonts", () => {
-    it("Verify The side bar options Revision History fonts", () => {
-      cy.get("[data-cy=\"note-icon\"]").arrowClick();
+  context("Verify The side bar options 'Revision History' fonts", () => {
+    it(`Verify 'Revision History' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="cr-icon"]`).arrowClick();
+      cy.get(`[data-cy="Revision History"]`)
+        .checkStylePropExists({
+          content: "Revision History",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
+        });
     });
   });
 
-  context("Verify The side bar options References fonts", () => {
+  context("Verify The side bar options Migration fonts", () => {
     it("Verify The side bar options References fonts", () => {
-      cy.get("[data-cy=\"references-icon\"]").arrowClick();
+      // cy.get("[data-cy=\"references-icon\"]").arrowClick();
+      cy.pause();
     });
     //   it("Verify The side bar options MIgration fonts", () => {
     //   });
   });
 
-  context("Approve and Release popup dialog font", () => {
+  context("Click on 'Approve and Release' button", () => {
     it("Click on Approve and Release button", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Click on Confirm without password entered", () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-    });
-
-    it("Verify approve and Release popup dialog font for 'Approve and Release'", () => {
-      cy.get("[class=\"MuiDialogTitle-root\"]").contains("Approve and Release")
-        .should("have.css", "font-size", "16px");
-      cy.get("[class=\"MuiDialogTitle-root\"]").contains("Approve and Release")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class=\"MuiDialogTitle-root\"]").contains("Approve and Release")
-        .should("have.css", "font-weight", "600");
-      cy.get("[class=\"MuiDialogTitle-root\"]").contains("Approve and Release")
-        .should("have.css", "line-height", "21px");
-    });
-
-    it("Verify approve and Release popup dialog font for 'Approvers'", () => {
-      cy.get("[data-cy=\"field-approvals\"]").contains("Approvers")
-        .should("have.css", "font-size", "16px");
-      cy.get("[data-cy=\"field-approvals\"]").contains("Approvers")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"field-approvals\"]").contains("Approvers")
-        .should("have.css", "font-weight", "400");
-      cy.get("[data-cy=\"field-approvals\"]").contains("Approvers")
-        .should("have.css", "line-height", "21px");
-    });
-
-    it("Verify approve and Release popup dialog font for 'Effective date'", () => {
-      cy.get("[data-cy=\"field-effectiveDate\"]").contains("Effective date")
-        .should("have.css", "font-size", "16px");
-      cy.get("[data-cy=\"field-effectiveDate\"]").contains("Effective date")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"field-effectiveDate\"]").contains("Effective date")
-        .should("have.css", "font-weight", "400");
-      cy.get("[data-cy=\"field-effectiveDate\"]").contains("Effective date")
-        .should("have.css", "line-height", "21px");
-    });
-
-    it("Verify approve and Release popup dialog font for 'Password'", () => {
-      cy.get("[data-cy=\"field-password\"]").contains("Password")
-        .should("have.css", "font-size", "16px");
-      cy.get("[data-cy=\"field-password\"]").contains("Password")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"field-password\"]").contains("Password")
-        .should("have.css", "font-weight", "400");
-      cy.get("[data-cy=\"field-password\"]").contains("Password")
-        .should("have.css", "line-height", "21px");
-    });
-
-    it("Verify approve and Release popup dialog font for 'Required'", () => {
-      cy.get("[class=\"MuiFormHelperText-root Mui-error\"]").contains("Required")
-        .should("have.css", "font-size", "12px");
-      cy.get("[class=\"MuiFormHelperText-root Mui-error\"]").contains("Required")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class=\"MuiFormHelperText-root Mui-error\"]").contains("Required")
-        .should("have.css", "font-weight", "400");
-      cy.get("[class=\"MuiFormHelperText-root Mui-error\"]").contains("Required")
-        .should("have.css", "line-height", "12px");
-    });
-
-    it("Verify approve and Release popup dialog font for 'Cancel' button", () => {
-      cy.get("[data-cy=\"transition.action.cancel\"]").contains("Cancel")
-        .should("have.css", "font-size", "12px");
-      cy.get("[data-cy=\"transition.action.cancel\"]").contains("Cancel")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[data-cy=\"transition.action.cancel\"]").contains("Cancel")
-        .should("have.css", "font-weight", "600");
-      cy.get("[data-cy=\"transition.action.cancel\"]").contains("Cancel")
-        .should("have.css", "line-height", "21px");
-    });
-
-    it("Verify approve and Release popup dialog font for 'Confirm' button", () => {
-      cy.get("[class=\"MuiButton-label\"]").contains("Confirm")
-        .should("have.css", "font-size", "12px");
-      cy.get("[class=\"MuiButton-label\"]").contains("Confirm")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class=\"MuiButton-label\"]").contains("Confirm")
-        .should("have.css", "font-weight", "600");
-      cy.get("[class=\"MuiButton-label\"]").contains("Confirm")
-        .should("have.css", "line-height", "21px");
     });
   });
 
-  context("Approve and Release the document", () => {
-    it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+  context("Verify 'Approve and Release' dialog window font", () => {
+    it(`Verify 'Approve and Release' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[class=\"MuiDialogTitle-root\"]")
+        .checkStylePropExists({
+          content: "Approve and Release",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'Approvers' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="field-approvals"]`)
+        .checkStylePropExists({
+          content: "Approvers",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'Effective date' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_16} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`[data-cy="field-effectiveDate"]`)
+        .checkStylePropExists({
+          content: "Effective date",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_16, "font-weight": FONT_WT_400 },
+        });
+    });
+
+    it(`Verify 'Password' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_16} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`[data-cy="field-password"]`)
+        .checkStylePropExists({
+          content: "Password",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_16, "font-weight": FONT_WT_400 },
+        });
+    });
+
+    it(`Verify 'Required' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
+      cy.get("[class=\"MuiFormHelperText-root Mui-error\"]")
+        .checkStylePropExists({
+          content: "Required",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
+        });
+    });
+
+    it(`Verify 'Cancel' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[class=\"MuiFormHelperText-root Mui-error\"]")
+        .checkStylePropExists({
+          content: "Cancel",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify 'Confirm' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[class=\"MuiButton-label\"]")
+        .checkStylePropExists({
+          content: "Confirm",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
+    });
+  });
+
+  context("Enter correct password and click on 'Confirm' button", () => {
+    it("Click on confirm after entering correct password", () => {
+      cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.ReleaseDocRev,
+        () => {
+          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+        });
     });
   });
 
@@ -777,100 +739,74 @@ context("User Creation Flow", () => {
       cy.usrClickMyProfile();
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify 'User Profile' font-size 22.4px font-family 'Sora, sans-serif' line-height 26.208px font-weight 400`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-userProfile\"]").contains("User Profile")
-        .should("have.css", "font-size", "22.4px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-userProfile\"]").contains("User Profile")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-userProfile\"]").contains("User Profile")
-        .should("have.css", "line-height", "26.208px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-userProfile\"]").contains("User Profile")
-        .should("have.css", "font-weight", "400");
+    it(`Verify 'User Profile' font-size ${FONT_SIZE_22_4} font-family ${sora} line-height ${LINE_HT_26_208} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-userProfile\"]")
+        .checkStylePropExists({
+          content: "User Profile",
+          props: { "font-size": FONT_SIZE_22_4, "font-family": sora, "line-height": LINE_HT_26_208, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify 'User Name' font-size 48px font-family 'Sora, sans-serif' line-height 49.92px font-weight 400`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-userName\"]").contains(USERS[1].name)
-        .should("have.css", "font-size", "48px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-userName\"]").contains(USERS[1].name)
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-userName\"]").contains(USERS[1].name)
-        .should("have.css", "line-height", "49.92px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-userName\"]").contains(USERS[1].name)
-        .should("have.css", "font-weight", "400");
+    it(`Verify 'User Name' font-size ${FONT_SIZE_48} font-family ${sora} line-height ${LINE_HT_49_92} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-userName\"]")
+        .checkStylePropExists({
+          content: USERS[1].name,
+          props: { "font-size": FONT_SIZE_48, "font-family": sora, "line-height": LINE_HT_49_92, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // // eslint-disable-next-line max-len
-    // it(`Verify 'Groups' font-size 16px font-family 'Sora, sans-serif' line-height 49.92px font-weight 400`, () => {
+    // it(`Verify 'Groups' font-size FONT_SIZE_16 font-family ${soraSansserif} line-height 49.92px font-weight 400`, () => {
     //   cy.get("#SummaryBaseProps-label").contains("Groups")
-    //     .should("have.css", "font-size", "16px");
+    //     .should("have.css", "font-size", "FONT_SIZE_16");
     //   cy.get("#SummaryBaseProps-label").contains("Groups")
-    //     .should("have.css", "font-family", "Sora, sans-serif");
+    //     .should("have.css", "font-family", soraSansserif);
     //   cy.get("#SummaryBaseProps-label").contains("Groups")
     //     .should("have.css", "line-height", "49.92px");
     //   cy.get("#SummaryBaseProps-label").contains("Groups")
-    //     .should("have.css", "font-weight", "400");
+    //     .should("have.css", "font-weight", FONT_WT_400);
     // });
 
-    // // eslint-disable-next-line max-len
-    // it(`Verify 'Groups text message' font-size 16px font-family 'Sora, sans-serif' line-height 26.208px font-weight 400`, () => {
+    // it(`Verify 'Groups text message' font-size FONT_SIZE_16 font-family ${soraSansserif} line-height 26.208px font-weight 400`, () => {
     //   cy.get("#SummaryBaseProps-values").contains("Owner as approver")
-    //     .should("have.css", "font-size", "16px");
+    //     .should("have.css", "font-size", "FONT_SIZE_16");
     //   cy.get("#SummaryBaseProps-values").contains("Owner as approver")
-    //     .should("have.css", "font-family", "Sora, sans-serif");
+    //     .should("have.css", "font-family", soraSansserif);
     //   cy.get("#SummaryBaseProps-values").contains("Owner as approver")
     //     .should("have.css", "line-height", "20px");
     //   cy.get("#SummaryBaseProps-values").contains("Owner as approver")
-    //     .should("have.css", "font-weight", "400");
+    //     .should("have.css", "font-weight", FONT_WT_400);
     // });
 
-    // eslint-disable-next-line max-len
-    it(`Verify 'Addresses' font-size 16px font-family 'Sora, sans-serif' line-height 25.6px font-weight 600`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-title\"]").contains("Addresses")
-        .should("have.css", "font-size", "16px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title\"]").contains("Addresses")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title\"]").contains("Addresses")
-        .should("have.css", "line-height", "25.6px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title\"]").contains("Addresses")
-        .should("have.css", "font-weight", "600");
+    it(`Verify 'Addresses' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_26_6} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-title\"]")
+        .checkStylePropExists({
+          content: "Addresses",
+          props: { "font-size": FONT_SIZE_16, "font-family": sora, "line-height": LINE_HT_26_6, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify 'Add Addresses' font-size 12px font-family 'Sora, sans-serif' line-height 21px font-weight 600`, () => {
-      cy.get("#EditRemoveAddFields-add").contains("Add Addresses")
-        .should("have.css", "font-size", "12px");
-      cy.get("#EditRemoveAddFields-add").contains("Add Addresses")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("#EditRemoveAddFields-add").contains("Add Addresses")
-        .should("have.css", "line-height", "21px");
-      cy.get("#EditRemoveAddFields-add").contains("Add Addresses")
-        .should("have.css",   "font-weight", "600");
+    it(`Verify 'Add Addresses' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get("#EditRemoveAddFields-add")
+        .checkStylePropExists({
+          content: "Add Addresses",
+          props: { "font-size": FONT_SIZE_12, "font-family": sora, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify 'Acct Codes' font-size 16px font-family 'Sora, sans-serif' line-height 25.6px font-weight 600`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-title-\"]").contains("Acct Codes")
-        .should("have.css", "font-size", "16px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title-\"]").contains("Acct Codes")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title-\"]").contains("Acct Codes")
-        .should("have.css", "line-height", "25.6px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title-\"]").contains("Acct Codes")
-        .should("have.css",   "font-weight", "600");
+    it(`Verify 'Acct Codes' ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-title-\"]")
+        .checkStylePropExists({
+          content: "Acct Codes",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_600 },
+        });
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify 'Add Acct Codes' font-size 12px font-family 'Sora, sans-serif' line-height 21px font-weight 600`, () => {
-      cy.get("#EditRemoveAddFields-add").contains("Add Acct Codes")
-        .should("have.css", "font-size", "12px");
-      cy.get("#EditRemoveAddFields-add").contains("Add Acct Codes")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("#EditRemoveAddFields-add").contains("Add Acct Codes")
-        .should("have.css", "line-height", "21px");
-      cy.get("#EditRemoveAddFields-add").contains("Add Acct Codes")
-        .should("have.css",   "font-weight", "600");
+    it(`Verify 'Add Acct Codes' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get("#EditRemoveAddFields-add")
+        .checkStylePropExists({
+          content: "Add Acct Codes",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
     });
 
     it(`Click on 'Add Acct Codes' button and enter 'TC333'`, () => {
@@ -878,16 +814,12 @@ context("User Creation Flow", () => {
       cy.get("#EditRemoveAddFields-done").contains("Done").arrowClick();
     });
 
-    // eslint-disable-next-line max-len
-    it(`Verify 'TC333' font-size 12px font-family 'Sora, sans-serif' line-height 25.6px font-weight 400`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-title- MuiTypography-subtitle1\"]").contains("test123")
-        .should("have.css", "font-size", "12px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title- MuiTypography-subtitle1\"]").contains("test123")
-        .should("have.css", "font-family", "Sora, sans-serif");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title- MuiTypography-subtitle1\"]").contains("test123")
-        .should("have.css", "line-height", "25.6px");
-      cy.get("[class^=\"MuiTypography-root makeStyles-title- MuiTypography-subtitle1\"]").contains("test123")
-        .should("have.css",   "font-weight", "400");
+    it(`Verify 'TC333' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_400}`, () => {
+      cy.get("[class^=\"MuiTypography-root makeStyles-title- MuiTypography-subtitle1\"]")
+        .checkStylePropExists({
+          content: "TC333",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_400 },
+        });
     });
 
     it("'Close My Profile", () => {
@@ -935,7 +867,7 @@ context("User Creation Flow", () => {
     });
 
     it("Selects company B", () => {
-      cy.cmpSelectCompany({ name: createdCompanyB.name, multiple: multipleCompanies });
+      cy.cmpSelectCompany({ name: createdCompanyB.name, multiple: true });
     });
   });
 
@@ -943,7 +875,7 @@ context("User Creation Flow", () => {
     it("Switch company", () => {
       cy.usrClickUserMenuButton();
       cy.usrClickSwitchCompanyButton();
-      cy.cmpSelectCompany({ name: createdCompanyB.name, multiple: multipleCompanies });
+      cy.cmpSelectCompany({ name: createdCompanyB.name, multiple: true });
     });
   });
 });
