@@ -1104,12 +1104,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
-    it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
-    });
-  });
-
   context("Approve the submission → LHRS is in the “Completed” state ", () => {
     it("Approve LHR", () => {
       cy.wait(3000);
@@ -1172,6 +1166,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   Revision A is Superseded`,
     () => {
       it("Add Approver to approvals list", () => {
+        cy.wait(1000);
         cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(USERS[1].name);
       });
 
@@ -1197,7 +1192,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       it("Open revisions tab, click and Revision A is Superseded", () => {
         cy.drClickRevisionsSidePanel();
-        cy.get(`[data-cy="revision"]`).eq(1).should("have.text", "Revision A  - Superseded");
+        cy.get(`[data-cy="revision"]`).eq(1).should("include.text", "Revision A  - Superseded");
       });
     }
   );
@@ -1237,12 +1232,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
-    it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
-    });
-  });
-
   context("Go back to the LHR and submit it for approval → LHR is “In Review”", () => {
     it("Go back to the LHR", () => {
       cy.get("#HeaderInfo-subtitle").click();
@@ -1262,7 +1251,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #22083001RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083101RD");
     });
 
     context(`The status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
@@ -1292,12 +1281,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
       });
-    });
-  });
-
-  context("Scroll down the page → The status bar should be fixed", () => {
-    it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
     });
   });
 
