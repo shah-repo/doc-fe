@@ -336,7 +336,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-         {showOutputSection ? (
+        {showOutputSection ? (
           <>
             {(isPO || includes(outputDocumentTypeName, true)
               ? _tabsState?.tabID !== "details" && (
