@@ -5,8 +5,8 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
-  DocumentRevisionFormProgressBar, DocumentRevisionSummaryHeader,
-  SMBox, SMTabs, SMTemplate, SM, SMTabsState,
+  DocumentRevisionFormProgressBar, DocumentRevisionFormHeader,
+  SMBox, SMTabs, SMTemplate, SM, SMTabsState, SMFormState,
 } from "../../../../../../../App";
 import { withSMTabs } from "../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
 import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
@@ -28,10 +28,12 @@ import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../../hel
 import DocumentRevisionFormPresenter from "../../../../DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "../../../../types";
 import styles from "./styles";
+import { withSMForm } from "../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc";
 
 interface ContainerProps {
   docRevId?: string;
   _tabsState?: SMTabsState;
+  _formState?: SMFormState;
 }
 
 interface ComponentProps extends ContainerProps {
@@ -43,10 +45,11 @@ const emptyFunction = () => undefined;
 const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   docRevId,
   _tabsState,
+  _formState,
   formik,
 }) => {
   const classes = styles();
-  const { _documentRevisionFormState, _formState } = SM.useStores();
+  const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   let schema = _documentRevisionFormState?.schema;
 
@@ -143,6 +146,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     _tabsState?.setTabID(tabConfig[newValue].tabId);
   };
 
+  useEffect(() => {
+    _formState?.setValues(initialValues);
+    _formState?.setMode(mode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Observer>
       {() => (
@@ -152,7 +161,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
             height: "auto",
             minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"),
           }}
-          header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
+          header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
+            type={type}
+            documentTypeId={formik.values.document?.documentType?.id}
+          />}
           lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
         >
           <Observer>
@@ -266,4 +278,4 @@ const DocumentPreviewContainer: React.FunctionComponent<ContainerProps> = (props
   );
 };
 
-export default withSMTabs(DocumentPreviewContainer);
+export default withSMForm(withSMTabs(DocumentPreviewContainer));
