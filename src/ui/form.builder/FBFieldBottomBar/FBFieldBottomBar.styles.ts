@@ -9,6 +9,7 @@ export default makeStyles((theme: Theme) => ({
     top: "100%",
     display: "flex",
     justifyContent: "center",
+    zIndex: 5,
   },
   button: {
     margin: 0,
@@ -17,6 +18,6 @@ export default makeStyles((theme: Theme) => ({
     borderTopRightRadius: 0,
     width: theme.spacing(40),
     border: 0,
-    background: Colors.dodger_blue,
+    backgroundColor: Colors.dodger_blue,
   },
 }));

@@ -3,14 +3,12 @@ import { FBFieldWrapperState, FBFormProps, FBInputProps, FBVisibilityType } from
 
 export type FBFieldWrapperProps =
   & Pick<FBFormProps, "children">
-  & Pick<BoxProps, "onMouseOver" | "onMouseLeave">
+  & Pick<BoxProps, "onMouseOver" | "onMouseLeave" | "mt" | "mb">
   & {
     fieldWrapperState?: FBFieldWrapperState;
     toolsVisible?: FBVisibilityType;
     addToolVisible?: FBVisibilityType;
     markDownVisible?: boolean;
-    topBarMargin?: number;
-    grabMargin?: number;
     inputProps?: Partial<FBInputProps>;
+    isDragged?: boolean;
   };
-

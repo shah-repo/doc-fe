@@ -7,32 +7,29 @@ import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   fieldWrapperState,
-  inputProps: { index = 0, type } = {},
+  inputProps: { index = 0 } = {},
   toolsVisible = false,
   markDownVisible = false,
   onMouseOver,
   onMouseLeave,
-  grabMargin,
   addToolVisible,
   inputProps,
+  isDragged,
+  mt,
+  mb,
   ...props
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ mt, mb, isDragged });
 
   return (
     <FBProvider {...{ fieldWrapperState }}>
-      <Box
-        {...{ onMouseOver, onMouseLeave }}
-        className={cx(`fb-field-wrapper-${inputProps?.name}`, classes.root)}
-        mt={index === 0 ? 0 : type === "section" || type === "approvals" ? 6 : 3.5}
-        mb={type === "section" || type === "subsection" ? -1 : 2}
-      >
+      <Box {...{ onMouseOver, onMouseLeave }} className={cx(`fb-field-wrapper-${inputProps?.name}`, classes.root)}>
         <Box className={classes.tools} visibility={toolsVisible}>
           <FBFieldTopBar visibility={toolsVisible} {...{ inputProps }} />
           <FBFieldBottomBar visibility={addToolVisible} {...{ index }} />
         </Box>
-        <Box display="flex" flexDirection="row">
-          <Box width="100%">{props.children}</Box>
+        <Box className={classes.field}>
+          {props.children}
         </Box>
         {markDownVisible && <FBFieldMarkDown {...{ index }} />}
       </Box>

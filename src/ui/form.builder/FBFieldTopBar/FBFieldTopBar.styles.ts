@@ -12,6 +12,7 @@ export default makeStyles((theme: Theme) => ({
     top: -HEIGHT,
     display: "flex",
     justifyContent: "flex-end",
+    zIndex: 5,
   },
   tools: {
     display: "flex",
