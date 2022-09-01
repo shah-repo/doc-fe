@@ -38,6 +38,8 @@ interface ComponentProps extends ContainerProps {
   formik: FormikProps<DocumentRevisionFormValues>;
 }
 
+const emptyFunction = () => undefined;
+
 const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   docRevId,
   _tabsState,
@@ -53,8 +55,8 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   // @todo: Mix between DocumentRevisionSummary and DocumentRevisionForm.
   // @todo: Move these elements to one component to reuse.
   // Create documentRevision and fill it
-  const documentRevision = get(formik, "values") as unknown as DocumentRevision;
-  const initialValues = documentRevision as unknown as DocumentRevisionFormValues;
+  const documentRevision = formik.values as unknown as DocumentRevision;
+  const initialValues = formik.values as unknown as DocumentRevisionFormValues;
 
   const docTypeId = documentRevision?.document?.documentType?.id as string;
   const documentType = documentTypesById[docTypeId];
@@ -76,8 +78,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const showAdministrativeAndVoidChange = false;
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const emptyFunction = () => {};
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
@@ -254,12 +254,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
 const DocumentPreviewContainer: React.FunctionComponent<ContainerProps> = (props) => {
   const formik = useFormikContext<DocumentRevisionFormValues>();
-  const initialValues = get(formik, "values");
+  const initialValues = formik.values;
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={() => undefined}
+      onSubmit={emptyFunction}
     >
       {(formikProps) => <DocumentPreview {...props} formik={formikProps} />}
     </Formik>

@@ -391,7 +391,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               docRevId={initialValues.id}
               status={documentRevision?.status}
               version={documentRevision?.version}
-              isDisabled={isDisabledInput}
+              isDisabled={isDisabledInputInPreview}
               outputDocs={values.outputDocumentTypes as OptionType[]}
             />
           </Grid>
