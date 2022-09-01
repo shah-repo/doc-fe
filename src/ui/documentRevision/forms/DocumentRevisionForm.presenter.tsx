@@ -336,12 +336,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {!isPreview && (!values.status || type === "newOutput") && (
-          <Grid item xs={12}>
-            <DocumentSecurity documentTypeId={documentTypeId} />
-          </Grid>
-        )}
-        {showOutputSection ? (
+         {showOutputSection ? (
           <>
             {(isPO || includes(outputDocumentTypeName, true)
               ? _tabsState?.tabID !== "details" && (
@@ -371,18 +366,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   />
                 </Grid>
               ))}
-
-            {hasOutput && (
-              <Grid item xs={12}>
-                <FBActiveNoOutput
-                  docRevId={initialValues.id}
-                  status={documentRevision?.status}
-                  version={documentRevision?.version}
-                  isDisabled={isDisabledInput}
-                  outputDocs={values.outputDocumentTypes as OptionType[]}
-                />
-              </Grid>
-            )}
           </>
         ) : (
           <Grid item xs={12}>
@@ -395,6 +378,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               docRevStatus={documentRevision?.status}
               documentRevision={documentRevision}
               documentTypeId={documentTypeId || ""}
+            />
+          </Grid>
+        )}
+        {!isPreview && (!values.status || type === "newOutput") && (
+          <Grid item xs={12}>
+            <DocumentSecurity documentTypeId={documentTypeId} />
+          </Grid>
+        )}
+        {showOutputSection && hasOutput && (
+          <Grid item xs={12}>
+            <FBActiveNoOutput
+              docRevId={initialValues.id}
+              status={documentRevision?.status}
+              version={documentRevision?.version}
+              isDisabled={isDisabledInput}
+              outputDocs={values.outputDocumentTypes as OptionType[]}
             />
           </Grid>
         )}
