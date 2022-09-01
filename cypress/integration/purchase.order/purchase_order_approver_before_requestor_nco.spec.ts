@@ -9,7 +9,6 @@ import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -177,7 +176,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
-      cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes");
+      cy.get(`[name*="approved-dam-json-is-used-"]`).check("Yes");
     });
 
     it("Upload DOM JSON", () => {
@@ -185,7 +184,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-      cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes");
+      cy.get(`[name*="approved-page-details-json-is-used-"]`).check("Yes");
     });
 
     it("Upload Page Details JSON", () => {
@@ -193,7 +192,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-      cy.get("[name*=\"approved-navigation-json-is-used-\"]").check("Yes");
+      cy.get(`[name*="approved-navigation-json-is-used-"]`).check("Yes");
     });
 
     it("Upload Navigation JSON", () => {
@@ -205,7 +204,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
+      cy.get(`[data-cy="albumMediaButton"]`).eq(0).arrowClick();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 
@@ -555,11 +554,6 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.poSelectPOStatus({ status: "Open" });
     });
 
-    /* it(`Select '${ownerName}' for Requestor`, () => {
-      cy.get("[data-cy^=\"requestor-\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains(ownerName).arrowClick();
-    }); */
-
     it("Select Order Date", () => {
       cy.get("input[name^=po-order-date]").parent().find("button").arrowClick();
       cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
@@ -574,43 +568,35 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Click on 'Add Line Item' button", () => {
-      SystemRequirement("REQ-1360");
       cy.poAddNewFieldItem();
     });
 
     it("Select Part Number", () => {
-      SystemRequirement("REQ-1410");
       cy.poSelectPartNumber({ partNo: "PRT-00001 - 1" });
     });
 
     it("Enter Supplier Part Number", () => {
-      SystemRequirement("REQ-1410");
       cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
     });
 
     it("Enter Quantity Ordered", () => {
-      SystemRequirement("REQ-1410");
       cy.poEnterQuantityOrdered({ quantity: "5" });
     });
 
     it("Select Units", () => {
-      SystemRequirement("REQ-1410");
       cy.poSelectUnits();
     });
 
     it("Add Required Date", () => {
-      SystemRequirement("REQ-1410");
       cy.get(`[name="date"]`).next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
     it("Enter number of Units", () => {
-      SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
     });
 
     it("Check Tax option", () => {
-      SystemRequirement("REQ-1450");
       cy.poSelectTaxCheckbox();
     });
 
@@ -671,10 +657,6 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.drSelectDetailsTab();
     });
 
-    /*  it(`Check the Approval field does not contain requestor ${ownerName}`, () => {
-      cy.get("[data-cy^=fb-po-approvals]").should("not.have.text", ownerName);
-    }); */
-
     it(`Add Approver '${ownerName}' for Approval`, () => {
       cy.poAddApproverOnApproverList({ approver: ownerName });
     });
@@ -734,7 +716,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Verify title is ${poDescription}`, () => {
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").should("contain.text", poDescription);
+      cy.get(`[data-cy="BaseWithhtml-editor"]`).should("contain.text", poDescription);
     });
 
     it(`Verify PO status is Open`, () => {
@@ -808,8 +790,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("revise record", () => {
-      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.get(`[data-cy="updateRecord"]`).arrowClick();
+      cy.get(`[data-cy="DocumentRevisionForm-submit"]`).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -821,7 +803,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     it(`Select '${USERS[2].name}' for Requestor`, () => {
       cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
-      cy.get("[data-cy^=\"po-requestor-\"]").arrowClick().wait(1000);
+      cy.get(`[data-cy^="po-requestor-"]`).arrowClick().wait(1000);
       cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
     });
 
@@ -844,12 +826,6 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
     });
-
-    /* it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    }); */
   });
 
   context("Submit for Approval and verify PO can be released", () => {
@@ -881,7 +857,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Verify title is ${poDescription}`, () => {
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").should("contain.text", poDescription);
+      cy.get(`[data-cy="BaseWithhtml-editor"]`).should("contain.text", poDescription);
     });
 
     it(`Verify PO status is Open`, () => {
