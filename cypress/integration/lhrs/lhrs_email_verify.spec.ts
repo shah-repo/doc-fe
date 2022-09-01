@@ -1046,7 +1046,7 @@ context("Email format Verification after LHR released", () => {
           contains: [`Hello <b>${USERS[1].name},</b>`,
             `<b>${lotId}</b> (for <b>CS-00005 - rev 1 - Part document</b>) has been released.`,
             "Please click on the button below to view it.",
-            "<button type=\"button\">VIEW ITEM</button>",
+            `<button type="button">VIEW ITEM</button>`,
             createdCompany.id],
         }];
 
