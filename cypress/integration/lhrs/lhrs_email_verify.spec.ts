@@ -938,6 +938,10 @@ context("Email format Verification after LHR released", () => {
 
   // complete step
   context("Complete the Step", () => {
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab().wait(2000);
+    });
+
     it("Select Approval", () => {
       cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
     });
@@ -989,7 +993,7 @@ context("Email format Verification after LHR released", () => {
 
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
     });
 
@@ -1010,7 +1014,7 @@ context("Email format Verification after LHR released", () => {
     });
   });
 
-  context("Verify email for LHRt notification", () => {
+  context("Verify email for released LHR notification", () => {
     it("Get emails", () => {
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
@@ -1045,12 +1049,14 @@ context("Email format Verification after LHR released", () => {
             "<button type=\"button\">VIEW ITEM</button>",
             createdCompany.id],
         }];
+
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 1,
       });
+
     });
   });
 });
