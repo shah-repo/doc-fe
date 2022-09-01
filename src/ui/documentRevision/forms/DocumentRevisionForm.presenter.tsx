@@ -19,7 +19,7 @@ import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { DocumentCloneType } from "../Clone.container";
+import { DocumentCloneType, DocumentCloneTypeOptions } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
@@ -381,7 +381,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {!isPreview && (!values.status || type === "newOutput") && (
+        {!isPreview && (!values.status || type === DocumentCloneTypeOptions.newOutput) && (
           <Grid item xs={12}>
             <DocumentSecurity documentTypeId={documentTypeId} />
           </Grid>
