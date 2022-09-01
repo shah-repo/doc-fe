@@ -140,8 +140,8 @@ context("Intermediate page validation", () => {
         cy.intPageVerifySelectedGroupsExist();
       });
 
-      it("Verify 'Attachment' field is not displayed", () => {
-        cy.intPageVerifyAttachmentNotExist();
+      it("Verify 'Attachment' field is displayed", () => {
+        cy.intPageVerifyAttachmentExist();
       });
 
       it(`Verify output document type is not displayed`, () => {
@@ -304,8 +304,8 @@ context("Intermediate page validation", () => {
         cy.intPageVerifySelectedGroupsExist();
       });
 
-      it("Verify 'Attachment' field is not displayed", () => {
-        cy.intPageVerifyAttachmentNotExist();
+      it("Verify 'Attachment' field is displayed", () => {
+        cy.intPageVerifyAttachmentExist();
       });
 
       it(`Verify output document type is not displayed`, () => {

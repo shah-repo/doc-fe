@@ -270,8 +270,8 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyDocTypeExist();
       });
 
-      it("Verify Document id is editable", () => {
-        cy.intPageVerifyDocIdIsEditable();
+      it("Verify Document id is not editable", () => {
+        cy.intPageVerifyDocIdIsNotEditable();
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
