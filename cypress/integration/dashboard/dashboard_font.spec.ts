@@ -16,6 +16,7 @@ import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHis
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
+import { FONT_SIZE_11, FONT_SIZE_12, FONT_SIZE_12_8, FONT_SIZE_14, FONT_SIZE_14_4, FONT_SIZE_16, FONT_SIZE_28, FONT_WT_400, FONT_WT_700, LINE_HT_1, LINE_HT_2, LINE_HT_20, LINE_HT_3, LINE_HT_33_6, LINE_HT_4, soraSansserif } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -58,17 +59,6 @@ const lhrsid = "LHRS-00001";
 const lhrid = "LHR-00007";
 const rejArId = "AR-00009";
 const tcId = "TC-00001";
-const soraSansserif = "Sora, sans-serif";
-const FONT_SIZE_12 = "12px";
-const FONT_SIZE_14 = "14px";
-const FONT_SIZE_14_4 = "14.4px";
-const FONT_WT_400 = "400";
-const FONT_WT_700 = "700";
-const LINE_HT_1 = "20.02px";
-const LINE_HT_2 = "20.592px";
-const LINE_HT_3 = "15px";
-const LINE_HT_4 = "21.6px";
-
 
 context("Dashboard notification font test", () => {
   before(() => {
@@ -1311,7 +1301,7 @@ context("Dashboard notification font test", () => {
 
     it("Add approvers to approval request on approver list", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"fb-approvers-approvers\"]").click().autocompleteSelect(USERS[2].email);
+      cy.get("[data-cy^=\"fb-approvers-\"]").click().autocompleteSelect(USERS[2].email);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1920,10 +1910,10 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_14} form-family ${soraSansserif} line-height 18px font-weight ${FONT_WT_400}`, () => {
+    it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_28} form-family ${soraSansserif} line-height ${LINE_HT_33_6} font-weight ${FONT_WT_400}`, () => {
       cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]").checkStylePropExists({
         content: USERS[1].name,
-        props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": "18px", "font-weight": FONT_WT_400 },
+        props: { "font-size": FONT_SIZE_28, "font-family": soraSansserif, "line-height": LINE_HT_33_6, "font-weight": FONT_WT_400 },
       });
     });
 
@@ -1973,7 +1963,7 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it(`Verify 'Rev A Approval Record title' has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height "20.592px font-weight ${FONT_WT_400}`, () => {
+    it(`Verify 'Rev A Approval Record title' has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: "Rev A Approval Record title",
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
@@ -1982,19 +1972,19 @@ context("Dashboard notification font test", () => {
   });
 
   context("Verify font for Outstanding Training Chart", () => {
-    it(`Verify Outstanding Training Chart font-size 16px and form-family ${soraSansserif} line-height 20px font-weight 600`, () => {
+    it(`Verify Outstanding Training Chart font-size ${FONT_SIZE_16} and form-family ${soraSansserif} line-height ${LINE_HT_20} font-weight 600`, () => {
       cy.checkStylePropExists({
         content: "TRAININGS OUTSTANDING",
-        props: { "font-size": "16px", "font-family": soraSansserif, "line-height": "20px", "font-weight": "600" },
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": "600" },
       });
     });
   });
 
   context("Verify font for Welcome back, Username!", () => {
-    it(`Verify Welcome back, Username! font-size as 27px and form-family as ${soraSansserif} line-height 34px font-weight 300`, () => {
+    it(`Verify Welcome back, Username! font-size as ${FONT_SIZE_28} and form-family as ${soraSansserif} line-height ${LINE_HT_33_6} font-weight 300`, () => {
       cy.checkStylePropExists({
         content: "Welcome Back, Giovanni Reynolds!",
-        props: { "font-size": "27px", "font-family": soraSansserif, "line-height": "34px", "font-weight": "300" },
+        props: { "font-size": FONT_SIZE_28, "font-family": soraSansserif, "line-height": LINE_HT_33_6, "font-weight": "300" },
       });
     });
   });
@@ -2080,19 +2070,19 @@ context("Dashboard notification font test", () => {
         .should("have.text", "OVERDUE").arrowClick();
     });
 
-    it(`Verify training status 'EMAIL ALL' font-size as 11px and form-family as ${soraSansserif} line-height ${FONT_SIZE_14} and font-weight ${FONT_WT_700}`, () => {
+    it(`Verify training status 'EMAIL ALL' font-size as ${FONT_SIZE_11} and form-family as ${soraSansserif} line-height ${FONT_SIZE_14} and font-weight ${FONT_WT_700}`, () => {
       cy.get("[class^=\"MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-emailbutton\"]")
         .checkStylePropExists({
           content: "EMAIL ALL",
-          props: { "font-size": "11px", "font-family": soraSansserif, "line-height": FONT_SIZE_14, "font-weight": FONT_WT_700 },
+          props: { "font-size": FONT_SIZE_11, "font-family": soraSansserif, "line-height": FONT_SIZE_14, "font-weight": FONT_WT_700 },
         });
     });
 
-    it(`Verify training status ${USERS[2].name} font-size as ${FONT_SIZE_14} and form-family as ${soraSansserif}`, () => {
+    it(`Verify training status ${USERS[2].name} font-size as ${FONT_SIZE_12_8} and form-family as ${soraSansserif}`, () => {
       cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
         .checkStylePropExists({
           content: USERS[2].name,
-          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif },
+          props: { "font-size": FONT_SIZE_12_8, "font-family": soraSansserif },
         });
     });
 
@@ -2109,28 +2099,28 @@ context("Dashboard notification font test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify TC id ${tcId} font-size as 14.4px and form-family ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify TC id ${tcId} font-size as ${FONT_SIZE_14_4} and form-family ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: tcId,
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_4, "font-weight": FONT_WT_400 },
       });
     });
 
-    it(`Verify PO id ${poOrder} has font-size as 14.4px and form-family as ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify PO id ${poOrder} has font-size as ${FONT_SIZE_14_4} and form-family as ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: poOrder,
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_4, "font-weight": FONT_WT_400 },
       });
     });
 
-    it(`Verify form id ${trainingFormId} font-size as 14.4px and form-family as ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify form id ${trainingFormId} font-size as ${FONT_SIZE_14_4} and form-family as ${soraSansserif} line-height ${LINE_HT_4} font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: trainingFormId,
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_4, "font-weight": FONT_WT_400 },
       });
     });
 
-    it(`Verify document LHR ID ${lhrid} font-size as 14.4px and form-family as ${soraSansserif} line-height ${LINE_HT_4}font-weight ${FONT_WT_400}`, () => {
+    it(`Verify document LHR ID ${lhrid} font-size as ${FONT_SIZE_14_4} and form-family as ${soraSansserif} line-height ${LINE_HT_4}font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: lhrid,
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_4, "font-weight": FONT_WT_400 },
@@ -2185,7 +2175,7 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it(`Verify REJECTED Approval Request ID ${rejArId} font-size 14p and form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify REJECTED Approval Request ID ${rejArId} font-size ${FONT_SIZE_14_4} and form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: rejArId,
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
