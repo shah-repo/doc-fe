@@ -282,4 +282,94 @@ context("Intermediate page validation", () => {
       cy.intPageVerifyCoordinatorExist();
     });
   });
+
+  context("Verify form options and add field button is displayed in Overview tab", () => {
+    context("Verify add field button is displayed", () => {
+      it("Verify 'Add Field' button displayed", () => {
+        cy.intPageVerifyAddFieldExist();
+      });
+    });
+
+    context("Check form options are displayed at center bottom", () => {
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
+      });
+    });
+  });
+
+  context("Verify form options and add field button is displayed in Specification tab", () => {
+    context("Verify add field button is displayed", () => {
+      it("Verify 'Add Field' button displayed", () => {
+        cy.get(`[data-cy="form.builder.addEquiSpec"]`).should("exist");
+      });
+    });
+
+    context("Check form options are displayed at center bottom", () => {
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
+      });
+    });
+  });
+
+  context("Add form fields", () => {
+    it("Click on 'Overview' tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Add Equipment 1", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-equipment-1" });
+      cy.get(`input[value="preventativeMaintenance"]`).arrowClick();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Equipment 2", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-equipment-2" });
+      cy.get(`input[value="calibration"]`).arrowClick();
+      cy.fbAddNewFieldButton();
+    });
+  });
+
+  context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify PM", () => {
+      cy.get(`[data-cy="fb-equipment-1"]`).eq(1).should("exist");
+    });
+
+    it("Verify CAL", () => {
+      cy.get(`[data-cy="fb-equipment-2"]`).eq(1).should("exist");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("Remove pm and check preview layout again", () => {
+    it("remove PM", () => {
+      cy.fbClickRemoveBtn({ label: "fb-equipment-1" });
+    });
+
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify CAL", () => {
+      cy.get(`[data-cy="fb-equipment-2"]`).eq(1).should("exist");
+    });
+
+    it("Verify PM should not exist", () => {
+      cy.get(`[data-cy="fb-equipment-1"]`).should("not.exist");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
 });
