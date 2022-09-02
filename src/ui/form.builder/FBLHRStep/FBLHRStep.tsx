@@ -155,7 +155,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               </Box>
               {stepLHRs &&
                 (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status)) &&
-                (<Box component={"span"}>
+                (<Box component={"span"} data-cy={`lhr-step-timestamp-${stepIndex}`}>
                   <Box component="span" marginRight={0.75}>&bull;</Box>
                   {isDocumentRevisionReleased(stepLHRs.status)
                     ? getFormattedDateString(
@@ -287,7 +287,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             <List>
               {map(operators, (operator, index) => (
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
-                  <ListItemAvatar>
+                  <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
                     {operator.user.avatar ? (
                       <Badge
                         overlap="circle"
@@ -311,18 +311,19 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                   <ListItemText
                     style={{ marginLeft: 4 }}
                     primary={
-                      <div className={classes.operatorTitle}>
+                      <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
                         {operator.user?.name}
                       </div>
                     }
                     secondary={
                       <Observer>
                         {() => (
-                          <>
+                          <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
                             <Typography
                               component="span"
                               variant="body2"
                               className={classes.operatorStatus}
+                              data-cy={`operator-status-${stepIndex}-${index}`}
                             >
                               {
                                 getStatusInfo(lhrStepState?.approvals, operator.stepId)
@@ -335,7 +336,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                               getFormattedDateString(
                                 getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt,
                                 MomentFormats.DateTime)}
-                          </>
+                          </div>
                         )}
                       </Observer>
                     }

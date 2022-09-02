@@ -1,28 +1,48 @@
-import { Box, Button, Grid, createStyles, makeStyles, Theme } from "@material-ui/core";
-import { FormikProps, useFormikContext } from "formik";
-import { filter, get, includes, map, size, isEmpty } from "lodash";
-import * as React from "react";
+import { Box, Button, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import cx from "classnames";
+import { FormikProps, useFormikContext } from "formik";
+import { filter, get, includes, isEmpty, map, size } from "lodash";
+import { Observer } from "mobx-react";
+import * as React from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
 import {
-  DocumentRevisionSummaryHeader,
-  DocumentRevisionFormProgressBar,
-  SM,
+  DocumentRevisionFormProgressBar, DocumentRevisionSummaryHeader, SM,
   SMBox,
   SMTabs,
   SMTemplate,
 } from "../../../../App";
+import FBTrainingInfoContainer from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
+import { ReactComponent as PreviewIcon } from "../../../../assets/images/preview.svg";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { Permission } from "../../../../state/ducks/auth/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import {
+  DocumentGroupType, DOC_TYPE_GROUP, TabInfo,
+  TabTypeOptions,
+} from "../../../../state/ducks/documentRevisions/documentType/types";
 import {
   DocumentRevision,
   DocumentRevisionStatus, SmartReferenceType,
 } from "../../../../state/ducks/documentRevisions/types";
+import { ApplicationState } from "../../../../state/reducers";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import { required, validator } from "../../../components/forms/fields/validators";
+import Text from "../../../components/Text";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
+import AttachmentsField from "../../../document.revision/form/attachments";
+import {
+  FB, FBDialog, FBDialogState, FBEditorState, FBProvider, FBSchemaProps, FBWorkspace,
+  FBWorkspaceModeOptions,
+} from "../../../form.builder";
+import FBMaterialEqInfoContainer from "../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import useGetHasPermission from "../../../hooks/useGetHasPermission";
+import Colors from "../../../layout/theme/utils/colors";
+import { DocumentCloneTypeOptions } from "../../Clone.container";
+import { isOperator } from "../../DocumentRevisionDisplay.container";
 import {
   checkIsDocumentLHR, checkIsDocumentMPIOutput,
   checkIsTypeCanBeOutput,
@@ -30,41 +50,10 @@ import {
 } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
-import { getActiveDocumentTypes } from "../transform";
-import RenderHtmlField from "./RenderHtmlField";
-import {
-  FBProvider,
-  FBDialog,
-  FB,
-  FBDialogState,
-  FBWorkspace,
-  FBWorkspaceModeOptions,
-  FBSchemaProps,
-  FBEditorState,
-} from "../../../form.builder";
-import Text from "../../../components/Text";
-import { ReactComponent as PreviewIcon } from "../../../../assets/images/preview.svg";
-import Colors from "../../../layout/theme/utils/colors";
-import { DocumentRevisionFormValues } from "../types";
-import { Observer } from "mobx-react";
-import {
-  DOC_TYPE_GROUP,
-  DocumentGroupType,
-  TabInfo,
-  TabTypeOptions,
-} from "../../../../state/ducks/documentRevisions/documentType/types";
 import DocumentRevisionFormPresenter from "../DocumentRevisionForm.presenter";
-import AttachmentsField from "../../../document.revision/form/attachments";
-import FBMaterialEqInfoContainer from "../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
-import FBTrainingInfoContainer
-  from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
-import { DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
-import { ApplicationState } from "../../../../state/reducers";
-import { isOperator } from "../../DocumentRevisionDisplay.container";
-import { useEffect } from "react";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { DocumentCloneTypeOptions } from "../../Clone.container";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { getActiveDocumentTypes } from "../transform";
+import { DocumentRevisionFormValues } from "../types";
+import RenderHtmlField from "./RenderHtmlField";
 
 interface Props {
   status: DocumentRevisionStatus;
@@ -100,7 +89,10 @@ const styles = makeStyles((theme: Theme) =>
       backgroundColor: `${Colors.dawn} !important`,
     },
     previewDialog: {
-      backgroundColor: Colors.alabaster,
+      backgroundColor: Colors.white,
+    },
+    previewTabContent: {
+      paddingBottom: theme.spacing(1.5),
     },
   }),
 );
@@ -228,12 +220,12 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     }];
   }
 
-  if (formValues.values?.retrain) {
-    tabConfig = tabConfig && [...tabConfig, {
+  if (formValues.values?.retrain && tabConfig) {
+    tabConfig = [...tabConfig, {
       labelId: "tabId.training",
       tabId: TabTypeOptions.TRAINING,
       type: TabTypeOptions.TRAINING,
-    } ];
+    }];
   }
 
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
@@ -291,10 +283,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                         const tabType = tabInfo.type;
                         const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                         return (
-                          <SMBox key={tabInfo.tabId}>
+                          <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
                             {tabType === TabTypeOptions.MIXED && <>
                               <DocumentRevisionFormPresenter
                                 {...formValues}
+                                isPreview={true}
                                 redlineActive={false}
                                 releasedDocRev={_documentRevisionFormState?.releasedDocRev}
                                 documentRevision={documentRevision}
@@ -356,6 +349,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
                             {tabType === TabTypeOptions.TABS_MEQ && (
                               <FBMaterialEqInfoContainer
                                 documentRevisionId={documentRevision?.id}
+                                inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                               />
                             )}
                             {tabType === TabTypeOptions.TRAINING &&

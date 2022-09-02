@@ -15,7 +15,7 @@ const groupTwo = "Company Admin";
 
 const tablePOAM = [
   ["Level 1", 5000, "Everyone"],
-  ["Level 2", 25000, "Can be approver", "Groups Management UnofficialUser Management"],
+  ["Level 2", 25000, "Can be approver", "Groups ManagementUser Management"],
   ["Level 3", 100000, "Owner as approver", "User ManagementAsync Tasks", "Company Admin"],
 ];
 
@@ -152,7 +152,7 @@ context("DAM and POAM", () => {
 
       context("Verify DAM opens to the Overview tab by default", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify Document ID exist", () => {
@@ -175,7 +175,6 @@ context("DAM and POAM", () => {
       context("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
         it("Navigate to Matrix Details Tab", () => {
           cy.drSelectMatrixDetailsTab();
-          cy.verifySelectedTab({ tab: "matrixdetails" });
         });
       });
 
@@ -425,7 +424,7 @@ context("DAM and POAM", () => {
 
       context("Verify DAM opens to the Overview tab by default", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         xit("Verify Training required exist", () => {
@@ -444,7 +443,6 @@ context("DAM and POAM", () => {
       context("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
         it("Navigate to Matrix Details Tab", () => {
           cy.drSelectMatrixDetailsTab();
-          cy.verifySelectedTab({ tab: "matrixdetails" });
         });
       });
 
@@ -632,7 +630,7 @@ context("DAM and POAM", () => {
 
       context("Verify Form opens to the Overview tab by default", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify that predefined field appears", () => {
@@ -648,7 +646,6 @@ context("DAM and POAM", () => {
       context("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
         it("Navigate to Matrix Details Tab", () => {
           cy.drSelectMatrixDetailsTab();
-          cy.verifySelectedTab({ tab: "matrixdetails" });
         });
       });
 
@@ -711,7 +708,7 @@ context("DAM and POAM", () => {
 
       context("Verify opens to the Overview tab by default", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         it("Verify Document ID exist", () => {
@@ -734,7 +731,6 @@ context("DAM and POAM", () => {
       context("Verify that Matrix Details tab contain", () => {
         it("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
           cy.drSelectMatrixDetailsTab();
-          cy.verifySelectedTab({ tab: "matrixdetails" });
         });
 
         it(`Verify PO Approval Matrix and table header contains: Level Name, Limit, Signature 1, 
@@ -934,7 +930,7 @@ context("DAM and POAM", () => {
 
       context("Verify POAM opens to the Overview tab by default ", () => {
         it("Verify Overview as default selected tab", () => {
-          cy.verifySelectedTab({ tab: "overview" });
+          cy.isTabActive({ name: "overview", index: 0 });
         });
 
         xit("Verify Training required exist", () => {
@@ -953,7 +949,6 @@ context("DAM and POAM", () => {
       context("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
         it("Navigate to Matrix Details Tab", () => {
           cy.drSelectMatrixDetailsTab();
-          cy.verifySelectedTab({ tab: "matrixdetails" });
         });
       });
 
@@ -998,7 +993,6 @@ context("DAM and POAM", () => {
       context("Verify that Matrix Details tab contain", () => {
         it("Click Matrix Details Tab, clicking on it should open that tab and close the other one", () => {
           cy.drSelectMatrixDetailsTab();
-          cy.verifySelectedTab({ tab: "matrixdetails" });
         });
 
         it(`Verify PO Approval Matrix and table header contains: Level Name, Limit, Signature 1, 

@@ -7,7 +7,7 @@ export const styles = makeStyles(() =>
     },
     root: {
       "overflow": "auto",
-      "height": "calc(100vh - 192px)",
+      "height": "calc(100vh - 196px)",
       "padding-bottom": 0,
     },
     grid: {
