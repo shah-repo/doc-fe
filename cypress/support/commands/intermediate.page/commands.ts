@@ -13,6 +13,7 @@ declare global {
       intPageVerifyDescriptionViewMoreNotExist(): Chainable<Subject>;
       intPageVerifyDocTypeExist(): Chainable<Subject>;
       intPageVerifyDocIdIsEditable(): Chainable<Subject>;
+      intPageVerifyDocIdIsNotEditable(): Chainable<Subject>;
       intPageVerifyRevisionStageExist(): Chainable<Subject>;
       intPageVerifyTrainingRequiredExist(): Chainable<Subject>;
       intPageVerifySelectedUsersExist(): Chainable<Subject>;
@@ -241,6 +242,10 @@ Cypress.Commands.add("intPageVerifyDocTypeExist", () => {
 
 Cypress.Commands.add("intPageVerifyDocIdIsEditable", () => {
   cy.get(`input[id="document.docId"]`).should("not.be.disabled");
+});
+
+Cypress.Commands.add("intPageVerifyDocIdIsNotEditable", () => {
+  cy.get(`input[id="document.docId"]`).should("be.disabled");
 });
 
 Cypress.Commands.add("intPageVerifyRevisionStageExist", () => {

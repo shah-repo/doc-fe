@@ -362,7 +362,7 @@ context("NCO document type management", () => {
 
     it("Click on edit added Doc Type", () => {
       cy.wait(1500);
-      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span>span>button").eq(0).arrowClick();
     });
 
     it("Inactivate doc type", () => {
@@ -372,7 +372,8 @@ context("NCO document type management", () => {
 
     it("Confirm Edit added Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
+        cy.wait(1500);
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span>span>button").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -381,7 +382,8 @@ context("NCO document type management", () => {
   context("Delete newly added Doc type", () => {
     it("Click on delete Doc Type", () => {
       cy.wait(1500);
-      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick({ force: true });
+      // eslint-disable-next-line max-len
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span>span>button").eq(1).arrowClick({ force: true });
     });
 
     it("Confirm deleted Doc Type is no longer in the list", () => {
