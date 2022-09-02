@@ -871,7 +871,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
-        cy.wait(2000);
+        cy.closeAllAlertMessages();
       });
 
       it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
@@ -908,7 +908,8 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
   context("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+      cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
@@ -1050,6 +1051,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   context("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
@@ -1101,6 +1103,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
       });
+    });
+  });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
@@ -1157,7 +1166,8 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
   context("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+      cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
@@ -1232,6 +1242,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+    });
+  });
+
   context("Go back to the LHR and submit it for approval → LHR is “In Review”", () => {
     it("Go back to the LHR", () => {
       cy.get("#HeaderInfo-subtitle").click();
@@ -1251,7 +1268,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083101RD");
+      // cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083101RD");
     });
 
     context(`The status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
@@ -1284,6 +1301,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+    });
+  });
+
   context("Approve it → LHR is Released → Check the content of the status bar", () => {
     it("Approve LHR", () => {
       cy.wait(3000);
@@ -1301,7 +1325,416 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
+    context("Check the content of the status bar", () => {
+      it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "LHR",
+          docId: "LHR-00001",
+          revision: "Rev A",
+        });
+        // cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083101RD");
+      });
 
+      context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+        it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+          cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+        });
+      });
+
+      context("Right side:", () => {
+        it("Last save should not be present", () => {
+          cy.contains("Last saved:").should("not.exist");
+        });
+
+        it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+        });
+
+        it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+        email shortly`, () => {
+          cy.sendToEmail();
+          cy.checkToastMessageContains({
+            message: "File will be sent to your email shortly.",
+          });
+          // cy.wait(2000);
+          cy.closeAllAlertMessages();
+        });
+
+        it("Click 'Revise document' button", () => {
+          cy.get("[data-cy=\"updateRecord\"]").click();
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Add Approver to approvals list", () => {
+          // cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        });
+
+        it("Click on Submit For Approval", () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+
+        it("Approve LHR", () => {
+          cy.wait(3000);
+          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+          cy.unClick();
+          cy.wrapWithWaitOnApiCalls(
+            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+            () => {
+              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+            }
+          );
+          cy.checkToastMessage({ exists: false });
+          cy.listLoadingElementShouldNotExist();
+        });
+      });
+    });
+  });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      // cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+      cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+    });
+  });
+
+  context("Revise LHR → A new revision is created in WIP", () => {
+    it("Click 'Revise document' button", () => {
+      cy.get("[data-cy=\"updateRecord\"]").click();
+    });
+
+    it(`A new revision is created in ${STATUS_TYPES_LABEL.WIP}`, () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+    });
+  });
+
+  context("Select Admin Change and release Rev A.2  → Rev A.1 is in Superseded state", () => {
+    it("Add Approver to approvals list", () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+    });
+
+    it("Click on Submit For Approval", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Approve LHR", () => {
+      cy.wait(3000);
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Open revisions tab, click and Revision A is Superseded", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.get(`[data-cy="revision"]`).eq(1).should("include.text", "Revision A.1  - Superseded");
+    });
+  });
+
+  context("Check the content of the status bar", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.RELEASED,
+        title: "LHR",
+        docId: "LHR-00001",
+        revision: "Rev A.2",
+      });
+      // cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083101RD");
+    });
+
+    context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+      it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+      });
+    });
+
+    context("Right side:", () => {
+      it("Last save should not be present", () => {
+        cy.contains("Last saved:").should("not.exist");
+      });
+
+      it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+
+      it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+      email shortly`, () => {
+        cy.sendToEmail();
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+        // cy.wait(2000);
+        cy.closeAllAlertMessages();
+      });
+    });
+  });
+
+  context("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+    });
+  });
+
+  context(`Click on the Lot linked in Referenced By field → The lot will open in a new Tab → 
+  The lot is in the “Released” state`, () => {
+    it("Open References Tab", () => {
+      cy.get("[data-cy=\"references-icon\"]").click();
+    });
+
+    it("Click on the references", () => {
+      cy.get("#ReferencePresenter-link").invoke("removeAttr", "target").click();
+    });
+
+    it(`Status is in ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
+  }
+  );
+
+  context("Check the content of the status bar", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.RELEASED,
+        title: "Lots",
+        docId: "LOT #22041301",
+        revision: "Rev A",
+      });
+    });
+
+    context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+      it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+      });
+    });
+
+    context("Right side:", () => {
+      it("Last save should not be present", () => {
+        cy.contains("Last saved:").should("not.exist");
+      });
+
+      it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+
+      it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+      email shortly`, () => {
+        cy.sendToEmail();
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+        // cy.wait(2000);
+        cy.closeAllAlertMessages();
+      });
+    });
+  });
+
+  context("Click on the references → They should open in a new tab", () => {
+    it("Click on the references", () => {
+      cy.get("#ReferencePresenter-link").click();
+    });
+  });
+
+  context("Revise the LOT → Lot is in WIP → Check the status bar content:", () => {
+    it("Click 'Update Record' button", () => {
+      cy.get("[data-cy=\"updateRecord\"]").click();
+    });
+
+    context("Check the content of the status bar", () => {
+      it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.WIP,
+          title: "Lots",
+          docId: "LOT #22041301",
+          revision: "Rev A.1",
+        });
+      });
+
+      context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
+        it(`Color of Header status bar is BLUE(${Colors.dodger_blue})`, () => {
+          cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+        });
+      });
+
+      context("Right side:", () => {
+        it("Enter title ", () => {
+          cy.drEnterDocumentTitle({ name: "API LOT EDIT" });
+        });
+
+        it("Last save should be present", () => {
+          cy.contains("Last saved:").should("be.exist");
+        });
+
+        it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
+          cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+        });
+
+        it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+        email shortly`, () => {
+          cy.sendToEmail();
+          cy.checkToastMessageContains({
+            message: "File will be sent to your email shortly.",
+          });
+          cy.closeAllAlertMessages();
+        });
+
+        it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.poAMCheckForAlertMessage();
+        });
+
+        it(`Export button  → Verify it is functional`, () => {
+          cy.get("#HeaderMenuButton").arrowClick();
+          cy.get("[data-cy=\"exportCSVButton\"]").arrowClick();
+          cy.get("#ExportListDialog-cancelButton").arrowClick();
+        });
+
+        it(`Cancel Draft button  → Verify it is functional`, () => {
+          cy.get("#HeaderMenuButton").arrowClick();
+          cy.get("[data-cy=\"cancelDraftButton\"]").arrowClick();
+          cy.get("#AlertDialog-cancelButton").arrowClick();
+        });
+      });
+    });
+  });
+
+  context(
+    "Add an approver and submit for approval → Lot is in Quarantine status  → Check the content of the status bar",
+    () => {
+      it("Navigate to Detail Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Add Approver to approvals list", () => {
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      });
+
+      it("Click on Submit For Approval", () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+
+      it(`Status is in ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
+      });
+
+      context("Check the content of the status bar", () => {
+        it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.IN_REVIEW,
+            title: "Lots",
+            docId: "LOT #22041301",
+            revision: "Rev A.1",
+          });
+        });
+
+        context(`The status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
+          it(`Color of Header status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
+            cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+          });
+        });
+
+        context("Right side:", () => {
+          it("Last save should not be present", () => {
+            cy.contains("Last saved:").should("not.exist");
+          });
+
+          it("Click 'Withdraw Submission' button", () => {
+            cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+              cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+            });
+          });
+
+          it("Click on Submit For Approval", () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          });
+
+          it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          });
+
+          it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+        email shortly`, () => {
+            cy.sendToEmail();
+            cy.checkToastMessageContains({
+              message: "File will be sent to your email shortly.",
+            });
+            // cy.wait(2000);
+            cy.closeAllAlertMessages();
+          });
+        });
+      });
+    }
+  );
+
+  context("Approve the Lot → Click on Revision A (no status) → Check the content of the status bar", () => {
+    it("Navigate to Detail Tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Approve the Lot", () => {
+      cy.wait(3000);
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    context("Check the content of the status bar", () => {
+      it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "Lots",
+          docId: "LOT #22041301",
+          revision: "Rev A.1",
+        });
+      });
+
+      context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+        it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+          cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+        });
+      });
+
+      context("Right side:", () => {
+        it("Last save should not be present", () => {
+          cy.contains("Last saved:").should("not.exist");
+        });
+
+        it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+        });
+
+        it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+        email shortly`, () => {
+          cy.sendToEmail();
+          cy.checkToastMessageContains({
+            message: "File will be sent to your email shortly.",
+          });
+          // cy.wait(2000);
+          cy.closeAllAlertMessages();
+        });
+      });
+    });
   });
 });
 
