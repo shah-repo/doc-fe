@@ -9,7 +9,7 @@ let loginResponse;
 let adminEmployee;
 
 context(
-  "Verify that the intermediate page of the Part matches the new design and functionality",
+  "Verify that the intermediate page of the Purchase Order matches the new design and functionality",
   () => {
     before(() => {
       cy.clearLocalStorageSnapshot();
@@ -69,141 +69,129 @@ context(
       });
     });
 
+    context("Select Document Type 'Form'", () => {
+      it("Click on 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Record Document' output document type from dropdown", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
+      });
+    });
     context(
-      "Select Document Type 'Form'",
+      "verify the button “Preview Layout” next to “Output Doc Type” and gets coloured and it’s clickable",
       () => {
-        it("Click on 'Form' document type", () => {
-          cy.drSelectDocumentType({ documentType: "Form" });
+        it("Check 'Select Output Document Type' is displayed", () => {
+          cy.get("[data-cy='field-outputDocumentTypes']").should("exist");
         });
-
-
-        it("Select 'Record Document' output document type from dropdown", () => {
-          cy.drSelectOutputDocumentType({ documentType: "Parts" });
+        it("Verify 'Preview Layout' button is displayed and next to output doc type", () => {
+          cy.contains("button", "Preview Layout").should("exist");
+          cy.get("[data-cy='field-outputDocumentTypes']")
+            .parent()
+            .parent()
+            .contains("Preview Layout")
+            .should("exist");
+        });
+        it("verify Preview layout button is colored and its clickable", () => {
+          cy.contains("button", "Preview Layout")
+            .should("be.enabled")
+            .should("have.css", "background-color", "rgb(1, 31, 187)");
         });
       }
     );
-    context("verify the button “Preview Layout” next to “Output Doc Type” and gets coloured and it’s clickable", () => {
-      it("Check 'Select Output Document Type' is displayed", () => {
-        cy.get("[data-cy='field-outputDocumentTypes']").should("exist");
-      });
-      it("Verify 'Preview Layout' button is displayed and next to output doc type", () => {
-        cy.contains("button", "Preview Layout").should("exist");
-        cy.get("[data-cy='field-outputDocumentTypes']").parent().parent().contains("Preview Layout").should("exist");
-      });
-      it("verify Preview layout button is colored and its clickable", () => {
-        cy.contains("button", "Preview Layout").should("be.enabled")
-          .should("have.css", "background-color", "rgb(1, 31, 187)");
-      });
-    });
 
-    context("Clicking on it will display a preview of the document and its fields", () => {
-      it("Click 'Preview Layout' button", () => {
-        cy.intPageClickPreviewLayout();
-      });
-      context("verify default fields", () => {
+    context(
+      "Clicking on it will display a preview of the document and its fields",
+      () => {
+        it("Click 'Preview Layout' button", () => {
+          cy.intPageClickPreviewLayout();
+        });
+        context("verify default fields", () => {
+          it("Verify Document Type", () => {
+            cy.get("[data-cy='field-document.documentType.id']")
+              .contains("Document Type")
+              .should("exist");
+          });
 
-        it("Verify Document Type", () => {
-          cy.get("[data-cy='field-document.documentType.id']").contains("Document Type")
-            .should("exist");
-        });
+          it("Verify Document ID", () => {
+            cy.get("[data-cy='field-document.docId']")
+              .contains("Document ID")
+              .should("exist");
+          });
 
-        it("Verify Document ID", () => {
-          cy.get("[data-cy='field-document.docId']").contains("Document ID")
-            .should("exist");
-        });
+          it("Verify Revision Stage", () => {
+            // eslint-disable-next-line max-len
+            cy.get(
+              "[id='sm-tabpanel-0'] [class^='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6']"
+            )
+              .eq(2)
+              .contains("Revision Stage")
+              .should("exist");
+          });
 
-        it("Verify Revision Stage", () => {
-          // eslint-disable-next-line max-len
-          cy.get("[id='sm-tabpanel-0'] [class^='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6']").eq(2).contains("Revision Stage")
-            .should("exist");
-        });
+          it("Verify Numeric", () => {
+            cy.get("[data-cy='field-revisionStage']")
+              .contains("Numeric")
+              .should("exist");
+          });
 
-        it("Verify Numeric", () => {
-          cy.get("[data-cy='field-revisionStage']").contains("Numeric")
-            .should("exist");
-        });
+          it("Verify Numeric Alpha", () => {
+            cy.get("[data-cy='field-revisionStage']")
+              .contains("Numeric Alpha")
+              .should("exist");
+          });
 
-        it("Verify Numeric Alpha", () => {
-          cy.get("[data-cy='field-revisionStage']").contains("Numeric Alpha")
-            .should("exist");
-        });
+          it("Verify Alpha", () => {
+            cy.get("[data-cy='field-revisionStage']")
+              .contains("Alpha")
+              .should("exist");
+          });
 
-        it("Verify Alpha", () => {
-          cy.get("[data-cy='field-revisionStage']").contains("Alpha")
-            .should("exist");
-        });
+          it("Verify Training Required", () => {
+            cy.get("[data-cy='field-retrain']")
+              .contains("Training Required")
+              .should("exist");
+          });
 
-        it("Verify Training Required", () => {
-          cy.get("[data-cy='field-retrain']").contains("Training Required")
-            .should("exist");
-        });
+          it("Verify Output Document Type", () => {
+            cy.get("[data-cy='field-outputDocumentTypes']")
+              .contains("Output Document Type")
+              .should("exist");
+          });
 
-        it("Verify Output Document Type", () => {
-          cy.get("[data-cy='field-outputDocumentTypes']").contains("Output Document Type")
-            .should("exist");
+          it("Verify Output Document Type as Purchase Order", () => {
+            cy.get("[id='formTemplate.outputDocumentTypes']")
+              .contains("Purchase Order")
+              .should("exist");
+          });
         });
+        context("verify predefined fields", () => {
+          it("Check 'PO Status' is displayed", () => {
+            cy.intPageVerifyPoStatusExist();
+          });
 
-        it("Verify Output Document Type as Parts", () => {
-          cy.get("[id='formTemplate.outputDocumentTypes']").contains("Parts")
-            .should("exist");
-        });
-      });
-      context("verify predefined fields", () => {
-        it("navigate to Specification Items", () => {
-          cy.drSelectSpecificationTab();
-        });
+          it("Check 'Requestor' is displayed", () => {
+            cy.intPageVerifyRequestorExist();
+          });
 
-        it("Button should have text Make vs Buy", () => {
-          cy.get("[data-cy='Make vs Buy']")
-            .should("have.text", "Make vs Buy");
-        });
+          it("Check 'Supplier' is displayed", () => {
+            cy.intPageVerifySupplierExist();
+          });
 
-        it("Button should have text Primary Supplier", () => {
-          cy.get("[data-cy='Primary Supplier']")
-            .should("have.text", "Primary Supplier");
-        });
+          it("Check 'Order Date' is displayed", () => {
+            cy.intPageVerifyOrderDateExist();
+          });
 
-        it("Button should have text Other Suppliers", () => {
-          cy.get("[data-cy='Other Suppliers']")
-            .should("have.text", "Other Suppliers");
-        });
+          it("Check 'PO table' is displayed", () => {
+            cy.intPageVerifyPoTableExist();
+          });
 
-        it("Button should have text Unit of measure", () => {
-          cy.get("[data-cy='Unit of measure']")
-            .should("have.text", "Unit of measure");
+          it("Check 'Approvals' is displayed", () => {
+            cy.intPageVerifyApproversExist();
+          });
         });
-
-        it("Button should have text Traceability required", () => {
-          cy.get("[data-cy='Traceability required']")
-            .should("have.text", "Traceability required");
-        });
-
-        it("Button should have text Serialized", () => {
-          cy.get("[data-cy='Serialized']")
-            .should("have.text", "Serialized");
-        });
-
-        it("Button should have text Select serialization", () => {
-          cy.get("[data-cy='Select serialization']")
-            .should("have.text", "Select serialization");
-        });
-
-        it("Button should have text IQC Required", () => {
-          cy.get("[data-cy='IQC Required']")
-            .should("have.text", "IQC Required");
-        });
-
-        it("Button should have text Limited Shelf Life", () => {
-          cy.get("[data-cy='Limited Shelf Life']")
-            .should("have.text", "Limited Shelf Life");
-        });
-
-        it("Button should have text FAI Required", () => {
-          cy.get("[data-cy='FAI Required']")
-            .should("have.text", "FAI Required");
-        });
-      });
-    });
+      }
+    );
 
     context("Click on create a Document", () => {
       it("Close Preview dialog", () => {
@@ -213,196 +201,309 @@ context(
         cy.drClickCreateDocumentWithApiCall();
       });
     });
-    context(`Make sure each tab in which the user can add FB fields has a functional “Preview” button`, () => {
-      it("Verify 'Overview' tab is displayed", () => {
-        cy.intPageVerifyOverviewTabExist();
-      });
+    context(
+      `Make sure each tab in which the user can add FB fields has a functional “Preview” button`,
+      () => {
+        it("Verify 'Details' tab is displayed", () => {
+          cy.intPageVerifyDetailsTabExist();
+        });
 
-      it("Navigate to Overview Tab", () => {
-        cy.drSelectOverviewTab();
-      });
+        it("Navigate to Details Tab", () => {
+          cy.drSelectDetailsTab();
+        });
 
-      it("Verify center bottom displays: eye, import and export icons", () => {
-        cy.intPageVerifyFormOptionsExist();
-      });
-      it("Verify 'Specifications' tab is displayed", () => {
-        cy.intPageVerifySpecificationTabExist();
-      });
+        it("Verify center bottom displays: eye, import and export icons", () => {
+          cy.intPageVerifyFormOptionsExist();
+        });
+        it("Verify 'Specifications' tab is displayed", () => {
+          cy.intPageVerifyLineItemsTabExist();
+        });
 
-      it("navigate to Specification Items", () => {
-        cy.drSelectSpecificationTab();
-      });
+        it("navigate to Line Items", () => {
+          cy.drSelectLineItems();
+        });
 
-      it("Verify center bottom displays: eye, import and export icons", () => {
-        cy.intPageVerifyFormOptionsExist();
-      });
-    });
+        it("Verify center bottom displays: eye, import and export icons", () => {
+          cy.intPageVerifyFormOptionsExist();
+        });
+      }
+    );
 
     context("Click on one of them", () => {
-      context("Make sure fields and tabs displayed in non preview mode are the same displayed in Preview mode", () => {
-        context("Add form fields", () => {
+      context(
+        "Make sure fields and tabs displayed in non preview mode are the same displayed in Preview mode",
+        () => {
+          context("Add form fields", () => {
+            it("Add Autocomplete", () => {
+              SystemRequirement("FB-0140", "FB-0150");
+              cy.fbClickAddNewHiddenBtn();
+              cy.fbSelectItemFromNewFieldList({
+                section: "Inputs",
+                field: "Autocomplete",
+              });
+              cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+              cy.fbEnterPlaceholder({
+                placeholder: "fb-autocomplete placeholder",
+              });
+              cy.get("[data-cy='optionId']").autocompleteSelect(
+                "Document Revision"
+              );
+              cy.fbSelectCheckboxValue(
+                "multiple",
+                "includeQRScan",
+                "reviseDisabled",
+                "deleteDisabled",
+                "copyableValue"
+              );
+              cy.fbAddNewFieldButton();
+            });
 
-          it("Add Autocomplete", () => {
-            SystemRequirement("FB-0140", "FB-0150");
-            cy.fbClickAddNewHiddenBtn();
-            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
-            cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
-            cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-            cy.get("[data-cy='optionId']").autocompleteSelect("Document Revision");
-            cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-            cy.fbAddNewFieldButton();
+            it("Add Date picker", () => {
+              cy.fbClickAddNewHiddenBtn();
+              cy.fbSelectItemFromNewFieldList({
+                section: "Inputs",
+                field: "Date picker",
+              });
+              cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
+              cy.fbSelectCheckboxValue(
+                "reviseDisabled",
+                "deleteDisabled",
+                "copyableValue"
+              );
+              cy.fbAddNewFieldButton();
+            });
           });
 
-          it("Add Date picker", () => {
-            cy.fbClickAddNewHiddenBtn();
-            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
-            cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
-            cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-            cy.fbAddNewFieldButton();
-          });
-        });
+          context("Verify Form fields in non preivew mode", () => {
+            it("Verify Autocomplete attributes", () => {
+              cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+              cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete" });
+              cy.fbVerifyNameValue({
+                name: "placeholder",
+                value: "fb-autocomplete placeholder",
+              });
+              cy.get("[data-cy='optionId']").should(
+                "have.value",
+                "Document revisions"
+              );
+              cy.fbVerifyCheckboxValue(
+                "multiple",
+                "includeQRScan",
+                "reviseDisabled",
+                "deleteDisabled",
+                "copyableValue"
+              );
+              cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+            });
 
-        context("Verify Form fields in non preivew mode", () => {
-
-          it("Verify Autocomplete attributes", () => {
-            cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
-            cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete" });
-            cy.fbVerifyNameValue({ name: "placeholder", value: "fb-autocomplete placeholder" });
-            cy.get("[data-cy='optionId']").should("have.value", "Document revisions");
-            cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-            cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-          });
-
-          it("Verify Date picker attributes", () => {
-            cy.fbClickLabelEditHiddenBtn({ label: "fb-datepicker" });
-            cy.fbVerifyNameValue({ name: "label", value: "fb-datepicker" });
-            cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-            cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-          });
-        });
-
-        context("Verify Form fields in preview mode", () => {
-          it("Open Preview dialog", () => {
-            cy.fbClickButton({ el: "FBWorkspace-clickView" });
-          });
-
-          it("Add and check Date picker field", () => {
-            cy.get("[data-cy='form.builder.form.preview']").parentsUntil(".MuiDialog-root")
-              .find("input[name^=fb-datepicker-]").parent().find("button").arrowClick();
-            cy.get(".MuiPickersDay-daySelected").arrowClick();
-            cy.get("[data-cy='form.builder.form.preview']").parentsUntil(".MuiDialog-root")
-              .find("input[name^=fb-datepicker-]").invoke("val").should("not.be.empty");
+            it("Verify Date picker attributes", () => {
+              cy.fbClickLabelEditHiddenBtn({ label: "fb-datepicker" });
+              cy.fbVerifyNameValue({ name: "label", value: "fb-datepicker" });
+              cy.fbVerifyCheckboxValue(
+                "reviseDisabled",
+                "deleteDisabled",
+                "copyableValue"
+              );
+              cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+            });
           });
 
-          it("Add and check Autocomplete field", () => {
-            cy.get("input[data-cy^='fb-autocomplete-']").eq(1).arrowClick().autocompleteSelect("FM-00001");
-            // eslint-disable-next-line max-len
-            cy.get("[class='MuiChip-root MuiAutocomplete-tag MuiChip-deletable']").eq(0).contains("FM-00001 - rev 1 - AR Form");
+          context("Verify Form fields in preview mode", () => {
+            it("Open Preview dialog", () => {
+              cy.fbClickButton({ el: "FBWorkspace-clickView" });
+            });
+
+            it("Add and check Date picker field", () => {
+              cy.get("[data-cy='form.builder.form.preview']")
+                .parentsUntil(".MuiDialog-root")
+                .find("input[name^=fb-datepicker-]")
+                .parent()
+                .find("button")
+                .arrowClick();
+              cy.get(".MuiPickersDay-daySelected").arrowClick();
+              cy.get("[data-cy='form.builder.form.preview']")
+                .parentsUntil(".MuiDialog-root")
+                .find("input[name^=fb-datepicker-]")
+                .invoke("val")
+                .should("not.be.empty");
+            });
+
+            it("Add and check Autocomplete field", () => {
+              cy.get("input[data-cy^='fb-autocomplete-']")
+                .eq(1)
+                .arrowClick()
+                .autocompleteSelect("FM-00001");
+              // eslint-disable-next-line max-len
+              cy.get(
+                "[class='MuiChip-root MuiAutocomplete-tag MuiChip-deletable']"
+              )
+                .eq(0)
+                .contains("FM-00001 - rev 1 - AR Form");
+            });
+
+            it("Close Preview dialog", () => {
+              cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+            });
           });
 
-          it("Close Preview dialog", () => {
-            cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
-          });
-        });
+          context(
+            `Make sure that none of the changes made in “Preview” were saved`,
+            () => {
+              it("Verify Date picker values", () => {
+                cy.get("input[name^='fb-datepicker-']")
+                  .invoke("val")
+                  .should("be.empty");
+              });
 
-        context(`Make sure that none of the changes made in “Preview” were saved`, () => {
-
-          it("Verify Date picker values", () => {
-            cy.get("input[name^='fb-datepicker-']").invoke("val").should("be.empty");
-          });
-
-          it("Verify Autocomplete values", () => {
-            cy.get("input[data-cy^='fb-autocomplete-']").parent().find(".MuiAutocomplete-tag").should("not.exist");
-          });
-        });
-      });
+              it("Verify Autocomplete values", () => {
+                cy.get("input[data-cy^='fb-autocomplete-']")
+                  .parent()
+                  .find(".MuiAutocomplete-tag")
+                  .should("not.exist");
+              });
+            }
+          );
+        }
+      );
     });
 
-    context("Click on ‘Add Field’ button in one of the tabs > Form Builder Library opens on the left-hand side", () => {
-      context(`Click on ‘Add Field’ button in one of the tabs >> 
-      Form Builder Library opens on the left-hand side`, () => {
-        it("Navigate to Overview Tab", () => {
-          cy.drSelectOverviewTab();
-        });
+    context(
+      "Click on ‘Add Field’ button in one of the tabs > Form Builder Library opens on the left-hand side",
+      () => {
+        context(
+          `Click on ‘Add Field’ button in one of the tabs >> 
+      Form Builder Library opens on the left-hand side`,
+          () => {
+            it("Navigate to Details Tab", () => {
+              cy.drSelectDetailsTab();
+            });
 
-        it("Add Quantity", () => {
-          cy.fbAddNewFieldWhenHidden();
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.fbAddNewFieldButton();
-          });
-        });
+            it("Add Text Editor", () => {
+              cy.fbAddNewFieldWhenHidden();
+              cy.fbSelectItemFromNewFieldList({
+                section: "Inputs",
+                field: "Text Editor",
+              });
+              cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
+              cy.get(
+                "button[data-cy='fb-editor-mode-validation-1']"
+              ).arrowClick();
+              cy.get(`input[name="validators.required_if"]`).check();
+              cy.get(
+                `[data-cy="validators.required_if.name"]`
+              ).autocompleteSelect("PO Status");
+              cy.unClick();
+              cy.get(
+                `[id="mui-component-select-validators.required_if.value"]`
+              ).arrowClick();
+              cy.get(`[data-value="Open"]`)
+                .click()
+                .focused()
+                .autocompleteSelect("Open");
+              cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+                cy.fbAddNewFieldButton();
+              });
+            });
 
-        it("Add Radio Button group", () => {
-          cy.fbAddNewFieldWhenHidden();
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
-          cy.fbGroupOptions("option1", "option2");
-          cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
-          cy.get("input[value^='visibility']").check();
-          cy.get(`input[name="validators.required_if"]`).check();
-          cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-quantity" );
-          cy.get(`[data-cy="validators.required_if.value"]`).arrowType("1" );
-          cy.fbAddNewFieldButton();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+            it("Add File Upload", () => {
+              cy.fbAddNewFieldWhenHidden();
+              cy.fbSelectItemFromNewFieldList({
+                section: "Inputs",
+                field: "File Upload",
+              });
+              cy.fbEnterNameValue({ name: "label", value: "file1" });
+              cy.fbAddNewFieldButton();
+              cy.fbMouseOverByLabel({ label: "file1" });
+            });
+          }
+        );
 
-      });
+        context(
+          "Click on Form Preview >> The preview option must display all tabs and all fields per tab",
+          () => {
+            it("Open Preview dialog", () => {
+              cy.fbClickButton({ el: "FBWorkspace-clickView" });
+            });
 
-      context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
-        it("Open Preview dialog", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
+            it("Verify both text editor and attachments are exists", () => {
+              cy.contains("fb-text-editor").should("exist");
+              cy.get("[id^='fb-attachment-field-file-']").should("exist");
+            });
 
-        it("Verify Only Field 1 is displayed", () => {
-          cy.get("[name^='fb-quantity-']").should("exist");
-          cy.get("[data-cy='fb-radiobutton-group']").should("not.be.visible");
-        });
-
-        it("Field 2 is only displayed if Field 1 is enter as '1'", () => {
-          cy.get("[name^='fb-quantity-']").eq(1).arrowType("1");
-          cy.get("[data-cy='fb-radiobutton-group']").should("exist");
-        });
-
-        it("Close Preview dialog", () => {
-          cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
-        });
-      });
-    });
+            context(
+              "Make sure Field 2 is flagged as required when PO status is Open",
+              () => {
+                it("Select 'Open' for PO status", () => {
+                  cy.get("[id$=\"po-status-built-in\"]")
+                    .eq(1)
+                    .arrowClick({ force: true });
+                  cy.get("ul>li[role=option]").contains("Open").arrowClick();
+                  cy.listLoadingElementShouldNotExist();
+                  cy.progressBarShouldNotExist();
+                });
+                it("check Field 2 as flagged as required when PO status is open", () => {
+                  cy.contains(
+                    "The fb-text-editor field is required when PO Status is Open"
+                  ).should("exist");
+                });
+                it("Close Preview dialog", () => {
+                  cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+                });
+              }
+            );
+          }
+        );
+      }
+    );
 
     context("Edit the fields so that", () => {
-      context("Remove the validation from Field 2", () => {
-        it("Edit Radio Button group", () => {
-          cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
+      context("Remove Both the editor and attachments", () => {
+        it("Navigate to Details Tab", () => {
+          cy.drSelectDetailsTab();
+        });
+        it("Edit text editor group", () => {
+          cy.fbClickLabelEditHiddenBtn({ label: "fb-text-editor" });
           cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
           cy.get("input[value^='default']").check();
-          cy.get(`input[name="validationMode"]`).check();
           cy.get(`input[name="validators.required_if"]`).uncheck();
           cy.fbAddNewFieldButton();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
+        it("Remove Text Editor", () => {
+          cy.contains("fb-text-editor")
+            .parentsUntil("li")
+            .find(`[data-cy="remove-schema-item"]`)
+            .arrowClick({ force: true });
+        });
+        it("Remove File Upload", () => {
+          cy.contains("file1")
+            .parentsUntil("li")
+            .find(`[data-cy="remove-schema-item"]`)
+            .arrowClick({ force: true });
+        });
       });
     });
 
-    context("Open the Preview mode and make sure it was updated accordingly", () => {
-      it("Open Preview dialog", () => {
-        cy.fbClickButton({ el: "FBWorkspace-clickView" });
-      });
+    context(
+      "Open the Preview mode and make sure it was updated accordingly",
+      () => {
+        it("Open Preview dialog", () => {
+          cy.fbClickButton({ el: "FBWorkspace-clickView" });
+        });
 
-      it("Verify Field 1 is displayed", () => {
-        cy.get("[name^='fb-quantity-']").should("exist");
-      });
+        it("Verify Field 1 is displayed", () => {
+          cy.contains("fb-text-editor").should("not.exist");
+        });
 
-      it("Verify Field 2 is displayed", () => {
-        cy.get("[data-cy='fb-radiobutton-group']").should("exist");
-      });
+        it("Verify Field 2 is displayed", () => {
+          cy.get("[data-cy='fb-radiobutton-group']").should("not.exist");
+        });
 
-      it("Close Preview dialog", () => {
-        cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
-      });
-    });
+        it("Close Preview dialog", () => {
+          cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+        });
+      }
+    );
   }
 );
