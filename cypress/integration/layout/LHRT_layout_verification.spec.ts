@@ -389,7 +389,6 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Enter Add field 1 to visible add field 2 tab", () => {
-        // cy.get("div[data-cy^='fb-textfield']").arrowClick();
         cy.get("div[data-cy^='fb-textfield']").eq(3).arrowType("Test");
       });
 
