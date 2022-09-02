@@ -28,6 +28,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           >
             {tabs?.map((tab, index) => (
               <Tab
+                { ...{ tabProps }}
                 className={classes.tab}
                 key={`sm-tabpanel-${tab}-${index}`}
                 data-cy={`tabCon-${tab}`}

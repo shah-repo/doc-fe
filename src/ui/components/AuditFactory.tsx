@@ -184,6 +184,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case "s3link":
         returnValue = <AuditDownloadS3link s3link={audit.nextValue as string}/>;
         break;
+      case "childrenParts":
       case "formDocument": {
         const { name, displayRevision, document } = audit.nextValue as DocumentRevision;
         returnValue = (<div data-cy={dataCy}>{`${document.docId} - revision ${displayRevision} - ${name}`}</div>);

@@ -82,10 +82,10 @@ const FBTrainingInfoContainer: React.FunctionComponent<
         setIsLoading(false);
       })
       .catch((exception) => {
+        setIsLoading(false);
         if (axios.isCancel(exception)) {
           return;
         }
-        setIsLoading(false);
       });
   }, [documentRevisionId]);
 
