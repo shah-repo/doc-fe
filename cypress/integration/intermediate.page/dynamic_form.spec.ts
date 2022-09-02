@@ -368,7 +368,7 @@ context(
             cy.get(".MuiDialogContent-root>div>div")
               .eq(3)
               .then((element) => cy.wrap(element)
-                .xpath("(//div[contains(@class, 'textfieldwithrange-3')])"));
+                .xpath("(//div[contains(@data-cy, 'textfieldwithrange-3')])"));
           });
 
           it("Verify Text field with range", () => {
