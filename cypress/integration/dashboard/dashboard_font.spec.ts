@@ -1301,7 +1301,7 @@ context("Dashboard notification font test", () => {
 
     it("Add approvers to approval request on approver list", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"fb-approvers-approvers\"]").click().autocompleteSelect(USERS[2].email);
+      cy.get("[data-cy^=\"fb-approvers-\"]").click().autocompleteSelect(USERS[2].email);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
