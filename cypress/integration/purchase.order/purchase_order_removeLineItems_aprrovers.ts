@@ -246,6 +246,7 @@ context("Create company with JSON's", () => {
             apiCreatedCompany.employees = response.employees;
             createdCompany = response;
             adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+            console.log("createdCompany", createdCompany);
           }
         });
       }).as("response");
@@ -617,7 +618,7 @@ context("Create company with JSON's", () => {
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy^=\"requestor-\"]").arrowClick();
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
@@ -748,7 +749,7 @@ context("Create company with JSON's", () => {
         cy.drSelectDetailsTab().wait(2000);
       });
 
-      it(`Select '${USERS[1].name}' as approval`, () => {
+      xit(`Select '${USERS[1].name}' as approval`, () => {
         cy.poAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
@@ -757,6 +758,7 @@ context("Create company with JSON's", () => {
       });
 
       it("Verify that “Backspace” and “Clear all” option will not be available in the PO approval field", () => {
+        cy.pause();
         cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
         cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
       });
@@ -857,31 +859,29 @@ context("Create company with JSON's", () => {
         cy.drSelectDetailsTab().wait(2000);
       });
 
-      it("Remove Approver", () => {
-        cy.contains(`${USERS[1].name} - ${USERS[1].email}`).last().parent().next().arrowClick();
-      });
 
       it("Save document'", () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
 
-      xit(`Verify ${USERS[1].name} is removed from approver list`, () => {
-        cy.get("[data-cy^='fb-po-approvals']").should("be.empty");
+      it(`Verify ${USERS[1].name} is removed from approver list`, () => {
+        cy.get("[data-cy^='fb-po-approvals']").arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).should("exist");
+      });
+
+      it("Remove the requestor", () => {
+        cy.get("[title='Clear']").eq(0).arrowClick({ force: true });
       });
 
       it("Select history tab", () => {
         cy.drSelectHistoryTab();
       });
 
-      it("Check history - removed approvers should be displayed", () => {
+      it("Check history - Added approvers should be displayed", () => {
         cy.wrapWithWaitOnApiCalls([], () => {
           cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
-            .should("contain.text", "Approver Removed").and("contain.text", USERS[1].name);
+            .should("contain.text", "Approver Added").and("contain.text", USERS[1].name);
         });
-      });
-
-      it("Remove the requestor", () => {
-        cy.get("[title='Clear']").eq(0).arrowClick({ force: true });
       });
 
       it("Save document'", () => {
@@ -981,12 +981,17 @@ context("Create company with JSON's", () => {
         });
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
-          cy.get("[data-cy^=\"requestor-\"]").arrowClick();
+          cy.get("[data-cy^='po-requestor-autocomplete']").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick().wait(2000);
         });
 
         it("Add Approver", () => {
           cy.get("[data-cy^='fb-po-approvals']").autocompleteSelect(USERS[1].name);
+        });
+
+        it("Verify Approver is only added once in Approver field", () => {
+          cy.get("[data-cy^='fb-po-approvals']").arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).should("not.exist");
         });
 
         it("Navigate to line Items", () => {
