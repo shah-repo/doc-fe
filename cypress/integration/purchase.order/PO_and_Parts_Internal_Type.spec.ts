@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
@@ -256,7 +255,6 @@ context("PO and parts ", () => {
         }).then(() => done());
       });
     });
-
   });
 
   context("Create purchase order form", () => {
@@ -942,7 +940,7 @@ context("PO and parts ", () => {
     });
   });
 
-  context("verify Bookmark and Revision History fields", () => {
+  context("Fill all fields", () => {
     it("Select 'Open' for PO status", () => {
       cy.poSelectPOStatus({ status: "Open" });
     });
@@ -1497,10 +1495,7 @@ context("PO and parts ", () => {
     });
   });
 
-  context(`Login with ${USERS[1].name} user`, () => {
-    // const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
-    const saveFileRedlineDOCX = (Math.round(Math.random() * 100000)) % 100000;
-
+  context(`Navigate to Po landing page`, () => {
     it("Navigate to PO", () => {
       cy.navigToPurchaseOrder();
     });
@@ -1513,6 +1508,27 @@ context("PO and parts ", () => {
       cy.drEnterDocumentDescription({ description: "Another new purchase order description" });
     });
 
+    it(`Select Requestor`, () => {
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+    });
+
+    it("Add Required Date", () => {
+      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+    });
+
+    it("Add approver", () => {
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick({ force: true });
+      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save PO", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
     });
@@ -1522,66 +1538,39 @@ context("PO and parts ", () => {
         .should("exist");
     });
 
-    it("Upload redline and verify cleanCopyStatus is created", () => {
-      cy.atchUploadRedlineVerifyCleanCopyStatus({ fileName: "redline.docx" });
+    it("Uploads image.jpg", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
-    it("Check attachment is displayed: redline.docx", () => {
-      cy.get("[data-cy=\"attachment.title\"]").contains("redline.docx").should("exist");
-    });
-
-    it("navigate to Details tab ", () => {
-      cy.wait(2000);
-      cy.drSelectDetailsTab();
-    });
-
-    it("navigate to Line Items", () => {
-      cy.drSelectLineItems();
-    });
-
-    it("Check attachment is displayed: redline.docx", () => {
-      cy.get("[data-cy=\"attachment.title\"]").contains("redline.docx").should("exist");
-    });
-
-    it("Download uploaded redline document", () => {
-      cy.atchDownloadFile({ fileName: "redline.docx", saveFileName: saveFileRedlineDOCX + "redline.docx" });
-    });
-
-    it("Check size of downloaded redline document", () => {
-      cy.readFile(`cypress/downloads/${saveFileRedlineDOCX}redline.docx`).should("have.length", "15874");
-    });
-
-    it("Remove attachment image1.jpg", () => {
-      cy.get("[id=\"AttachmentIconPresenter-handleRemove\"]").eq(1).arrowClick({ force: true });
-    });
-
-    it("Check one attachment is removed", () => {
-      cy.get("[data-cy=\"attachment.title\"]").should("not.exist");
-    });
-
-    it("Uploads text.docx", () => {
+    it("Uploads test.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
     });
 
+    it("Check attachment is displayed: image.jpg", () => {
+      cy.get("[data-cy=\"attachment.title\"]").contains("image.jpg").should("exist");
+    });
+
     it("navigate to Details tab ", () => {
       cy.wait(2000);
       cy.drSelectDetailsTab();
-    });
-
-    it("Add approver", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it(`Select Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
+    });
+
+    it("navigate to Line Items", () => {
+      cy.wait(2000);
+      cy.drSelectLineItems();
+    });
+
+    it("Download attachments document", () => {
+      cy.atchDownloadAll();
+    });
+
+    it("navigate to Details tab ", () => {
+      cy.wait(2000);
+      cy.drSelectDetailsTab();
     });
 
     it("Approve PO", () => {
