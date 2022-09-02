@@ -71,7 +71,7 @@ context("Verify New Layout for Seed Document", () => {
     });
   });
 
-  context("Login user", () => {
+  context("Login admin user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
@@ -120,7 +120,7 @@ context("Verify New Layout for Seed Document", () => {
     it("Verify predefined fields", () => {
       cy.verifyTitleDescriptionFields();
       cy.verifyDefaultFields();
-      cy.get(`[data-cy=\"field-outputDocumentTypes\"]`).should("exist");
+      cy.get(`[data-cy="field-outputDocumentTypes"]`).should("exist");
     });
 
     it("Verify document header details", () => {
@@ -145,7 +145,7 @@ context("Verify New Layout for Seed Document", () => {
         it("Verify Overview tab default fields", () => {
           cy.get("#sm-tabpanel-0").should("exist");
           cy.verifyDefaultFields();
-          cy.get(`[data-cy=\"field-outputDocumentTypes\"]`).should("exist");
+          cy.get(`[data-cy="field-outputDocumentTypes"]`).should("exist");
         });
 
         it("Verify that Form Options should appear for Overview tab", () => {
@@ -230,7 +230,7 @@ context("Verify New Layout for Seed Document", () => {
           });
 
           it("Verify References", () => {
-            cy.get(`[data-cy=\"field-referenceTo\"]`).should("exist");
+            cy.get(`[data-cy="field-referenceTo"]`).should("exist");
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -363,7 +363,7 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Verify References tab is fixed as the user scrolls up or down", () => {
-      cy.get(`[data-cy=\"References\"]`).scrollIntoView({ ensureScrollable: false });
+      cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
     });
 
     context("Verify References tab", () => {
@@ -438,14 +438,14 @@ context("Verify New Layout for Seed Document", () => {
     context("Verify Bookmarks tab", () => {
       it("Open bookmarks tab", () => {
         cy.drSelectBookmarksTab();
-        cy.get(`[data-cy=\"bookmark-icon\"]`).should("be.visible");
+        cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
       });
     });
 
     context("Verify Revision History tab", () => {
       it("Open revision history tab", () => {
         cy.drSelectRevisionHistoryTab();
-        cy.get(`[data-cy=\"Revision History-detail\"]`).should("be.visible");
+        cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
       });
     });
 
@@ -479,7 +479,7 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Enters document description 'First document description'", () => {
-        cy.get(`[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div`)
+        cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
           .click({ force: true }).arrowType("First document description", { force: true });
       });
 
@@ -510,7 +510,7 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Select radio button option", () => {
-        cy.get("[name^=\"fb-radiobutton-group-\"]").last().arrowClick();
+        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
       });
 
       it("Save document", () => {
@@ -626,7 +626,7 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Verify References tab is fixed as the user scrolls up or down", () => {
-        cy.get(`[data-cy=\"References\"]`).scrollIntoView({ ensureScrollable: false });
+        cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
       });
 
       context("Verify References tab", () => {
@@ -694,14 +694,14 @@ context("Verify New Layout for Seed Document", () => {
       context("Verify Bookmarks tab", () => {
         it("Open bookmarks tab", () => {
           cy.drSelectBookmarksTab();
-          cy.get(`[data-cy=\"bookmark-icon\"]`).should("be.visible");
+          cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
         });
       });
 
       context("Verify Revision History tab", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
-          cy.get(`[data-cy=\"Revision History-detail\"]`).should("be.visible");
+          cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
         });
       });
 
@@ -737,8 +737,8 @@ context("Verify New Layout for Seed Document", () => {
 
   context("Verify released seed document", () => {
     it("Verify predefined fields", () => {
-      cy.get("#field-name").contains("Test Seed");
-      cy.get(`[data-cy=\"BaseWithhtml-editor\"]`).contains("Test Seed Description");
+      cy.get("#field-name").contains(docTitle);
+      cy.get(`[data-cy="BaseWithhtml-editor"]`).contains(docDescription);
     });
 
     it("Verify document header details", () => {
@@ -816,7 +816,7 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Verify References tab is fixed as the user scrolls up or down", () => {
-        cy.get(`[data-cy=\"References\"]`).scrollIntoView({ ensureScrollable: false });
+        cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
       });
 
       context("Verify References tab", () => {
@@ -825,7 +825,7 @@ context("Verify New Layout for Seed Document", () => {
         });
 
         it("Verify References", () => {
-          cy.get(`[data-cy=\"generalInfo\"]`).should("contain.text", "References");
+          cy.get(`[data-cy="generalInfo"]`).should("contain.text", "References");
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -884,14 +884,14 @@ context("Verify New Layout for Seed Document", () => {
       context("Verify Bookmarks tab", () => {
         it("Open bookmarks tab", () => {
           cy.drSelectBookmarksTab();
-          cy.get(`[data-cy=\"bookmark-icon\"]`).should("be.visible");
+          cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
         });
       });
 
       context("Verify Revision History tab", () => {
         it("Open revision history tab", () => {
           cy.drSelectRevisionHistoryTab();
-          cy.get(`[data-cy=\"Revision History-detail\"]`).should("be.visible");
+          cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
         });
       });
 

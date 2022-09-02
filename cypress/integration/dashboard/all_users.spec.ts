@@ -625,7 +625,7 @@ context("All regular users on new dashboard", () => {
       });
 
       it("Save PO", () => {
-        cy.poSaveDocument();
+        cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -642,7 +642,7 @@ context("All regular users on new dashboard", () => {
       });
 
       it("Click on 'Add item' button to add item without Part Number", () => {
-        cy.get(`button[data-cy="fb-control-btn"]`).arrowClick().wait(1000);
+        cy.get(`button[data-cy="fb-control-btn"]`).eq(0).arrowClick({ multiple: true, force: true }).wait(1000);
       });
 
       it("Enter Quantity Ordered", () => {

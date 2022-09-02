@@ -346,9 +346,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -360,9 +358,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Open details tab", () => {
@@ -405,9 +401,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -455,7 +449,7 @@ context("Export training curriculum", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       cy.get("[name=\"voidDescription\"]").arrowType("test");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").arrowClick();
+        cy.get("[data-cy=\"common.true\"]").arrowClick({ multiple: true });
       });
     });
 
@@ -517,9 +511,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -574,9 +566,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Void button", () => {
@@ -617,9 +607,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -666,9 +654,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {
