@@ -107,7 +107,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
-      cy.get("[data-cy=\"field-document.documentType.id\"]").parent()
+      cy.get("[data-cy='field-document.documentType.id']").parent()
         .should("have.class", "MuiGrid-grid-xs-6").next()
         .should("have.class", "MuiGrid-grid-xs-6")
         .should("contain.text", "Document ID");
@@ -122,7 +122,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]").parent().parent()
+      cy.get("[data-cy='field-revisionStage']").parent().parent()
         .should("have.class", "MuiGrid-grid-xs-6").next()
         .should("have.class", "MuiGrid-grid-xs-6")
         .should("contain.text", "Training Required");
@@ -224,7 +224,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
-        cy.get("[data-cy=\"field-document.documentType.id\"]").parent()
+        cy.get("[data-cy='field-document.documentType.id']").parent()
           .should("have.class", "MuiGrid-grid-xs-6").next()
           .should("have.class", "MuiGrid-grid-xs-6")
           .should("contain.text", "Document ID");
@@ -239,7 +239,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
-        cy.get("[data-cy=\"field-revisionStage\"]").parent().parent()
+        cy.get("[data-cy='field-revisionStage']").parent().parent()
           .should("have.class", "MuiGrid-grid-xs-6").next()
           .should("have.class", "MuiGrid-grid-xs-6")
           .should("contain.text", "Training Required");
@@ -299,7 +299,7 @@ context("Intermediate page validation", () => {
 
   context("Click 'Create Document' button and verify predefined fields are displayed", () => {
     it("Click on 'Create Document' button", () => {
-      cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.get("[id='DocumentRevisionForm-submit']").arrowClick();
     });
 
     it("Check 'Approvals' is displayed", () => {
@@ -370,4 +370,204 @@ context("Intermediate page validation", () => {
       });
     });
   });
+  context("Verify Preview mode for overview tab after doc creation", () => {
+
+    it("Click on Preview", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+    });
+
+    it("Verify Approval should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("exist");
+    });
+
+    it("Select Approval", () => {
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).autocompleteSelect(USERS[1].name);
+    });
+
+    it("Close Preview window", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+
+    it("Reopen Preview window and verify approval block should not have any value", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("not.contain.value");
+    });
+  });
+
+  context("Verify form options and add field button is displayed in Detail tab", () => {
+    context("Check form options are displayed at center bottom", () => {
+      it("Click on 'Detail' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
+      });
+    });
+
+    context("Verify add field button is displayed", () => {
+      it("Verify 'Add Field' button displayed", () => {
+        cy.intPageVerifyAddFieldExist();
+      });
+    });
+  });
+
+  context("Verify Preview mode after doc creation", () => {
+    it("verify form preview button in Overview Tab", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+    });
+
+    it("Verify tabs overview, detail", () => {
+      cy.verifyTabs("overview", "details");
+    });
+
+    it("Verify training curiculam section visible", () => {
+      cy.get(".MuiDialogContent-root #training-curriculum-details-section").should("exist");
+    });
+
+    it("Verify document to be train on should be visible", () => {
+      cy.get(`.MuiDialogContent-root [name="training-types-of-items-to-be-trained-on"]`).should("exist");
+      cy.get(`.MuiDialogContent-root [value^="Documents"]`).should("exist");
+      cy.get(`.MuiDialogContent-root [value^="Process Instruction"]`).should("exist");
+    });
+
+    it("Verify force retraining should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy^="Force retraining"]`).should("exist");
+    });
+
+    it("Verify Refresh retraining should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy^="Refresh/repeat"]`).should("exist");
+    });
+
+    it("Verify training detail section should be visible", () => {
+      cy.get(`.MuiDialogContent-root #training-details-section`).should("exist");
+    });
+
+    it("Verify select group to train should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy="training-select-groups-to-train"]`).should("exist");
+    });
+
+    it("Verify select user to train should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy="training-select-users-to-train"]`).should("exist");
+    });
+
+  });
+
+  context("Verify fields in preview mode editable or not", () => {
+
+    it("Check documents to be trained on", () => {
+      cy.get(`.MuiDialogContent-root [name="training-types-of-items-to-be-trained-on"]`).should("exist");
+      cy.get(`.MuiDialogContent-root [value^="Documents"]`).check();
+      cy.get(`.MuiDialogContent-root [value^="Process Instruction"]`).check();
+    });
+
+    it("Select force retraining", () => {
+      cy.get(`.MuiDialogContent-root [name="training-force-retraining-for-everyone"]`).arrowClick({ multiple: true });
+    });
+
+    it("Select refresh training", () => {
+      cy.get(`.MuiDialogContent-root [name="training-refresh-training-periodically"]`).arrowClick({ multiple: true });
+    });
+
+    it("select group to train should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy="training-select-groups-to-train"]`).autocompleteSelect("Everyone");
+    });
+
+    it("Verify select user to train should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy="training-select-users-to-train"]`).autocompleteSelect(USERS[1].name);
+    });
+
+    it("Close the preview mode", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+
+    it("Reopen the preview mode and verify enter detail not saved", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get(`.MuiDialogContent-root [data-cy="training-select-users-to-train"]`).should("not.contain.value");
+      cy.get(`.MuiDialogContent-root [data-cy="training-select-groups-to-train"]`).should("not.contain.value");
+      cy.get(`.MuiDialogContent-root [value^="Documents"]`).should("not.be.checked");
+      cy.get(`.MuiDialogContent-root [value^="Process Instruction"]`).should("not.be.checked");
+      cy.get(`.MuiDialogContent-root [name="training-refresh-training-periodically"]`).should("not.be.selected");
+      cy.get(`.MuiDialogContent-root [name="training-force-retraining-for-everyone"]`).should("not.be.selected");
+    });
+
+    it("Close the preview mode dialog", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+
+  });
+
+  context("Add FB fields and verify field 2 is visible when field 1 has value 'YES'", () => {
+
+    it("Add textfield", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "FbTrainingText" });
+      cy.fbAddField();
+    });
+
+
+    it("Add radio button group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "RadioBtnGroup for inline" });
+      cy.fbGroupOptions("One", "Two", "Three");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.get("input[value^='visibility']").check();
+      cy.get(`input[name="validators.required_if"]`).check();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("FbTrainingText");
+      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Yes");
+      cy.fbAddField();
+    });
+
+    it("Verify form preview button in Overview Tab", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+    });
+
+    it("Verify FB Text field 'Text1' is visible and radio button group is hidden", () => {
+      cy.get("[name^='fb-training-text']").last().should("exist");
+      cy.get("[name^='radio-btn-group-for-inline']").should("be.hidden");
+    });
+
+    it("Enter value 'Yes' in text field Text1 Radio button group should be visible", () => {
+      cy.get("[name^='fb-training-text']").last().arrowType("Yes").wait(2000);
+      cy.get("[name^='radio-btn-group-for-inline']").last().should("exist");
+      cy.get("[data-cy='RadioBtnGroup for inline']").should("be.visible");
+    });
+
+    it("Remove value 'Yes' in text field Text1 Radio button group should be hidden", () => {
+      cy.get("[name^='fb-training-text']").last().arrowType("Ye").clear();
+      cy.get("[name^='radio-btn-group-for-inline']").last().should("be.hidden");
+      cy.get("[data-cy='RadioBtnGroup for inline']").should("be.hidden");
+    });
+
+    it("Close the preview mode dialog", () => {
+      cy.get("[name^='fb-training-text']").last().arrowType("Yes");
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+
+  });
+
+  context("Remove the FB fields validation and verify", () => {
+
+    it("Edit Component", () => {
+      cy.get("[data-cy='edit-schema-item']").last().arrowClick({ force: true });
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.get("input[value^='default']").check();
+      cy.get(`input[name="validators.required_if"]`).uncheck();
+      cy.fbAddField();
+    });
+
+    it("Open form preview", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+    });
+
+    it("Verify Text field and radio button group is visible after removal of validation", () => {
+      cy.get("[name^='radio-btn-group-for-inline']").last().should("exist");
+      cy.get("[data-cy='RadioBtnGroup for inline']").should("be.visible");
+    });
+
+  });
+
+
 });
