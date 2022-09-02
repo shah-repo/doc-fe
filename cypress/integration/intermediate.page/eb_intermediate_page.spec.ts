@@ -252,15 +252,15 @@ context("Intermediate page validation", () => {
   });
 
   context("Verify form options and add field button is displayed in Overview tab", () => {
-    context("Check form options are displayed at center bottom", () => {
-      it("check 'Form Options' are diplayed at bottom center", () => {
-        cy.intPageVerifyFormOptionsExist();
-      });
-    });
-
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
         cy.intPageVerifyAddFieldExist();
+      });
+    });
+
+    context("Check form options are displayed at center bottom", () => {
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
       });
     });
   });
@@ -271,15 +271,114 @@ context("Intermediate page validation", () => {
         cy.drSelectProcedureTab();
       });
 
+      context("Verify add field button is displayed", () => {
+        it("Verify 'Add Field' button displayed", () => {
+          cy.intPageVerifyAddFieldExist();
+        });
+      });
+
       it("check 'Form Options' are diplayed at bottom center", () => {
         cy.intPageVerifyFormOptionsExist();
       });
     });
+  });
 
-    context("Verify add field button is displayed", () => {
-      it("Verify 'Add Field' button displayed", () => {
-        cy.intPageVerifyAddFieldExist();
-      });
+  context("Verify form options and add field button is not displayed in M&E tab", () => {
+    it("Navigate to M&E Tab", () => {
+      cy.drSelectMaterialsAndEquipmentTab();
+    });
+
+    it("Verify 'Add Field' button not displayed", () => {
+      cy.intPageVerifyAddFieldNotExist();
+    });
+
+    it("check 'Form Options' are not diplayed at bottom center", () => {
+      cy.intPageVerifyFormOptionsNotExist();
+    });
+  });
+
+  context("Add form fields", () => {
+    it("Click on 'Procedure' tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Add EB Procedure", () => {
+      cy.wait(1000);
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Autocomplete", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
+      cy.get(`[data-cy="optionId"]`).autocompleteSelect("Document revisions (all versions)");
+      cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+      cy.get(`input[name="validators.required"]`).check();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Checkbox group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
+      cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+      cy.get(`input[value^="visibility"]`).check();
+      cy.get(`input[name="validators.required_if"]`).check();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-autocomplete" );
+      cy.unClick();
+      cy.wait(1000);
+      cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect("Engineering Build title" );
+      cy.fbAddNewFieldButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify Checkbox group should not exist", () => {
+      cy.get(`[data-cy="Checkbox"]`).eq(1).should("not.exist");
+    });
+
+    it("Verify EB Procedure", () => {
+      cy.get(`[data-cy="form.builder.step.number"]`).eq(1).should("exist");
+    });
+
+    it("Verify Autocomplete", () => {
+      cy.get(`[data-cy="fb-autocomplete"]`).eq(1).should("exist");
+    });
+
+    it("Select autocomplete", () => {
+      cy.get(`[name^="fb-autocomplete-"]`).eq(1).autocompleteSelect("Engineering Build title" );
+    });
+
+    /* it("Verify Checkbox group should display now", () => {
+      cy.get(`[data-cy="Checkbox"]`).eq(1).should("exist");
+    }); */
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("add field", () => {
+    it("Add Text field with range", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-range" });
+      cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
+      cy.fbSelectCheckboxName("editorConfig.rangeOption",
+        "editorConfig.criticalToQuality", "editorConfig.inspection");
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
     });
   });
 });
