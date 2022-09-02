@@ -120,7 +120,6 @@ context(
           });
 
           it("Verify Revision Stage", () => {
-            // eslint-disable-next-line max-len
             cy.get(
               "[id='sm-tabpanel-0'] [class^='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6']"
             )
@@ -333,7 +332,6 @@ context(
                 .eq(1)
                 .arrowClick()
                 .autocompleteSelect("FM-00001");
-              // eslint-disable-next-line max-len
               cy.get(
                 "[class='MuiChip-root MuiAutocomplete-tag MuiChip-deletable']"
               )
@@ -492,11 +490,11 @@ context(
           cy.fbClickButton({ el: "FBWorkspace-clickView" });
         });
 
-        it("Verify Field 1 is displayed", () => {
+        it("Verify Field 1 is not displayed", () => {
           cy.contains("fb-text-editor").should("not.exist");
         });
 
-        it("Verify Field 2 is displayed", () => {
+        it("Verify Field 2 is not displayed", () => {
           cy.get("[data-cy='fb-radiobutton-group']").should("not.exist");
         });
 
