@@ -16,7 +16,7 @@ import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHis
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
-import { FONT_SIZE_11, FONT_SIZE_12, FONT_SIZE_12_8, FONT_SIZE_14, FONT_SIZE_14_4, FONT_SIZE_16, FONT_SIZE_27, FONT_WT_300, FONT_WT_400, FONT_WT_600, FONT_WT_700, LINE_HT_1, LINE_HT_2, LINE_HT_20, LINE_HT_3, LINE_HT_34, LINE_HT_4, soraSansserif } from "../../utils/constants/fonts_constants";
+import { FONT_SIZE_11, FONT_SIZE_12, FONT_SIZE_12_8, FONT_SIZE_14, FONT_SIZE_14_4, FONT_SIZE_16, FONT_SIZE_28, FONT_WT_300, FONT_WT_400, FONT_WT_600, FONT_WT_700, LINE_HT_1, LINE_HT_2, LINE_HT_20, LINE_HT_3, LINE_HT_4, soraSansserif } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -1910,10 +1910,10 @@ context("Dashboard notification font test", () => {
       });
     });
 
-    it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_27} form-family ${soraSansserif} line-height ${LINE_HT_34} font-weight ${FONT_WT_700}`, () => {
+    it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_28} form-family ${soraSansserif} font-weight ${FONT_WT_700}`, () => {
       cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]").checkStylePropExists({
         content: USERS[1].name,
-        props: { "font-size": FONT_SIZE_27, "font-family": soraSansserif, "line-height": LINE_HT_34, "font-weight": FONT_WT_700 },
+        props: { "font-size": FONT_SIZE_28, "font-family": soraSansserif, "font-weight": FONT_WT_700 },
       });
     });
 
@@ -1981,10 +1981,10 @@ context("Dashboard notification font test", () => {
   });
 
   context("Verify font for Welcome back, Username!", () => {
-    it(`Verify Welcome back, Username! font-size as ${FONT_SIZE_27} and form-family as ${soraSansserif} line-height ${LINE_HT_34} font-weight ${FONT_WT_300}`, () => {
+    it(`Verify Welcome back, Username! font-size as ${FONT_SIZE_28} and form-family as ${soraSansserif} font-weight ${FONT_WT_300}`, () => {
       cy.checkStylePropExists({
         content: "Welcome Back, Giovanni Reynolds!",
-        props: { "font-size": FONT_SIZE_27, "font-family": soraSansserif, "line-height": LINE_HT_34, "font-weight": FONT_WT_300 },
+        props: { "font-size": FONT_SIZE_28, "font-family": soraSansserif, "font-weight": FONT_WT_300 },
       });
     });
   });
