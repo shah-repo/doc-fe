@@ -42,7 +42,7 @@ const history = [
     actions: [
       { key: "New Doc ID", value: "PO-00002" },
       { key: "Form Set To", value: "FM-00002 - revision 1 - New Purchase Order Form" },
-      { key: "New owner", value: `${owner}` },
+      { key: "New owner", value: owner },
       { key: "Access granted to group", value: "Everyone" },
       { key: "New status", value: `Set to Draft by ${owner}` },
     ],
@@ -1418,27 +1418,27 @@ context("PO and parts ", () => {
     });
 
     it("verify that PO landing page is pulling correct data", () => {
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PO-00002").wait(500);
+      cy.get("[class='k-textbox']").eq(0).clear().arrowType("PO-00002").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType("A").wait(500);
+      cy.get("[class='k-textbox']").eq(1).clear().arrowType("A").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType("Open").wait(500);
+      cy.get("[class='k-textbox']").eq(2).clear().arrowType("Open").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType("API Supplier Document").wait(500);
+      cy.get("[class='k-textbox']").eq(3).clear().arrowType("API Supplier Document").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(4).clear().arrowType("PRT-00005 - 1").wait(500);
+      cy.get("[class='k-textbox']").eq(4).clear().arrowType("PRT-00005 - 1").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(5).clear().arrowType("$250.93").wait(500);
+      cy.get("[class='k-textbox']").eq(5).clear().arrowType("$250.93").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(6).clear().arrowType("Giovanni Reynolds").wait(500);
+      cy.get("[class='k-textbox']").eq(6).clear().arrowType("Giovanni Reynolds").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(7).clear().arrowType("N/A").wait(500);
+      cy.get("[class='k-textbox']").eq(7).clear().arrowType("N/A").wait(500);
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select PO from the list", () => {
       cy.get("[data-cy=\"clearFilter\"]").arrowClick();
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PO-00001");
+      cy.get("[class='k-textbox']").eq(0).clear().arrowType("PO-00001");
       cy.dlSelectFirstDocument();
     });
 
@@ -1462,27 +1462,27 @@ context("PO and parts ", () => {
     });
 
     it("verify that PO landing page is pulling correct data for newly released po", () => {
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PO-00001").wait(500);
+      cy.get("[class='k-textbox']").eq(0).clear().arrowType("PO-00001").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType("A").wait(500);
+      cy.get("[class='k-textbox']").eq(1).clear().arrowType("A").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType("Open").wait(500);
+      cy.get("[class='k-textbox']").eq(2).clear().arrowType("Open").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType("N/A").wait(500);
+      cy.get("[class='k-textbox']").eq(3).clear().arrowType("N/A").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(4).clear().arrowType("N/A").wait(500);
+      cy.get("[class='k-textbox']").eq(4).clear().arrowType("N/A").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(5).clear().arrowType("N/A").wait(500);
+      cy.get("[class='k-textbox']").eq(5).clear().arrowType("N/A").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(6).clear().arrowType("Giovanni Reynolds").wait(500);
+      cy.get("[class='k-textbox']").eq(6).clear().arrowType("Giovanni Reynolds").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(7).clear().arrowType("N/A").wait(500);
+      cy.get("[class='k-textbox']").eq(7).clear().arrowType("N/A").wait(500);
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select PO from the list", () => {
       cy.get("[data-cy=\"clearFilter\"]").arrowClick();
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PO-00002");
+      cy.get("[class='k-textbox']").eq(0).clear().arrowType("PO-00002");
       cy.dlSelectFirstDocument();
     });
 
