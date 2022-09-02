@@ -318,7 +318,7 @@ context(
       });
     });
 
-    context("Click on ‘Add Field’ button in one of the tabs >> Form Builder Library opens on the left-hand side", () => {
+    context("Click on ‘Add Field’ button in one of the tabs > Form Builder Library opens on the left-hand side", () => {
       context(`Click on ‘Add Field’ button in one of the tabs >> 
       Form Builder Library opens on the left-hand side`, () => {
         it("Navigate to Overview Tab", () => {
