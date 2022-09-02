@@ -183,6 +183,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         name="document.documentType.id"
         label={label}
         selectProps={{
+          disabled: isDocTypeDisabled,
           inputProps: { id: "documentType", disabled: isDocTypeDisabled },
           onChange: handleTypeChange,
         }}

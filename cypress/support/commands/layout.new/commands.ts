@@ -10,7 +10,6 @@ declare global {
       verifyTitleDescriptionFields(): Chainable;
       verifyDefaultFields(): Chainable;
       verifyDocumentHeaderDetails(): Chainable;
-      verifySelectedTab(params: {tab: string}): Chainable;
       verifyFixedTab(): Chainable;
       verifyApprovalsField(): Chainable;
       verifyFormOptionsVisibility(): Chainable;
@@ -23,8 +22,13 @@ declare global {
       verifyReferenceInfo(): Chainable;
       verifyReferenceTab({ user, formId, shortName }): Chainable;
       verifyAddRemoveReference({ formId }): Chainable;
-      verifyHistoryTab(history, groupOne, groupTwo): Chainable;
       verifyDescriptionToolbar(): Chainable;
+      verifyHeaderInfoContent(HeaderInfo): Chainable;
+      isTabActive(tabInfo: {name: string; index: number}): Chainable;
+      verifyTabs(...tabs: string[]): Chainable;
+      verifyReferencesTabAsActive(): Chainable;
+      openRevisionsTabAndVerifyCurrentRevision(rev: string): Chainable;
+      verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
     }
   }
 }
@@ -48,10 +52,6 @@ Cypress.Commands.add("verifyDocumentHeaderDetails", () => {
   cy.get("span[data-cy=\"HeaderInfo-docId\"]").should("exist");
   cy.get("div[data-cy=\"HeaderInfo-Rev\"]").should("exist");
   cy.get("div[data-cy=\"HeaderInfo-status\"]").should("exist");
-});
-
-Cypress.Commands.add("verifySelectedTab", (params: {tab: string}) => {
-  cy.get(`[data-cy="tabId.${params.tab}"]`).parent().parent().should("have.class", "Mui-selected");
 });
 
 Cypress.Commands.add("verifyFixedTab", () => {
@@ -135,56 +135,10 @@ Cypress.Commands.add("verifyReferenceTab", ({ user, formId, shortName }) => {
 });
 
 Cypress.Commands.add("verifyAddRemoveReference", ({ formId }) => {
-  cy.get("[data-cy=\"references-icon\"]").arrowClick();
-  cy.wait(1000);
+  cy.get("[data-cy=\"references-icon\"]").arrowClick().wait(500);
   cy.get("[data-cy=\"referenceTo\"]").arrowClick();
   cy.drSelectReferences(formId);
   cy.drRemoveReferences({ reference: formId });
-});
-
-Cypress.Commands.add("verifyHistoryTab", (history, groupOne, groupTwo) => {
-
-  it("Open history drawer and compare history values", () => {
-    cy.drSelectHistoryTab();
-  });
-
-  history.forEach((element, groupIndex) => {
-    it(`Check owner name for group ${groupIndex + 1}`, () => {
-      cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-    });
-    element.actions.forEach((action, index, identifier) => {
-      it(`'${action.key}' as '${action.value}' exists`, () => {
-        const typeOfChange = action.key;
-        let contentOfChange = action.value;
-
-        if (action.key === "New description" || action.key === "Description changed" ) {
-          contentOfChange = "\n" + action.value + "\n";
-        }
-
-        if (typeOfChange === "s3Link added") {
-          cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-          cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
-        }
-        else {
-          if (action.key === "Access granted to group") {
-            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
-              expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
-            });
-          }
-          else {
-            cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
-              .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-              .parent()
-              .parent()
-              .within(() => {
-                cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
-              });
-          }
-        }
-      });
-    });
-  });
 });
 
 Cypress.Commands.add("verifyDescriptionToolbar", () => {
@@ -204,16 +158,52 @@ Cypress.Commands.add("verifyDescriptionToolbar", () => {
   cy.get("div[title=\"Outdent\"]").should("exist");
   cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
   cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
-  cy.get("[title=\"Block Type\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
-  cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+  cy.get("[data-cy=\"description\"][aria-label=\"rdw-font-size-control\"]").should("not.exist");
+  cy.get("[data-cy=\"description\"][aria-label=\"rdw-font-family-control\"]").should("not.exist");
   cy.get("[aria-label=\"rdw-inline-control\"]").should("exist");
   cy.get("[aria-label=\"rdw-color-picker\"]").should("exist");
   cy.get("[aria-label=\"rdw-textalign-control\"]").should("exist");
-  cy.get("[title=\"Block Type\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-size-control\"]").should("not.exist");
-  cy.get("[aria-label=\"rdw-font-family-control\"]").should("not.exist");
 });
 
+Cypress.Commands.add("verifyHeaderInfoContent", (HeaderInfo) => {
+  if (HeaderInfo.status) {
+    cy.drCheckDocumentStatus({ status: HeaderInfo.status });
+  }
+  cy.get("[data-cy=\"Header-listIcon\"]").should("exist");
+  cy.get("[data-cy=\"Header-listTitle\"]").should("have.text", HeaderInfo.title);
+  if (HeaderInfo.docId) {
+    cy.get("[data-cy='HeaderInfo-docId']").should("contain.text", HeaderInfo.docId);
+  }
+  cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", HeaderInfo.revision);
+});
+
+Cypress.Commands.add("isTabActive", (tabInfo) => {
+  cy.get(`[data-cy="tabCon-tabId.${tabInfo.name}"]`).should("have.attr", "aria-selected", "true");
+  cy.get(`#sm-tabpanel-${tabInfo.index}`).should("be.visible");
+});
+
+Cypress.Commands.add("verifyTabs", (...tabs: string[]) => {
+  tabs.forEach((tab) => {
+    cy.get(`[data-cy="tabId.${tab}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("verifyReferencesTabAsActive", () => {
+  cy.get(`[data-cy="references-icon"]`).should("be.visible");
+  cy.get(`[data-cy="References-detail"]`).should("exist");
+  cy.get(`[data-cy="generalInfo"]`).should("be.visible");
+});
+
+Cypress.Commands.add("openRevisionsTabAndVerifyCurrentRevision", (rev) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+    cy.drClickRevisionsSidePanel();
+    cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).arrowClick();
+    cy.recCheckRevisionStage({ stage: `Revision ${rev}` });
+    cy.get(`[data-cy="HeaderInfo-Rev"]`).contains(`Rev ${rev}`);
+  });
+});
+
+Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
+  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
+});
 

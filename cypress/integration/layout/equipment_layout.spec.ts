@@ -1,0 +1,1088 @@
+/* eslint-disable @typescript-eslint/camelcase */
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+import "moment-timezone";
+import moment from "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { verifyHistoryContent } from "../../utils/context/historyContent";
+
+let createdCompany;
+let loginResponse;
+let adminEmployee;
+
+let approvalRequestDocumentType;
+let formDocumentType;
+let initialArDocument;
+let group;
+let maintenanceRecordDocumentType;
+let createdPMForm;
+let createdCalibrationForm;
+
+let pmSchemaFieldName;
+let calibrationSchemaFieldName;
+let equipmentURL;
+
+const fbclickOnAddCalPM = () => {
+  cy.get("button[data-cy='form.builder.add.field']").eq(-1).arrowClick({ force: true });
+};
+
+context("Layout Verification of EQ", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  context("[API]Prepare company", () => {
+    it("[API]Creates company", (done: any) => {
+      cy.authApiLogin({
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: USERS[1].email,
+            importerEmail: IMPORTER_USER.email,
+            users: [USERS[2], USERS[3], USERS[4]],
+            documentTypes: [
+            ],
+          }, sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
+          done();
+        });
+      });
+    });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API]Create PM form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>PM form</p>",
+              document: {
+                docId: "FM-00004",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Preventative Maintenance form",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: maintenanceRecordDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "fb-maintenance-details-section",
+                    type: "section",
+                    index: 0,
+                    label: "Maintenance Details",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "equipment_id",
+                    type: "autocomplete",
+                    index: 1,
+                    label: "Equipment",
+                    tabId: "details",
+                    rules: "required",
+                    optionId: "20",
+                    placeholder: "[Select revision here]",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "equipment_maintainer",
+                    type: "autocomplete",
+                    index: 2,
+                    label: "Maintainer",
+                    tabId: "details",
+                    rules: "required",
+                    optionId: "13",
+                    placeholder: "[Select name here]",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-equipment_due_date",
+                    type: "datepicker",
+                    index: 3,
+                    label: "Completion Date",
+                    tabId: "details",
+                    rules: "required",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-requipment-maintenance-section",
+                    type: "textfield",
+                    index: 4,
+                    label: "Equipment Maintenance Section",
+                    tabId: "details",
+                    rules: "required",
+                    hidden: true,
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    tabId: "overview",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-kybkhbpt",
+                    uniqueSchemaItem: true,
+                    index: 5,
+                  },
+                ],
+              },
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPMForm = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPMForm.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]Create Calibration form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Calibration form</p>",
+          document: {
+            docId: "FM-00005",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Calibration form",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: maintenanceRecordDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "fb-maintenance-details-section",
+                type: "section",
+                index: 0,
+                label: "Maintenance Details",
+                tabId: "details",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_id",
+                type: "autocomplete",
+                index: 1,
+                label: "Equipment",
+                tabId: "details",
+                rules: "required",
+                optionId: "20",
+                placeholder: "[Select revision here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_maintainer",
+                type: "autocomplete",
+                index: 2,
+                label: "Maintainer",
+                tabId: "details",
+                rules: "required",
+                optionId: "13",
+                placeholder: "[Select name here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-equipment_due_date",
+                type: "datepicker",
+                index: 3,
+                label: "Completion Date",
+                tabId: "details",
+                rules: "required",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-requipment-maintenance-section",
+                type: "textfield",
+                index: 4,
+                label: "Equipment Maintenance Section",
+                tabId: "details",
+                rules: "required",
+                hidden: true,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                tabId: "overview",
+                deleteDisabled: true,
+                name: "fb-approvals-kybkhbpt",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdCalibrationForm = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdCalibrationForm.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+  });
+
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+  });
+
+  context("Create EQ document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+  });
+
+  context("Fill EQ document attributes", () => {
+    it("Verify predefiend fields title description doc id revision output type", () => {
+      cy.verifyPredefiendFields();
+    });
+
+    it("Enter document title 'EQ document'", () => {
+      cy.drEnterDocumentTitle({ name: "EQ Title" });
+    });
+
+    it("Fill MR document description", () => {
+      cy.drEnterDocumentDescription({ description: "EQ  description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Equipment' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Equipment" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Verify Layout of document and Tabs", () => {
+    it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Document List",
+        docId: "FM-00002",
+        revision: "Rev 1",
+      });
+    });
+
+    it("Verify that it contains Overview, Specification, calpmhistory", () => {
+      cy.verifyTabs("overview", "specification", "calpmhistory");
+    });
+
+    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+      cy.verifyFixedTab();
+    });
+
+    it("Verify EQ opens to the Overview tab by default", () => {
+      cy.isTabActive({ name: "overview", index: 0 });
+    });
+
+    it("Verify overview tab predefiend fields up to attachment", () => {
+      cy.verifyPredefiendFields();
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+  });
+
+  context("Add FB Fields", () => {
+    it("Add autocomplete of “Approvers” and set validation", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
+      cy.get("[data-cy='optionId']").autocompleteSelect("Approvers");
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.fbAddField();
+    });
+
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Navigate to Specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
+    it("Add textfield", () => {
+      fbclickOnAddCalPM();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "Eq Textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Select references", () => {
+      cy.drSelectReferences( "FM-00004" );
+      cy.drSelectReferences( "FM-00005" );
+      cy.unClick();
+    });
+
+    it("Add Checkbox group", () => {
+      fbclickOnAddCalPM();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+  });
+
+  context("Verify overview specification tab fb and schema fields", () => {
+    it("Navigate to Specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
+    it("Verify Click on EQ  Specification Tab, clicking on it should open that tab and close the other one", () => {
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
+      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.isTabActive({ name: "specification", index: 1 });
+    });
+
+    it("Verify Primary owner and co-ordinator fields", () => {
+      cy.get("[data-cy='fb-primary-owner-eq']").should("exist");
+      cy.get("[data-cy='fb-coordinator-eq']").should("exist");
+    });
+
+    it("Verify Add field button Exist in specification tab", () => {
+      cy.get("[data-cy='form.builder.add.field']").should("exist");
+    });
+
+    it("Verify add FB Field Checked chebox", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+    });
+
+    it("Verify add FB Field  textfield", () => {
+      cy.get("[name^='eq-textfield']").should("exist");
+    });
+
+    it("Verify Add Cal or PM is displayed", () => {
+      cy.get("[data-cy='form.builder.addEquiSpec']").should("exist");
+    });
+
+    it("Verify that Form Options should  appear for this tab ", () => {
+      cy.get(".formOptionsBox").should("exist");
+    });
+  });
+
+  context("Release EQ", () => {
+    it("Approve and release  document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+  });
+
+  context("Create a required document from release form, Verify the layout and Release It", () => {
+    context("Create New Document from Release form", () => {
+      it("Click 'Create New'", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+    });
+
+    context("Verify Layout of document and Tabs", () => {
+      it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (DRAFT)", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.DRAFT,
+          title: "Equipment",
+          docId: "EQ-00001",
+          revision: "Rev 1",
+        });
+      });
+
+      it("Verify that it contains Overview, Specification tab", () => {
+        cy.verifyTabs("overview", "specification");
+      });
+
+      it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+        cy.verifyFixedTab();
+      });
+
+      it("Verify EQ opens to the Overview tab by default", () => {
+        cy.isTabActive({ name: "overview", index: 0 });
+      });
+
+      it("Verify overview tab predefiend fields up to attachment and FB fields Approver,Eq status", () => {
+        cy.get("[data-cy='field-name']").should("exist");
+        cy.get("[name='fb-default-eq-status']").should("exist");
+        cy.get("[data-cy^='autocomplete-approvers']").should("exist");
+        cy.get("[data-cy='select.document.documentType.id']").should("exist");
+      });
+    });
+
+    context("Verify specification tab", () => {
+      it("Navigate to Specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
+        cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
+        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
+      });
+
+      it("Add EQUIPMENT SECTIONS FOR PM", () => {
+        fbclickOnAddCalPM();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+        cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
+        cy.get("input[value='preventativeMaintenance']").arrowClick();
+        cy.fbAddField();
+      });
+
+      it("Add EQUIPMENT SECTIONS FOR CAL", () => {
+        fbclickOnAddCalPM();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+        cy.fbEnterNameValue({ name: "label", value: "Calibration" });
+        cy.get("input[value='calibration']").arrowClick();
+        cy.fbAddField();
+      });
+
+      it("Save the document", () => {
+        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
+        cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
+        cy.wait("@response").then((res) => {
+          if (res.response) {
+            const response = res.response.body;
+            pmSchemaFieldName = response.schema[6].name;
+            calibrationSchemaFieldName = response.schema[7].name;
+          }
+        });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
+
+      it("Verify Primary owner and co-ordinator fields", () => {
+        cy.get("[data-cy='fb-primary-owner-eq']").should("exist");
+        cy.get("[data-cy='fb-coordinator-eq']").should("exist");
+      });
+
+      it("Verify Add field button Exist in detail tab", () => {
+        cy.get("[data-cy='form.builder.add.field']").should("exist");
+
+      });
+
+      it("Verify add FB Field Checked chebox", () => {
+        cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+      });
+
+      it("Verify add FB Field  textfield", () => {
+        cy.get("[name^='eq-textfield']").should("exist");
+      });
+
+      it("Verify PM section exist or not", () => {
+        cy.get("[class*='fb-field-wrapper-preventative-maintenance']").should("exist");
+      });
+
+      it("Verify Cal section exist or not", () => {
+        cy.get("[class*='fb-field-wrapper-calibration']").should("exist");
+      });
+
+      it("Verify Add Cal or PM is displayed", () => {
+        cy.get("[data-cy='form.builder.addEquiSpec']").should("exist");
+      });
+
+      it("Verify that Form Options should  appear for this tab ", () => {
+        cy.get(".formOptionsBox").should("exist");
+      });
+    });
+
+    context("Fill the form", () => {
+      it("Navigate to overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Fill the record details'", () => {
+        cy.drEnterDocumentTitle({ name: "EQ Test title" });
+      });
+
+      it("Fill the Description details'", () => {
+        cy.drEnterDocumentDescription({ description: "EQ Test Description" });
+      });
+
+      it("Fill the Eq status and Approver'", () => {
+        cy.get("[name='fb-default-eq-status']").eq(0).arrowClick({ force: true });
+        cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Click on Save", () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
+      });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it(`Enter text field value`, () => {
+        cy.get("[data-cy^='eq-textfield']").arrowType("Test");
+        cy.get(`input[type="checkbox"][value="1"]`).check({ force: true }).wait(2000);
+      });
+
+      it(`Select '${USERS[1].name}' for Primary Owner`, () => {
+        cy.get("input[data-cy='fb-primary-owner-eq']").autocompleteSelect(USERS[1].name);
+      });
+
+      it(`Select '${USERS[2].name}' for Coordinator`, () => {
+        cy.get("input[data-cy='fb-coordinator-eq']").autocompleteSelect(USERS[2].name);
+      });
+
+      it("Select document 'Yes' for preventative maintenance required", () => {
+        cy.get("[value='Yes']").eq(0).arrowClick({ force: true }).wait(2000);
+      });
+
+      it("Select 'Preventative Maintenance form' for preventative maintenance required", () => {
+        cy.get("[name$='preventativeForm'] button").eq(2).arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.unClick();
+        cy.get("[data-cy*='preventativeForm']").eq(0).arrowClick();
+        cy.get("ul>li[role='option']").contains("Preventative Maintenance form").arrowClick();
+      });
+
+      it("Select preventative maintenance frequency", () => {
+        cy.get("[name*='frequency']").eq(0).arrowType(`5`);
+        cy.unClick();
+      });
+
+      it("Type preventative maintenance instruction", () => {
+        cy.get("[data-cy^='preventative-maintenance']>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
+        cy.unClick();
+      });
+
+      it("Select document 'Yes' for calibration required", () => {
+        cy.get("[value='Yes']").eq(1).arrowClick({ force: true }).wait(2000);
+      });
+
+      it("Select 'Calibration form' for calibration required", () => {
+        cy.get("[name$='preventativeForm'] button").eq(5).arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.unClick();
+        cy.get("[data-cy*='preventativeForm']").eq(1).arrowClick();
+        cy.get("ul>li[role='option']").contains("Calibration form").arrowClick();
+      });
+
+      it("Select calibration frequency", () => {
+        cy.get("[name*='frequency']").eq(1).arrowType(`5`);
+      });
+
+      it("Type calibration maintenance instruction", () => {
+        cy.get("[data-cy^='calibration']>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().arrowType("Instructions for calibration");
+        cy.unClick();
+      });
+
+      it("Click on Save", () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
+      });
+
+      it("Approve and Release", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.url().then((url: any) => {
+          equipmentURL = url;
+        });
+      });
+
+      it("Verify tabs should visible Overview, Specification, calpmhistory", () => {
+        cy.verifyTabs("overview", "specification", "calpmhistory");
+      });
+
+      it("Button ‘New PM should be displayed", () => {
+        cy.drSelectSpecificationTab();
+        cy.get("[data-cy='fb-control-btn']").contains("New PM").should("be.visible");
+      });
+
+      it("Button ‘New Cal’ should be displayed", () => {
+        cy.get("[data-cy='fb-control-btn']").contains("New Cal").scrollIntoView().should("be.visible");
+      });
+    });
+
+
+    context("Fill new calbration form", () => {
+      it("Switch to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+      it("Click 'NEW CAL' on calibration section", () => {
+        cy.url().then((url: any) => {
+          const docIdFromUrl = url.split("/").pop();
+          // eslint-disable-next-line max-len
+          const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaFieldName}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newPMUrl);
+          });
+        });
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Enter title 'Calibration document'", () => {
+        cy.drEnterDocumentTitle({ name: "Calibration document" });
+      });
+
+      it("Select document type 'Maintenance Record'", () => {
+        cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+      });
+
+      it("Select revision stage 'Numeric'", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it(`Select maintainer '${USERS[1].name}'`, () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy='equipment_maintainer']").arrowClick();
+        cy.get("ul>li[role='option']").contains(USERS[1].name).arrowClick();
+      });
+
+      it("Fill 'Completion Date'", () => {
+        const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
+        cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            cy.log(dayNumber);
+            if (dayOfTheMonth.toString() === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+
+      it("Create 'Calibration document' and approve", () => {
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add an Approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve record", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
+          cy.ebApprove();
+        });
+      });
+    });
+
+    context("Fill new PM form", () => {
+      const ADMIN_USER = USERS[1];
+      it("Navigate to EQ document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
+          cy.visit(equipmentURL);
+        });
+      });
+
+      it("Click 'NEW PM' on Preventative Maintenance section", () => {
+        cy.url().then((url: any) => {
+          const docIdFromUrl = url.split("/").pop();
+          // eslint-disable-next-line max-len
+          const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaFieldName}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newPMUrl);
+          });
+        });
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Enter title 'Preventative Maintenance'", () => {
+        cy.drEnterDocumentTitle({ name: "Preventative Maintenance" });
+      });
+
+      it("Select revision stage 'Numeric'", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy='equipment_maintainer']").arrowClick();
+        cy.get("ul>li[role='option']").contains(ADMIN_USER.name).arrowClick();
+      });
+
+      it("Fill 'Completion Date'", () => {
+        const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
+        cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            cy.log(dayNumber);
+            if (dayOfTheMonth.toString() === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+
+      it("Create 'Preventative Maintenance' and approve it", () => {
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add an Approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve record", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
+          cy.ebApprove();
+        });
+      });
+    });
+
+    context("Navigate to EQ and Verify", () => {
+      it("Navigate back to EQ", () => {
+        cy.navigToEquipment();
+      });
+
+      it("Select 'EQ-00001'", () => {
+        cy.dlFilterByDocId({ docId: "EQ-00001" });
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Verify tabs should visible Overview, Specification, calpmhistory", () => {
+        cy.verifyTabs("overview", "specification", "calpmhistory");
+      });
+    });
+
+
+    context("Validate Right Side Panel", () => {
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
+      });
+
+      it("Verify Reference tab Info", () => {
+        cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
+      });
+
+      it("Verify Right side pannel Expand and collapse", () => {
+        cy.verifyExpandCollpase();
+      });
+
+      it("Verify Eye Icon", () => {
+        cy.get("[data-cy='references-icon']").should("exist");
+      });
+
+      it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
+        cy.verifyReferenceInfo();
+        cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text",
+          moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+      });
+
+      context("Verify Revision", () => {
+        it("Revise Record", () => {
+          cy.get("[data-cy='updateRecord']").arrowClick();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Enter document description 'test training description'", () => {
+          cy.drEnterDocumentDescription({ description: "EQ description 2" });
+        });
+
+        it("Save Record'", () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
+        it("open revision tab", () => {
+          cy.get("[data-cy='note-icon']").arrowClick();
+        });
+
+        it("Verify revision Rev Document open or not", () => {
+          cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick().wait(2000);
+          cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 2");
+        });
+
+        it("open revision tab", () => {
+          cy.get("[data-cy='note-icon']").arrowClick();
+        });
+
+        it("Verify revision Rev Document open or not", () => {
+          cy.get("[data-cy='DocumentRevisionList-item']").eq(1).arrowClick().wait(2000);
+          cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 1");
+        });
+      });
+
+      context("Verify User able to add Groups or other user permissions", () => {
+        it("Open permissions tab", () => {
+          cy.drSelectPermissionTab();
+        });
+
+        it("Add another user permission", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+            cy.drAddUserFromPermissionTab(USERS[3].name);
+          });
+        });
+
+        it("Add another group permission", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.drAddGroupFromPermissionTab("Developers");
+          });
+        });
+      });
+
+      context("Check document history", () => {
+        const groupOne = "Developers";
+        const history = [
+          {
+            owner: USERS[1].name,
+            actions: [
+              { key: "Access granted to group", value: "Developers" },
+            ],
+          },
+          {
+            owner: USERS[1].name,
+            actions: [
+              { key: "Access granted to user", value: `${USERS[3].name}` },
+            ],
+          },
+        ];
+        it("Verify Doc history", () => {
+          cy.drSelectHistoryTab();
+        });
+        verifyHistoryContent(history, groupOne);
+      });
+
+      context("Verify Book Mark", () => {
+        it("Verify Book Mark Navigation", () => {
+          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+        });
+      });
+
+      context("Verify Scroll", () => {
+        it("Navigate to history tab", () => {
+          cy.get("[data-cy='timeline-icon']").arrowClick();
+        });
+
+        it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+          cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+        });
+      });
+    });
+  });
+});
+
+export { };

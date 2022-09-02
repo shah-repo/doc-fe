@@ -279,6 +279,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
+      cy.wait(5000);
       cy.drSelectPermissionTab();
     });
 
