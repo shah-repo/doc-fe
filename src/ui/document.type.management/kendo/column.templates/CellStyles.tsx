@@ -32,6 +32,7 @@ const CellStyles = makeStyles((theme) => ({
     color: Colors.navy,
     border: `1px solid ${Colors.gray}`,
     backgroundColor: Colors.white,
+    textTransform: "uppercase",
   },
   schemaAddBtn: {
     "fontWeight": 600,
@@ -42,8 +43,13 @@ const CellStyles = makeStyles((theme) => ({
     "color": Colors.white,
     "paddingRight": theme.spacing(2.5),
     "paddingLeft": theme.spacing(2.5),
+    "textTransform": "uppercase",
     "&:hover": {
       background: Colors.navy,
+    },
+    "&:disabled": {
+      opacity: .6,
+      backgroundColor: Colors.navy,
     },
   },
   closeButton: {
