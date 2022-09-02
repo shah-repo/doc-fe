@@ -9,9 +9,11 @@ export const FONT_SIZE_14 = "14px";
 export const FONT_SIZE_14_4 = "14.4px";
 export const FONT_SIZE_16 = "16px";
 export const FONT_SIZE_22_4 = "22.4px";
+export const FONT_SIZE_27 = "27px";
 export const FONT_SIZE_28 = "28px";
 export const FONT_SIZE_48 = "48px";
 
+export const FONT_WT_300 = "300";
 export const FONT_WT_400 = "400";
 export const FONT_WT_600 = "600";
 export const FONT_WT_700 = "700";
@@ -31,6 +33,7 @@ export const LINE_HT_21_28 = "21.28px";
 export const LINE_HT_25_6 = "25.6px";
 export const LINE_HT_26_208 = "26.208px";
 export const LINE_HT_26_6 = "21.6px";
+export const LINE_HT_33_6 = "33.6px";
 export const LINE_HT_34 = "34px";
 export const LINE_HT_49_92 = "49.92px";
 
