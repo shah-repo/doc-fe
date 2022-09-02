@@ -28,6 +28,7 @@ declare global {
       verifyTabs(...tabs: string[]): Chainable;
       verifyReferencesTabAsActive(): Chainable;
       openRevisionsTabAndVerifyCurrentRevision(rev: string): Chainable;
+      verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
     }
   }
 }
@@ -202,4 +203,7 @@ Cypress.Commands.add("openRevisionsTabAndVerifyCurrentRevision", (rev) => {
   });
 });
 
+Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
+  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
+});
 
