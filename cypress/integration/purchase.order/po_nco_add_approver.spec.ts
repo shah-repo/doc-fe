@@ -1196,6 +1196,10 @@ context("Add Requestor as an approver of the PO", () => {
       cy.pmSubmitForApproval();
       cy.poApprove();
     });
+
+    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for RELEASED document`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+    });
   });
 
   context("Verify all data should be visible", () => {
