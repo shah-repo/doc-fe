@@ -23,36 +23,13 @@ interface Props {
 const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   isCreateDocumentDisabled,
 }) => {
-  const isNewLayout = SM.isNewLayout;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { workspaceState } = FB.useStores();
   const { _documentRevisionFormState } = SM.useStores();
   const classes = styles();
-  const renderLastSavedContnet = () => (
-    <Box>
-      Last saved: &nbsp;
-      {lastSavedTimestamp}
-    </Box>
-  );
-  const newRenderLastSavedContnet = () => (
-    <Box
-      display="flex"
-      alignItems="center"
-      color={Colors.white}
-      className={classes.lastEdited}
-    >
-      <CloudIcon className={classes.cloudIcon} />
-      <Text
-        translation="form.builder.header.lastSaved"
-        values={{
-          lastSavedTimestamp,
-        }}
-      />
-    </Box>
-  );
   return (
-    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus} >
+    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
       {documentRevision &&
       <HeaderInfo
         revisionStage={documentRevision.revisionStage}
@@ -72,8 +49,12 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
       }
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center" container>
         <Grid container={true} alignItems="center" justify="flex-end">
-          {lastSavedTimestamp && !isNewLayout && renderLastSavedContnet()}
-          {lastSavedTimestamp && isNewLayout && newRenderLastSavedContnet()}
+          {documentRevision.updatedAt && (
+            <HeaderLastSaved
+              timestamp={documentRevision.updatedAt}
+              loading={asyncState.status === AsyncStatus.Active}
+            />
+          )}
           <DocRevActions {...{ isCreateDocumentDisabled }} />
         </Grid>
       </Grid>
