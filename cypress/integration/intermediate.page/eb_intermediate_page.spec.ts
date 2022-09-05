@@ -297,6 +297,87 @@ context("Intermediate page validation", () => {
     });
   });
 
+  context("Make sure fields and tabs displayed in non preview mode are the same displayed in Preview mode", () => {
+    context("Add form fields", () => {
+      it("Navigate to Overview Tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add Quantity", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add Autocomplete", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-1" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
+        cy.get(`[data-cy="optionId"]`).autocompleteSelect("Document Revision");
+        cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+    });
+
+    context("Verify Form fields in non preivew mode", () => {
+      it("Verify Quantity attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-quantity" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      });
+
+      it("Verify Autocomplete attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete-1" });
+        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-autocomplete placeholder" });
+        cy.get(`[data-cy="optionId"]`).should("have.value", "Document revisions");
+        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      });
+    });
+
+    context("Verify Form fields in preview mode", () => {
+      it("Open Preview dialog", () => {
+        cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      });
+
+      it("Add and check Quantity field", () => {
+        cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-quantity-]").clear().arrowType("1");
+        cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-quantity-]").should("have.value", "1");
+      });
+
+      it("Add and check Autocomplete field", () => {
+        cy.get(`input[data-cy^="fb-autocomplete-"]`).eq(1).arrowClick().autocompleteSelect("FM-00001");
+        // eslint-disable-next-line max-len
+        cy.get("[class='MuiChip-root MuiAutocomplete-tag MuiChip-deletable']").eq(0).contains("FM-00001 - rev 1 - AR Form");
+      });
+
+      it("Close Preview dialog", () => {
+        cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+      });
+    });
+
+    context(`Make sure that none of the changes made in “Preview” were saved`, () => {
+      it("Verify Quantity values", () => {
+        cy.get(`input[name^="fb-quantity-"]`).should("have.text", "");
+      });
+
+      it("Verify Autocomplete values", () => {
+        cy.get(`input[data-cy^="fb-autocomplete-"]`).parent().find(".MuiAutocomplete-tag").should("not.exist");
+      });
+    });
+  });
+
   context("Add form fields", () => {
     it("Click on 'Procedure' tab", () => {
       cy.drSelectProcedureTab();
@@ -312,10 +393,9 @@ context("Intermediate page validation", () => {
     it("Add Autocomplete", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-2" });
       cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-      cy.get(`[data-cy="optionId"]`).autocompleteSelect("Document revisions (all versions)");
-      cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="optionId"]`).autocompleteSelect("Document Revision");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
       cy.get(`input[name="validators.required"]`).check();
       cy.fbAddNewFieldButton();
@@ -329,13 +409,17 @@ context("Intermediate page validation", () => {
       cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
       cy.get(`input[value^="visibility"]`).check();
       cy.get(`input[name="validators.required_if"]`).check();
-      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-autocomplete" );
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-autocomplete-2" );
       cy.unClick();
       cy.wait(1000);
-      cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect("Engineering Build title" );
+      cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect("FM-00001" );
       cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
@@ -353,16 +437,16 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify Autocomplete", () => {
-      cy.get(`[data-cy="fb-autocomplete"]`).eq(1).should("exist");
+      cy.get(`[data-cy="fb-autocomplete-2"]`).eq(1).should("exist");
     });
 
     it("Select autocomplete", () => {
-      cy.get(`[name^="fb-autocomplete-"]`).eq(1).autocompleteSelect("Engineering Build title" );
+      cy.get(`[name^="fb-autocomplete-"]`).eq(1).autocompleteSelect("FM-00001" );
     });
 
-    /* it("Verify Checkbox group should display now", () => {
+    it("Verify Checkbox group should display now", () => {
       cy.get(`[data-cy="Checkbox"]`).eq(1).should("exist");
-    }); */
+    });
 
     it("Close Preview dialog", () => {
       cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
@@ -379,6 +463,14 @@ context("Intermediate page validation", () => {
         "editorConfig.criticalToQuality", "editorConfig.inspection");
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
+    });
+
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify text with range in preview mode", () => {
+      cy.get(`[data-cy="fb-range"]`).eq(1).should("exist");
     });
   });
 });

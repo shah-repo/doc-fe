@@ -172,6 +172,10 @@ context("Intermediate page validation", () => {
     it("Check 'Completion Date' is not displayed", () => {
       cy.intPageVerifyCompletionDateNotExist();
     });
+
+    it("Check 'Approvals' is not displayed", () => {
+      cy.intPageVerifyApprovalsNotExist();
+    });
   });
 
   context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
@@ -240,8 +244,8 @@ context("Intermediate page validation", () => {
     });
 
     context("verify predefined fields are displayed", () => {
-      it("Check 'Approvals' is not displayed", () => {
-        cy.intPageVerifyApproversNotExist();
+      it("Check 'Approvals' is displayed", () => {
+        cy.intPageVerifyApprovalsExist();
       });
 
       it("Navigate to Detail Tab", () => {
@@ -275,8 +279,8 @@ context("Intermediate page validation", () => {
       cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
-    it("Check 'Approvals' is not displayed", () => {
-      cy.intPageVerifyApproversNotExist();
+    it("Check 'Approvals' is displayed", () => {
+      cy.intPageVerifyApprovalsExist();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -328,6 +332,83 @@ context("Intermediate page validation", () => {
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
         cy.intPageVerifyAddFieldExist();
+      });
+    });
+  });
+
+  context("Make sure fields and tabs displayed in non preview mode are the same displayed in Preview mode", () => {
+    context("Add form fields", () => {
+      it("Add Quantity", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add Autocomplete", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
+        cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+    });
+
+    context("Verify Form fields in non preivew mode", () => {
+      it("Verify Quantity attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-quantity" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      });
+
+      it("Verify Autocomplete attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete" });
+        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-autocomplete placeholder" });
+        cy.get(`[data-cy="optionId"]`).should("have.value", "Document revisions");
+        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      });
+    });
+
+    context("Verify Form fields in preview mode", () => {
+      it("Open Preview dialog", () => {
+        cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      });
+
+      it("Add and check Quantity field", () => {
+        cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-quantity-]").clear().arrowType("1");
+        cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-quantity-]").should("have.value", "1");
+      });
+
+      it("Add and check Autocomplete field", () => {
+        cy.get(`input[data-cy^="fb-autocomplete-"]`).eq(1).arrowClick().autocompleteSelect("FM-00001");
+        // eslint-disable-next-line max-len
+        cy.get("[class='MuiChip-root MuiAutocomplete-tag MuiChip-deletable']").eq(0).contains("FM-00001 - rev 1 - AR Form");
+      });
+
+      it("Close Preview dialog", () => {
+        cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+      });
+    });
+
+    context(`Make sure that none of the changes made in “Preview” were saved`, () => {
+      it("Verify Quantity values", () => {
+        cy.get(`input[name^="fb-quantity-"]`).should("have.text", "");
+      });
+
+      it("Verify Autocomplete values", () => {
+        cy.get(`input[data-cy^="fb-autocomplete-"]`).parent().find(".MuiAutocomplete-tag").should("not.exist");
       });
     });
   });
