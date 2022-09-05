@@ -517,4 +517,68 @@ context("Intermediate page validation", () => {
       });
     });
   });
+
+  context("Add form fields", () => {
+    it("Add TextField", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Hyperlink", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Hyperlink" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
+      cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+    });
+  });
+
+  context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify TextField", () => {
+      cy.get(`[data-cy="fb-textfield"]`).eq(1).should("exist");
+    });
+
+    it("Verify Hyperlink", () => {
+      cy.get(`[name^="fb-hyperlink-"]`).eq(1).should("exist");
+    });
+
+    it("Verify location linked on Hyperlink in new tab", () => {
+      cy.window().then((win) => {
+        cy.spy(win, "open").as("redirect");
+      });
+      cy.get("[name^=fb-hyperlink-]").eq(1).arrowClick();
+      cy.get("@redirect").should("be.calledWith", "https://google.com");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("Populate fields and check preview mode again", () => {
+    it("Edit Hyperlink field", () => {
+      cy.get(`[name^="fb-hyperlink-"]`)
+        .parentsUntil("li").find("[data-cy=edit-schema-item]").arrowClick({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify Hyperlink", () => {
+      cy.get(`[name^="fb-hyperlink-"]`).eq(1).should("contain.text", "fb-hyperlink1");
+    });
+  });
 });
