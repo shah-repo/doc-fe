@@ -2,18 +2,16 @@ import { Box, Grid, LinearProgress } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { SM } from "../../../App";
-import { ReactComponent as CloudIcon } from "../../../assets/images/cloud.svg";
 import { AsyncStatus } from "../../../state/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
+import HeaderLastSaved from "../../components/common/header/HeaderLastSaved";
 import { generateSubtitle } from "../../components/common/header/subtitles";
 import FormMessage from "../../components/forms/FormMessage";
-import Text from "../../components/Text";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { FB } from "../../form.builder";
-import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./FormHeader.styles";
 
 interface Props {
@@ -24,7 +22,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   isCreateDocumentDisabled,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
+  const  { documentRevision, isDisabled, asyncState, type } = React.useContext(FormHeaderContext)!;
   const { workspaceState } = FB.useStores();
   const { _documentRevisionFormState } = SM.useStores();
   const classes = styles();
