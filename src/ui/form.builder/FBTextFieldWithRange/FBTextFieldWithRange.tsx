@@ -14,7 +14,7 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
   rules,
   ...props
 }) => (
-  <Box mb={5}>
+  <Box mb={5} data-cy={`${props.type}-${props.index}`}>
     {criticalToQuality && (
       <Box
         display="flex"
