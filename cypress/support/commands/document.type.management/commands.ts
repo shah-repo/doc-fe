@@ -17,6 +17,7 @@ declare global {
       dtmUncheckQMS(): Chainable<Subject>;
       dtmUncheckNeedsSignature(): Chainable<Subject>;
       dtmUncheckTraining(): Chainable<Subject>;
+      dtmCloseDialogButton(): Chainable<Subject>;
       dtmSelectGroup(params: { group: string }): Chainable;
       dtmSelectUsersWithoutTags(params: { usersWithoutTags: string }): Chainable;
       dtmSelectRevisionStage(params: { revisionStage: string }): Chainable;
@@ -94,6 +95,10 @@ Cypress.Commands.add("dtmUncheckTraining", () => {
   cy.get("[data-grid-row-index='0']>td>span>input").eq(4).uncheck();
 });
 
+Cypress.Commands.add("dtmCloseDialogButton", () => {
+  cy.get("#DialogContent-close").arrowClick();
+});
+
 Cypress.Commands.add("dtmSelectGroup", (params: { group: string }) => {
   cy.get(`tr>td span[role="listbox"] span.k-input`).eq(3).scrollIntoView().arrowClick();
   cy.get("li").contains(new RegExp("^" + params.group + "$", "g")).arrowClick();
@@ -128,6 +133,10 @@ Cypress.Commands.add("dtmAddCategory", (params: { category: string }) => {
 Cypress.Commands.add("dtmClearFilters", () => {
   cy.get("button").contains("Clear Filters").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("dtmCloseDialogButton", () => {
+  cy.get("#DialogContent-close").arrowClick();
 });
 
 Cypress.Commands.add("filterDocTypeManagement", (params: {status: string; documentType: string; acronym: string;

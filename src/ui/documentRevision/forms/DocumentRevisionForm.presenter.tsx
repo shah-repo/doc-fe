@@ -19,7 +19,7 @@ import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { DocumentCloneType } from "../Clone.container";
+import { DocumentCloneType, DocumentCloneTypeOptions } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
@@ -336,11 +336,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {!isPreview && (!values.status || type === "newOutput") && (
-          <Grid item xs={12}>
-            <DocumentSecurity documentTypeId={documentTypeId} />
-          </Grid>
-        )}
         {showOutputSection ? (
           <>
             {(isPO || includes(outputDocumentTypeName, true)
@@ -371,18 +366,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   />
                 </Grid>
               ))}
-
-            {hasOutput && (
-              <Grid item xs={12}>
-                <FBActiveNoOutput
-                  docRevId={initialValues.id}
-                  status={documentRevision?.status}
-                  version={documentRevision?.version}
-                  isDisabled={isDisabledInput}
-                  outputDocs={values.outputDocumentTypes as OptionType[]}
-                />
-              </Grid>
-            )}
           </>
         ) : (
           <Grid item xs={12}>
@@ -395,6 +378,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               docRevStatus={documentRevision?.status}
               documentRevision={documentRevision}
               documentTypeId={documentTypeId || ""}
+            />
+          </Grid>
+        )}
+        {!isPreview && (!values.status || type === DocumentCloneTypeOptions.newOutput) && (
+          <Grid item xs={12}>
+            <DocumentSecurity documentTypeId={documentTypeId} />
+          </Grid>
+        )}
+        {showOutputSection && hasOutput && (
+          <Grid item xs={12}>
+            <FBActiveNoOutput
+              docRevId={initialValues.id}
+              status={documentRevision?.status}
+              version={documentRevision?.version}
+              isDisabled={isDisabledInput}
+              outputDocs={values.outputDocumentTypes as OptionType[]}
             />
           </Grid>
         )}
