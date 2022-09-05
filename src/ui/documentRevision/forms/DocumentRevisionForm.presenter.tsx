@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, includes, isEmpty } from "lodash";
+import { flatten, includes, isEmpty, get } from "lodash";
 import { Observer, observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -207,8 +207,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     FBWorkspaceModeOptions.FORMDESIGN,
   ].includes(_formState?.mode as FBWorkspaceModeOptions) || isEB);
 
-  const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
-    i?.label?.includes("Purchase Order")) : [false];
+  // outputDocumentTypes could be OptionType[] and OptionType in some cases.
+  // @todo: fix it.
+  const outputDocumentTypeName = get(initialValues?.outputDocumentTypes, "[0].label")
+    || get(initialValues?.outputDocumentTypes, "label");
+  const outputIsPO = includes(outputDocumentTypeName, "Purchase Order");
 
   return (
     <FormWrapper
@@ -337,7 +340,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {showOutputSection ? (
           <>
-            {(isPO || includes(outputDocumentTypeName, true)
+            {(isPO || outputIsPO
               ? _tabsState?.tabID !== "details" && (
               <Grid item xs={12}>
                 <AttachmentsField
