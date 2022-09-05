@@ -19,9 +19,9 @@ let createdCompany;
 let loginResponse;
 let adminEmployee;
 let developersGroup;
-let poCreationDate1;
-let poCreationDate2;
 let poPageDetailsId;
+let poHTMLDocRevId;
+
 const apiCreatedCompany: any = {
   employees: [],
   documentTypes: [],
@@ -422,7 +422,15 @@ context("Add Requestor as an approver of the PO", () => {
         email: USERS[1].email,
       });
 
+      cy.intercept({ method: "GET", pathname: "/api/v1/auth/sessionDetails" }, (req) => {
+        req.reply((res) => {
+          if (res.body !== "") {
+            loginResponse = res.body;
+          }
+        });
+      }).as("response");
       cy.cmpSelectCompany({ name: newCompanyName, multiple: true });
+      cy.wait("@response");
     });
   });
 
@@ -935,30 +943,42 @@ context("Add Requestor as an approver of the PO", () => {
     });
   });
 
-  // The following code needs to be enable later for PDF download verification for requestor
-  // context("Verify that downloaded PDF display Requestor information", () => {
-  //   it("Select created PO", () => {
-  //     cy.dlSelectFirstDocument();
-  //   });
+  context("Verify that downloaded PDF display Requestor information", () => {
+    it("Select created PO", () => {
+      cy.dlSelectFirstDocument();
+    });
 
-  //   it(`Click on 'Download HTML'`, () => {
-  //     cy.get(`[data-cy="downloadHtml"]`).arrowClick();
-  //     cy.wait(5000);
-  //   });
-
-  //   it(`Click on 'Download'`, () => {
-  //     cy.get("cr-icon-button").should("have.id", "download").arrowClick({ force: true });
-  //   });
-
-  //   it(`verify 'Download' file contains requestor name correct`, () => {
-  //   });
-  // });
+    it("[API]Get html document and verify PO number and Requestor information", () => {
+      cy.url().then((url: any) => {
+        poHTMLDocRevId = url.split("/").pop();
+        cy.request({
+          method: "GET",
+          url: `${CONFIG.BE_URL}/api/v1/document_revisions/generate_html/${poHTMLDocRevId}`,
+          headers: {
+            Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
+          },
+        }).then((response) => {
+          const responseBody = response.body.toString();
+          expect(responseBody)
+            .contains(`PO Number:          PO-00001-1`)
+            .and.contains("Requestor:")
+            .and.contains(USERS[1].name);
+        });
+      });
+    });
+  });
 
   context("Revise record and check flow", () => {
-    it("Navigate to Created Record", () => {
-      cy.dlSelectFirstDocument();
-      cy.landingPageLoadingElementShouldNotExist();
+    it("Navigate to Purchase Order landing page", () => {
+      cy.navigToPurchaseOrder();
+      cy.dlClearFilters();
     });
+
+
+    it("Select created PO", () => {
+      cy.dlSelectFirstDocument();
+    });
+
     it("Click on revise PO", () => {
       cy.drClickReviseDocument();
     });
@@ -1260,24 +1280,35 @@ context("Add Requestor as an approver of the PO", () => {
     });
   });
 
-  // The following code needs to be enable later for PDF download verification for requestor
-  // context("Verify that downloaded PDF display Requestor information", () => {
-  //   it("Select created PO", () => {
-  //     cy.dlSelectFirstDocument();
-  //   });
+  context("Verify that downloaded PDF display Requestor information", () => {
+    it("Navigate to Purchase Order list", () => {
+      cy.navigToPurchaseOrder();
+      cy.dlClearFilters();
+    });
 
-  //   it(`Click on 'Download HTML'`, () => {
-  //     cy.get(`[data-cy="downloadHtml"]`).arrowClick();
-  //     cy.wait(5000);
-  //   });
+    it("Select created PO", () => {
+      cy.dlSelectFirstDocument();
+    });
 
-  //   it(`Click on 'Download'`, () => {
-  //     cy.get("cr-icon-button").should("have.id", "download").arrowClick({ force: true });
-  //   });
-
-  //   it(`verify 'Download' file contains requestor name correct`, () => {
-  //   });
-  // });
+    it("[API]Get html document and verify PO number and Requestor information", () => {
+      cy.url().then((url: any) => {
+        poHTMLDocRevId = url.split("/").pop();
+        cy.request({
+          method: "GET",
+          url: `${CONFIG.BE_URL}/api/v1/document_revisions/generate_html/${poHTMLDocRevId}`,
+          headers: {
+            Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
+          },
+        }).then((response) => {
+          const responseBody = response.body.toString();
+          expect(responseBody)
+            .contains(`PO Number:          PO-00001-2`)
+            .and.contains("Requestor:")
+            .and.contains(USERS[1].name);
+        });
+      });
+    });
+  });
 });
 
 export { };
