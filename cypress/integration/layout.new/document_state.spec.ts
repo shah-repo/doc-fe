@@ -320,28 +320,6 @@ context(
           }
         );
 
-        xit("Add Approver to approvals list", () => {
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
-        });
-
-        xit("Click on Submit For Approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-
-        xit("Approve Regular Record", () => {
-          cy.wait(3000);
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-          cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
-          cy.checkToastMessage({ exists: false });
-          cy.listLoadingElementShouldNotExist();
-        });
       });
 
       context("Scroll down the page → The status bar should be fixed", () => {
@@ -399,7 +377,6 @@ context(
 
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
-            // cy.sendToEmail();
             cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
             cy.checkToastMessageContains({
               message: "File will be sent to your email shortly.",
@@ -423,6 +400,207 @@ context(
       context("Scroll down the page → The status bar should be fixed", () => {
         it("Scroll down to the bottom of the page", () => {
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+          cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+        });
+      });
+
+      context("Approve the record → The record is in the Released status", () => {
+        it("Approve the record", () => {
+          cy.wait(3000);
+          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+          cy.unClick();
+          cy.wrapWithWaitOnApiCalls(
+            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+            () => {
+              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+            }
+          );
+          cy.checkToastMessage({ exists: false });
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it(`The record is in the ${STATUS_TYPES_LABEL.RELEASED}  state`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+        });
+      });
+
+      context("Check the content of the status bar", () => {
+        it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.RELEASED,
+            title: "Records",
+            docId: "RD-00003",
+            revision: "Rev A",
+          });
+        });
+
+        context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+          it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+            cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+          });
+        });
+
+        context("Right side:", () => {
+          it("Last save should not be present", () => {
+            cy.contains("Last saved:").should("not.exist");
+          });
+
+          it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+          email shortly`, () => {
+            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+            cy.checkToastMessageContains({
+              message: "File will be sent to your email shortly.",
+            });
+            cy.closeAllAlertMessages();
+          });
+
+          context(`Update the record and release the new revision`, () => {
+            it("Check if 'Update Record' button header menu and is functional", () => {
+              cy.get("[data-cy=\"updateRecord\"]").should("be.visible").arrowClick();
+            });
+
+            it("Add Approver to approvals list", () => {
+              cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
+            });
+
+            it("Click on Submit For Approval", () => {
+              cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            });
+
+            it("Approve the record", () => {
+              cy.wait(3000);
+              cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+              cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+              cy.unClick();
+              cy.wrapWithWaitOnApiCalls(
+                [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+                () => {
+                  cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+                }
+              );
+              cy.checkToastMessage({ exists: false });
+              cy.listLoadingElementShouldNotExist();
+            });
+          });
+        });
+      });
+
+      context("Scroll down the page → The status bar should be fixed", () => {
+        it("Scroll down to the bottom of the page", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+          cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+        });
+      });
+
+      context("Click on the References added in step 5 → Referenced documents open in a new tab", () => {
+        it("Open References Tab", () => {
+          cy.get("[data-cy=\"references-icon\"]").click();
+        });
+
+        it("Click on the references", () => {
+          cy.get("#ReferencePresenter-link").click();
+        });
+      });
+
+      context(`Update the record and release the new revision`, () => {
+        it("Check if 'Update Record' button header menu and is functional", () => {
+          cy.get("[data-cy=\"updateRecord\"]").should("be.visible").arrowClick();
+        });
+
+        it("Add Approver to approvals list", () => {
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
+        });
+
+        it("Click on Submit For Approval", () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+
+        it("Approve the record", () => {
+          cy.wait(3000);
+          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+          cy.unClick();
+          cy.wrapWithWaitOnApiCalls(
+            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+            () => {
+              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+            }
+          );
+          cy.checkToastMessage({ exists: false });
+          cy.listLoadingElementShouldNotExist();
+        });
+      });
+
+      context(
+        `Update the record and select revision stage “Void” → Complete the voiding process until 
+      the item goes to ${STATUS_TYPES_LABEL.VOIDED} state`,
+        () => {
+          it("Revise document with 'Void' option", () => {
+            cy.drClickReviseDocument();
+            cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
+            cy.drClickCreateDocumentWithoutApiCall();
+            cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[2].name}`);
+            cy.drApproveAndReleaseDialog();
+            cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
+            cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+          });
+
+          it("Approve the record", () => {
+            cy.wait(3000);
+            cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+            cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+            cy.unClick();
+            cy.wrapWithWaitOnApiCalls(
+              [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+              () => {
+                cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+              }
+            );
+            cy.checkToastMessage({ exists: false });
+            cy.listLoadingElementShouldNotExist();
+          });
+        }
+      );
+
+      context("Check the content of the status bar", () => {
+        it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.VOIDED,
+            title: "Records",
+            docId: "RD-00003",
+            revision: "Rev A.3",
+          });
+        });
+
+        context(`The status bar is RED(${Colors.latest_red_varient})`, () => {
+          it(`Color of Header status bar is RED(${Colors.latest_red_varient})`, () => {
+            cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
+          });
+        });
+
+        context("Right side:", () => {
+          it("Last save should not be present", () => {
+            cy.contains("Last saved:").should("not.exist");
+          });
+
+          it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+          email shortly`, () => {
+            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+            cy.checkToastMessageContains({
+              message: "File will be sent to your email shortly.",
+            });
+            cy.closeAllAlertMessages();
+          });
+
+
+        });
+      });
+
+      context("Scroll down the page → The status bar should be fixed", () => {
+        it("Scroll down to the bottom of the page", () => {
           cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
         });
       });
