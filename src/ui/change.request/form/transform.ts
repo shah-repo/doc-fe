@@ -2,7 +2,7 @@ import { isEmpty, pick } from "lodash";
 import { getStartOfDayDateString } from "../../../common/utils/date";
 import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest/types";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
-import { ChangeRequestFormValues } from "./types";
+import { ChangeRequestFormValues, TemplateOption } from "./types";
 
 interface OptionApproverType {
   value: string;
@@ -36,6 +36,22 @@ export const toUniqGroupOptions = (approvers) => {
   const mergedArray = Object.values(arrayHashmap);
 
   return mergedArray;
+};
+
+export const templateOptionToChangeRequestCreateBody = (option: TemplateOption): ChangeRequestEditRequestBody => {
+  const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+    formDocument: {
+      id: option.value,
+    },
+    title: "",
+    description: "",
+    formInput: option.formInput ?? {},
+    documentType: {
+      id: option.docTypeId,
+    },
+  };
+
+  return changeRequestEditRequestBody;
 };
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
