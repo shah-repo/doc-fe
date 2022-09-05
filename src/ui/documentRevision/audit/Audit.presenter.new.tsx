@@ -384,8 +384,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       change.index = key++;
     });
 
-    if (!singleFields.length && !attachments.length &&
-      !newReferences.length && !deletedReferences.length) {
+    if (!singleFields.length && !attachments.length && !newReferences.length && !deletedReferences.length) {
       return null;
     }
 
