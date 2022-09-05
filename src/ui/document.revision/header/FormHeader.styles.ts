@@ -1,17 +1,7 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { makeStyles, Theme } from "@material-ui/core";
 
-export const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    lastEdited: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 400,
-      fontSize: "12px",
-      lineHeight: "15px",
-      color: Colors.white,
-    },
-    cloudIcon: { marginRight: 10 },
-    linearProgress: { width: "100%" },
-  })
-);
+export const styles = makeStyles((theme: Theme) => ({
+  linearProgress: {
+    width: "100%",
+  },
+}));

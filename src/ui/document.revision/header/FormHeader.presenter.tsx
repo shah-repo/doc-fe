@@ -26,6 +26,11 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   const { workspaceState } = FB.useStores();
   const { _documentRevisionFormState } = SM.useStores();
   const classes = styles();
+  const isLoading =
+    asyncState.status === AsyncStatus.Active
+    || workspaceState?.documentRevApi.loading
+    || _documentRevisionFormState?.loading;
+
   return (
     <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
       {documentRevision &&
@@ -60,9 +65,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
       <Observer>
         {() => (
           <>
-            {(asyncState.status === AsyncStatus.Active ||
-              workspaceState?.documentRevApi.loading ||
-              _documentRevisionFormState?.loading) && (
+            {isLoading && (
               <Box width="100%" pt={1}>
                 <LinearProgress className={classes.linearProgress} data-cy="Document-Save-Progress-Bar" />
               </Box>
