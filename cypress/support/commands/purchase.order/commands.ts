@@ -17,11 +17,13 @@ declare global {
       poAddPOButtonClick(): Chainable<Subject>;
       poEnterDocumentDescription(params: {description: string }): Chainable<Subject>;
       poSelectPartNumber(params: {partNo: string }): Chainable<Subject>;
+      poSelectPartNumberNew(params: {partNo: string }): Chainable<Subject>;
       poEnterQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
       poEnterQuantityReceipt(params: {quantity: string}): Chainable<Subject>;
       poSelectUnits(): Chainable<Subject>;
       poSelectGLCode(): Chainable<Subject>;
       poEnterSupplierPartNumber(params: {partNumber: string}): Chainable<Subject>;
+      poEnterPartDescription(params: {partDescription: string}): Chainable<Subject>;
       poNumberOfUnits(params: {number: string}): Chainable<Subject>;
       poAddDateRequired(): Chainable<Subject>;
       poShippingCost(params: {number: string}): Chainable<Subject>;
@@ -62,6 +64,7 @@ declare global {
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
+      poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
     }
@@ -127,6 +130,12 @@ Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
   cy.get("ul>li[role=option]").contains(params.partNo).arrowClick();
 });
 
+Cypress.Commands.add("poSelectPartNumberNew", (params: {partNo: string }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"partNumber\"]").click({ force: true }).focused().autocompleteSelect(params.partNo);
+  cy.unClick();
+});
+
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
   cy.get("[name=\"order\"]").arrowClick().arrowType(params.quantity);
 });
@@ -149,6 +158,10 @@ Cypress.Commands.add("poSelectGLCode", () => {
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
   cy.get("[name=\"supplierPartNumber\"]").arrowClick().arrowType(params.partNumber);
+});
+
+Cypress.Commands.add("poEnterPartDescription", (params: {partDescription: string}) => {
+  cy.get("[name=\"partNumberTitle\"]").arrowClick().arrowType(params.partDescription);
 });
 
 Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
@@ -363,6 +376,10 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
 
 Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string }) => {
   cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
+});
+
+Cypress.Commands.add("poListVerifyFilterByOrderDate", (params: {orderDate: string }) => {
+  cy.get(`[aria-colindex="9"] input`).arrowType(params.orderDate).wait(500);
 });
 
 Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {

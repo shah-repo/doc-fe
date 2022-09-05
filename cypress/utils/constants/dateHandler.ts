@@ -12,6 +12,7 @@ export const pdfDocDraftyear = momentInPST().format("YYYY");
 export const equimentDueDays = 365;
 export const equimentDueDaysFmt = momentInPST().add(equimentDueDays, "days").format("ddd MMMM D YYYY");
 export const lotDocumentIdRef = ` - LOT #` + lotDateSuffix();
+export const lotIdRef = `LOT #` + lotDateSuffix();
 export const equimentPMDueDays = 40;
 export const equimentCALDueDays = 31;
 export const equimentPMDueDaysFmt = momentInPST().add(equimentPMDueDays, "days").format("ddd MMM D YYYY");
