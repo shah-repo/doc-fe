@@ -9,11 +9,6 @@ import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
-
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
 let createdCompany;
 let loginResponse;
 let adminEmployee;
@@ -413,7 +408,20 @@ context("PO and parts ", () => {
       cy.get(`input[placeholder^="Search"]`).should("exist");
       cy.fbVerifySectionsOnAddField("Section", "Inputs", "Approvals", "Custom Controls",
         "Instructions", "Buttons", "Actions");
-      cy.fbCheckFieldsExistSectionList("Section", "Subsection", "Step");
+    });
+    it("Verify Section  from Add field field", () => {
+      cy.get(`[data-cy="Section-btn"]`).arrowClick();
+      cy.get("[data-cy='Section']").eq(0).should("exist");
+      cy.get("[data-cy='Section']").eq(1).arrowClick();
+      cy.get(`[data-cy="fb-editor-mode-config-0"]`).should("exist");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).should("exist");
+      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      cy.wait(2000);
+      cy.get(`[data-cy="Section-btn"]`).arrowClick();
+      cy.wait(1000);
+    });
+
+    it("Verify 'Input' from Add Field section", () => {
       cy.fbCheckFieldsExistInputsList("Text field", "Checkbox group", "Autocomplete", "Text Editor",
         "Date picker", "Hyperlink", "Select", "Radio Button group", "Paragraph", "File Upload",
         "Blank Template Form", "Quantity", "Timer", "Purchase Order", "Receive Purchase Order",
@@ -522,32 +530,25 @@ context("PO and parts ", () => {
     });
 
     it("move component", () => {
+      cy.get("[data-cy='Textfield for Po  ']").trigger("mouseover");
+      cy.wait(2000);
       cy.get(`[class="drag-handle"]`).eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(`[class="drag-handle"]`).eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-    });
-
-    it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(0)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(1)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
 
     it("Edit Component", () => {
-      cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
       cy.fbAddLabelName({ name: "Textfield for Po Edited" });
       cy.fbAddField();
     });
 
     it("remove Component", () => {
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1518,13 +1519,6 @@ context("PO and parts ", () => {
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
-    it("Add approver", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick({ force: true });
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Save PO", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
@@ -1553,6 +1547,14 @@ context("PO and parts ", () => {
     it("navigate to Details tab ", () => {
       cy.wait(2000);
       cy.drSelectDetailsTab();
+    });
+
+    it("Add approver", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
+      cy.get("[data-cy^='fb-po-approvals-']").arrowClick({ force: true });
+      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
     it("Submit for approval", () => {
