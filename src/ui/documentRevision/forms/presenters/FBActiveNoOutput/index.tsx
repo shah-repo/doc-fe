@@ -1,4 +1,4 @@
-import { Box, Button, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import cx from "classnames";
 import { useFormikContext } from "formik";
 import { get, isEmpty } from "lodash";
@@ -17,13 +17,13 @@ import Text from "../../../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../../constants/urls";
 import { FB, FBDialog, FBDialogState, FBProvider } from "../../../../form.builder";
 import useGetHasPermission from "../../../../hooks/useGetHasPermission";
-import Colors from "../../../../layout/theme/utils/colors";
 import { checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "../../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../../helpers/documentRevisionStatus";
 import { getFBSchemeByDocType } from "../../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../../transform";
 import RenderHtmlField from "../RenderHtmlField";
 import DocumentPreview from "./components/DocumentPreview";
+import styles from "./styles";
 
 interface Props {
   status: DocumentRevisionStatus;
@@ -33,36 +33,6 @@ interface Props {
   outputDocs: OptionType[];
 }
 
-const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    outputGrey: {
-      color: `${theme.palette.text.disabled}`,
-    },
-    previewColumn: {
-      flex: "0 0 auto",
-    },
-    previewButton: {
-      "height": 40,
-      "padding": "10px 20px",
-      "margin": "0 0 20px 0",
-      "borderRadius": 100,
-      "color": Colors.white,
-      "&, &:hover": {
-        backgroundColor: Colors.navy,
-      },
-      "& svg": {
-        marginRight: 10,
-      },
-    },
-    previewButtonDisabled: {
-      color: `${Colors.white} !important`,
-      backgroundColor: `${Colors.dawn} !important`,
-    },
-    previewDialog: {
-      backgroundColor: Colors.white,
-    },
-  }),
-);
 const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   status,
   version,

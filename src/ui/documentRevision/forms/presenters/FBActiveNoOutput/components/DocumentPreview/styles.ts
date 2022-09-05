@@ -1,6 +1,6 @@
-import { Theme, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
-export default makeStyles<Theme>((theme) => ({
+export default makeStyles((theme) => ({
   previewTabContent: {
     paddingBottom: theme.spacing(1.5),
   },
