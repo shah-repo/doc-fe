@@ -36,14 +36,14 @@ context("Intermediate page validation", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[2].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[5], USERS[3], USERS[4]],
             documentTypes: [AdministrativeDocumentDocType],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -51,7 +51,7 @@ context("Intermediate page validation", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[3].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -61,7 +61,7 @@ context("Intermediate page validation", () => {
 
   context("Login company admin", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: adminEmployee.id });
     });
   });
 
@@ -245,20 +245,6 @@ context("Intermediate page validation", () => {
     });
   });
 
-  xcontext("Verify form options and add field button is displayed in Details tab", () => {
-    context("Check form options are displayed at center bottom", () => {
-      it("check 'Form Options' are diplayed at bottom center", () => {
-        cy.intPageVerifyFormOptionsExist();
-      });
-    });
-
-    context("Verify add field button is displayed", () => {
-      it("Verify 'Add Field' button displayed", () => {
-        cy.intPageVerifyAddFieldExist();
-      });
-    });
-  });
-
   context("Click 'Create Document' button and verify predefined fields are displayed", () => {
     it("Click on 'Create Document' button", () => {
       cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
@@ -270,6 +256,20 @@ context("Intermediate page validation", () => {
 
     it("Verify center bottom displays: eye, import and export icons", () => {
       cy.intPageVerifyFormOptionsExist();
+    });
+  });
+
+  context("Verify form options and add field button is displayed in Details tab", () => {
+    context("Check form options are displayed at center bottom", () => {
+      it("check 'Form Options' are diplayed at bottom center", () => {
+        cy.intPageVerifyFormOptionsExist();
+      });
+    });
+
+    context("Verify add field button is displayed", () => {
+      it("Verify 'Add Field' button displayed", () => {
+        cy.intPageVerifyAddFieldExist();
+      });
     });
   });
 
@@ -457,11 +457,15 @@ context("Intermediate page validation", () => {
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(".drag-handle").eq(2)
-          .realMouseMove(500, 0, { position: "center" })
+          .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
       });
 
-      it("Add Checkpoint", () => {
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Add Checkpoint Field 4", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Checkpoint" });
         cy.fbEnterNameValue({ name: "label", value: "fb-checkpoint" });
@@ -497,6 +501,11 @@ context("Intermediate page validation", () => {
       it("Verify date picker field exists", () => {
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .find("input[name^=fb-datepicker-]").should("exist");
+      });
+
+      it("Verify that date picker is in Updated position", () => {
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("[data-cy='datepicker-3']").should("exists");
       });
 
       it("Close Preview dialog", () => {
