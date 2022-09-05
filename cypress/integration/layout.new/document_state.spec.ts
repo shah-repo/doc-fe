@@ -650,6 +650,379 @@ context(
           });
         });
       });
+
+      context(`Create New → The record will be in ${STATUS_TYPES_LABEL.DRAFT} state`, () => {
+        it("Click on Create New button", () => {
+          cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        });
+      });
+
+      context("Check the content of the status bar", () => {
+        it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.DRAFT,
+            title: "Purchase Orders",
+            docId: "PO-00001",
+            revision: "Rev A",
+          });
+        });
+
+        context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
+          it(`Color of Header status bar is BLUE(${Colors.dodger_blue})`, () => {
+            cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+          });
+        });
+
+        context("Right side:", () => {
+          it("Turn off autosave", () => {
+            cy.cmpTurnOffAutosave();
+          });
+
+          it("Enter title", () => {
+            cy.drEnterDocumentDescription({ description: "Purchase order document" });
+          });
+
+          it(`Save → Verify it is functional and the last saved should be updated every time there is a “save” event 
+      (manual or auto)`, () => {
+            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+          });
+
+          it("Last save should be present", () => {
+            cy.contains("Last saved:").should("be.exist");
+          });
+
+          xit("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          });
+
+          xit(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+          email shortly`, () => {
+            cy.sendToEmail();
+            cy.checkToastMessageContains({
+              message: "File will be sent to your email shortly.",
+            });
+            cy.closeAllAlertMessages();
+          });
+        });
+
+        context(
+          `Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” options are displayed → 
+        Verify they’re functional`,
+          () => {
+            it("Clicks on VOID button in header menu and is functional", () => {
+              cy.get("#HeaderMenuButton").arrowClick();
+              cy.get("[data-cy=\"void-button\"]").arrowClick();
+              cy.get("#AlertDialog-cancelButton").arrowClick();
+              cy.checkToastMessage({ exists: false });
+            });
+
+            it("Check if 'Change Owner' button header menu and is functional", () => {
+              cy.get("#HeaderMenuButton").arrowClick();
+              cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+              cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+            });
+          }
+        );
+
+      });
+
+      context("Scroll down the page → The status bar should be fixed", () => {
+        it("Scroll down to the bottom of the page", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+          cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+        });
+
+        it("Turn on autosave", () => {
+          cy.cmpTurnOnAutosave();
+        });
+      });
+
+      context("Add some references", () => {
+        it("Add some references", () => {
+          cy.drSelectReferences(reference.value);
+        });
+      });
+
+      context("Add Required Fields", () => {
+        it(`Select '${USERS[1].name}' for Requestor`, () => {
+          cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        });
+
+        it("Add Required Date", () => {
+          cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+          cy.get(".MuiPickersDay-daySelected").arrowClick();
+        });
+      });
+
+      context("Add an approver and submit for approval → The record will be in “In Review”", () => {
+        it("Add Approver to approvals list", () => {
+          cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
+        });
+
+        it("Click on Submit For Approval", () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+      });
+
+      context("Check the content of the status bar", () => {
+        it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.PENDING_APPROVAL,
+            title: "Purchase Orders",
+            docId: "PO-00001",
+            revision: "Rev A",
+          });
+        });
+
+        context(`The status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
+          it(`Color of Header status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
+            cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+          });
+        });
+
+        context("Right side:", () => {
+          it("Last save should not be present", () => {
+            cy.contains("Last saved:").should("not.exist");
+          });
+
+          xit("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          });
+
+          xit(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+          email shortly`, () => {
+            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+            cy.checkToastMessageContains({
+              message: "File will be sent to your email shortly.",
+            });
+            cy.closeAllAlertMessages();
+          });
+
+          it("Click 'Withdraw Submission' button", () => {
+            cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+              cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+            });
+          });
+
+          it("Click on Submit For Approval", () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          });
+        });
+      });
+
+      context("Scroll down the page → The status bar should be fixed", () => {
+        it("Scroll down to the bottom of the page", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+          cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+        });
+      });
+
+      context("Approve the PO → The PO is in the Released status", () => {
+        it("Approve the PO", () => {
+          cy.wait(3000);
+          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+          cy.unClick();
+          cy.wrapWithWaitOnApiCalls(
+            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+            () => {
+              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+            }
+          );
+          cy.checkToastMessage({ exists: false });
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it(`The PO is in the ${STATUS_TYPES_LABEL.RELEASED}  state`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+        });
+      });
+
+      context("Check the content of the status bar", () => {
+        it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.RELEASED,
+            title: "Purchase Orders",
+            docId: "PO-00001",
+            revision: "Rev A",
+          });
+        });
+
+        context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+          it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+            cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+          });
+        });
+
+        context("Right side:", () => {
+          it("Last save should not be present", () => {
+            cy.contains("Last saved:").should("not.exist");
+          });
+
+          xit(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+          email shortly`, () => {
+            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+            cy.checkToastMessageContains({
+              message: "File will be sent to your email shortly.",
+            });
+            cy.closeAllAlertMessages();
+          });
+
+          context(`Update the PO and release the new revision`, () => {
+            it("Check if 'Revise PO' button header menu and is functional", () => {
+              cy.get("[data-cy=\"updateRecord\"]").should("be.visible").arrowClick();
+            });
+
+            it("Add Approver to approvals list", () => {
+              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+              cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
+            });
+
+            it("Click on Submit For Approval", () => {
+              cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            });
+
+            it("Approve the PO", () => {
+              cy.wait(3000);
+              cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+              cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+              cy.unClick();
+              cy.wrapWithWaitOnApiCalls(
+                [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+                () => {
+                  cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+                }
+              );
+              cy.checkToastMessage({ exists: false });
+              cy.listLoadingElementShouldNotExist();
+            });
+          });
+        });
+      });
+
+      context("Scroll down the page → The status bar should be fixed", () => {
+        it("Scroll down to the bottom of the page", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+          cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+        });
+      });
+
+      context("Click on the References added in step 5 → Referenced documents open in a new tab", () => {
+        it("Open References Tab", () => {
+          cy.get("[data-cy=\"references-icon\"]").click();
+        });
+
+        it("Click on the references", () => {
+          cy.get("#ReferencePresenter-link").click();
+        });
+      });
+
+      context(`Update the PO and release the new revision`, () => {
+        it("Check if 'Update PO' button header menu and is functional", () => {
+          cy.get("[data-cy=\"updateRecord\"]").should("be.visible").arrowClick();
+        });
+
+        it("Add Approver to approvals list", () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+          cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
+        });
+
+        it("Click on Submit For Approval", () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+
+        it("Approve the PO", () => {
+          cy.wait(3000);
+          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+          cy.unClick();
+          cy.wrapWithWaitOnApiCalls(
+            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+            () => {
+              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+            }
+          );
+          cy.checkToastMessage({ exists: false });
+          cy.listLoadingElementShouldNotExist();
+        });
+      });
+
+      context(
+        `Update the PO and select revision stage “Void” → Complete the voiding process until 
+      the item goes to ${STATUS_TYPES_LABEL.VOIDED} state`,
+        () => {
+          it("Revise document with 'Void' option", () => {
+            cy.drClickReviseDocument();
+            cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
+            cy.drClickCreateDocumentWithoutApiCall();
+            cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[2].name}`);
+            cy.drApproveAndReleaseDialog();
+            cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
+            cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+          });
+
+          it("Approve the record", () => {
+            cy.wait(3000);
+            cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+            cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+            cy.unClick();
+            cy.wrapWithWaitOnApiCalls(
+              [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
+              () => {
+                cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+              }
+            );
+            cy.checkToastMessage({ exists: false });
+            cy.listLoadingElementShouldNotExist();
+          });
+        }
+      );
+
+      context("Check the content of the status bar", () => {
+        it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.VOIDED,
+            title: "Purchase Orders",
+            docId: "PO-00001",
+            revision: "Rev OBS",
+          });
+        });
+
+        context(`The status bar is RED(${Colors.latest_red_varient})`, () => {
+          it(`Color of Header status bar is RED(${Colors.latest_red_varient})`, () => {
+            cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
+          });
+        });
+
+        context("Right side:", () => {
+          it("Last save should not be present", () => {
+            cy.contains("Last saved:").should("not.exist");
+          });
+
+          xit(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+          email shortly`, () => {
+            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+            cy.checkToastMessageContains({
+              message: "File will be sent to your email shortly.",
+            });
+            cy.closeAllAlertMessages();
+          });
+
+
+        });
+      });
+
+      context("Scroll down the page → The status bar should be fixed", () => {
+        it("Scroll down to the bottom of the page", () => {
+          cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+        });
+      });
     });
 
     context(`Create a new form with an output of internal type Suppliers`, () => {
