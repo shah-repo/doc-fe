@@ -52,7 +52,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return null;
       }
 
-      if (renderChanges(audit[groupId], key).props.children[0]?.length === 0) {
+      if (renderChanges(audit[groupId], key) === null) {
         return null;
       }
 
@@ -383,6 +383,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     deletedReferences.forEach((change) => {
       change.index = key++;
     });
+
+    if (singleFields.length === 0 && attachments.length === 0 &&
+      newReferences.length === 0 && deletedReferences.length === 0) {
+      return null;
+    }
 
     return (
       <>
