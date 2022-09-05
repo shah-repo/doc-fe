@@ -134,8 +134,8 @@ context("Equipment maintenance and calibration", () => {
     });
 
     context("Add preventative maintenance section", () => {
-      it("Navigate to Cal/PM history", () => {
-        cy.drSelectCalPmHistoryTab();
+      it("Navigate to overview", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Click add PM field", () => {
@@ -297,8 +297,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Export and save the template", () => {
-        // cy.fbExportTemplate({ name: "Equipment_Form" });
-        cy.get("[class=\"MuiIconButton-label\"]").eq(6).arrowClick();
+        cy.get("[data-cy='FBWorkspace-exportTemplate']").eq(0).arrowClick();
         cy.get("[data-cy=\"fb-template-name\"]").arrowType("Equipment_Form");
         cy.get("[data-cy=\"common.add\"]").arrowClick();
       });
@@ -911,10 +910,6 @@ context("Equipment maintenance and calibration", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("navigate to cal/pm history tab", () => {
-      cy.drSelectCalPmHistoryTab();
-    });
-
     it("Select document 'NO' for preventative maintenance required", () => {
       cy.get("[value=\"No\"]").eq(1).arrowClick({ force: true });
     });
@@ -1213,8 +1208,8 @@ context("Equipment maintenance and calibration", () => {
     });
 
     context("Verify Maintenance History is changed to History", () => {
-      it("navigate to cal/pm history tab", () => {
-        cy.drSelectCalPmHistoryTab();
+      it("navigate to overview", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Verify for pm", () => {
