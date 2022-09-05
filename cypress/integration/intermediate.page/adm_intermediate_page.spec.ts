@@ -504,8 +504,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify that date picker is in Updated position", () => {
-        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-          .find("[data-cy='datepicker-3']").should("exists");
+        cy.get(".MuiDialogContent-root>div>div").eq(3).should("have.attr", "data-cy", "datepicker-3");
       });
 
       it("Close Preview dialog", () => {
