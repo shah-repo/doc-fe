@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -328,6 +329,124 @@ context("Intermediate page validation", () => {
       it("Verify 'Add Field' button displayed", () => {
         cy.intPageVerifyAddFieldExist();
       });
+    });
+  });
+
+  context("Add form fields", () => {
+    it("Add Blank Template Form", () => {
+      cy.wait(1000);
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Radio Button group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+      cy.get(`input[name="validators.required"]`).check();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add File Upload", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+      cy.get(`input[name="validators.required_if"]`).check();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group" );
+      cy.unClick();
+      cy.wait(1000);
+      cy.get(`input[value="option1"]`).check({ force: true });
+      cy.fbAddNewFieldButton();
+    });
+  });
+
+  context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify Blank template form group should exist", () => {
+      cy.get(`[data-cy="fb-blank-template"]`).eq(1).should("exist");
+    });
+
+    it("Upload attachment in Blank template form", () => {
+      cy.fixture("image.jpg").then((fileContent) => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+          cy.get(`[id^="fb-attachment-field-fb-blank-template-"]`).eq(1).attachFile({
+            fileContent: fileContent.toString(),
+            fileName: "image.jpg",
+            mimeType: "*",
+            filePath: `fixtures/image.jpg`,
+          });
+        });
+      });
+    });
+
+    it("Verify Radio Button Group", () => {
+      cy.get(`[data-cy="fb-radiobutton-group"]`).eq(1).should("exist");
+    });
+
+    it("Verify Radio Button Group is a required field", () => {
+      cy.get(`[label="fb-radiobutton-group"]`).eq(1).parent().next()
+        .should("have.text", "The fb-radiobutton-group is a required field.");
+    });
+
+    it("Verify Fileupload", () => {
+      cy.get(`[data-cy="fb-fileupload"]`).eq(1).should("exist");
+    });
+
+    it("Input option 1 in radio button group and verify file upload is a required field", () => {
+      cy.get(`input[value="option1"]`).eq(1).check({ force: true });
+      cy.wait(1000);
+      cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).eq(1).parent().parent().next()
+        .should("have.text", "The fb-fileupload field is required when fb-radiobutton-group is option1.");
+    });
+
+    it("Upload attachment in File upload form", () => {
+      cy.fixture("image.jpg").then((fileContent) => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).eq(1).attachFile({
+            fileContent: fileContent.toString(),
+            fileName: "image.jpg",
+            mimeType: "*",
+            filePath: `fixtures/image.jpg`,
+          });
+        });
+      });
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("Populate fields and check preview mode again", () => {
+    it("Upload attachment in Blank template form", () => {
+      cy.elUploadAttachment({ fileName: "test_image.jpg", el: "fb-attachment-field-fb-blank-template-" });
+    });
+
+    it("Edit Radio Button group", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
+      cy.get(`[data-cy="options"]`).arrowType("{enter}option3");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify option 3 in radio button group", () => {
+      cy.get(`input[value="option3"]`).eq(1).should("exist");
+    });
+
+    it("Verify test image is added in preview mode", () => {
+      cy.get(`[data-cy="remove-test_image.jpg"]`).eq(1).parent().prev().contains("test_image.jpg");
     });
   });
 });
