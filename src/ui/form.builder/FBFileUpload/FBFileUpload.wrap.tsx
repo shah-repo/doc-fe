@@ -48,7 +48,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
           formState?.setFieldValue(name, files, withState);
           formState?.setFieldAutosave(name);
           formState?.unlockField(name);
-          if (isEmpty(files?.length)) {
+          if (isEmpty(files)) {
             formState?.validate();
             const isUnderWorkspace = workspaceState?.getSchemaItem(name);
             if (!isUnderWorkspace) { return; }
