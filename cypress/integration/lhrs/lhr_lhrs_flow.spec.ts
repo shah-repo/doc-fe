@@ -1594,6 +1594,36 @@ context("LHR & LHRS Flow", () => {
                 it("verify operators field exists", () => {
                   cy.get("[data-cy='operators-1']").should("exist");
                 });
+                context(`If LHR step has not been started yet,the operators will be fetched from 
+                the Operators field in Access Permissions`, () => {
+                  it("Click on sidebar permission icon to add Operators", () => {
+                    cy.drSelectPermissionTab();
+                  });
+                  it(`Select '${USERS[2].name}' to Assign document to`, () => {
+                    cy.drAssignDocumentTo({ username: USERS[2].name });
+                  });
+                  it("Navigate to Detail Tab", () => {
+                    cy.drSelectDetailsTab();
+                  });
+                  it(`verify operators should have '${USERS[2].name}'`, () => {
+                    cy.wait(2000);
+                    cy.get("[data-cy='LHR Step 1']").arrowClick();
+                    cy.get("[data-cy='operator-name-1-0']").should("have.text", USERS[2].name);
+                  });
+                  it("Click on sidebar permission icon to add Operators", () => {
+                    cy.drSelectPermissionTab();
+                  });
+                  it(`remove operator '${USERS[2].name}'`, () => {
+                    cy.get("[data-cy^='operator-ac-']").find("svg").arrowClick({ force: true });
+                  });
+                  it("Navigate to Detail Tab", () => {
+                    cy.drSelectDetailsTab();
+                  });
+                  it(`verify operators should have '${USERS[2].name}'`, () => {
+                    cy.get("[data-cy='LHR Step 1']").arrowClick();
+                    cy.get("[data-cy='operator-name-1-0']").should("not.exist");
+                  });
+                });
               });
               context("verify the following fields for LHR Step2", () => {
                 it("verify QPI Doc ID and Title", () => {
@@ -1629,6 +1659,37 @@ context("LHR & LHRS Flow", () => {
                 });
                 it("verify operators field exists", () => {
                   cy.get("[data-cy=operators-2]").should("exist");
+                });
+                context(`If LHR step has not been started yet,the operators will be fetched from 
+                the Operators field in Access Permissions`, () => {
+                  it("Click on sidebar permission icon to add Operators", () => {
+                    cy.drSelectPermissionTab();
+                  });
+                  it(`Select '${USERS[2].name}' to Assign document to`, () => {
+                    cy.drAssignDocumentTo({ username: USERS[2].name });
+                  });
+                  it("Navigate to Detail Tab", () => {
+                    cy.drSelectDetailsTab();
+                  });
+                  it(`verify operators should have '${USERS[2].name}'`, () => {
+                    cy.wait(2000);
+                    cy.get("[data-cy='LHR Step 2']").arrowClick();
+                    cy.get("[data-cy='operator-name-2-0']").should("have.text", USERS[2].name);
+                  });
+                  it("Click on sidebar permission icon to add Operators", () => {
+                    cy.drSelectPermissionTab();
+                  });
+                  it(`remove operator '${USERS[2].name}'`, () => {
+                    cy.get("[data-cy^='operator-ac-']").find("svg").arrowClick({ force: true });
+                  });
+                  it("Navigate to Detail Tab", () => {
+                    cy.drSelectDetailsTab();
+                  });
+                  it(`verify operators should have '${USERS[2].name}'`, () => {
+                    cy.get("[data-cy='LHR Step 2']").arrowClick();
+                    cy.get("[data-cy='operator-name-2-0']").should("not.exist");
+                    cy.get("[data-cy=references-icon]").arrowClick();
+                  });
                 });
               });
             }
@@ -1855,7 +1916,6 @@ context("LHR & LHRS Flow", () => {
   context("verify All right panel tabs ", () => {
     context("verify reference tab ", () => {
       it("Reference Tab info", () => {
-        // TODO Remove last
         cy.get("[data-cy=references-icon]").arrowClick();
         cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
       });
@@ -1936,7 +1996,6 @@ context("LHR & LHRS Flow", () => {
       it("Verify Book", () => {
         cy.get("[data-cy='bookmark-icon']").arrowClick();
         cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
-        // TODO Remove last bug is there
         cy.get("[data-cy=references-icon]").arrowClick();
       });
     });
@@ -2023,7 +2082,6 @@ context("LHR & LHRS Flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
       });
-      cy.wait(5000);
     });
     it("Add an Approval User2", () => {
       cy.get("[data-cy^='fb-approvals-approvals']").arrowClick();
@@ -2091,10 +2149,17 @@ context("LHR & LHRS Flow", () => {
       );
     });
 
-    // Operators are not displaying seems to be Bug
-    // it("Expand LHR step - User1 and User2 should be displayed in the Operators list with Pending
-    // approval status", () => {
-    // });
+    context(`Expand LHR step - User1 and User2 should be displayed in the Operators list with Pending
+    approval status`, () => {
+      it(`verify operator '${USERS[2].name}' and Pending status`, () => {
+        cy.get("[data-cy='operator-name-1-0']").should("have.text", USERS[2].name);
+        cy.get("[data-cy='operator-status-1-0']").should("have.text", "PENDING");
+      });
+      it(`verify operator '${USERS[3].name}' and Pending status`, () => {
+        cy.get("[data-cy='operator-name-1-1']").should("have.text", USERS[3].name);
+        cy.get("[data-cy='operator-status-1-1']").should("have.text", "PENDING");
+      });
+    });
     it("verify MPI/QPI Doc ID, Rev and Title", () => {
       cy.get("div[class^='MuiExpansionPanelSummary']").eq(0).arrowClick();
       cy.get("[data-cy='lhrstep-built-in'][value='LHR-00001, Step #1 (MPI-00001, MPI document, Rev 1)']")
@@ -2192,9 +2257,17 @@ context("LHR & LHRS Flow", () => {
   });
   context("Expand LHR step #1", () => {
     // 29
-    // operators are not displaying BUG
-    // Operator List - status of Approved with date and timestamp should
-    // be displayed beside the operator/approver (User 1 and User 2)
+    context(`Operator List - status of Approved with date and timestamp should
+     be displayed beside the operator/approver (User 1 and User 2)`, () => {
+      it(`verify operator '${USERS[2].name}' and APPROVED status`, () => {
+        cy.get("[data-cy='operator-name-1-0']").should("have.text", USERS[2].name);
+        cy.get("[data-cy='operator-status-1-0']").should("have.text", "APPROVED");
+      });
+      it(`verify operator '${USERS[3].name}' and APPROVED status`, () => {
+        cy.get("[data-cy='operator-name-1-1']").should("have.text", USERS[3].name);
+        cy.get("[data-cy='operator-status-1-1']").should("have.text", "APPROVED");
+      });
+    });
     context("Start/Accepted/Rejected quantities should be displayed", () => {
       it("check Start quntity", () => {
         cy.get("[data-cy='start-quantity-value-1']").should("have.text", "10");
@@ -2697,175 +2770,192 @@ context("LHR & LHRS Flow", () => {
             .should("have.css", "border-color", "rgb(244, 67, 54)");
         });
         context("Operators list: LHR/LHRS owner and User 3 should be displayed", () => {
-          it(`verify operators should have '${USERS[1].name}'`, () => {
+          it(`verify operators should have '${USERS[1].name}'and status as APPROVED with timestamp`, () => {
             cy.get("[data-cy='operator-name-2-0']").should("have.text", USERS[1].name);
+            cy.get("[data-cy='operator-status-2-0']").should("have.text", "APPROVED");
+            cy.get("[data-cy='operator-sub-title-2-0']")
+              .should(
+                "contain.text",
+                moment().tz("America/Los_Angeles").format("MMMM D, YYYY"));
           });
-          it(`verify operators should have '${USERS[3].name}'`, () => {
+          it(`verify operators should have '${USERS[3].name}' and status as PENDING`, () => {
             cy.get("[data-cy='operator-name-2-1']").should("have.text", USERS[3].name);
+            cy.get("[data-cy='operator-status-2-1']").should("contain.text", "PENDING");
           });
-          // LHR owner should have Approved status with date and timestamp
-          // User 3 should be displayed with Pending approval status
         });
-
       });
-    });
-  context("Login Third operator and complete step", () => {
 
-    it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
     });
+});
+context("Login Third operator and complete step", () => {
 
-    it("Navigate to LHRs", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.visit(lhrs1DocUrl);
-      });
-    });
+  it("Login user to dashboard", () => {
+    cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
+  });
 
-    context("Complete LHRs with operator", () => {
-      it("Approve step", () => {
-        cy.ebApprove();
-        cy.wait(15000);
-      });
+  it("Navigate to LHRs", () => {
+    cy.navigToRecords();
+    cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.visit(lhrs1DocUrl);
     });
   });
-  context("Login as owner and access LHR", () => {
-    it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-    it("Navig to LHRs #1", () => {
-      cy.reload();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.visit(lhr1DocUrl);
-      });
+
+  context("Complete LHRs with operator", () => {
+    it("Approve step", () => {
+      cy.ebApprove();
+      cy.wait(15000);
     });
   });
-  context("check loader present and  Step 1, Step 2 completed ", () => {
-    it("Select Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-    it("verify loader is present", () => {
-      cy.get("[data-cy='LHR-Step-Progress-Bar']").should("be.visible");
-    });
-    it("verify Step 1 is completed", () => {
-      cy.get("[data-cy='completed-steps']").contains("1").should("exist");
-    });
-    it("verify Step 2 is completed", () => {
-      cy.get("[data-cy='completed-steps']").contains("2").should("exist");
+});
+context("Login as owner and access LHR", () => {
+  it("Login user to dashboard", () => {
+    cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+  });
+  it("Navig to LHRs #1", () => {
+    cy.navigToRecords();
+    cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.visit(lhr1DocUrl);
     });
   });
-  context("In the Details tab, LHR Step #2 should now have status of Completed with date and time stamp", () => {
-    it("LHR Step #2 should have status of Completed", () => {
-      cy.get("[data-cy='form.builder.step.complete']").should(
-        "have.length",
+});
+context("check loader present and  Step 1, Step 2 completed ", () => {
+  it("Select Details tab", () => {
+    cy.drSelectDetailsTab();
+  });
+  it("verify loader is present", () => {
+    cy.get("[data-cy='LHR-Step-Progress-Bar']").should("be.visible");
+  });
+  it("verify Step 1 is completed", () => {
+    cy.get("[data-cy='completed-steps']").contains("1").should("exist");
+  });
+  it("verify Step 2 is completed", () => {
+    cy.get("[data-cy='completed-steps']").contains("2").should("exist");
+  });
+});
+context("In the Details tab, LHR Step #2 should now have status of Completed with date and time stamp", () => {
+  it("LHR Step #2 should have status of Completed", () => {
+    cy.get("[data-cy='form.builder.step.complete']").should(
+      "have.length",
+      "2"
+    );
+  });
+  it("verify LHR Step2 has completed date & time stamp", () => {
+    cy.get("[data-cy='lhr-step-timestamp-2']")
+      .should(
+        "contain.text",
+        moment().tz("America/Los_Angeles").format("MMMM D, YYYY"));
+  });
+  context("Start/Accepted/Rejected quantities should be displayed", () => {
+    it("verify Start quantity exists", () => {
+      cy.get("[data-cy='start-quantity-2']").should("exist");
+      cy.get("[data-cy='start-quantity-value-2']").should(
+        "have.text",
+        "10"
+      );
+    });
+    it("verify Accepted quantity exists", () => {
+      cy.get("[data-cy='accepted-quantity-2']").should("exist");
+      cy.get("[data-cy='accepted-quantity-value-2']").should(
+        "have.text",
+        "8"
+      );
+    });
+    it("verify Rejected quantity exists", () => {
+      cy.get("[data-cy='rejected-quantity-2']").should("exist");
+      cy.get("[data-cy='rejected-quantity-value-2']").should(
+        "have.text",
         "2"
       );
     });
-    it("verify LHR Step2 has copleted date & time stamp", () => {
-      cy.get("[data-cy='lhr-step-timestamp-2']")
+    it("verify operators field exists", () => {
+      cy.get("[data-cy=operators-2]").should("exist");
+    });
+    it(`verify operators should have '${USERS[1].name}'and status as APPROVED with timestamp`, () => {
+      cy.get("[data-cy='operator-name-2-0']").should("have.text", USERS[1].name);
+      cy.get("[data-cy='operator-status-2-0']").should("have.text", "APPROVED");
+      cy.get("[data-cy='operator-sub-title-2-0']")
         .should(
           "contain.text",
           moment().tz("America/Los_Angeles").format("MMMM D, YYYY"));
     });
-    context("Start/Accepted/Rejected quantities should be displayed", () => {
-      it("verify Start quantity exists", () => {
-        cy.get("[data-cy='start-quantity-2']").should("exist");
-        cy.get("[data-cy='start-quantity-value-2']").should(
-          "have.text",
-          "10"
-        );
-      });
-      it("verify Accepted quantity exists", () => {
-        cy.get("[data-cy='accepted-quantity-2']").should("exist");
-        cy.get("[data-cy='accepted-quantity-value-2']").should(
-          "have.text",
-          "8"
-        );
-      });
-      it("verify Rejected quantity exists", () => {
-        cy.get("[data-cy='rejected-quantity-2']").should("exist");
-        cy.get("[data-cy='rejected-quantity-value-2']").should(
-          "have.text",
-          "2"
-        );
-      });
-      it("verify operators field exists", () => {
-        cy.get("[data-cy=operators-2]").should("exist");
-      });
-
+    it(`verify operators should have '${USERS[3].name}' and status as PENDING`, () => {
+      cy.get("[data-cy='operator-name-2-1']").should("have.text", USERS[3].name);
+      cy.get("[data-cy='operator-status-2-1']").should("contain.text", "APPROVED");
+      cy.get("[data-cy='operator-sub-title-2-0']")
+        .should(
+          "contain.text",
+          moment().tz("America/Los_Angeles").format("MMMM D, YYYY"));
     });
-    it("Button beside MPI/QPI should now be changed “View Step”", () => {
-      it("verify Start Step button exists", () => {
-        cy.get("[data-cy='form.builder.view.step']")
-          .eq(1)
-          .should("exist");
-      });
+
+  });
+  it("Button beside MPI/QPI should now be changed “View Step”", () => {
+    it("verify Start Step button exists", () => {
+      cy.get("[data-cy='form.builder.view.step']")
+        .eq(1)
+        .should("exist");
     });
   });
-  context("In the Materials& Equipment tab", () => {
-    it("Navigate to Materials and Equipment Tab", () => {
-      cy.drSelectMaterialsAndEquipmentTab();
-      cy.wait(500);
-      cy.get("[data-cy='form.builder.materials|s']").arrowClick({ multiple: true });
+});
+context("In the Materials& Equipment tab", () => {
+  it("Navigate to Materials and Equipment Tab", () => {
+    cy.drSelectMaterialsAndEquipmentTab();
+    cy.wait(500);
+    cy.get("[data-cy='form.builder.materials|s']").arrowClick({ multiple: true });
+  });
+  it("Materials - Lot Number for the material should be displayed", () => {
+    cy.get(".MuiChip-label").contains(lotNumber);
+  });
+  it("Equipment - Cal/PM Next due dates should be displayed", () => {
+    cy.get("[data-cy='form.builder.equipment']").arrowClick({ multiple: true });
+    cy.get(".MuiChip-label").contains("Callibration Due");
+    cy.get(".MuiChip-label").contains("Preventive Maintenance Due");
+  });
+});
+
+context("In the LHR Overview tab", () => {
+  it("Select Overview tab", () => {
+    cy.drSelectOverviewTab();
+  });
+  it("Check that End Quantity is updated with the quantity in the last step", () => {
+    cy.get("[name='lhr-end-quantity'][value='8']").should("exist");
+  });
+  context("Assign approvers and submit for approval", () => {
+    it("Add an Approval User1", () => {
+      cy.get("[data-cy^='fb-approvals']").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      });
+      cy.wait(5000);
     });
-    it("Materials - Lot Number for the material should be displayed", () => {
-      cy.get(".MuiChip-label").contains(lotNumber);
-    });
-    it("Equipment - Cal/PM Next due dates should be displayed", () => {
-      cy.get("[data-cy='form.builder.equipment']").arrowClick({ multiple: true });
-      cy.get(".MuiChip-label").contains("Callibration Due");
-      cy.get(".MuiChip-label").contains("Preventive Maintenance Due");
+    it("Submit LHR for approval", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
   });
-
-  context("In the LHR Overview tab", () => {
-    it("Select Overview tab", () => {
-      cy.drSelectOverviewTab();
+  context("Approve LHR. Lot# with RD should be created and should be displayed in the References section", () => {
+    it("Approve LHR", () => {
+      cy.get("[data-cy='form.builder.request.approve']").contains("Approve").arrowClick();
+      cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy='common.confirm']").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
     });
-    it("Check that End Quantity is updated with the quantity in the last step", () => {
-      cy.get("[name='lhr-end-quantity'][value='8']").should("exist");
+  });
+  context("Go to Lots landing page and check that Lot is displayed there as well.", () => {
+    it("Navigate to lots", () => {
+      cy.navigToLots();
     });
-    context("Assign approvers and submit for approval", () => {
-      it("Add an Approval User1", () => {
-        cy.get("[data-cy^='fb-approvals']").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
-        cy.wait(5000);
-      });
-      it("Submit LHR for approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+    it("Verify filter for LOT #", () => {
+      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
+      cy.get(`th[aria-colindex="1"] input`).arrowType(lotNumber);
+      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", lotNumber);
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
-    context("Approve LHR. Lot# with RD should be created and should be displayed in the References section", () => {
-      it("Approve LHR", () => {
-        cy.get("[data-cy='form.builder.request.approve']").contains("Approve").arrowClick();
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
-      });
-      it("Lot# with RD should be created and should be displayed in the References section.", () => {
-        // its not displaying on references
-      });
-    });
-    context("Go to Lots landing page and check that Lot is displayed there as well.", () => {
-      it("Navigate to lots", () => {
-        cy.navigToLots();
-      });
-      it("Verify filter for LOT #", () => {
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="1"] input`).arrowType(lotNumber);
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", lotNumber);
-        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-      });
-    });
-
   });
 });
 
