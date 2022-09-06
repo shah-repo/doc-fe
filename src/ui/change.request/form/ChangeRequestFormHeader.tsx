@@ -24,7 +24,7 @@ const ChangeRequestFormHeader: React.FunctionComponent<ChangeRequestFormHeaderPr
   >
     <Box paddingBottom={1.25}>
       <Title
-        name="name"
+        name="title"
         documentTypeId={documentTypeId}
         disabled={isDisabledInput}
         value={title}

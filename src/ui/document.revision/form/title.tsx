@@ -19,6 +19,7 @@ type Props = OwnProps;
 
 const Title: React.FunctionComponent<Props> = ({
   documentTypeId = "",
+  name,
   ...props
 }) => {
   const intl = useIntl();
@@ -42,16 +43,16 @@ const Title: React.FunctionComponent<Props> = ({
       value: props.value,
     });
   }
-  console.log(options);
-
   if (!isVisible) {
     return null;
   }
 
+  const nameToUse = name ?? "name";
+
   return (
     <CustomLabelTooltip {...{ tooltipConfig }}>
       <CreatableField
-        name="name"
+        name={nameToUse}
         creatableProps={{ id: "Title-field" }}
         isDisabled={props.disabled}
         placeholder={intl.formatMessage({ id: "form.builder.enter.title" })}

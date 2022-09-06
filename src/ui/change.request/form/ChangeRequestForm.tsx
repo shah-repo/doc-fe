@@ -13,7 +13,7 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import Sidebar from "../../common/components/Sidebar";
 import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
-import { FBSchemaProps, FBWorkspace } from "../../form.builder";
+import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../form.builder";
 import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
 import FormHeader from "./assessmentForm/FormHeader";
@@ -47,7 +47,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   withoutBottomBar,
   autosave,
 }) => {
-  const { _formState, _tabsState } = SM.useStores();
+  const { _tabsState } = SM.useStores();
 
   const [isDrawerOpen, setOpen] = React.useState(true);
   // const classes = styles({ isDrawerOpen });
@@ -128,7 +128,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       const tabType = tabInfo.type;
                       const showTabContent = _tabsState?.tabID === tabInfo.tabId;
 
-                      console.log(tabType, showTabContent, _formState);
+                      // console.log(tabType, showTabContent, _formState);
 
                       return (
                         <SMBox key={index} {...{ py: 2 }}>
@@ -143,7 +143,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 mode={mode}
                               />
                           }
-                          {tabType === "DYNAMIC" && showTabContent &&
+                          {tabType === "DYNAMIC" && showTabContent && mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace
                               isPortal={false}
                               initialValues={cloneDeep(changeRequest?.formInput)}
