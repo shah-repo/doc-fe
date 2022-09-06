@@ -2,7 +2,9 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -276,6 +278,161 @@ context("Intermediate page validation", () => {
 
     it("Check 'Approval Roles' is displayed", () => {
       cy.intPageVerifyApprovalRolesExist();
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    it("Revise the existing DAM", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context(`Click on ‘Add Field’ button in one of the tabs`, () => {
+    it("Add Section", () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-section" });
+      cy.fbSelectCheckboxValue("inspectionSection");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Select Field", () => {
+      SystemRequirement("FB-0130");
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbSelectCheckboxValue("copyableValue");
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.fbAddNewFieldButton();
+    });
+
+    it(`Add 'Text Field'`, () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
+      cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+      cy.get(`input[value^="disabled"]`).check();
+      cy.get(`input[name="validators.required_if"]`).check();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-select-field" );
+      cy.get(`[id="mui-component-select-validators.required_if.value"]`).arrowClick();
+      cy.get("[data-value='option1']").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+    });
+
+    it("Save form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify Field 1 exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^='fb-section-']").should("exist");
+    });
+
+    it("Verify Field 2 exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy='select-1']").should("exist");
+    });
+
+    it("Verify Field 2 Required error message exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find(".MuiFormHelperText-root.Mui-error").contains("The fb-select-field is a required field.").should("exist");
+    });
+
+    it("Verify Field 3 exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy='textfield-2']").should("exist");
+    });
+
+    it("Verify Field 3 error message should not exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find(".MuiFormHelperText-root.Mui-error")
+        .contains("The TEXT FIELD field is required when fb-select-field is option1.")
+        .should("not.exist");
+    });
+
+    it("Select option1", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^='mui-component-select-fb-select-field-']").arrowClick();
+      cy.get("[data-value='option1']").arrowClick();
+    });
+
+    it("Verify Field 3 error message should exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find(".MuiFormHelperText-root.Mui-error")
+        .contains("The TEXT FIELD field is required when fb-select-field is option1.")
+        .should("exist");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("Edit fields & Remove all fields", () => {
+    it("Remove Field1", () => {
+      cy.get("[class*='fb-section-']").trigger("mouseover");
+      cy.get("[data-cy='remove-schema-item']").eq(0).arrowClick();
+    });
+
+    it("Remove validation for TEXT FIELD", () => {
+      cy.get("[data-cy='textfield-2']").trigger("mouseover");
+      cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true });
+      cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+      cy.get(`input[name="validators.required_if"]`).arrowClick();
+      cy.get("[value='default']").arrowClick();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Remove Field2", () => {
+      cy.get("[data-cy='select-1']").trigger("mouseover");
+      cy.get("[data-cy='remove-schema-item']").eq(0).arrowClick();
+    });
+
+    it("Remove Field3", () => {
+      cy.get("[data-cy='textfield-2']").trigger("mouseover");
+      cy.get("[data-cy='remove-schema-item']").eq(0).arrowClick();
+    });
+  });
+
+  context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Verify Field 1 exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[id^='fb-section-']").should("not.exist");
+    });
+
+    it("Verify Field 2 exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy='select-1']").should("not.exist");
+    });
+
+    it("Verify Field 2 exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy='textfield-2']").should("not.exist");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
     });
   });
 });
