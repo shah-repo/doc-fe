@@ -147,6 +147,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (audit.nextValue as DocumentType).documentTypeName;
         break;
       case "approvals.status":
+        if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
+          returnValue = (audit.nextValue as Employee).user?.name;
+          break;
+        }
       case "status":
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
@@ -180,6 +184,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case "s3link":
         returnValue = <AuditDownloadS3link s3link={audit.nextValue as string}/>;
         break;
+      case "childrenParts":
       case "formDocument": {
         const { name, displayRevision, document } = audit.nextValue as DocumentRevision;
         returnValue = (<div data-cy={dataCy}>{`${document.docId} - revision ${displayRevision} - ${name}`}</div>);

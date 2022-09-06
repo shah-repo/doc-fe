@@ -215,6 +215,7 @@
   "common.cancel": "Cancel",
   "common.proceed": "Proceed",
   "common.confirm": "Confirm",
+  "common.confirm.change": "Confirm Change",
   "common.ok": "Ok",
   "common.edit": "Edit",
   "common.status": "Status",
@@ -545,6 +546,8 @@
   "documentRevision.audit.redline.BOOLEAN_NEW": "Redline",
   "documentRevision.audit.approvers.removed.by": "Approval Removed by {owner}",
   "documentRevision.audit.formDocument": "Form Set To",
+  "documentRevision.audit.childrenParts.ARRAY_DELETED": "Part removed",
+  "documentRevision.audit.childrenParts.ARRAY_NEW": "Part added",
   "document.revision.audit.download.s3link.error": "Attachment can't be downloaded",
   "document.revision.quntity.error": "You cannot exceed more than 10 numbers after the decimal in the \"Quantity\" field.",
   "document.revision.quntity.positive.error": "\"Quantity\" field must be a positive number.",
@@ -741,6 +744,7 @@
   "form.builder.approving.roles.placeholder": "Start typing to see the list…",
   "form.builder.purhcase.order.items.placeholder": "Item A\nItem B\nItem C\n...",
   "form.builder.add.item": "Add item",
+  "form.builder.add.line.item": "ADD LINE ITEM",
   "form.builder.field.level.name": "Level name",
   "form.builder.field.limit": "Limit",
   "form.builder.field.qunatity.ordered": "Quantity Ordered",
@@ -835,6 +839,7 @@
   "form.builder.set.approvers": "Set Approvers",
   "form.builder.approval.reset.msg": "Section is already approved. Are you sure you want to reset the state?",
   "form.builder.lot": "Lot",
+  "form.builder.po.details": "PO Details",
   "form.builder.po.line.item": "Purchase Order Line Item",
   "form.builder.po.items.received": "Items Received",
   "form.builder.po.create.lot": "Create Lot",
@@ -1322,5 +1327,6 @@
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",
   "meq.chip.nextCalDate": "Next Callibration Due :",
-  "meq.chip.prevMaintance": "Preventive Maintenance Due : "
+  "meq.chip.prevMaintance": "Preventive Maintenance Due : ",
+  "form.builder.addEquiSpec": "Add Cal or PM"
 }

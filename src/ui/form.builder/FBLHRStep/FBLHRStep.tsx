@@ -13,6 +13,7 @@ import { ReactComponent as CollapseMoreIcon } from "../../../assets/images/Colla
 import { ReactComponent as ExpandMoreIcon } from "../../../assets/images/ExpandMoreIcon.svg";
 import { ReactComponent as OperatorApprovedIcon } from "../../../assets/images/OperatorApproved.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { User } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
@@ -22,7 +23,6 @@ import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedure
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { FBLHRStepStyles } from "./FBLHRStep.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
-import { User } from "../../../state/ducks/common/types";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -155,7 +155,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               </Box>
               {stepLHRs &&
                 (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status)) &&
-                (<Box component={"span"}>
+                (<Box component={"span"} data-cy={`lhr-step-timestamp-${stepIndex}`}>
                   <Box component="span" marginRight={0.75}>&bull;</Box>
                   {isDocumentRevisionReleased(stepLHRs.status)
                     ? getFormattedDateString(
@@ -255,39 +255,39 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           <Box mb={3.75} mt={3.75}>
             <Grid container spacing={3}>
               <Grid item xs={4}>
-                <Typography className={classes.fontTitle}>
+                <Typography className={classes.fontTitle} data-cy={`start-quantity-${stepIndex}`}>
                   <Text translation="form.builder.start.quantity" />
                 </Typography>
-                <Typography className={classes.subTitle}>
+                <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
                   {stepLHRs?.formInput?.["lhrs-start-quantity"]}
                 </Typography>
               </Grid>
               <Grid item xs={4}>
-                <Typography className={classes.fontTitle}>
+                <Typography className={classes.fontTitle}  data-cy={`accepted-quantity-${stepIndex}`}>
                   <Text translation="form.builder.accepted.quantity" />
                 </Typography>
-                <Typography className={classes.subTitle}>
+                <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
                   {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
                 </Typography>
               </Grid>
               <Grid item xs={4}>
-                <Typography className={classes.fontTitle}>
+                <Typography className={classes.fontTitle} data-cy={`rejected-quantity-${stepIndex}`}>
                   <Text translation="form.builder.rejected.quantity" />
                 </Typography>
-                <Typography className={classes.subTitle}>
+                <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
                   {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
                 </Typography>
               </Grid>
             </Grid>
           </Box>
           <Box>
-            <Box className={classes.fontTitle}>
+            <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>
               <Text translation="common.operators" />
             </Box>
             <List>
               {map(operators, (operator, index) => (
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
-                  <ListItemAvatar>
+                  <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
                     {operator.user.avatar ? (
                       <Badge
                         overlap="circle"
@@ -311,18 +311,19 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                   <ListItemText
                     style={{ marginLeft: 4 }}
                     primary={
-                      <div className={classes.operatorTitle}>
+                      <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
                         {operator.user?.name}
                       </div>
                     }
                     secondary={
                       <Observer>
                         {() => (
-                          <>
+                          <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
                             <Typography
                               component="span"
                               variant="body2"
                               className={classes.operatorStatus}
+                              data-cy={`operator-status-${stepIndex}-${index}`}
                             >
                               {
                                 getStatusInfo(lhrStepState?.approvals, operator.stepId)
@@ -335,7 +336,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                               getFormattedDateString(
                                 getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt,
                                 MomentFormats.DateTime)}
-                          </>
+                          </div>
                         )}
                       </Observer>
                     }

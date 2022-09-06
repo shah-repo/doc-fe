@@ -54,10 +54,11 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   );
   const group: DocumentGroupType =
     docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+
   return (
     <Box>
       <FBWorkspaceSocket />
-      {isStarter && <FBStarter />}
+      {isStarter &&  _tabsState?.tabID !== "calpmhistory" && <FBStarter />}
       {!isStarter && size(schema) > 0 && (
         <FBSchema
           {...{ schema }}

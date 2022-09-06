@@ -38,6 +38,12 @@ const FBPurchaseOrderClasses = makeStyles({
       whiteSpace: "nowrap",
     },
   },
+  button: {
+    borderRadius: 0,
+    borderStyle: "dashed",
+    borderColor: Colors.dodger_blue,
+    height: "40px",
+  },
 });
 
 export default FBPurchaseOrderClasses;

@@ -325,6 +325,9 @@ export function KendoPanel<T extends { id?: string }>({
 
   // On field config: inline edit
   const update = (dataItem: DTMRowItem) => {
+    // need to convert
+    dataItem.active = dataItem.active === true || dataItem.active.toString() ===
+    getTranslatedText(TranslatedText[DisplayText.ACTIVE]);
     const newData = {
       documentTypeName: dataItem.documentTypeName,
       documentTypeAcronym: dataItem.documentTypeAcronym,

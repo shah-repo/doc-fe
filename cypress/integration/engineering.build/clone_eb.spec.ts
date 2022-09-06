@@ -14,6 +14,7 @@ import { EngineeringBuild } from "../../utils/constants/documentTypes/engineerin
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -740,6 +741,7 @@ context("Clone EB Flow test", () => {
 
     context("Clone EB select 'Yes' and  Click on the CONTINUE button", () => {
       it("Click Clone EB button", () => {
+        SystemRequirement("REQ-5230");
         cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
         cy.ebClickCloneEB();
         cy.ebCloneClickNo();
@@ -930,7 +932,12 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({force: true}).wait(500);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add attachment", () => {
@@ -958,6 +965,7 @@ context("Clone EB Flow test", () => {
 
     context("Clone EB select 'No' and  Click on the CONTINUE button", () => {
       it("Click Clone EB button", () => {
+        SystemRequirement("REQ-5230");
         cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
         cy.ebClickCloneEB();
         cy.ebCloneClickNo();
@@ -1136,7 +1144,12 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({force: true}).wait(500);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add attachment", () => {
@@ -1164,6 +1177,7 @@ context("Clone EB Flow test", () => {
 
     context("Clone EB select 'No' and  Click on the CONTINUE button", () => {
       it("Click Clone EB button", () => {
+        SystemRequirement("REQ-5230");
         cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
         cy.ebClickCloneEB();
         cy.ebCloneClickNo();
