@@ -1,12 +1,23 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+
+let group;
+let initialArDocument;
+let purchaseOrderDocumentType;
+let createdPOFormDocument;
+let createdPODocument;
+let formDocumentType;
+let approvalRequestDocumentType;
+
 
 const docType = "Form";
 const receivingOutputDocType = "Receivable";
@@ -42,17 +53,318 @@ context("Intermediate page validation", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           done();
         });
       });
     });
 
+
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
         done();
+      });
+    });
+
+    it("[API]Create PO-s", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>PO Form document</p>",
+              document: {
+                docId: "FM-00002",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "PO Form document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: purchaseOrderDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                    tabId: "details",
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                    tabId: "details",
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                    tabId: "lineitems",
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "poapprovals",
+                    deleteDisabled: false,
+                    name: "fb-po-approvals-kqqix31p",
+                    uniqueSchemaItem: true,
+                    index: 3,
+                    tabId: "details",
+                  },
+                ],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPOFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPOFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => {
+              cy.poAPICreatePO({
+                payload: {
+                  name: "",
+                  attachments: [],
+                  referenceTo: [],
+                  formDocument: { id: createdPOFormDocument.id },
+                  description: "API PO document",
+                  revisionChangeType: RevisionChangeType.NextRevision,
+                  document: {
+                    docId: "POT-00001",
+                    documentType: {
+                      id: purchaseOrderDocumentType[0].id,
+                    },
+                    securityList: {
+                      operators: [],
+                      securityEmployees: [],
+                      securityGroups: [
+                        {
+                          id: group.body[0].id,
+                        },
+                      ],
+                    },
+                  },
+                  formInput: {
+                    "po-items-built-in": {
+                      items: [{
+                        id: "kqqj708c",
+                        type: "service",
+                        date: (new Date()).toISOString(),
+                        tax: false,
+                        capitalEquipment: false,
+                        isTraceabilityRequired: false,
+                        description: "office cleaning",
+                        serviceId: "cleaning",
+                        units: "hours",
+                        order: 5,
+                        glCode: "code 1",
+                        unitPrice: 30,
+                        received: 0,
+                        totalAmount: "150.00",
+                        formattedDate: (new Date()).toLocaleDateString("en-US"),
+                        index: 0,
+                      }],
+                      tax: "0.00",
+                      taxRate: 9.25,
+                      subTotal: "150.00",
+                      totalAmount: "150.00",
+                      shippingCost: "0.00",
+                      currency: "USD",
+                      exchangeRate: 1,
+                      totalInUSD: "150.00",
+                      dateOfExchangeRate: "",
+                    },
+                    "po-status-built-in": "Open",
+                  },
+                },
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then((response) => {
+                createdPODocument = response;
+                cy.drAPIApproveAndRelease({
+                  documentId: createdPODocument.id,
+                  payload: {
+                    effectiveDate: (new Date()).toISOString(),
+                    documentType: { id: approvalRequestDocumentType[0].id },
+                    formDocument: { id: initialArDocument[0].id },
+                    approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                  },
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                }).then(() => {
+                  cy.poAPICreatePO({
+                    payload: {
+                      name: "",
+                      attachments: [],
+                      referenceTo: [],
+                      formDocument: { id: createdPOFormDocument.id },
+                      description: "API PO document 2",
+                      revisionChangeType: RevisionChangeType.NextRevision,
+                      document: {
+                        docId: "POT-00002",
+                        documentType: {
+                          id: purchaseOrderDocumentType[0].id,
+                        },
+                        securityList: {
+                          operators: [],
+                          securityEmployees: [],
+                          securityGroups: [
+                            {
+                              id: group.body[0].id,
+                            },
+                          ],
+                        },
+                      },
+                      formInput: {
+                        "po-items-built-in": {
+                          items: [{
+                            id: "kdpr51z9",
+                            type: "service",
+                            date: (new Date()).toISOString(),
+                            tax: false,
+                            capitalEquipment: false,
+                            isTraceabilityRequired: false,
+                            description: "transporting products",
+                            serviceId: "transportingID",
+                            units: "hours",
+                            order: 5,
+                            glCode: "code 1",
+                            unitPrice: 40,
+                            received: 0,
+                            totalAmount: "200.00",
+                            formattedDate: (new Date()).toLocaleDateString("en-US"),
+                            index: 0,
+                          },
+                          {
+                            id: "kdpr51z8",
+                            type: "service",
+                            date: (new Date()).toISOString(),
+                            tax: false,
+                            capitalEquipment: false,
+                            isTraceabilityRequired: false,
+                            description: "office cleaning",
+                            serviceId: "cleaningID",
+                            units: "hours",
+                            order: 6,
+                            glCode: "code 1",
+                            unitPrice: 30,
+                            received: 0,
+                            totalAmount: "180.00",
+                            formattedDate: (new Date()).toLocaleDateString("en-US"),
+                            index: 1,
+                          }],
+                          tax: "0.00",
+                          taxRate: 9.25,
+                          subTotal: "380.00",
+                          totalAmount: "380.00",
+                          shippingCost: "0.00",
+                          currency: "USD",
+                          exchangeRate: 1,
+                          totalInUSD: "380.00",
+                          dateOfExchangeRate: "",
+                        },
+                        "po-status-built-in": "Open",
+                      },
+                    },
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                  }).then((response) => {
+                    createdPODocument = response;
+                    cy.drAPIApproveAndRelease({
+                      documentId: createdPODocument.id,
+                      payload: {
+                        effectiveDate: (new Date()).toISOString(),
+                        documentType: { id: approvalRequestDocumentType[0].id },
+                        formDocument: { id: initialArDocument[0].id },
+                        approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                      },
+                      employeeId: adminEmployee.id,
+                      sessionId: loginResponse.sessionId,
+                    }).then(() => {
+                      done();
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
       });
     });
   });
@@ -277,5 +589,159 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyAddFieldExist();
       });
     });
+  });
+
+  context("Verify Preview mode for overview tab after doc creation", () => {
+    it("Select overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Verify 'Add Field' button displayed", () => {
+      cy.intPageVerifyAddFieldExist();
+    });
+
+    it("check 'Form Options' are diplayed at bottom center", () => {
+      cy.intPageVerifyFormOptionsExist();
+    });
+
+    it("Click on Preview", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+    });
+
+    it("Verify Approval should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("exist");
+    });
+
+    it("Select Approval", () => {
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).autocompleteSelect(USERS[1].name);
+    });
+
+    it("Close Preview window", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+
+    it("Reopen Preview window and verify approval block should not have any value", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("not.contain.value");
+    });
+  });
+
+  context("Verify Preview mode after doc creation and check is it editable", () => {
+    it("Navigate to detail tab ", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Verify form preview button in Overview Tab", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+    });
+
+    it("Verify tabs overview, detail", () => {
+      cy.verifyTabs("overview", "details");
+    });
+
+    it("Verify receivable po field should be visible", () => {
+      cy.get(".MuiDialogContent-root [data-cy='porec-fb-receive-po']").last().should("be.visible");
+    });
+
+    it("Verify receivable po field editable or not", () => {
+      cy.get(".MuiDialogContent-root [data-cy='porec-fb-receive-po']").last().arrowType("Test");
+    });
+
+    it("Close Preview window", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+
+    it("Reopen Preview window and verify receivable po field should not have any value", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get(`.MuiDialogContent-root [data-cy^="porec-fb-receive-po"]`).should("not.contain.value");
+    });
+
+    it("Close Preview window", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("Add FB fields and verify field 2 is visible when field 1 has value 'YES'", () => {
+
+    it("Add textfield", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "FbReceivable" });
+      cy.fbAddField();
+    });
+
+    it("Add textfield", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "FbTrainingText" });
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.get("input[value^='visibility']").check();
+      cy.get(`input[name="validators.required_if"]`).check();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("FbReceivable");
+      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Yes");
+      cy.pause();
+      cy.fbAddField();
+    });
+
+    it("Add select field with no validation ", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
+      cy.fbEnterNameValue({ name: "label", value: "Select field" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbAddField();
+    });
+
+    xit("Add textfield", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "FbTrainingText" });
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.get("input[value^='visibility']").check();
+      cy.get(`input[name="validators.required_if"]`).check();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Receivable Po");
+      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Yes");
+      cy.fbAddField();
+    });
+
+
+    // it("Add radio button group", () => {
+    //   cy.fbAddNewFieldWhenHiddenLastPlace();
+    //   cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+    //   cy.fbEnterNameValue({ name: "label", value: "RadioBtnGroup for inline" });
+    //   cy.fbGroupOptions("One", "Two", "Three");
+    //   cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+    //   cy.get("input[value^='visibility']").check();
+    //   cy.get(`input[name="validators.required_if"]`).check();
+    //   cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("FbTrainingText");
+    //   cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Yes");
+    //   cy.fbAddField();
+    // });
+
+    // it("Verify form preview button in Overview Tab", () => {
+    //   cy.get("[data-cy='FBWorkspace-clickView']").click();
+    // });
+
+    // it("Verify FB Text field 'Text1' is visible and radio button group is hidden", () => {
+    //   cy.get("[name^='fb-training-text']").last().should("exist");
+    //   cy.get("[name^='radio-btn-group-for-inline']").should("be.hidden");
+    // });
+
+    // it("Enter value 'Yes' in text field Text1 Radio button group should be visible", () => {
+    //   cy.get("[name^='fb-training-text']").last().arrowType("Yes").wait(2000);
+    //   cy.get("[name^='radio-btn-group-for-inline']").last().should("exist");
+    //   cy.get("[data-cy='RadioBtnGroup for inline']").should("be.visible");
+    // });
+
+    // it("Remove value 'Yes' in text field Text1 Radio button group should be hidden", () => {
+    //   cy.get("[name^='fb-training-text']").last().arrowType("Ye").clear();
+    //   cy.get("[name^='radio-btn-group-for-inline']").last().should("be.hidden");
+    //   cy.get("[data-cy='RadioBtnGroup for inline']").should("be.hidden");
+    // });
+
+    // it("Close the preview mode dialog", () => {
+    //   cy.get("[name^='fb-training-text']").last().arrowType("Yes");
+    //   cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    // });
+
   });
 });
