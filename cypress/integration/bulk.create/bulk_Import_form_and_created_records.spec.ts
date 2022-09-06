@@ -518,31 +518,26 @@ context("Export Bulk", () => {
     });
 
     it("move Component", () => {
+      cy.get("[data-cy='Textfield for bulk import test']").trigger("mouseover");
+      cy.wait(2000);
       cy.get(`[class="drag-handle"]`).eq(9)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(`[class="drag-handle"]`).eq(8)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
-    });
-    it("move Component again", () => {
-      cy.get(`[class="drag-handle"]`).eq(8)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(9)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
+      cy.unClick();
     });
 
     it("Edit Component", () => {
-      cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"edit-schema-item\"]").eq(8).arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
       cy.fbAddLabelName({ name: "Textfield for bulk import Edited" });
       cy.fbAddField();
     });
 
     it("remove Component", () => {
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"remove-schema-item\"]").eq(8).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -604,31 +599,25 @@ context("Export Bulk", () => {
       });
 
       it("move Component", () => {
+        cy.get("[data-cy='Textfield for New bulk import test']").trigger("mouseover");
+        cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(`[class="drag-handle"]`).eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-      });
-      it("move Component again", () => {
-        cy.get(`[class="drag-handle"]`).eq(0)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(1)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for New bulk import Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
