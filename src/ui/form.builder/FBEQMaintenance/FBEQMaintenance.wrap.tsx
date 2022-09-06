@@ -5,7 +5,21 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import {
+  DocumentRevision,
+  DocumentRevisionStatus,
+  FBOutputDocumentType,
+  RevisionChangeType,
+} from "../../../state/ducks/documentRevisions/types";
+import useAsync from "../../hooks/useAsync";
+import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import useActionCreator from "../../hooks/useActionCreator";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { useSelector } from "react-redux";
+import { ApplicationState } from "../../../state/reducers";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
+import { toastError } from "../../components/notifications";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>
@@ -70,10 +84,59 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       ) || !isEqStatusReleased || isEmpty(pmFormId);
     }
 
+    const async = useAsync<DocumentRevision>({
+      onSuccess: (createdDocumentRevision?) => {
+        console.log(createdDocumentRevision);
+      },
+      onError: (error) => {
+        toastError(error);
+      },
+    });
+    const create = useActionCreator(documentRevisionsActions.create);
+
+    const pmForm = useSelector((state: ApplicationState) =>
+      documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""));
+
     // MARK: @methods
     handleAdd = () => {
       if (!docRevId && !pmFormId) { return; }
-      window.open(`/document_revision/${pmFormId}/create_maintenance/${docRevId}/${name}`);
+
+      const values: DocumentRevisionFormValues = {
+        formDocument: {
+          id: pmFormId,
+        },
+        parentEquipment: {
+          id: docRevId as string,
+        },
+        equipmentSection: name,
+        document: {
+          docId: "123", //
+        }, //
+        revisionChangeType: RevisionChangeType.NextRevision,
+        name: "",
+        description: "",
+        revisionStage: 1,
+        retrain: false,
+        attachments: [],
+        referenceTo: [],
+
+        securityEmployees: [],
+        securityGroups: [],
+        operators: [],
+      };
+
+      // REQ: It only has to be populated if there is one output type
+      const pmFormOutput = pmForm?.formTemplate?.outputDocumentTypes;
+      if (pmFormOutput?.length === 1) {
+        values.document = {
+          ...values.document,
+          documentType: pmFormOutput[0] as FBOutputDocumentType,
+        };
+      }
+
+      const body = toNewVersionRequestBody(values);
+
+      async.start(create, body, async);
     };
 
     const filterOutOption = (docRev: AvailableMaintenanceForm, inputValue: string ) => {
