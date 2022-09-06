@@ -13,7 +13,7 @@ import { checkIsDocumentDirectApproved, checkIsDocumentPO } from "./checkDocumen
  * @param outputTypes Array of output types that will be checked.
  */
 const hasDirectApproval = (outputTypes: DocumentType[]) =>
-  some(outputTypes, (type) => checkIsDocumentDirectApproved(type.groupOptions));
+  some(outputTypes, (type) => checkIsDocumentDirectApproved(type?.groupOptions));
 
 const hasPO = (outputTypes: DocumentType[]) =>
   some(outputTypes, (type) => checkIsDocumentPO(type.groupOptions));
@@ -45,7 +45,7 @@ export const getFBSchemeByDocType = (
   const finalScheme: FBSchemaProps[] = documentTypes.reduce((scheme, typeId) => {
     const rec = documentTypesById[typeId];
     // If type has scheme
-    if (!rec.schema) { return scheme; }
+    if (!rec?.schema) { return scheme; }
     const typeScheme = map(rec.schema, ((schemaItem) => ({
       ...schemaItem,
       ...find(originScheme, { name: schemaItem.name }),

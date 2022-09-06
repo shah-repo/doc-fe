@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { each } from "lodash";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -13,6 +14,7 @@ declare global {
       dashRejectApprovalForListItem(params: {listItem: string}): Chainable<Subject>;
       dashVerifyNoPendingActions(): Chainable<Subject>;
       dashApproverFirstFromList(): Chainable<Subject>;
+      checkStylePropExists(params: {content: string; props: any}): Chainable<Subject>;
     }
   }
 }
@@ -69,6 +71,12 @@ Cypress.Commands.add("dashApproverFirstFromList", () => {
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("checkStylePropExists", (params: {content: string; props: any}) => {
+  each( params.props, ( value, name ) => {
+    cy.contains(params.content).should("have.css", name, value);
+  } );
 });
 
 export { };

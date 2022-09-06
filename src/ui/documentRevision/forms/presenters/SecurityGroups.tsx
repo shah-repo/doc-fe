@@ -6,9 +6,10 @@ import AutocompleteField from "../../../components/forms/fields/Autocomplete/Aut
 
 interface Props {
   portal?: boolean;
+  isDisabled?: boolean;
 }
 
-const SecurityGroups: React.FunctionComponent<Props> = ({ portal }) => {
+const SecurityGroups: React.FunctionComponent<Props> = ({ portal, isDisabled }) => {
   const intl = useIntl();
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
@@ -26,6 +27,7 @@ const SecurityGroups: React.FunctionComponent<Props> = ({ portal }) => {
       }}
       options={groupOptions}
       portal={portal}
+      isDisabled={isDisabled}
     />
   );
 };

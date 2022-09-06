@@ -669,10 +669,7 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Navigate to Overview tab", () => {
@@ -845,9 +842,7 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to Overview tab", () => {

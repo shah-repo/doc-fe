@@ -45,14 +45,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty, index } = change;
+      const { owner, ownerUser, ownerThirdParty } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
 
       if (change.field.includes("-built-in")) {
         return null;
       }
 
-      if (index && renderChanges(audit[groupId], key).props.children[index]?.length === 0) {
+      if (!renderChanges(audit[groupId], key)) {
         return null;
       }
 
@@ -383,6 +383,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     deletedReferences.forEach((change) => {
       change.index = key++;
     });
+
+    if (!singleFields.length && !attachments.length && !newReferences.length && !deletedReferences.length) {
+      return null;
+    }
 
     return (
       <>
