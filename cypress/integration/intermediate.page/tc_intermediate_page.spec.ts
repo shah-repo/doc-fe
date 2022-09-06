@@ -450,7 +450,6 @@ context("Intermediate page validation", () => {
     it("Verify select user to train should be visible", () => {
       cy.get(`.MuiDialogContent-root [data-cy="training-select-users-to-train"]`).should("exist");
     });
-
   });
 
   context("Verify fields in preview mode editable or not", () => {
@@ -568,6 +567,4 @@ context("Intermediate page validation", () => {
     });
 
   });
-
-
 });

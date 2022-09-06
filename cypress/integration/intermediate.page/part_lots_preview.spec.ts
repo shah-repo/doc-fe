@@ -107,7 +107,6 @@ context("Part Lot Preview mode validation", () => {
     });
   });
 
-
   context("Verify schema fields are not displayed", () => {
     it("Check 'Initial Quantity' is not displayed", () => {
       cy.intPageVerifyInitialQuantityNotExist();
@@ -194,12 +193,9 @@ context("Part Lot Preview mode validation", () => {
       it("Close Preview dialog", () => {
         cy.intPageClosePreviewDialog();
       });
-
     });
 
     context("verify predefined fields are displayed", () => {
-
-
       it("Click 'Preview Layout' button", () => {
         cy.intPageClickPreviewLayout();
       });
@@ -247,10 +243,6 @@ context("Part Lot Preview mode validation", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
 
-    // it("Click 'Preview Layout' button", () => {
-    //   cy.intPageClickPreviewLayout();
-    // });
-
     it("Check 'Initial Quantity' is displayed", () => {
       cy.intPageVerifyInitialQuantityExist();
     });
@@ -274,7 +266,6 @@ context("Part Lot Preview mode validation", () => {
     it("Close Preview dialog", () => {
       cy.intPageClosePreviewDialog();
     });
-
   });
 
   context("Verify form options and add field button is displayed in Details tab", () => {
@@ -291,10 +282,7 @@ context("Part Lot Preview mode validation", () => {
     });
   });
 
-  // 1p
-
   context("Verify Preview mode for overview tab after doc creation", () => {
-
     it("Select overview tab", () => {
       cy.drSelectOverviewTab();
     });
@@ -362,11 +350,9 @@ context("Part Lot Preview mode validation", () => {
     it("Close the preview mode", () => {
       cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
-
   });
 
   context("Verify fields in preview mode editable or not", () => {
-
     it("verify form preview button in Overview Tab", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
@@ -410,11 +396,9 @@ context("Part Lot Preview mode validation", () => {
     it("Close the preview mode dialog", () => {
       cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
-
   });
 
   context("Add FB fields and verify field 2 is visible when field 1 has value 'YES'", () => {
-
     it("Add Checkbox group", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
@@ -426,33 +410,16 @@ context("Part Lot Preview mode validation", () => {
     });
 
     it("Add Autocomplete", () => {
-
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
-
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
       cy.get("input[value^='disabled']").check(); // validators.required_if_in
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox");
       cy.get(`[name="validators.required_if_in.value"]`).parent().find("input").check();
       cy.fbAddNewFieldButton();
-    });
-
-
-    xit("Add radio button group", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
-      cy.fbEnterNameValue({ name: "label", value: "RadioBtnGroup for inline" });
-      cy.fbGroupOptions("One", "Two", "Three");
-      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
-      cy.get("input[value^='visibility']").check();
-      cy.get(`input[name="validators.required_if"]`).check();
-      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("FbTrainingText");
-      cy.get(`[data-cy="validators.required_if.value"]`).parent().find("button").arrowClick({ force: true });
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
-      cy.fbAddField();
     });
 
     it("Verify form preview button in Overview Tab", () => {
@@ -462,7 +429,6 @@ context("Part Lot Preview mode validation", () => {
     it("Verify fb Autocomplete input is disabled ", () => {
       cy.get(".MuiDialogContent-root input[data-cy^='fb-autocomplete']").last().should("be.disabled");
     });
-
 
     it("Checked  'isEnabled' checkbox Fb autocomplete should be enabled", () => {
       cy.get(".MuiDialogContent-root [value='isFieldEnabled']").last().check();
@@ -477,11 +443,9 @@ context("Part Lot Preview mode validation", () => {
     it("Close the preview mode dialog", () => {
       cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
-
   });
 
   context("Remove the FB fields validation and verify", () => {
-
     it("Edit Component", () => {
       cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true });
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);

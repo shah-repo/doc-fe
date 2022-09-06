@@ -318,7 +318,6 @@ context("Intermediate page validation", () => {
   });
 
   // start of scenarion 1o of ENC-11456
-
   context("Verify Preview mode after doc creation", () => {
     it("Verify form preview button in Overview Tab", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
