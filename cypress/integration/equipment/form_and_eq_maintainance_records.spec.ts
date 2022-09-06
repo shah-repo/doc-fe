@@ -222,8 +222,8 @@ context("Equipment maintenance and calibration", () => {
     });
 
     context("Move & Edit & Remove component", () => {
-      it("Navigate to overview", () => {
-        cy.drSelectOverviewTab();
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
       });
 
       it("Add component", () => {
@@ -234,36 +234,32 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("move Component", () => {
-        cy.get(`[class="drag-handle"]`).eq(1)
+        cy.get("[data-cy='Textfield for equipment test']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(`[class="drag-handle"]`).eq(2)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(`[class="drag-handle"]`).eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
-      });
-      it("move Component again", () => {
-        cy.get(`[class="drag-handle"]`).eq(0)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(1)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
+        cy.unClick();
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for equipment test Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add component", () => {
+        cy.drSelectOverviewTab();
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for equipment test" });
@@ -352,8 +348,8 @@ context("Equipment maintenance and calibration", () => {
     });
 
     context("Move & Edit & Remove component", () => {
-      it("Navigate to overview", () => {
-        cy.drSelectOverviewTab();
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
       });
 
       it("Add component", () => {
@@ -364,31 +360,26 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("move Component", () => {
+        cy.get("[data-cy='Textfield for new equipment test']").trigger("mouseover");
+        cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(2)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(`[class="drag-handle"]`).eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
-      });
-      it("move Component again", () => {
-        cy.get(`[class="drag-handle"]`).eq(0)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(2)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
+        cy.unClick();
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for New equipment test Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -470,28 +461,31 @@ context("Equipment maintenance and calibration", () => {
       it("Add component", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-        cy.fbAddLabelName({ name: "Textfield for PM " });
+        cy.fbAddLabelName({ name: "Textfield for PM" });
         cy.fbAddField();
       });
 
       it("move Component", () => {
+        cy.get("[data-cy='Textfield for PM']").trigger("mouseover");
+        cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(`[class="drag-handle"]`).eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
+        cy.unClick();
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for PM Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -580,43 +574,38 @@ context("Equipment maintenance and calibration", () => {
     });
 
     context("Move & Edit & Remove component", () => {
-      it("Navigate to overview", () => {
+      it("Navigate to overview tab", () => {
         cy.drSelectOverviewTab();
       });
 
       it("Add component", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-        cy.fbAddLabelName({ name: "Textfield for New PM " });
+        cy.fbAddLabelName({ name: "Textfield for New PM" });
         cy.fbAddField();
       });
 
       it("move Component", () => {
+        cy.get("[data-cy='Textfield for New PM']").trigger("mouseover");
+        cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(2)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(`[class="drag-handle"]`).eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
-      });
-      it("move Component again", () => {
-        cy.get(`[class="drag-handle"]`).eq(0)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(2)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
+        cy.unClick();
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for New PM Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -694,11 +683,13 @@ context("Equipment maintenance and calibration", () => {
       it("Add component", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-        cy.fbAddLabelName({ name: "Textfield for CAL " });
+        cy.fbAddLabelName({ name: "Textfield for CAL" });
         cy.fbAddField();
       });
 
       it("move Component", () => {
+        cy.get("[data-cy='Textfield for CAL']").trigger("mouseover");
+        cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
@@ -708,14 +699,14 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for CAL Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -806,36 +797,31 @@ context("Equipment maintenance and calibration", () => {
       it("Add component", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-        cy.fbAddLabelName({ name: "Textfield for New CAL " });
+        cy.fbAddLabelName({ name: "Textfield for New CAL" });
         cy.fbAddField();
       });
 
       it("move Component", () => {
+        cy.get("[data-cy='Textfield for New CAL']").trigger("mouseover");
+        cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(2)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(`[class="drag-handle"]`).eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
-      });
-      it("move Component again", () => {
-        cy.get(`[class="drag-handle"]`).eq(0)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(2)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
+        cy.unClick();
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for New CAL Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
