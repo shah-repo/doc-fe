@@ -410,7 +410,6 @@ context("NCO document type management with record doc type", () => {
 
   context("Create form for SEED document", () => {
     it("Navigates to document list", () => {
-      cy.pause();
       cy.navigToDocumentList();
     });
 
@@ -531,7 +530,6 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Save document", () => {
-      cy.pause();
       cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
@@ -627,7 +625,6 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Save document", () => {
-      cy.pause();
       cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
