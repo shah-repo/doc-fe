@@ -281,4 +281,93 @@ context("Intermediate page validation", () => {
       });
     });
   });
+
+  context("Make sure fields and tabs displayed in non preview mode are the same displayed in Preview mode", () => {
+    context("Add form fields", () => {
+      it("Add Checkbox group", () => {
+        cy.fbAddNewField();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("Option1", "Option2", "Other");
+        cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+        cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+        cy.fbAddNewFieldButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Add Text Editor", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
+        cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+        cy.get(`input[value^="disabled"]`).check();
+        cy.get(`input[name="validators.required_if_in"]`).check();
+        cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
+        cy.get(`input[type="checkbox"][value="Other"]`).first().check();
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add Inline Approval", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval" });
+        cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+        cy.fbAddNewFieldButton();
+      });
+    });
+
+    context("Verify Form fields in non preview mode", () => {
+      it("Verify 'Checkbox' field is displayed", () => {
+        cy.get(`[data-cy="Checkbox"]`).should("exist");
+        cy.get(`[name^="checkbox"]`).find("input").eq(0).should("contain.value", "Option1");
+        cy.get(`[name^="checkbox"]`).find("input").eq(1).should("contain.value", "Option2");
+        cy.get(`[name^="checkbox"]`).find("input").eq(2).should("contain.value", "Other");
+      });
+
+      it("Verify 'Text Editor' field is displayed", () => {
+        cy.get(`[data-cy="fb-text-editor"]`).should("exist");
+      });
+
+      it("Verify 'Inline Approval' field is displayed", () => {
+        cy.get(`[data-cy="fb-inline-approval"]`).should("exist");
+      });
+    });
+
+    context("Verify Form fields in preview mode", () => {
+      it("Open Preview dialog", () => {
+        cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      });
+
+      it("Verify 'Checkbox' field is displayed", () => {
+        cy.get(`[data-cy="Checkbox"]`).eq(1).should("exist");
+        cy.get(`[name^="checkbox"]`).eq(1).find("input").eq(0).should("contain.value", "Option1");
+        cy.get(`[name^="checkbox"]`).eq(1).find("input").eq(1).should("contain.value", "Option2");
+        cy.get(`[name^="checkbox"]`).eq(1).find("input").eq(2).should("contain.value", "Other");
+        cy.get(`[name^="checkbox"]`).eq(1).parent().find("p")
+          .should("contain.text", "The Checkbox is a required field.");
+      });
+
+      // it("Verify 'Text Editor' field is displayed and disabled", () => {
+      //   cy.get(`[data-cy^="fb-text-editor"]`).should("have.css", "style", "curser: inherit");
+      // });
+
+      it("Verify 'Inline Approval' field is displayed", () => {
+        cy.get(`[data-cy="fb-inline-approval"]`).eq(1).should("exist");
+      });
+
+      it("Checkbox option 'Other' checked", () => {
+        cy.get(`input[type="checkbox"][value="Other"]`).last().check();
+      });
+
+      // it("Verify 'Text Editor' field is displayed and is editable", () => {
+      //   cy.get(`[data-cy^="fb-text-editor"]`).should("have.css", "style", "curser: text");
+      // });
+
+      it("Close Preview dialog", () => {
+        cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+      });
+    });
+  });
 });
