@@ -161,7 +161,7 @@ context("Check inline approval Record flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval" });
-        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("sopan group");
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect(groupName);
         cy.fbAddNewFieldButton();
       });
 
@@ -240,7 +240,7 @@ context("Check inline approval Record flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval" });
-        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("sopan group");
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect(groupName);
         cy.fbAddNewFieldButton();
       });
 
