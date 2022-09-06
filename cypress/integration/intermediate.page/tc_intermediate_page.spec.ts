@@ -565,6 +565,5 @@ context("Intermediate page validation", () => {
       cy.get("[name^='radio-btn-group-for-inline']").last().should("exist");
       cy.get("[data-cy='RadioBtnGroup for inline']").should("be.visible");
     });
-
   });
 });
