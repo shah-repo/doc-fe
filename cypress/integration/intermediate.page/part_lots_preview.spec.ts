@@ -9,9 +9,9 @@ let loginResponse;
 let adminEmployee;
 
 const docType = "Form";
-const lotsOutputDocType = "Lots";
+const lotsOutputDocType = "Component Specification Lot";
 
-context("Intermediate page validation", () => {
+context("Part Lot Preview mode validation", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -88,60 +88,12 @@ context("Intermediate page validation", () => {
       cy.drEnterDocumentDescription({ description: lotsOutputDocType + " description" });
     });
 
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-  });
-
-  context(`Select document type ${docType} and check fields`, () => {
     it(`Select ${docType} document type`, () => {
       cy.drSelectDocumentType({ documentType: docType });
     });
 
-    it("Verify Document id is assigned by system", () => {
-      cy.get("input[id='document.docId']").should("contain.value", "FM-000");
-    });
-
-    it("Verify Document id is editable", () => {
-      cy.intPageVerifyDocIdIsEditable();
-    });
-
-    it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
-      cy.get("[data-cy=\"field-document.documentType.id\"]").parent()
-        .should("have.class", "MuiGrid-grid-xs-6").next()
-        .should("have.class", "MuiGrid-grid-xs-6")
-        .should("contain.text", "Document ID");
-    });
-
-    it("Verify 'Revision Stage' field is displayed", () => {
-      cy.intPageVerifyRevisionStageExist();
-    });
-
-    it("Verify 'Training required' field is displayed", () => {
-      cy.intPageVerifyTrainingRequiredExist();
-    });
-
-    it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]").parent().parent()
-        .should("have.class", "MuiGrid-grid-xs-6").next()
-        .should("have.class", "MuiGrid-grid-xs-6")
-        .should("contain.text", "Training Required");
-    });
-
-    it("Verify 'Selected Users' field is displayed", () => {
-      cy.intPageVerifySelectedUsersExist();
-    });
-
-    it("Verify 'Selected Groups' field is displayed", () => {
-      cy.intPageVerifySelectedGroupsExist();
-    });
-
-    it("Verify 'Attachment' field is displayed", () => {
-      cy.intPageVerifyAttachmentExist();
-    });
-
-    it("Verify 'Preview Layout' button is disabled and grayed out", () => {
-      cy.intPageVerifyPreviewLayoutButtonDisabled();
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 
@@ -155,7 +107,8 @@ context("Intermediate page validation", () => {
     });
   });
 
-  context("Verify predefined fields are not displayed", () => {
+
+  context("Verify schema fields are not displayed", () => {
     it("Check 'Initial Quantity' is not displayed", () => {
       cy.intPageVerifyInitialQuantityNotExist();
     });
@@ -198,7 +151,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Details' tab is displayed", () => {
-        cy.intPageVerifyDetailsTabExist();
+        cy.verifyTabs("overview", "details");
       });
     });
 
@@ -209,13 +162,6 @@ context("Intermediate page validation", () => {
 
       it("Verify Document id is not editable", () => {
         cy.intPageVerifyDocIdIsNotEditable();
-      });
-
-      it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
-        cy.get("[data-cy=\"field-document.documentType.id\"]").parent()
-          .should("have.class", "MuiGrid-grid-xs-6").next()
-          .should("have.class", "MuiGrid-grid-xs-6")
-          .should("contain.text", "Document ID");
       });
 
       it("Verify 'Revision Stage' field is displayed", () => {
@@ -240,9 +186,28 @@ context("Intermediate page validation", () => {
       it("Verify Output document type is displayed", () => {
         cy.intPageVerifyOutputDocTypeExist();
       });
+
+      it("Check 'Approvals' is displayed", () => {
+        cy.intPageVerifyApprovalsExist();
+      });
+
+      it("Close Preview dialog", () => {
+        cy.intPageClosePreviewDialog();
+      });
+
     });
 
     context("verify predefined fields are displayed", () => {
+
+
+      it("Click 'Preview Layout' button", () => {
+        cy.intPageClickPreviewLayout();
+      });
+
+      it("Navigate to detail tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Check 'Initial Quantity' is displayed", () => {
         cy.intPageVerifyInitialQuantityExist();
       });
@@ -263,10 +228,6 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyInspectionOverrideExist();
       });
 
-      it("Check 'Approvals' is displayed", () => {
-        cy.intPageVerifyApprovalsExist();
-      });
-
       it("Close Preview dialog", () => {
         cy.intPageClosePreviewDialog();
       });
@@ -277,6 +238,18 @@ context("Intermediate page validation", () => {
     it("Click on 'Create Document' button", () => {
       cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
+
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("verify form preview button in Overview Tab", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+    });
+
+    // it("Click 'Preview Layout' button", () => {
+    //   cy.intPageClickPreviewLayout();
+    // });
 
     it("Check 'Initial Quantity' is displayed", () => {
       cy.intPageVerifyInitialQuantityExist();
@@ -298,9 +271,10 @@ context("Intermediate page validation", () => {
       cy.intPageVerifyInspectionOverrideExist();
     });
 
-    it("Check 'Approvals' is displayed", () => {
-      cy.intPageVerifyApprovalsExist();
+    it("Close Preview dialog", () => {
+      cy.intPageClosePreviewDialog();
     });
+
   });
 
   context("Verify form options and add field button is displayed in Details tab", () => {
@@ -317,15 +291,52 @@ context("Intermediate page validation", () => {
     });
   });
 
-  // start of scenarion 1o of ENC-11456
+  // 1p
 
-  context("Verify Preview mode after doc creation", () => {
-    it("verify form preview button in Overview Tab", () => {
+  context("Verify Preview mode for overview tab after doc creation", () => {
+
+    it("Select overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Verify 'Add Field' button displayed", () => {
+      cy.intPageVerifyAddFieldExist();
+    });
+
+    it("check 'Form Options' are diplayed at bottom center", () => {
+      cy.intPageVerifyFormOptionsExist();
+    });
+
+    it("Click on Preview", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
 
-    it("Verify tabs overview, detail", () => {
-      cy.verifyTabs("details");
+    it("Verify Approval should be visible", () => {
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("exist");
+    });
+
+    it("Select Approval", () => {
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).autocompleteSelect(USERS[1].name);
+    });
+
+    it("Close Preview window", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+
+    it("Reopen Preview window and verify approval block should not have any value", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("not.contain.value");
+    });
+  });
+
+  context("Verify Preview mode after doc creation for detail tab", () => {
+
+    it("Select detail tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("verify form preview button in Overview Tab", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
 
     it("Verify lot  quantity visible", () => {
@@ -348,9 +359,8 @@ context("Intermediate page validation", () => {
       cy.get(`.MuiDialogContent-root [name="100-inspection-override"]`).should("be.visible");
     });
 
-    it("Verify 'FB approval'", () => {
-      cy.get(".MuiDialogContent-root [name^='fb-approvals']").last().scrollIntoView();
-      cy.get(".MuiDialogContent-root [name^='fb-approvals']").last().should("be.visible");
+    it("Close the preview mode", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
 
   });
@@ -361,7 +371,6 @@ context("Intermediate page validation", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
 
-
     it("Enter initial lot  quantity", () => {
       cy.get(`.MuiDialogContent-root [name="lot_quantity"]`).arrowType("10");
     });
@@ -371,26 +380,19 @@ context("Intermediate page validation", () => {
     });
 
     it("Enter Expiration date", () => {
-      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`).parent().find("button").arrowClick({ force: true });
+      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`)
+        .parent().find("button").arrowClick({ force: true });
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
     it("Select Part", () => {
       cy.get(`.MuiDialogContent-root [data-cy="lot_part"]`).autocompleteSelect("Part document");
+      cy.unClick();
     });
 
     it("Check 100% override", () => {
       cy.get(`.MuiDialogContent-root [value="100% Inspection Override"]`).check();
     });
-
-    it("Add one approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-    });
-
-    // it("Verify 'FB approval'", () => {
-    //   cy.get(".MuiDialogContent-root [name^='fb-approvals']").last().scrollIntoView();
-    //   cy.get(".MuiDialogContent-root [name^='fb-approvals']").last().should("be.visible");
-    // });
 
     it("Close the preview mode", () => {
       cy.get(`[data-cy="dialog-close"]`).arrowClick();
@@ -402,9 +404,7 @@ context("Intermediate page validation", () => {
       cy.get(`.MuiDialogContent-root [name="lot_usable_quantity"]`).should("not.contain.value");
       cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`).should("not.contain.value");
       cy.get(`.MuiDialogContent-root [data-cy="lot_part"]`).should("not.contain.value");
-
       cy.get(`.MuiDialogContent-root [value="100% Inspection Override"]`).should("not.be.checked");
-      cy.get(".MuiDialogContent-root [name^='fb-approvals']").last().should("not.contain.value");
     });
 
     it("Close the preview mode dialog", () => {
@@ -415,15 +415,33 @@ context("Intermediate page validation", () => {
 
   context("Add FB fields and verify field 2 is visible when field 1 has value 'YES'", () => {
 
-    it("Add textfield", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "FbTrainingText" });
-      cy.fbAddField();
+    it("Add Checkbox group", () => {
+      cy.fbAddNewField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("isFieldEnabled");
+      cy.fbAddNewFieldButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add Autocomplete", () => {
+
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
+
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.get("input[value^='disabled']").check(); // validators.required_if_in
+      cy.get(`input[name="validators.required_if_in"]`).check();
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox");
+      cy.get(`[name="validators.required_if_in.value"]`).parent().find("input").check();
+      cy.fbAddNewFieldButton();
     });
 
 
-    it("Add radio button group", () => {
+    xit("Add radio button group", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "RadioBtnGroup for inline" });
@@ -441,30 +459,22 @@ context("Intermediate page validation", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
 
-    it("Verify FB Text field 'Text1' is visible and radio button group is hidden", () => {
-      cy.get("[name^='fb-training-text']").last().should("exist");
-      cy.get("[name^='radio-btn-group-for-inline']").should("be.hidden");
+    it("Verify fb Autocomplete input is disabled ", () => {
+      cy.get(".MuiDialogContent-root input[data-cy^='fb-autocomplete']").last().should("be.disabled");
     });
 
 
-    it("Enter  'Date' in Expiration field  Radio button group should be visible", () => {
-      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`).parent()
-        .find("button").arrowClick({ force: true });
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
-      cy.get("[name^='radio-btn-group-for-inline']").last().should("exist");
-      cy.get("[data-cy='RadioBtnGroup for inline']").should("be.visible");
+    it("Checked  'isEnabled' checkbox Fb autocomplete should be enabled", () => {
+      cy.get(".MuiDialogContent-root [value='isFieldEnabled']").last().check();
+      cy.get(".MuiDialogContent-root input[data-cy^='fb-autocomplete']").last().should("not.be.disabled");
     });
 
-    it("Remove value 'Yes' in text field Text1 Radio button group should be hidden", () => {
-      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`).clear();
-      cy.get("[name^='radio-btn-group-for-inline']").last().should("be.hidden");
-      cy.get("[data-cy='RadioBtnGroup for inline']").should("be.hidden");
+    it("Uncheck the checkbox 'isEnabled' and verify fb autocomplete is disabled", () => {
+      cy.get(".MuiDialogContent-root [value='isFieldEnabled']").last().uncheck();
+      cy.get(".MuiDialogContent-root input[data-cy^='fb-autocomplete']").last().should("be.disabled");
     });
 
     it("Close the preview mode dialog", () => {
-      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`).parent()
-        .find("button").arrowClick({ force: true });
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
 
@@ -473,10 +483,10 @@ context("Intermediate page validation", () => {
   context("Remove the FB fields validation and verify", () => {
 
     it("Edit Component", () => {
-      cy.get("[data-cy='edit-schema-item']").last().arrowClick({ force: true });
+      cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true });
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
       cy.get("input[value^='default']").check();
-      cy.get(`input[name="validators.required_if"]`).uncheck();
+      cy.get(`input[name="validators.required_if_in"]`).uncheck();
       cy.fbAddField();
     });
 
@@ -484,13 +494,8 @@ context("Intermediate page validation", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
 
-    it("Verify Text field and radio button group is visible after removal of validation", () => {
-      cy.get("[name^='radio-btn-group-for-inline']").last().should("exist");
-      cy.get("[data-cy='RadioBtnGroup for inline']").should("be.visible");
+    it("Verify autocomplete input should be enabled  after removal of validation", () => {
+      cy.get(".MuiDialogContent-root [data-cy^='fb-autocomplete']").last().should("be.enabled");
     });
-
   });
-
-
-  //
 });

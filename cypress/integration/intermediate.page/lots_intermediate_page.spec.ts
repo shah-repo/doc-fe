@@ -107,7 +107,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
-      cy.get("[data-cy=\"field-document.documentType.id\"]").parent()
+      cy.get("[data-cy='field-document.documentType.id']").parent()
         .should("have.class", "MuiGrid-grid-xs-6").next()
         .should("have.class", "MuiGrid-grid-xs-6")
         .should("contain.text", "Document ID");
@@ -122,7 +122,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]").parent().parent()
+      cy.get("[data-cy='field-revisionStage']").parent().parent()
         .should("have.class", "MuiGrid-grid-xs-6").next()
         .should("have.class", "MuiGrid-grid-xs-6")
         .should("contain.text", "Training Required");
@@ -212,7 +212,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
-        cy.get("[data-cy=\"field-document.documentType.id\"]").parent()
+        cy.get("[data-cy='field-document.documentType.id']").parent()
           .should("have.class", "MuiGrid-grid-xs-6").next()
           .should("have.class", "MuiGrid-grid-xs-6")
           .should("contain.text", "Document ID");
@@ -227,7 +227,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
-        cy.get("[data-cy=\"field-revisionStage\"]").parent().parent()
+        cy.get("[data-cy='field-revisionStage']").parent().parent()
           .should("have.class", "MuiGrid-grid-xs-6").next()
           .should("have.class", "MuiGrid-grid-xs-6")
           .should("contain.text", "Training Required");
@@ -275,7 +275,7 @@ context("Intermediate page validation", () => {
 
   context("Click 'Create Document' button and verify predefined fields are displayed", () => {
     it("Click on 'Create Document' button", () => {
-      cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.get("[id='DocumentRevisionForm-submit']").arrowClick();
     });
 
     it("Check 'Initial Quantity' is displayed", () => {
