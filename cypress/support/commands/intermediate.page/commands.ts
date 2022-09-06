@@ -124,6 +124,8 @@ declare global {
       intPageVerifyPartToBeManufacturedNotExist(): Chainable<Subject>;
       intPageVerifyBuildTypeExist(): Chainable<Subject>;
       intPageVerifyBuildTypeNotExist(): Chainable<Subject>;
+      intPageVerifyDueDateExist(): Chainable<Subject>;
+      intPageVerifyDueDateNotExist(): Chainable<Subject>;
       intPageVerifyLHRStepExist(): Chainable<Subject>;
       intPageVerifyLHRStepNotExist(): Chainable<Subject>;
       intPageVerifyPoStatusExist(): Chainable<Subject>;
@@ -691,6 +693,14 @@ Cypress.Commands.add("intPageVerifyBuildTypeExist", () => {
 
 Cypress.Commands.add("intPageVerifyBuildTypeNotExist", () => {
   cy.get(`[data-cy="Build Type"]`).should("not.exist");
+});
+
+Cypress.Commands.add("intPageVerifyDueDateExist", () => {
+  cy.get(`[data-cy="Due Date"]`).should("exist");
+});
+
+Cypress.Commands.add("intPageVerifyDueDateNotExist", () => {
+  cy.get(`[data-cy="Due Date"]`).should("not.exist");
 });
 
 Cypress.Commands.add("intPageVerifyLHRStepExist", () => {
