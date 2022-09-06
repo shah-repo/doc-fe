@@ -57,9 +57,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     ?.map(({ user }) => user) as User[];
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
-  const approverList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((e) => ({
-    stepId: e,
-    user: getUserDetails(e)?.user,
+  const approverList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((id) => ({
+    stepId: id,
+    user: getUserDetails(id)?.user,
   }));
   const operators = approverList ?? documentOperators
     ?.map((user) => ({ stepId: user.id, user }));
