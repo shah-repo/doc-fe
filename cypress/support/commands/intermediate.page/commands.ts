@@ -1024,7 +1024,7 @@ Cypress.Commands.add("intPageVerifySpecificationTabExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyCalPmHistoryTabExist", () => {
-  cy.get(`[data-cy="tabId.calpmhistory"]`).should("exist");
+  cy.get(`[data-cy="tabId.specification"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyTrainingTabExist", () => {

@@ -194,7 +194,7 @@ context("Equipment maintenance test", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -210,7 +210,7 @@ context("Equipment maintenance test", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],

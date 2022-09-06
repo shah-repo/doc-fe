@@ -456,7 +456,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Select '${ownerName}' for Requestor`, () => {
-      cy.get("[data-cy^=\"requestor-\"]").arrowClick();
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
       cy.get("ul>li[role=option]").contains(ownerName).arrowClick();
     });
 
@@ -566,7 +566,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Check the Requestor field contain ${ownerName} - ${ownerEmail}`, () => {
-      cy.get(`[data-cy^="requestor-"]`).should("have.value", `${ownerName} - ${ownerEmail}`);
+      cy.get(`[data-cy^="po-requestor-autocomplete"]`).should("have.value", `${ownerName} - ${ownerEmail}`);
     });
 
     it(`Verify Order Date`, () => {
