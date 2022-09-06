@@ -44,7 +44,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   doNotPrompt,
   chosenForm,
 }) => {
-  const FBContainer = React.useRef(null);
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
@@ -77,7 +76,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       withoutBottomBar={true}
       autosave={autosaveEnabled}
       {...props}
-      portalContainer={FBContainer}
     />
 
     // <FBWorkspace

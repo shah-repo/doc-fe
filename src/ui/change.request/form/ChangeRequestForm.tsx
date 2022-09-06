@@ -28,7 +28,6 @@ type ChangeRequestFormProps =
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
-  portalContainer?: React.MutableRefObject<HTMLDivElement | null>;
   sidebarList: SidebarTypes[];
   changeOpenStatus: (status: boolean) => void;
   schema?: FBSchemaProps[];
@@ -41,7 +40,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   asyncState,
   changeRequest,
   doNotPrompt,
-  portalContainer,
   sidebarList,
   changeOpenStatus,
   schema,
@@ -49,7 +47,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   withoutBottomBar,
   autosave,
 }) => {
-
   const { _formState, _tabsState } = SM.useStores();
 
   const [isDrawerOpen, setOpen] = React.useState(true);
@@ -124,46 +121,39 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                   <SMTabs
                     onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                     tabs={tabLabels}
-                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    boxProps={{ px: 3.75, py: 2, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
                       const showTabContent = _tabsState?.tabID === tabInfo.tabId;
 
-                      console.log(_tabsState);
-                      console.log(tabInfo);
-                      console.log(index);
+                      console.log(tabType, showTabContent, _formState);
 
                       return (
-                        <SMBox key={index}>
+                        <SMBox key={index} {...{ py: 2 }}>
                           {tabType === "MIXED" && showTabContent && changeRequest &&
                               <FBWorkspace
-                                isPortal={true}
-                                portalContainer={portalContainer}
+                                isPortal={false}
                                 initialValues={cloneDeep(changeRequest?.formInput)}
                                 changeRequest={cloneDeep(changeRequest)}
                                 autosave={autosave}
                                 withoutBottomBar={withoutBottomBar}
                                 schema={schema}
                                 mode={mode}
-                              >
-                                <div ref={portalContainer} />
-                              </FBWorkspace>
+                              />
                           }
-                          {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&
+                          {tabType === "DYNAMIC" && showTabContent &&
                             <FBWorkspace
-                              isPortal={true}
-                              portalContainer={portalContainer}
+                              isPortal={false}
                               initialValues={cloneDeep(changeRequest?.formInput)}
                               changeRequest={cloneDeep(changeRequest)}
                               autosave={autosave}
                               withoutBottomBar={withoutBottomBar}
                               schema={schema}
                               mode={mode}
-                            >
-                              <div ref={portalContainer} />
-                            </FBWorkspace>}
+                            />
+                          }
                         </SMBox>
                       );
                     })}
