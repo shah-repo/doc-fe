@@ -931,7 +931,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check Tax value", () => {
-      cy.poCheckTax({ number: "0.00" });
+      cy.get(`[name="po-items-built-in.tax"]`).should("have.attr", "value", "0.00");
     });
 
     it("Check Total value", () => {
