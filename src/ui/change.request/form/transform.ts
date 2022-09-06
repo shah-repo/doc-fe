@@ -1,7 +1,6 @@
 import { isEmpty, pick } from "lodash";
 import { getStartOfDayDateString } from "../../../common/utils/date";
 import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest/types";
-import { reactQuillEmptyString } from "../../components/forms/fields/validators";
 import { ChangeRequestFormValues, TemplateOption } from "./types";
 
 interface OptionApproverType {
@@ -14,7 +13,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
   const values: ChangeRequestFormValues = {
     id: changeRequest.id,
     title: changeRequest.title,
-    description: changeRequest.description || reactQuillEmptyString,
+    description: changeRequest.description,
     formInput: changeRequest.formInput,
     formDocument: changeRequest.formDocument,
   };

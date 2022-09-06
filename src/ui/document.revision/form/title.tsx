@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { uniqBy } from "lodash";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -11,6 +12,7 @@ interface OwnProps {
   name: string;
   documentTypeId?: string;
   disabled?: boolean;
+  value?: string; // making the component more usable.
 }
 
 type Props = OwnProps;
@@ -21,7 +23,9 @@ const Title: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useTitle(documentTypeId);
+  // console.log(isVisible, label, tooltipConfig);
   const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
+  // console.log(documents);
   const options = useMemo(
     () =>
       uniqBy(documents, (document) => document.name)
@@ -31,6 +35,14 @@ const Title: React.FunctionComponent<Props> = ({
         })),
     [documents],
   );
+
+  if (options.length === 0 && props.value) {
+    options.push({
+      label: props.value,
+      value: props.value,
+    });
+  }
+  console.log(options);
 
   if (!isVisible) {
     return null;
