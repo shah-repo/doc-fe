@@ -17,6 +17,7 @@ declare global {
       poAddPOButtonClick(): Chainable<Subject>;
       poEnterDocumentDescription(params: {description: string }): Chainable<Subject>;
       poSelectPartNumber(params: {partNo: string }): Chainable<Subject>;
+      poSelectPartNumberNew(params: {partNo: string }): Chainable<Subject>;
       poEnterQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
       poEnterQuantityReceipt(params: {quantity: string}): Chainable<Subject>;
       poSelectUnits(): Chainable<Subject>;
@@ -129,6 +130,11 @@ Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
   cy.get("ul>li[role=option]").contains(params.partNo).arrowClick();
 });
 
+Cypress.Commands.add("poSelectPartNumberNew", (params: {partNo: string }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"partNumber\"]").click({ force: true }).focused().autocompleteSelect(params.partNo);
+  cy.unClick();
+});
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
   cy.get("[name=\"order\"]").arrowClick().arrowType(params.quantity);

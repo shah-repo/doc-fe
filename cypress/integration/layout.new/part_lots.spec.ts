@@ -1,3 +1,5 @@
+import moment from "moment";
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -19,6 +21,7 @@ let createdPartDocument;
 let approvalRequestDocumentType;
 
 const PART_DOCUMENT_TYPE_NAME = "Part";
+const currentDate = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 const owner = USERS[1].name;
 const userOne = USERS[2].name;
@@ -755,7 +758,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         cy.verifyHeaderInfoContent({
           status: STATUS_TYPES_LABEL.WIP,
           title: "Lots",
-          docId: "LOT #22082501",
+          docId: `LOT #${currentDate}01`,
           revision: "Rev A",
         });
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
