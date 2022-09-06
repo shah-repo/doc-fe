@@ -130,6 +130,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         validationAttribute: (label as string) || placeholder || validationAttribute,
         tabId: _tabsState?.tabID,
       }, index);
+      leftPanelState?.setIndex(index + 1 || 0);
 
       dialogState?.closeDialog();
       leftPanelState?.HideLeftPanel();
