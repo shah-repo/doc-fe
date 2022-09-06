@@ -434,120 +434,6 @@ context("Add Requestor as an approver of the PO", () => {
     });
   });
 
-  // context("Check PO exists & verify schema with predefined schema", () => {
-  //   it("Navigate to document type management", () => {
-  //     cy.navigToDocumentTypeManagement();
-  //   });
-
-  //   it("Check filters for document type management", () => {
-  //     cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
-  //     cy.filterDocTypeManagement({
-  //       status: "Active", documentType: "Purchase Order", acronym: "PO-",
-  //       privateNumber: "Yes", redline: "No", qms: "Yes", needsSignature: "Yes", training: "No",
-  //       startingNumber: "1", revisionStage: "Numeric", group: "PO",
-  //       equipmentProdEnforce: "No", category: "Purchase Order",
-  //     });
-  //   });
-  // });
-
-  // context("Create Form Part document to create Part", () => {
-  //   it("Navigates to document list", () => {
-  //     cy.navigToDocumentList();
-  //   });
-
-  //   it("Clicks on 'create a document' button", () => {
-  //     cy.cmpClickCreateNewDocument();
-  //   });
-
-  //   it("Enters title 'New Part Form'", () => {
-  //     cy.drEnterDocumentTitle({ name: "New Part Form" });
-  //   });
-
-  //   it("Enters description 'New Part Form description'", () => {
-  //     cy.drEnterDocumentDescription({ description: "New Part Form description" });
-  //   });
-
-  //   it("Select 'Numeric' revision stage", () => {
-  //     cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-  //   });
-
-  //   it("Selects 'Form' document type from dropdown", () => {
-  //     cy.drSelectDocumentType({ documentType: "Form" });
-  //   });
-
-  //   it("Selects 'PO Part' document type from dropdown", () => {
-  //     cy.drSelectOutputDocumentType({ documentType: "Parts" });
-  //   });
-
-  //   it("Click create document after filling document", () => {
-  //     cy.drClickCreateDocumentWithApiCall();
-  //   });
-
-  //   it("Approve and release document", () => {
-  //     cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-  //   });
-  // });
-
-  // context("Create Part document for PO", () => {
-  //   it("Navigates to parts list", () => {
-  //     cy.navigToParts();
-  //   });
-
-  //   it("Clicks on 'Add new part' button", () => {
-  //     cy.ptClickCreateNewPart();
-  //   });
-
-  //   it("Clicks on 'PO Part' Form", () => {
-  //     cy.ptSelectPartFormFromMultiSelect({ partForm: "Parts" });
-  //   });
-
-  //   it("Enters title 'New Part'", () => {
-  //     cy.drEnterDocumentTitle({ name: "New Part" });
-  //   });
-
-  //   it("Enters description 'New Part description'", () => {
-  //     cy.drEnterDocumentDescription({ description: "New Part description" });
-  //   });
-
-  //   it("Select 'Numeric' revision stage", () => {
-  //     cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-  //   });
-
-  //   it("Click create document after filling document", () => {
-  //     cy.drClickCreateDocumentWithoutApiCall();
-  //   });
-  // });
-
-  // context("Create Part document for PO", () => {
-  //   it("Navigates to parts list", () => {
-  //     cy.navigToParts();
-  //   });
-
-  //   it("Clicks on 'Add new part' button", () => {
-  //     cy.ptClickCreateNewPart();
-  //   });
-
-  //   it("Clicks on 'PO Part' Form", () => {
-  //     cy.ptSelectPartFormFromMultiSelect({ partForm: "Parts" });
-  //   });
-
-  //   it("Enters title 'New Part'", () => {
-  //     cy.drEnterDocumentTitle({ name: "New Part 2" });
-  //   });
-
-  //   it("Enters description 'New Part description'", () => {
-  //     cy.drEnterDocumentDescription({ description: "New Part description 2" });
-  //   });
-
-  //   it("Select 'Numeric' revision stage", () => {
-  //     cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-  //   });
-
-  //   it("Click create document after filling document", () => {
-  //     cy.drClickCreateDocumentWithoutApiCall();
-  //   });
-  // });
-
   context("Create a new form with output type as 'Purchase Order'", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
@@ -848,15 +734,15 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify all data should be visible", () => {
     it("Verify PO Status", () => {
-      cy.get("[id='mui-component-select-po-status-built-in']").should("have.text", "Open");
+      cy.poBuildInStatus({ status: "Open" });
     });
 
     it("Verify Requestor", () => {
-      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.poCheckRequestor({ requestor: `${USERS[1].name} - ${USERS[1].email}` });
     });
 
     it("Verify Order Date", () => {
-      cy.get("[name^='ordered-']").should("have.value", receivingReleasedDate);
+      cy.poCheckOrderDate({ orderDate: receivingReleasedDate });
     });
 
     it("Verify approvers", () => {
@@ -888,11 +774,24 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Verify Received Quantity", () => {
-      cy.poCheckReceivedQuantity({ quantity: "00" });
+      cy.poCheckReceiptQty({ quantity: "00" });
     });
 
     it("Verify Unit", () => {
       cy.poCheckUnits({ unit: "each" });
+    });
+
+    it("Check Subtotal value", () => {
+      cy.get(`[class*="MuiTableCell-root MuiTableCell-body FBTotal-root"]`).contains("Sub Total:").parent()
+        .contains("$20.00");
+    });
+
+    it("Check Tax Rate", () => {
+      cy.poCheckTaxRate({ taxRate: "9.25" });
+    });
+
+    it(`Verify Shipping cost`, () => {
+      cy.poCheckShippingCost({ cost: "0.0" });
     });
 
     it("Check Tax value", () => {
@@ -917,8 +816,8 @@ context("Add Requestor as an approver of the PO", () => {
       cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
       cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "RELEASED");
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
-      cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "PRT-00001 - 1");
-      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$10.93");
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "");
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$20.00");
       cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
       cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
     });
@@ -971,15 +870,15 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify all data should be visible", () => {
     it("Verify PO Status", () => {
-      cy.get("[id='mui-component-select-po-status-built-in']").should("have.text", "Open");
+      cy.poBuildInStatus({ status: "Open" });
     });
 
     it("Verify Requestor", () => {
-      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.poCheckRequestor({ requestor: `${USERS[1].name} - ${USERS[1].email}` });
     });
 
     it("Verify Order Date", () => {
-      cy.get("[name^='ordered-']").should("have.value", receivingReleasedDate);
+      cy.poCheckOrderDate({ orderDate: receivingReleasedDate });
     });
 
     it("Verify approvers", () => {
@@ -990,40 +889,53 @@ context("Add Requestor as an approver of the PO", () => {
       cy.drSelectLineItems();
     });
 
-    it("Verify part number", () => {
-      cy.get("[data-cy='partNumberDocId']>span").should("have.text", "PRT-00001 - 1");
+    it("Verify Service Id", () => {
+      cy.poCheckServiceID({ serviceId: "SRV123" });
     });
 
-    it("Verify supplier number", () => {
-      cy.get("[data-cy='supplierPartNumber']>span").should("have.text", "PRT-0004");
+    it("Verify Supplier Part number", () => {
+      cy.poVerifyPartNumber({ partNo: "N/A" });
     });
 
-    it("Verify description", () => {
-      cy.get("[data-cy='description']>span>span>span").should("have.text", "New Part");
+    it("Verify service description", () => {
+      cy.poCheckDescription({ description: "Description for SRV123" });
     });
 
     it("Verify ordered quantity", () => {
-      cy.get("[data-cy='order']>span").should("have.text", "5");
+      cy.poCheckQuantityOrdered({ quantity: "2" });
     });
 
     it("Verify Date Required", () => {
-      cy.get("[data-cy='formattedDate']>span").should("have.text", receivingReleasedDate);
+      cy.poCheckDateRequired({ dateRequired: receivingReleasedDate });
+    });
+
+    it("Verify Received Quantity", () => {
+      cy.poCheckReceiptQty({ quantity: "00" });
     });
 
     it("Verify Unit", () => {
-      cy.get("[data-cy='unitPrice']>span").should("have.text", "$2.00");
+      cy.poCheckUnits({ unit: "each" });
     });
 
-    it("Verify Tax Rate", () => {
-      cy.get("[name='po-items-built-in.taxRate']").should("have.value", "9.25");
+    it("Check Subtotal value", () => {
+      cy.get(`[class*="MuiTableCell-root MuiTableCell-body FBTotal-root"]`).contains("Sub Total:").parent()
+        .contains("$20.00");
     });
 
-    it("Verify Tax Value", () => {
-      cy.get("[name='po-items-built-in.tax']").should("have.value", "0.925000");
+    it("Check Tax Rate", () => {
+      cy.get(`[name="po-items-built-in.taxRate"]`).should("have.attr", "value", "9.25");
     });
 
-    it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").should("have.text", "$10.93");
+    it(`Verify Shipping cost`, () => {
+      cy.get(`[name="po-items-built-in.shippingCost"]`).should("have.attr", "value", "0.00");
+    });
+
+    it("Check Tax value", () => {
+      cy.poCheckTax({ number: "0.0" });
+    });
+
+    it("Check Total value", () => {
+      cy.poCheckTotalAmount({ number: "$20.00" });
     });
   });
 
@@ -1065,8 +977,8 @@ context("Add Requestor as an approver of the PO", () => {
       cy.get(".MuiFormHelperText-root.Mui-error").should("not.exist");
     });
 
-    it("Check requestor is added", () => {
-      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
+    it("Verify Requestor", () => {
+      cy.poCheckRequestor({ requestor: `${USERS[2].name} - ${USERS[2].email}` });
     });
 
     it("Check approvers automatically added", () => {
@@ -1123,7 +1035,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
   });
 
-  context("Add part from Enlil in the PO line item", () => {
+  context("Add Service in the PO line item", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
     });
@@ -1135,60 +1047,41 @@ context("Add Requestor as an approver of the PO", () => {
       });
     });
 
-    it("Click on 'Add' inside PO dialog box and check for required fields", () => {
-      SystemRequirement("REQ-1400");
-      cy.get("[data-cy='common.add']").click();
-      cy.get("p[class*='MuiFormHelperText-root']>span")
-        .contains("The Part Number field is required when Supplier Part Number is empty.");
-      cy.get("p[class*='MuiFormHelperText-root']>span")
-        .contains("The Supplier Part Number field is required when Part Number is empty.");
+    it("Click on service option", () => {
+      cy.poSelectOption({ optionName: "service" });
     });
 
-    it("Select Part Number", () => {
-      SystemRequirement("REQ-1410");
-      cy.poSelectPartNumber({ partNo: "PRT-00002 - 1" });
+    it("Select service id", () => {
+      cy.poEnterServiceID({ serviceId: "SRV321" });
+    });
+
+    it("Enter Description", () => {
+      cy.poEnterDescription({ description: "Description for SRV321" });
     });
 
     it("Enter Quantity Ordered", () => {
-      SystemRequirement("REQ-1410");
-      cy.poEnterQuantityOrdered({ quantity: "5" });
+      cy.poEnterQuantityOrdered({ quantity: "3" });
     });
 
     it("Select Units", () => {
-      SystemRequirement("REQ-1410");
       cy.poSelectUnits();
     });
 
     it("Select GL code", () => {
-      SystemRequirement("REQ-1410");
       cy.poSelectGLCode();
     });
 
-    it("Enter Supplier Part Number", () => {
-      SystemRequirement("REQ-1410");
-      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
-    });
-
-    it("Enter number of Units", () => {
-      SystemRequirement("REQ-1410");
-      cy.poNumberOfUnits({ number: "2" });
-    });
-
     it("Add Required Date", () => {
-      SystemRequirement("REQ-1410");
-      cy.get("[name='date']").next().find("button").arrowClick();
+      cy.get("[name=\"date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
-    it("Check Tax box", () => {
-      SystemRequirement("REQ-1450");
-      cy.poSelectTaxCheckbox();
+    it("Enter Unit Price", () => {
+      cy.poNumberOfUnits({ number: "30" });
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddPOButtonClick();
-      });
+      cy.poAddPOButtonClick();
     });
   });
 
@@ -1205,15 +1098,15 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify all data should be visible", () => {
     it("Verify PO Status", () => {
-      cy.get("[id='mui-component-select-po-status-built-in']").should("have.text", "Open");
+      cy.poBuildInStatus({ status: "Open" });
     });
 
     it("Verify Requestor", () => {
-      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.poCheckRequestor({ requestor: `${USERS[1].name} - ${USERS[1].email}` });
     });
 
     it("Verify Order Date", () => {
-      cy.get("[name^='ordered-']").should("have.value", receivingReleasedDate);
+      cy.poCheckOrderDate({ orderDate: receivingReleasedDate });
     });
 
     it("Verify approvers", () => {
@@ -1224,40 +1117,53 @@ context("Add Requestor as an approver of the PO", () => {
       cy.drSelectLineItems();
     });
 
-    it("Verify part number", () => {
-      cy.get("[data-cy='partNumberDocId']>span").eq(1).should("have.text", "PRT-00002 - 1");
+    it("Verify Service Id", () => {
+      cy.poCheckServiceID({ serviceId: "SRV321" });
     });
 
-    it("Verify supplier number", () => {
-      cy.get("[data-cy='supplierPartNumber']>span").eq(1).should("have.text", "PRT-0004");
+    it("Verify Supplier Part number", () => {
+      cy.poVerifyPartNumber({ partNo: "N/A" });
     });
 
-    it("Verify description", () => {
-      cy.get("[data-cy='description']>span>span>span").eq(1).should("have.text", "New Part 2");
+    it("Verify service description", () => {
+      cy.poCheckDescription({ description: "Description for SRV321" });
     });
 
     it("Verify ordered quantity", () => {
-      cy.get("[data-cy='order']>span").eq(1).should("have.text", "5");
+      cy.poCheckQuantityOrdered({ quantity: "3" });
     });
 
     it("Verify Date Required", () => {
-      cy.get("[data-cy='formattedDate']>span").eq(1).should("have.text", receivingReleasedDate);
+      cy.poCheckDateRequired({ dateRequired: receivingReleasedDate });
+    });
+
+    it("Verify Received Quantity", () => {
+      cy.poCheckReceiptQty({ quantity: "00" });
     });
 
     it("Verify Unit", () => {
-      cy.get("[data-cy='unitPrice']>span").eq(1).should("have.text", "$2.00");
+      cy.poCheckUnits({ unit: "each" });
     });
 
-    it("Verify Tax Rate", () => {
-      cy.get("[name='po-items-built-in.taxRate']").should("contain", "9.25");
+    it("Check Subtotal value", () => {
+      cy.get(`[class*="MuiTableCell-root MuiTableCell-body FBTotal-root"]`).contains("Sub Total:").parent()
+        .contains("$110.00");
     });
 
-    it("Verify Tax Value", () => {
-      cy.get("[name='po-items-built-in.tax']").should("contain", "1.850000");
+    it("Check Tax Rate", () => {
+      cy.get(`[name="po-items-built-in.taxRate"]`).contains("9.25");
     });
 
-    it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").should("have.text", "$21.85");
+    it(`Verify Shipping cost`, () => {
+      cy.get(`[name="po-items-built-in.shippingCost"]`).contains("0.00");
+    });
+
+    it("Check Tax value", () => {
+      cy.poCheckTax({ number: "0.0" });
+    });
+
+    it("Check Total value", () => {
+      cy.poCheckTotalAmount({ number: "$110.00" });
     });
   });
 

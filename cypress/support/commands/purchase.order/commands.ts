@@ -22,6 +22,7 @@ declare global {
       poEnterQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
       poCheckQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
       poEnterQuantityReceipt(params: {quantity: string}): Chainable<Subject>;
+      poCheckReceiptQty(params: {quantity: string}): Chainable<Subject>;
       poSelectUnits(): Chainable<Subject>;
       poCheckUnits(params: {unit: string}): Chainable<Subject>;
       poSelectGLCode(): Chainable<Subject>;
@@ -31,6 +32,7 @@ declare global {
       poAddDateRequired(): Chainable<Subject>;
       poCheckDateRequired(params: {dateRequired: string}): Chainable<Subject>;
       poShippingCost(params: {number: string}): Chainable<Subject>;
+      poCheckShippingCost(params: {cost: string}): Chainable<Subject>;
       poCheckCurrency(): Chainable<Subject>;
       poCheckAmount(params: {number: string}): Chainable<Subject>;
       poCheckTotalAmount(params: {number: string}): Chainable<Subject>;
@@ -69,10 +71,14 @@ declare global {
       poSelectPoFormFromMultiSelect(params: {poType: string; poForm?: string}): Chainable<Subject>;
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
+      poCheckTaxRate(params: {taxRate: string}): Chainable<Subject>;
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
       poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
+      poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
+      poCheckOrderDate(params: {orderDate: string}): Chainable<Subject>;
+      poBuildInStatus(params: {status: string}): Chainable<Subject>;
     }
   }
 }
@@ -143,7 +149,7 @@ Cypress.Commands.add("poSelectPartNumberNew", (params: {partNo: string }) => {
 });
 
 Cypress.Commands.add("poVerifyPartNumber", (params: {partNo: string }) => {
-  cy.get("[data-cy=\"partNumber\"]").contains(params.partNo);
+  cy.get(`[data-cy="supplierPartNumber"]`).contains(params.partNo);
 });
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
@@ -156,6 +162,10 @@ Cypress.Commands.add("poCheckQuantityOrdered", (params: {quantity: string}) => {
 
 Cypress.Commands.add("poEnterQuantityReceipt", (params: {quantity: string}) => {
   cy.get("[name=\"received\"]").arrowClick().arrowType(params.quantity);
+});
+
+Cypress.Commands.add("poCheckReceiptQty", (params: {quantity: string}) => {
+  cy.get(`[data-cy="received"]`).contains(params.quantity);
 });
 
 Cypress.Commands.add("poSelectUnits", () => {
@@ -200,6 +210,10 @@ Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
   cy.get("[name*=\"shippingCost\"]").arrowClick().arrowType("{leftarrow}{leftarrow}{leftarrow}{leftarrow}" + params.number);
 });
 
+Cypress.Commands.add("poCheckShippingCost", (params: {cost: string}) => {
+  cy.get(`[name*="shippingCost"]`).contains(params.cost);
+});
+
 Cypress.Commands.add("poCheckCurrency", () => {
   cy.get("[id*=\"currency\"]").arrowClick();
   cy.get("ul[role=listbox] > li").contains("USD").should("exist");
@@ -227,11 +241,15 @@ Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poCheckTotalAmount", (params: {number: string}) => {
-  cy.get("[data-cy=\"poTotal\"]").contains(params.number).should("exist");
+  cy.get(`[data-cy="poTotal"]`).contains(params.number).should("exist");
+});
+
+Cypress.Commands.add("poCheckTaxRate", (params: {taxRate: string}) => {
+  cy.get(`[name="po-items-built-in.taxRate"]`).should("have.text", params.taxRate);
 });
 
 Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
-  cy.get("[name=\"po-items-built-in.tax\"]").should("have.attr", "value", params.number);
+  cy.get(`[name="po-items-built-in.tax"]`).contains(params.number);
 });
 
 Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
@@ -429,4 +447,16 @@ Cypress.Commands.add("poApprove", () => {
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("poCheckRequestor", (params: {requestor: string }) => {
+  cy.get("[data-cy^='po-requestor-']").should("have.value", params.requestor);
+});
+
+Cypress.Commands.add("poCheckOrderDate", (params: {orderDate: string }) => {
+  cy.get("[name^='ordered-']").should("have.value", params.orderDate);
+});
+
+Cypress.Commands.add("poBuildInStatus", (params: {status: string }) => {
+  cy.get("#mui-component-select-po-status-built-in").should("have.text", params.status);
 });
