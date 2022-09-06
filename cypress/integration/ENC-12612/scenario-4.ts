@@ -1,5 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
 import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -8,11 +9,9 @@ import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
-import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
-let multipleCompanies;
 let createdCompany;
 let loginResponse;
 let adminEmployee;
@@ -28,12 +27,7 @@ let materialsDocument;
 let mpiDocumentType;
 let mpiDocument;
 
-const ncoFormName = "NCO Form";
-const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
-const newCompanyName = "New company " + randomNumberForCompany;
-const newCompanyAbbr = "NC-" + randomNumberForCompany;
-
-context("NCO document type management", () => {
+context("Scenario 4: Create new company and verify Internal Type for LHR Template is LHRT", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -64,7 +58,6 @@ context("NCO document type management", () => {
               MPITest,
               LHRTTest,
               Part,
-              NCORecord,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -85,10 +78,10 @@ context("NCO document type management", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
+
 
     it("[API]Create equipment one", () => {
       cy.grpGetGroupByName({
@@ -397,148 +390,8 @@ context("NCO document type management", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-  });
-
-  context("Create form for NCO document", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
-    it("Navigates to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Clicks on 'create a document' button", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it(`Enters title '${ncoFormName}'`, () => {
-      cy.drEnterDocumentTitle({ name: ncoFormName });
-    });
-
-    it("Enters description 'New NCO Form description'", () => {
-      cy.drEnterDocumentDescription({ description: "New NCO Form description" });
-    });
-
-    it("Select 'Form' document type from dropdown", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Select 'New Company Record' output document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "New Company Record" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-    });
-  });
-
-  context("Create NCO document from Form", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Select released NCO Form", () => {
-      cy.drFilterDocListByNameAndStatus({ title: ncoFormName, status: "Released" });
-    });
-
-    it("Create new document from form", () => {
-      cy.drCreateNewDocumentFromForm();
-    });
-
-    it("Enters title 'New Company'", () => {
-      cy.drEnterDocumentTitle({ name: "New Company" });
-    });
-
-    it("Enters description 'New Company description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Company description" });
-    });
-
-    it("Select 'Details' tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it(`Enters company name '${newCompanyName}'`, () => {
-      cy.get("[name^=company-name-]").arrowType(newCompanyName);
-    });
-
-    it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
-      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
-    });
-
-    it(`Enters company email '${USERS[1].email}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
-    });
-
-    it("Select 'Yes' for 'Approved DAM json is used'", () => {
-      cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes");
-    });
-
-    it("Upload correct DAM JSON", () => {
-      cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
-    });
-
-    it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-      cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes");
-    });
-
-    it("Upload Page Details JSON", () => {
-      cy.atchUploadPageDetailsJSONForNCO({ fileName: "doc_type_page_details.json", queue: 0 });
-    });
-
-    it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-      cy.get("[name*=\"approved-navigation-json-is-used-\"]").check("Yes");
-    });
-
-    it("Upload Navigation JSON", () => {
-      cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
-    });
-
-    it("Upload Users List JSON", () => {
-      cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
-    });
-
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
-    it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
-    });
-
-    it("Log out user", () => {
-      cy.authLogout();
-    });
-  });
-
-  context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -561,7 +414,7 @@ context("NCO document type management", () => {
     });
 
     it("Select 'LHRt' document type", () => {
-      cy.drSelectDocumentType({ documentType: "Lot History Record Template" });
+      cy.drSelectDocumentType({ documentType: "LHR template" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -576,6 +429,14 @@ context("NCO document type management", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Verify if exist LHR fields", () => {
+      cy.get("[data-cy=\"Part to be Manufactured\"]");
+      cy.get("[data-cy=\"Initial Quantity\"]");
+      cy.get("[data-cy=\"End Quantity\"]");
+      cy.get("[data-cy=\"Build Type\"]");
+      cy.get("[data-cy=\"Due Date\"]");
+    });
+
     it("Verify Group for LHR Template", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_type" }, (req) => {
         req.reply((res) => {
@@ -583,14 +444,6 @@ context("NCO document type management", () => {
           expect(item.group).to.equal("LHRT");
         });
       }).as("response");
-    });
-
-    it("Verify if exist LHR fields", () => {
-      cy.get("[data-cy=\"Part to be Manufactured\"]");
-      cy.get("[data-cy=\"Initial Quantity\"]");
-      cy.get("[data-cy=\"End Quantity\"]");
-      cy.get("[data-cy=\"Build Type\"]");
-      cy.get("[data-cy=\"Due Date\"]");
     });
 
     it("Verify LHRT is in DRAFT status", () => {
@@ -692,6 +545,12 @@ context("NCO document type management", () => {
       it("Verify LHRT is in RELEASED status", () => {
         cy.drCheckDocumentStatus({ status: "RELEASED" });
       });
+    });
+  });
+
+  context("Create LHR using that LHRT", () => {
+    it("Create new", () => {
+      cy.drCreateNewDocumentFromForm();
     });
   });
 });
