@@ -8,16 +8,12 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import {
   DocumentRevision,
   DocumentRevisionStatus,
-  FBOutputDocumentType,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions/types";
 import useAsync from "../../hooks/useAsync";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import useActionCreator from "../../hooks/useActionCreator";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { useSelector } from "react-redux";
-import { ApplicationState } from "../../../state/reducers";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
 import { toastError } from "../../components/notifications";
 
@@ -94,8 +90,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     });
     const create = useActionCreator(documentRevisionsActions.create);
 
-    const pmForm = useSelector((state: ApplicationState) =>
-      documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""));
+    // const pmForm = useSelector((state: ApplicationState) =>
+    //   documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""));
 
     // MARK: @methods
     handleAdd = () => {
@@ -110,29 +106,32 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         },
         equipmentSection: name,
         document: {
-          docId: "123", //
-        }, //
+          docId: "123", // todo: gen correct id
+          documentType: {
+            id: "1f6ddb7f-8a76-4491-8a70-b9af5827543e", // todo: take correct doc type
+          },
+        },
         revisionChangeType: RevisionChangeType.NextRevision,
         name: "",
         description: "",
-        revisionStage: 1,
+        revisionStage: 1, // todo: take default revision stage
         retrain: false,
         attachments: [],
         referenceTo: [],
 
-        securityEmployees: [],
-        securityGroups: [],
-        operators: [],
+        securityEmployees: [], // todo
+        securityGroups: [], // todo
+        operators: [], // todo
       };
 
       // REQ: It only has to be populated if there is one output type
-      const pmFormOutput = pmForm?.formTemplate?.outputDocumentTypes;
-      if (pmFormOutput?.length === 1) {
-        values.document = {
-          ...values.document,
-          documentType: pmFormOutput[0] as FBOutputDocumentType,
-        };
-      }
+      // const pmFormOutput = pmForm?.formTemplate?.outputDocumentTypes;
+      // if (pmFormOutput?.length === 1) {
+      //   values.document = {
+      //     ...values.document,
+      //     documentType: pmFormOutput[0] as FBOutputDocumentType,
+      //   };
+      // }
 
       const body = toNewVersionRequestBody(values);
 
