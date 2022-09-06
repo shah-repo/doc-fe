@@ -546,6 +546,8 @@
   "documentRevision.audit.redline.BOOLEAN_NEW": "Redline",
   "documentRevision.audit.approvers.removed.by": "Approval Removed by {owner}",
   "documentRevision.audit.formDocument": "Form Set To",
+  "documentRevision.audit.childrenParts.ARRAY_DELETED": "Part removed",
+  "documentRevision.audit.childrenParts.ARRAY_NEW": "Part added",
   "document.revision.audit.download.s3link.error": "Attachment can't be downloaded",
   "document.revision.quntity.error": "You cannot exceed more than 10 numbers after the decimal in the \"Quantity\" field.",
   "document.revision.quntity.positive.error": "\"Quantity\" field must be a positive number.",
@@ -1325,5 +1327,6 @@
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",
   "meq.chip.nextCalDate": "Next Callibration Due :",
-  "meq.chip.prevMaintance": "Preventive Maintenance Due : "
+  "meq.chip.prevMaintance": "Preventive Maintenance Due : ",
+  "form.builder.addEquiSpec": "Add Cal or PM"
 }
