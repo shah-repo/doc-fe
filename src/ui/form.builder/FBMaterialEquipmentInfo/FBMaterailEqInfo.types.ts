@@ -1,10 +1,13 @@
-interface LotItem {
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+
+export interface LotItem {
   lotId: string;
   partId: string;
   quantity: number;
   unit: string;
 }
-interface Material {
+
+export interface Material {
   docId: string;
   title: string;
   revision: string;
@@ -12,15 +15,17 @@ interface Material {
   unit: string;
   lots: LotItem[];
 }
-interface Equipment {
+
+export interface Equipment {
   docId: string;
   title: string;
   nextCalibration: Date;
   nextPm: Date;
 }
-export interface  MaterialAndEquipment {
+
+export interface MaterialAndEquipment {
   equipment: Equipment[];
-  materials:  Material [];
+  materials: Material [];
 }
 
 export interface MaterialEqProps {
@@ -28,6 +33,6 @@ export interface MaterialEqProps {
 }
 
 export interface MaterialEqContainerProps {
-  documentRevisionId?: string;
+  documentRevision?: DocumentRevision;
   inView: boolean;
 }
