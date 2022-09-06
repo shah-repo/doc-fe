@@ -509,11 +509,12 @@ context(
         });
 
         it("Add Approver to approvals list", () => {
+          cy.wait(3000);
           cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
         });
 
         it("Click on Submit For Approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
 
         it("Approve the record", () => {
@@ -540,6 +541,7 @@ context(
             cy.drClickReviseDocument();
             cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
             cy.drClickCreateDocumentWithoutApiCall();
+            cy.wait(3000);
             cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[2].name}`);
             cy.drApproveAndReleaseDialog();
             cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
@@ -758,6 +760,7 @@ context(
 
       context("Add an approver and submit for approval → The record will be in “In Review”", () => {
         it("Add Approver to approvals list", () => {
+          cy.wait(3000);
           cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
         });
 
@@ -836,16 +839,11 @@ context(
           cy.checkToastMessage({ exists: false });
           cy.listLoadingElementShouldNotExist();
         });
-
-        it(`The PO is in the ${STATUS_TYPES_LABEL.RELEASED}  state`, () => {
-          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-        });
       });
 
       context("Check the content of the status bar", () => {
         it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
           cy.verifyHeaderInfoContent({
-            status: STATUS_TYPES_LABEL.RELEASED,
             title: "Purchase Orders",
             docId: "PO-00001",
             revision: "Rev A",
@@ -879,6 +877,7 @@ context(
 
             it("Add Approver to approvals list", () => {
               cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+              cy.wait(3000);
               cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
             });
 
@@ -928,6 +927,7 @@ context(
 
         it("Add Approver to approvals list", () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+          cy.wait(3000);
           cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
         });
 
@@ -959,7 +959,8 @@ context(
             cy.drClickReviseDocument();
             cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
             cy.drClickCreateDocumentWithoutApiCall();
-            cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[2].name}`);
+            cy.wait(3000);
+            cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(`${USERS[2].name}`);
             cy.drApproveAndReleaseDialog();
             cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
             cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
@@ -987,7 +988,7 @@ context(
       context("Check the content of the status bar", () => {
         it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
           cy.verifyHeaderInfoContent({
-            status: STATUS_TYPES_LABEL.VOIDED,
+            status: STATUS_TYPES_LABEL.VOID,
             title: "Purchase Orders",
             docId: "PO-00001",
             revision: "Rev OBS",
