@@ -284,15 +284,31 @@ context("Intermediate page validation", () => {
           cy.get(`[data-cy="validators.required_if.value"]`).arrowType("1");
           cy.fbAddNewFieldButton();
         });
+
+        it("Add 'PI Procedure' step #2", () => {
+          cy.fbAddNewFieldWhenHiddenLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PI Procedure" });
+          cy.fbAddNewFieldButton();
+        });
       });
 
       context("Verify Form fields in non preview mode", () => {
-        it("Verify 'PI Procedure' attributes", () => {
+        it("Verify 'PI Procedure'", () => {
           cy.intPageVerifyPiProcedureExist();
-          cy.get(`[data-cy="form.builder.step.number"]`).should("contain.text", "Step #1");
-          cy.get(`[data-cy="form.builder.attachments"]`).should("exist");
-          cy.get(`[data-cy="form.builder.materials"]`).should("exist");
-          cy.get(`[data-cy="form.builder.equipment"]`).should("exist");
+        });
+
+        it("Verify 'PI Procedure' Step #1", () => {
+          cy.get(`[data-cy="form.builder.step.number"]`).eq(0).should("contain.text", "Step #1");
+          cy.get(`[data-cy="form.builder.attachments"]`).eq(0).should("exist");
+          cy.get(`[data-cy="form.builder.materials"]`).eq(0).should("exist");
+          cy.get(`[data-cy="form.builder.equipment"]`).eq(0).should("exist");
+        });
+
+        it("Verify 'PI Procedure' Step #2", () => {
+          cy.get(`[data-cy="form.builder.step.number"]`).eq(1).should("contain.text", "Step #2");
+          cy.get(`[data-cy="form.builder.attachments"]`).eq(1).should("exist");
+          cy.get(`[data-cy="form.builder.materials"]`).eq(1).should("exist");
+          cy.get(`[data-cy="form.builder.equipment"]`).eq(1).should("exist");
         });
 
         it("Verify 'Start quantity' is displayed", () => {
@@ -328,12 +344,22 @@ context("Intermediate page validation", () => {
           cy.fbClickButton({ el: "FBWorkspace-clickView" });
         });
 
-        it("Verify 'PI Procedure' attributes", () => {
+        it("Verify 'PI Procedure'", () => {
           cy.get(`[data-cy="form.builder.mpiprocedure"]`).eq(1).should("exist");
-          cy.get(`[data-cy="form.builder.step.number"]`).eq(1).should("contain.text", "Step #1");
-          cy.get(`[data-cy="form.builder.attachments"]`).eq(1).should("exist");
-          cy.get(`[data-cy="form.builder.materials"]`).eq(1).should("exist");
-          cy.get(`[data-cy="form.builder.equipment"]`).eq(1).should("exist");
+        });
+
+        it("Verify 'PI Procedure' Step #1", () => {
+          cy.get(`[data-cy="form.builder.step.number"]`).eq(2).should("contain.text", "Step #1");
+          cy.get(`[data-cy="form.builder.attachments"]`).eq(2).should("exist");
+          cy.get(`[data-cy="form.builder.materials"]`).eq(2).should("exist");
+          cy.get(`[data-cy="form.builder.equipment"]`).eq(2).should("exist");
+        });
+
+        it("Verify 'PI Procedure' Step #2", () => {
+          cy.get(`[data-cy="form.builder.step.number"]`).eq(3).should("contain.text", "Step #2");
+          cy.get(`[data-cy="form.builder.attachments"]`).eq(3).should("exist");
+          cy.get(`[data-cy="form.builder.materials"]`).eq(3).should("exist");
+          cy.get(`[data-cy="form.builder.equipment"]`).eq(3).should("exist");
         });
 
         it("Verify 'Start quantity' is displayed", () => {
@@ -402,10 +428,10 @@ context("Intermediate page validation", () => {
         it("move component", () => {
           cy.get("[class*='fb-field-wrapper-fb-quantity-']").trigger("mouseover");
           cy.wait(2000);
-          cy.get(".drag-handle").eq(-1)
+          cy.get(".drag-handle").eq(-2)
             .realMouseDown({ position: "center", button: "left" });
           cy.wait(3000);
-          cy.get(".drag-handle").eq(1).scrollIntoView()
+          cy.get(`[data-cy="Start quantity"]`).scrollIntoView()
             .realMouseMove(0, 0, { position: "center" })
             .realMouseUp();
           cy.unClick();
