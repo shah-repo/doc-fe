@@ -18,14 +18,18 @@ declare global {
       poEnterDocumentDescription(params: {description: string }): Chainable<Subject>;
       poSelectPartNumber(params: {partNo: string }): Chainable<Subject>;
       poSelectPartNumberNew(params: {partNo: string }): Chainable<Subject>;
+      poVerifyPartNumber(params: {partNo: string }): Chainable<Subject>;
       poEnterQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
+      poCheckQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
       poEnterQuantityReceipt(params: {quantity: string}): Chainable<Subject>;
       poSelectUnits(): Chainable<Subject>;
+      poCheckUnits(params: {unit: string}): Chainable<Subject>;
       poSelectGLCode(): Chainable<Subject>;
       poEnterSupplierPartNumber(params: {partNumber: string}): Chainable<Subject>;
       poEnterPartDescription(params: {partDescription: string}): Chainable<Subject>;
       poNumberOfUnits(params: {number: string}): Chainable<Subject>;
       poAddDateRequired(): Chainable<Subject>;
+      poCheckDateRequired(params: {dateRequired: string}): Chainable<Subject>;
       poShippingCost(params: {number: string}): Chainable<Subject>;
       poCheckCurrency(): Chainable<Subject>;
       poCheckAmount(params: {number: string}): Chainable<Subject>;
@@ -33,7 +37,9 @@ declare global {
       poSelectTaxCheckbox(): Chainable<Subject>;
       poSelectOption(params: {optionName: string}): Chainable<Subject>;
       poEnterServiceID(params: {serviceId: string}): Chainable<Subject>;
+      poCheckServiceID(params: {serviceId: string}): Chainable<Subject>;
       poEnterDescription(params: {description: string}): Chainable<Subject>;
+      poCheckDescription(params: {description: string}): Chainable<Subject>;
       poSelectCurrency(params: { currencyValue: string }): Chainable<Subject>;
       poCheckMessageForConversionSite(): Chainable<Subject>;
       poCheckStatus(...list: string[]): Chainable<Subject>;
@@ -136,8 +142,16 @@ Cypress.Commands.add("poSelectPartNumberNew", (params: {partNo: string }) => {
   cy.unClick();
 });
 
+Cypress.Commands.add("poVerifyPartNumber", (params: {partNo: string }) => {
+  cy.get("[data-cy=\"partNumber\"]").contains(params.partNo);
+});
+
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
   cy.get("[name=\"order\"]").arrowClick().arrowType(params.quantity);
+});
+
+Cypress.Commands.add("poCheckQuantityOrdered", (params: {quantity: string}) => {
+  cy.get(`[data-cy="order"]`).contains(params.quantity);
 });
 
 Cypress.Commands.add("poEnterQuantityReceipt", (params: {quantity: string}) => {
@@ -148,6 +162,10 @@ Cypress.Commands.add("poSelectUnits", () => {
   cy.listLoadingElementShouldNotExist();
   cy.get("[name=\"units\"]").click().focused().autocompleteSelect("Each");
   cy.unClick();
+});
+
+Cypress.Commands.add("poCheckUnits", (params: {unit: string}) => {
+  cy.get(`[data-cy="units"]`).contains(params.unit);
 });
 
 Cypress.Commands.add("poSelectGLCode", () => {
@@ -172,6 +190,10 @@ Cypress.Commands.add("poAddDateRequired", () => {
   cy.xpath("//input[@name]/ ../div/button").arrowClick();
   cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
     .click();
+});
+
+Cypress.Commands.add("poCheckDateRequired", (params: { dateRequired: string }) => {
+  cy.get("[data-cy='formattedDate']>span").contains(params.dateRequired);
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
@@ -220,8 +242,16 @@ Cypress.Commands.add("poEnterServiceID", (params: {serviceId: string}) => {
   cy.get("[name=\"serviceId\"]").arrowClick().arrowType(params.serviceId);
 });
 
+Cypress.Commands.add("poCheckServiceID", (params: {serviceId: string}) => {
+  cy.get(`[data-cy="serviceId"]`).contains(params.serviceId);
+});
+
 Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
   cy.get("[name=\"description\"]").arrowClick().arrowType(params.description);
+});
+
+Cypress.Commands.add("poCheckDescription", (params: {description: string}) => {
+  cy.get(`[data-cy="description"]`).contains(params.description);
 });
 
 Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
